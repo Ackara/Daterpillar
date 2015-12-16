@@ -4,8 +4,6 @@ namespace Ackara.Daterpillar.Transformation
 {
     public class DataType
     {
-        internal const string TagName = "dataType";
-
         [XmlAttribute("min")]
         public int Min { get; set; }
 

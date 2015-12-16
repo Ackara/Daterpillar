@@ -5,8 +5,6 @@ namespace Ackara.Daterpillar.Transformation
 {
     public class Table
     {
-        public const string TagName = "table";
-
         [XmlAttribute("name")]
         public string Name { get; set; }
 
@@ -17,9 +15,15 @@ namespace Ackara.Daterpillar.Transformation
         public List<string> Modifiers { get; set; }
 
         [XmlElement("column")]
-        public List<Column> Members { get; set; }
+        public List<Column> Columns { get; set; }
 
         [XmlElement("foreignKey")]
         public List<ForeignKey> ForeignKeys { get; set; }
+
+        #region Private Members
+
+        private IList<Column> _columns;
+
+        #endregion
     }
 }

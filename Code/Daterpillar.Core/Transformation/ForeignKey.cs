@@ -4,8 +4,6 @@ namespace Ackara.Daterpillar.Transformation
 {
     public class ForeignKey
     {
-        public const string TagName = "foreignKey";
-
         [XmlAttribute("name")]
         public string Name { get; set; }
 
