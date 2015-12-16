@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://tempuri.org/XMLSchema.xsd"
+           xmlns="http://tempuri.org/XMLSchema.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+  <xs:element name="schema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="table"
+                    type="Table"
+                    minOccurs="0"
+                    maxOccurs="unbounded" />
+      </xs:sequence>
+
+      <xs:attribute name="name"
+                    type="xs:string"
+                    use="optional" />
+
+      <xs:attribute name="author"
+                    type="xs:string"
+                    use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- XSD TYPES -->
+  <!-- C -->
+
+  <xs:complexType name="Column">
+    <xs:sequence>
+      <xs:element name="comment"
+                  type="xs:string"
+                  minOccurs="0" />
+
+      <xs:element name="dataType"
+                  type="DataType" />
+
+      <xs:element name="modifier"
+                  type="xs:string"
+                  minOccurs="0"
+                  maxOccurs="unbounded" />
+    </xs:sequence>
+
+    <xs:attribute name="name"
+                  type="xs:string"
+                  use="required" />
+  </xs:complexType>
+
+  <!-- D -->
+
+  <xs:complexType name="DataType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="min"
+                      type="xs:int"
+                      use="optional" />
+
+        <xs:attribute name="max"
+                      type="xs:int"
+                      use="optional" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- F -->
+
+  <xs:complexType name="ForeignKey">
+    <xs:all>
+      <xs:element name="onUpdate"
+                  type="ForeignKeyRule" />
+
+      <xs:element name="onDelete"
+                  type="ForeignKeyRule" />
+
+      <xs:element name="onMatch"
+                  type="ForeignKeyRule" />
+    </xs:all>
+
+    <xs:attribute name="name"
+                  type="xs:string"
+                  use="optional" />
+
+    <xs:attribute name="localColumn"
+                  type="xs:string"
+                  use="required" />
+
+    <xs:attribute name="foreignTable"
+                  type="xs:string"
+                  use="required" />
+
+    <xs:attribute name="foreignColumn"
+                  type="xs:string"
+                  use="required" />
+  </xs:complexType>
+
+  <xs:simpleType name="ForeignKeyRule">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CASCADE" />
+      <xs:enumeration value="NO ACTION" />
+      <xs:enumeration value="SET NULL" />
+      <xs:enumeration value="SET DEFAULT" />
+      <xs:enumeration value="RESTRICT" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- I -->
+
+  <xs:complexType name="Index">
+    <xs:sequence>
+      <xs:element name="columnName"
+                  type="IndexColumn"
+                  maxOccurs="unbounded" />
+    </xs:sequence>
+
+    <xs:attribute name="name"
+                  type="xs:string"
+                  use="required" />
+
+    <xs:attribute name="unique"
+                  type="xs:boolean"
+                  default="0" />
+
+    <xs:attribute name="type">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="index" />
+          <xs:enumeration value="primaryKey" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="IndexColumn">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="order"
+                      type="SortOrder"
+                      use="optional" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- O -->
+
+  <!-- S -->
+
+  <xs:simpleType name="SortOrder">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ASC" />
+      <xs:enumeration value="DESC" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- T -->
+
+  <xs:complexType name="Table">
+    <xs:sequence>
+      <xs:element name="comment"
+                  type="xs:string"
+                  minOccurs="0" />
+
+      <xs:element name="modifier"
+                  type="xs:string"
+                  minOccurs="0"
+                  maxOccurs="unbounded" />
+
+      <xs:element name="member"
+                  type="Column"
+                  minOccurs="0"
+                  maxOccurs="unbounded" />
+
+      <xs:element name="foreignKey"
+                  type="ForeignKey"
+                  minOccurs="0"
+                  maxOccurs="unbounded" />
+    </xs:sequence>
+
+    <xs:attribute name="name"
+                  type="xs:string"
+                  use="required" />
+  </xs:complexType>
+</xs:schema>
