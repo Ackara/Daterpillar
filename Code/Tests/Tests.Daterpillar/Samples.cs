@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Ackara.Daterpillar.Transformation;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Tests.Daterpillar
 {
@@ -11,8 +9,21 @@ namespace Tests.Daterpillar
     {
         public static FileInfo GetFile(string filename)
         {
-
             throw new System.NotImplementedException();
+        }
+
+        public static Schema GetSchema([CallerMemberName]string name = null)
+        {
+            var schema = new Schema();
+            schema.Name = name ?? "SchemaName";
+            schema.Author = "johnDoe@example.com";
+
+            var table1 = new Table();
+            
+
+            schema.Tables.Add(table1);
+
+            return schema;
         }
     }
 }

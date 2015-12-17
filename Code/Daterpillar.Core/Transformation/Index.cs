@@ -11,6 +11,9 @@ namespace Ackara.Daterpillar.Transformation
         [XmlAttribute("unique")]
         public bool Unique { get; set; }
 
+        [XmlAttribute("type")]
+        public string Type { get; set; }
+
         [XmlElement("columnName")]
         public List<IndexColumn> Columns { get; set; }
     }

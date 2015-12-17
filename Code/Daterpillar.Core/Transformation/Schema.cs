@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace Ackara.Daterpillar.Transformation
 {
     [XmlRoot("schema", Namespace = Xmlns)]
-    public class Schema : Class1
+    public class Schema
     {
         #region Static Members
 
@@ -28,8 +28,6 @@ namespace Ackara.Daterpillar.Transformation
 
         #endregion Static Members
 
-        public string Path { get; set; }
-
         [XmlAttribute("name")]
         public string Name { get; set; }
 
@@ -37,6 +35,44 @@ namespace Ackara.Daterpillar.Transformation
         public string Author { get; set; }
 
         [XmlElement("table")]
-        public List<Table> Tables { get; set; }
+        public List<Table> Tables
+        {
+            get
+            {
+                if (_tables == null)
+                {
+                    _tables = new List<Table>();
+                }
+
+                return _tables;
+            }
+            set { _tables = value; }
+        }
+        
+        /// <summary>
+        /// Outputs this <see cref="Schema"/> to the specified <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
+        public void Save(Stream stream)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Outputs this <see cref="Schema"/> to the specified <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="writer">
+        /// A <see cref="System.Xml.XmlWriter"/> that the <see cref="Schema"/> will be written to.
+        /// </param>
+        public void Save(System.Xml.XmlWriter writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #region Private Member
+
+        private List<Table> _tables;
+
+        #endregion Private Member
     }
 }

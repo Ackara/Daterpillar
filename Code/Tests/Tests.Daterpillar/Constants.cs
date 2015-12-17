@@ -3,12 +3,14 @@
     public struct Str
     {
         public const string
-            Ackara = "ackara.dev@outlook.com";
+            Ackara = "ackara.dev@outlook.com",
+            ApprovalsDir = "Approvals";
     }
 
     public struct Filename
     {
         public const string
-            DataXLSX = "data.xlsx";
+            DataXLSX = "data.xlsx",
+            XddlSpec = "xddl-spec.xsd";
     }
 }

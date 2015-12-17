@@ -49,7 +49,7 @@
 
   <xs:complexType name="DataType">
     <xs:simpleContent>
-      <xs:extension base="xs:string">
+      <xs:extension base="TypeName">
         <xs:attribute name="min"
                       type="xs:int"
                       use="optional" />
@@ -139,8 +139,6 @@
     </xs:simpleContent>
   </xs:complexType>
 
-  <!-- O -->
-
   <!-- S -->
 
   <xs:simpleType name="SortOrder">
@@ -178,4 +176,28 @@
                   type="xs:string"
                   use="required" />
   </xs:complexType>
+
+  <xs:simpleType name="TypeName">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="bool" />
+
+      <xs:enumeration value="blob" />
+      <xs:enumeration value="char" />
+      <xs:enumeration value="text" />
+      <xs:enumeration value="varchar" />
+
+      <xs:enumeration value="int" />
+      <xs:enumeration value="bigInt" />
+      <xs:enumeration value="mediumInt" />
+      <xs:enumeration value="smallInt" />
+
+      <xs:enumeration value="float" />
+      <xs:enumeration value="double" />
+      <xs:enumeration value="decimal" />
+
+      <xs:enumeration value="date" />
+      <xs:enumeration value="time" />
+      <xs:enumeration value="dateTime" />
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>

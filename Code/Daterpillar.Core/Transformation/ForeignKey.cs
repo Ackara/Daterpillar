@@ -8,13 +8,13 @@ namespace Ackara.Daterpillar.Transformation
         public string Name { get; set; }
 
         [XmlAttribute("localColumn")]
-        public string LocalMember { get; set; }
+        public string LocalColumn { get; set; }
 
         [XmlAttribute("foreignTable")]
-        public string ForeignObject { get; set; }
+        public string ForeignTable { get; set; }
 
         [XmlAttribute("foreignColumn")]
-        public string ForeignMember { get; set; }
+        public string ForeignColumn { get; set; }
 
         [XmlElement("onUpdate")]
         public ForeignKeyRule OnUpdate { get; set; }
