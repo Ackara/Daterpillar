@@ -4,18 +4,14 @@ namespace Ackara.Daterpillar.Transformation.Template
 {
     public class SQLiteTemplate : ITemplate
     {
-        public SQLiteTemplate() : this(SqlTemplateSettings.Default)
-        {
-        }
+        public SQLiteTemplate() : this(SqlTemplateSettings.Default, new SqlTypeNameResolver()) { }
 
-        public SQLiteTemplate(SqlTemplateSettings settings)
-        {
-            _settings = settings;
-        }
+        public SQLiteTemplate(SqlTemplateSettings settings) : this(settings, new SqlTypeNameResolver()) { }
 
         public SQLiteTemplate(SqlTemplateSettings settings, ITypeNameResolver nameResolver)
         {
-            
+            _settings = settings;
+            _nameResolver = nameResolver;
         }
 
         public string Transform(Schema schema)

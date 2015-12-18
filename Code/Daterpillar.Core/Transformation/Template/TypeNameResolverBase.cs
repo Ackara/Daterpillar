@@ -29,26 +29,26 @@ namespace Ackara.Daterpillar.Transformation.Template
 		/// </summary>
 		public TypeNameResolverBase()
 		{
-			TypeNameDictionary = new Dictionary<string, string>();
+			TypeNames = new Dictionary<string, string>();
 		
-			TypeNameDictionary.Add("bool", "bool");
-			TypeNameDictionary.Add("blob", "blob");
-			TypeNameDictionary.Add("char", "char");
-			TypeNameDictionary.Add("text", "text");
-			TypeNameDictionary.Add("varchar", "varchar");
-			TypeNameDictionary.Add("int", "int");
-			TypeNameDictionary.Add("bigInt", "bigInt");
-			TypeNameDictionary.Add("mediumInt", "mediumInt");
-			TypeNameDictionary.Add("smallInt", "smallInt");
-			TypeNameDictionary.Add("float", "float");
-			TypeNameDictionary.Add("double", "double");
-			TypeNameDictionary.Add("decimal", "decimal");
-			TypeNameDictionary.Add("date", "date");
-			TypeNameDictionary.Add("time", "time");
-			TypeNameDictionary.Add("dateTime", "dateTime");
+			TypeNames.Add("bool", "bool");
+			TypeNames.Add("blob", "blob");
+			TypeNames.Add("char", "char");
+			TypeNames.Add("text", "text");
+			TypeNames.Add("varchar", "varchar");
+			TypeNames.Add("int", "int");
+			TypeNames.Add("bigInt", "bigInt");
+			TypeNames.Add("mediumInt", "mediumInt");
+			TypeNames.Add("smallInt", "smallInt");
+			TypeNames.Add("float", "float");
+			TypeNames.Add("double", "double");
+			TypeNames.Add("decimal", "decimal");
+			TypeNames.Add("date", "date");
+			TypeNames.Add("time", "time");
+			TypeNames.Add("dateTime", "dateTime");
 		}
 
-		protected IDictionary<string, string> TypeNameDictionary { get; set; }
+		protected IDictionary<string, string> TypeNames { get; set; }
 
 		public abstract string GetName(DataType dataType);
 	}

@@ -16,21 +16,21 @@ namespace Ackara.Daterpillar.Transformation.Template
         public override string GetName(DataType dataType)
         {
             string name = "";
-            string typeName = dataType.Name;
+            string type = dataType.Name;
 
-            switch (typeName)
+            switch (type)
             {
                 case VARCHAR:
                     int size = dataType.Scale == 0? dataType.Precision : dataType.Scale;
-                    name = $"{typeName}({size})";
+                    name = $"{type}({size})";
                     break;
 
                 case DECIMAL:
-                    name = $"{typeName}({dataType.Scale}, {dataType.Precision})";
+                    name = $"{type}({dataType.Scale}, {dataType.Precision})";
                     break;
 
                 default:
-                    name = TypeNameDictionary[typeName];
+                    name = TypeNames[type];
                     break;
             }
 
