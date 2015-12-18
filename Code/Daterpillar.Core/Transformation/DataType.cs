@@ -5,12 +5,12 @@ namespace Ackara.Daterpillar.Transformation
     public class DataType
     {
         [XmlAttribute("min")]
-        public int Min { get; set; }
+        public int Precision { get; set; }
 
         [XmlAttribute("max")]
-        public int Max { get; set; }
+        public int Scale { get; set; }
 
         [XmlText]
-        public string TypeName { get; set; }
+        public string Name { get; set; }
     }
 }

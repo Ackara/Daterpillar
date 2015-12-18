@@ -11,16 +11,7 @@ namespace Ackara.Daterpillar.Transformation.Template
 
         public static string ToPascal(this string word)
         {
-
             throw new System.NotImplementedException();
-        }
-
-
-
-        internal static void TrimComma(this StringBuilder builder)
-        {
-            int commaIndex = builder.ToString().LastIndexOf(',');
-            builder.Remove(commaIndex, 1);
         }
 
         internal static string ToText(this ForeignKeyRule rule)
@@ -52,6 +43,12 @@ namespace Ackara.Daterpillar.Transformation.Template
             }
 
             return output;
+        }
+
+        internal static void TrimComma(this StringBuilder builder)
+        {
+            int commaIndex = builder.ToString().LastIndexOf(',');
+            builder.Remove(commaIndex, 1);
         }
     }
 }

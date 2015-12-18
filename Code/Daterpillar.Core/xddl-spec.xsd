@@ -50,11 +50,11 @@
   <xs:complexType name="DataType">
     <xs:simpleContent>
       <xs:extension base="TypeName">
-        <xs:attribute name="min"
+        <xs:attribute name="scale"
                       type="xs:int"
                       use="optional" />
 
-        <xs:attribute name="max"
+        <xs:attribute name="precision"
                       type="xs:int"
                       use="optional" />
       </xs:extension>

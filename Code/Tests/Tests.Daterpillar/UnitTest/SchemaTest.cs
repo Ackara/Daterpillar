@@ -2,8 +2,12 @@
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Tests.Daterpillar.UnitTest
 {
@@ -12,6 +16,9 @@ namespace Tests.Daterpillar.UnitTest
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SchemaTest
     {
+        /// <summary>
+        /// Save writes a s the schema object into a stream when called.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void Save_writes_a_Schema_object_into_a_stream_when_called()

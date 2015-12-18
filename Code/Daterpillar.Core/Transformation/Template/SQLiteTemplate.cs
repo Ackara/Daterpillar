@@ -33,7 +33,7 @@ namespace Ackara.Daterpillar.Transformation.Template
         #region Private Members
 
         private SqlTemplateSettings _settings;
-        private ITypeNameResolver _nameResolover;
+        private ITypeNameResolver _nameResolver;
         private StringBuilder _text = new StringBuilder();
 
         private void TransformTable(Table table)
@@ -57,7 +57,7 @@ namespace Ackara.Daterpillar.Transformation.Template
 
         private void TransformColumn(Column column)
         {
-            string dataType = "";
+            string dataType = _nameResolver.GetName(column.Type);
             string modifiers = string.Join(" ", column.Modifiers);
 
             _text.AppendLine($"\t{column.Name.ToTitle()} {dataType} {modifiers},");
