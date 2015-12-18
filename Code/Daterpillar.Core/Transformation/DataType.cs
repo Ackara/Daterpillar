@@ -2,7 +2,7 @@
 
 namespace Ackara.Daterpillar.Transformation
 {
-    public class DataType
+    public struct DataType
     {
         [XmlAttribute("scale")]
         public int Scale { get; set; }

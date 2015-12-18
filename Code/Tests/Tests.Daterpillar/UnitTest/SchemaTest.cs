@@ -2,12 +2,8 @@
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace Tests.Daterpillar.UnitTest
 {

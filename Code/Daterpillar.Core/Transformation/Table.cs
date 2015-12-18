@@ -20,10 +20,7 @@ namespace Ackara.Daterpillar.Transformation
         [XmlElement("foreignKey")]
         public List<ForeignKey> ForeignKeys { get; set; }
 
-        #region Private Members
-
-        private IList<Column> _columns;
-
-        #endregion
+        [XmlElement("index")]
+        public List<Index> Indexes { get; set; }
     }
 }

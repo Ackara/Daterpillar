@@ -7,6 +7,13 @@
             ApprovalsDir = "Approvals";
     }
 
+    public struct Data
+    {
+        public const string
+            Provider = "System.Data.Odbc",
+            ConnectionString = "Dsn=Excel Files;dbq=|DataDirectory|\\data.xlsx";
+    }
+
     public struct Filename
     {
         public const string

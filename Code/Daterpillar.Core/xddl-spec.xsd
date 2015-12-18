@@ -119,6 +119,10 @@
                   type="xs:boolean"
                   default="0" />
 
+    <xs:attribute name="table"
+                  type="xs:string"
+                  use="required" />
+
     <xs:attribute name="type">
       <xs:simpleType>
         <xs:restriction base="xs:string">

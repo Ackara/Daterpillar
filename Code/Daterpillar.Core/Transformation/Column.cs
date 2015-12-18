@@ -12,7 +12,7 @@ namespace Ackara.Daterpillar.Transformation
         public string Comment { get; set; }
 
         [XmlElement("dataType")]
-        public DataType Type { get; set; }
+        public DataType DataType { get; set; }
 
         [XmlElement("modifier")]
         public List<string> Modifiers { get; set; }

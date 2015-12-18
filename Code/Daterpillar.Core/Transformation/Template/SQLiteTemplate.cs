@@ -1,17 +1,22 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace Ackara.Daterpillar.Transformation.Template
 {
     public class SQLiteTemplate : ITemplate
     {
-        public SQLiteTemplate() : this(SqlTemplateSettings.Default, new SqlTypeNameResolver()) { }
+        public SQLiteTemplate() : this(SqlTemplateSettings.Default, new SqlTypeNameResolver())
+        {
+        }
 
-        public SQLiteTemplate(SqlTemplateSettings settings) : this(settings, new SqlTypeNameResolver()) { }
+        public SQLiteTemplate(SqlTemplateSettings settings) : this(settings, new SqlTypeNameResolver())
+        {
+        }
 
-        public SQLiteTemplate(SqlTemplateSettings settings, ITypeNameResolver nameResolver)
+        public SQLiteTemplate(SqlTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
-            _nameResolver = nameResolver;
+            _typeResolver = typeResolver;
         }
 
         public string Transform(Schema schema)
@@ -29,12 +34,12 @@ namespace Ackara.Daterpillar.Transformation.Template
         #region Private Members
 
         private SqlTemplateSettings _settings;
-        private ITypeNameResolver _nameResolver;
+        private ITypeNameResolver _typeResolver;
         private StringBuilder _text = new StringBuilder();
 
         private void TransformTable(Table table)
         {
-            _text.AppendLine($"CREATE TABLE IF NOT EXISTS {table.Name.ToTitle()}");
+            _text.AppendLine($"CREATE TABLE IF NOT EXISTS [{table.Name}]");
             _text.AppendLine("(");
 
             foreach (var column in table.Columns)
@@ -42,31 +47,52 @@ namespace Ackara.Daterpillar.Transformation.Template
                 TransformColumn(column);
             }
 
+            foreach (var index in table.Indexes.Where(x => x.Type == "primaryKey"))
+            {
+                TransformPrimaryKey(index);
+            }
+
             foreach (var foreignKey in table.ForeignKeys)
             {
                 TransformForeignKey(foreignKey);
             }
 
-            _text.TrimComma();
+            _text.RemoveLastComma();
             _text.AppendLine(");");
+            _text.AppendLine();
+
+            foreach (var index in table.Indexes.Where(x => x.Type == "index"))
+            {
+                TransformIndex(index);
+            }
         }
 
         private void TransformColumn(Column column)
         {
-            string dataType = _nameResolver.GetName(column.Type);
+            string dataType = _typeResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
 
-            _text.AppendLine($"\t{column.Name.ToTitle()} {dataType} {modifiers},");
+            _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers},");
+        }
+
+        private void TransformPrimaryKey(Index primaryKey)
+        {
+            string columns = string.Join(", ", primaryKey.Columns.Select(x => $"[{x.Name}] {x.Order}"));
+
+            _text.AppendLine($"\tPRIMARY KEY ({columns}),");
         }
 
         private void TransformForeignKey(ForeignKey foreignKey)
         {
-            _text.AppendLine($"\tFOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()}");
+            _text.AppendLine($"\tFOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()},");
         }
 
         private void TransformIndex(Index index)
         {
-            _text.AppendLine($"create index ;");
+            string unique = index.Unique ? " UNIQUE " : " ";
+            string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
+
+            _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS {index.Name} ON [{index.Table}] ({columns});");
         }
 
         #endregion Private Members

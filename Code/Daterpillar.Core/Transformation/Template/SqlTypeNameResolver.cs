@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ackara.Daterpillar.Transformation.Template
+﻿namespace Ackara.Daterpillar.Transformation.Template
 {
     public class SqlTypeNameResolver : TypeNameResolverBase
     {
         public SqlTypeNameResolver() : base()
         {
-            
         }
 
         public override string GetName(DataType dataType)
@@ -21,7 +14,7 @@ namespace Ackara.Daterpillar.Transformation.Template
             switch (type)
             {
                 case VARCHAR:
-                    int size = dataType.Scale == 0? dataType.Precision : dataType.Scale;
+                    int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
                     name = $"{type}({size})";
                     break;
 
@@ -34,7 +27,7 @@ namespace Ackara.Daterpillar.Transformation.Template
                     break;
             }
 
-            return name;
+            return name.ToUpper();
         }
     }
 }
