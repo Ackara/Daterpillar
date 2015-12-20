@@ -13,19 +13,16 @@ namespace Ackara.Daterpillar.Transformation.Template
         /// <param name="text">The string to convert to camel case.</param>
         /// <returns>The specified string converted to camel case.</returns>
         /// <remarks>
-        /// <list type="bullet">
-        /// <listheader>Rules</listheader>
-        /// <item>Lower the first letter in the text.</item>
-        /// <item>Capitalize the first letter for each subsequent word.</item>
-        /// <item>Concatenate each word.</item>
-        /// </list>
+        /// <list type="bullet"><listheader>Rules</listheader><item>Lower the first letter in the
+        /// text.</item><item>Capitalize the first letter for each subsequent
+        /// word.</item><item>Concatenate each word.</item></list>
         /// </remarks>
-        public static string ToCamelCase(this string text, params char[] seperator)
+        public static string ToCamelCase(this string text, params char[] separator)
         {
             if (text.Length == 1) return text.ToLower();
             else
             {
-                string pascal = ToPascalCase(text, seperator);
+                string pascal = ToPascalCase(text, separator);
                 return char.ToLower(pascal[0]) + pascal.Substring(1);
             }
         }
@@ -36,20 +33,17 @@ namespace Ackara.Daterpillar.Transformation.Template
         /// <param name="text">The string to convert to pascal case.</param>
         /// <returns>The specified string converted to pascal case.</returns>
         /// <remarks>
-        /// <list type="bullet">
-        /// <listheader>Rules</listheader>
-        /// <item>Capitalize the first letter in the text.</item>
-        /// <item>Capitalize the first letter for each subsequent word.</item>
-        /// <item>Concatenate each word.</item>
-        /// </list>
+        /// <list type="bullet"><listheader>Rules</listheader><item>Capitalize the first letter in
+        /// the text.</item><item>Capitalize the first letter for each subsequent
+        /// word.</item><item>Concatenate each word.</item></list>
         /// </remarks>
-        public static string ToPascalCase(this string text, params char[] seperator)
+        public static string ToPascalCase(this string text, params char[] separator)
         {
             if (text.Length == 1) return text.ToUpper();
             else
             {
-                if (seperator.Length == 0) seperator = new char[] { ' ' };
-                string[] words = text.Split(seperator, System.StringSplitOptions.RemoveEmptyEntries);
+                if (separator.Length == 0) separator = new char[] { ' ' };
+                string[] words = text.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
                 string pascal = "";
 
                 foreach (var word in words)
@@ -59,37 +53,6 @@ namespace Ackara.Daterpillar.Transformation.Template
 
                 return pascal;
             }
-        }
-
-        internal static string ToText(this ForeignKeyRule rule)
-        {
-            string output;
-
-            switch (rule)
-            {
-                default:
-                case ForeignKeyRule.NoAction:
-                    output = "NO ACTION";
-                    break;
-
-                case ForeignKeyRule.Cascade:
-                    output = "CASCADE";
-                    break;
-
-                case ForeignKeyRule.SetNull:
-                    output = "SET NULL";
-                    break;
-
-                case ForeignKeyRule.SetDefault:
-                    output = "SET DEFAULT";
-                    break;
-
-                case ForeignKeyRule.Restrict:
-                    output = "RESTRICT";
-                    break;
-            }
-
-            return output;
         }
 
         internal static void RemoveLastComma(this StringBuilder builder)

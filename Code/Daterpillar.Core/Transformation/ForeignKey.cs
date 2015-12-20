@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace Ackara.Daterpillar.Transformation
 {
@@ -17,12 +18,23 @@ namespace Ackara.Daterpillar.Transformation
         public string ForeignColumn { get; set; }
 
         [XmlElement("onUpdate")]
-        public ForeignKeyRule OnUpdate { get; set; }
+        public string OnUpdate { get; set; }
 
         [XmlElement("onDelete")]
-        public ForeignKeyRule OnDelete { get; set; }
+        public string OnDelete { get; set; }
 
-        [XmlElement("onMatch")]
-        public ForeignKeyRule OnMatch { get; set; }
+        [XmlIgnore]
+        public ForeignKeyRule OnUpdateRule
+        {
+            get { return (ForeignKeyRule)Enum.Parse(typeof(ForeignKeyRule), OnUpdate.Replace(" ", "_")); }
+            set { OnUpdate = value.ToText(); }
+        }
+
+        [XmlIgnore]
+        public ForeignKeyRule OnDeleteRule
+        {
+            get { return (ForeignKeyRule)Enum.Parse(typeof(ForeignKeyRule), OnDelete.Replace(" ", "_")); }
+            set { OnDelete = value.ToText(); }
+        }
     }
 }

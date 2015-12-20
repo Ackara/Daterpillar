@@ -2,10 +2,10 @@
 {
     public enum ForeignKeyRule
     {
-        NoAction,
-        Cascade,
-        SetNull,
-        SetDefault,
-        Restrict
+        NONE,
+        CASCADE,
+        SET_NULL,
+        SET_DEFAULT,
+        RESTRICT
     }
 }

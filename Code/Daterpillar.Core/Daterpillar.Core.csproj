@@ -41,10 +41,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transformation\Template\ITypeNameResolver.cs" />
-    <Compile Include="Transformation\Template\SqlTemplateSettings.cs" />
     <Compile Include="Transformation\Template\SQLiteTemplate.cs" />
     <Compile Include="Transformation\Template\ITemplate.cs" />
-    <Compile Include="Transformation\Template\SqlTypeNameResolver.cs" />
+    <Compile Include="Transformation\Template\SQLiteTypeNameResolver.cs" />
     <Compile Include="Transformation\Template\TemplateExtensions.cs" />
     <Compile Include="Transformation\ForeignKeyRule.cs" />
     <Compile Include="Transformation\DataType.cs" />
@@ -60,6 +59,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeNameResolverBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transformation\TransformationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Transformation\Template\TypeNameResolverBase.tt">
@@ -69,12 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="xddl-spec.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

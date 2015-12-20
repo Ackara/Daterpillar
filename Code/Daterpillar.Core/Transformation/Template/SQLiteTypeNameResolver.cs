@@ -1,9 +1,24 @@
 ﻿namespace Ackara.Daterpillar.Transformation.Template
 {
-    public class SqlTypeNameResolver : TypeNameResolverBase
+    public class SQLiteTypeNameResolver : TypeNameResolverBase
     {
-        public SqlTypeNameResolver() : base()
+        public SQLiteTypeNameResolver() : base()
         {
+            TypeNames[BOOL] = "boolean";
+            TypeNames[BLOB] = "blob";
+            TypeNames[CHAR] = "char";
+            TypeNames[TEXT] = "text";
+            TypeNames[VARCHAR] = "varchar";
+            TypeNames[INT] = "integer";
+            TypeNames[BIGINT] = "bigInt";
+            TypeNames[MEDIUMINT] = "integer";
+            TypeNames[SMALLINT] = "integer";
+            TypeNames[FLOAT] = "float";
+            TypeNames[DOUBLE] = "double";
+            TypeNames[DECIMAL] = "decimal";
+            TypeNames[DATE] = "date";
+            TypeNames[TIME] = "time";
+            TypeNames[DATETIME] = "dateTime";
         }
 
         public override string GetName(DataType dataType)

@@ -57,7 +57,7 @@ namespace Ackara.Daterpillar.Transformation.Template
 <#+ 
 	public IEnumerable<string> GetXsdTypeNames()
 	{
-		string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "xddl-spec.xsd");
+		string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "xsml.xsd");
 		
 		var xsdDoc = XDocument.Load(schemaPath);	
 		string xmlns = "http://www.w3.org/2001/XMLSchema";

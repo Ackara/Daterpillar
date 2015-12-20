@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="http://tempuri.org/XMLSchema.xsd"
-           xmlns="http://tempuri.org/XMLSchema.xsd"
+<xs:schema targetNamespace="http://schema.gigobyte.com/v1/xsml.xsd"
+           xmlns="http://schema.gigobyte.com/v1/xsml.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified">
   <xs:element name="schema">
@@ -66,13 +66,12 @@
   <xs:complexType name="ForeignKey">
     <xs:all>
       <xs:element name="onUpdate"
-                  type="ForeignKeyRule" />
+                  type="ForeignKeyRule"
+                  minOccurs="0" />
 
       <xs:element name="onDelete"
-                  type="ForeignKeyRule" />
-
-      <xs:element name="onMatch"
-                  type="ForeignKeyRule" />
+                  type="ForeignKeyRule"
+                  minOccurs="0" />
     </xs:all>
 
     <xs:attribute name="name"
@@ -113,7 +112,7 @@
 
     <xs:attribute name="name"
                   type="xs:string"
-                  use="required" />
+                  use="optional" />
 
     <xs:attribute name="unique"
                   type="xs:boolean"
@@ -121,7 +120,7 @@
 
     <xs:attribute name="table"
                   type="xs:string"
-                  use="required" />
+                  use="optional" />
 
     <xs:attribute name="type">
       <xs:simpleType>
@@ -165,13 +164,18 @@
                   minOccurs="0"
                   maxOccurs="unbounded" />
 
-      <xs:element name="member"
+      <xs:element name="column"
                   type="Column"
                   minOccurs="0"
                   maxOccurs="unbounded" />
 
       <xs:element name="foreignKey"
                   type="ForeignKey"
+                  minOccurs="0"
+                  maxOccurs="unbounded" />
+
+      <xs:element name="index"
+                  type="Index"
                   minOccurs="0"
                   maxOccurs="unbounded" />
     </xs:sequence>

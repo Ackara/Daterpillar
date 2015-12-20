@@ -4,6 +4,11 @@ namespace Ackara.Daterpillar.Transformation
 {
     public struct DataType
     {
+        public DataType(string typeName) : this()
+        {
+            Name = typeName;
+        }
+
         [XmlAttribute("scale")]
         public int Scale { get; set; }
 

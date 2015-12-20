@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Core", "Daterpi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Daterpillar", "Tests\Tests.Daterpillar\Tests.Daterpillar.csproj", "{E76B5A23-D15A-4AC5-942D-8A0A27C1B857}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Daterpillar", "Tests\Tests.Daterpillar\Tests.Daterpillar.csproj", "{9CC6674B-4A4C-4F4E-BD29-27D7898511BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,15 +19,15 @@ Global
 		{EEE56AC1-7B0E-49CA-985E-7F00E3A88C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE56AC1-7B0E-49CA-985E-7F00E3A88C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE56AC1-7B0E-49CA-985E-7F00E3A88C81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E76B5A23-D15A-4AC5-942D-8A0A27C1B857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E76B5A23-D15A-4AC5-942D-8A0A27C1B857}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E76B5A23-D15A-4AC5-942D-8A0A27C1B857}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E76B5A23-D15A-4AC5-942D-8A0A27C1B857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E76B5A23-D15A-4AC5-942D-8A0A27C1B857} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
+		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
 	EndGlobalSection
 EndGlobal

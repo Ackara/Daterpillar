@@ -4,20 +4,22 @@
     {
         public const string
             Ackara = "ackara.dev@outlook.com",
-            ApprovalsDir = "Approvals";
+            ApprovalsDir = "ApprovalTests";
     }
 
     public struct Data
     {
         public const string
-            Provider = "System.Data.Odbc",
-            ConnectionString = "Dsn=Excel Files;dbq=|DataDirectory|\\data.xlsx";
+            ExcelProvider = "System.Data.Odbc",
+            ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\" + Filename.DataXLSX;
     }
 
     public struct Filename
     {
         public const string
             DataXLSX = "data.xlsx",
-            XddlSpec = "xddl-spec.xsd";
+            SamplesFolder = "Sample Files",
+            EmployeeSchema = "employee_schema.xml",
+            XSML = "xsml.xsd";
     }
 }

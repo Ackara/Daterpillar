@@ -9,7 +9,7 @@ namespace Ackara.Daterpillar.Transformation
     {
         #region Static Members
 
-        public const string Xmlns = "http://schema.gigobyte.com/v1/xddl.xsd";
+        public const string Xmlns = "http://schema.gigobyte.com/v1/xsml.xsd";
 
         public static Schema Load(Stream stream)
         {
@@ -48,25 +48,16 @@ namespace Ackara.Daterpillar.Transformation
             }
             set { _tables = value; }
         }
-        
-        /// <summary>
-        /// Outputs this <see cref="Schema"/> to the specified <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
-        public void Save(Stream stream)
-        {
-            throw new System.NotImplementedException();
-        }
 
         /// <summary>
-        /// Outputs this <see cref="Schema"/> to the specified <see cref="Stream"/>.
+        /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
         /// </summary>
-        /// <param name="writer">
-        /// A <see cref="System.Xml.XmlWriter"/> that the <see cref="Schema"/> will be written to.
-        /// </param>
-        public void Save(System.Xml.XmlWriter writer)
+        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
+        public void WriteTo(Stream stream)
         {
-            throw new System.NotImplementedException();
+            var serializer = new XmlSerializer(typeof(Schema));
+            serializer.Serialize(stream, this);
+            stream.Position = 0;
         }
 
         #region Private Member

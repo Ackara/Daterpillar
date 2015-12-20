@@ -1,7 +1,0 @@
-﻿<table>
-create table if not exist <name>
-</table>
-
-<column>
-<name> <dataType> <modifiers>
-</column>

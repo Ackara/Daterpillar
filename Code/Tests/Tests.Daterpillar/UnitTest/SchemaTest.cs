@@ -1,63 +1,75 @@
-﻿using ApprovalTests;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
+﻿using Ackara.Daterpillar.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Xml;
 
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
-    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
+    [DeploymentItem(Filename.SamplesFolder + "\\" + Filename.EmployeeSchema)]
     public class SchemaTest
     {
         /// <summary>
-        /// Save writes a s the schema object into a stream when called.
+        /// Validate <see cref="Schema.WriteTo(Stream)"/> serialize the <see cref="Schema"/> object
+        /// into a <see cref="Filename.XSML"/> xml document.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void Save_writes_a_Schema_object_into_a_stream_when_called()
+        public void SerializeSchemaObjectToStream()
         {
             // Arrange
-            var sut = Samples.GetSchema();
+            Schema sut = Samples.GetSchema();
             using (var stream = new MemoryStream())
             {
                 // Act
-                sut.Save(stream);
-                using (var reader = new StreamReader(stream))
-                {
-                    var result = reader.ReadToEnd();
+                sut.WriteTo(stream);
 
-                    // Assert
-                    Approvals.VerifyXml(result);
-                }
+                var validator = new XmlValidator();
+                validator.Load(stream);
+
+                // Assert
+                Assert.IsTrue(validator.XmlDocIsValid, validator.GetErrorLog());
             }
         }
 
+        /// <summary>
+        /// Assert <see cref="Schema"/> can be deserialized by the <see
+        /// cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void Save_writes_a_Schema_object_into_a_XmlWriter_when_called()
+        public void DeserializeSchemaObjectFromStream()
         {
             // Arrange
-            var sut = Samples.GetSchema();
-            using (var stream = new MemoryStream())
+            var schemaFile = Samples.GetFile(Filename.EmployeeSchema);
+
+            // Act
+            using (var stream = schemaFile.OpenRead())
             {
-                var settings = new XmlWriterSettings();
-                settings.Indent = false;
+                var obj = Schema.Load(stream);
 
-                var writer = XmlWriter.Create(stream, settings);
-
-                // Act
-                sut.Save(writer);
-                using (var reader = new StreamReader(stream))
-                {
-                    var result = reader.ReadToEnd();
-
-                    // Assert
-                    Approvals.VerifyXml(result);
-                }
+                // Assert
+                Assert.IsNotNull(obj);
+                Assert.IsNotNull(obj.Tables);
             }
+        }
+
+        /// <summary>
+        /// Assert <see cref="Schema"/> can be deserialized by the <see
+        /// cref="System.Xml.Serialization.XmlSerializer"/> with a string.
+        /// </summary>
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void DeserializeSchemaObjectFromString()
+        {
+            // Arrange
+            var schemaFile = Samples.GetFile(Filename.EmployeeSchema);
+
+            // Act
+            var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));
+
+            // Assert
+            Assert.IsNotNull(obj);
+            Assert.IsNotNull(obj.Tables);
         }
     }
 }

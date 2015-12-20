@@ -14,7 +14,7 @@ namespace Tests.Daterpillar.UnitTest
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        [DataSource(Data.Provider, Data.ConnectionString, "Text_Formats$", DataAccessMethod.Sequential)]
+        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
         public void ConvertStringToPascalCase()
         {
             // Arrange
@@ -35,7 +35,7 @@ namespace Tests.Daterpillar.UnitTest
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        [DataSource(Data.Provider, Data.ConnectionString, "Text_Formats$", DataAccessMethod.Sequential)]
+        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
         public void ConvertStringToCamelCase()
         {
             // Arrange

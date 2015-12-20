@@ -11,7 +11,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SQLiteTemplateTest
     {
         [ClassCleanup]
@@ -21,27 +21,49 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Verify the <see cref="SQLiteTemplate.Transform(Schema)"/> method outputs a Schema object as a SQLite schema when the default settings is passed.
+        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> is generating a SQLite schema with
+        /// comments enabled.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void ReturnSQLiteSchemaWithAllSettings()
+        public void GenerateSQLiteSchemaWithComments()
         {
             // Arrange
-            var settings = new SqlTemplateSettings()
-            {
-                Indent = true,
-                ShowComments = true
-            };
-
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
             mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
-                .Returns("DATA_TYPE")
+                .Returns("INTEGER")
                 .OccursAtLeast(1);
 
-            var sut = new SQLiteTemplate(settings, mockTypeResolver);
             var sample = Samples.GetSchema();
+            sample.Tables.Add(Samples.GetTableSchema("Manager"));
 
+            var sut = new SQLiteTemplate(mockTypeResolver, addComments: true);
+            // Act
+            var result = sut.Transform(sample);
+
+            // Assert
+            mockTypeResolver.Assert();
+            Approvals.Verify(result);
+        }
+
+        /// <summary>
+        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> is generating a SQLite schema with
+        /// comments disabled.
+        /// </summary>
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void GenerateSQLiteSchemaWithoutComments()
+        {
+            // Arrange
+            var mockTypeResolver = Mock.Create<ITypeNameResolver>();
+            mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
+                .Returns("INTEGER")
+                .OccursAtLeast(1);
+
+            var sample = Samples.GetSchema();
+            sample.Tables.Add(Samples.GetTableSchema("Manager"));
+
+            var sut = new SQLiteTemplate(mockTypeResolver, addComments: false);
             // Act
             var result = sut.Transform(sample);
 

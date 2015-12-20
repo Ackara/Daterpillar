@@ -1,6 +1,8 @@
 ﻿using Ackara.Daterpillar.Transformation;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Tests.Daterpillar
@@ -9,7 +11,11 @@ namespace Tests.Daterpillar
     {
         public static FileInfo GetFile(string filename)
         {
-            throw new System.NotImplementedException();
+            string ext = "*" + Path.GetExtension(filename);
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            return new DirectoryInfo(baseDirectory).GetFiles(ext, SearchOption.AllDirectories)
+                .First(x => x.Name == filename);
         }
 
         public static Schema GetSchema([CallerMemberName]string name = null)
@@ -18,21 +24,27 @@ namespace Tests.Daterpillar
             schema.Name = name ?? "SchemaName";
             schema.Author = "johnDoe@example.com";
 
-            // Define tables
-            var employee = new Table();
-            employee.Name = "Employee";
+            var employeeTable = GetTableSchema();
+            schema.Tables.Add(employeeTable);
+
+            return schema;
+        }
+
+        public static Table GetTableSchema(string name = "Employee")
+        {
+            var table = new Table() { Name = name };
 
             // Define columns
             var id = new Column();
             id.Name = "Id";
             id.Comment = "The id column.";
             id.DataType = new DataType() { Name = "int" };
-            id.Modifiers = new List<string>(new string[] { "NOT NULL", "PRIMARY KEY AUTO_INCREMENT" });
+            id.Modifiers = new List<string>(new string[] { "NOT NULL" });
 
             var fullName = new Column();
             fullName.Name = "Full_Name";
             fullName.Comment = "The first name column.";
-            fullName.DataType = new DataType() { Name = "VARCHAR", Scale = 64 };
+            fullName.DataType = new DataType() { Name = "varchar", Scale = 64 };
             fullName.Modifiers = new List<string>(new string[] { "not null", "default 'n/a'" });
 
             var salary = new Column();
@@ -47,30 +59,28 @@ namespace Tests.Daterpillar
             fKey.LocalColumn = "Id";
             fKey.ForeignTable = "Card";
             fKey.ForeignColumn = "Id";
-            fKey.OnUpdate = ForeignKeyRule.SetNull;
-            fKey.OnDelete = ForeignKeyRule.Cascade;
+            fKey.OnUpdateRule = ForeignKeyRule.SET_NULL;
+            fKey.OnDeleteRule = ForeignKeyRule.CASCADE;
 
             // Define index
             var pKey = new Index();
-            pKey.Table = employee.Name;
+            pKey.Table = table.Name;
             pKey.Type = "primaryKey";
             pKey.Columns = new List<IndexColumn>() { new IndexColumn() { Name = "Id" } };
 
             var idx1 = new Index();
-            idx1.Name = "index1";
+            idx1.Name = $"{name}_idx".ToLower();
             idx1.Type = "index";
             idx1.Unique = true;
-            idx1.Table = employee.Name;
+            idx1.Table = table.Name;
             idx1.Columns = new List<IndexColumn>() { new IndexColumn() { Name = fullName.Name, Order = SortOrder.DESC } };
 
             // Put it all together
-            employee.Columns = new List<Column>() { id, fullName, salary };
-            employee.ForeignKeys = new List<ForeignKey>() { fKey };
-            employee.Indexes = new List<Index>() { pKey, idx1 };
+            table.Columns = new List<Column>() { id, fullName, salary };
+            table.ForeignKeys = new List<ForeignKey>() { fKey };
+            table.Indexes = new List<Index>() { pKey, idx1 };
 
-            schema.Tables.Add(employee);
-
-            return schema;
+            return table;
         }
     }
 }
