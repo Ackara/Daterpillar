@@ -1,8 +1,8 @@
 ﻿namespace Ackara.Daterpillar.Transformation.Template
 {
-    public struct CsharpTemplateSettings
+    public struct CSharpTemplateSettings
     {
-        public static CsharpTemplateSettings Default = new CsharpTemplateSettings()
+        public static CSharpTemplateSettings Default = new CSharpTemplateSettings()
         {
             Namespace = Schema.Xmlns,
 

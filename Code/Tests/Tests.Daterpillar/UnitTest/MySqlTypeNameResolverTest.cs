@@ -6,7 +6,9 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    public class CSharpTypeNameResolverTest : TypeNameResolverTestBase
+    [DeploymentItem(Artifact.XSML)]
+    [DeploymentItem(Artifact.DataXLSX)]
+    public class MySqlTypeNameResolverTest : TypeNameResolverTestBase
     {
         public TestContext TestContext { get; set; }
 
@@ -17,18 +19,18 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="CSharpTypeNameResolver.GetName(DataType)"/> returns a valid C# type
+        /// Assert <see cref="MySqlTypeNameResolver.GetName(DataType)"/> returns a valid MySQL type
         /// name that best match the specified data type.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
-        public void ResolveCsharpTypeName()
+        public void ResolveMySqlTypeName()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
-            var expected = TestContext.DataRow["C#"].ToString();
-            var sut = new CSharpTypeNameResolver();
+            var expected = TestContext.DataRow["MySQL"].ToString();
+            var sut = new MySqlTypeNameResolver();
 
             // Act
             var result = sut.GetName(dataType);

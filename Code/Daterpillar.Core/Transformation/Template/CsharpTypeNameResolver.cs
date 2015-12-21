@@ -1,8 +1,8 @@
 ﻿namespace Ackara.Daterpillar.Transformation.Template
 {
-    public class CsharpTypeNameResolver : TypeNameResolverBase
+    public sealed class CSharpTypeNameResolver : TypeNameResolverBase
     {
-        public CsharpTypeNameResolver()
+        public CSharpTypeNameResolver()
         {
             TypeNames[BOOL] = "bool";
             TypeNames[BLOB] = "string";

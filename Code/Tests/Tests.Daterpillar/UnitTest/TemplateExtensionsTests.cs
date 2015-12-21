@@ -23,8 +23,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Act
             var result = text.ToPascalCase();
-
-            TestContext.WriteLine("sample: {0}", text);
+            TestContext.WriteLine("input: {0}", text);
 
             // Assert
             Assert.AreEqual(expected, result);
@@ -44,6 +43,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Act
             var result = text.ToCamelCase();
+            TestContext.WriteLine("input: {0}", text);
 
             // Assert
             Assert.AreEqual(expected, result);

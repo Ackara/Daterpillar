@@ -1,6 +1,6 @@
 ﻿namespace Ackara.Daterpillar.Transformation.Template
 {
-    public class SQLiteTypeNameResolver : TypeNameResolverBase
+    public sealed class SQLiteTypeNameResolver : TypeNameResolverBase
     {
         public SQLiteTypeNameResolver() : base()
         {

@@ -12,10 +12,10 @@ namespace Tests.Daterpillar.UnitTest
     [TestClass]
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class CsharpTemplateTest
+    public class CSharpTemplateTest
     {
         /// <summary>
-        /// Assert <see cref="CsharpTemplate.Transform(Schema)"/> returns valid C# when all settings
+        /// Assert <see cref="CSharpTemplate.Transform(Schema)"/> returns valid C# when all settings
         /// are enabled.
         /// </summary>
         [TestMethod]
@@ -26,7 +26,7 @@ namespace Tests.Daterpillar.UnitTest
             Schema schema = Samples.GetSchema();
             schema.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var settings = new CsharpTemplateSettings()
+            var settings = new CSharpTemplateSettings()
             {
                 Namespace = Schema.Xmlns,
 
@@ -41,7 +41,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("string")
                 .OccursAtLeast(1);
 
-            var sut = new CsharpTemplate(settings, mockResolver);
+            var sut = new CSharpTemplate(settings, mockResolver);
 
             // Act
             var csharp = sut.Transform(schema);
@@ -52,7 +52,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="CsharpTemplate.Transform(Schema)"/> returns valid C# when all settings
+        /// Assert <see cref="CSharpTemplate.Transform(Schema)"/> returns valid C# when all settings
         /// are disabled.
         /// </summary>
         [TestMethod]
@@ -63,7 +63,7 @@ namespace Tests.Daterpillar.UnitTest
             Schema schema = Samples.GetSchema();
             schema.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var settings = new CsharpTemplateSettings()
+            var settings = new CSharpTemplateSettings()
             {
                 Namespace = string.Empty,
 
@@ -78,7 +78,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("string")
                 .OccursAtLeast(1);
 
-            var sut = new CsharpTemplate(settings, mockResolver);
+            var sut = new CSharpTemplate(settings, mockResolver);
 
             // Act
             var csharp = sut.Transform(schema);

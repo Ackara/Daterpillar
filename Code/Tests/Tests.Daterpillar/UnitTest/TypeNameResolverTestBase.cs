@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 namespace Tests.Daterpillar.UnitTest
 {
+    [TestClass]
     public abstract class TypeNameResolverTestBase
     {
         /// <summary>

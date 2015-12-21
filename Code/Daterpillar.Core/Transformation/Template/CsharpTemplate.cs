@@ -3,17 +3,17 @@ using System.Text;
 
 namespace Ackara.Daterpillar.Transformation.Template
 {
-    public class CsharpTemplate : ITemplate
+    public class CSharpTemplate : ITemplate
     {
-        public CsharpTemplate() : this(CsharpTemplateSettings.Default, new CsharpTypeNameResolver())
+        public CSharpTemplate() : this(CSharpTemplateSettings.Default, new CSharpTypeNameResolver())
         {
         }
 
-        public CsharpTemplate(CsharpTemplateSettings settings) : this(settings, new CsharpTypeNameResolver())
+        public CSharpTemplate(CSharpTemplateSettings settings) : this(settings, new CSharpTypeNameResolver())
         {
         }
 
-        public CsharpTemplate(CsharpTemplateSettings settings, ITypeNameResolver typeResolver)
+        public CSharpTemplate(CSharpTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;
@@ -37,7 +37,7 @@ namespace Ackara.Daterpillar.Transformation.Template
 
         private Table _currentTable;
         private ITypeNameResolver _typeResolver;
-        private CsharpTemplateSettings _settings;
+        private CSharpTemplateSettings _settings;
         private StringBuilder _text = new StringBuilder();
 
         private static string GetAttributeShortName(string attributeName)
@@ -133,24 +133,6 @@ namespace Ackara.Daterpillar.Transformation.Template
             }
         }
 
-        private void AppendDataContract(Table table)
-        {
-            if (_settings.DataContractsEnabled)
-            {
-                string nameSpace = string.IsNullOrEmpty(_settings.Namespace) ? "" : $"(Namespace = \"{_settings.Namespace}\")";
-                _text.AppendLine($"[DataContract{nameSpace}]");
-            }
-        }
-
-        private void AppendSchemaAttribute(Table table)
-        {
-            if (_settings.SchemaAnnotationsEnabled)
-            {
-                string attribute = GetAttributeShortName(typeof(TableAttribute).Name);
-                _text.AppendLine($"[{attribute}(\"{table.Name}\")]");
-            }
-        }
-
         private void AppendComment(Column column)
         {
             if (_settings.CommentsEnabled)
@@ -170,11 +152,29 @@ namespace Ackara.Daterpillar.Transformation.Template
             }
         }
 
+        private void AppendDataContract(Table table)
+        {
+            if (_settings.DataContractsEnabled)
+            {
+                string nameSpace = string.IsNullOrEmpty(_settings.Namespace) ? "" : $"(Namespace = \"{_settings.Namespace}\")";
+                _text.AppendLine($"[DataContract{nameSpace}]");
+            }
+        }
+
         private void AppendDataContract(Column column)
         {
             if (_settings.DataContractsEnabled)
             {
                 _text.AppendLine($"\t[DataMember]");
+            }
+        }
+
+        private void AppendSchemaAttribute(Table table)
+        {
+            if (_settings.SchemaAnnotationsEnabled)
+            {
+                string attribute = GetAttributeShortName(typeof(TableAttribute).Name);
+                _text.AppendLine($"[{attribute}(\"{table.Name}\")]");
             }
         }
 
