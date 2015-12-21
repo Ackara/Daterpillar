@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Ackara.Daterpillar.Transformation.Template
 {
@@ -55,10 +57,28 @@ namespace Ackara.Daterpillar.Transformation.Template
             }
         }
 
+        internal static string AppendPeriod(this string text)
+        {
+            return text[text.Length - 1] == '.' ? text : (text + ".");
+        }
+
         internal static void RemoveLastComma(this StringBuilder builder)
         {
             int commaIndex = builder.ToString().LastIndexOf(',');
             builder.Remove(commaIndex, 1);
+        }
+
+        internal static bool IsKey(this IEnumerable<Index> indexes, string columnName)
+        {
+            foreach (var index in indexes.Where(x => x.IndexType == IndexType.Primary))
+            {
+                if (index.Columns.Exists(x => x.Name == columnName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

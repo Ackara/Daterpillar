@@ -8,6 +8,9 @@ namespace Ackara.Daterpillar.Transformation
         [XmlAttribute("name")]
         public string Name { get; set; }
 
+        [XmlAttribute("autoIncrement")]
+        public bool AutoIncrement { get; set; }
+
         [XmlElement("comment")]
         public string Comment { get; set; }
 

@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> is generating a SQLite schema with
+        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> returns a valid SQLite schema with
         /// comments enabled.
         /// </summary>
         [TestMethod]
@@ -47,7 +47,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> is generating a SQLite schema with
+        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> returns a valid SQLite schema with
         /// comments disabled.
         /// </summary>
         [TestMethod]

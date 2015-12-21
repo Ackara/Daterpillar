@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.UnitTest
     {
         /// <summary>
         /// This method ensures that the test data in alignment with the allowed <see
-        /// cref="Filename.XSML"/> xml schema types.
+        /// cref="Artifact.XSML"/> xml schema types.
         /// </summary>
         public static void AssertTestDataIsValid()
         {
@@ -26,14 +26,14 @@ namespace Tests.Daterpillar.UnitTest
             {
                 if (testDataTypeNameList.Contains(officialName) == false)
                 {
-                    Assert.Fail($"{Filename.DataXLSX} does not contain \"{officialName}\" as a type name.");
+                    Assert.Fail($"{Artifact.DataXLSX} does not contain \"{officialName}\" as a type name.");
                 }
             }
         }
 
         private static IEnumerable<string> GetXsdTypeNames()
         {
-            string schemaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Filename.XSML);
+            string schemaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Artifact.XSML);
 
             var xsdDoc = XDocument.Load(schemaPath);
             string xmlns = "http://www.w3.org/2001/XMLSchema";

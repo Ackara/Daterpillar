@@ -1,8 +1,8 @@
 ﻿/* GenerateSQLiteSchemaWithComments by johnDoe@example.com | Table(s):2 */
 
--- ------------------------------
--- Employee table
--- ------------------------------
+-- -----------------------------------
+-- EMPLOYEE TABLE
+-- -----------------------------------
 CREATE TABLE IF NOT EXISTS [Employee]
 (
 	[Id] INTEGER NOT NULL,
@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS [Employee]
 
 CREATE UNIQUE INDEX IF NOT EXISTS employee_idx ON [Employee] ([Full_Name] DESC);
 
--- ------------------------------
--- Manager table
--- ------------------------------
+-- -----------------------------------
+-- MANAGER TABLE
+-- -----------------------------------
 CREATE TABLE IF NOT EXISTS [Manager]
 (
 	[Id] INTEGER NOT NULL,

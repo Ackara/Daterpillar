@@ -117,9 +117,18 @@ namespace Ackara.Daterpillar.Transformation.Template
         {
             if (_commentsEnabled)
             {
-                _text.AppendLine("-- ------------------------------");
-                _text.AppendLine($"-- {table.Name} table");
-                _text.AppendLine("-- ------------------------------");
+                if (string.IsNullOrWhiteSpace(table.Comment))
+                {
+                    _text.AppendLine("-- -----------------------------------");
+                    _text.AppendLine($"-- {table.Name.ToUpper()} TABLE");
+                    _text.AppendLine("-- -----------------------------------");
+                }
+                else
+                {
+                    _text.AppendLine("/*");
+                    _text.AppendLine($"{table.Comment.Trim().AppendPeriod()}");
+                    _text.AppendLine("*/");
+                }
             }
         }
 

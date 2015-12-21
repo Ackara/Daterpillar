@@ -11,14 +11,16 @@
     {
         public const string
             ExcelProvider = "System.Data.Odbc",
-            ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\" + Filename.DataXLSX;
+            ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\" + Artifact.DataXLSX;
     }
 
-    public struct Filename
+    public struct Artifact
     {
         public const string
             DataXLSX = "data.xlsx",
-            SamplesFolder = "Sample Files",
+            x86SQLiteInterop = "x86\\SQLite.Interop.dll",
+            x64SQLiteInterop = "x64\\SQLite.Interop.dll",
+            SamplesFolder = "Sample Files\\",
             EmployeeSchema = "employee_schema.xml",
             XSML = "xsml.xsd";
     }

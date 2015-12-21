@@ -37,7 +37,7 @@ namespace Tests.Daterpillar
             // Define columns
             var id = new Column();
             id.Name = "Id";
-            id.Comment = "The id column.";
+            id.AutoIncrement = true;
             id.DataType = new DataType() { Name = "int" };
             id.Modifiers = new List<string>(new string[] { "NOT NULL" });
 

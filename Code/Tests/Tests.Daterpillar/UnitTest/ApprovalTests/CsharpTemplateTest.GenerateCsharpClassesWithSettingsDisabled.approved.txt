@@ -1,0 +1,17 @@
+﻿public partial class Employee
+{
+	public string Id { get; set; }
+
+	public string FullName { get; set; }
+
+	public string Salary { get; set; }
+}
+
+public partial class Manager
+{
+	public string Id { get; set; }
+
+	public string FullName { get; set; }
+
+	public string Salary { get; set; }
+}

@@ -90,6 +90,8 @@
     <Compile Include="UnitTest\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
     <Compile Include="UnitTest\TypeNameResolverTestBase.cs" />
+    <Compile Include="UnitTest\CsharpTemplateTest.cs" />
+    <Compile Include="UnitTest\CsharpTypeNameResolverTest.cs" />
     <Compile Include="XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>

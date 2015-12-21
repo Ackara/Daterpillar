@@ -11,7 +11,7 @@ namespace Tests.Daterpillar
 
         public static SQLiteConnection CreateSQLiteConnection(string schema = null)
         {
-            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp.db3");
+            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp.db");
             if (File.Exists(dbPath)) File.Delete(dbPath);
 
             string connectionString = new SQLiteConnectionStringBuilder() { DataSource = dbPath }.ConnectionString;

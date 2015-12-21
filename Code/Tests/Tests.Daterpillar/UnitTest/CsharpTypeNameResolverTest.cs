@@ -6,9 +6,7 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.DataXLSX)]
-    [DeploymentItem(Artifact.XSML)]
-    public class SQLiteTypeNameResolverTest : TypeNameResolverTestBase
+    public class CsharpTypeNameResolverTest : TypeNameResolverTestBase
     {
         public TestContext TestContext { get; set; }
 
@@ -19,18 +17,18 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// <see cref="SQLiteTypeNameResolver.GetName(DataType)"/> should return the SQLite type
+        /// Assert <see cref="CsharpTypeNameResolver.GetName(DataType)"/> returns a valid C# type
         /// name that best match the specified data type.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
-        public void ResolveSQLiteTypeName()
+        public void ResolveCsharpTypeName()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
-            var expected = TestContext.DataRow["SQLite"].ToString();
-            var sut = new SQLiteTypeNameResolver();
+            var expected = TestContext.DataRow["C#"].ToString();
+            var sut = new CsharpTypeNameResolver();
 
             // Act
             var result = sut.GetName(dataType);

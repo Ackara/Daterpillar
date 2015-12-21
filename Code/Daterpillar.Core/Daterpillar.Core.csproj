@@ -36,10 +36,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Annotation\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotation\ColumnAttribute.cs" />
+    <Compile Include="Annotation\TableAttribute.cs" />
+    <Compile Include="Annotation\ViewAttribute.cs" />
+    <Compile Include="Data\EntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transformation\Template\CsharpTemplate.cs" />
+    <Compile Include="Transformation\Template\CsharpTemplateSettings.cs" />
+    <Compile Include="Transformation\Template\CsharpTypeNameResolver.cs" />
+    <Compile Include="Transformation\IndexType.cs" />
     <Compile Include="Transformation\Template\ITypeNameResolver.cs" />
     <Compile Include="Transformation\Template\SQLiteTemplate.cs" />
     <Compile Include="Transformation\Template\ITemplate.cs" />

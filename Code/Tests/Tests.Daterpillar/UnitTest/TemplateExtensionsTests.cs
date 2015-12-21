@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Filename.DataXLSX)]
+    [DeploymentItem(Artifact.DataXLSX)]
     public class TemplateExtensionsTests
     {
         public TestContext TestContext { get; set; }

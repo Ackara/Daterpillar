@@ -43,6 +43,10 @@
     <xs:attribute name="name"
                   type="xs:string"
                   use="required" />
+
+    <xs:attribute name="autoIncrement"
+                  type="xs:boolean"
+                  use="optional" />
   </xs:complexType>
 
   <!-- D -->
