@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Data
+﻿namespace Gigobyte.Daterpillar.Data
 {
     public struct ColumnInfo
     {

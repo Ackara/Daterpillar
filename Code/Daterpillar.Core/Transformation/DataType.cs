@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar.Transformation
+namespace Gigobyte.Daterpillar.Transformation
 {
     public struct DataType
     {

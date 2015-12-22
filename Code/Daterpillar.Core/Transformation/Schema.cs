@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar.Transformation
+namespace Gigobyte.Daterpillar.Transformation
 {
     [XmlRoot("schema", Namespace = Xmlns)]
     public class Schema

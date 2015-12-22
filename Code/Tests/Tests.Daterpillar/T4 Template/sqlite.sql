@@ -1,9 +1,9 @@
-﻿-- -----------------------------------
--- SCHEMA:		beta corp llc
--- AUTHOR:		john@example.com
--- VERSION:		1.0.0.0
--- GENERATED:	Dec 22, 2015
--- -----------------------------------
+﻿/*
+ * SCHEMA:		example inc.
+ * VERSION:		1.0.0.0
+ * AUTHOR:		john@example.com
+ * GENERATED:	Dec 22, 2015
+*/
 
 -- -----------------------------------
 -- EMPLOYEE TABLE
@@ -19,13 +19,14 @@ CREATE TABLE IF NOT EXISTS [employee]
 	PRIMARY KEY ([Id] ASC)
 );
 
+
 -- -----------------------------------
 -- SALARY TABLE
 -- -----------------------------------
 CREATE TABLE IF NOT EXISTS [salary]
 (
 	[Employee_Id] INTEGER not null,
-	[salary] DECIMAL(12, 2) not null default 0,
+	[amount] DECIMAL(12, 2) not null default 0,
 	[from_date] DATE not null,
 	[to_date] DATE not null,
 	PRIMARY KEY ([from_date] ASC, [Employee_Id] ASC),

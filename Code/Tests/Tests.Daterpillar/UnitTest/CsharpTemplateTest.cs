@@ -1,8 +1,8 @@
-﻿using Ackara.Daterpillar.Transformation;
-using Ackara.Daterpillar.Transformation.Template;
-using ApprovalTests;
+﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;

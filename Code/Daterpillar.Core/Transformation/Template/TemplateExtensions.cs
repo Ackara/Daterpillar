@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Ackara.Daterpillar.Transformation.Template
+namespace Gigobyte.Daterpillar.Transformation.Template
 {
     /// <summary>
     /// Extension methods for the <see cref="Template"/> namespace.

@@ -1,7 +1,7 @@
-﻿using Ackara.Daterpillar.Annotation;
+﻿using Gigobyte.Daterpillar.Annotation;
 using System.Text;
 
-namespace Ackara.Daterpillar.Transformation.Template
+namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public class CSharpTemplate : ITemplate
     {

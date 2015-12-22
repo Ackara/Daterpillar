@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar.Transformation
+namespace Gigobyte.Daterpillar.Transformation
 {
     public class Table
     {

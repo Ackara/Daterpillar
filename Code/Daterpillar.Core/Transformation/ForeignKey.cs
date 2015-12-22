@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar.Transformation
+namespace Gigobyte.Daterpillar.Transformation
 {
     public class ForeignKey
     {

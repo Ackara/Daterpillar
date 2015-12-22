@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Ackara.Daterpillar.Transformation.Template
+namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public sealed class MySqlTemplate : ITemplate
     {
@@ -85,7 +85,7 @@ namespace Ackara.Daterpillar.Transformation.Template
             string modifiers = string.Join(" ", column.Modifiers);
             string autoIncrement = column.AutoIncrement ? " AUTO_INCREMENT " : " ";
 
-            _text.AppendLine($"\t{column.Name} {dataType} {modifiers}{autoIncrement}COMMENT '{column.Comment?.Replace("'", "''")}',");
+            _text.AppendLine($"\t`{column.Name}` {dataType} {modifiers}{autoIncrement}COMMENT '{column.Comment?.Replace("'", "''")}',");
         }
 
         private void Transform(ForeignKey foreignKey)

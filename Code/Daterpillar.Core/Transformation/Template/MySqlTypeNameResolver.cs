@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Transformation.Template
+﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public sealed class MySqlTypeNameResolver : TypeNameResolverBase
     {

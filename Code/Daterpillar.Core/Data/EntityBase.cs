@@ -1,8 +1,8 @@
-﻿using Ackara.Daterpillar.Annotation;
+﻿using Gigobyte.Daterpillar.Annotation;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Ackara.Daterpillar.Data
+namespace Gigobyte.Daterpillar.Data
 {
     [System.Runtime.Serialization.DataContract]
     [System.Diagnostics.DebuggerDisplay("{" + nameof(ToDebuggerDisplay) + "}")]

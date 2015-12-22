@@ -1,5 +1,5 @@
-﻿using Ackara.Daterpillar.Transformation;
-using Ackara.Daterpillar.Transformation.Template;
+﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Microsoft.CodeAnalysis.CSharp;
@@ -72,6 +72,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
+        //[Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
         public void GenerateMySqlSchemaFromFile()
         {
             // Arrange

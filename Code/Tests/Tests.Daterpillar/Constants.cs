@@ -20,6 +20,7 @@
             XSML = "xsml.xsd",
             DataXLSX = "data.xlsx",
             SamplesFolder = "Sample Files\\",
+            MusicSchema = "music-sqlite.sql",
             x86SQLiteInterop = "x86\\SQLite.Interop.dll",
             x64SQLiteInterop = "x64\\SQLite.Interop.dll",
             DaterpillarSchema = "daterpillar_schema.xml";

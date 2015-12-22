@@ -45,7 +45,7 @@
       <modifier>not null</modifier>
     </column>
 
-    <column name="salary">
+    <column name="amount">
       <dataType scale="12" precision="2">decimal</dataType>
       <modifier>not null</modifier>
       <modifier>default 0</modifier>

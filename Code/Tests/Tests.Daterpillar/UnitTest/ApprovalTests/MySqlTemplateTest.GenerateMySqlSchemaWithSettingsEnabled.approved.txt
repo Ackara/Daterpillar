@@ -7,9 +7,9 @@ USE `GenerateMySqlSchemaWithSettingsEnabled`;
 -- ------------------------------
 CREATE TABLE IF NOT EXISTS `Employee`
 (
-	Id int NOT NULL AUTO_INCREMENT COMMENT '',
-	Full_Name int not null default 'n/a' COMMENT 'The first name column.',
-	Salary int not null COMMENT 'The salary column',
+	`Id` int NOT NULL AUTO_INCREMENT COMMENT '',
+	`Full_Name` int not null default 'n/a' COMMENT 'The first name column.',
+	`Salary` int not null COMMENT 'The salary column',
 	PRIMARY KEY (`Id` ASC),
 	FOREIGN KEY (`Id`) REFERENCES `Card`(`Id`) ON UPDATE SET NULL ON DELETE CASCADE
 );
@@ -21,9 +21,9 @@ this is a table.
 */
 CREATE TABLE IF NOT EXISTS `Manager`
 (
-	Id int NOT NULL AUTO_INCREMENT COMMENT '',
-	Full_Name int not null default 'n/a' COMMENT 'The first name column.',
-	Salary int not null COMMENT 'The salary column',
+	`Id` int NOT NULL AUTO_INCREMENT COMMENT '',
+	`Full_Name` int not null default 'n/a' COMMENT 'The first name column.',
+	`Salary` int not null COMMENT 'The salary column',
 	PRIMARY KEY (`Id` ASC),
 	FOREIGN KEY (`Id`) REFERENCES `Card`(`Id`) ON UPDATE SET NULL ON DELETE CASCADE
 );

@@ -1,0 +1,50 @@
+﻿<#@ template hostspecific="true" language="C#" #>
+<#@ assembly name="$(TargetDir)\Gigobyte.Daterpillar.Core.dll" #>
+<#@ assembly name="System.Reflection" #>
+<#@ assembly name="System.Runtime" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.IO" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="Gigobyte.Daterpillar.Transformation" #>
+<#@ import namespace="Gigobyte.Daterpillar.Transformation.Template" #>
+<#@ output extension=".cs" #>
+<# 
+	/* *** INSTRUCTIONS *** */
+	/// To run this template, the location of the "Gigobyte.Daterpillar.Core.dll" must be provided.
+	/// If you add the .dll to project as a reference then perform a build, the directive above "@ assembly name="$(TargetDir)\Gigobyte.Daterpillar.Core.dll" #"
+	/// will find the .dll.
+#>
+using System;
+using Gigobyte.Daterpillar.Data;
+using System.Runtime.Serialization;
+using Gigobyte.Daterpillar.Annotation;
+
+namespace GeneratedCode
+{
+<# 
+	/* *** INSTRUCTIONS *** */
+	/// Provide the path to the schema document you wish to transform.
+	/// Below are some examples of how a dynamic path can be constructed.
+
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(TargetDir)"), "schema.xml");
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "schema.xml");
+	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "T4 Template", "schema.xml");
+	
+	var settings = new CSharpTemplateSettings()
+	{
+		CommentsEnabled = true,
+		DataContractsEnabled = true,
+		SchemaAnnotationsEnabled = true,
+		VirtualPropertiesEnabled = true
+	};
+
+	var template = new CSharpTemplate(settings);
+	var schema = Schema.Load(File.OpenRead(schemaPath));
+	string csharp = template.Transform(schema);
+
+	PushIndent("\t");
+	WriteLine(csharp);
+	ClearIndent();
+#>
+}

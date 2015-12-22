@@ -1,4 +1,4 @@
-﻿using Ackara.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Transformation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,11 @@ namespace Tests.Daterpillar
 
             return new DirectoryInfo(baseDirectory).GetFiles(ext, SearchOption.AllDirectories)
                 .First(x => x.Name == filename);
+        }
+
+        public static string GetFileContent(string filename)
+        {
+            return File.ReadAllText(GetFile(filename).FullName);
         }
 
         public static Schema GetSchema([CallerMemberName]string name = null)

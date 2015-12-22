@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ackara.Daterpillar.Annotation
+namespace Gigobyte.Daterpillar.Annotation
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class ColumnAttribute : Attribute

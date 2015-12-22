@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Ackara.Daterpillar.Transformation.Template
+namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public class SQLiteTemplate : ITemplate
     {

@@ -1,6 +1,6 @@
-﻿namespace Ackara.Daterpillar.Transformation.Template
+﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    internal interface ITemplate
+    public interface ITemplate
     {
         string Transform(Schema schema);
     }

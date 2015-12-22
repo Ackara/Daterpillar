@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ackara.Daterpillar.Transformation.Template
+namespace Gigobyte.Daterpillar.Transformation.Template
 {
 	public abstract class TypeNameResolverBase : ITypeNameResolver
 	{

@@ -1,11 +1,11 @@
-﻿using Ackara.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.SamplesFolder + "\\" + Artifact.DaterpillarSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + Artifact.DaterpillarSchema)]
     public class SchemaTest
     {
         /// <summary>
