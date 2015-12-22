@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <schema xmlns="http://schema.gigobyte.com/v1/xsml.xsd"
-        name="employee"
+        name="daterpillar"
         author="john@example.com">
   <table name="employee">
     <column name="Id">

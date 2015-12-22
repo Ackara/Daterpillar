@@ -5,7 +5,7 @@ using System.IO;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.SamplesFolder + "\\" + Artifact.EmployeeSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + "\\" + Artifact.DaterpillarSchema)]
     public class SchemaTest
     {
         /// <summary>
@@ -40,7 +40,7 @@ namespace Tests.Daterpillar.UnitTest
         public void DeserializeSchemaObjectFromStream()
         {
             // Arrange
-            var schemaFile = Samples.GetFile(Artifact.EmployeeSchema);
+            var schemaFile = Samples.GetFile(Artifact.DaterpillarSchema);
 
             // Act
             using (var stream = schemaFile.OpenRead())
@@ -62,7 +62,7 @@ namespace Tests.Daterpillar.UnitTest
         public void DeserializeSchemaObjectFromString()
         {
             // Arrange
-            var schemaFile = Samples.GetFile(Artifact.EmployeeSchema);
+            var schemaFile = Samples.GetFile(Artifact.DaterpillarSchema);
 
             // Act
             var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));

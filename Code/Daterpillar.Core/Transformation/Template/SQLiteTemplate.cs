@@ -19,18 +19,12 @@ namespace Ackara.Daterpillar.Transformation.Template
         {
             _text.Clear();
 
-            AppendSchemaComments(schema);
             foreach (var table in schema.Tables)
             {
-                TransformTable(table);
+                Transform(table);
             }
 
             return _text.ToString().Trim();
-        }
-
-        public void AttachScript(string path)
-        {
-            throw new System.NotImplementedException();
         }
 
         #region Private Members
@@ -39,43 +33,41 @@ namespace Ackara.Daterpillar.Transformation.Template
         private ITypeNameResolver _typeResolver;
         private StringBuilder _text = new StringBuilder();
 
-        private void TransformTable(Table table)
+        private void Transform(Table table)
         {
-            AppendTableComments(table);
+            AppendComments(table);
+
             _text.AppendLine($"CREATE TABLE IF NOT EXISTS [{table.Name}]");
             _text.AppendLine("(");
 
             foreach (var column in table.Columns)
             {
-                TransformColumn(column);
+                Transform(column);
             }
 
-            foreach (var index in table.Indexes.Where(x => x.Type == "primaryKey"))
+            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Primary))
             {
                 TransformPrimaryKey(index);
             }
 
             foreach (var foreignKey in table.ForeignKeys)
             {
-                TransformForeignKey(foreignKey);
+                Transform(foreignKey);
             }
 
             _text.RemoveLastComma();
             _text.AppendLine(");");
             _text.AppendLine();
 
-            bool hasIndex = false;
-
-            foreach (var index in table.Indexes.Where(x => x.Type == "index"))
+            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
             {
                 TransformIndex(index);
-                hasIndex = true;
             }
 
-            if (hasIndex) _text.AppendLine();
+            _text.AppendLine();
         }
 
-        private void TransformColumn(Column column)
+        private void Transform(Column column)
         {
             string dataType = _typeResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
@@ -90,7 +82,7 @@ namespace Ackara.Daterpillar.Transformation.Template
             _text.AppendLine($"\tPRIMARY KEY ({columns}),");
         }
 
-        private void TransformForeignKey(ForeignKey foreignKey)
+        private void Transform(ForeignKey foreignKey)
         {
             _text.AppendLine($"\tFOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate} ON DELETE {foreignKey.OnDelete},");
         }
@@ -103,17 +95,7 @@ namespace Ackara.Daterpillar.Transformation.Template
             _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS {index.Name} ON [{index.Table}] ({columns});");
         }
 
-        private void AppendSchemaComments(Schema schema)
-        {
-            if (_commentsEnabled)
-            {
-                int totalTables = schema.Tables.Count;
-                _text.AppendLine($"/* {schema.Name} by {schema.Author} | Table(s):{totalTables} */");
-                _text.AppendLine();
-            }
-        }
-
-        private void AppendTableComments(Table table)
+        private void AppendComments(Table table)
         {
             if (_commentsEnabled)
             {

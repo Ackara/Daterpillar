@@ -14,13 +14,26 @@ namespace Tests.Daterpillar.UnitTest
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class MySqlTemplateTest
     {
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
+        }
+
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void GenerateMySqlSchemaWithComments()
+        public void GenerateMySqlSchemaWithSettingsEnabled()
         {
             // Arrange
+            var settings = new MySqlTemplateSettings()
+            {
+                CommentsEnabled = true,
+                DropSchemaAtBegining = true
+            };
+
             var schema = Samples.GetSchema();
             var managerTable = Samples.GetTableSchema("Manager");
+            managerTable.Comment = "this is a table";
             schema.Tables.Add(managerTable);
 
             var mockResolver = Mock.Create<ITypeNameResolver>();
@@ -28,7 +41,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("int")
                 .OccursAtLeast(1);
 
-            var sut = new MySqlTemplate(mockResolver, addComment: true);
+            var sut = new MySqlTemplate(settings, mockResolver);
 
             // Act
             var mysql = sut.Transform(schema);
@@ -40,9 +53,15 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void GenerateMySqlSchemaWithoutComments()
+        public void GenerateMySqlSchemaWithSettingsDisabled()
         {
             // Arrange
+            var settings = new MySqlTemplateSettings()
+            {
+                CommentsEnabled = false,
+                DropSchemaAtBegining = false
+            };
+
             var schema = Samples.GetSchema();
             var managerTable = Samples.GetTableSchema("Manager");
             schema.Tables.Add(managerTable);
@@ -52,7 +71,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("int")
                 .OccursAtLeast(1);
 
-            var sut = new MySqlTemplate(mockResolver, addComment: false);
+            var sut = new MySqlTemplate(settings, mockResolver);
 
             // Act
             var mysql = sut.Transform(schema);

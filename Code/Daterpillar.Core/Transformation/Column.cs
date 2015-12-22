@@ -18,6 +18,24 @@ namespace Ackara.Daterpillar.Transformation
         public DataType DataType { get; set; }
 
         [XmlElement("modifier")]
-        public List<string> Modifiers { get; set; }
+        public List<string> Modifiers
+        {
+            get
+            {
+                if (_modifiers == null)
+                {
+                    _modifiers = new List<string>();
+                }
+
+                return _modifiers;
+            }
+            set { _modifiers = value; }
+        }
+
+        #region Private Members
+
+        private List<string> _modifiers;
+
+        #endregion Private Members
     }
 }

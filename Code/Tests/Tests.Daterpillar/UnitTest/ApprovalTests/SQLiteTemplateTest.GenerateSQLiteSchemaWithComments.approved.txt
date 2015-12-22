@@ -1,6 +1,4 @@
-﻿/* GenerateSQLiteSchemaWithComments by johnDoe@example.com | Table(s):2 */
-
--- -----------------------------------
+﻿-- -----------------------------------
 -- EMPLOYEE TABLE
 -- -----------------------------------
 CREATE TABLE IF NOT EXISTS [Employee]

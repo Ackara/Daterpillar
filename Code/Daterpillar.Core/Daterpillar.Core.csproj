@@ -50,6 +50,7 @@
     <Compile Include="Transformation\IndexType.cs" />
     <Compile Include="Transformation\Template\ITypeNameResolver.cs" />
     <Compile Include="Transformation\Template\MySqlTemplate.cs" />
+    <Compile Include="Transformation\Template\MySqlTemplateSettings.cs" />
     <Compile Include="Transformation\Template\MySqlTypeNameResolver.cs" />
     <Compile Include="Transformation\Template\SQLiteTemplate.cs" />
     <Compile Include="Transformation\Template\ITemplate.cs" />

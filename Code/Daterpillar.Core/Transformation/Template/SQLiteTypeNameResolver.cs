@@ -28,6 +28,7 @@
 
             switch (type)
             {
+                case CHAR:
                 case VARCHAR:
                     int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
                     name = $"{type}({size})";

@@ -13,19 +13,19 @@ namespace Tests.Daterpillar.IntegrationTest
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.EmployeeSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + Artifact.DaterpillarSchema)]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests
     {
         /// <summary>
-        /// Generate a SQLite schema from the <see cref="Artifact.EmployeeSchema"/> file.
+        /// Generate a SQLite schema from the <see cref="Artifact.DaterpillarSchema"/> file.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void GenerateSQLiteSchemaFromFile()
         {
             // Arrange
-            var schema = Schema.Load(Samples.GetFile(Artifact.EmployeeSchema).OpenRead());
+            var schema = Schema.Load(Samples.GetFile(Artifact.DaterpillarSchema).OpenRead());
             var template = new SQLiteTemplate(new SQLiteTypeNameResolver(), addComments: true);
 
             // Act
@@ -39,14 +39,14 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Generate a CSharp classes from the <see cref="Artifact.EmployeeSchema"/> file.
+        /// Generate a CSharp classes from the <see cref="Artifact.DaterpillarSchema"/> file.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void GenerateCSharpClassesFromFile()
         {
             // Arrange
-            var schema = Schema.Load(Samples.GetFile(Artifact.EmployeeSchema).OpenRead());
+            var schema = Schema.Load(Samples.GetFile(Artifact.DaterpillarSchema).OpenRead());
             var template = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -67,16 +67,25 @@ namespace Tests.Daterpillar.IntegrationTest
             Assert.IsFalse(string.IsNullOrWhiteSpace(csharp));
         }
 
+        /// <summary>
+        /// Generate a MySQL schema from the <see cref="Artifact.DaterpillarSchema"/> file.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void GenerateMySqlSchemaFromFile()
         {
             // Arrange
-            using (var fileStream = Samples.GetFile(Artifact.EmployeeSchema).OpenRead())
+            using (var fileStream = Samples.GetFile(Artifact.DaterpillarSchema).OpenRead())
             {
+                var settings = new MySqlTemplateSettings()
+                {
+                    CommentsEnabled = true,
+                    DropSchemaAtBegining = true
+                };
+
                 var schema = Schema.Load(fileStream);
-                var template = new MySqlTemplate(new MySqlTypeNameResolver(), addComment: true);
-                int exitcode;
+                var template = new MySqlTemplate(settings, new MySqlTypeNameResolver());
+                int nChanges;
 
                 // Act
                 var mysql = template.Transform(schema);
@@ -87,12 +96,12 @@ namespace Tests.Daterpillar.IntegrationTest
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = mysql;
-                        exitcode = command.ExecuteNonQuery();
+                        nChanges = command.ExecuteNonQuery();
                     }
                 }
 
                 // Assert
-                Assert.AreEqual(0, exitcode);
+                Assert.IsTrue(nChanges > 0, $"{nChanges} changes were made.");
                 Assert.IsFalse(string.IsNullOrWhiteSpace(mysql));
             }
         }
