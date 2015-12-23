@@ -120,6 +120,7 @@
     <Compile Include="UnitTest\CSharpTemplateTest.cs" />
     <Compile Include="UnitTest\CSharpTypeNameResolverTest.cs" />
     <Compile Include="IntegrationTest\EnumGeneratorTest.cs" />
+    <Compile Include="UnitTest\QueryTest.cs" />
     <Compile Include="XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
