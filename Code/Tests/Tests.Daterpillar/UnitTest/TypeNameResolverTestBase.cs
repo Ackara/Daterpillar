@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
     {
         /// <summary>
         /// This method ensures that the test data in alignment with the allowed <see
-        /// cref="Artifact.XSML"/> xml schema types.
+        /// cref="Artifact.XDDL"/> xml schema types.
         /// </summary>
         public static void AssertTestDataIsValid()
         {
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.UnitTest
 
         private static IEnumerable<string> GetXsdTypeNames()
         {
-            string schemaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Artifact.XSML);
+            string schemaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Artifact.XDDL);
 
             var xsdDoc = XDocument.Load(schemaPath);
             string xmlns = "http://www.w3.org/2001/XMLSchema";

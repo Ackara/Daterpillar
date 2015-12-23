@@ -6,7 +6,7 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.XSML)]
+    [DeploymentItem(Artifact.XDDL)]
     [DeploymentItem(Artifact.DataXLSX)]
     public class MySqlTypeNameResolverTest : TypeNameResolverTestBase
     {

@@ -3,6 +3,7 @@
     public enum SqlStyle
     {
         SQL,
+        SQLite,
         MySQL,
         TSQL
     }

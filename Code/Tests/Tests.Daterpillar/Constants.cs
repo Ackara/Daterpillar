@@ -17,12 +17,12 @@
     public struct Artifact
     {
         public const string
-            XSML = "xsml.xsd",
+            XDDL = "xsml.xsd",
             DataXLSX = "data.xlsx",
             SamplesFolder = "Sample Files\\",
             MusicSchema = "music-sqlite.sql",
+            SampleSchema = "daterpillar_schema.xml",
             x86SQLiteInterop = "x86\\SQLite.Interop.dll",
-            x64SQLiteInterop = "x64\\SQLite.Interop.dll",
-            DaterpillarSchema = "daterpillar_schema.xml";
+            x64SQLiteInterop = "x64\\SQLite.Interop.dll";
     }
 }

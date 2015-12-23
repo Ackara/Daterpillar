@@ -3,7 +3,7 @@
 namespace Gigobyte.Daterpillar.Data.Linq
 {
     /// <summary>
-    /// Represents a formatted SQL query.
+    /// Represents a SQL query string.
     /// </summary>
     public struct Query
     {
@@ -25,10 +25,16 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return this;
         }
 
+        public Query Top(int value)
+        {
+            _limit = value;
+            return this;
+        }
+
         public Query From(params string[] tables)
         {
             SqlStyle style = _style;
-            _from = string.Join(", ", tables.Select(x => Escape(x, style)));
+            _from = string.Join(",\n\t", tables.Select(x => Escape(x, style)));
             return this;
         }
 
@@ -60,7 +66,51 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         public string GetValue(bool minify = false)
         {
-            throw new System.NotImplementedException();
+            if (_select == null || _from == null) return string.Empty;
+            else
+            {
+                string top = (_style == SqlStyle.TSQL) ? (" TOP " + _limit) : string.Empty;
+                string query = $"SELECT{top}\n\t{_select}\nFROM\n\t{_from}\n{GetWhere()}{GetGroupBy()}{GetOrderBy()}{GetLimit()};";
+                if (minify)
+                {
+                    query = query.Replace("\n", " ").Replace(" \t", " ").Replace(" ;", ";");
+                }
+
+                return query;
+            }
+        }
+
+        #region Private Members
+
+        private SqlStyle _style;
+        private int _limit;
+
+        private string
+            _select, _from, _where,
+            _group, _order;
+
+        private string GetWhere()
+        {
+            return string.IsNullOrEmpty(_where) ? string.Empty : $"WHERE\n\t{_where}\n";
+        }
+
+        private string GetGroupBy()
+        {
+            return string.IsNullOrEmpty(_group) ? string.Empty : $"GROUP BY\n\t{_group}\n";
+        }
+
+        private string GetOrderBy()
+        {
+            return string.IsNullOrEmpty(_order) ? string.Empty : $"ORDER BY\n\t{_order}\n";
+        }
+
+        private string GetLimit()
+        {
+            if (_limit < 1 || _style == SqlStyle.TSQL) return string.Empty;
+            else
+            {
+                return $"LIMIT {_limit}\n";
+            }
         }
 
         internal static string Escape(string identifier, SqlStyle style)
@@ -72,21 +122,13 @@ namespace Gigobyte.Daterpillar.Data.Linq
                     break;
 
                 case SqlStyle.TSQL:
+                case SqlStyle.SQLite:
                     identifier = "[" + identifier + "]";
                     break;
             }
 
             return identifier;
         }
-
-        #region Private Members
-
-        private SqlStyle _style;
-        private int _limit;
-
-        private string
-            _select, _from, _where,
-            _group, _order;
 
         #endregion Private Members
     }

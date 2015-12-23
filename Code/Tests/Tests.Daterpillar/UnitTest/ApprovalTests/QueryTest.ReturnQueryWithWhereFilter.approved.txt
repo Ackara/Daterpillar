@@ -1,0 +1,8 @@
+﻿SELECT
+	Name
+FROM
+	tableA,
+	tableB
+WHERE
+	Id = 3
+;

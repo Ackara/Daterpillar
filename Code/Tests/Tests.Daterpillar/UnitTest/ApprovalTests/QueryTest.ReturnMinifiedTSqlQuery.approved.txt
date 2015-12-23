@@ -1,0 +1,1 @@
+﻿SELECT TOP 100 [Id], [Name] FROM [tableA], [tableB] WHERE Id = 22 GROUP BY [Name], [Age] ORDER BY [Name], [Age];

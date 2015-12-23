@@ -7,7 +7,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Artifact.DataXLSX)]
-    [DeploymentItem(Artifact.XSML)]
+    [DeploymentItem(Artifact.XDDL)]
     public class SQLiteTypeNameResolverTest : TypeNameResolverTestBase
     {
         public TestContext TestContext { get; set; }

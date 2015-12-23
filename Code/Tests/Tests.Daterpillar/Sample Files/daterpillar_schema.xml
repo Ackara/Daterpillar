@@ -74,4 +74,80 @@
       <columnName>Employee_Id</columnName>
     </index>
   </table>
+
+  <table name="artist">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Bio">
+      <dataType>text</dataType>
+    </column>
+  </table>
+
+  <table name="genre">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+    </column>
+  </table>
+
+  <table name="album">
+    <column name="Artist_Id">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <foreignKey localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id" />
+
+    <index type="primaryKey">
+      <columnName>Artist_Id</columnName>
+      <columnName>Name</columnName>
+    </index>
+  </table>
+
+  <table name="song">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Genre_Id">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Length">
+      <dataType scale="4" precision="2">decimal</dataType>
+    </column>
+
+    <column name="price">
+      <dataType scale="12" precision="2">decimal</dataType>
+    </column>
+
+    <foreignKey localColumn="Genre_Id" foreignTable="Genre" foreignColumn="Id" />
+  </table>
 </schema>

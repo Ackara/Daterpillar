@@ -13,19 +13,19 @@ namespace Tests.Daterpillar.IntegrationTest
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.DaterpillarSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests
     {
         /// <summary>
-        /// Generate a SQLite schema from the <see cref="Artifact.DaterpillarSchema"/> file.
+        /// Generate a SQLite schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void GenerateSQLiteSchemaFromFile()
         {
             // Arrange
-            var schema = Schema.Load(Samples.GetFile(Artifact.DaterpillarSchema).OpenRead());
+            var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
             var template = new SQLiteTemplate(new SQLiteTypeNameResolver(), addComments: true);
 
             // Act
@@ -39,14 +39,14 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Generate a CSharp classes from the <see cref="Artifact.DaterpillarSchema"/> file.
+        /// Generate a CSharp classes from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void GenerateCSharpClassesFromFile()
         {
             // Arrange
-            var schema = Schema.Load(Samples.GetFile(Artifact.DaterpillarSchema).OpenRead());
+            var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
             var template = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -68,7 +68,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Generate a MySQL schema from the <see cref="Artifact.DaterpillarSchema"/> file.
+        /// Generate a MySQL schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
@@ -76,7 +76,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void GenerateMySqlSchemaFromFile()
         {
             // Arrange
-            using (var fileStream = Samples.GetFile(Artifact.DaterpillarSchema).OpenRead())
+            using (var fileStream = Samples.GetFile(Artifact.SampleSchema).OpenRead())
             {
                 var settings = new MySqlTemplateSettings()
                 {
