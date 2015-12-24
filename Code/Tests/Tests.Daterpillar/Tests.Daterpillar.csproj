@@ -148,10 +148,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sample Files\daterpillar_schema.xml">
+    <Content Include="Sample Files\music.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample Files\music-sqlite.sql">
+    <Content Include="Sample Files\music_store.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="T4 Template\csharp_with_enum.tt">
