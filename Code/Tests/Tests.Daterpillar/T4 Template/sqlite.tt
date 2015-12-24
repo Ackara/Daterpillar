@@ -27,9 +27,9 @@
 	/// Provide the path to the schema document you wish to transform.
 	/// Below are some examples of how a dynamic path can be constructed.
 
-	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(TargetDir)"), "schema.xml");
-	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "schema.xml");
-	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "T4 Template", "schema.xml");
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(TargetDir)"), "music.xddl.xml");
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "music.xddl.xml");
+	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "Sample Files", "music.xddl.xml");
 	
 	var schema = Schema.Load(File.OpenRead(schemaPath));
 	var template = new SQLiteTemplate();

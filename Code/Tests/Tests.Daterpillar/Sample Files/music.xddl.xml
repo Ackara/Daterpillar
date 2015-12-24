@@ -3,78 +3,6 @@
 <schema xmlns="http://schema.gigobyte.com/v1/xsml.xsd"
         name="zune"
         author="john@example.com">
-  <table name="employee">
-    <column name="Id">
-      <dataType>int</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="birth_date">
-      <dataType>date</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="first_name">
-      <dataType scale="14">varchar</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="last_name">
-      <dataType scale="16">varchar</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="gender">
-      <dataType>int</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="hire_date">
-      <dataType>date</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <index type="primaryKey">
-      <columnName>Id</columnName>
-    </index>
-  </table>
-
-  <table name="salary">
-    <column name="Employee_Id">
-      <dataType>int</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="salary">
-      <dataType scale="12" precision="2">decimal</dataType>
-      <modifier>not null</modifier>
-      <modifier>default 0</modifier>
-    </column>
-
-    <column name="from_date">
-      <dataType>date</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <column name="to_date">
-      <dataType>date</dataType>
-      <modifier>not null</modifier>
-    </column>
-
-    <foreignKey name="salary_emp_id_fey"
-                localColumn="Employee_Id"
-                foreignTable="employee"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>CASCADE</onDelete>
-    </foreignKey>
-
-    <index type="primaryKey">
-      <columnName>from_date</columnName>
-      <columnName>Employee_Id</columnName>
-    </index>
-  </table>
-
   <table name="artist">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
@@ -135,19 +63,31 @@
       <modifier>NOT NULL</modifier>
     </column>
 
+    <column name="Length">
+      <dataType scale="4" precision="2">decimal</dataType>
+    </column>
+
+    <column name="Price">
+      <dataType scale="12" precision="2">decimal</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Album_Id">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Artist_Id">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
     <column name="Genre_Id">
       <dataType>int</dataType>
       <modifier>NOT NULL</modifier>
     </column>
 
-    <column name="Length">
-      <dataType scale="4" precision="2">decimal</dataType>
-    </column>
-
-    <column name="price">
-      <dataType scale="12" precision="2">decimal</dataType>
-    </column>
-
     <foreignKey localColumn="Genre_Id" foreignTable="Genre" foreignColumn="Id" />
+    <foreignKey localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id" />
   </table>
 </schema>

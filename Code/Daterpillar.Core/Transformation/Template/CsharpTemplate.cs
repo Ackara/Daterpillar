@@ -183,7 +183,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             if (_settings.SchemaAnnotationsEnabled)
             {
                 string attribute = GetAttributeShortName(typeof(ColumnAttribute).Name);
-                bool isKey = _currentTable.Indexes.IsKey(column.Name);
+                bool isKey = _currentTable.Indexes.IsKey(column.Name) || column.AutoIncrement;
                 string key = isKey ? ", IsKey = true" : string.Empty;
                 string autoIncrement = column.AutoIncrement ? ", AutoIncrement = true" : string.Empty;
 

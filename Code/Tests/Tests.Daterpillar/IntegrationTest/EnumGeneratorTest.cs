@@ -8,7 +8,7 @@ namespace Tests.Daterpillar.IntegrationTest
     [TestClass]
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.MusicSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + Artifact.MusicSQLiteSchema)]
     public class EnumGeneratorTest
     {
         /// <summary>
@@ -19,7 +19,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void GenerateEnumDeclarationFromDbConnection()
         {
             // Arrange
-            var schema = Samples.GetFileContent(Artifact.MusicSchema);
+            var schema = Samples.GetFileContent(Artifact.MusicSQLiteSchema);
             using (var connection = DbFactory.CreateSQLiteConnection(schema))
             {
                 var generator = new EnumGenerator(connection);
@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
                 var template = new EnumTemplate();
                 var code = template.Transform(enumeration);
-
+                System.Diagnostics.Debug.Write(code);
                 var syntax = CSharpSyntaxTree.ParseText(code);
                 var errorList = syntax.GetDiagnostics();
                 int errorCount = 0;

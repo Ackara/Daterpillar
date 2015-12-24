@@ -8,7 +8,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
     {
         public static string ConvertToSelectCommand(EntityBase entity, SqlStyle style)
         {
-            return $"SELECT * FROM {GetFields(entity, style)} WHERE {GetWhereClause(entity, style)};";
+            return $"SELECT * FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
         public static string ConvertToDeleteCommand(EntityBase entity, SqlStyle style)
@@ -16,7 +16,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return $"DELETE FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
-        public static string ConvertToInsertCommand(EntityBase entity, SqlStyle style, bool ignore = false)
+        public static string ConvertToInsertCommand(EntityBase entity, SqlStyle style)
         {
             return $"INSERT INTO {Query.Escape(entity.TableName, style)} ({GetFields(entity, style)}) VALUES ({GetValues(entity)});";
         }
@@ -96,9 +96,9 @@ namespace Gigobyte.Daterpillar.Data.Linq
         private static string GetWhereClause(EntityBase entity, SqlStyle style)
         {
             var keys = from k in entity.GetKeys()
-                       select (String.Format("{0}={1}", Escape(k.Name, style), k.Value));
+                       select ($"{Escape(k.Name, style)}={EscapeValue(k.Value)}");
 
-            return String.Join(" AND ", keys).Trim();
+            return string.Join(" AND ", keys).Trim();
         }
 
         #endregion Private Members

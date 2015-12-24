@@ -81,3 +81,5 @@ CREATE TABLE IF NOT EXISTS `song`
 	FOREIGN KEY (`Album_Id`) REFERENCES `album`(`Id`) ON UPDATE  ON DELETE ,
 	FOREIGN KEY (`Artist_Id`) REFERENCES `artist`(`Id`) ON UPDATE  ON DELETE 
 );
+
+INSERT INTO [genre] ([Name]) VALUES ('Rap', 'Pop', 'R&B', 'Rock', 'Jazz');

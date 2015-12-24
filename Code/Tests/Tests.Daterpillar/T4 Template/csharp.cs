@@ -6,156 +6,238 @@ using Gigobyte.Daterpillar.Annotation;
 namespace GeneratedCode
 {
 	/// <summary>
-	/// Represents the [employee] table.
+	/// Represents the [artist] table.
 	/// </summary>
 	[DataContract]
-	[Table("employee")]
-	public partial class Employee : EntityBase
+	[Table("artist")]
+	public partial class Artist : EntityBase
 	{
 		#region Constants
 	
 		/// <summary>
-		/// The employee table identifier.
+		/// The artist table identifier.
 		/// </summary>
-		public const string Table = "employee";
+		public const string Table = "artist";
 	
 		/// <summary>
-		/// The [employee].[Id] column identifier.
+		/// The [artist].[Id] column identifier.
 		/// </summary>
 		public const string IdColumn = "Id";
 	
 		/// <summary>
-		/// The [employee].[birth_date] column identifier.
+		/// The [artist].[Name] column identifier.
 		/// </summary>
-		public const string BirthDateColumn = "birth_date";
+		public const string NameColumn = "Name";
 	
 		/// <summary>
-		/// The [employee].[first_name] column identifier.
+		/// The [artist].[Bio] column identifier.
 		/// </summary>
-		public const string FirstNameColumn = "first_name";
-	
-		/// <summary>
-		/// The [employee].[last_name] column identifier.
-		/// </summary>
-		public const string LastNameColumn = "last_name";
-	
-		/// <summary>
-		/// The [employee].[gender] column identifier.
-		/// </summary>
-		public const string GenderColumn = "gender";
-	
-		/// <summary>
-		/// The [employee].[hire_date] column identifier.
-		/// </summary>
-		public const string HireDateColumn = "hire_date";
+		public const string BioColumn = "Bio";
 	
 		#endregion Constants
 	
 		/// <summary>
-		/// Get or set the [employee].[Id] column value.
+		/// Get or set the [artist].[Id] column value.
 		/// </summary>
 		[DataMember]
-		[Column("Id", IsKey = true)]
+		[Column("Id", IsKey = true, AutoIncrement = true)]
 		public virtual int Id { get; set; }
 	
 		/// <summary>
-		/// Get or set the [employee].[birth_date] column value.
+		/// Get or set the [artist].[Name] column value.
 		/// </summary>
 		[DataMember]
-		[Column("birth_date")]
-		public virtual DateTime BirthDate { get; set; }
+		[Column("Name")]
+		public virtual string Name { get; set; }
 	
 		/// <summary>
-		/// Get or set the [employee].[first_name] column value.
+		/// Get or set the [artist].[Bio] column value.
 		/// </summary>
 		[DataMember]
-		[Column("first_name")]
-		public virtual string FirstName { get; set; }
-	
-		/// <summary>
-		/// Get or set the [employee].[last_name] column value.
-		/// </summary>
-		[DataMember]
-		[Column("last_name")]
-		public virtual string LastName { get; set; }
-	
-		/// <summary>
-		/// Get or set the [employee].[gender] column value.
-		/// </summary>
-		[DataMember]
-		[Column("gender")]
-		public virtual int Gender { get; set; }
-	
-		/// <summary>
-		/// Get or set the [employee].[hire_date] column value.
-		/// </summary>
-		[DataMember]
-		[Column("hire_date")]
-		public virtual DateTime HireDate { get; set; }
+		[Column("Bio")]
+		public virtual string Bio { get; set; }
 	}
 	
 	/// <summary>
-	/// Represents the [salary] table.
+	/// Represents the [genre] table.
 	/// </summary>
 	[DataContract]
-	[Table("salary")]
-	public partial class Salary : EntityBase
+	[Table("genre")]
+	public partial class Genre : EntityBase
 	{
 		#region Constants
 	
 		/// <summary>
-		/// The salary table identifier.
+		/// The genre table identifier.
 		/// </summary>
-		public const string Table = "salary";
+		public const string Table = "genre";
 	
 		/// <summary>
-		/// The [salary].[Employee_Id] column identifier.
+		/// The [genre].[Id] column identifier.
 		/// </summary>
-		public const string EmployeeIdColumn = "Employee_Id";
+		public const string IdColumn = "Id";
 	
 		/// <summary>
-		/// The [salary].[amount] column identifier.
+		/// The [genre].[Name] column identifier.
 		/// </summary>
-		public const string AmountColumn = "amount";
-	
-		/// <summary>
-		/// The [salary].[from_date] column identifier.
-		/// </summary>
-		public const string FromDateColumn = "from_date";
-	
-		/// <summary>
-		/// The [salary].[to_date] column identifier.
-		/// </summary>
-		public const string ToDateColumn = "to_date";
+		public const string NameColumn = "Name";
 	
 		#endregion Constants
 	
 		/// <summary>
-		/// Get or set the [salary].[Employee_Id] column value.
+		/// Get or set the [genre].[Id] column value.
 		/// </summary>
 		[DataMember]
-		[Column("Employee_Id", IsKey = true)]
-		public virtual int EmployeeId { get; set; }
+		[Column("Id", IsKey = true, AutoIncrement = true)]
+		public virtual int Id { get; set; }
 	
 		/// <summary>
-		/// Get or set the [salary].[amount] column value.
+		/// Get or set the [genre].[Name] column value.
 		/// </summary>
 		[DataMember]
-		[Column("amount")]
-		public virtual decimal Amount { get; set; }
+		[Column("Name")]
+		public virtual string Name { get; set; }
+	}
+	
+	/// <summary>
+	/// Represents the [album] table.
+	/// </summary>
+	[DataContract]
+	[Table("album")]
+	public partial class Album : EntityBase
+	{
+		#region Constants
 	
 		/// <summary>
-		/// Get or set the [salary].[from_date] column value.
+		/// The album table identifier.
 		/// </summary>
-		[DataMember]
-		[Column("from_date", IsKey = true)]
-		public virtual DateTime FromDate { get; set; }
+		public const string Table = "album";
 	
 		/// <summary>
-		/// Get or set the [salary].[to_date] column value.
+		/// The [album].[Artist_Id] column identifier.
+		/// </summary>
+		public const string ArtistIdColumn = "Artist_Id";
+	
+		/// <summary>
+		/// The [album].[Name] column identifier.
+		/// </summary>
+		public const string NameColumn = "Name";
+	
+		#endregion Constants
+	
+		/// <summary>
+		/// Get or set the [album].[Artist_Id] column value.
 		/// </summary>
 		[DataMember]
-		[Column("to_date")]
-		public virtual DateTime ToDate { get; set; }
+		[Column("Artist_Id", IsKey = true)]
+		public virtual int ArtistId { get; set; }
+	
+		/// <summary>
+		/// Get or set the [album].[Name] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Name", IsKey = true)]
+		public virtual string Name { get; set; }
+	}
+	
+	/// <summary>
+	/// Represents the [song] table.
+	/// </summary>
+	[DataContract]
+	[Table("song")]
+	public partial class Song : EntityBase
+	{
+		#region Constants
+	
+		/// <summary>
+		/// The song table identifier.
+		/// </summary>
+		public const string Table = "song";
+	
+		/// <summary>
+		/// The [song].[Id] column identifier.
+		/// </summary>
+		public const string IdColumn = "Id";
+	
+		/// <summary>
+		/// The [song].[Name] column identifier.
+		/// </summary>
+		public const string NameColumn = "Name";
+	
+		/// <summary>
+		/// The [song].[Length] column identifier.
+		/// </summary>
+		public const string LengthColumn = "Length";
+	
+		/// <summary>
+		/// The [song].[Price] column identifier.
+		/// </summary>
+		public const string PriceColumn = "Price";
+	
+		/// <summary>
+		/// The [song].[Album_Id] column identifier.
+		/// </summary>
+		public const string AlbumIdColumn = "Album_Id";
+	
+		/// <summary>
+		/// The [song].[Artist_Id] column identifier.
+		/// </summary>
+		public const string ArtistIdColumn = "Artist_Id";
+	
+		/// <summary>
+		/// The [song].[Genre_Id] column identifier.
+		/// </summary>
+		public const string GenreIdColumn = "Genre_Id";
+	
+		#endregion Constants
+	
+		/// <summary>
+		/// Get or set the [song].[Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Id", IsKey = true, AutoIncrement = true)]
+		public virtual int Id { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Name] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Name")]
+		public virtual string Name { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Length] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Length")]
+		public virtual decimal Length { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Price] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Price")]
+		public virtual decimal Price { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Album_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Album_Id")]
+		public virtual int AlbumId { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Artist_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Artist_Id")]
+		public virtual int ArtistId { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Genre_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Genre_Id")]
+		public virtual int GenreId { get; set; }
 	}
 }

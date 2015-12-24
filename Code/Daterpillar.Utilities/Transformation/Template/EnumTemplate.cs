@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Gigobyte.Daterpillar.Transformation.Template
 {
@@ -6,13 +7,16 @@ namespace Gigobyte.Daterpillar.Transformation.Template
     {
         public string Transform(Enumeration enumeration)
         {
+            var regex = new Regex(@"[^a-z0-9_]+", RegexOptions.IgnoreCase);
+
             var text = new StringBuilder();
             text.AppendLine($"public enum {enumeration.Name.ToPascalCase(' ', '_')}");
             text.AppendLine("{");
 
             foreach (var value in enumeration.Values)
             {
-                text.AppendLine($"\t{value.Key.ToPascalCase(' ', '_')} = {value.Value},");
+                string name = regex.Replace(value.Key, "_").ToPascalCase(' ', '_');
+                text.AppendLine($"\t{name} = {value.Value},");
             }
 
             // remove last comma

@@ -14,6 +14,6 @@ namespace Gigobyte.Daterpillar.Annotation
 
         public bool IsKey { get; set; }
 
-        public bool AutoIncremented { get; set; }
+        public bool AutoIncrement { get; set; }
     }
 }

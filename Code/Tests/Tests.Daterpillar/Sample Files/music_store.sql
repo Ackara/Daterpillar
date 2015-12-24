@@ -1,7 +1,0 @@
-﻿CREATE TABLE [genre]
-(
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	[Name] VARCHAR(64) NOT NULL
-);
-
-INSERT INTO [genre] ([Name]) VALUES ('Rap'), ('Rock'), ('Pop');

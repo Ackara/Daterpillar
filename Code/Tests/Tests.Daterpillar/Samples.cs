@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar
 {
@@ -23,10 +24,24 @@ namespace Tests.Daterpillar
             return File.ReadAllText(GetFile(filename).FullName);
         }
 
+        public static Song GetSong([CallerMemberName]string name = null)
+        {
+            return new Song()
+            {
+                Id = 100,
+                Name = name,
+                Length = 12,
+                Price = 1.29M,
+                AlbumId = 1,
+                ArtistId = 22,
+                GenreId = 1
+            };
+        }
+
         public static Schema GetSchema([CallerMemberName]string name = null)
         {
             var schema = new Schema();
-            schema.Name = name ?? "SchemaName";
+            schema.Name = name;
             schema.Author = "johnDoe@example.com";
 
             var employeeTable = GetTableSchema();
@@ -87,7 +102,5 @@ namespace Tests.Daterpillar
 
             return table;
         }
-     
-         
     }
 }

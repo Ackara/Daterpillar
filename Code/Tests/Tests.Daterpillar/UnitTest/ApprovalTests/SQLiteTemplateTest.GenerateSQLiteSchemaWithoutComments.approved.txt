@@ -1,6 +1,6 @@
 ﻿CREATE TABLE IF NOT EXISTS [Employee]
 (
-	[Id] INTEGER NOT NULL,
+	[Id] INTEGER NOT NULL AUTOINCREMENT,
 	[Full_Name] INTEGER not null default 'n/a',
 	[Salary] INTEGER not null,
 	PRIMARY KEY ([Id] ASC),
@@ -11,7 +11,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS employee_idx ON [Employee] ([Full_Name] DESC);
 
 CREATE TABLE IF NOT EXISTS [Manager]
 (
-	[Id] INTEGER NOT NULL,
+	[Id] INTEGER NOT NULL AUTOINCREMENT,
 	[Full_Name] INTEGER not null default 'n/a',
 	[Salary] INTEGER not null,
 	PRIMARY KEY ([Id] ASC),

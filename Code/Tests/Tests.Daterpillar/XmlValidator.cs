@@ -9,14 +9,6 @@ namespace Tests.Daterpillar
 {
     public class XmlValidator
     {
-        public static XmlValidator Create(Stream docStream)
-        {
-            var validator = new XmlValidator();
-            validator.Load(docStream);
-
-            return validator;
-        }
-
         public XmlValidator()
         {
             _schemaSet = new XmlSchemaSet();

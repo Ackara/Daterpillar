@@ -72,7 +72,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        //[Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
+        [Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
         public void GenerateMySqlSchemaFromFile()
         {
             // Arrange
@@ -90,7 +90,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
                 // Act
                 var mysql = template.Transform(schema);
-
+                
                 using (var connection = DbFactory.CreateMySqlConnection())
                 {
                     connection.Open();

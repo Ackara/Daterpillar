@@ -53,3 +53,5 @@ CREATE TABLE IF NOT EXISTS [song]
 	FOREIGN KEY ([Genre_Id]) REFERENCES [Genre] ([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY ([Artist_Id]) REFERENCES [artist] ([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+INSERT INTO [genre] ([Name]) VALUES ('Rap'), ('Pop'), ('R&B'), ('Rock'), ('Jazz');

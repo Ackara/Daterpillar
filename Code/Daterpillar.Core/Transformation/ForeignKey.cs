@@ -5,6 +5,12 @@ namespace Gigobyte.Daterpillar.Transformation
 {
     public class ForeignKey
     {
+        public ForeignKey()
+        {
+            OnUpdateRule = ForeignKeyRule.CASCADE;
+            OnDeleteRule = ForeignKeyRule.CASCADE;
+        }
+
         [XmlAttribute("name")]
         public string Name { get; set; }
 
