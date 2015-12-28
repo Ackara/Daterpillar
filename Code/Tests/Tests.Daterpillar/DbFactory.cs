@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
+using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
 using System.Data.SQLite;
@@ -33,6 +35,27 @@ namespace Tests.Daterpillar
         {
             string connectionString = ConfigurationManager.ConnectionStrings[database].ConnectionString;
             return new MySqlConnection(connectionString);
+        }
+
+        public static MySqlConnection CreateMySqlConnection(Schema schema)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            using (var command = connection.CreateCommand())
+            {
+                var settings = new MySqlTemplateSettings()
+                {
+                    CommentsEnabled = false,
+                    DropSchema = true
+                };
+
+                command.CommandText = new MySqlTemplate(settings).Transform(schema);
+                command.ExecuteNonQuery();
+            }
+
+            return connection;
         }
     }
 }

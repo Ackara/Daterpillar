@@ -10,14 +10,16 @@ namespace Tests.Daterpillar.UnitTest
         public TestContext TestContext { get; set; }
 
         /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToSelectCommand(Gigobyte.Daterpillar.Data.EntityBase, SqlStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/> into a SQL query.
+        /// Assert <see cref="SqlWriter.ConvertToSelectCommand(Gigobyte.Daterpillar.Data.EntityBase,
+        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
+        /// into a SQL query.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void ConvertEntityToQuery()
         {
             var song = Samples.GetSong();
-            var query = SqlWriter.ConvertToSelectCommand(song, SqlStyle.SQL);
+            var query = SqlWriter.ConvertToSelectCommand(song, QueryStyle.SQL);
             string expected = $"SELECT * FROM song WHERE Id='{song.Id}';";
 
             TestContext.WriteLine("e: " + expected);
@@ -27,15 +29,17 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToInsertCommand(Gigobyte.Daterpillar.Data.EntityBase, SqlStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/> to a SQL insert command.
+        /// Assert <see cref="SqlWriter.ConvertToInsertCommand(Gigobyte.Daterpillar.Data.EntityBase,
+        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
+        /// to a SQL insert command.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void ConvertEntityToInsertCommand()
         {
             var song = Samples.GetSong();
-            var query = SqlWriter.ConvertToInsertCommand(song, SqlStyle.SQLite);
-            string expected = $"INSERT INTO [song] ([Name], [Length], [Price], [Album_Id], [Artist_Id], [Genre_Id]) VALUES ('{song.Name}', '{song.Length}', '{song.Price}', '{song.AlbumId}', '{song.ArtistId}', '{song.GenreId}');";
+            var query = SqlWriter.ConvertToInsertCommand(song, QueryStyle.SQLite);
+            string expected = $"INSERT INTO [song] ([Album_Id], [Artist_Id], [Genre_Id], [Name], [Length], [Price], [On_Device]) VALUES ('{song.AlbumId}', '{song.ArtistId}', '{song.GenreId}', '{song.Name}', '{song.Length}', '{song.Price}', '1');";
 
             TestContext.WriteLine("e: " + expected);
             TestContext.WriteLine("a: " + query);
@@ -44,14 +48,16 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToDeleteCommand(Gigobyte.Daterpillar.Data.EntityBase, SqlStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/> to a SQL delete command.
+        /// Assert <see cref="SqlWriter.ConvertToDeleteCommand(Gigobyte.Daterpillar.Data.EntityBase,
+        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
+        /// to a SQL delete command.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void ConvertEntityToDeleteCommand()
         {
             var song = Samples.GetSong();
-            var query = SqlWriter.ConvertToDeleteCommand(song, SqlStyle.SQLite);
+            var query = SqlWriter.ConvertToDeleteCommand(song, QueryStyle.SQLite);
             string expected = $"DELETE FROM [song] WHERE [Id]='{song.Id}';";
 
             TestContext.WriteLine("e: " + expected);

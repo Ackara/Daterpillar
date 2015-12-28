@@ -13,6 +13,10 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
         }
 
+        public MySqlTemplate(MySqlTemplateSettings settings) : this(settings, new MySqlTypeNameResolver())
+        {
+        }
+
         public MySqlTemplate(MySqlTemplateSettings settings, ITypeNameResolver nameResolver)
         {
             _settings = settings;
@@ -23,7 +27,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             _text.Clear();
 
-            if (_settings.DropSchemaAtBegining)
+            if (_settings.DropSchema)
             {
                 _text.AppendLine($"DROP DATABASE IF EXISTS `{schema.Name}`;");
             }
@@ -37,6 +41,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
                 Transform(table);
             }
 
+            _text.AppendLine(schema.Script);
             return _text.ToString().Trim();
         }
 

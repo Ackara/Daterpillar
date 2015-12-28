@@ -6,6 +6,47 @@ using Gigobyte.Daterpillar.Annotation;
 namespace GeneratedCode
 {
 	/// <summary>
+	/// Represents the [genre] table.
+	/// </summary>
+	[DataContract]
+	[Table("genre")]
+	public partial class Genre : EntityBase
+	{
+		#region Constants
+	
+		/// <summary>
+		/// The genre table identifier.
+		/// </summary>
+		public const string Table = "genre";
+	
+		/// <summary>
+		/// The [genre].[Id] column identifier.
+		/// </summary>
+		public const string IdColumn = "Id";
+	
+		/// <summary>
+		/// The [genre].[Name] column identifier.
+		/// </summary>
+		public const string NameColumn = "Name";
+	
+		#endregion Constants
+	
+		/// <summary>
+		/// Get or set the [genre].[Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Id", IsKey = true, AutoIncrement = true)]
+		public virtual int Id { get; set; }
+	
+		/// <summary>
+		/// Get or set the [genre].[Name] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Name")]
+		public virtual string Name { get; set; }
+	}
+	
+	/// <summary>
 	/// Represents the [artist] table.
 	/// </summary>
 	[DataContract]
@@ -59,47 +100,6 @@ namespace GeneratedCode
 	}
 	
 	/// <summary>
-	/// Represents the [genre] table.
-	/// </summary>
-	[DataContract]
-	[Table("genre")]
-	public partial class Genre : EntityBase
-	{
-		#region Constants
-	
-		/// <summary>
-		/// The genre table identifier.
-		/// </summary>
-		public const string Table = "genre";
-	
-		/// <summary>
-		/// The [genre].[Id] column identifier.
-		/// </summary>
-		public const string IdColumn = "Id";
-	
-		/// <summary>
-		/// The [genre].[Name] column identifier.
-		/// </summary>
-		public const string NameColumn = "Name";
-	
-		#endregion Constants
-	
-		/// <summary>
-		/// Get or set the [genre].[Id] column value.
-		/// </summary>
-		[DataMember]
-		[Column("Id", IsKey = true, AutoIncrement = true)]
-		public virtual int Id { get; set; }
-	
-		/// <summary>
-		/// Get or set the [genre].[Name] column value.
-		/// </summary>
-		[DataMember]
-		[Column("Name")]
-		public virtual string Name { get; set; }
-	}
-	
-	/// <summary>
 	/// Represents the [album] table.
 	/// </summary>
 	[DataContract]
@@ -123,6 +123,11 @@ namespace GeneratedCode
 		/// </summary>
 		public const string NameColumn = "Name";
 	
+		/// <summary>
+		/// The [album].[Release_Date] column identifier.
+		/// </summary>
+		public const string ReleaseDateColumn = "Release_Date";
+	
 		#endregion Constants
 	
 		/// <summary>
@@ -138,6 +143,13 @@ namespace GeneratedCode
 		[DataMember]
 		[Column("Name", IsKey = true)]
 		public virtual string Name { get; set; }
+	
+		/// <summary>
+		/// Get or set the [album].[Release_Date] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Release_Date")]
+		public virtual DateTime ReleaseDate { get; set; }
 	}
 	
 	/// <summary>
@@ -160,6 +172,21 @@ namespace GeneratedCode
 		public const string IdColumn = "Id";
 	
 		/// <summary>
+		/// The [song].[Album_Id] column identifier.
+		/// </summary>
+		public const string AlbumIdColumn = "Album_Id";
+	
+		/// <summary>
+		/// The [song].[Artist_Id] column identifier.
+		/// </summary>
+		public const string ArtistIdColumn = "Artist_Id";
+	
+		/// <summary>
+		/// The [song].[Genre_Id] column identifier.
+		/// </summary>
+		public const string GenreIdColumn = "Genre_Id";
+	
+		/// <summary>
 		/// The [song].[Name] column identifier.
 		/// </summary>
 		public const string NameColumn = "Name";
@@ -175,19 +202,9 @@ namespace GeneratedCode
 		public const string PriceColumn = "Price";
 	
 		/// <summary>
-		/// The [song].[Album_Id] column identifier.
+		/// The [song].[On_Device] column identifier.
 		/// </summary>
-		public const string AlbumIdColumn = "Album_Id";
-	
-		/// <summary>
-		/// The [song].[Artist_Id] column identifier.
-		/// </summary>
-		public const string ArtistIdColumn = "Artist_Id";
-	
-		/// <summary>
-		/// The [song].[Genre_Id] column identifier.
-		/// </summary>
-		public const string GenreIdColumn = "Genre_Id";
+		public const string OnDeviceColumn = "On_Device";
 	
 		#endregion Constants
 	
@@ -197,6 +214,27 @@ namespace GeneratedCode
 		[DataMember]
 		[Column("Id", IsKey = true, AutoIncrement = true)]
 		public virtual int Id { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Album_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Album_Id")]
+		public virtual int AlbumId { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Artist_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Artist_Id")]
+		public virtual int ArtistId { get; set; }
+	
+		/// <summary>
+		/// Get or set the [song].[Genre_Id] column value.
+		/// </summary>
+		[DataMember]
+		[Column("Genre_Id")]
+		public virtual int GenreId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Name] column value.
@@ -220,24 +258,10 @@ namespace GeneratedCode
 		public virtual decimal Price { get; set; }
 	
 		/// <summary>
-		/// Get or set the [song].[Album_Id] column value.
+		/// Get or set the [song].[On_Device] column value.
 		/// </summary>
 		[DataMember]
-		[Column("Album_Id")]
-		public virtual int AlbumId { get; set; }
-	
-		/// <summary>
-		/// Get or set the [song].[Artist_Id] column value.
-		/// </summary>
-		[DataMember]
-		[Column("Artist_Id")]
-		public virtual int ArtistId { get; set; }
-	
-		/// <summary>
-		/// Get or set the [song].[Genre_Id] column value.
-		/// </summary>
-		[DataMember]
-		[Column("Genre_Id")]
-		public virtual int GenreId { get; set; }
+		[Column("On_Device")]
+		public virtual bool OnDevice { get; set; }
 	}
 }

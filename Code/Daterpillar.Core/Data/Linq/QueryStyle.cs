@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.Data.Linq
 {
-    public enum SqlStyle
+    public enum QueryStyle
     {
         SQL,
         SQLite,

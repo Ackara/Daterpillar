@@ -22,27 +22,28 @@ namespace Tests.Daterpillar.IntegrationTest
             var schema = Samples.GetFileContent(Artifact.MusicSQLiteSchema);
             using (var connection = DbFactory.CreateSQLiteConnection(schema))
             {
-                var generator = new EnumGenerator(connection);
-
-                // Act
-                var enumeration = generator.FetchEnumeration("genre", "Name", "Id");
-
-                var template = new EnumTemplate();
-                var code = template.Transform(enumeration);
-                System.Diagnostics.Debug.Write(code);
-                var syntax = CSharpSyntaxTree.ParseText(code);
-                var errorList = syntax.GetDiagnostics();
-                int errorCount = 0;
-
-                foreach (var error in errorList)
+                using (var generator = new EnumGenerator(connection))
                 {
-                    errorCount++;
-                    System.Diagnostics.Debug.WriteLine(error);
-                }
+                    // Act
+                    var enumeration = generator.FetchEnumeration("genre", "Name", "Id");
 
-                // Assert
-                Assert.AreEqual(0, errorCount);
-                Assert.IsFalse(string.IsNullOrWhiteSpace(code));
+                    var template = new EnumTemplate();
+                    var code = template.Transform(enumeration);
+                    System.Diagnostics.Debug.Write(code);
+                    var syntax = CSharpSyntaxTree.ParseText(code);
+                    var errorList = syntax.GetDiagnostics();
+                    int errorCount = 0;
+
+                    foreach (var error in errorList)
+                    {
+                        errorCount++;
+                        System.Diagnostics.Debug.WriteLine(error);
+                    }
+
+                    // Assert
+                    Assert.AreEqual(0, errorCount);
+                    Assert.IsFalse(string.IsNullOrWhiteSpace(code));
+                }
             }
         }
     }

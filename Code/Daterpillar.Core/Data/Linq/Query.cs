@@ -7,7 +7,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
     /// </summary>
     public struct Query
     {
-        public Query(SqlStyle style) : this()
+        public Query(QueryStyle style) : this()
         {
             _style = style;
         }
@@ -20,7 +20,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         public Query Select(params string[] columns)
         {
-            SqlStyle style = _style;
+            QueryStyle style = _style;
             _select = string.Join(",\n\t", columns.Select(x => Escape(x, style)));
             return this;
         }
@@ -33,7 +33,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         public Query From(params string[] tables)
         {
-            SqlStyle style = _style;
+            QueryStyle style = _style;
             _from = string.Join(",\n\t", tables.Select(x => Escape(x, style)));
             return this;
         }
@@ -46,14 +46,14 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         public Query GroupBy(params string[] columns)
         {
-            SqlStyle style = _style;
+            QueryStyle style = _style;
             _group = string.Join(",\n\t", columns.Select(x => Escape(x, style)));
             return this;
         }
 
         public Query OrderBy(params string[] columns)
         {
-            SqlStyle style = _style;
+            QueryStyle style = _style;
             _order = string.Join(",\n\t", columns.Select(x => Escape(x, style)));
             return this;
         }
@@ -69,7 +69,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             if (_select == null || _from == null) return string.Empty;
             else
             {
-                string top = (_style == SqlStyle.TSQL) ? (" TOP " + _limit) : string.Empty;
+                string top = (_style == QueryStyle.TSQL) ? (" TOP " + _limit) : string.Empty;
                 string query = $"SELECT{top}\n\t{_select}\nFROM\n\t{_from}\n{GetWhere()}{GetGroupBy()}{GetOrderBy()}{GetLimit()};";
                 if (minify)
                 {
@@ -82,7 +82,24 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         #region Private Members
 
-        private SqlStyle _style;
+        internal static string Escape(string identifier, QueryStyle style)
+        {
+            switch (style)
+            {
+                case QueryStyle.MySQL:
+                    identifier = "`" + identifier + "`";
+                    break;
+
+                case QueryStyle.TSQL:
+                case QueryStyle.SQLite:
+                    identifier = "[" + identifier + "]";
+                    break;
+            }
+
+            return identifier;
+        }
+
+        private QueryStyle _style;
         private int _limit;
 
         private string
@@ -106,28 +123,11 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         private string GetLimit()
         {
-            if (_limit < 1 || _style == SqlStyle.TSQL) return string.Empty;
+            if (_limit < 1 || _style == QueryStyle.TSQL) return string.Empty;
             else
             {
                 return $"LIMIT {_limit}\n";
             }
-        }
-
-        internal static string Escape(string identifier, SqlStyle style)
-        {
-            switch (style)
-            {
-                case SqlStyle.MySQL:
-                    identifier = "`" + identifier + "`";
-                    break;
-
-                case SqlStyle.TSQL:
-                case SqlStyle.SQLite:
-                    identifier = "[" + identifier + "]";
-                    break;
-            }
-
-            return identifier;
         }
 
         #endregion Private Members

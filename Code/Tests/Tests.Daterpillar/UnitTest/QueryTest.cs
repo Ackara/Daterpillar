@@ -109,7 +109,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Str.Ackara)]
         public void ReturnQueryWithTop()
         {
-            var sut = new Query(SqlStyle.TSQL)
+            var sut = new Query(QueryStyle.TSQL)
                 .SelectAll().Top(10)
                 .From("tableA");
 
@@ -117,13 +117,13 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted MySQL query when <see cref="SqlStyle.MySQL"/> is passed.
+        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted MySQL query when <see cref="QueryStyle.MySQL"/> is passed.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void ReturnMySqlQuery()
         {
-            var sut = new Query(SqlStyle.MySQL)
+            var sut = new Query(QueryStyle.MySQL)
                 .Select("Id", "Name")
                 .From("tableA", "tableB")
                 .Where("Id = 12")
@@ -135,13 +135,13 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQLite query when <see cref="SqlStyle.SQLite"/> is passed.
+        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQLite query when <see cref="QueryStyle.SQLite"/> is passed.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void ReturnSQliteQuery()
         {
-            var sut = new Query(SqlStyle.SQLite)
+            var sut = new Query(QueryStyle.SQLite)
                 .Select("Id", "Name")
                 .From("tableA", "tableB")
                 .Where("")
@@ -177,7 +177,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Str.Ackara)]
         public void ReturnMinifiedTSqlQuery()
         {
-            var sut = new Query(SqlStyle.TSQL)
+            var sut = new Query(QueryStyle.TSQL)
                 .Select("Id", "Name").Top(100)
                 .From("tableA", "tableB")
                 .Where("Id = 22")

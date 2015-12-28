@@ -6,17 +6,17 @@ namespace Gigobyte.Daterpillar.Data.Linq
 {
     public static class SqlWriter
     {
-        public static string ConvertToSelectCommand(EntityBase entity, SqlStyle style)
+        public static string ConvertToSelectCommand(EntityBase entity, QueryStyle style)
         {
             return $"SELECT * FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
-        public static string ConvertToDeleteCommand(EntityBase entity, SqlStyle style)
+        public static string ConvertToDeleteCommand(EntityBase entity, QueryStyle style)
         {
             return $"DELETE FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
-        public static string ConvertToInsertCommand(EntityBase entity, SqlStyle style)
+        public static string ConvertToInsertCommand(EntityBase entity, QueryStyle style)
         {
             return $"INSERT INTO {Query.Escape(entity.TableName, style)} ({GetFields(entity, style)}) VALUES ({GetValues(entity)});";
         }
@@ -47,7 +47,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             }
         }
 
-        internal static string Escape(string tableOrColumn, SqlStyle style)
+        internal static string Escape(string tableOrColumn, QueryStyle style)
         {
             Func<string, string, bool> notEscapedWith = (a, b) =>
             {
@@ -57,15 +57,15 @@ namespace Gigobyte.Daterpillar.Data.Linq
             switch (style)
             {
                 default:
-                case SqlStyle.SQL:
+                case QueryStyle.SQL:
                     return tableOrColumn;
 
-                case SqlStyle.TSQL:
-                case SqlStyle.SQLite:
+                case QueryStyle.TSQL:
+                case QueryStyle.SQLite:
                     if (notEscapedWith("[", "]")) return String.Format("[{0}]", tableOrColumn);
                     else return tableOrColumn;
 
-                case SqlStyle.MySQL:
+                case QueryStyle.MySQL:
                     if (notEscapedWith("`", "`")) return String.Format("`{0}`", tableOrColumn);
                     else return tableOrColumn;
             }
@@ -73,7 +73,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
         #region Private Members
 
-        private static string GetFields(EntityBase entity, SqlStyle style)
+        private static string GetFields(EntityBase entity, QueryStyle style)
         {
             var columns =
                 from c in entity.GetColumns()
@@ -93,7 +93,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return String.Join(", ", columns).Trim();
         }
 
-        private static string GetWhereClause(EntityBase entity, SqlStyle style)
+        private static string GetWhereClause(EntityBase entity, QueryStyle style)
         {
             var keys = from k in entity.GetKeys()
                        select ($"{Escape(k.Name, style)}={EscapeValue(k.Value)}");

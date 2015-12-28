@@ -9,6 +9,10 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
         }
 
+        public SQLiteTemplate(bool addComments) : this(new SQLiteTypeNameResolver(), addComments)
+        {
+        }
+
         public SQLiteTemplate(ITypeNameResolver typeResolver, bool addComments = true)
         {
             _typeResolver = typeResolver;
@@ -24,6 +28,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
                 Transform(table);
             }
 
+            _text.AppendLine(schema.Script);
             return _text.ToString().Trim();
         }
 

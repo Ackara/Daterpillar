@@ -15,7 +15,7 @@ namespace Gigobyte.Daterpillar.Data
                 if (string.IsNullOrEmpty(_tableName))
                 {
                     TableAttribute attribute = GetType().GetTypeInfo().GetCustomAttribute<TableAttribute>();
-                    _tableName = attribute?.Name;
+                    _tableName = attribute.Name;
                 }
 
                 return _tableName;
@@ -41,7 +41,7 @@ namespace Gigobyte.Daterpillar.Data
                 {
                     object data = property.GetValue(this);
 
-                    yield return new ColumnInfo()
+                    yield return new ColumnInfo(property)
                     {
                         AutoIncremented = column.AutoIncrement,
                         IsKey = column.IsKey,

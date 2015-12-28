@@ -1,7 +1,14 @@
-﻿namespace Gigobyte.Daterpillar.Data
+﻿using System.Reflection;
+
+namespace Gigobyte.Daterpillar.Data
 {
-    public struct ColumnInfo
+    public class ColumnInfo
     {
+        public ColumnInfo(PropertyInfo propertyInfo)
+        {
+            _propertyInfo = propertyInfo;
+        }
+
         /// <summary>
         /// Gets whether the column's primary key is auto incremented.
         /// </summary>
@@ -21,5 +28,26 @@
         /// Gets the value assigned in the column.
         /// </summary>
         public object Value { get; internal set; }
+
+        public System.Type GetPropertyType()
+        {
+            return _propertyInfo.PropertyType;
+        }
+
+        public object GetValue(object obj)
+        {
+            return _propertyInfo.GetValue(obj);
+        }
+
+        public void SetValue(object obj, object value)
+        {
+            _propertyInfo.SetValue(obj, value);
+        }
+
+        #region Private Member
+
+        private PropertyInfo _propertyInfo;
+
+        #endregion Private Member
     }
 }

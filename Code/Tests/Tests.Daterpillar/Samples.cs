@@ -28,13 +28,14 @@ namespace Tests.Daterpillar
         {
             return new Song()
             {
-                Id = 100,
+                Id = 154,
                 Name = name,
                 Length = 12,
                 Price = 1.29M,
                 AlbumId = 1,
-                ArtistId = 22,
-                GenreId = 1
+                ArtistId = 1,
+                GenreId = 1,
+                OnDevice = true
             };
         }
 
@@ -46,6 +47,7 @@ namespace Tests.Daterpillar
 
             var employeeTable = GetTableSchema();
             schema.Tables.Add(employeeTable);
+            schema.Script = "-- Script Goes Here";
 
             return schema;
         }

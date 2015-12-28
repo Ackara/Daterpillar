@@ -3,8 +3,22 @@
 <schema xmlns="http://schema.gigobyte.com/v1/xsml.xsd"
         name="zune"
         author="john@example.com">
+  <table name="genre">
+    <column name="Id"
+            autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+    </column>
+  </table>
+
   <table name="artist">
-    <column name="Id" autoIncrement="true">
+    <column name="Id"
+            autoIncrement="true">
       <dataType>int</dataType>
       <modifier>NOT NULL</modifier>
       <modifier>PRIMARY KEY</modifier>
@@ -20,18 +34,6 @@
     </column>
   </table>
 
-  <table name="genre">
-    <column name="Id" autoIncrement="true">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-      <modifier>PRIMARY KEY</modifier>
-    </column>
-
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-    </column>
-  </table>
-
   <table name="album">
     <column name="Artist_Id">
       <dataType>int</dataType>
@@ -43,7 +45,13 @@
       <modifier>NOT NULL</modifier>
     </column>
 
-    <foreignKey localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id" />
+    <column name="Release_Date">
+      <dataType>date</dataType>
+    </column>
+
+    <foreignKey localColumn="Artist_Id"
+                foreignTable="artist"
+                foreignColumn="Id" />
 
     <index type="primaryKey">
       <columnName>Artist_Id</columnName>
@@ -52,24 +60,11 @@
   </table>
 
   <table name="song">
-    <column name="Id" autoIncrement="true">
+    <column name="Id"
+            autoIncrement="true">
       <dataType>int</dataType>
       <modifier>NOT NULL</modifier>
       <modifier>PRIMARY KEY</modifier>
-    </column>
-
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="Length">
-      <dataType scale="4" precision="2">decimal</dataType>
-    </column>
-
-    <column name="Price">
-      <dataType scale="12" precision="2">decimal</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Album_Id">
@@ -87,7 +82,53 @@
       <modifier>NOT NULL</modifier>
     </column>
 
-    <foreignKey localColumn="Genre_Id" foreignTable="Genre" foreignColumn="Id" />
-    <foreignKey localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id" />
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Length">
+      <dataType scale="4"
+                precision="2">decimal</dataType>
+    </column>
+
+    <column name="Price">
+      <dataType scale="12"
+                precision="2">decimal</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="On_Device">
+      <dataType>bool</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>DEFAULT '0'</modifier>
+    </column>
+
+    <foreignKey localColumn="Genre_Id"
+                foreignTable="genre"
+                foreignColumn="Id" />
+    <foreignKey localColumn="Artist_Id"
+                foreignTable="artist"
+                foreignColumn="Id" />
   </table>
+
+  <script>
+    /* *** SEED *** */
+
+    INSERT INTO genre (Id, Name) VALUES
+    ('1', 'Rap'),
+    ('2', 'Pop'),
+    ('3', 'Rock');
+
+    INSERT INTO artist (Id, Name, Bio) VALUES
+    ('1', 'Drake', 'A canadian rapper');
+
+    INSERT INTO album (Artist_Id, Name, Release_Date) VALUES
+    ('1', 'If You''er Reading This It''s Too Late', '2015-02-01');
+
+    INSERT INTO song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) VALUES
+    ('1', '1', '1', 'Legend', '4.01', '1.29', '0'),
+    ('1', '1', '1', 'Energy', '3.01', '1.29', '1'),
+    ('1', '1', '1', '10 Bands', '2.57', '1.29', '1');
+  </script>
 </schema>

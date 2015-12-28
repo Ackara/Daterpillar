@@ -1,7 +1,7 @@
-﻿using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
-using ApprovalTests.Namers;
+﻿using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
@@ -17,6 +17,8 @@ namespace Tests.Daterpillar.IntegrationTest
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests
     {
+        public TestContext TestContext { get; set; }
+
         /// <summary>
         /// Generate a SQLite schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
@@ -81,7 +83,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 var settings = new MySqlTemplateSettings()
                 {
                     CommentsEnabled = true,
-                    DropSchemaAtBegining = true
+                    DropSchema = true
                 };
 
                 var schema = Schema.Load(fileStream);
@@ -90,7 +92,8 @@ namespace Tests.Daterpillar.IntegrationTest
 
                 // Act
                 var mysql = template.Transform(schema);
-                
+                TestContext.WriteLine(mysql);
+
                 using (var connection = DbFactory.CreateMySqlConnection())
                 {
                     connection.Open();

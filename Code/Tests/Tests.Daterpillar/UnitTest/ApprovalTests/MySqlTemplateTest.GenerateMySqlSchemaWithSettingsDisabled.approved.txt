@@ -22,3 +22,5 @@ CREATE TABLE IF NOT EXISTS `Manager`
 );
 
 CREATE UNIQUE INDEX `manager_idx` ON `Manager` (`Full_Name` DESC);
+
+-- Script Goes Here

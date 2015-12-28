@@ -5,11 +5,11 @@
         public static MySqlTemplateSettings Default = new MySqlTemplateSettings()
         {
             CommentsEnabled = true,
-            DropSchemaAtBegining = false
+            DropSchema = false
         };
 
         public bool CommentsEnabled { get; set; }
 
-        public bool DropSchemaAtBegining { get; set; }
+        public bool DropSchema { get; set; }
     }
 }

@@ -49,6 +49,9 @@ namespace Gigobyte.Daterpillar.Transformation
             set { _tables = value; }
         }
 
+        [XmlElement("script")]
+        public string Script { get; set; }
+
         /// <summary>
         /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
         /// </summary>
