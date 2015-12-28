@@ -2,7 +2,7 @@
  * SCHEMA:		example inc.
  * VERSION:		1.0.0.0
  * AUTHOR:		john@example.com
- * GENERATED:	Dec 27, 2015
+ * GENERATED:	Dec 28, 2015
 */
 
 -- -----------------------------------
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS [song]
     ('1', 'Drake', 'A canadian rapper');
 
     INSERT INTO album (Artist_Id, Name, Release_Date) VALUES
-    ('1', 'If You''er Reading This It''s Too Late', '2015-02-01')
+    ('1', 'If You''er Reading This It''s Too Late', '2015-02-01');
 
     INSERT INTO song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) VALUES
     ('1', '1', '1', 'Legend', '4.01', '1.29', '0'),

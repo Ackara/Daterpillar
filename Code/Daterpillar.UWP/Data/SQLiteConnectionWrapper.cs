@@ -11,6 +11,7 @@ namespace Gigobyte.Daterpillar.Data
 
         public SQLiteConnectionWrapper(string connectionString, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
         {
+            Constructor = constructor;
             ConnectionString = connectionString;
         }
 
@@ -19,7 +20,7 @@ namespace Gigobyte.Daterpillar.Data
             OpenConnection();
 
             // TODO: Begin Transaction here if possible
-
+            
             string command;
             while (CommandQueue.Count > 0)
             {
@@ -43,7 +44,7 @@ namespace Gigobyte.Daterpillar.Data
                     if (handled == false)
                     {
                         RaiseError(new DbExceptionEventArgs(command, ex.Message, ex.HResult));
-                        // TODO: Roolback here if possible
+                        // TODO: Rollback here if possible
                         throw;
                     }
                 }
@@ -71,6 +72,14 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        protected void OpenConnection(SQLiteOpen mode = SQLiteOpen.READWRITE)
+        {
+            if (Connection == null)
+            {
+                Connection = new SQLiteConnection(ConnectionString, mode);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -78,14 +87,6 @@ namespace Gigobyte.Daterpillar.Data
                 Connection?.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        protected void OpenConnection(SQLiteOpen mode = SQLiteOpen.READWRITE)
-        {
-            if (Connection == null)
-            {
-                Connection = new SQLiteConnection(ConnectionString, mode);
-            }
         }
 
         #endregion Protected Members

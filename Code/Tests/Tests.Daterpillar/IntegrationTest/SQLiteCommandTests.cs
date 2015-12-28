@@ -109,6 +109,19 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Str.Ackara)]
+        public void EnforceForeignKeyConstraints()
+        {
+            // Arrange
+            
+
+            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString)))
+            {
+
+            }
+        }
+
+        [TestMethod]
+        [Owner(Str.Ackara)]
         public void HandleSQLiteException()
         {
             // Arrange
@@ -151,20 +164,20 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        internal void ExceptionHandler(Exception ex, string command, out bool handled)
+        #region Private Members
+
+        private static bool _exceptionHandlerCalled, _eventRaised;
+
+        private void ExceptionHandler(Exception ex, string command, out bool handled)
         {
             _exceptionHandlerCalled = (command == nameof(HandleSQLiteException));
             handled = true;
         }
 
-        internal void Connection_Error(object sender, DbExceptionEventArgs e)
+        private void Connection_Error(object sender, DbExceptionEventArgs e)
         {
             _eventRaised = true;
         }
-
-        #region Private Members
-
-        private static bool _exceptionHandlerCalled, _eventRaised;
 
         private static void BuildSQLiteDatabase()
         {

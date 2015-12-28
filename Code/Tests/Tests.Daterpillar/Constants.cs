@@ -21,8 +21,6 @@
             DataXLSX = "data.xlsx",
             SamplesFolder = "Sample Files\\",
             SampleSchema = "music.xddl.xml",
-            MusicMySqlSchema = "music.mysql.sql",
-            MusicSQLiteSchema = "music.sqlite.sql",
             x86SQLiteInterop = "x86\\SQLite.Interop.dll",
             x64SQLiteInterop = "x64\\SQLite.Interop.dll";
     }

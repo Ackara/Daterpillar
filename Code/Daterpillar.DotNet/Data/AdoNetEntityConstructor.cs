@@ -15,7 +15,7 @@ namespace Gigobyte.Daterpillar.Data
                 foreach (var column in entity.GetColumns())
                 {
                     value = data[column.Name];
-                    if (value == DBNull.Value) continue;
+                    if (value == null || value == DBNull.Value) continue;
                     else column.SetValue(entity, Convert.ChangeType(value, column.GetPropertyType()));
                 }
                 return entity;

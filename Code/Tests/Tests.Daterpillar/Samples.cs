@@ -10,6 +10,7 @@ namespace Tests.Daterpillar
 {
     public static class Samples
     {
+#if !WINDOWS_UWP
         public static FileInfo GetFile(string filename)
         {
             string ext = "*" + Path.GetExtension(filename);
@@ -23,6 +24,8 @@ namespace Tests.Daterpillar
         {
             return File.ReadAllText(GetFile(filename).FullName);
         }
+
+#endif
 
         public static Song GetSong([CallerMemberName]string name = null)
         {

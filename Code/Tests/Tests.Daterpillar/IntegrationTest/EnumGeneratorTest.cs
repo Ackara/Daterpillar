@@ -1,4 +1,5 @@
-﻿using Gigobyte.Daterpillar.Transformation.Template;
+﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Gigobyte.Daterpillar.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,7 +9,7 @@ namespace Tests.Daterpillar.IntegrationTest
     [TestClass]
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.MusicSQLiteSchema)]
+    [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
     public class EnumGeneratorTest
     {
         /// <summary>
@@ -19,8 +20,10 @@ namespace Tests.Daterpillar.IntegrationTest
         public void GenerateEnumDeclarationFromDbConnection()
         {
             // Arrange
-            var schema = Samples.GetFileContent(Artifact.MusicSQLiteSchema);
-            using (var connection = DbFactory.CreateSQLiteConnection(schema))
+            var xml = Samples.GetFileContent(Artifact.SampleSchema);
+            var sqlite = new SQLiteTemplate().Transform(Schema.Parse(xml));
+
+            using (var connection = DbFactory.CreateSQLiteConnection(sqlite))
             {
                 using (var generator = new EnumGenerator(connection))
                 {
