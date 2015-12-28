@@ -1,33 +1,63 @@
 ﻿using SQLitePCL;
-using SQLitePCL.Extensions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gigobyte.Daterpillar.Data
 {
     public class SQLiteConnectionWrapper : DbConnectionWrapperBase
     {
-        public SQLiteConnectionWrapper(string connectionString, IEntityConstructor constructor)
+        public SQLiteConnectionWrapper(string connectionString) : this(connectionString, new SQLitePclEntityConstruction())
         {
-            _connectionString = connectionString;
+        }
+
+        public SQLiteConnectionWrapper(string connectionString, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
+        {
+            ConnectionString = connectionString;
         }
 
         public override void Commit()
         {
             OpenConnection();
 
+            // TODO: Begin Transaction here if possible
+
             string command;
             while (CommandQueue.Count > 0)
             {
                 command = CommandQueue.Dequeue();
+                try
+                {
+                    using (ISQLiteStatement statement = Connection.Prepare(command))
+                    {
+                        statement.Step();
+                        statement.Reset();
+                        statement.ClearBindings();
+                    }
 
+                    // TODO: Commit here if possible
+                }
+                catch (SQLiteException ex)
+                {
+                    bool handled = false;
+                    ExceptionHandler?.Invoke(ex, command, out handled);
+
+                    if (handled == false)
+                    {
+                        RaiseError(new DbExceptionEventArgs(command, ex.Message, ex.HResult));
+                        // TODO: Roolback here if possible
+                        throw;
+                    }
+                }
             }
         }
 
         #region Protected Members
+
+        protected readonly string ConnectionString;
+
+        protected IEntityConstructor Constructor;
+
+        protected ISQLiteConnection Connection;
+
         protected override IEnumerable<TEntity> FetchData<TEntity>(string query)
         {
             OpenConnection();
@@ -36,7 +66,7 @@ namespace Gigobyte.Daterpillar.Data
             {
                 while (statement.Step() == SQLiteResult.ROW)
                 {
-                    yield return (TEntity)_constructor.CreateInstance(typeof(TEntity), statement);
+                    yield return (TEntity)Constructor.CreateInstance(typeof(TEntity), statement);
                 }
             }
         }
@@ -50,22 +80,14 @@ namespace Gigobyte.Daterpillar.Data
             base.Dispose(disposing);
         }
 
-
-
-        protected ISQLiteConnection Connection;
-        #endregion
-
-        #region Private Members
-        private readonly string _connectionString;
-        private IEntityConstructor _constructor;
-
-        private void OpenConnection()
+        protected void OpenConnection(SQLiteOpen mode = SQLiteOpen.READWRITE)
         {
             if (Connection == null)
             {
-                Connection = new SQLiteConnection(_connectionString, SQLiteOpen.READWRITE);
+                Connection = new SQLiteConnection(ConnectionString, mode);
             }
         }
-        #endregion
+
+        #endregion Protected Members
     }
 }

@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\SQLiteConnectionWrapper.cs" />
+    <Compile Include="Data\SQLitePclEntityConstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Daterpillar.UWP.rd.xml" />
   </ItemGroup>

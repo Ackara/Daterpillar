@@ -10,10 +10,21 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
     [TestClass]
     public class UwpSQLiteConnectionTest
     {
-        [TestMethod]
-        public void foo()
+        [ClassInitialize]
+        public static void Setup(TestContext context)
         {
+            // Create SQLite database
 
         }
+
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void RunQueryOnSQLitePclConnection()
+        {
+            // Arrange
+            
+        }
+
+        internal static string ConnectionString;
     }
 }
