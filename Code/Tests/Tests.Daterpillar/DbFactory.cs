@@ -12,7 +12,7 @@ namespace Tests.Daterpillar
     {
         public static SQLiteConnection CreateSQLiteConnection(string schema = null)
         {
-            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp.db");
+            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"temp{DateTime.Now.ToString("HHmmssfff")}.db");
             if (File.Exists(dbPath)) File.Delete(dbPath);
 
             string connectionString = new SQLiteConnectionStringBuilder() { DataSource = dbPath }.ConnectionString;

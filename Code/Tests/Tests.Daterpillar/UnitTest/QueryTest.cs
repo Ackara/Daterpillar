@@ -8,7 +8,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class QueryTest
     {
         [ClassCleanup]

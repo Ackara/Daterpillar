@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
                     var template = new EnumTemplate();
                     var code = template.Transform(enumeration);
-                    System.Diagnostics.Debug.Write(code);
+
                     var syntax = CSharpSyntaxTree.ParseText(code);
                     var errorList = syntax.GetDiagnostics();
                     int errorCount = 0;

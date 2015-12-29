@@ -22,6 +22,9 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             _connectionString = destination.Path;
         }
 
+        /// <summary>
+        /// Assert <see cref="SQLiteConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset on a universal app.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void RunQueryUsingSQLiteConnectionOnUWP()
@@ -29,19 +32,23 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             // Arrange
             using (var connection = new SQLiteConnectionWrapper(_connectionString))
             {
+                int limit = 100;
                 var query = new Query()
                     .SelectAll()
                     .From(Song.Table)
-                    .Where($"{Song.IdColumn}<='100'");
+                    .Limit(limit);
 
                 // Act
                 var album = connection.Execute<Song>(query);
 
                 // Assert
-                Assert.AreEqual(3, album.Count());
+                Assert.AreEqual(limit, album.Count());
             }
         }
 
+        /// <summary>
+        /// Assert <see cref="SQLiteConnectionWrapper.Commit"/> can execute an insert command on a universal app.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void RunInsertCommandUsingSQLiteConnectionOnUWP()
@@ -68,6 +75,9 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Assert <see cref="SQLiteConnectionWrapper.Commit"/> can execute a delete command on a universal app.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void RunDeleteCommandUsingSQLiteConnectionOnUWP()
@@ -99,6 +109,9 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Assert <see cref="DbConnectionWrapperBase.ExceptionHandlerDelegate"/> is invoked when an exception is thrown.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void HandleSQLiteExceptionOnUWP()
@@ -119,6 +132,9 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             Assert.IsTrue(_exceptionHandlerCalled);
         }
 
+        /// <summary>
+        /// Assert <see cref="DbConnectionWrapperBase.Error"/> is raised when an exception is thrown.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
         public void RaiseErrorEventOnUWP()
@@ -144,21 +160,42 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             Assert.IsTrue(_eventRaised);
         }
 
+        /// <summary>
+        /// Assert foreign key constraints are enforced when inserting new records.
+        /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void EnforceForeignKeyConstraints()
+        public void EnforceForeignKeyConstraintsOnUWP()
         {
             // Arrange
             var track = Samples.GetSong();
-            track.AlbumId = 10000;
-            track.ArtistId = 10000;
+            track.GenreId = 9999;
+            track.AlbumId = 9999;
+            track.ArtistId = 9999;
+
+            var query = new Query()
+                .SelectAll()
+                .From(Sample.Song.Table)
+                .Where($"{Song.NameColumn} = '{nameof(EnforceForeignKeyConstraintsOnUWP)}'");
 
             using (var connection = new SQLiteConnectionWrapper(_connectionString))
             {
+                // Act
                 connection.Insert(track);
-                connection.Commit();
+                try
+                {
+                    connection.Commit();
+                    Assert.Fail("Foreign key constraint was not enforced.");
+                }
+                catch
+                {
+                    var insertedTrack = connection.Execute<Song>(query)
+                        .FirstOrDefault();
+
+                    // Assert
+                    Assert.IsNull(insertedTrack, "Foreign key constraint was not enforced.");
+                }
             }
-            throw new System.NotImplementedException();
         }
 
         #region Private Member

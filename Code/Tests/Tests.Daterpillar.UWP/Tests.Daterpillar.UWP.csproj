@@ -121,9 +121,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="sample.db">
+    <Content Include="sample.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Tests.Daterpillar.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

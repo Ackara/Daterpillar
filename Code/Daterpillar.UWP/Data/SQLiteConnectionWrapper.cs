@@ -5,36 +5,37 @@ namespace Gigobyte.Daterpillar.Data
 {
     public class SQLiteConnectionWrapper : DbConnectionWrapperBase
     {
-        public SQLiteConnectionWrapper(string connectionString) : this(connectionString, new SQLitePclEntityConstruction())
+        public SQLiteConnectionWrapper(string connectionString) : this(connectionString, true, new SQLitePclEntityConstruction())
         {
         }
 
-        public SQLiteConnectionWrapper(string connectionString, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
+        public SQLiteConnectionWrapper(string connectionString, bool enableForiegnKeys) : this(connectionString, enableForiegnKeys, new SQLitePclEntityConstruction())
+        {
+        }
+
+        public SQLiteConnectionWrapper(string connectionString, bool enableForiegnKeys, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
         {
             Constructor = constructor;
             ConnectionString = connectionString;
+            CommandQueue.Enqueue($"PRAGMA foreign_keys = {(enableForiegnKeys ? 1 : 0)};");
         }
 
         public override void Commit()
         {
             OpenConnection();
 
-            // TODO: Begin Transaction here if possible
-
             string command;
+            ISQLiteStatement statement;
+
             while (CommandQueue.Count > 0)
             {
                 command = CommandQueue.Dequeue();
                 try
                 {
-                    using (ISQLiteStatement statement = Connection.Prepare(command))
+                    using (statement = Connection.Prepare(command))
                     {
                         statement.Step();
-                        statement.Reset();
-                        statement.ClearBindings();
                     }
-
-                    // TODO: Commit here if possible
                 }
                 catch (SQLiteException ex)
                 {
@@ -44,7 +45,6 @@ namespace Gigobyte.Daterpillar.Data
                     if (handled == false)
                     {
                         RaiseError(new DbExceptionEventArgs(command, ex.Message, ex.HResult));
-                        // TODO: Rollback here if possible
                         throw;
                     }
                 }
