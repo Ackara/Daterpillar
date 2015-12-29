@@ -18,8 +18,8 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             // Copy SQLite database
             string fileName = "sample.db";
             var dbFile = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(fileName);
-            var newDest = await dbFile.CopyAsync(ApplicationData.Current.LocalFolder, fileName, NameCollisionOption.ReplaceExisting);
-            _connectionString = newDest.Path;
+            var destination = await dbFile.CopyAsync(ApplicationData.Current.LocalFolder, fileName, NameCollisionOption.ReplaceExisting);
+            _connectionString = destination.Path;
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
 
             using (var sut = new SQLiteConnectionWrapper(_connectionString))
             {
-                sut.ExceptionHandler = SQliteExceptionHanlder;
+                sut.ExceptionHandler = SQLiteExceptionHandler;
 
                 // Act
                 sut.ExecuteNonQuery(invalidCommand);
@@ -144,13 +144,30 @@ namespace Tests.Daterpillar.UWP.IntegrationTest
             Assert.IsTrue(_eventRaised);
         }
 
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void EnforceForeignKeyConstraints()
+        {
+            // Arrange
+            var track = Samples.GetSong();
+            track.AlbumId = 10000;
+            track.ArtistId = 10000;
+
+            using (var connection = new SQLiteConnectionWrapper(_connectionString))
+            {
+                connection.Insert(track);
+                connection.Commit();
+            }
+            throw new System.NotImplementedException();
+        }
+
         #region Private Member
 
         private static bool _exceptionHandlerCalled, _eventRaised;
 
         private static string _connectionString;
 
-        private void SQliteExceptionHanlder(Exception ex, string command, out bool handled)
+        private void SQLiteExceptionHandler(Exception ex, string command, out bool handled)
         {
             handled = _exceptionHandlerCalled = (command == nameof(HandleSQLiteExceptionOnUWP));
         }

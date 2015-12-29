@@ -139,7 +139,7 @@ namespace Tests.Daterpillar.UnitTest
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void ReturnSQliteQuery()
+        public void ReturnSQLiteQuery()
         {
             var sut = new Query(QueryStyle.SQLite)
                 .Select("Id", "Name")

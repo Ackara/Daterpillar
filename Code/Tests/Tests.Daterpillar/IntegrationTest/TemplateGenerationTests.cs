@@ -27,8 +27,14 @@ namespace Tests.Daterpillar.IntegrationTest
         public void GenerateSQLiteSchemaFromFile()
         {
             // Arrange
+            var settings = new SQLiteTemplateSettings()
+            {
+                CommentsEnabled = true,
+                DropTable = true
+            };
+
             var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
-            var template = new SQLiteTemplate(new SQLiteTypeNameResolver(), addComments: true);
+            var template = new SQLiteTemplate(settings, new SQLiteTypeNameResolver());
 
             // Act
             var sqlite = template.Transform(schema);

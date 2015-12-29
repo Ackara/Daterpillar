@@ -1,8 +1,8 @@
-﻿using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
-using ApprovalTests;
+﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
@@ -37,7 +37,13 @@ namespace Tests.Daterpillar.UnitTest
             var sample = Samples.GetSchema();
             sample.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var sut = new SQLiteTemplate(mockTypeResolver, addComments: true);
+            var settings = new SQLiteTemplateSettings()
+            {
+                CommentsEnabled = true,
+                DropTable = true
+            };
+
+            var sut = new SQLiteTemplate(settings, mockTypeResolver);
             // Act
             var result = sut.Transform(sample);
 
@@ -63,7 +69,13 @@ namespace Tests.Daterpillar.UnitTest
             var sample = Samples.GetSchema();
             sample.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var sut = new SQLiteTemplate(mockTypeResolver, addComments: false);
+            var settings = new SQLiteTemplateSettings()
+            {
+                CommentsEnabled = false,
+                DropTable = false
+            };
+
+            var sut = new SQLiteTemplate(settings, mockTypeResolver);
             // Act
             var result = sut.Transform(sample);
 

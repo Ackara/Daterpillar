@@ -61,6 +61,7 @@
     <Compile Include="Transformation\Template\MySqlTypeNameResolver.cs" />
     <Compile Include="Transformation\Template\SQLiteTemplate.cs" />
     <Compile Include="Transformation\Template\ITemplate.cs" />
+    <Compile Include="Transformation\Template\SQLiteTemplateSettings.cs" />
     <Compile Include="Transformation\Template\SQLiteTypeNameResolver.cs" />
     <Compile Include="Transformation\Template\TemplateExtensions.cs" />
     <Compile Include="Transformation\ForeignKeyRule.cs" />

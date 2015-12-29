@@ -20,7 +20,7 @@ namespace Gigobyte.Daterpillar.Data
             OpenConnection();
 
             // TODO: Begin Transaction here if possible
-            
+
             string command;
             while (CommandQueue.Count > 0)
             {

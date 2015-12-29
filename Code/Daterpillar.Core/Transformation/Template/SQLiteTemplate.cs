@@ -5,18 +5,18 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public class SQLiteTemplate : ITemplate
     {
-        public SQLiteTemplate() : this(new SQLiteTypeNameResolver())
+        public SQLiteTemplate() : this(SQLiteTemplateSettings.Default, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplate(bool addComments) : this(new SQLiteTypeNameResolver(), addComments)
+        public SQLiteTemplate(SQLiteTemplateSettings settings) : this(settings, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplate(ITypeNameResolver typeResolver, bool addComments = true)
+        public SQLiteTemplate(SQLiteTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _typeResolver = typeResolver;
-            _commentsEnabled = addComments;
+            _settings = settings;
         }
 
         public string Transform(Schema schema)
@@ -34,13 +34,18 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         #region Private Members
 
-        private bool _commentsEnabled;
         private ITypeNameResolver _typeResolver;
+        private SQLiteTemplateSettings _settings;
         private StringBuilder _text = new StringBuilder();
 
-        private void Transform(Table table)
+        private  void Transform(Table table)
         {
             AppendComments(table);
+
+            if (_settings.DropTable)
+            {
+                _text.AppendLine($"DROP TABLE IF EXISTS [{table.Name}];");
+            }
 
             _text.AppendLine($"CREATE TABLE IF NOT EXISTS [{table.Name}]");
             _text.AppendLine("(");
@@ -103,7 +108,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private void AppendComments(Table table)
         {
-            if (_commentsEnabled)
+            if (_settings.CommentsEnabled)
             {
                 if (string.IsNullOrWhiteSpace(table.Comment))
                 {

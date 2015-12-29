@@ -22,7 +22,21 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            BuildSQLiteDatabase();
+            // Create SQLite database
+            string path = Samples.GetFile(Artifact.SampleSchema).FullName;
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                var schema = Schema.Load(stream);
+                string sqlite = new SQLiteTemplate().Transform(schema);
+
+                using (var connection = DbFactory.CreateSQLiteConnection(sqlite))
+                {
+                    var builder = new SQLiteConnectionStringBuilder();
+                    builder.DataSource = connection.FileName;
+
+                    ConnectionString = builder.ConnectionString;
+                }
+            }
         }
 
         [TestMethod]
@@ -30,12 +44,14 @@ namespace Tests.Daterpillar.IntegrationTest
         public void RunQueryOnSQLiteConnection()
         {
             // Arrange
+            int limit = 200;
+
             using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
             {
                 var query = new Query()
                     .SelectAll()
                     .From(Song.Table)
-                    .Where($"{Song.IdColumn}<='100'");
+                    .Limit(limit);
 
                 // Act
                 var album = connection.Execute<Song>(query);
@@ -45,7 +61,7 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(3, album.Count());
+                Assert.AreEqual(limit, album.Count());
                 Assert.AreEqual(track1.Id, single.Id);
             }
         }
@@ -109,19 +125,6 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Str.Ackara)]
-        public void EnforceForeignKeyConstraints()
-        {
-            // Arrange
-            
-
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString)))
-            {
-
-            }
-        }
-
-        [TestMethod]
-        [Owner(Str.Ackara)]
         public void HandleSQLiteException()
         {
             // Arrange
@@ -177,24 +180,6 @@ namespace Tests.Daterpillar.IntegrationTest
         private void Connection_Error(object sender, DbExceptionEventArgs e)
         {
             _eventRaised = true;
-        }
-
-        private static void BuildSQLiteDatabase()
-        {
-            string path = Samples.GetFile(Artifact.SampleSchema).FullName;
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var schema = Schema.Load(stream);
-                string sqlite = new SQLiteTemplate().Transform(schema);
-
-                using (var connection = DbFactory.CreateSQLiteConnection(sqlite))
-                {
-                    var builder = new SQLiteConnectionStringBuilder();
-                    builder.DataSource = connection.FileName;
-
-                    ConnectionString = builder.ConnectionString;
-                }
-            }
         }
 
         #endregion Private Members
