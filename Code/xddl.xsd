@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="http://schema.gigobyte.com/v1/xsml.xsd"
-           xmlns="http://schema.gigobyte.com/v1/xsml.xsd"
+<xs:schema targetNamespace="http://schema.gigobyte.com/v1/xddl.xsd"
+           xmlns="http://schema.gigobyte.com/v1/xddl.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified">
   <xs:element name="schema">

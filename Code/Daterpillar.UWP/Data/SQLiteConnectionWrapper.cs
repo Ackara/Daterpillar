@@ -9,15 +9,15 @@ namespace Gigobyte.Daterpillar.Data
         {
         }
 
-        public SQLiteConnectionWrapper(string connectionString, bool enableForiegnKeys) : this(connectionString, enableForiegnKeys, new SQLitePclEntityConstruction())
+        public SQLiteConnectionWrapper(string connectionString, bool enableForeignKeys) : this(connectionString, enableForeignKeys, new SQLitePclEntityConstruction())
         {
         }
 
-        public SQLiteConnectionWrapper(string connectionString, bool enableForiegnKeys, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
+        public SQLiteConnectionWrapper(string connectionString, bool enableForeignKeys, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
         {
             Constructor = constructor;
             ConnectionString = connectionString;
-            CommandQueue.Enqueue($"PRAGMA foreign_keys = {(enableForiegnKeys ? 1 : 0)};");
+            CommandQueue.Enqueue($"PRAGMA foreign_keys = {(enableForeignKeys ? 1 : 0)};");
         }
 
         public override void Commit()
