@@ -137,4 +137,11 @@ Global
 		{9CC6674B-4A4C-4F4E-BD29-27D7898511BF} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
 		{F0350A82-7B4B-4C86-9841-128299CC1BA9} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
 	EndGlobalSection
+	GlobalSection(AutomaticVersions) = postSolution
+		PrimaryVersionType = AssemblyVersionAttribute
+		UpdateAssemblyVersion = True
+		UpdateAssemblyFileVersion = False
+		UpdateAssemblyInfoVersion = False
+		AssemblyVersionSettings = None.None.DateStamp.TimeStamp
+	EndGlobalSection
 EndGlobal

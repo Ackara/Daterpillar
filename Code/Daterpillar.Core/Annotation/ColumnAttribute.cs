@@ -2,6 +2,10 @@
 
 namespace Gigobyte.Daterpillar.Annotation
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class ColumnAttribute : Attribute
     {
