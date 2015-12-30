@@ -9,7 +9,7 @@ namespace Gigobyte.Daterpillar.Transformation
     {
         #region Static Members
 
-        public const string Xmlns = "http://schema.gigobyte.com/v1/xsml.xsd";
+        public const string Xmlns = "http://schema.gigobyte.com/v1/xddl.xsd";
 
         public static Schema Load(Stream stream)
         {
