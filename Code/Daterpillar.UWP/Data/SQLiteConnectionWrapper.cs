@@ -107,11 +107,11 @@ namespace Gigobyte.Daterpillar.Data
         /// Opens the connection.
         /// </summary>
         /// <param name="mode">The mode.</param>
-        protected void OpenConnection(SQLiteOpen mode = SQLiteOpen.READWRITE)
+        protected void OpenConnection()
         {
             if (Connection == null)
             {
-                Connection = new SQLiteConnection(ConnectionString, mode);
+                Connection = new SQLiteConnection(ConnectionString, SQLiteOpen.READWRITE);
             }
         }
 

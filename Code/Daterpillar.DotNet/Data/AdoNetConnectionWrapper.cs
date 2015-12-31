@@ -108,7 +108,7 @@ namespace Gigobyte.Daterpillar.Data
 
         #region Private Member
 
-        public IEntityConstructor _constructor;
+        private IEntityConstructor _constructor;
         private IDbConnection _connection;
 
         private void OpenConnection()
