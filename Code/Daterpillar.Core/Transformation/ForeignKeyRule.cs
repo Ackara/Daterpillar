@@ -1,5 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation
 {
+    /// <summary>
+    /// Foreign key collision rule.
+    /// </summary>
     public enum ForeignKeyRule
     {
         NONE,

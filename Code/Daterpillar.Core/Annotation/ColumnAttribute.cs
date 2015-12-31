@@ -3,7 +3,7 @@
 namespace Gigobyte.Daterpillar.Annotation
 {
     /// <summary>
-    /// Specifies the property is mapped to a table column.
+    /// Represents the database column that a property is mapped to.
     /// </summary>
     /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
@@ -19,7 +19,7 @@ namespace Gigobyte.Daterpillar.Annotation
         }
 
         /// <summary>
-        /// The name of the column.
+        /// The name of the column the property is mapped to.
         /// </summary>
         public readonly string Name;
 

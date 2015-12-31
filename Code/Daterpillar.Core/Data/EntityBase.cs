@@ -4,10 +4,19 @@ using System.Reflection;
 
 namespace Gigobyte.Daterpillar.Data
 {
+    /// <summary>
+    /// Represents an object that is mapped to a database table.
+    /// </summary>
     [System.Runtime.Serialization.DataContract]
     [System.Diagnostics.DebuggerDisplay("{" + nameof(ToDebuggerDisplay) + "}")]
     public abstract class EntityBase
     {
+        /// <summary>
+        /// Gets the name of the database table that is mapped to this object.
+        /// </summary>
+        /// <value>
+        /// The name of the table.
+        /// </value>
         public string TableName
         {
             get
@@ -22,6 +31,10 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        /// <summary>
+        /// Gets the primary key columns that are mapped to this object.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ColumnInfo> GetKeys()
         {
             foreach (var column in GetColumns())
@@ -31,6 +44,10 @@ namespace Gigobyte.Daterpillar.Data
                 }
         }
 
+        /// <summary>
+        /// Gets the columns that are mapped to this object.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ColumnInfo> GetColumns()
         {
             foreach (var property in GetType().GetRuntimeProperties())
@@ -52,6 +69,10 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        /// <summary>
+        /// Get this object string representation in the debugger variable windows.
+        /// </summary>
+        /// <returns>The string representation in the debugger variable windows.</returns>
         protected virtual string ToDebuggerDisplay()
         {
             return $"[{TableName}]";

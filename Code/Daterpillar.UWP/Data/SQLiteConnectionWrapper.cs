@@ -3,16 +3,35 @@ using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.Data
 {
+    /// <summary>
+    /// Represents a SQLite connection.
+    /// </summary>
+    /// <seealso cref="Gigobyte.Daterpillar.Data.DbConnectionWrapperBase" />
     public class SQLiteConnectionWrapper : DbConnectionWrapperBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteConnectionWrapper"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
         public SQLiteConnectionWrapper(string connectionString) : this(connectionString, true, new SQLitePclEntityConstruction())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteConnectionWrapper"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="enableForeignKeys">if set to <c>true</c> [enable foreign keys].</param>
         public SQLiteConnectionWrapper(string connectionString, bool enableForeignKeys) : this(connectionString, enableForeignKeys, new SQLitePclEntityConstruction())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteConnectionWrapper"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="enableForeignKeys">if set to <c>true</c> [enable foreign keys].</param>
+        /// <param name="constructor">The constructor.</param>
         public SQLiteConnectionWrapper(string connectionString, bool enableForeignKeys, IEntityConstructor constructor) : base(Linq.QueryStyle.SQLite)
         {
             Constructor = constructor;
@@ -20,6 +39,9 @@ namespace Gigobyte.Daterpillar.Data
             CommandQueue.Enqueue($"PRAGMA foreign_keys = {(enableForeignKeys ? 1 : 0)};");
         }
 
+        /// <summary>
+        /// Commits or save changes made on this open connection.
+        /// </summary>
         public override void Commit()
         {
             OpenConnection();
@@ -53,10 +75,19 @@ namespace Gigobyte.Daterpillar.Data
 
         #region Protected Members
 
+        /// <summary>
+        /// The connection string.
+        /// </summary>
         protected readonly string ConnectionString;
 
+        /// <summary>
+        /// The constructor.
+        /// </summary>
         protected IEntityConstructor Constructor;
 
+        /// <summary>
+        /// The SQLite connection.
+        /// </summary>
         protected ISQLiteConnection Connection;
 
         protected override IEnumerable<TEntity> FetchData<TEntity>(string query)
@@ -72,6 +103,10 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        /// <summary>
+        /// Opens the connection.
+        /// </summary>
+        /// <param name="mode">The mode.</param>
         protected void OpenConnection(SQLiteOpen mode = SQLiteOpen.READWRITE)
         {
             if (Connection == null)

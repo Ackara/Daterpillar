@@ -7,17 +7,30 @@ namespace Gigobyte.Daterpillar.Data.Linq
     /// </summary>
     public struct Query
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Query"/> struct.
+        /// </summary>
+        /// <param name="style">The style.</param>
         public Query(QueryStyle style) : this()
         {
             _style = style;
         }
 
+        /// <summary>
+        /// Selects *.
+        /// </summary>
+        /// <returns></returns>
         public Query SelectAll()
         {
             _select = "*";
             return this;
         }
 
+        /// <summary>
+        /// SELECT [column1], [column2]....
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <returns></returns>
         public Query Select(params string[] columns)
         {
             QueryStyle style = _style;
@@ -25,12 +38,22 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return this;
         }
 
+        /// <summary>
+        /// TOP n.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public Query Top(int value)
         {
             _limit = value;
             return this;
         }
 
+        /// <summary>
+        /// FROM [table1], [table2]...
+        /// </summary>
+        /// <param name="tables">The tables.</param>
+        /// <returns></returns>
         public Query From(params string[] tables)
         {
             QueryStyle style = _style;
@@ -38,12 +61,22 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return this;
         }
 
+        /// <summary>
+        /// WHERE [columA]='value'.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
         public Query Where(string expression)
         {
             _where = expression;
             return this;
         }
 
+        /// <summary>
+        /// GROUP BY [columnA], [columnB]...
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <returns></returns>
         public Query GroupBy(params string[] columns)
         {
             QueryStyle style = _style;
@@ -51,6 +84,11 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return this;
         }
 
+        /// <summary>
+        /// ORDER BY [columnA], [columnB]...
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <returns></returns>
         public Query OrderBy(params string[] columns)
         {
             QueryStyle style = _style;
@@ -58,12 +96,22 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return this;
         }
 
+        /// <summary>
+        /// LIMIT n.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public Query Limit(int value)
         {
             _limit = value;
             return this;
         }
 
+        /// <summary>
+        /// Gets the SQL query.
+        /// </summary>
+        /// <param name="minify">if set to <c>true</c> [minify].</param>
+        /// <returns></returns>
         public string GetValue(bool minify = false)
         {
             if (_select == null || _from == null) return string.Empty;
@@ -80,7 +128,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             }
         }
 
-        #region Private Members
+        #region Private & Internal Members
 
         internal static string Escape(string identifier, QueryStyle style)
         {
