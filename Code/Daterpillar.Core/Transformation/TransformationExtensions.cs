@@ -1,5 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation
 {
+    /// <summary>
+    /// Provide extension methods for the <see cref="Transformation"/> namespace.
+    /// </summary>
     public static class TransformationExtensions
     {
         internal static string ToText(this ForeignKeyRule rule)

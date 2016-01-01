@@ -6,21 +6,44 @@ namespace Gigobyte.Daterpillar.Data.Linq
 {
     public static class SqlWriter
     {
+        /// <summary>
+        /// Gets the SQL command to retrieve the specified <paramref name="entity"/> from a database.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="style">The style.</param>
+        /// <returns></returns>
         public static string ConvertToSelectCommand(EntityBase entity, QueryStyle style)
         {
             return $"SELECT * FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
+        /// <summary>
+        /// Gets the SQL command to delete the specified <paramref name="entity"/> from a database.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="style">The style.</param>
+        /// <returns></returns>
         public static string ConvertToDeleteCommand(EntityBase entity, QueryStyle style)
         {
             return $"DELETE FROM {Escape(entity.TableName, style)} WHERE {GetWhereClause(entity, style)};";
         }
 
+        /// <summary>
+        /// Gets the SQL command to insert the specified <paramref name="entity"/> from a database.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="style">The style.</param>
+        /// <returns></returns>
         public static string ConvertToInsertCommand(EntityBase entity, QueryStyle style)
         {
             return $"INSERT INTO {Query.Escape(entity.TableName, style)} ({GetFields(entity, style)}) VALUES ({GetValues(entity)});";
         }
 
+        /// <summary>
+        /// Escapes the specified <paramref name="value"/> into a well formatted SQL value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public static string EscapeValue(object value)
         {
             if (value == null) return "''";
@@ -47,6 +70,8 @@ namespace Gigobyte.Daterpillar.Data.Linq
             }
         }
 
+        #region Internal & Private Members
+
         internal static string Escape(string tableOrColumn, QueryStyle style)
         {
             Func<string, string, bool> notEscapedWith = (a, b) =>
@@ -70,8 +95,6 @@ namespace Gigobyte.Daterpillar.Data.Linq
                     else return tableOrColumn;
             }
         }
-
-        #region Private Members
 
         private static string GetFields(EntityBase entity, QueryStyle style)
         {
@@ -101,6 +124,6 @@ namespace Gigobyte.Daterpillar.Data.Linq
             return string.Join(" AND ", keys).Trim();
         }
 
-        #endregion Private Members
+        #endregion Internal & Private Members
     }
 }
