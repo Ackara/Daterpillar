@@ -1,16 +1,6 @@
 CD %~dp0
-FOR /r %%f in (*.txt) DO (
-	DEL %%f 
-)
 
-SET fn=..\Code\Daterpillar.Core\Daterpillar.Core.csproj
+SET fn=..\Code\Daterpillar.Core\Daterpillar.Core.nuspec
 IF exist %fn% (
-	nuget.exe pack %fn%
+	nuget.exe pack %fn% -IncludeReferencedProjects
 )
-
-SET fn=..\Code\Daterpillar.Core\Daterpillar.DotNet.csproj
-IF exist %fn% (
-	nuget.exe pack %fn%
-)
-
-PAUSE
