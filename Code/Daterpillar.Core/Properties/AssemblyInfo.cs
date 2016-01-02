@@ -8,7 +8,7 @@ using System;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Daterpillar.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Daterpillar is a data access and transformation technology for new applications.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Gigobyte")]
 [assembly: AssemblyProduct("Daterpillar.Core")]
@@ -27,5 +27,5 @@ using System;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.15365.1802")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.16002.1355")]
+[assembly: AssemblyFileVersion("1.7.16002.1355")]

@@ -5,6 +5,7 @@ using System.IO;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
+    [DeploymentItem(Artifact.XDDL)]
     [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
     public class SchemaTest
     {

@@ -2,7 +2,7 @@
  * SCHEMA:		example inc.
  * VERSION:		1.0.0.0
  * AUTHOR:		john@example.com
- * GENERATED:	Dec 28, 2015
+ * GENERATED:	Jan 02, 2016
 */
 
 -- -----------------------------------
