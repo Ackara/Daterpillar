@@ -156,4 +156,10 @@ Global
 		{F0350A82-7B4B-4C86-9841-128299CC1BA9} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
 		{640FD9DA-8A9D-40F7-BE61-5DE08E75A4D8} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
 	EndGlobalSection
+	GlobalSection(AutomaticVersions) = postSolution
+		PrimaryVersionType = AssemblyVersionAttribute
+		UpdateAssemblyVersion = False
+		UpdateAssemblyFileVersion = False
+		UpdateAssemblyInfoVersion = False
+	EndGlobalSection
 EndGlobal
