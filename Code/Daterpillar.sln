@@ -158,8 +158,10 @@ Global
 	EndGlobalSection
 	GlobalSection(AutomaticVersions) = postSolution
 		PrimaryVersionType = AssemblyVersionAttribute
-		UpdateAssemblyVersion = False
-		UpdateAssemblyFileVersion = False
+		UpdateAssemblyVersion = True
+		UpdateAssemblyFileVersion = True
 		UpdateAssemblyInfoVersion = False
+		AssemblyVersionSettings = None.None.None.Increment
+		AssemblyFileVersionSettings = None.None.None.Increment
 	EndGlobalSection
 EndGlobal
