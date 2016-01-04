@@ -196,4 +196,5 @@ FakesAssemblies/
 *.opt
 
 # User Defined
-*.exe
+*.ps1
+*.gitignore

@@ -10,8 +10,8 @@ using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar.IntegrationTest
 {
-    [Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     [TestClass]
+    [Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     public class MySqlCommandTests
     {
         [ClassInitialize]
@@ -31,10 +31,12 @@ namespace Tests.Daterpillar.IntegrationTest
             // Arrange
             using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
             {
+                var limit = 100;
+
                 var query = new Query()
                     .SelectAll()
                     .From(Song.Table)
-                    .Where($"{Song.IdColumn}<='100'");
+                    .Where($"{Song.IdColumn}<='{limit}'");
 
                 // Act
                 var album = connection.Execute<Song>(query);
@@ -44,7 +46,7 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(3, album.Count());
+                Assert.AreEqual(limit, album.Count());
                 Assert.AreEqual(track1.Id, single.Id);
             }
         }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <package >
   <metadata>
     <id>$id$</id>
@@ -15,10 +15,4 @@
 	<language>en-US</language>
     <tags>database sqlite schema c#</tags>
   </metadata>
-  <files>
-	<file src="..\Tests\Tests.Daterpillar.T4\xddl.xsd" target="content" />
-	<file src="..\Tests\Tests.Daterpillar.T4\schema.xddl.xml" target="content" />
-	<file src="..\Tests\Tests.Daterpillar.T4\schema.sqlite.tt" target="content" />
-	<file src="..\Tests\Tests.Daterpillar.T4\schema.csharp.tt" target="content" />
-  </files>
 </package>

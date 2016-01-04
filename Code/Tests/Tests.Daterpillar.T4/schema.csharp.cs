@@ -1,0 +1,8 @@
+﻿using System;
+using Gigobyte.Daterpillar.Data;
+using System.Runtime.Serialization;
+using Gigobyte.Daterpillar.Annotation;
+
+namespace GeneratedCode
+{
+}

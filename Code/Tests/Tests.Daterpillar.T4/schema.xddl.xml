@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<schema xmlns="http://schema.gigobyte.com/v1/xddl.xsd"
+        name="your_schema"
+        author="your_name">
+  <table name="tableA">
+    <column name="Id"
+            autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+    </column>
+  </table>
+
+  <table name="tableB">
+    <column name="Id">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="Date">
+      <dataType>date</dataType>
+    </column>
+
+    <column name="TableA_Id">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="Age">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <foreignKey localColumn="TableA_Id"
+                foreignTable="tableA"
+                foreignColumn="Id">
+      <onUpdate>CASCADE</onUpdate>
+      <onDelete>CASCADE</onDelete>
+    </foreignKey>
+
+    <index type="primaryKey">
+      <columnName>Id</columnName>
+    </index>
+
+    <index name="age_idx"
+           type="index"
+           table="tableB">
+      <columnName>Age</columnName>
+    </index>
+  </table>
+</schema>

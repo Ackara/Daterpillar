@@ -19,7 +19,7 @@
  * SCHEMA:		example inc.
  * VERSION:		1.0.0.0
  * AUTHOR:		john@example.com
- * GENERATED:	<#= DateTime.Now.ToString("MMM dd, yyyy") #>
+ * GENERATED:	<#= DateTime.Now.ToString("MMMM dd, yyyy") #>
 */
 
 <# 
@@ -27,13 +27,20 @@
 	/// Provide the path to the schema document you wish to transform.
 	/// Below are some examples of how a dynamic path can be constructed.
 
-	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(TargetDir)"), "music.xddl.xml");
-	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "music.xddl.xml");
-	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "Sample Files", "music.xddl.xml");
-	
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(TargetDir)"), "schema.xddl.xml");
+	/// string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "schema.xddl.xml");
+	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), "schema.xddl.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
-	var template = new SQLiteTemplate();
+	
+	/// You can change the output of the SQLite schema using the settings object.
+	/// You can also write your own template by implementing <see cref="Gigobyte.Daterpillar.Transformation.Template.ITemplate" />
+	var settings = new SQLiteTemplateSettings()
+	{
+		DropTable = true,
+		CommentsEnabled = true
+	};
 
+	var template = new SQLiteTemplate(settings);
 	string sqlite = template.Transform(schema);
 	WriteLine(sqlite);
 #>

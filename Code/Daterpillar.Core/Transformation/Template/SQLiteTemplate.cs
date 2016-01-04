@@ -38,7 +38,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private SQLiteTemplateSettings _settings;
         private StringBuilder _text = new StringBuilder();
 
-        private  void Transform(Table table)
+        private void Transform(Table table)
         {
             AppendComments(table);
 

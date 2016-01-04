@@ -48,8 +48,14 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 			TypeNames.Add("dateTime", "dateTime");
 		}
 
-		protected IDictionary<string, string> TypeNames { get; set; }
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public abstract string GetName(DataType dataType);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IDictionary<string, string> TypeNames { get; set; }
 	}
 }
