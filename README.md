@@ -42,7 +42,8 @@ public class Employee
 Creating your own template or customizing an existing one is also easy.
 
 ## Getting Started
-The easiest way to get started is by installing the NuGet package with the following [Install-Package Gigobyte.Daterpillar.Core](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core).
+The easiest way to get started is by installing the NuGet package.
+[Install-Package Gigobyte.Daterpillar.Core](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core).
 
 ## License
 [MIT License](https://github.com/Ackara/Daterpillar/blob/master/LICENSE)
