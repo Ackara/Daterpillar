@@ -6,7 +6,7 @@
         {
             TypeNames[BOOL] = "bool";
             TypeNames[BLOB] = "string";
-            TypeNames[CHAR] = "char";
+            TypeNames[CHAR] = "string";
             TypeNames[TEXT] = "string";
             TypeNames[VARCHAR] = "string";
             TypeNames[INT] = "int";
