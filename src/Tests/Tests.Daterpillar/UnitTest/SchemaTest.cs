@@ -1,6 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Linq;
 
 namespace Tests.Daterpillar.UnitTest
 {
@@ -71,6 +72,27 @@ namespace Tests.Daterpillar.UnitTest
             // Assert
             Assert.IsNotNull(obj);
             Assert.IsNotNull(obj.Tables);
+        }
+
+        /// <summary>
+        /// Assert <see cref="Schema.RemoveTable(string)"/> can find and remove an existing <see cref="Table"/> object from an instance.
+        /// </summary>
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void RemoveTableFromSchema()
+        {
+            // Arrange
+            var schema = Samples.GetSchema();
+            var nameOfTableToRemove = "RemoveMe";
+            var tableToRemove = Samples.GetTableSchema(nameOfTableToRemove);
+
+            schema.Tables.Add(tableToRemove);
+
+            // Act
+            schema.RemoveTable(nameOfTableToRemove);
+
+            // Assert
+            Assert.IsNull(schema.Tables.FirstOrDefault(x => x.Name == nameOfTableToRemove));
         }
     }
 }
