@@ -1,0 +1,187 @@
+﻿/// <summary>
+/// Represents the [Employee] table.
+/// </summary>
+[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+[Table("Employee")]
+public partial class Employee : EntityBase, System.ComponentModel.INotifyPropertyChanged
+{
+	#region Constants
+
+	/// <summary>
+	/// The Employee table identifier.
+	/// </summary>
+	public const string Table = "Employee";
+
+	/// <summary>
+	/// The [Employee].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [Employee].[Full_Name] column identifier.
+	/// </summary>
+	public const string FullNameColumn = "Full_Name";
+
+	/// <summary>
+	/// The [Employee].[Salary] column identifier.
+	/// </summary>
+	public const string SalaryColumn = "Salary";
+
+	#endregion Constants
+
+	/// <summary>
+	/// Get or set the [Employee].[Id] column value.
+	/// </summary>
+	[DataMember]
+	[Column("Id", IsKey = true, AutoIncrement = true)]
+	public virtual string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	/// <summary>
+	/// The first name column.
+	/// </summary>
+	[DataMember]
+	[Column("Full_Name")]
+	public virtual string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_full_Name = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	/// <summary>
+	/// The salary column.
+	/// </summary>
+	[DataMember]
+	[Column("Salary")]
+	public virtual string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+	}
+
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
+}
+
+/// <summary>
+/// Represents the [Manager] table.
+/// </summary>
+[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+[Table("Manager")]
+public partial class Manager : EntityBase, System.ComponentModel.INotifyPropertyChanged
+{
+	#region Constants
+
+	/// <summary>
+	/// The Manager table identifier.
+	/// </summary>
+	public const string Table = "Manager";
+
+	/// <summary>
+	/// The [Manager].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [Manager].[Full_Name] column identifier.
+	/// </summary>
+	public const string FullNameColumn = "Full_Name";
+
+	/// <summary>
+	/// The [Manager].[Salary] column identifier.
+	/// </summary>
+	public const string SalaryColumn = "Salary";
+
+	#endregion Constants
+
+	/// <summary>
+	/// Get or set the [Manager].[Id] column value.
+	/// </summary>
+	[DataMember]
+	[Column("Id", IsKey = true, AutoIncrement = true)]
+	public virtual string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	/// <summary>
+	/// The first name column.
+	/// </summary>
+	[DataMember]
+	[Column("Full_Name")]
+	public virtual string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_full_Name = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	/// <summary>
+	/// The salary column.
+	/// </summary>
+	[DataMember]
+	[Column("Salary")]
+	public virtual string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+	}
+
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
+}

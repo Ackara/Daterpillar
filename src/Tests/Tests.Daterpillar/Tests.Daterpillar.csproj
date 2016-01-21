@@ -18,7 +18,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AssemblyVersion>1.0.0.7</AssemblyVersion>
+    <AssemblyVersion>1.0.0.18</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -110,6 +110,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>csharp.tt</DependentUpon>
     </Compile>
+    <Compile Include="UnitTest\NotifyPropertyChangedTemplateTest.cs" />
     <Compile Include="UnitTest\EnumTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTypeNameResolverTest.cs" />

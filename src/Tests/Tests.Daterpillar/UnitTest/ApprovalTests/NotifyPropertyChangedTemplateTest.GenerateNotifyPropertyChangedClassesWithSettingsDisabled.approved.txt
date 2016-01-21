@@ -1,0 +1,81 @@
+﻿public partial class Employee : System.ComponentModel.INotifyPropertyChanged
+{
+	public string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_full_Name = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+	}
+
+}
+
+public partial class Manager : System.ComponentModel.INotifyPropertyChanged
+{
+	public string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_full_Name = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+	}
+
+}
