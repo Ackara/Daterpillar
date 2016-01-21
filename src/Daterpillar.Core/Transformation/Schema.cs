@@ -103,6 +103,19 @@ namespace Gigobyte.Daterpillar.Transformation
             stream.Position = 0;
         }
 
+        /// <summary>
+        /// Removes all <see cref="Table"/> object with the specified name.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        public void RemoveTable(string tableName)
+        {
+            for (int i = 0; i < _tables.Count; i++)
+                if (_tables[i].Name.Equals(tableName, System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    _tables.RemoveAt(i);
+                }
+        }
+
         #region Private Member
 
         private List<Table> _tables;
