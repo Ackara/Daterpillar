@@ -1,9 +1,9 @@
 ﻿/// <summary>
 /// Represents the [Employee] table.
 /// </summary>
-[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
 [Table("Employee")]
-public partial class Employee : EntityBase, System.ComponentModel.INotifyPropertyChanged
+[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+public partial class Employee : EntityBase, INotifyPropertyChanged
 {
 	#region Constants
 
@@ -54,7 +54,7 @@ public partial class Employee : EntityBase, System.ComponentModel.INotifyPropert
 		get { return _fullName; }
 		set
 		{
-			_full_Name = value;
+			_fullName = value;
 			RaisePropertyChanged();
 		}
 	}
@@ -78,7 +78,7 @@ public partial class Employee : EntityBase, System.ComponentModel.INotifyPropert
 
 	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
 	#region Private Members
@@ -95,9 +95,9 @@ public partial class Employee : EntityBase, System.ComponentModel.INotifyPropert
 /// <summary>
 /// Represents the [Manager] table.
 /// </summary>
-[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
 [Table("Manager")]
-public partial class Manager : EntityBase, System.ComponentModel.INotifyPropertyChanged
+[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+public partial class Manager : EntityBase, INotifyPropertyChanged
 {
 	#region Constants
 
@@ -148,7 +148,7 @@ public partial class Manager : EntityBase, System.ComponentModel.INotifyProperty
 		get { return _fullName; }
 		set
 		{
-			_full_Name = value;
+			_fullName = value;
 			RaisePropertyChanged();
 		}
 	}
@@ -172,7 +172,7 @@ public partial class Manager : EntityBase, System.ComponentModel.INotifyProperty
 
 	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
 	#region Private Members

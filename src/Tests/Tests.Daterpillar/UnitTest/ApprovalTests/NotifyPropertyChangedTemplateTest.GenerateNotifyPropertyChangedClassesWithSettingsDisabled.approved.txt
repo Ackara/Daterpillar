@@ -1,4 +1,4 @@
-﻿public partial class Employee : System.ComponentModel.INotifyPropertyChanged
+﻿public partial class Employee : INotifyPropertyChanged
 {
 	public string Id
 	{
@@ -15,7 +15,7 @@
 		get { return _fullName; }
 		set
 		{
-			_full_Name = value;
+			_fullName = value;
 			RaisePropertyChanged();
 		}
 	}
@@ -34,12 +34,21 @@
 
 	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
 }
 
-public partial class Manager : System.ComponentModel.INotifyPropertyChanged
+public partial class Manager : INotifyPropertyChanged
 {
 	public string Id
 	{
@@ -56,7 +65,7 @@ public partial class Manager : System.ComponentModel.INotifyPropertyChanged
 		get { return _fullName; }
 		set
 		{
-			_full_Name = value;
+			_fullName = value;
 			RaisePropertyChanged();
 		}
 	}
@@ -75,7 +84,16 @@ public partial class Manager : System.ComponentModel.INotifyPropertyChanged
 
 	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
 }

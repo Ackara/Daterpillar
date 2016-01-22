@@ -41,8 +41,6 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private StringBuilder _text = new StringBuilder();
         private readonly string _raisePropertyChangedHandleName = "RaisePropertyChanged";
 
-
-
         private static string GetAttributeShortName(string attributeName)
         {
             return attributeName.Replace("Attribute", "");
@@ -86,19 +84,16 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType;
 
-            if (_settings.SchemaAnnotationsEnabled)
+            _text.AppendLine("\t#region Private Members");
+            _text.AppendLine();
+            foreach (var column in table.Columns)
             {
-                _text.AppendLine("\t#region Private Members");
+                dataType = _typeResolver.GetName(column.DataType);
+                _text.AppendLine($"\tprivate {dataType} _{column.Name.ToCamelCase(' ', '_')};");
                 _text.AppendLine();
-                foreach (var column in table.Columns)
-                {
-                    dataType = _typeResolver.GetName(column.DataType);
-                    _text.AppendLine($"\tprivate {dataType} _{column.Name.ToCamelCase(' ', '_')};");
-                    _text.AppendLine();
-                }
-
-                _text.AppendLine("\t#endregion Private Members");
             }
+
+            _text.AppendLine("\t#endregion Private Members");
         }
 
         private void Transform(Table table)
@@ -106,11 +101,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _currentTable = table;
 
             AppendComment(table);
-            AppendDataContract(table);
             AppendSchemaAttribute(table);
+            AppendDataContract(table);
 
             string baseType = _settings.SchemaAnnotationsEnabled ? (" " + typeof(Data.EntityBase).Name + ",") : string.Empty;
-            _text.AppendLine($"public partial class {table.Name.ToPascalCase(' ', '_')} :{baseType} System.ComponentModel.INotifyPropertyChanged");
+            _text.AppendLine($"public partial class {table.Name.ToPascalCase(' ', '_')} :{baseType} INotifyPropertyChanged");
             _text.AppendLine("{");
 
             GenerateConstants(table);
@@ -128,7 +123,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
             _text.AppendLine($"\tprotected virtual void {_raisePropertyChangedHandleName}([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)");
             _text.AppendLine("\t{");
-            _text.AppendLine($"\t\tPropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this, propertyName));");
+            _text.AppendLine($"\t\tPropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
             _text.AppendLine("\t}");
             _text.AppendLine();
 
@@ -150,7 +145,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _text.AppendLine($"\t\tget {{ return _{column.Name.ToCamelCase(' ', '_')}; }}");
             _text.AppendLine("\t\tset");
             _text.AppendLine("\t\t{");
-            _text.AppendLine($"\t\t\t_{column.Name.ToCamelCase()} = value;");
+            _text.AppendLine($"\t\t\t_{column.Name.ToCamelCase(' ', '_')} = value;");
             _text.AppendLine($"\t\t\t{_raisePropertyChangedHandleName}();");
             _text.AppendLine("\t\t}");
             _text.AppendLine("\t}");
