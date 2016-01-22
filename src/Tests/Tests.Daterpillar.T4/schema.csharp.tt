@@ -14,7 +14,6 @@
 	/// To run this template, the location of the "Gigobyte.Daterpillar.Core.dll" must be provided.
 	/// If you add the .dll to project as a reference then perform a build, the directive above "@ assembly name="$(TargetDir)\Gigobyte.Daterpillar.Core.dll" #"
 	/// will locate the .dll.
-	/// ** Un-Comment statement at Line 51 after you have build the project. **
 #>
 using System;
 using Gigobyte.Daterpillar.Data;
@@ -47,8 +46,7 @@ namespace GeneratedCode
 
 	PushIndent("\t");
 
-	// uncomment this line after you have build the project.
-	//WriteLine(csharp);
+	WriteLine(csharp);
 	ClearIndent();
 #>
 }
