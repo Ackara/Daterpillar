@@ -161,7 +161,7 @@ Global
 		UpdateAssemblyVersion = True
 		UpdateAssemblyFileVersion = True
 		UpdateAssemblyInfoVersion = False
-		AssemblyVersionSettings = None.None.None.Increment
-		AssemblyFileVersionSettings = None.None.None.Increment
+		AssemblyVersionSettings = None.IncrementOnDemand.DateStamp.IncrementOnDemandWithReset
+		AssemblyFileVersionSettings = None.IncrementOnDemand.DateStamp.IncrementOnDemandWithReset
 	EndGlobalSection
 EndGlobal
