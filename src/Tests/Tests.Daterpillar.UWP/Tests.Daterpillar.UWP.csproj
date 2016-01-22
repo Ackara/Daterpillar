@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Tests.Daterpillar.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">14.0</UnitTestPlatformVersion>
-    <AssemblyVersion>1.0.0.4</AssemblyVersion>
+    <AssemblyVersion>1.0.0.5</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
