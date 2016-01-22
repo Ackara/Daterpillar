@@ -196,5 +196,4 @@ FakesAssemblies/
 *.opt
 
 # User Defined
-*.ps1
 *.gitignore
