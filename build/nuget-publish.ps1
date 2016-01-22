@@ -30,6 +30,7 @@ foreach($path in [System.IO.Directory]::GetFiles($projectRootDir, "*.csproj", [S
 }
 
 echo "DONE!";
+Pause;
 
 # ----------------------
 # Functions
