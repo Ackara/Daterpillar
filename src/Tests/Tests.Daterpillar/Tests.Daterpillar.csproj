@@ -114,6 +114,8 @@
     <Compile Include="UnitTest\SQLiteTemplateTest.cs" />
     <Compile Include="UnitTest\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
+    <Compile Include="UnitTest\TSqlTemplateTest.cs" />
+    <Compile Include="UnitTest\TSqlTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\TypeNameResolverTestBase.cs" />
     <Compile Include="UnitTest\CSharpTemplateTest.cs" />
     <Compile Include="UnitTest\CSharpTypeNameResolverTest.cs" />
