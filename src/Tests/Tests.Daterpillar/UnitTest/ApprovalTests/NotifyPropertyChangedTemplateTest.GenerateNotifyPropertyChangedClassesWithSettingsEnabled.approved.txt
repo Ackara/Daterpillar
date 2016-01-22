@@ -76,11 +76,7 @@ public partial class Employee : EntityBase, INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
+	partial  void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null);
 	#region Private Members
 
 	private string _id;
@@ -170,11 +166,7 @@ public partial class Manager : EntityBase, INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
+	partial  void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null);
 	#region Private Members
 
 	private string _id;

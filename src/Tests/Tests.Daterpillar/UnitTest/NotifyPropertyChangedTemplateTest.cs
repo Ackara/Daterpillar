@@ -31,14 +31,15 @@ namespace Tests.Daterpillar.UnitTest
             Schema schema = Samples.GetSchema();
             schema.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var settings = new CSharpTemplateSettings()
+            var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 Namespace = Schema.Xmlns,
 
                 CommentsEnabled = true,
                 DataContractsEnabled = true,
                 SchemaAnnotationsEnabled = true,
-                VirtualPropertiesEnabled = true
+                VirtualPropertiesEnabled = true,
+                PartialRaisePropertyChangedMethodEnabled = true
             };
 
             var mockResolver = Mock.Create<ITypeNameResolver>();
@@ -68,14 +69,15 @@ namespace Tests.Daterpillar.UnitTest
             Schema schema = Samples.GetSchema();
             schema.Tables.Add(Samples.GetTableSchema("Manager"));
 
-            var settings = new CSharpTemplateSettings()
+            var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 Namespace = string.Empty,
 
                 CommentsEnabled = false,
                 DataContractsEnabled = false,
                 SchemaAnnotationsEnabled = false,
-                VirtualPropertiesEnabled = false
+                VirtualPropertiesEnabled = false,
+                PartialRaisePropertyChangedMethodEnabled = false
             };
 
             var mockResolver = Mock.Create<ITypeNameResolver>();

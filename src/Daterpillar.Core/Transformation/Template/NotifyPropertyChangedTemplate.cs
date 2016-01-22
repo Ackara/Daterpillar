@@ -5,15 +5,15 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 {
     public class NotifyPropertyChangedTemplate : ITemplate
     {
-        public NotifyPropertyChangedTemplate() : this(CSharpTemplateSettings.Default, new CSharpTypeNameResolver())
+        public NotifyPropertyChangedTemplate() : this(NotifyPropertyChangedTemplateSettings.Default, new CSharpTypeNameResolver())
         {
         }
 
-        public NotifyPropertyChangedTemplate(CSharpTemplateSettings settings) : this(settings, new CSharpTypeNameResolver())
+        public NotifyPropertyChangedTemplate(NotifyPropertyChangedTemplateSettings settings) : this(settings, new CSharpTypeNameResolver())
         {
         }
 
-        public NotifyPropertyChangedTemplate(CSharpTemplateSettings settings, ITypeNameResolver typeResolver)
+        public NotifyPropertyChangedTemplate(NotifyPropertyChangedTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;
@@ -37,9 +37,9 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private Table _currentTable;
         private ITypeNameResolver _typeResolver;
-        private CSharpTemplateSettings _settings;
+        private NotifyPropertyChangedTemplateSettings _settings;
         private StringBuilder _text = new StringBuilder();
-        private readonly string _raisePropertyChangedHandleName = "RaisePropertyChanged";
+        private readonly string _raisePropertyChangedMethodName = "RaisePropertyChanged";
 
         private static string GetAttributeShortName(string attributeName)
         {
@@ -121,11 +121,16 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _text.AppendLine("\tpublic event PropertyChangedEventHandler PropertyChanged;");
             _text.AppendLine();
 
-            _text.AppendLine($"\tprotected virtual void {_raisePropertyChangedHandleName}([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)");
-            _text.AppendLine("\t{");
-            _text.AppendLine($"\t\tPropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
-            _text.AppendLine("\t}");
-            _text.AppendLine();
+            string semiColon = (_settings.PartialRaisePropertyChangedMethodEnabled ? ";" : "");
+            string partial = (_settings.PartialRaisePropertyChangedMethodEnabled ? "partial " : "protected virtual");
+            _text.AppendLine($"\t{partial} void {_raisePropertyChangedMethodName}([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null){semiColon}");
+            if (_settings.PartialRaisePropertyChangedMethodEnabled == false)
+            {
+                _text.AppendLine("\t{");
+                _text.AppendLine($"\t\tPropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));");
+                _text.AppendLine("\t}");
+                _text.AppendLine();
+            }
 
             GeneratePrivateFields(table);
 
@@ -146,7 +151,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _text.AppendLine("\t\tset");
             _text.AppendLine("\t\t{");
             _text.AppendLine($"\t\t\t_{column.Name.ToCamelCase(' ', '_')} = value;");
-            _text.AppendLine($"\t\t\t{_raisePropertyChangedHandleName}();");
+            _text.AppendLine($"\t\t\t{_raisePropertyChangedMethodName}();");
             _text.AppendLine("\t\t}");
             _text.AppendLine("\t}");
         }

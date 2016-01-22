@@ -86,7 +86,37 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             // Arrange
             var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
-            var template = new NotifyPropertyChangedTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
+            var template = new NotifyPropertyChangedTemplate(NotifyPropertyChangedTemplateSettings.Default, new CSharpTypeNameResolver());
+
+            // Act
+            var csharp = template.Transform(schema);
+
+            var syntax = CSharpSyntaxTree.ParseText(csharp);
+            var errorList = syntax.GetDiagnostics();
+            int errorCount = 0;
+
+            foreach (var error in syntax.GetDiagnostics())
+            {
+                errorCount++;
+                Debug.WriteLine(error);
+            }
+
+            // Assert
+            Assert.AreEqual(0, errorCount);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(csharp));
+        }
+
+        /// <summary>
+        /// Generate a CSharp classes that implement <see cref="System.ComponentModel.INotifyPropertyChanged"/> with a partial method from the <see cref="Artifact.SampleSchema"/> file.
+        /// </summary>
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void GenerateNotifyPropertyChangedClassesWithParialMethodFromFile()
+        {
+            // Arrange
+            var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
+            var settings = new NotifyPropertyChangedTemplateSettings() { PartialRaisePropertyChangedMethodEnabled = true };
+            var template = new NotifyPropertyChangedTemplate(settings, new CSharpTypeNameResolver());
 
             // Act
             var csharp = template.Transform(schema);
