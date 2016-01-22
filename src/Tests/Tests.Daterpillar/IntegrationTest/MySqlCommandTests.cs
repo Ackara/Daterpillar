@@ -22,7 +22,8 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset from a MySQL database.
+        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a
+        /// dataset from a MySQL database.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
@@ -52,7 +53,8 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a MySQL connection.
+        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a
+        /// MySQL connection.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]
@@ -81,7 +83,8 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command on a MySQL connection.
+        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command on a
+        /// MySQL connection.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]

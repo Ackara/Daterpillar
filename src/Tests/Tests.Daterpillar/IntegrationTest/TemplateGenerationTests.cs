@@ -76,6 +76,37 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
+        /// Generate a CSharp classes that implement <see
+        /// cref="System.ComponentModel.INotifyPropertyChanged"/> from the <see
+        /// cref="Artifact.SampleSchema"/> file.
+        /// </summary>
+        [TestMethod]
+        [Owner(Str.Ackara)]
+        public void GenerateNotifyPropertyChangedClassesFromFile()
+        {
+            // Arrange
+            var schema = Schema.Load(Samples.GetFile(Artifact.SampleSchema).OpenRead());
+            var template = new NotifyPropertyChangedTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
+
+            // Act
+            var csharp = template.Transform(schema);
+
+            var syntax = CSharpSyntaxTree.ParseText(csharp);
+            var errorList = syntax.GetDiagnostics();
+            int errorCount = 0;
+
+            foreach (var error in syntax.GetDiagnostics())
+            {
+                errorCount++;
+                Debug.WriteLine(error);
+            }
+
+            // Assert
+            Assert.AreEqual(0, errorCount);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(csharp));
+        }
+
+        /// <summary>
         /// Generate a MySQL schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
