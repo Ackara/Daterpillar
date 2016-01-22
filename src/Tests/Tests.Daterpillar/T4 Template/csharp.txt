@@ -34,15 +34,15 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [genre].[Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Id", IsKey = true, AutoIncrement = true)]
+		[DataMember]
 		public virtual int Id { get; set; }
 	
 		/// <summary>
 		/// Get or set the [genre].[Name] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Name")]
+		[DataMember]
 		public virtual string Name { get; set; }
 	}
 	
@@ -80,22 +80,22 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [artist].[Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Id", IsKey = true, AutoIncrement = true)]
+		[DataMember]
 		public virtual int Id { get; set; }
 	
 		/// <summary>
 		/// Get or set the [artist].[Name] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Name")]
+		[DataMember]
 		public virtual string Name { get; set; }
 	
 		/// <summary>
 		/// Get or set the [artist].[Bio] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Bio")]
+		[DataMember]
 		public virtual string Bio { get; set; }
 	}
 	
@@ -133,22 +133,22 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [album].[Artist_Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Artist_Id", IsKey = true)]
+		[DataMember]
 		public virtual int ArtistId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [album].[Name] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Name", IsKey = true)]
+		[DataMember]
 		public virtual string Name { get; set; }
 	
 		/// <summary>
 		/// Get or set the [album].[Release_Date] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Release_Date")]
+		[DataMember]
 		public virtual DateTime ReleaseDate { get; set; }
 	}
 	
@@ -211,57 +211,57 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [song].[Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Id", IsKey = true, AutoIncrement = true)]
+		[DataMember]
 		public virtual int Id { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Album_Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Album_Id")]
+		[DataMember]
 		public virtual int AlbumId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Artist_Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Artist_Id")]
+		[DataMember]
 		public virtual int ArtistId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Genre_Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Genre_Id")]
+		[DataMember]
 		public virtual int GenreId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Name] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Name")]
+		[DataMember]
 		public virtual string Name { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Length] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Length")]
+		[DataMember]
 		public virtual decimal Length { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[Price] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Price")]
+		[DataMember]
 		public virtual decimal Price { get; set; }
 	
 		/// <summary>
 		/// Get or set the [song].[On_Device] column value.
 		/// </summary>
-		[DataMember]
 		[Column("On_Device")]
+		[DataMember]
 		public virtual bool OnDevice { get; set; }
 	}
 }

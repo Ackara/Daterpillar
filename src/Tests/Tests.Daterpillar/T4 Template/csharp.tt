@@ -8,7 +8,7 @@
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="Gigobyte.Daterpillar.Transformation" #>
 <#@ import namespace="Gigobyte.Daterpillar.Transformation.Template" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".txt" #>
 <# 
 	/* *** INSTRUCTIONS *** */
 	/// To run this template, the location of the "Gigobyte.Daterpillar.Core.dll" must be provided.
