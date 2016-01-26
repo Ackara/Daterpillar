@@ -1,3 +1,4 @@
+[![build](https://gigobyte.visualstudio.com/DefaultCollection/_apis/public/build/definitions/c1607574-4e07-41e8-954f-f983147fe67d/5/badge)](https://gigobyte.visualstudio.com/DefaultCollection/_apis/public/build/definitions/c1607574-4e07-41e8-954f-f983147fe67d/5/badge)
 [![version](https://img.shields.io/nuget/v/Gigobyte.Daterpillar.Core.svg?style=flat-square)](https://www.nuget.org/packages?q=Gigobyte.Daterpillar.Core)
 [![downloads](https://img.shields.io/nuget/dt/Gigobyte.Daterpillar.Core.svg)](https://img.shields.io/nuget/dt/Gigobyte.Daterpillar.Core.svg)
 # Daterpillar
