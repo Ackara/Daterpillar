@@ -142,10 +142,6 @@
       <Project>{eee56ac1-7b0e-49ca-985e-7f00e3a88c81}</Project>
       <Name>Daterpillar.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Daterpillar.UWP\Daterpillar.UWP.csproj">
-      <Project>{7d7be464-a864-4e6f-bf2a-412a9aae6447}</Project>
-      <Name>Daterpillar.UWP</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
