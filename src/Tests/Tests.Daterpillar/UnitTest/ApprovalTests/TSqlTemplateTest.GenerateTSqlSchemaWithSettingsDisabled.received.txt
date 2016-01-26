@@ -1,0 +1,23 @@
+﻿CREATE TABLE IF NOT EXISTS [Employee]
+(
+	[Id] int NOT NULL AUTOINCREMENT,
+	[Full_Name] int not null default 'n/a',
+	[Salary] int not null,
+	PRIMARY KEY ([Id] ASC),
+	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS employee_idx ON [Employee] ([Full_Name] DESC);
+
+CREATE TABLE IF NOT EXISTS [Manager]
+(
+	[Id] int NOT NULL AUTOINCREMENT,
+	[Full_Name] int not null default 'n/a',
+	[Salary] int not null,
+	PRIMARY KEY ([Id] ASC),
+	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS manager_idx ON [Manager] ([Full_Name] DESC);
+
+-- Script Goes Here

@@ -15,21 +15,21 @@ namespace Tests.Daterpillar.IntegrationTest
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
     [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
-    public class SQLiteCommandTests
+    public class TSqlCommandTests
     {
         public static string ConnectionString;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            // Create SQLite database
+            // Create SQL Server database
             string path = Samples.GetFile(Artifact.SampleSchema).FullName;
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 var schema = Schema.Load(stream);
-                string sqlite = new SQLiteTemplate().Transform(schema);
+                string tsql = new SQLiteTemplate().Transform(schema);
 
-                using (var connection = DbFactory.CreateSQLiteConnection(sqlite))
+                using (var connection = DbFactory.CreateSQLiteConnection(tsql))
                 {
                     var builder = new SQLiteConnectionStringBuilder();
                     builder.DataSource = connection.FileName;
@@ -40,7 +40,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset from a SQLite database.
+        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset from a MS SQL database.
         /// </summary>
         [TestMethod]
         [Owner(Str.Ackara)]

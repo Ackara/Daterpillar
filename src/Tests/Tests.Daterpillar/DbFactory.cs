@@ -3,6 +3,7 @@ using Gigobyte.Daterpillar.Transformation.Template;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 
@@ -35,6 +36,28 @@ namespace Tests.Daterpillar
         {
             string connectionString = ConfigurationManager.ConnectionStrings[database].ConnectionString;
             return new MySqlConnection(connectionString);
+        }
+
+        public static SqlConnection CreateConnection(Schema schema)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            using (var command = connection.CreateCommand())
+            {
+                var settings = new TSqlTemplateSettings()
+                {
+                    CommentsEnabled = false,
+                    DropSchema = true,
+                    DropTable = true
+                };
+
+                command.CommandText = new TSqlTemplate(settings).Transform(schema);
+                command.ExecuteNonQuery();
+            }
+
+            return connection;
         }
 
         public static MySqlConnection CreateMySqlConnection(Schema schema)
