@@ -1,6 +1,6 @@
 ﻿namespace Tests.Daterpillar
 {
-    public struct Str
+    public struct Dev
     {
         public const string
             Ackara = "ackara.dev@outlook.com",

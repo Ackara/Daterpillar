@@ -43,7 +43,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset from a SQLite database.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunQueryOnSQLiteConnection()
         {
             // Arrange
@@ -73,7 +73,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a MS SQL connection.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunInsertCommandOnSQLiteConnection()
         {
             // Arrange
@@ -102,7 +102,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command from a SQLite database.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunDeleteCommandOnSQLiteConnection()
         {
             // Arrange
@@ -136,7 +136,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Assert <see cref="DbConnectionWrapperBase.ExceptionHandlerDelegate"/> is invoked when an exception is thrown.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void HandleSQLiteException()
         {
             // Arrange
@@ -157,7 +157,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Assert <see cref="DbConnectionWrapperBase.Error"/> is raised when an exception is thrown.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RaiseErrorEvent()
         {
             // Arrange

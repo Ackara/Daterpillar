@@ -26,7 +26,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// dataset from a MySQL database.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunQueryOnMySqlConnection()
         {
             // Arrange
@@ -57,7 +57,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// MySQL connection.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunInsertCommandOnMySqlConnection()
         {
             // Arrange
@@ -87,7 +87,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// MySQL connection.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RunDeleteCommandOnMySqlConnection()
         {
             // Arrange

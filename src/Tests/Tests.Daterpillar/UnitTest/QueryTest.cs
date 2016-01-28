@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class QueryTest
     {
@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns an empty string when instantiated.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnEmptyString()
         {
             var query = new Query();
@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQL query after both <see cref="Query.Select(string[])"/> and <see cref="Query.From(string[])"/> is called.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnSelectQuery()
         {
             var sut = new Query()
@@ -46,7 +46,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.Where(string)"/> is called at least once.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnQueryWithWhereFilter()
         {
             var sut = new Query()
@@ -61,7 +61,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.GroupBy(string[])"/> is called at least once.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnQueryWithGrouping()
         {
             var sut = new Query()
@@ -76,7 +76,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.OrderBy(string[])"/> is called at least once.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnQueryWithOrdering()
         {
             var sut = new Query()
@@ -91,7 +91,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.Limit(int)"/> is called at least once.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnQueryLimit()
         {
             var sut = new Query()
@@ -106,7 +106,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after calling <see cref="Query.Top(int)"/>.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnQueryWithTop()
         {
             var sut = new Query(QueryStyle.TSQL)
@@ -120,7 +120,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted MySQL query when <see cref="QueryStyle.MySQL"/> is passed.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnMySqlQuery()
         {
             var sut = new Query(QueryStyle.MySQL)
@@ -138,7 +138,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQLite query when <see cref="QueryStyle.SQLite"/> is passed.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnSQLiteQuery()
         {
             var sut = new Query(QueryStyle.SQLite)
@@ -156,7 +156,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a non T-SQL query with no new lines or tab characters.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnMinifiedNonTSqlQuery()
         {
             var sut = new Query()
@@ -174,7 +174,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Query.GetValue(bool)"/> returns a T-SQL query with no new lines or tab characters.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ReturnMinifiedTSqlQuery()
         {
             var sut = new Query(QueryStyle.TSQL)

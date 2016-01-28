@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class EnumTemplateTest
     {
@@ -17,7 +17,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="EnumTemplate.Transform(Enumeration)"/> generates a enum declaration from a <see cref="Enumeration"/> object.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateEnumDeclaration()
         {
             // Arrange

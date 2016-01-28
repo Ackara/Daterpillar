@@ -15,7 +15,7 @@ namespace Tests.Daterpillar.UnitTest
         /// into a <see cref="Artifact.XDDL"/> xml document.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void SerializeSchemaObjectToStream()
         {
             // Arrange
@@ -38,7 +38,7 @@ namespace Tests.Daterpillar.UnitTest
         /// cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void DeserializeSchemaObjectFromStream()
         {
             // Arrange
@@ -60,7 +60,7 @@ namespace Tests.Daterpillar.UnitTest
         /// cref="System.Xml.Serialization.XmlSerializer"/> with a string.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void DeserializeSchemaObjectFromString()
         {
             // Arrange
@@ -78,7 +78,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="Schema.RemoveTable(string)"/> can find and remove an existing <see cref="Table"/> object from an instance.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void RemoveTableFromSchema()
         {
             // Arrange

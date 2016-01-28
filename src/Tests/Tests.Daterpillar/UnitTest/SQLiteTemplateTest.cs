@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SQLiteTemplateTest
     {
@@ -25,7 +25,7 @@ namespace Tests.Daterpillar.UnitTest
         /// comments enabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateSQLiteSchemaWithComments()
         {
             // Arrange
@@ -57,7 +57,7 @@ namespace Tests.Daterpillar.UnitTest
         /// comments disabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateSQLiteSchemaWithoutComments()
         {
             // Arrange

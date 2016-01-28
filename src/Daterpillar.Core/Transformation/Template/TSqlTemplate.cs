@@ -22,6 +22,13 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         public string Transform(Schema schema)
         {
             _text.Clear();
+            if (_settings.DropSchema)
+            {
+                _text.AppendLine($"DROP DATABASE [{schema.Name}];");
+            }
+            _text.AppendLine($"CREATE DATABASE [{schema.Name}];");
+            _text.AppendLine($"USE [{schema.Name}];");
+            _text.AppendLine();
 
             foreach (var table in schema.Tables)
             {
@@ -63,6 +70,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _text.AppendLine(");");
             _text.AppendLine();
 
+            if(table.Columns.Count(x=> x.AutoIncrement) > 0)
+            {
+                _text.AppendLine($"SET IDENTITY_INSERT [{table.Name}] ON;");
+            }
+
             foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
             {
                 TransformIndex(index);
@@ -75,7 +87,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType = _typeResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
-            string autoIncrement = column.AutoIncrement ? " IDENTITY(1,1)" : string.Empty;
+            string autoIncrement = column.AutoIncrement ? " IDENTITY(1, 1)" : string.Empty;
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }

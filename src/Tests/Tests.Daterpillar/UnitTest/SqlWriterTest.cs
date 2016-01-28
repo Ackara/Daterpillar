@@ -15,7 +15,7 @@ namespace Tests.Daterpillar.UnitTest
         /// into a SQL query.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertEntityToQuery()
         {
             var song = Samples.GetSong();
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.UnitTest
         /// to a SQL insert command.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertEntityToInsertCommand()
         {
             var song = Samples.GetSong();
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.UnitTest
         /// to a SQL delete command.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertEntityToDeleteCommand()
         {
             var song = Samples.GetSong();
@@ -70,7 +70,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="DateTime"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertDateToSqlValue()
         {
             Assert.AreEqual("'2015-01-01 13:11:11'", SqlWriter.EscapeValue(new DateTime(2015, 01, 01, 13, 11, 11, DateTimeKind.Utc)));
@@ -80,7 +80,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="int"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertIntegerToSqlValue()
         {
             Assert.AreEqual("'123'", SqlWriter.EscapeValue(123));
@@ -90,7 +90,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="float"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertFloatToSqlValue()
         {
             Assert.AreEqual("'123.45'", SqlWriter.EscapeValue(123.45F));
@@ -100,7 +100,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="bool"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertBooleanToSqlValue()
         {
             Assert.AreEqual("'1'", SqlWriter.EscapeValue(true));
@@ -110,7 +110,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="string"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertStringToSqlValue()
         {
             Assert.AreEqual("'the dog''s bowl. ''_'' ^_^ ''_'''", SqlWriter.EscapeValue("the dog's bowl. '_' ^_^ '_'"));
@@ -120,7 +120,7 @@ namespace Tests.Daterpillar.UnitTest
         /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="Enum"/> value.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void ConvertEnumToSqlValue()
         {
             Assert.AreEqual("'0'", SqlWriter.EscapeValue(DayOfWeek.Sunday));

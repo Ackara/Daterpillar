@@ -1,6 +1,9 @@
-﻿CREATE TABLE [Employee]
+﻿CREATE DATABASE [GenerateTSqlSchemaWithSettingsDisabled];
+USE [GenerateTSqlSchemaWithSettingsDisabled];
+
+CREATE TABLE [Employee]
 (
-	[Id] int NOT NULL IDENTITY(1,1),
+	[Id] int NOT NULL IDENTITY(1, 1),
 	[Full_Name] int not null default 'n/a',
 	[Salary] int not null,
 	PRIMARY KEY ([Id] ASC),
@@ -11,7 +14,7 @@ CREATE UNIQUE INDEX employee_idx ON [Employee] ([Full_Name] DESC);
 
 CREATE TABLE [Manager]
 (
-	[Id] int NOT NULL IDENTITY(1,1),
+	[Id] int NOT NULL IDENTITY(1, 1),
 	[Full_Name] int not null default 'n/a',
 	[Salary] int not null,
 	PRIMARY KEY ([Id] ASC),

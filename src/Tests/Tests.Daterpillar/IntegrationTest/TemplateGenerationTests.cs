@@ -10,7 +10,7 @@ using System.IO;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
     [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
@@ -23,7 +23,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Generate a SQLite schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateSQLiteSchemaFromFile()
         {
             // Arrange
@@ -50,7 +50,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Generate a CSharp classes from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateCSharpClassesFromFile()
         {
             // Arrange
@@ -81,7 +81,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateNotifyPropertyChangedClassesFromFile()
         {
             // Arrange
@@ -110,7 +110,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Generate a CSharp classes that implement <see cref="System.ComponentModel.INotifyPropertyChanged"/> with a partial method from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateNotifyPropertyChangedClassesWithParialMethodFromFile()
         {
             // Arrange
@@ -140,7 +140,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Generate a MySQL schema from the <see cref="Artifact.SampleSchema"/> file.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
         public void GenerateMySqlSchemaFromFile()
         {
