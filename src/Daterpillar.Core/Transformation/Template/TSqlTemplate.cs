@@ -41,13 +41,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private void Transform(Table table)
         {
             AppendComments(table);
-
-            if (_settings.DropTable)
-            {
-                _text.AppendLine($"DROP TABLE IF EXISTS [{table.Name}];");
-            }
-
-            _text.AppendLine($"CREATE TABLE IF NOT EXISTS [{table.Name}]");
+            _text.AppendLine($"CREATE TABLE [{table.Name}]");
             _text.AppendLine("(");
 
             foreach (var column in table.Columns)
@@ -81,7 +75,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType = _typeResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
-            string autoIncrement = column.AutoIncrement ? " AUTOINCREMENT" : string.Empty;
+            string autoIncrement = column.AutoIncrement ? " IDENTITY(1,1)" : string.Empty;
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }
@@ -103,7 +97,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             string unique = index.Unique ? " UNIQUE " : " ";
             string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
 
-            _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS {index.Name} ON [{index.Table}] ({columns});");
+            _text.AppendLine($"CREATE{unique}INDEX {index.Name} ON [{index.Table}] ({columns});");
         }
 
         private void AppendComments(Table table)

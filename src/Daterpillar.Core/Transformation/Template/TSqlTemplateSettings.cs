@@ -5,12 +5,10 @@
         public static TSqlTemplateSettings Default = new TSqlTemplateSettings()
         {
             CommentsEnabled = true,
-            DropSchema = false,
-            DropTable = true
+            DropSchema = false
         };
 
         public bool CommentsEnabled { get; set; }
         public bool DropSchema { get; set; }
-        public bool DropTable { get; set; }
     }
 }

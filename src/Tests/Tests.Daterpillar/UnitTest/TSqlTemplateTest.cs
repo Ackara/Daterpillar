@@ -11,7 +11,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [UseApprovalSubdirectory(Str.ApprovalsDir)]
-    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TSqlTemplateTest
     {
         [ClassCleanup]
@@ -31,8 +31,7 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var settings = new TSqlTemplateSettings()
             {
-                CommentsEnabled = true,
-                DropSchema = true
+                
             };
 
             var schema = Samples.GetSchema();
@@ -66,8 +65,7 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var settings = new TSqlTemplateSettings()
             {
-                CommentsEnabled = false,
-                DropSchema = false
+                
             };
 
             var schema = Samples.GetSchema();

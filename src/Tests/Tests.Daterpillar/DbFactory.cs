@@ -38,7 +38,7 @@ namespace Tests.Daterpillar
             return new MySqlConnection(connectionString);
         }
 
-        public static SqlConnection CreateConnection(Schema schema)
+        public static SqlConnection CreateMsSqlConnection(Schema schema)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
             var connection = new SqlConnection(connectionString);
@@ -49,8 +49,7 @@ namespace Tests.Daterpillar
                 var settings = new TSqlTemplateSettings()
                 {
                     CommentsEnabled = false,
-                    DropSchema = true,
-                    DropTable = true
+                    DropSchema = true
                 };
 
                 command.CommandText = new TSqlTemplate(settings).Transform(schema);
