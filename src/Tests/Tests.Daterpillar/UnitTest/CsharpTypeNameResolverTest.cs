@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.UnitTest
         /// name that best match the specified data type.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
         public void ResolveCsharpTypeName()
         {

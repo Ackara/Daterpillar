@@ -38,7 +38,7 @@ namespace Tests.Daterpillar
             return new MySqlConnection(connectionString);
         }
 
-        public static SqlConnection CreateConnection(Schema schema)
+        public static SqlConnection CreateSqlServerConnection()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
             var connection = new SqlConnection(connectionString);
@@ -49,11 +49,16 @@ namespace Tests.Daterpillar
                 var settings = new TSqlTemplateSettings()
                 {
                     CommentsEnabled = false,
-                    DropSchema = true,
-                    DropTable = true
+                    DropSchema = false
                 };
 
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Artifact.SampleSchema);
+                var schema = Schema.Load(File.OpenRead(path));
+
                 command.CommandText = new TSqlTemplate(settings).Transform(schema);
+
+                //File.WriteAllText(@"C:\Users\Ackeem\Downloads\schema.sql", command.CommandText);
+
                 command.ExecuteNonQuery();
             }
 

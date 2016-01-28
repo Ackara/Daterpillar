@@ -10,8 +10,8 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
-    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TSqlTemplateTest
     {
         [ClassCleanup]
@@ -25,7 +25,7 @@ namespace Tests.Daterpillar.UnitTest
         /// comments enabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateTSqlSchemaWithSettingsEnabled()
         {
             // Arrange
@@ -48,11 +48,11 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new TSqlTemplate(settings, mockResolver);
 
             // Act
-            var tsql = sut.Transform(schema);
+            var sql = sut.Transform(schema);
 
             // Assert
             mockResolver.Assert();
-            Approvals.Verify(tsql);
+            Approvals.Verify(sql);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Tests.Daterpillar.UnitTest
         /// comments disabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateTSqlSchemaWithSettingsDisabled()
         {
             // Arrange

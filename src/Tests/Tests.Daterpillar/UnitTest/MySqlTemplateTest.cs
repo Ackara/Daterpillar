@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class MySqlTemplateTest
     {
@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateMySqlSchemaWithSettingsEnabled()
         {
             // Arrange
@@ -52,7 +52,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateMySqlSchemaWithSettingsDisabled()
         {
             // Arrange

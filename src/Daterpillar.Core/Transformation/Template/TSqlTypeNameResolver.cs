@@ -4,17 +4,17 @@
     {
         public TSqlTypeNameResolver() : base()
         {
-            TypeNames[BOOL] = "boolean";
-            TypeNames[BLOB] = "blob";
+            TypeNames[BOOL] = "bit";
+            TypeNames[BLOB] = "varbinary";
             TypeNames[CHAR] = "char";
             TypeNames[TEXT] = "text";
             TypeNames[VARCHAR] = "varchar";
-            TypeNames[INT] = "integer";
+            TypeNames[INT] = "int";
             TypeNames[BIGINT] = "bigInt";
-            TypeNames[MEDIUMINT] = "integer";
-            TypeNames[SMALLINT] = "integer";
+            TypeNames[MEDIUMINT] = "int";
+            TypeNames[SMALLINT] = "smallInt";
             TypeNames[FLOAT] = "float";
-            TypeNames[DOUBLE] = "double";
+            TypeNames[DOUBLE] = "float";
             TypeNames[DECIMAL] = "decimal";
             TypeNames[DATE] = "date";
             TypeNames[TIME] = "time";
@@ -29,13 +29,14 @@
             switch (type)
             {
                 case CHAR:
+                case BLOB:
                 case VARCHAR:
                     int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
-                    name = $"{type}({size})";
+                    name = $"{TypeNames[type]}({size})";
                     break;
 
                 case DECIMAL:
-                    name = $"{type}({dataType.Scale}, {dataType.Precision})";
+                    name = $"{TypeNames[type]}({dataType.Scale}, {dataType.Precision})";
                     break;
 
                 default:

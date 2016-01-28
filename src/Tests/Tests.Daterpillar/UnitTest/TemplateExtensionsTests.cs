@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
         /// <see cref="TemplateExtensions.ToPascalCase(string, char[])"/> should return every word passed to it in pascal case.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
         public void ConvertStringToPascalCase()
         {
@@ -33,7 +33,7 @@ namespace Tests.Daterpillar.UnitTest
         /// <see cref="TemplateExtensions.ToCamelCase(string, char[])"/> should return every word passed to it in camel case.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
         public void ConvertStringToCamelCase()
         {

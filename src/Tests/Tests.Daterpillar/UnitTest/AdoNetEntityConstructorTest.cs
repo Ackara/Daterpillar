@@ -15,7 +15,7 @@ namespace Tests.Daterpillar.UnitTest
         /// <see cref="EntityBase"/> object when a <see cref="DataRow"/> is passed.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Songs$", DataAccessMethod.Sequential)]
         public void ConvertDataRowToEntityBase()
         {

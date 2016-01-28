@@ -24,12 +24,16 @@ namespace Gigobyte.Daterpillar.Transformation
         /// <returns></returns>
         public static Schema Load(Stream stream)
         {
-            var serializer = new XmlSerializer(typeof(Schema));
-            return (Schema)serializer.Deserialize(stream);
+            using (stream)
+            {
+                var serializer = new XmlSerializer(typeof(Schema));
+                return (Schema)serializer.Deserialize(stream);
+            }
         }
 
         /// <summary>
-        /// Convert the string representation of a <see cref="Schema"/> to it's <see cref="System.Object"/> equivalent.
+        /// Convert the string representation of a <see cref="Schema"/> to it's <see
+        /// cref="System.Object"/> equivalent.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>
@@ -47,27 +51,21 @@ namespace Gigobyte.Daterpillar.Transformation
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
+        /// <value>The name.</value>
         [XmlAttribute("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the author.
         /// </summary>
-        /// <value>
-        /// The author.
-        /// </value>
+        /// <value>The author.</value>
         [XmlAttribute("author")]
         public string Author { get; set; }
 
         /// <summary>
         /// Gets or sets the tables.
         /// </summary>
-        /// <value>
-        /// The tables.
-        /// </value>
+        /// <value>The tables.</value>
         [XmlElement("table")]
         public List<Table> Tables
         {
@@ -86,9 +84,7 @@ namespace Gigobyte.Daterpillar.Transformation
         /// <summary>
         /// Gets or sets the script.
         /// </summary>
-        /// <value>
-        /// The script.
-        /// </value>
+        /// <value>The script.</value>
         [XmlElement("script")]
         public string Script { get; set; }
 

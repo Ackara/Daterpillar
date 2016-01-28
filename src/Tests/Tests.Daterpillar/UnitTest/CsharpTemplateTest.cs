@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Str.ApprovalsDir)]
+    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpTemplateTest
     {
@@ -19,7 +19,7 @@ namespace Tests.Daterpillar.UnitTest
         /// are enabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateCsharpClassesWithSettingsEnabled()
         {
             // Arrange
@@ -56,7 +56,7 @@ namespace Tests.Daterpillar.UnitTest
         /// are disabled.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateCsharpClassesWithSettingsDisabled()
         {
             // Arrange

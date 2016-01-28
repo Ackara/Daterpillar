@@ -16,7 +16,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// Generates a enum declaration from a database connection.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GenerateEnumDeclarationFromDbConnection()
         {
             // Arrange

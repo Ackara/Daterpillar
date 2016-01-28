@@ -23,13 +23,13 @@ namespace Tests.Daterpillar.UnitTest
         /// name that best match the specified data type.
         /// </summary>
         [TestMethod]
-        [Owner(Str.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
         public void ResolveTSqlTypeName()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
-            var expected = TestContext.DataRow["TSQL"].ToString();
+            var expected = TestContext.DataRow["T-SQL"].ToString();
             var sut = new TSqlTypeNameResolver();
 
             // Act
