@@ -14,6 +14,7 @@ CREATE TABLE [Employee]
 	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
+SET IDENTITY_INSERT [Employee] ON;
 CREATE UNIQUE INDEX employee_idx ON [Employee] ([Full_Name] DESC);
 
 /*
@@ -28,6 +29,7 @@ CREATE TABLE [Manager]
 	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
+SET IDENTITY_INSERT [Manager] ON;
 CREATE UNIQUE INDEX manager_idx ON [Manager] ([Full_Name] DESC);
 
 -- Script Goes Here
