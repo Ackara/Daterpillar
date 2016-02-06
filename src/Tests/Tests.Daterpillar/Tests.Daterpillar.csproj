@@ -99,7 +99,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DbFactory.cs" />
-    <Compile Include="IntegrationTest\TSqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
     <Compile Include="IntegrationTest\TemplateGenerationTests.cs" />
     <Compile Include="IntegrationTest\MySqlCommandTests.cs" />
@@ -115,8 +114,6 @@
     <Compile Include="UnitTest\SQLiteTemplateTest.cs" />
     <Compile Include="UnitTest\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
-    <Compile Include="UnitTest\TSqlTemplateTest.cs" />
-    <Compile Include="UnitTest\TSqlTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\TypeNameResolverTestBase.cs" />
     <Compile Include="UnitTest\CSharpTemplateTest.cs" />
     <Compile Include="UnitTest\CSharpTypeNameResolverTest.cs" />
@@ -164,16 +161,6 @@
     <Content Include="T4 Template\csharp_with_enum.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>csharp_with_enum.txt</LastGenOutput>
-    </Content>
-    <Content Include="T4 Template\csharp_with_enum.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>csharp_with_enum.tt</DependentUpon>
-    </Content>
-    <Content Include="T4 Template\mysql.sql">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>mysql.tt</DependentUpon>
     </Content>
     <Content Include="T4 Template\mysql.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

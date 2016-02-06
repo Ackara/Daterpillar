@@ -8,15 +8,15 @@ namespace Gigobyte.Daterpillar.Data
     /// Represents an object that is mapped to a database table.
     /// </summary>
     [System.Runtime.Serialization.DataContract]
-#if DEBUG
-    [System.Diagnostics.DebuggerDisplay("{" + nameof(ToDebuggerDisplay) + "}")]
-#endif
+    [System.Diagnostics.DebuggerDisplay("{" + nameof(ToDebuggerDisplay) + "()}")]
     public abstract class EntityBase
     {
         /// <summary>
         /// Gets the name of the database table that is mapped to this object.
         /// </summary>
-        /// <value>The name of the table.</value>
+        /// <value>
+        /// The name of the table.
+        /// </value>
         public string TableName
         {
             get
@@ -75,7 +75,7 @@ namespace Gigobyte.Daterpillar.Data
         /// <returns>The string representation in the debugger variable windows.</returns>
         protected virtual string ToDebuggerDisplay()
         {
-            return $"[{TableName}]";
+            return $"{{{TableName}}}";
         }
 
         #region Private Members

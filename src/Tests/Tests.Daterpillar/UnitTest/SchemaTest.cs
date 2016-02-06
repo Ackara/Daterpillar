@@ -34,8 +34,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="Schema"/> can be deserialized by the <see
-        /// cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
+        /// Assert <see cref="Schema"/> can be deserialized by the <see cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
