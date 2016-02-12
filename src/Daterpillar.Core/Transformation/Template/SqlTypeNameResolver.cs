@@ -1,20 +1,20 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public sealed class TSqlTypeNameResolver : TypeNameResolverBase
+    public class SqlTypeNameResolver : TypeNameResolverBase
     {
-        public TSqlTypeNameResolver() : base()
+        public SqlTypeNameResolver()
         {
-            TypeNames[BOOL] = "bit";
-            TypeNames[BLOB] = "varbinary";
+            TypeNames[BOOL] = "boolean";
+            TypeNames[BLOB] = "blob";
             TypeNames[CHAR] = "char";
             TypeNames[TEXT] = "text";
             TypeNames[VARCHAR] = "varchar";
-            TypeNames[INT] = "int";
+            TypeNames[INT] = "integer";
             TypeNames[BIGINT] = "bigInt";
-            TypeNames[MEDIUMINT] = "int";
-            TypeNames[SMALLINT] = "smallInt";
+            TypeNames[MEDIUMINT] = "integer";
+            TypeNames[SMALLINT] = "integer";
             TypeNames[FLOAT] = "float";
-            TypeNames[DOUBLE] = "float";
+            TypeNames[DOUBLE] = "double";
             TypeNames[DECIMAL] = "decimal";
             TypeNames[DATE] = "date";
             TypeNames[TIME] = "time";
@@ -28,15 +28,15 @@
 
             switch (type)
             {
-                case CHAR:
                 case BLOB:
+                case CHAR:
                 case VARCHAR:
                     int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
-                    name = $"{TypeNames[type]}({size})";
+                    name = $"{type}({size})";
                     break;
 
                 case DECIMAL:
-                    name = $"{TypeNames[type]}({dataType.Scale}, {dataType.Precision})";
+                    name = $"{type}({dataType.Scale}, {dataType.Precision})";
                     break;
 
                 default:

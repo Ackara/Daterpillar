@@ -5,11 +5,14 @@
         public static MySqlTemplateSettings Default = new MySqlTemplateSettings()
         {
             CommentsEnabled = true,
-            DropSchema = false
+            DropTableIfExist = false,
+            DropDataIfExist = false
         };
 
         public bool CommentsEnabled { get; set; }
 
-        public bool DropSchema { get; set; }
+        public bool DropDataIfExist { get; set; }
+
+        public bool DropTableIfExist { get; set; }
     }
 }

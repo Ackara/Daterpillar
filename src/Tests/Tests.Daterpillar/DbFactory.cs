@@ -3,7 +3,6 @@ using Gigobyte.Daterpillar.Transformation.Template;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 
@@ -38,33 +37,6 @@ namespace Tests.Daterpillar
             return new MySqlConnection(connectionString);
         }
 
-        public static SqlConnection CreateSqlServerConnection()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
-            var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            using (var command = connection.CreateCommand())
-            {
-                var settings = new TSqlTemplateSettings()
-                {
-                    CommentsEnabled = false,
-                    DropSchema = false
-                };
-
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Artifact.SampleSchema);
-                var schema = Schema.Load(File.OpenRead(path));
-
-                command.CommandText = new TSqlTemplate(settings).Transform(schema);
-
-                //File.WriteAllText(@"C:\Users\Ackeem\Downloads\schema.sql", command.CommandText);
-
-                command.ExecuteNonQuery();
-            }
-
-            return connection;
-        }
-
         public static MySqlConnection CreateMySqlConnection(Schema schema)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
@@ -76,7 +48,7 @@ namespace Tests.Daterpillar
                 var settings = new MySqlTemplateSettings()
                 {
                     CommentsEnabled = false,
-                    DropSchema = true
+                    DropDataIfExist = true
                 };
 
                 command.CommandText = new MySqlTemplate(settings).Transform(schema);

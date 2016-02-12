@@ -27,7 +27,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             _text.Clear();
 
-            if (_settings.DropSchema)
+            if (_settings.DropDataIfExist)
             {
                 _text.AppendLine($"DROP DATABASE IF EXISTS `{schema.Name}`;");
             }

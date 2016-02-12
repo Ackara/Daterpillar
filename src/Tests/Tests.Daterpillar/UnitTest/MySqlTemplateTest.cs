@@ -28,7 +28,7 @@ namespace Tests.Daterpillar.UnitTest
             var settings = new MySqlTemplateSettings()
             {
                 CommentsEnabled = true,
-                DropSchema = true
+                DropDataIfExist = true
             };
 
             var schema = Samples.GetSchema();
@@ -59,7 +59,7 @@ namespace Tests.Daterpillar.UnitTest
             var settings = new MySqlTemplateSettings()
             {
                 CommentsEnabled = false,
-                DropSchema = false
+                DropDataIfExist = false
             };
 
             var schema = Samples.GetSchema();

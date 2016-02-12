@@ -150,7 +150,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 var settings = new MySqlTemplateSettings()
                 {
                     CommentsEnabled = true,
-                    DropSchema = true
+                    DropDataIfExist = true
                 };
 
                 var schema = Schema.Load(fileStream);
