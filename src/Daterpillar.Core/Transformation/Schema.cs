@@ -15,7 +15,7 @@ namespace Gigobyte.Daterpillar.Transformation
         /// <summary>
         /// The XML document default namespace.
         /// </summary>
-        public const string Xmlns = "http://schema.gigobyte.com/v1/xddl.xsd";
+        public const string Xmlns = "http://api.gigobyte.com/schema/v1/xddl.xsd";
 
         /// <summary>
         /// Creates a <see cref="Schema"/> by using the specified <paramref name="stream"/>.

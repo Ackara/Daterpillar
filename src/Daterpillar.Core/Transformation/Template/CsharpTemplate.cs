@@ -106,8 +106,8 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private void Transform(Column column)
         {
             AppendComment(column);
-            AppendDataContract(column);
             AppendSchemaAttribute(column);
+            AppendDataContract(column);
 
             string dataType = _typeResolver.GetName(column.DataType);
             string virtualModifier = _settings.VirtualPropertiesEnabled ? " virtual " : " ";

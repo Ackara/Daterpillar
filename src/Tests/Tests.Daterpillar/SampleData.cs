@@ -8,11 +8,11 @@ using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar
 {
-    public static class Samples
+    public static class SampleData
     {
-#if !WINDOWS_UWP
         public static FileInfo GetFile(string filename)
         {
+            filename = Path.GetFileName(filename);
             string ext = "*" + Path.GetExtension(filename);
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -25,9 +25,7 @@ namespace Tests.Daterpillar
             return File.ReadAllText(GetFile(filename).FullName);
         }
 
-#endif
-
-        public static Song GetSong([CallerMemberName]string name = null)
+        public static Song CreateSong([CallerMemberName]string name = null)
         {
             return new Song()
             {
@@ -42,20 +40,20 @@ namespace Tests.Daterpillar
             };
         }
 
-        public static Schema GetSchema([CallerMemberName]string name = null)
+        public static Schema CreateSchema([CallerMemberName]string name = null)
         {
             var schema = new Schema();
             schema.Name = name;
             schema.Author = "johnDoe@example.com";
 
-            var employeeTable = GetTableSchema();
+            var employeeTable = CreateTableSchema();
             schema.Tables.Add(employeeTable);
             schema.Script = "-- Script Goes Here";
 
             return schema;
         }
 
-        public static Table GetTableSchema(string name = "Employee")
+        public static Table CreateTableSchema(string name = "Employee")
         {
             var table = new Table() { Name = name };
 

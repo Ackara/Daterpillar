@@ -10,18 +10,20 @@
     public struct Data
     {
         public const string
+            DataTypesSheet = "DataTypes$",
             ExcelProvider = "System.Data.Odbc",
-            ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\" + Artifact.DataXLSX;
+            ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\data.xlsx";
     }
 
     public struct Artifact
     {
         public const string
             XDDL = "xddl.xsd",
-            DataXLSX = "data.xlsx",
-            SamplesFolder = "Sample Files\\",
-            SampleSchema = "music.xddl.xml",
+            SampleDataDir = "SampleData",
+            DataXLSX = SampleDataDir + "\\data.xlsx",
             x86SQLiteInterop = "x86\\SQLite.Interop.dll",
-            x64SQLiteInterop = "x64\\SQLite.Interop.dll";
+            x64SQLiteInterop = "x64\\SQLite.Interop.dll",
+            SampleSchema = SampleDataDir + "\\music.xddl.xml",
+            TSqlSampleSchema = SampleDataDir + "\\music.tsql.xddl.xml";
     }
 }

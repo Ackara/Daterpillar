@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpTemplateTest
     {
@@ -23,8 +23,8 @@ namespace Tests.Daterpillar.UnitTest
         public void GenerateCsharpClassesWithSettingsEnabled()
         {
             // Arrange
-            Schema schema = Samples.GetSchema();
-            schema.Tables.Add(Samples.GetTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {
@@ -60,8 +60,8 @@ namespace Tests.Daterpillar.UnitTest
         public void GenerateCsharpClassesWithSettingsDisabled()
         {
             // Arrange
-            Schema schema = Samples.GetSchema();
-            schema.Tables.Add(Samples.GetTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {

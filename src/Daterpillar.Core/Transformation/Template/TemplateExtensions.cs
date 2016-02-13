@@ -55,6 +55,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
                 return pascal;
             }
+        } 
+
+        public static string AS(this string text, string alias)
+        {
+            return $"{text} AS '{alias}'";
         }
 
         internal static string AppendPeriod(this string text)

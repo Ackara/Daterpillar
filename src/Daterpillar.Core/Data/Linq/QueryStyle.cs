@@ -6,22 +6,22 @@
     public enum QueryStyle
     {
         /// <summary>
-        /// Standard SQL
+        /// Standard SQL format
         /// </summary>
         SQL,
 
         /// <summary>
-        /// The SQLite
+        /// SQLite format
         /// </summary>
         SQLite,
 
         /// <summary>
-        /// MySQL
+        /// MySQL format
         /// </summary>
         MySQL,
 
         /// <summary>
-        /// Microsoft's T-SQL
+        /// Microsoft's T-SQL format
         /// </summary>
         TSQL
     }

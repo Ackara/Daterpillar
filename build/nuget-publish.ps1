@@ -3,7 +3,7 @@
 # in the directory excluding the test projects.
 # ----------------------------------------------------------------------
 Clear-Host;
-$publishPackages = $false;
+$publishPackages = $true;
 $projectRootDir = [System.IO.Path]::GetDirectoryName($PSScriptRoot);
 $nuget = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "nuget.exe");
 

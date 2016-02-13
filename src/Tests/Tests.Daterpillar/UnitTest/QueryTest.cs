@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class QueryTest
     {
@@ -178,7 +178,7 @@ namespace Tests.Daterpillar.UnitTest
         public void ReturnMinifiedTSqlQuery()
         {
             var sut = new Query(QueryStyle.TSQL)
-                .Select("Id", "Name").Top(100)
+                .Select("Id", "Name")
                 .From("tableA", "tableB")
                 .Where("Id = 22")
                 .GroupBy("Name", "Age")

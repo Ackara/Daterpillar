@@ -1,0 +1,22 @@
+﻿CREATE DATABASE [GenerateSqlSchemaWithSettingsDisabled];
+
+CREATE TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee]
+(
+	Id int NOT NULL IDENTITY(1, 1),
+	Full_Name int not null default 'n/a',
+	Salary int not null,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+);
+
+ALTER TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Employee_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsdisabled_employee_idx1] ON [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee] (Id ASC);
+CREATE TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager]
+(
+	Id int NOT NULL IDENTITY(1, 1),
+	Full_Name int not null default 'n/a',
+	Salary int not null,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+);
+
+ALTER TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Manager_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsdisabled_manager_idx2] ON [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager] (Id ASC);

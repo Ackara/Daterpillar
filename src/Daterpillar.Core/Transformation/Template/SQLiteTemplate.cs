@@ -42,7 +42,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             AppendComments(table);
 
-            if (_settings.DropTable)
+            if (_settings.DropTableIfExist)
             {
                 _text.AppendLine($"DROP TABLE IF EXISTS [{table.Name}];");
             }

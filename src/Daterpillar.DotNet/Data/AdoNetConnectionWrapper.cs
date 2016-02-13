@@ -32,18 +32,23 @@ namespace Gigobyte.Daterpillar.Data
         public AdoNetConnectionWrapper(IDbConnection connection, IEntityConstructor constructor, QueryStyle style) : base(style)
         {
             _constructor = constructor;
-            _connection = connection;
+            Connection = connection;
         }
+
+        /// <summary>
+        /// The connection.
+        /// </summary>
+        protected IDbConnection Connection;
 
         /// <summary>
         /// Commits or save changes made on this open connection.
         /// </summary>
         public override void Commit()
         {
-            OpenConnection();
+            OpenConnectionIfClosed();
 
-            IDbTransaction transaction = _connection.BeginTransaction();
-            IDbCommand command = _connection.CreateCommand();
+            IDbTransaction transaction = Connection.BeginTransaction();
+            IDbCommand command = Connection.CreateCommand();
             command.Transaction = transaction;
 
             try
@@ -77,9 +82,9 @@ namespace Gigobyte.Daterpillar.Data
 
         protected override IEnumerable<TEntity> FetchData<TEntity>(string query)
         {
-            OpenConnection();
+            OpenConnectionIfClosed();
 
-            using (var command = _connection.CreateCommand())
+            using (var command = Connection.CreateCommand())
             {
                 command.CommandText = query;
                 using (var results = new DataTable())
@@ -96,12 +101,15 @@ namespace Gigobyte.Daterpillar.Data
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        /// <param name="disposing">
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release
+        /// only unmanaged resources.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _connection?.Dispose();
+                Connection?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -109,13 +117,12 @@ namespace Gigobyte.Daterpillar.Data
         #region Private Member
 
         private IEntityConstructor _constructor;
-        private IDbConnection _connection;
 
-        private void OpenConnection()
+        private void OpenConnectionIfClosed()
         {
-            if (_connection.State != ConnectionState.Open)
+            if (Connection.State != ConnectionState.Open)
             {
-                _connection.Open();
+                Connection.Open();
             }
         }
 

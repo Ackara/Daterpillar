@@ -18,7 +18,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertEntityToQuery()
         {
-            var song = Samples.GetSong();
+            var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToSelectCommand(song, QueryStyle.SQL);
             string expected = $"SELECT * FROM song WHERE Id='{song.Id}';";
 
@@ -37,7 +37,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertEntityToInsertCommand()
         {
-            var song = Samples.GetSong();
+            var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToInsertCommand(song, QueryStyle.SQLite);
             string expected = $"INSERT INTO [song] ([Album_Id], [Artist_Id], [Genre_Id], [Name], [Length], [Price], [On_Device]) VALUES ('{song.AlbumId}', '{song.ArtistId}', '{song.GenreId}', '{song.Name}', '{song.Length}', '{song.Price}', '1');";
 
@@ -56,7 +56,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertEntityToDeleteCommand()
         {
-            var song = Samples.GetSong();
+            var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToDeleteCommand(song, QueryStyle.SQLite);
             string expected = $"DELETE FROM [song] WHERE [Id]='{song.Id}';";
 

@@ -1,0 +1,31 @@
+﻿IF (db_id('GenerateSqlSchemaWithSettingsEnabled') IS NOT NULL) DROP DATABASE [GenerateSqlSchemaWithSettingsEnabled];
+CREATE DATABASE [GenerateSqlSchemaWithSettingsEnabled];
+
+-- ------------------------------------
+-- CREATE EMPLOYEE TABLE
+-- ------------------------------------
+CREATE TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Employee]
+(
+	Id int NOT NULL IDENTITY(1, 1),
+	Full_Name int not null default 'n/a',
+	Salary int not null,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+);
+
+ALTER TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Employee] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsEnabled_Employee_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsenabled_employee_idx1] ON [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Employee] (Id ASC);
+-- ------------------------------------
+-- CREATE MANAGER TABLE
+-- ------------------------------------
+CREATE TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Manager]
+(
+	Id int NOT NULL IDENTITY(1, 1),
+	Full_Name int not null default 'n/a',
+	Salary int not null,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+);
+
+ALTER TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Manager] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsEnabled_Manager_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsenabled_manager_idx2] ON [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Manager] (Id ASC);
+
+-- Script Goes Here

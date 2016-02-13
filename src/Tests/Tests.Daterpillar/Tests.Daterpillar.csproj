@@ -18,7 +18,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AssemblyVersion>1.0.16027.62</AssemblyVersion>
+    <AssemblyVersion>1.0.16044.123</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,11 +102,11 @@
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
     <Compile Include="IntegrationTest\TemplateGenerationTests.cs" />
     <Compile Include="IntegrationTest\MySqlCommandTests.cs" />
+    <Compile Include="IntegrationTest\SqlCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sample Files\Music.cs" />
-    <Compile Include="Samples.cs" />
+    <Compile Include="SampleData\Music.cs" />
+    <Compile Include="SampleData.cs" />
     <Compile Include="UnitTest\NotifyPropertyChangedTemplateTest.cs" />
-    <Compile Include="UnitTest\EnumTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\SqlWriterTest.cs" />
@@ -117,9 +117,10 @@
     <Compile Include="UnitTest\TypeNameResolverTestBase.cs" />
     <Compile Include="UnitTest\CSharpTemplateTest.cs" />
     <Compile Include="UnitTest\CSharpTypeNameResolverTest.cs" />
-    <Compile Include="IntegrationTest\EnumGeneratorTest.cs" />
     <Compile Include="UnitTest\QueryTest.cs" />
     <Compile Include="UnitTest\AdoNetEntityConstructorTest.cs" />
+    <Compile Include="UnitTest\SqlTypeNameResolverTest.cs" />
+    <Compile Include="UnitTest\SqlTemplateTest.cs" />
     <Compile Include="XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,10 +132,6 @@
       <Project>{7178415e-3fbc-4e66-a897-1bd5b92a5a9a}</Project>
       <Name>Daterpillar.DotNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Daterpillar.Utilities\Daterpillar.Utilities.csproj">
-      <Project>{9ec0d764-03a9-4dd0-bb88-f7fbb332821c}</Project>
-      <Name>Daterpillar.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\xddl.xsd">
@@ -142,14 +139,20 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="app.config" />
-    <None Include="data.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SampleData\data.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sample Files\music.xddl.xml">
+    <None Include="SampleData\music.tsql.xddl.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="SampleData\music.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>

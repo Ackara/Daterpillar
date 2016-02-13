@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SQLiteTemplateTest
     {
@@ -34,13 +34,13 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("INTEGER")
                 .OccursAtLeast(1);
 
-            var sample = Samples.GetSchema();
-            sample.Tables.Add(Samples.GetTableSchema("Manager"));
+            var sample = SampleData.CreateSchema();
+            sample.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new SQLiteTemplateSettings()
             {
                 CommentsEnabled = true,
-                DropTable = true
+                DropTableIfExist = true
             };
 
             var sut = new SQLiteTemplate(settings, mockTypeResolver);
@@ -66,13 +66,13 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("INTEGER")
                 .OccursAtLeast(1);
 
-            var sample = Samples.GetSchema();
-            sample.Tables.Add(Samples.GetTableSchema("Manager"));
+            var sample = SampleData.CreateSchema();
+            sample.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new SQLiteTemplateSettings()
             {
                 CommentsEnabled = false,
-                DropTable = false
+                DropTableIfExist = false
             };
 
             var sut = new SQLiteTemplate(settings, mockTypeResolver);
