@@ -4,15 +4,15 @@
     {
         public SqlTypeNameResolver()
         {
-            TypeNames[BOOL] = "boolean";
-            TypeNames[BLOB] = "blob";
+            TypeNames[BOOL] = "bit";
+            TypeNames[BLOB] = "varbinary";
             TypeNames[CHAR] = "char";
             TypeNames[TEXT] = "text";
             TypeNames[VARCHAR] = "varchar";
-            TypeNames[INT] = "integer";
+            TypeNames[INT] = "int";
             TypeNames[BIGINT] = "bigInt";
-            TypeNames[MEDIUMINT] = "integer";
-            TypeNames[SMALLINT] = "integer";
+            TypeNames[MEDIUMINT] = "int";
+            TypeNames[SMALLINT] = "smallint";
             TypeNames[FLOAT] = "float";
             TypeNames[DOUBLE] = "double";
             TypeNames[DECIMAL] = "decimal";
@@ -26,17 +26,17 @@
             string name = "";
             string type = dataType.Name;
 
-            switch (type)
+            switch (type.ToLower())
             {
-                case BLOB:
                 case CHAR:
+                case BLOB:
                 case VARCHAR:
                     int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
-                    name = $"{type}({size})";
+                    name = $"{TypeNames[type]}({(size == 0 ? "MAX" : size.ToString())})";
                     break;
 
                 case DECIMAL:
-                    name = $"{type}({dataType.Scale}, {dataType.Precision})";
+                    name = $"{TypeNames[type]}({dataType.Scale}, {dataType.Precision})";
                     break;
 
                 default:

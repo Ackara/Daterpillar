@@ -6,31 +6,31 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.DataXLSX)]
     [DeploymentItem(Artifact.XDDL)]
-    public class SQLiteTypeNameResolverTest : TypeNameResolverTestBase
+    [DeploymentItem(Artifact.DataXLSX)]
+    public class SqlTypeNameResolverTest : TypeNameResolverTestBase
     {
         public TestContext TestContext { get; set; }
 
         [ClassInitialize]
-        public static void PreTestValidation(TestContext context)
+        public static void Setup(TestContext context)
         {
             AssertTestDataIsValid();
         }
 
         /// <summary>
-        /// <see cref="SQLiteTypeNameResolver.GetName(DataType)"/> should return the SQLite type
-        /// name that best match the specified data type.
+        /// Assert <see cref="SqlTypeNameResolver.GetName(DataType)"/> should return the T-SQL data
+        /// type that best match the specified type.
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, Data.DataTypesSheet, DataAccessMethod.Sequential)]
-        public void ResolveSQLiteTypeName()
+        public void ResolveSqlTypeName()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
-            var expected = TestContext.DataRow["SQLite"].ToString();
-            var sut = new SQLiteTypeNameResolver();
+            var expected = Convert.ToString(TestContext.DataRow["T-SQL"]);
+            var sut = new SqlTypeNameResolver();
 
             // Act
             var result = sut.GetName(dataType);

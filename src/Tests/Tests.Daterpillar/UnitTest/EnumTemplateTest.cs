@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class EnumTemplateTest
     {

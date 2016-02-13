@@ -20,7 +20,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void GenerateEnumDeclarationFromDbConnection()
         {
             // Arrange
-            var xml = Samples.GetFileContent(Artifact.SampleSchema);
+            var xml = SampleData.GetFileContent(Artifact.SampleSchema);
             var sqlite = new SQLiteTemplate().Transform(Schema.Parse(xml));
 
             using (var connection = DbFactory.CreateSQLiteConnection(sqlite))

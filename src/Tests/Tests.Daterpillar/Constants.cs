@@ -11,6 +11,7 @@
     {
         public const string
             ExcelProvider = "System.Data.Odbc",
+            DataTypesSheet = "DataTypes$",
             ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\" + Artifact.DataXLSX;
     }
 
@@ -18,6 +19,8 @@
     {
         public const string
             XDDL = "xddl.xsd",
+            SampleDataDir = "SampleData",
+            ApprovalsDir = "ApprovalTests",
             DataXLSX = "data.xlsx",
             SamplesFolder = "Sample Files\\",
             SampleSchema = "music.xddl.xml",

@@ -1,8 +1,8 @@
-﻿using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
-using ApprovalTests;
+﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class MySqlTemplateTest
     {
@@ -31,8 +31,8 @@ namespace Tests.Daterpillar.UnitTest
                 DropDataIfExist = true
             };
 
-            var schema = Samples.GetSchema();
-            var managerTable = Samples.GetTableSchema("Manager");
+            var schema = SampleData.CreateSchema();
+            var managerTable = SampleData.CreateTableSchema("Manager");
             managerTable.Comment = "this is a table";
             schema.Tables.Add(managerTable);
 
@@ -44,11 +44,11 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new MySqlTemplate(settings, mockResolver);
 
             // Act
-            var mysql = sut.Transform(schema);
+            var result = sut.Transform(schema);
 
             // Assert
             mockResolver.Assert();
-            Approvals.Verify(mysql);
+            Approvals.Verify(result);
         }
 
         [TestMethod]
@@ -62,8 +62,8 @@ namespace Tests.Daterpillar.UnitTest
                 DropDataIfExist = false
             };
 
-            var schema = Samples.GetSchema();
-            var managerTable = Samples.GetTableSchema("Manager");
+            var schema = SampleData.CreateSchema();
+            var managerTable = SampleData.CreateTableSchema("Manager");
             schema.Tables.Add(managerTable);
 
             var mockResolver = Mock.Create<ITypeNameResolver>();
@@ -74,11 +74,11 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new MySqlTemplate(settings, mockResolver);
 
             // Act
-            var mysql = sut.Transform(schema);
+            var result = sut.Transform(schema);
 
             // Assert
             mockResolver.Assert();
-            Approvals.Verify(mysql);
+            Approvals.Verify(result);
         }
     }
 }

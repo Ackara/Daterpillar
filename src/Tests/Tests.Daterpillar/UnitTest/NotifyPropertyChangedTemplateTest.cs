@@ -10,7 +10,7 @@ using Telerik.JustMock.Helpers;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(Dev.ApprovalsDir)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class NotifyPropertyChangedTemplateTest
     {
@@ -28,8 +28,8 @@ namespace Tests.Daterpillar.UnitTest
         public void GenerateNotifyPropertyChangedClassesWithSettingsEnabled()
         {
             // Arrange
-            Schema schema = Samples.GetSchema();
-            schema.Tables.Add(Samples.GetTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
@@ -66,8 +66,8 @@ namespace Tests.Daterpillar.UnitTest
         public void GenerateNotifyPropertyChangedClassesWithSettingsDisabled()
         {
             // Arrange
-            Schema schema = Samples.GetSchema();
-            schema.Tables.Add(Samples.GetTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
