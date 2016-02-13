@@ -23,7 +23,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public static void Setup(TestContext context)
         {
             // Create SQLite database
-            string path = Samples.GetFile(Artifact.SampleSchema).FullName;
+            string path = SampleData.GetFile(Artifact.SampleSchema).FullName;
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 var schema = Schema.Load(stream);
@@ -77,7 +77,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void RunInsertCommandOnSQLiteConnection()
         {
             // Arrange
-            var track1 = Samples.GetSong();
+            var track1 = SampleData.GetSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -106,7 +106,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void RunDeleteCommandOnSQLiteConnection()
         {
             // Arrange
-            var track1 = Samples.GetSong();
+            var track1 = SampleData.GetSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)

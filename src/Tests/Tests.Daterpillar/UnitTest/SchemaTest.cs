@@ -19,7 +19,7 @@ namespace Tests.Daterpillar.UnitTest
         public void SerializeSchemaObjectToStream()
         {
             // Arrange
-            Schema sut = Samples.GetSchema();
+            Schema sut = SampleData.CreateSchema();
             using (var stream = new MemoryStream())
             {
                 // Act
@@ -41,7 +41,7 @@ namespace Tests.Daterpillar.UnitTest
         public void DeserializeSchemaObjectFromStream()
         {
             // Arrange
-            var schemaFile = Samples.GetFile(Artifact.SampleSchema);
+            var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
 
             // Act
             using (var stream = schemaFile.OpenRead())
@@ -63,7 +63,7 @@ namespace Tests.Daterpillar.UnitTest
         public void DeserializeSchemaObjectFromString()
         {
             // Arrange
-            var schemaFile = Samples.GetFile(Artifact.SampleSchema);
+            var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
 
             // Act
             var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));
@@ -81,9 +81,9 @@ namespace Tests.Daterpillar.UnitTest
         public void RemoveTableFromSchema()
         {
             // Arrange
-            var schema = Samples.GetSchema();
+            var schema = SampleData.CreateSchema();
             var nameOfTableToRemove = "RemoveMe";
-            var tableToRemove = Samples.GetTableSchema(nameOfTableToRemove);
+            var tableToRemove = SampleData.CreateTableSchema(nameOfTableToRemove);
 
             schema.Tables.Add(tableToRemove);
 
