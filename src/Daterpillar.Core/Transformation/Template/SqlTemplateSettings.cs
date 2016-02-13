@@ -4,14 +4,14 @@
     {
         public static SqlTemplateSettings Default = new SqlTemplateSettings()
         {
-            RunScript = true,
-            CommentEnabled = false,
-            DropDatabaseIfExist = true
+            AddScript = true,
+            CommentsEnabled = true,
+            DropDatabaseIfExist = false
         };
 
-        public bool RunScript { get; set; }
+        public bool AddScript { get; set; }
 
-        public bool CommentEnabled { get; set; }
+        public bool CommentsEnabled { get; set; }
 
         public bool DropDatabaseIfExist { get; set; }
     }

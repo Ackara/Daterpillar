@@ -11,14 +11,32 @@ using System.IO;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [UseApprovalSubdirectory(nameof(ApprovalTests))]
+    [DeploymentItem(Artifact.SampleSchema)]
+    [DeploymentItem(Artifact.TSqlSampleSchema)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
+    [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests
     {
         public TestContext TestContext { get; set; }
+
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
+            var conn = new System.Data.SqlClient.SqlConnection(connStr);
+
+            using (conn)
+            {
+                conn.Open();
+                using (var command = conn.CreateCommand())
+                {
+                    command.CommandText = "CREATE DATABASE [zune];";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
 
         /// <summary>
         /// Generate a SQLite schema from the <see cref="Artifact.SampleSchema"/> file.
@@ -31,7 +49,7 @@ namespace Tests.Daterpillar.IntegrationTest
             var settings = new SQLiteTemplateSettings()
             {
                 CommentsEnabled = true,
-                DropTable = true
+                DropTableIfExist = true
             };
 
             var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
@@ -153,7 +171,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 var settings = new MySqlTemplateSettings()
                 {
                     CommentsEnabled = true,
-                    DropDataIfExist = true
+                    DropDatabaseIfExist = true
                 };
 
                 var schema = Schema.Load(fileStream);
@@ -191,12 +209,12 @@ namespace Tests.Daterpillar.IntegrationTest
             // Arrange
             var settings = new SqlTemplateSettings()
             {
-                RunScript = false,
-                CommentEnabled = true,
+                AddScript = false,
+                CommentsEnabled = true,
                 DropDatabaseIfExist = true
             };
 
-            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Artifact.TSqlSampleSchema).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act

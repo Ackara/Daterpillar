@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Represents the [Employee] table.
 /// </summary>
-[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+[DataContract(Namespace = "http://api.gigobyte.com/schema/v1/xddl.xsd")]
 [Table("Employee")]
 public partial class Employee : EntityBase
 {
@@ -32,29 +32,29 @@ public partial class Employee : EntityBase
 	/// <summary>
 	/// Get or set the [Employee].[Id] column value.
 	/// </summary>
-	[DataMember]
 	[Column("Id", IsKey = true, AutoIncrement = true)]
+	[DataMember]
 	public virtual string Id { get; set; }
 
 	/// <summary>
 	/// The first name column.
 	/// </summary>
-	[DataMember]
 	[Column("Full_Name")]
+	[DataMember]
 	public virtual string FullName { get; set; }
 
 	/// <summary>
 	/// The salary column.
 	/// </summary>
-	[DataMember]
 	[Column("Salary")]
+	[DataMember]
 	public virtual string Salary { get; set; }
 }
 
 /// <summary>
 /// Represents the [Manager] table.
 /// </summary>
-[DataContract(Namespace = "http://schema.gigobyte.com/v1/xddl.xsd")]
+[DataContract(Namespace = "http://api.gigobyte.com/schema/v1/xddl.xsd")]
 [Table("Manager")]
 public partial class Manager : EntityBase
 {
@@ -85,21 +85,21 @@ public partial class Manager : EntityBase
 	/// <summary>
 	/// Get or set the [Manager].[Id] column value.
 	/// </summary>
-	[DataMember]
 	[Column("Id", IsKey = true, AutoIncrement = true)]
+	[DataMember]
 	public virtual string Id { get; set; }
 
 	/// <summary>
 	/// The first name column.
 	/// </summary>
-	[DataMember]
 	[Column("Full_Name")]
+	[DataMember]
 	public virtual string FullName { get; set; }
 
 	/// <summary>
 	/// The salary column.
 	/// </summary>
-	[DataMember]
 	[Column("Salary")]
+	[DataMember]
 	public virtual string Salary { get; set; }
 }

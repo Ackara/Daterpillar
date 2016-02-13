@@ -5,11 +5,11 @@
         public static SQLiteTemplateSettings Default = new SQLiteTemplateSettings()
         {
             CommentsEnabled = true,
-            DropTable = true
+            DropTableIfExist = true
         };
 
         public bool CommentsEnabled { get; set; }
 
-        public bool DropTable { get; set; }
+        public bool DropTableIfExist { get; set; }
     }
 }

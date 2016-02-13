@@ -117,7 +117,7 @@ namespace Gigobyte.Daterpillar.Data.Linq
             if (_select == null || _from == null) return string.Empty;
             else
             {
-                string top = (_style == QueryStyle.TSQL) ? (" TOP " + _limit) : string.Empty;
+                string top = (_style == QueryStyle.TSQL && _limit > 0) ? (" TOP " + _limit) : string.Empty;
                 string query = $"SELECT{top}\n\t{_select}\nFROM\n\t{_from}\n{GetWhere()}{GetGroupBy()}{GetOrderBy()}{GetLimit()};";
                 if (minify)
                 {
@@ -129,6 +129,14 @@ namespace Gigobyte.Daterpillar.Data.Linq
         }
 
         #region Private & Internal Members
+
+        private QueryStyle _style;
+
+        private int _limit;
+
+        private string
+            _select, _from, _where,
+            _group, _order;
 
         internal static string Escape(string identifier, QueryStyle style)
         {
@@ -146,13 +154,6 @@ namespace Gigobyte.Daterpillar.Data.Linq
 
             return identifier;
         }
-
-        private QueryStyle _style;
-        private int _limit;
-
-        private string
-            _select, _from, _where,
-            _group, _order;
 
         private string GetWhere()
         {
@@ -178,6 +179,6 @@ namespace Gigobyte.Daterpillar.Data.Linq
             }
         }
 
-        #endregion Private Members
+        #endregion Private & Internal Members
     }
 }

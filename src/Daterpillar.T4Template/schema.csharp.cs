@@ -34,15 +34,15 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [tableA].[Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Id", IsKey = true, AutoIncrement = true)]
+		[DataMember]
 		public int Id { get; set; }
 	
 		/// <summary>
 		/// Get or set the [tableA].[Name] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Name")]
+		[DataMember]
 		public string Name { get; set; }
 	}
 	
@@ -85,29 +85,29 @@ namespace GeneratedCode
 		/// <summary>
 		/// Get or set the [tableB].[Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Id", IsKey = true)]
+		[DataMember]
 		public int Id { get; set; }
 	
 		/// <summary>
 		/// Get or set the [tableB].[Date] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Date")]
+		[DataMember]
 		public DateTime Date { get; set; }
 	
 		/// <summary>
 		/// Get or set the [tableB].[TableA_Id] column value.
 		/// </summary>
-		[DataMember]
 		[Column("TableA_Id")]
+		[DataMember]
 		public int TableAId { get; set; }
 	
 		/// <summary>
 		/// Get or set the [tableB].[Age] column value.
 		/// </summary>
-		[DataMember]
 		[Column("Age")]
+		[DataMember]
 		public int Age { get; set; }
 	}
 }

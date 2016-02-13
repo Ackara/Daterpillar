@@ -9,9 +9,9 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
         }
 
-        public SqlTemplate(bool enableComments) : this(SqlTemplateSettings.Default, new SqlTypeNameResolver())
+        public SqlTemplate(bool dropDatabase) : this(SqlTemplateSettings.Default, new SqlTypeNameResolver())
         {
-            _settings.CommentEnabled = enableComments;
+            _settings.DropDatabaseIfExist = dropDatabase;
         }
 
         public SqlTemplate(SqlTemplateSettings settings) : this(settings, new SqlTypeNameResolver())
@@ -42,7 +42,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
                 Transform(table);
             }
 
-            if (_settings.RunScript)
+            if (_settings.AddScript)
             {
                 _text.AppendLine();
                 _text.AppendLine(schema.Script);
@@ -125,7 +125,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private void AppendTableComment(Table table)
         {
-            if (_settings.CommentEnabled)
+            if (_settings.CommentsEnabled)
             {
                 _text.AppendLine("-- ------------------------------------");
                 _text.AppendLine($"-- CREATE {table.Name.ToUpper()} TABLE");

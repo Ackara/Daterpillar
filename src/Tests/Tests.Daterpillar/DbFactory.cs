@@ -48,7 +48,7 @@ namespace Tests.Daterpillar
                 var settings = new MySqlTemplateSettings()
                 {
                     CommentsEnabled = false,
-                    DropDataIfExist = true
+                    DropDatabaseIfExist = true
                 };
 
                 command.CommandText = new MySqlTemplate(settings).Transform(schema);

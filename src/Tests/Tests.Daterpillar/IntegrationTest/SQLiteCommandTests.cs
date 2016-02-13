@@ -12,9 +12,9 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
+    [DeploymentItem(Artifact.SampleSchema)]
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
     public class SQLiteCommandTests
     {
         public static string ConnectionString;
@@ -77,7 +77,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void RunInsertCommandOnSQLiteConnection()
         {
             // Arrange
-            var track1 = SampleData.GetSong();
+            var track1 = SampleData.CreateSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -106,7 +106,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void RunDeleteCommandOnSQLiteConnection()
         {
             // Arrange
-            var track1 = SampleData.GetSong();
+            var track1 = SampleData.CreateSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)

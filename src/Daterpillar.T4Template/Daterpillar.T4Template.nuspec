@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>Copyright 2016</copyright>
-	<language>en-US</language>
-    <tags>database sqlite schema c#</tags>
+    <language>en-US</language>
+    <tags>database sqlite schema c# t4 template</tags>
   </metadata>
 </package>

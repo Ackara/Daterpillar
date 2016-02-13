@@ -8,15 +8,13 @@ namespace Gigobyte.Daterpillar.Data
     /// Represents an object that is mapped to a database table.
     /// </summary>
     [System.Runtime.Serialization.DataContract]
-    [System.Diagnostics.DebuggerDisplay("{" + nameof(ToDebuggerDisplay) + "()}")]
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public abstract class EntityBase
     {
         /// <summary>
         /// Gets the name of the database table that is mapped to this object.
         /// </summary>
-        /// <value>
-        /// The name of the table.
-        /// </value>
+        /// <value>The name of the table.</value>
         public string TableName
         {
             get

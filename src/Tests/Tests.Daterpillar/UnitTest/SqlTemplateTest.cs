@@ -32,8 +32,8 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var settings = new SqlTemplateSettings()
             {
-                RunScript = true,
-                CommentEnabled = true,
+                AddScript = true,
+                CommentsEnabled = true,
                 DropDatabaseIfExist = true,
             };
 
@@ -51,8 +51,8 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var settings = new SqlTemplateSettings()
             {
-                RunScript = false,
-                CommentEnabled = false,
+                AddScript = false,
+                CommentsEnabled = false,
                 DropDatabaseIfExist = false,
             };
 

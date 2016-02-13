@@ -4,15 +4,15 @@
     {
         public static MySqlTemplateSettings Default = new MySqlTemplateSettings()
         {
+            AddScript = true,
             CommentsEnabled = true,
-            DropTableIfExist = false,
-            DropDataIfExist = false
+            DropDatabaseIfExist = false
         };
+
+        public bool AddScript { get; set; }
 
         public bool CommentsEnabled { get; set; }
 
-        public bool DropDataIfExist { get; set; }
-
-        public bool DropTableIfExist { get; set; }
+        public bool DropDatabaseIfExist { get; set; }
     }
 }

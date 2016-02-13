@@ -10,9 +10,9 @@ namespace Tests.Daterpillar
 {
     public static class SampleData
     {
-#if !WINDOWS_UWP
         public static FileInfo GetFile(string filename)
         {
+            filename = Path.GetFileName(filename);
             string ext = "*" + Path.GetExtension(filename);
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -25,9 +25,7 @@ namespace Tests.Daterpillar
             return File.ReadAllText(GetFile(filename).FullName);
         }
 
-#endif
-
-        public static Song GetSong([CallerMemberName]string name = null)
+        public static Song CreateSong([CallerMemberName]string name = null)
         {
             return new Song()
             {

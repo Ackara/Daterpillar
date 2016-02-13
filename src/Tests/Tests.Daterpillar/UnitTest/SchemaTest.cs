@@ -7,7 +7,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Artifact.XDDL)]
-    [DeploymentItem(Artifact.SamplesFolder + Artifact.SampleSchema)]
+    [DeploymentItem(Artifact.SampleSchema)]
     public class SchemaTest
     {
         /// <summary>
@@ -34,7 +34,8 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="Schema"/> can be deserialized by the <see cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
+        /// Assert <see cref="Schema"/> can be deserialized by the <see
+        /// cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
@@ -74,7 +75,8 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         /// <summary>
-        /// Assert <see cref="Schema.RemoveTable(string)"/> can find and remove an existing <see cref="Table"/> object from an instance.
+        /// Assert <see cref="Schema.RemoveTable(string)"/> can find and remove an existing <see
+        /// cref="Table"/> object from an instance.
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]

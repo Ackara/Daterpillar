@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Tests.Daterpillar.T4")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Daterpillar.T4Template")]
+[assembly: AssemblyDescription("Daterpillar is a data access and transformation technology for new applications.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tests.Daterpillar.T4")]
+[assembly: AssemblyCompany("Gigobyte")]
+[assembly: AssemblyProduct("Daterpillar.T4Template")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("640fd9da-8a9d-40f7-be61-5de08e75a4d8")]
+[assembly: Guid("adc11969-4a3c-4247-a12a-8f8b4788c4f5")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.16044.22")]
-[assembly: AssemblyFileVersion("1.0.16044.22")]
+[assembly: AssemblyVersion("1.0.16044.3")]
+[assembly: AssemblyFileVersion("1.0.16044.3")]
