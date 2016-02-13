@@ -8,5 +8,5 @@ CREATE TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee]
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
 );
 
-ALTER TABLE [dbo].[] ADD CONSTRAINT [AutoFillSqlIndexTableNameIfMissing__pk] PRIMARY KEY (Id ASC);
-CREATE INDEX [autofillsqlindextablenameifmissing_employee_idx1] ON [dbo].[Employee] (Id ASC);
+ALTER TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] ADD CONSTRAINT [AutoFillSqlIndexTableNameIfMissing_Employee_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [autofillsqlindextablenameifmissing_employee_idx1] ON [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] (Id ASC);

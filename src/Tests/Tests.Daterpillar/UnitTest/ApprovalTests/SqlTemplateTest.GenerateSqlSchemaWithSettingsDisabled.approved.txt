@@ -8,8 +8,8 @@ CREATE TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee]
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
 );
 
-ALTER TABLE [dbo].[Employee] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Employee_pk] PRIMARY KEY (Id ASC);
-CREATE INDEX [generatesqlschemawithsettingsdisabled_employee_idx1] ON [dbo].[Employee] (Id ASC);
+ALTER TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Employee_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsdisabled_employee_idx1] ON [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Employee] (Id ASC);
 CREATE TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager]
 (
 	Id int NOT NULL IDENTITY(1, 1),
@@ -18,5 +18,5 @@ CREATE TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager]
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
 );
 
-ALTER TABLE [dbo].[Manager] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Manager_pk] PRIMARY KEY (Id ASC);
-CREATE INDEX [generatesqlschemawithsettingsdisabled_manager_idx2] ON [dbo].[Manager] (Id ASC);
+ALTER TABLE [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsDisabled_Manager_pk] PRIMARY KEY (Id ASC);
+CREATE INDEX [generatesqlschemawithsettingsdisabled_manager_idx2] ON [GenerateSqlSchemaWithSettingsDisabled].[dbo].[Manager] (Id ASC);
