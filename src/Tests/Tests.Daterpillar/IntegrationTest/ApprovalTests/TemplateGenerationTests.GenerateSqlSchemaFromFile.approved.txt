@@ -1,118 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿BEGIN TRY
+DROP DATABASE [zune];
+END TRY
+BEGIN CATCH
+END CATCH;
 
-<schema xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd"
-        name="zune"
-        author="john@example.com">
-  <table name="genre">
-    <column name="Id"
-            autoIncrement="true">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-      <modifier>PRIMARY KEY</modifier>
-    </column>
+CREATE DATABASE [zune];
+USE [zune];
 
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-    </column>
-  </table>
+-- ------------------------------------
+-- CREATE GENRE TABLE
+-- ------------------------------------
+CREATE TABLE [zune].[dbo].[genre]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) 
+);
 
-  <table name="artist">
-    <column name="Id"
-            autoIncrement="true">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-      <modifier>PRIMARY KEY</modifier>
-    </column>
+-- ------------------------------------
+-- CREATE ARTIST TABLE
+-- ------------------------------------
+CREATE TABLE [zune].[dbo].[artist]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) NOT NULL,
+	[Bio] TEXT 
+);
 
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
+-- ------------------------------------
+-- CREATE ALBUM TABLE
+-- ------------------------------------
+CREATE TABLE [zune].[dbo].[album]
+(
+	[Artist_Id] INT NOT NULL,
+	[Name] VARCHAR(64) NOT NULL,
+	[Release_Date] DATE ,
+	CONSTRAINT [album_artist_id_to_id_id_fkey1] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id])
+);
 
-    <column name="Bio">
-      <dataType>text</dataType>
-    </column>
-  </table>
+ALTER TABLE [zune].[dbo].[album] ADD CONSTRAINT [zune_album_pk] PRIMARY KEY ([Artist_Id] ASC, [Name] ASC);
+CREATE INDEX [zune_album_idx2] ON [zune].[dbo].[album] ([Artist_Id] ASC, [Name] ASC);
+-- ------------------------------------
+-- CREATE SONG TABLE
+-- ------------------------------------
+CREATE TABLE [zune].[dbo].[song]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Album_Id] INT NOT NULL,
+	[Artist_Id] INT NOT NULL,
+	[Genre_Id] INT NOT NULL,
+	[Name] VARCHAR(64) NOT NULL,
+	[Length] DECIMAL(4, 2) ,
+	[Price] DECIMAL(12, 2) NOT NULL,
+	[On_Device] BIT NOT NULL DEFAULT '0',
+	CONSTRAINT [song_genre_id_to_id_id_fkey3] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]),
+	CONSTRAINT [song_artist_id_to_id_id_fkey4] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id])
+);
 
-  <table name="album">
-    <column name="Artist_Id">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
 
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
 
-    <column name="Release_Date">
-      <dataType>date</dataType>
-    </column>
-
-    <foreignKey localColumn="Artist_Id"
-                foreignTable="artist"
-                foreignColumn="Id" />
-
-    <index type="primaryKey">
-      <columnName>Artist_Id</columnName>
-      <columnName>Name</columnName>
-    </index>
-  </table>
-
-  <table name="song">
-    <column name="Id"
-            autoIncrement="true">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-      <modifier>PRIMARY KEY</modifier>
-    </column>
-
-    <column name="Album_Id">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="Artist_Id">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="Genre_Id">
-      <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="Length">
-      <dataType scale="4"
-                precision="2">decimal</dataType>
-    </column>
-
-    <column name="Price">
-      <dataType scale="12"
-                precision="2">decimal</dataType>
-      <modifier>NOT NULL</modifier>
-    </column>
-
-    <column name="On_Device">
-      <dataType>bool</dataType>
-      <modifier>NOT NULL</modifier>
-      <modifier>DEFAULT '0'</modifier>
-    </column>
-
-    <foreignKey localColumn="Genre_Id"
-                foreignTable="genre"
-                foreignColumn="Id" />
-    <foreignKey localColumn="Artist_Id"
-                foreignTable="artist"
-                foreignColumn="Id" />
-  </table>
-
-  <script>
     /* *** SEED *** */
 
     INSERT INTO genre (Name) VALUES
@@ -405,5 +350,4 @@
     insert into song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) values (1, 8, 2, 'nibh in', 1.42, 94, 1);
     insert into song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) values (4, 6, 3, 'ipsum', 1.06, 38, 1);
 
-  </script>
-</schema>
+  

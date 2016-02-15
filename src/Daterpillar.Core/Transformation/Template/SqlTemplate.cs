@@ -31,10 +31,19 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
             if (_settings.DropDatabaseIfExist)
             {
-                _text.AppendLine($"IF (db_id('{schema.Name}') IS NOT NULL) DROP DATABASE [{schema.Name}];");
+                _text.AppendLine("BEGIN TRY");
+                _text.AppendLine($"DROP DATABASE [{_schemaName}];");
+                _text.AppendLine("END TRY");
+                _text.AppendLine("BEGIN CATCH");
+                _text.AppendLine("END CATCH;");
+                _text.AppendLine();
             }
 
-            _text.AppendLine($"CREATE DATABASE [{schema.Name}];");
+            _text.AppendLine($"CREATE DATABASE [{_schemaName}];");
+            if (_settings.UseDatabase)
+            {
+                _text.AppendLine($"USE [{_schemaName}];");
+            }
             _text.AppendLine();
 
             foreach (var table in schema.Tables)
@@ -95,7 +104,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             string modifiers = string.Join(" ", column.Modifiers);
             string autoIncrement = (column.AutoIncrement ? " IDENTITY(1, 1)" : string.Empty);
 
-            _text.AppendLine($"\t{column.Name} {dataType} {modifiers}{autoIncrement},");
+            _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }
 
         private void Transform(ForeignKey key, string tableName)
@@ -108,7 +117,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             key.Table = (string.IsNullOrEmpty(key.Table) ? tableName : key.Table);
             string name = (string.IsNullOrEmpty(key.Name) ? $"{_schemaName}_{key.Table}_pk" : key.Name);
-            string columns = string.Join(", ", key.Columns.Select(x => $"{x.Name} {x.Order}"));
+            string columns = string.Join(", ", key.Columns.Select(x => $"[{x.Name}] {x.Order}"));
 
             _text.AppendLine($"ALTER TABLE [{_schemaName}].[dbo].[{key.Table}] ADD CONSTRAINT [{name}] PRIMARY KEY ({columns});");
         }
@@ -117,7 +126,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             index.Table = (string.IsNullOrEmpty(index.Table) ? tableName : index.Table);
             string unique = (index.Unique ? "unique" : " ");
-            string columns = string.Join(", ", index.Columns.Select(x => $"{x.Name} {x.Order}"));
+            string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
             string name = (string.IsNullOrEmpty(index.Name) ? $"{_schemaName}_{index.Table}_idx{++_seed}" : index.Name).ToLower();
 
             _text.AppendLine($"CREATE{unique}INDEX [{name}] ON [{_schemaName}].[dbo].[{index.Table}] ({columns});");

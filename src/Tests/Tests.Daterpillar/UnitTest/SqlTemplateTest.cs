@@ -23,7 +23,7 @@ namespace Tests.Daterpillar.UnitTest
 
         /// <summary>
         /// Assert <see cref="SqlTemplate.Transform(Schema)"/> returns a well formatted T-SQL schema
-        /// when all settings are enbaled.
+        /// when all settings are enabled.
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
@@ -33,6 +33,7 @@ namespace Tests.Daterpillar.UnitTest
             var settings = new SqlTemplateSettings()
             {
                 AddScript = true,
+                UseDatabase = true,
                 CommentsEnabled = true,
                 DropDatabaseIfExist = true,
             };
@@ -52,6 +53,7 @@ namespace Tests.Daterpillar.UnitTest
             var settings = new SqlTemplateSettings()
             {
                 AddScript = false,
+                UseDatabase = false,
                 CommentsEnabled = false,
                 DropDatabaseIfExist = false,
             };
@@ -68,7 +70,7 @@ namespace Tests.Daterpillar.UnitTest
         public void AutoFillSqlIndexTableNameIfMissing()
         {
             // Arrange
-            var sut = new SqlTemplate(new SqlTemplateSettings(), Mock.Create<ITypeNameResolver>());
+            var sut = new SqlTemplate(SqlTemplateSettings.Default, Mock.Create<ITypeNameResolver>());
             var schema = SampleData.CreateSchema();
             schema.Tables[0].Indexes[0].Table = "";
 
@@ -95,11 +97,11 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new SqlTemplate(settings, mockTypeResolver);
 
             // Act
-            var tsql = sut.Transform(schema);
+            var script = sut.Transform(schema);
 
             // Assert
             mockTypeResolver.AssertAll();
-            Approvals.Verify(tsql);
+            Approvals.Verify(script);
         }
     }
 }

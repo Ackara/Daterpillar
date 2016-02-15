@@ -5,11 +5,14 @@
         public static SqlTemplateSettings Default = new SqlTemplateSettings()
         {
             AddScript = true,
+            UseDatabase = true,
             CommentsEnabled = true,
             DropDatabaseIfExist = false
         };
 
         public bool AddScript { get; set; }
+
+        public bool UseDatabase { get; set; }
 
         public bool CommentsEnabled { get; set; }
 
