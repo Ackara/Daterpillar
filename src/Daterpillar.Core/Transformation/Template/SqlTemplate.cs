@@ -39,7 +39,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
                 _text.AppendLine();
             }
 
-            _text.AppendLine($"CREATE DATABASE [{_schemaName}];");
+            if (_settings.CreateSchema)
+            {
+                _text.AppendLine($"CREATE DATABASE [{_schemaName}];");
+            }
+
             if (_settings.UseDatabase)
             {
                 _text.AppendLine($"USE [{_schemaName}];");
