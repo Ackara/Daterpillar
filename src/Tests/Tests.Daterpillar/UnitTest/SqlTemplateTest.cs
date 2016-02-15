@@ -34,6 +34,7 @@ namespace Tests.Daterpillar.UnitTest
             {
                 AddScript = true,
                 UseDatabase = true,
+                CreateSchema = true,
                 CommentsEnabled = true,
                 DropDatabaseIfExist = true,
             };
@@ -54,6 +55,7 @@ namespace Tests.Daterpillar.UnitTest
             {
                 AddScript = false,
                 UseDatabase = false,
+                CreateSchema = false,
                 CommentsEnabled = false,
                 DropDatabaseIfExist = false,
             };

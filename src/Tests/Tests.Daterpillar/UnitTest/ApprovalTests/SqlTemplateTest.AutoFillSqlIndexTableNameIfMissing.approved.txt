@@ -1,5 +1,4 @@
-﻿CREATE DATABASE [AutoFillSqlIndexTableNameIfMissing];
-USE [AutoFillSqlIndexTableNameIfMissing];
+﻿USE [AutoFillSqlIndexTableNameIfMissing];
 
 -- ------------------------------------
 -- CREATE EMPLOYEE TABLE

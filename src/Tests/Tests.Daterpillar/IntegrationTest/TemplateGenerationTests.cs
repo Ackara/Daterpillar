@@ -212,6 +212,7 @@ namespace Tests.Daterpillar.IntegrationTest
             {
                 AddScript = true,
                 UseDatabase = true,
+                CreateSchema = true,
                 CommentsEnabled = true,
                 DropDatabaseIfExist = true,
             };

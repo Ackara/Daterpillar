@@ -6,6 +6,7 @@
         {
             AddScript = true,
             UseDatabase = true,
+            CreateSchema = false,
             CommentsEnabled = true,
             DropDatabaseIfExist = false
         };
@@ -13,9 +14,11 @@
         public bool AddScript { get; set; }
 
         public bool UseDatabase { get; set; }
+        public bool CreateSchema { get; set; }
 
         public bool CommentsEnabled { get; set; }
 
         public bool DropDatabaseIfExist { get; set; }
+
     }
 }
