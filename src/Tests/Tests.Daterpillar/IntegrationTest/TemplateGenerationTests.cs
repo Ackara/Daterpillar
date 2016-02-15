@@ -1,4 +1,5 @@
-﻿using ApprovalTests.Namers;
+﻿using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
@@ -16,12 +17,12 @@ namespace Tests.Daterpillar.IntegrationTest
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests
     {
         public TestContext TestContext { get; set; }
 
-        [ClassCleanup]
+        //[ClassCleanup]
         public static void Cleanup()
         {
             string connStr = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
@@ -32,7 +33,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 conn.Open();
                 using (var command = conn.CreateCommand())
                 {
-                    command.CommandText = "CREATE DATABASE [zune];";
+                    command.CommandText = "DROP DATABASE [zune];";
                     command.ExecuteNonQuery();
                 }
             }
@@ -162,7 +163,7 @@ namespace Tests.Daterpillar.IntegrationTest
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        //[Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
+        [Ignore(/* To run this test provide a connection string to a MySQL database in the app.config. */)]
         public void GenerateMySqlSchemaFromFile()
         {
             // Arrange
@@ -179,22 +180,22 @@ namespace Tests.Daterpillar.IntegrationTest
                 int nChanges;
 
                 // Act
-                var mysql = template.Transform(schema);
-                TestContext.WriteLine(mysql);
+                var script = template.Transform(schema);
+                TestContext.WriteLine(script);
 
                 using (var connection = DbFactory.CreateMySqlConnection())
                 {
                     connection.Open();
                     using (var command = connection.CreateCommand())
                     {
-                        command.CommandText = mysql;
+                        command.CommandText = script;
                         nChanges = command.ExecuteNonQuery();
                     }
                 }
 
                 // Assert
                 Assert.IsTrue(nChanges > 0, $"{nChanges} changes were made.");
-                Assert.IsFalse(string.IsNullOrWhiteSpace(mysql));
+                Assert.IsFalse(string.IsNullOrWhiteSpace(script));
             }
         }
 
@@ -203,21 +204,24 @@ namespace Tests.Daterpillar.IntegrationTest
         /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        //[Ignore(/* To run this test provide a connection string to a SQL Server database in the app.config. */)]
+        [Ignore(/* To run this test provide a connection string to a SQL Server database in the app.config. */)]
         public void GenerateSqlSchemaFromFile()
         {
             // Arrange
             var settings = new SqlTemplateSettings()
             {
-                AddScript = false,
+                AddScript = true,
+                UseDatabase = true,
                 CommentsEnabled = true,
-                DropDatabaseIfExist = true
+                DropDatabaseIfExist = true,
             };
 
-            var schema = Schema.Load(SampleData.GetFile(Artifact.TSqlSampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act
+            Approvals.Verify(script);
+
             using (var connection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString))
             {
                 connection.Open();

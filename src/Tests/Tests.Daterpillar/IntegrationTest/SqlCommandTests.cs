@@ -12,6 +12,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
+    [DeploymentItem(Artifact.SampleSchema)]
     [DeploymentItem(Artifact.TSqlSampleSchema)]
     [Ignore(/* To run these test provide a connection string to a SQL Server database in the app.config. */)]
     public class SqlCommandTests
@@ -19,32 +20,31 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            using (var conn = CreateConnection())
+            try
             {
-                if (conn.State != ConnectionState.Open) conn.Open();
-
-                using (var command = conn.CreateCommand())
+                var settings = new SqlTemplateSettings()
                 {
-                    var schema = Schema.Load(SampleData.GetFile(Artifact.TSqlSampleSchema).OpenRead());
-                    string script = new SqlTemplate(dropDatabase: true).Transform(schema);
-                    command.CommandText = script;
-                    command.ExecuteNonQuery();
+                    AddScript = true,
+                    UseDatabase = true,
+                    CommentsEnabled = true,
+                    DropDatabaseIfExist = false,
+                };
+
+                var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+                var script = new SqlTemplate(settings).Transform(schema);
+
+                using (var connection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString))
+                {
+                    connection.Open();
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = script;
+                        command.ExecuteNonQuery();
+                    }
                 }
             }
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            using (var conn = CreateConnection())
-            {
-                conn.Open();
-                using (var command = conn.CreateCommand())
-                {
-                    command.CommandText = "CREATE DATABASE [zune];";
-                    command.ExecuteNonQuery();
-                }
-            }
+            catch (System.Data.Common.DbException) { }
         }
 
         /// <summary>
