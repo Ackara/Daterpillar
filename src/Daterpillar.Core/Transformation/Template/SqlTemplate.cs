@@ -106,7 +106,10 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType = _typeNameResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
-            string autoIncrement = (column.AutoIncrement ? " IDENTITY(1, 1)" : string.Empty);
+
+            int seed = column.DataType.Scale;
+            int increment = column.DataType.Precision;
+            string autoIncrement = (column.AutoIncrement ? $" IDENTITY({(seed == 0 ? 1 : seed)}, {(increment == 0 ? 1 : increment)})" : string.Empty);
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }
