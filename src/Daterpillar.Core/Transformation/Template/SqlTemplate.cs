@@ -116,8 +116,8 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private void Transform(ForeignKey key, string tableName)
         {
-            string name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignColumn}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
-            _text.AppendLine($"\tCONSTRAINT [{name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]),");
+            string name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignTable}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
+            _text.AppendLine($"\tCONSTRAINT [{name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]) ON UPDATE {key.OnUpdate} ON DELETE {key.OnDelete},");
         }
 
         private void TransformPrimaryKey(Index key, string tableName)
