@@ -1,11 +1,26 @@
-﻿# ----------------------------------------------------------------------
+﻿Clear-Host;
+# ----------------------------------------------------------------------
 # This script generates .nuspec for each .csproj in the project
 # in the directory excluding the test projects.
 # ----------------------------------------------------------------------
-Clear-Host;
 $publishPackages = $true;
 $projectRootDir = [System.IO.Path]::GetDirectoryName($PSScriptRoot);
 $nuget = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "nuget.exe");
+
+# ----------------------
+# Functions
+# ----------------------
+function Get-Nupkg($dir)
+{
+    [string] $nupkg = $null;
+    foreach($path in [System.IO.Directory]::GetFiles($dir, "*.nupkg", [System.IO.SearchOption]::TopDirectoryOnly))
+    {
+        $nupkg = $path;
+        break;
+    }
+
+    return $nupkg;
+}
 
 # Download nuget.exe
 & $([System.IO.Path]::Combine($PSScriptRoot, "get-nuget.ps1"));
@@ -30,18 +45,3 @@ foreach($path in [System.IO.Directory]::GetFiles($projectRootDir, "*.csproj", [S
 }
 
 echo "DONE!";
-
-# ----------------------
-# Functions
-# ----------------------
-function Get-Nupkg($dir)
-{
-    [string] $nupkg = $null;
-    foreach($path in [System.IO.Directory]::GetFiles($dir, "*.nupkg", [System.IO.SearchOption]::TopDirectoryOnly))
-    {
-        $nupkg = $path;
-        break;
-    }
-
-    return $nupkg;
-}
