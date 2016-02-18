@@ -8,7 +8,7 @@ CREATE TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee]
 	[Id]  NOT NULL IDENTITY(1, 1),
 	[Full_Name]  not null default 'n/a',
 	[Salary]  not null,
-	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
 ALTER TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] ADD CONSTRAINT [AutoFillSqlIndexTableNameIfMissing_Employee_pk] PRIMARY KEY ([Id] ASC);

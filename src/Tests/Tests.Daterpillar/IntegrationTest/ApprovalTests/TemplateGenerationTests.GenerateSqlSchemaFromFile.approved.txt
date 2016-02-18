@@ -34,7 +34,7 @@ CREATE TABLE [zune].[dbo].[album]
 	[Artist_Id] INT NOT NULL,
 	[Name] VARCHAR(64) NOT NULL,
 	[Release_Date] DATE ,
-	CONSTRAINT [album_artist_id_to_id_id_fkey1] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id])
+	CONSTRAINT [album_artist_id_to_artist_id_fkey1] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 ALTER TABLE [zune].[dbo].[album] ADD CONSTRAINT [zune_album_pk] PRIMARY KEY ([Artist_Id] ASC, [Name] ASC);
@@ -52,8 +52,8 @@ CREATE TABLE [zune].[dbo].[song]
 	[Length] DECIMAL(4, 2) ,
 	[Price] DECIMAL(12, 2) NOT NULL,
 	[On_Device] BIT NOT NULL DEFAULT '0',
-	CONSTRAINT [song_genre_id_to_id_id_fkey3] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]),
-	CONSTRAINT [song_artist_id_to_id_id_fkey4] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id])
+	CONSTRAINT [song_genre_id_to_genre_id_fkey3] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [song_artist_id_to_artist_id_fkey4] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 

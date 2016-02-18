@@ -106,15 +106,20 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType = _typeNameResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
-            string autoIncrement = (column.AutoIncrement ? " IDENTITY(1, 1)" : string.Empty);
+
+            int seed = column.DataType.Scale;
+            int increment = column.DataType.Precision;
+            string autoIncrement = (column.AutoIncrement ? $" IDENTITY({(seed == 0 ? 1 : seed)}, {(increment == 0 ? 1 : increment)})" : string.Empty);
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }
 
         private void Transform(ForeignKey key, string tableName)
         {
-            string name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignColumn}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
-            _text.AppendLine($"\tCONSTRAINT [{name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]),");
+            string onUpdate = (key.OnUpdateRule != ForeignKeyRule.RESTRICT ? $" ON UPDATE {key.OnUpdate}" : string.Empty);
+            string onDelete = (key.OnDeleteRule != ForeignKeyRule.RESTRICT ? $" ON DELETE {key.OnDeleteRule}" : string.Empty);
+            string name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignTable}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
+            _text.AppendLine($"\tCONSTRAINT [{name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
         private void TransformPrimaryKey(Index key, string tableName)

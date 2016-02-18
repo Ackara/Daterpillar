@@ -15,7 +15,7 @@ CREATE TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Employee]
 	[Id] int NOT NULL IDENTITY(1, 1),
 	[Full_Name] int not null default 'n/a',
 	[Salary] int not null,
-	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
 ALTER TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Employee] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsEnabled_Employee_pk] PRIMARY KEY ([Id] ASC);
@@ -28,7 +28,7 @@ CREATE TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Manager]
 	[Id] int NOT NULL IDENTITY(1, 1),
 	[Full_Name] int not null default 'n/a',
 	[Salary] int not null,
-	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id])
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
 ALTER TABLE [GenerateSqlSchemaWithSettingsEnabled].[dbo].[Manager] ADD CONSTRAINT [GenerateSqlSchemaWithSettingsEnabled_Manager_pk] PRIMARY KEY ([Id] ASC);
