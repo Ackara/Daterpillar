@@ -110,6 +110,12 @@
     <foreignKey localColumn="Artist_Id"
                 foreignTable="artist"
                 foreignColumn="Id" />
+
+    <index type="index"
+           table="song"
+           name="song_idx">
+      <columnName>Name</columnName>
+    </index>
   </table>
 
   <script>
