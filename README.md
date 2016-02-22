@@ -7,7 +7,7 @@ Daterpillar allows you to write your database schema in XML then transform that 
 Let say you have the following XML document
 
 ```xml
-<schema xmlns="http://schema.gigobyte.com/v1/xsml.xsd">
+<schema xmlns="http://api.gigobyte.com/scheam/v1/xddl.xsd">
   <table name="employee">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
