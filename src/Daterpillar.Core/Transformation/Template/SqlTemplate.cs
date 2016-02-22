@@ -96,7 +96,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
                 TransformPrimaryKey(index, table.Name);
             }
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Primary))
+            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
             {
                 Transform(index, table.Name);
             }
@@ -134,7 +134,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private void Transform(Index index, string tableName)
         {
             index.Table = (string.IsNullOrEmpty(index.Table) ? tableName : index.Table);
-            string unique = (index.Unique ? "unique" : " ");
+            string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
             string name = (string.IsNullOrEmpty(index.Name) ? $"{_schemaName}_{index.Table}_idx{++_seed}" : index.Name).ToLower();
 

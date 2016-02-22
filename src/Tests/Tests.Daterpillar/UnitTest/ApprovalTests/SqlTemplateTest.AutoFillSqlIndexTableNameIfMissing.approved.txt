@@ -12,6 +12,6 @@ CREATE TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee]
 );
 
 ALTER TABLE [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] ADD CONSTRAINT [AutoFillSqlIndexTableNameIfMissing_Employee_pk] PRIMARY KEY ([Id] ASC);
-CREATE INDEX [autofillsqlindextablenameifmissing_employee_idx1] ON [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] ([Id] ASC);
+CREATE UNIQUE INDEX [employee_idx] ON [AutoFillSqlIndexTableNameIfMissing].[dbo].[Employee] ([Full_Name] DESC);
 
 -- Script Goes Here
