@@ -1,4 +1,3 @@
-[![build](https://gigobyte.visualstudio.com/DefaultCollection/_apis/public/build/definitions/c1607574-4e07-41e8-954f-f983147fe67d/5/badge)](https://gigobyte.visualstudio.com/DefaultCollection/_apis/public/build/definitions/c1607574-4e07-41e8-954f-f983147fe67d/5/badge)
 [![version](https://img.shields.io/nuget/v/Gigobyte.Daterpillar.Core.svg?style=flat-square)](https://www.nuget.org/packages?q=Gigobyte.Daterpillar.Core)
 [![downloads](https://img.shields.io/nuget/dt/Gigobyte.Daterpillar.Core.svg)](https://img.shields.io/nuget/dt/Gigobyte.Daterpillar.Core.svg)
 # Daterpillar
@@ -8,7 +7,7 @@ Daterpillar allows you to write your database schema in XML then transform that 
 Let say you have the following XML document
 
 ```xml
-<schema xmlns="http://schema.gigobyte.com/v1/xsml.xsd">
+<schema xmlns="http://api.gigobyte.com/scheam/v1/xddl.xsd">
   <table name="employee">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
