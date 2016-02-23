@@ -84,7 +84,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
             {
                 hasIndex = true;
-                Transform(index);
+                Transform(index, table.Name);
             }
             if (hasIndex) _text.AppendLine();
         }
@@ -103,12 +103,13 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             _text.AppendLine($"\tFOREIGN KEY (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}`(`{foreignKey.ForeignColumn}`) ON UPDATE {foreignKey.OnUpdate} ON DELETE {foreignKey.OnDelete},");
         }
 
-        private void Transform(Index index)
+        private void Transform(Index index, string tableName)
         {
             string unique = index.Unique ? " UNIQUE " : " ";
             string columns = string.Join(", ", index.Columns.Select(x => $"`{x.Name}` {x.Order}"));
+            tableName = (string.IsNullOrEmpty(index.Name) ? tableName : tableName);
 
-            _text.AppendLine($"CREATE{unique}INDEX `{index.Name}` ON `{index.Table}` ({columns});");
+            _text.AppendLine($"CREATE{unique}INDEX `{index.Name}` ON `{tableName}` ({columns});");
         }
 
         private void AppendComment(Table table)
