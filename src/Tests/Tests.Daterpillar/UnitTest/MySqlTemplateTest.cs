@@ -80,5 +80,31 @@ namespace Tests.Daterpillar.UnitTest
             mockResolver.Assert();
             Approvals.Verify(result);
         }
+
+        /// <summary>
+        /// Assert <see cref="MySqlTemplate.Transform(Schema)"/> assigns the <see cref="Index.Table"/> property if null or empty.
+        /// </summary>
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        public void AssignMySqlIndexTableNameFieldIfMissing()
+        {
+            // Arrange
+            var sample = SampleData.CreateSchema();
+            sample.Tables[0].Indexes[1].Table = string.Empty;
+
+            var mockTypeResolver = Mock.Create<ITypeNameResolver>();
+            mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
+                .Returns("INT")
+                .OccursAtLeast(1);
+
+            var sut = new MySqlTemplate(new MySqlTemplateSettings(), mockTypeResolver);
+
+            // Act
+            var script = sut.Transform(sample);
+
+            // Assert
+            mockTypeResolver.AssertAll();
+            Approvals.Verify(script);
+        }
     }
 }

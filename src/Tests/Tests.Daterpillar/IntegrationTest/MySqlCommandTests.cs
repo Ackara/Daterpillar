@@ -11,7 +11,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    //[Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
+    [Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     public class MySqlCommandTests
     {
         [ClassInitialize]
