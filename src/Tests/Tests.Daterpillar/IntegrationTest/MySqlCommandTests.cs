@@ -1,6 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Data;
 using Gigobyte.Daterpillar.Data.Linq;
 using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System.Configuration;
@@ -11,7 +12,6 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    //[Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     public class MySqlCommandTests
     {
         public TestContext TestContext { get; set; }
@@ -19,14 +19,21 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            BuildMySqlDatabase();
+            //BuildMySqlDatabase();
             ConnectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(ConnectionString), new MySqlTemplate(new MySqlTemplateSettings()
+            {
+                CommentsEnabled = false,
+                DropDatabaseIfExist = true
+            }));
         }
 
         [TestMethod]
         [Owner(Dev.Ackara)]
         public void FetchData_should_retrieve_query_results_from_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
             using (var database = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
             {
@@ -54,6 +61,8 @@ namespace Tests.Daterpillar.IntegrationTest
         [Owner(Dev.Ackara)]
         public void Commit_should_execute_a_insert_command_against_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
             var track1 = SampleData.CreateSong();
             var query = new Query()
@@ -80,6 +89,8 @@ namespace Tests.Daterpillar.IntegrationTest
         [Owner(Dev.Ackara)]
         public void Commit_should_execute_a_delete_command_against_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
             var track1 = SampleData.CreateSong();
             var query = new Query()
@@ -111,7 +122,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         #region Private Members
 
-        private bool _UnableToRunTests = true;
+        private static bool _unableToRunTests = false;
 
         private static void BuildMySqlDatabase()
         {
@@ -123,6 +134,19 @@ namespace Tests.Daterpillar.IntegrationTest
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        private static void IgnoreTestIfDbConnectionIsUnavailable()
+        {
+            if (_unableToRunTests)
+            {
+                string failureMessage = $"The {nameof(SampleData.TryCreateSampleDatabase)}() method was unable to create a sample database.";
+#if DEBUG
+                Assert.Inconclusive(failureMessage);
+#else
+                Assert.Fail(failureMessage);
+#endif
             }
         }
 
