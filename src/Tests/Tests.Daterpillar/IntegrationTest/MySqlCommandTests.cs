@@ -11,9 +11,11 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
+    //[Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     public class MySqlCommandTests
     {
+        public TestContext TestContext { get; set; }
+
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
@@ -21,16 +23,12 @@ namespace Tests.Daterpillar.IntegrationTest
             ConnectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a
-        /// dataset from a MySQL database.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunQueryOnMySqlConnection()
+        public void FetchData_should_retrieve_query_results_from_mysql_database()
         {
             // Arrange
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
+            using (var database = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
             {
                 var limit = 100;
 
@@ -40,10 +38,10 @@ namespace Tests.Daterpillar.IntegrationTest
                     .Where($"{Song.IdColumn}<='{limit}'");
 
                 // Act
-                var album = connection.Execute<Song>(query);
+                var album = database.Execute<Song>(query);
                 var track1 = album.First();
 
-                var single = connection.Execute<Song>(track1.ToSelectCommand())
+                var single = database.Execute<Song>(track1.ToSelectCommand())
                     .First();
 
                 // Assert
@@ -52,13 +50,9 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a
-        /// MySQL connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunInsertCommandOnMySqlConnection()
+        public void Commit_should_execute_a_insert_command_against_mysql_database()
         {
             // Arrange
             var track1 = SampleData.CreateSong();
@@ -77,18 +71,14 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(RunInsertCommandOnMySqlConnection), song.Name);
+                Assert.AreEqual(nameof(Commit_should_execute_a_insert_command_against_mysql_database), song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command on a
-        /// MySQL connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunDeleteCommandOnMySqlConnection()
+        public void Commit_should_execute_a_delete_command_against_mysql_database()
         {
             // Arrange
             var track1 = SampleData.CreateSong();
@@ -120,6 +110,8 @@ namespace Tests.Daterpillar.IntegrationTest
         internal static string ConnectionString;
 
         #region Private Members
+
+        private bool _UnableToRunTests = true;
 
         private static void BuildMySqlDatabase()
         {
