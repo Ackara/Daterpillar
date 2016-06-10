@@ -1,6 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Data;
 using Gigobyte.Daterpillar.Data.Linq;
 using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System.Configuration;
@@ -11,26 +12,30 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [Ignore(/* To run these test provide a connection string to a MySQL database in the app.config. */)]
     public class MySqlCommandTests
     {
+        public TestContext TestContext { get; set; }
+
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            BuildMySqlDatabase();
+            //BuildMySqlDatabase();
             ConnectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(ConnectionString), new MySqlTemplate(new MySqlTemplateSettings()
+            {
+                CommentsEnabled = false,
+                DropDatabaseIfExist = true
+            }));
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a
-        /// dataset from a MySQL database.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunQueryOnMySqlConnection()
+        public void FetchData_should_retrieve_query_results_from_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
+            using (var database = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
             {
                 var limit = 100;
 
@@ -40,10 +45,10 @@ namespace Tests.Daterpillar.IntegrationTest
                     .Where($"{Song.IdColumn}<='{limit}'");
 
                 // Act
-                var album = connection.Execute<Song>(query);
+                var album = database.Execute<Song>(query);
                 var track1 = album.First();
 
-                var single = connection.Execute<Song>(track1.ToSelectCommand())
+                var single = database.Execute<Song>(track1.ToSelectCommand())
                     .First();
 
                 // Assert
@@ -52,14 +57,12 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a
-        /// MySQL connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunInsertCommandOnMySqlConnection()
+        public void Commit_should_execute_a_insert_command_against_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
             var track1 = SampleData.CreateSong();
             var query = new Query()
@@ -77,19 +80,17 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(RunInsertCommandOnMySqlConnection), song.Name);
+                Assert.AreEqual(nameof(Commit_should_execute_a_insert_command_against_mysql_database), song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command on a
-        /// MySQL connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunDeleteCommandOnMySqlConnection()
+        public void Commit_should_execute_a_delete_command_against_mysql_database()
         {
+            IgnoreTestIfDbConnectionIsUnavailable();
+
             // Arrange
             var track1 = SampleData.CreateSong();
             var query = new Query()
@@ -121,6 +122,8 @@ namespace Tests.Daterpillar.IntegrationTest
 
         #region Private Members
 
+        private static bool _unableToRunTests = false;
+
         private static void BuildMySqlDatabase()
         {
             string path = SampleData.GetFile(Artifact.SampleSchema).FullName;
@@ -131,6 +134,19 @@ namespace Tests.Daterpillar.IntegrationTest
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        private static void IgnoreTestIfDbConnectionIsUnavailable()
+        {
+            if (_unableToRunTests)
+            {
+                string failureMessage = $"The {nameof(SampleData.TryCreateSampleDatabase)}() method was unable to create a sample database.";
+#if DEBUG
+                Assert.Inconclusive(failureMessage);
+#else
+                Assert.Fail(failureMessage);
+#endif
             }
         }
 
