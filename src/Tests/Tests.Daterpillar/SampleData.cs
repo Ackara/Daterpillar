@@ -1,6 +1,8 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,7 +10,7 @@ using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar
 {
-    public static class SampleData
+    public static partial class SampleData
     {
         public static FileInfo GetFile(string filename)
         {
@@ -105,5 +107,39 @@ namespace Tests.Daterpillar
 
             return table;
         }
+
+        #region Database Methods
+
+        public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template, out string connectionString)
+        {
+            var schema = Schema.Load(GetFile(Artifact.SampleSchema).OpenRead());
+            return TryCreateSampleDatabase(connection, schema, template,out connectionString);
+        }
+
+        public static bool TryCreateSampleDatabase(IDbConnection connection, Schema schema, ITemplate template, out string connectionString)
+        {
+            try
+            {
+                using (connection)
+                {
+                    if (connection.State != ConnectionState.Open) connection.Open();
+                    using (IDbCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = template.Transform(schema);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                connectionString = "";
+
+                return true;
+            }
+            catch
+            {
+                connectionString = string.Empty;
+                return false;
+            }
+        }
+
+        #endregion Database Methods
     }
 }
