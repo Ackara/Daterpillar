@@ -14,7 +14,6 @@ namespace Tests.Daterpillar.IntegrationTest
     [TestClass]
     [DeploymentItem(Artifact.SampleSchema)]
     [DeploymentItem(Artifact.TSqlSampleSchema)]
-    [Ignore(/* To run these test provide a connection string to a SQL Server database in the app.config. */)]
     public class SqlCommandTests
     {
         [ClassInitialize]
@@ -48,13 +47,10 @@ namespace Tests.Daterpillar.IntegrationTest
             catch (System.Data.Common.DbException) { }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a
-        /// dataset from a SQL Server database.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunQueryOnSqlConnection()
+        [TestCategory(Category.Integration)]
+        public void Execute_should_retrieve_query_results_from_sql_server_database()
         {
             // Arrange
             int limit = 100;
@@ -84,17 +80,15 @@ namespace Tests.Daterpillar.IntegrationTest
             Assert.AreEqual(track1.Id, single.Id);
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a
-        /// SQL Server connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunInsertCommandOnSqlConnection()
+        [TestCategory(Category.Integration)]
+        public void Insert_should_commit_add_a_new_record_to_a_sql_server_database()
         {
             // Arrange
             Song song;
-            var track1 = SampleData.CreateSong();
+            var nameOfTrack = nameof(Insert_should_commit_add_a_new_record_to_a_sql_server_database);
+            var track1 = SampleData.CreateSong(nameOfTrack);
             var query = new Query().SelectAll().From($"[zune].[dbo].[{Song.Table}]")
                 .Where($"{Song.NameColumn}='{track1.Name}'");
 
@@ -115,17 +109,14 @@ namespace Tests.Daterpillar.IntegrationTest
             }
 
             // Assert
-            Assert.AreEqual(nameof(RunInsertCommandOnSqlConnection), song.Name);
+            Assert.AreEqual(nameOfTrack, song.Name);
             Assert.AreNotEqual(track1.Id, song.Id);
         }
-
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command on a
-        /// SQL Server connection.
-        /// </summary>
+        
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunDeleteCommandOnSqlConnection()
+        [TestCategory(Category.Integration)]
+        public void Delete_should_remove_a_old_record_from_a_sql_server_database()
         {
             // Arrange
             Song insertedSong;
@@ -162,6 +153,22 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         #region Private Members
+
+        private static string _connectionString;
+        private static bool _unableToRunTests = false;
+
+        private static void IgnoreTestIfDbConnectionIsUnavailable()
+        {
+            if (_unableToRunTests)
+            {
+                string failureMessage = $"The {nameof(SampleData.TryCreateSampleDatabase)}() method was unable to create a sample database.";
+#if DEBUG
+                Assert.Inconclusive(failureMessage);
+#else
+                Assert.Fail(failureMessage);
+#endif
+            }
+        }
 
         private static IDbConnection CreateConnection(bool selectDatabase = false)
         {
