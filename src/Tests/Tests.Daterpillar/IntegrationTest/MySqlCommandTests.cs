@@ -17,14 +17,14 @@ namespace Tests.Daterpillar.IntegrationTest
         public static void Setup(TestContext context)
         {
             var schema = Schema.Load(SampleData.GetFile(SampleData.MusicxddlXML).OpenRead());
-            _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString.Trim();
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
             {
                 CommentsEnabled = false,
                 DropDatabaseIfExist = true
             }));
 
-            _connectionString += $"database={schema.Name}";
+            _connectionString += (_connectionString.Last() == ';' ? string.Empty : ";") + $"database={schema.Name}";
         }
 
         [TestMethod]
