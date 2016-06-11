@@ -1,11 +1,9 @@
 ﻿using Gigobyte.Daterpillar.Data;
 using Gigobyte.Daterpillar.Data.Linq;
-using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using Tests.Daterpillar.Sample;
 
@@ -14,13 +12,11 @@ namespace Tests.Daterpillar.IntegrationTest
     [TestClass]
     public class MySqlCommandTests
     {
-        public TestContext TestContext { get; set; }
-
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            ConnectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
-            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(ConnectionString), new MySqlTemplate(new MySqlTemplateSettings()
+            _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), new MySqlTemplate(new MySqlTemplateSettings()
             {
                 CommentsEnabled = false,
                 DropDatabaseIfExist = true
@@ -29,12 +25,13 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
+        [TestCategory(Category.Integration)]
         public void FetchData_should_retrieve_query_results_from_mysql_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
 
             // Arrange
-            using (var database = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
+            using (var database = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 var limit = 100;
 
@@ -58,6 +55,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
+        [TestCategory(Category.Integration)]
         public void Commit_should_execute_a_insert_command_against_mysql_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
@@ -69,7 +67,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
+            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 // Act
                 connection.Insert(track1);
@@ -86,6 +84,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
+        [TestCategory(Category.Integration)]
         public void Commit_should_execute_a_delete_command_against_mysql_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
@@ -97,7 +96,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(ConnectionString), QueryStyle.MySQL))
+            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 // Act
                 connection.Insert(track1);
@@ -117,24 +116,10 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        internal static string ConnectionString;
-
         #region Private Members
 
+        private static string _connectionString;
         private static bool _unableToRunTests = false;
-
-        private static void BuildMySqlDatabase()
-        {
-            string path = SampleData.GetFile(Artifact.SampleSchema).FullName;
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var schema = Schema.Load(stream);
-                using (var connection = DbFactory.CreateMySqlConnection(schema))
-                {
-                    connection.Close();
-                }
-            }
-        }
 
         private static void IgnoreTestIfDbConnectionIsUnavailable()
         {
