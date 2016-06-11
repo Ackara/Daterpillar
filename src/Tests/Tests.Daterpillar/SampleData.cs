@@ -110,13 +110,13 @@ namespace Tests.Daterpillar
 
         #region Database Methods
 
-        public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template, out string connectionString)
+        public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
             var schema = Schema.Load(GetFile(Artifact.SampleSchema).OpenRead());
-            return TryCreateSampleDatabase(connection, schema, template,out connectionString);
+            return TryCreateSampleDatabase(connection, schema, template);
         }
 
-        public static bool TryCreateSampleDatabase(IDbConnection connection, Schema schema, ITemplate template, out string connectionString)
+        public static bool TryCreateSampleDatabase(IDbConnection connection, Schema schema, ITemplate template)
         {
             try
             {
@@ -129,15 +129,9 @@ namespace Tests.Daterpillar
                         command.ExecuteNonQuery();
                     }
                 }
-                connectionString = "";
-
                 return true;
             }
-            catch
-            {
-                connectionString = string.Empty;
-                return false;
-            }
+            catch { return false; }
         }
 
         #endregion Database Methods

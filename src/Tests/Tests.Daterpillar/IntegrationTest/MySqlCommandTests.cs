@@ -19,7 +19,6 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            //BuildMySqlDatabase();
             ConnectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(ConnectionString), new MySqlTemplate(new MySqlTemplateSettings()
             {
