@@ -97,6 +97,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Category.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DbFactory.cs" />
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
@@ -104,8 +105,13 @@
     <Compile Include="IntegrationTest\MySqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SqlCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleData\Music.cs" />
+    <Compile Include="Sample Data\Music.cs" />
     <Compile Include="SampleData.cs" />
+    <Compile Include="Sample Data\SampleData.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SampleData.tt</DependentUpon>
+    </Compile>
     <Compile Include="UnitTest\NotifyPropertyChangedTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTemplateTest.cs" />
     <Compile Include="UnitTest\MySqlTypeNameResolverTest.cs" />
@@ -142,19 +148,23 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="SampleData\data.xlsx">
+    <None Include="Sample Data\data.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SampleData\music.tsql.xddl.xml">
+    <None Include="Sample Data\music.tsql.xddl.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="SampleData\music.xddl.xml">
+    <Content Include="Sample Data\music.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Sample Data\SampleData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SampleData.cs</LastGenOutput>
     </Content>
     <Content Include="T4 Template\csharp.txt">
       <AutoGen>True</AutoGen>

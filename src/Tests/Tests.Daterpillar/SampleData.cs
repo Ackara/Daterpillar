@@ -112,7 +112,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(GetFile(MusicxddlXML).OpenRead());
             return TryCreateSampleDatabase(connection, schema, template);
         }
 
