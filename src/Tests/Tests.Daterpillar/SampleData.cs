@@ -131,7 +131,12 @@ namespace Tests.Daterpillar
                 }
                 return true;
             }
-            catch { return false; }
+            catch (System.Data.Common.DbException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.ErrorCode}");
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         #endregion Database Methods
