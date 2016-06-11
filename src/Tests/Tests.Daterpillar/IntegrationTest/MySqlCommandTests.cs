@@ -1,5 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Data;
 using Gigobyte.Daterpillar.Data.Linq;
+using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
@@ -15,12 +16,15 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicxddlXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
-            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), new MySqlTemplate(new MySqlTemplateSettings()
+            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
             {
                 CommentsEnabled = false,
                 DropDatabaseIfExist = true
             }));
+
+            _connectionString += $"database={schema.Name}";
         }
 
         [TestMethod]
