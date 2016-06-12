@@ -22,7 +22,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateMySqlSchemaWithSettingsEnabled()
+        public void Transform_should_generate_a_mysql_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
             var settings = new MySqlTemplateSettings()
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateMySqlSchemaWithSettingsDisabled()
+        public void Transform_should_generate_a_mysql_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
             var settings = new MySqlTemplateSettings()
@@ -81,12 +81,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(result);
         }
 
-        /// <summary>
-        /// Assert <see cref="MySqlTemplate.Transform(Schema)"/> assigns the <see cref="Index.Table"/> property if null or empty.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void AssignMySqlIndexTableNameFieldIfMissing()
+        public void Transform_should_assign_the_mysql_schema_index_tableName_property_when_null()
         {
             // Arrange
             var sample = SampleData.CreateSchema();

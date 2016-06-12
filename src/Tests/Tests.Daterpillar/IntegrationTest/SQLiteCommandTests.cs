@@ -17,8 +17,6 @@ namespace Tests.Daterpillar.IntegrationTest
     [DeploymentItem(Artifact.x64SQLiteInterop)]
     public class SQLiteCommandTests
     {
-        public static string ConnectionString;
-
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
@@ -34,22 +32,20 @@ namespace Tests.Daterpillar.IntegrationTest
                     var builder = new SQLiteConnectionStringBuilder();
                     builder.DataSource = connection.FileName;
 
-                    ConnectionString = builder.ConnectionString;
+                    _connectionString = builder.ConnectionString;
                 }
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.FetchData{TEntity}(string)"/> can retrieve a dataset from a SQLite database.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunQueryOnSQLiteConnection()
+        [TestCategory(Category.Integration)]
+        public void Execute_should_retrieve_query_results_from_a_sqlite_database()
         {
             // Arrange
             int limit = 200;
 
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
+            using (var sut = new AdoNetConnectionWrapper(new SQLiteConnection(_connectionString), QueryStyle.SQLite))
             {
                 var query = new Query()
                     .SelectAll()
@@ -57,10 +53,10 @@ namespace Tests.Daterpillar.IntegrationTest
                     .Limit(limit);
 
                 // Act
-                var album = connection.Execute<Song>(query);
+                var album = sut.Execute<Song>(query);
                 var track1 = album.First();
 
-                var single = connection.Execute<Song>(track1.ToSelectCommand())
+                var single = sut.Execute<Song>(track1.ToSelectCommand())
                     .First();
 
                 // Assert
@@ -69,12 +65,10 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute an insert command on a MS SQL connection.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunInsertCommandOnSQLiteConnection()
+        [TestCategory(Category.Integration)]
+        public void Commit_should_execute_an_insert_command_against_sqlite_a_database()
         {
             // Arrange
             var track1 = SampleData.CreateSong();
@@ -83,27 +77,25 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
+            using (var sut = new AdoNetConnectionWrapper(new SQLiteConnection(_connectionString), QueryStyle.SQLite))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var song = connection.Execute<Song>(query)
+                var song = sut.Execute<Song>(query)
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(RunInsertCommandOnSQLiteConnection), song.Name);
+                Assert.AreEqual(nameof(Commit_should_execute_an_insert_command_against_sqlite_a_database), song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetConnectionWrapper.Commit"/> can execute a delete command from a SQLite database.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RunDeleteCommandOnSQLiteConnection()
+        [TestCategory(Category.Integration)]
+        public void Commit_should_execute_a_delete_command_against_sqlite_a_database()
         {
             // Arrange
             var track1 = SampleData.CreateSong();
@@ -112,19 +104,19 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
+            using (var sut = new AdoNetConnectionWrapper(new SQLiteConnection(_connectionString), QueryStyle.SQLite))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var insertedTrack = connection.Execute<Song>(query)
+                var insertedTrack = sut.Execute<Song>(query)
                     .First();
 
-                connection.Delete(insertedTrack);
-                connection.Commit();
+                sut.Delete(insertedTrack);
+                sut.Commit();
 
-                bool trackDeleted = connection.Execute<Song>(query).FirstOrDefault() == null;
+                bool trackDeleted = sut.Execute<Song>(query).FirstOrDefault() == null;
 
                 // Assert
                 Assert.IsNotNull(insertedTrack);
@@ -132,40 +124,36 @@ namespace Tests.Daterpillar.IntegrationTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="DbConnectionWrapperBase.ExceptionHandlerDelegate"/> is invoked when an exception is thrown.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void HandleSQLiteException()
+        [TestCategory(Category.Integration)]
+        public void ExceptionHandler_should_call_the_method_assigned_when_an_exception_is_thrown()
         {
             // Arrange
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
+            using (var sut = new AdoNetConnectionWrapper(new SQLiteConnection(_connectionString), QueryStyle.SQLite))
             {
-                connection.ExceptionHandler = ExceptionHandler;
+                sut.ExceptionHandler = ExceptionHandler;
 
                 // Act
-                connection.ExecuteNonQuery(nameof(HandleSQLiteException));
-                connection.Commit();
+                sut.ExecuteNonQuery("Invalid SQL command.");
+                sut.Commit();
             }
 
             // Assert
             Assert.IsTrue(_exceptionHandlerCalled);
         }
 
-        /// <summary>
-        /// Assert <see cref="DbConnectionWrapperBase.Error"/> is raised when an exception is thrown.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RaiseErrorEvent()
+        [TestCategory(Category.Integration)]
+        public void Commit_should_raise_the_error_event_when_an_exception_is_thrown()
         {
             // Arrange
-            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(ConnectionString), QueryStyle.SQLite))
+            using (var connection = new AdoNetConnectionWrapper(new SQLiteConnection(_connectionString), QueryStyle.SQLite))
             {
                 // Act
                 connection.Error += Connection_Error;
-                connection.ExecuteNonQuery(nameof(RaiseErrorEvent));
+                connection.ExecuteNonQuery("Invalid SQL command.");
 
                 try
                 {
@@ -184,11 +172,12 @@ namespace Tests.Daterpillar.IntegrationTest
 
         #region Private Members
 
+        private static string _connectionString;
         private static bool _exceptionHandlerCalled, _eventRaised;
 
         private void ExceptionHandler(Exception ex, string command, out bool handled)
         {
-            _exceptionHandlerCalled = (command == nameof(HandleSQLiteException));
+            _exceptionHandlerCalled = (command == nameof(ExceptionHandler_should_call_the_method_assigned_when_an_exception_is_thrown));
             handled = true;
         }
 

@@ -14,13 +14,9 @@ namespace Tests.Daterpillar.UnitTest
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpTemplateTest
     {
-        /// <summary>
-        /// Assert <see cref="CSharpTemplate.Transform(Schema)"/> returns valid C# when all settings
-        /// are enabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateCsharpClassesWithSettingsEnabled()
+        public void Transform_should_generate_a_csharp_classes_when_all_template_settings_are_enabled()
         {
             // Arrange
             Schema schema = SampleData.CreateSchema();
@@ -51,13 +47,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(csharp);
         }
 
-        /// <summary>
-        /// Assert <see cref="CSharpTemplate.Transform(Schema)"/> returns valid C# when all settings
-        /// are disabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateCsharpClassesWithSettingsDisabled()
+        public void Transform_should_generate_a_csharp_classes_when_all_template_settings_are_disabled()
         {
             // Arrange
             Schema schema = SampleData.CreateSchema();

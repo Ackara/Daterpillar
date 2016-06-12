@@ -18,14 +18,10 @@ namespace Tests.Daterpillar.UnitTest
             AssertTestDataIsValid();
         }
 
-        /// <summary>
-        /// Assert <see cref="MySqlTypeNameResolver.GetName(DataType)"/> returns a valid MySQL type
-        /// name that best match the specified data type.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
-        public void ResolveMySqlTypeName()
+        public void GetName_should_return_a_valid_mysql_type_when_a_data_type_is_passed()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));

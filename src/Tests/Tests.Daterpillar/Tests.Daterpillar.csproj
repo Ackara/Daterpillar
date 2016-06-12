@@ -50,10 +50,6 @@
       <HintPath>..\..\packages\ApprovalUtilities.3.0.10\lib\net45\ApprovalUtilities.Net45.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Gigobyte.Mockaroo.Core, Version=1.1.16013.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Gigobyte.Mockaroo.Core.1.1.16013.0\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\Gigobyte.Mockaroo.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.1.1.1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
@@ -166,7 +162,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Sample Data\mock-schema-data.xml" />
     <Content Include="Sample Data\music.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>

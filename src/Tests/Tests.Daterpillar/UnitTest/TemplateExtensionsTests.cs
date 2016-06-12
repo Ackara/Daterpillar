@@ -9,13 +9,10 @@ namespace Tests.Daterpillar.UnitTest
     {
         public TestContext TestContext { get; set; }
 
-        /// <summary>
-        /// <see cref="TemplateExtensions.ToPascalCase(string, char[])"/> should return every word passed to it in pascal case.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
-        public void ConvertStringToPascalCase()
+        public void ToPascalCase_should_format_a_string_into_pascal_case()
         {
             // Arrange
             var text = TestContext.DataRow["TEXT"].ToString();
@@ -29,13 +26,10 @@ namespace Tests.Daterpillar.UnitTest
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// <see cref="TemplateExtensions.ToCamelCase(string, char[])"/> should return every word passed to it in camel case.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Text_Formats$", DataAccessMethod.Sequential)]
-        public void ConvertStringToCamelCase()
+        public void ToCamelCase_should_format_a_string_into_camel_case()
         {
             // Arrange
             var text = TestContext.DataRow["TEXT"].ToString();

@@ -20,13 +20,9 @@ namespace Tests.Daterpillar.UnitTest
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
         }
 
-        /// <summary>
-        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> returns a valid SQLite schema with
-        /// comments enabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateSQLiteSchemaWithComments()
+        public void Transform_should_generate_a_sqlite_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
@@ -52,13 +48,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(result);
         }
 
-        /// <summary>
-        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> returns a valid SQLite schema with
-        /// comments disabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateSQLiteSchemaWithoutComments()
+        public void Transform_should_generate_a_sqlite_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
@@ -84,12 +76,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(result);
         }
 
-        /// <summary>
-        /// Assert <see cref="SQLiteTemplate.Transform(Schema)"/> assigns the <see cref="Index.Table"/> property if null or empty.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void AssignSQLiteIndexTableNameFieldIfMissing()
+        public void Transform_should_assign_the_sqlite_schema_index_tableName_property_when_null()
         {
             // Arrange
             var sample = SampleData.CreateSchema();

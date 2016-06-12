@@ -18,14 +18,10 @@ namespace Tests.Daterpillar.UnitTest
             AssertTestDataIsValid();
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlTypeNameResolver.GetName(DataType)"/> should return the T-SQL data
-        /// type that best match the specified type.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, Data.DataTypesSheet, DataAccessMethod.Sequential)]
-        public void ResolveSqlTypeName()
+        public void GetName_should_return_a_valid_mssql_type_when_a_data_type_is_passed()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));

@@ -19,13 +19,9 @@ namespace Tests.Daterpillar.UnitTest
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
         }
 
-        /// <summary>
-        /// Assert <see cref="NotifyPropertyChangedTemplate.Transform(Schema)"/> returns valid C# when all settings
-        /// are enabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateNotifyPropertyChangedClassesWithSettingsEnabled()
+        public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_enabled()
         {
             // Arrange
             Schema schema = SampleData.CreateSchema();
@@ -57,13 +53,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(csharp);
         }
 
-        /// <summary>
-        /// Assert <see cref="NotifyPropertyChangedTemplate.Transform(Schema)"/> returns valid C# when all settings
-        /// are disabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateNotifyPropertyChangedClassesWithSettingsDisabled()
+        public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_disabled()
         {
             // Arrange
             Schema schema = SampleData.CreateSchema();

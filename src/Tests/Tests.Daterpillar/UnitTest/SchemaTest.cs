@@ -10,13 +10,9 @@ namespace Tests.Daterpillar.UnitTest
     [DeploymentItem(Artifact.SampleSchema)]
     public class SchemaTest
     {
-        /// <summary>
-        /// Validate <see cref="Schema.WriteTo(Stream)"/> serialize the <see cref="Schema"/> object
-        /// into a <see cref="Artifact.XDDL"/> xml document.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void SerializeSchemaObjectToStream()
+        public void WriteTo_should_serialize_its_schema_object_into_a_stream()
         {
             // Arrange
             Schema sut = SampleData.CreateSchema();
@@ -33,13 +29,9 @@ namespace Tests.Daterpillar.UnitTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="Schema"/> can be deserialized by the <see
-        /// cref="System.Xml.Serialization.XmlSerializer"/> using a <see cref="Stream"/>.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void DeserializeSchemaObjectFromStream()
+        public void Assert_that_the_schema_object_can_be_deserialized_by_the_xml_serializer()
         {
             // Arrange
             var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
@@ -55,13 +47,9 @@ namespace Tests.Daterpillar.UnitTest
             }
         }
 
-        /// <summary>
-        /// Assert <see cref="Schema"/> can be deserialized by the <see
-        /// cref="System.Xml.Serialization.XmlSerializer"/> with a string.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void DeserializeSchemaObjectFromString()
+        public void Parse_should_return_a_schema_object_from_a_xml_formatted_string()
         {
             // Arrange
             var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
@@ -74,13 +62,9 @@ namespace Tests.Daterpillar.UnitTest
             Assert.IsNotNull(obj.Tables);
         }
 
-        /// <summary>
-        /// Assert <see cref="Schema.RemoveTable(string)"/> can find and remove an existing <see
-        /// cref="Table"/> object from an instance.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void RemoveTableFromSchema()
+        public void RemoveTable_should_delete_a_table_object_from_a_schema_object_when_a_valid_name_is_given()
         {
             // Arrange
             var schema = SampleData.CreateSchema();

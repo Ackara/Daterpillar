@@ -75,13 +75,13 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new SqlConnection(_connectionString), QueryStyle.TSQL))
+            using (var sut = new AdoNetConnectionWrapper(new SqlConnection(_connectionString), QueryStyle.TSQL))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var song = connection.Execute<Song>(query)
+                var song = sut.Execute<Song>(query)
                     .First();
 
                 // Assert
@@ -104,19 +104,19 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new SqlConnection(_connectionString), QueryStyle.TSQL))
+            using (var sut = new AdoNetConnectionWrapper(new SqlConnection(_connectionString), QueryStyle.TSQL))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var insertedTrack = connection.Execute<Song>(query)
+                var insertedTrack = sut.Execute<Song>(query)
                     .First();
 
-                connection.Delete(insertedTrack);
-                connection.Commit();
+                sut.Delete(insertedTrack);
+                sut.Commit();
 
-                bool trackDeleted = connection.Execute<Song>(query).FirstOrDefault() == null;
+                bool trackDeleted = sut.Execute<Song>(query).FirstOrDefault() == null;
 
                 // Assert
                 Assert.IsNotNull(insertedTrack);

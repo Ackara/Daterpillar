@@ -18,14 +18,10 @@ namespace Tests.Daterpillar.UnitTest
             AssertTestDataIsValid();
         }
 
-        /// <summary>
-        /// <see cref="SQLiteTypeNameResolver.GetName(DataType)"/> should return the SQLite type
-        /// name that best match the specified data type.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, Data.DataTypesSheet, DataAccessMethod.Sequential)]
-        public void ResolveSQLiteTypeName()
+        public void GetName_should_return_a_valid_sqlite_type_when_a_data_type_is_passed()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));

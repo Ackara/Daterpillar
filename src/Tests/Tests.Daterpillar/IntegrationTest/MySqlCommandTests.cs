@@ -30,12 +30,12 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Category.Integration)]
-        public void FetchData_should_retrieve_query_results_from_mysql_database()
+        public void FetchData_should_retrieve_query_results_from_mysql_a_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
 
             // Arrange
-            using (var database = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
+            using (var sut = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 var limit = 100;
 
@@ -45,10 +45,10 @@ namespace Tests.Daterpillar.IntegrationTest
                     .Where($"{Song.IdColumn}<='{limit}'");
 
                 // Act
-                var album = database.Execute<Song>(query);
+                var album = sut.Execute<Song>(query);
                 var track1 = album.First();
 
-                var single = database.Execute<Song>(track1.ToSelectCommand())
+                var single = sut.Execute<Song>(track1.ToSelectCommand())
                     .First();
 
                 // Assert
@@ -60,7 +60,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Category.Integration)]
-        public void Commit_should_execute_a_insert_command_against_mysql_database()
+        public void Commit_should_execute_an_insert_command_against_mysql_a_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
 
@@ -71,17 +71,17 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
+            using (var sut = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var song = connection.Execute<Song>(query)
+                var song = sut.Execute<Song>(query)
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(Commit_should_execute_a_insert_command_against_mysql_database), song.Name);
+                Assert.AreEqual(nameof(Commit_should_execute_an_insert_command_against_mysql_a_database), song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
@@ -89,7 +89,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Category.Integration)]
-        public void Commit_should_execute_a_delete_command_against_mysql_database()
+        public void Commit_should_execute_a_delete_command_against_mysql_a_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
 
@@ -100,19 +100,19 @@ namespace Tests.Daterpillar.IntegrationTest
                 .From(Song.Table)
                 .Where($"{Song.NameColumn}={track1.Name.ToSQL()}");
 
-            using (var connection = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
+            using (var sut = new AdoNetConnectionWrapper(new MySqlConnection(_connectionString), QueryStyle.MySQL))
             {
                 // Act
-                connection.Insert(track1);
-                connection.Commit();
+                sut.Insert(track1);
+                sut.Commit();
 
-                var insertedTrack = connection.Execute<Song>(query)
+                var insertedTrack = sut.Execute<Song>(query)
                     .First();
 
-                connection.Delete(insertedTrack);
-                connection.Commit();
+                sut.Delete(insertedTrack);
+                sut.Commit();
 
-                bool trackDeleted = connection.Execute<Song>(query).FirstOrDefault() == null;
+                bool trackDeleted = sut.Execute<Song>(query).FirstOrDefault() == null;
 
                 // Assert
                 Assert.IsNotNull(insertedTrack);

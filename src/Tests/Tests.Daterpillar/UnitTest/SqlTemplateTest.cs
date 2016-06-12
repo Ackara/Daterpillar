@@ -21,13 +21,9 @@ namespace Tests.Daterpillar.UnitTest
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlTemplate.Transform(Schema)"/> returns a well formatted T-SQL schema
-        /// when all settings are enabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateSqlSchemaWithSettingsEnabled()
+        public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
             var settings = new SqlTemplateSettings()
@@ -42,13 +38,9 @@ namespace Tests.Daterpillar.UnitTest
             RunTemplateTest(settings);
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlTemplate.Transform(Schema)"/> returns a well formatted T-SQL schema
-        /// when all settings are disabled.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GenerateSqlSchemaWithSettingsDisabled()
+        public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
             var settings = new SqlTemplateSettings()
@@ -63,13 +55,9 @@ namespace Tests.Daterpillar.UnitTest
             RunTemplateTest(settings);
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlTemplate.Transform(Schema)"/> assign a value to <see
-        /// cref="Index.Table"/> if null or empty.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void AutoFillSqlIndexTableNameIfMissing()
+        public void Transform_should_assign_the_tsql_schema_index_tableName_property_when_null()
         {
             // Arrange
             var sut = new SqlTemplate(SqlTemplateSettings.Default, Mock.Create<ITypeNameResolver>());

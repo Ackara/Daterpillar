@@ -17,23 +17,17 @@ namespace Tests.Daterpillar.UnitTest
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns an empty string when instantiated.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnEmptyString()
+        public void GetValue_should_return_an_empty_string_when_query_is_instantiated()
         {
             var query = new Query();
             Assert.AreEqual(string.Empty, query.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQL query after both <see cref="Query.Select(string[])"/> and <see cref="Query.From(string[])"/> is called.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnSelectQuery()
+        public void GetValue_should_return_a_query_with_a_select_and_from_clause_only()
         {
             var sut = new Query()
                 .Select("Id", "Name")
@@ -42,12 +36,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.Where(string)"/> is called at least once.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnQueryWithWhereFilter()
+        public void GetValue_should_return_a_query_with_a_where_clause()
         {
             var sut = new Query()
                 .Select("Name")
@@ -57,12 +48,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.GroupBy(string[])"/> is called at least once.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnQueryWithGrouping()
+        public void GetValue_should_return_query_with_a_groupby_clause()
         {
             var sut = new Query()
                 .SelectAll()
@@ -72,12 +60,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.OrderBy(string[])"/> is called at least once.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnQueryWithOrdering()
+        public void GetValue_should_return_a_query_with_a_orderby_clause()
         {
             var sut = new Query()
                 .SelectAll()
@@ -87,12 +72,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after <see cref="Query.Limit(int)"/> is called at least once.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnQueryLimit()
+        public void GetValue_should_return_a_query_with_a_limit_clause()
         {
             var sut = new Query()
                 .SelectAll()
@@ -102,12 +84,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted query after calling <see cref="Query.Top(int)"/>.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnQueryWithTop()
+        public void GetValue_should_return_a_query_with_a_top_clause()
         {
             var sut = new Query(QueryStyle.TSQL)
                 .SelectAll().Top(10)
@@ -116,12 +95,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted MySQL query when <see cref="QueryStyle.MySQL"/> is passed.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnMySqlQuery()
+        public void GetValue_should_return_a_mysql_query_when_the_appropreaite_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.MySQL)
                 .Select("Id", "Name")
@@ -134,12 +110,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a formatted SQLite query when <see cref="QueryStyle.SQLite"/> is passed.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnSQLiteQuery()
+        public void GetValue_should_return_a_sqlite_query_when_the_appropreaite_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.SQLite)
                 .Select("Id", "Name")
@@ -152,12 +125,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue());
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a non T-SQL query with no new lines or tab characters.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnMinifiedNonTSqlQuery()
+        public void GetValue_should_return_a_minified_non_tsql_query()
         {
             var sut = new Query()
                 .SelectAll()
@@ -170,12 +140,9 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(sut.GetValue(minify: true));
         }
 
-        /// <summary>
-        /// Assert <see cref="Query.GetValue(bool)"/> returns a T-SQL query with no new lines or tab characters.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ReturnMinifiedTSqlQuery()
+        public void GetValue_should_return_a_minified_tsql_query()
         {
             var sut = new Query(QueryStyle.TSQL)
                 .Select("Id", "Name")

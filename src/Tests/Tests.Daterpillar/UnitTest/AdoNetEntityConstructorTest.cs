@@ -10,14 +10,10 @@ namespace Tests.Daterpillar.UnitTest
     {
         public TestContext TestContext { get; set; }
 
-        /// <summary>
-        /// Assert <see cref="AdoNetEntityConstructor.CreateInstance(Type, object)"/> returns an
-        /// <see cref="EntityBase"/> object when a <see cref="DataRow"/> is passed.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Songs$", DataAccessMethod.Sequential)]
-        public void ConvertDataRowToEntityBase()
+        public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {
             // Arrange
             var name = Convert.ToString(TestContext.DataRow["Name"]);

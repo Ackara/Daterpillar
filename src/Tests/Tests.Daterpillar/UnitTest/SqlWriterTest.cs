@@ -9,14 +9,9 @@ namespace Tests.Daterpillar.UnitTest
     {
         public TestContext TestContext { get; set; }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToSelectCommand(Gigobyte.Daterpillar.Data.EntityBase,
-        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
-        /// into a SQL query.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertEntityToQuery()
+        public void ConvertToSelectCommand_should_format_an_entity_object_into_a_select_query()
         {
             var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToSelectCommand(song, QueryStyle.SQL);
@@ -28,14 +23,9 @@ namespace Tests.Daterpillar.UnitTest
             Assert.AreEqual(expected, query);
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToInsertCommand(Gigobyte.Daterpillar.Data.EntityBase,
-        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
-        /// to a SQL insert command.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertEntityToInsertCommand()
+        public void ConvertToInsertCommand_should_format_an_entity_object_into_a_insert_command()
         {
             var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToInsertCommand(song, QueryStyle.SQLite);
@@ -47,14 +37,9 @@ namespace Tests.Daterpillar.UnitTest
             Assert.AreEqual(expected, query);
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.ConvertToDeleteCommand(Gigobyte.Daterpillar.Data.EntityBase,
-        /// QueryStyle)"/> converts a specified <see cref="Gigobyte.Daterpillar.Data.EntityBase"/>
-        /// to a SQL delete command.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertEntityToDeleteCommand()
+        public void ConvertToDeleteCommand_should_format_an_entity_object_into_a_delete_command()
         {
             var song = SampleData.CreateSong();
             var query = SqlWriter.ConvertToDeleteCommand(song, QueryStyle.SQLite);
@@ -66,62 +51,44 @@ namespace Tests.Daterpillar.UnitTest
             Assert.AreEqual(expected, query);
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="DateTime"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertDateToSqlValue()
+        public void EscapeValue_should_convert_a_date_object_into_a_sql_value()
         {
             Assert.AreEqual("'2015-01-01 13:11:11'", SqlWriter.EscapeValue(new DateTime(2015, 01, 01, 13, 11, 11, DateTimeKind.Utc)));
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="int"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertIntegerToSqlValue()
+        public void EscapeValue_should_convert_a_integer_object_into_a_sql_value()
         {
             Assert.AreEqual("'123'", SqlWriter.EscapeValue(123));
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="float"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertFloatToSqlValue()
+        public void EscapeValue_should_convert_a_float_object_into_a_sql_value()
         {
             Assert.AreEqual("'123.45'", SqlWriter.EscapeValue(123.45F));
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="bool"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertBooleanToSqlValue()
+        public void EscapeValue_should_convert_a_boolean_object_into_a_sql_value()
         {
             Assert.AreEqual("'1'", SqlWriter.EscapeValue(true));
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="string"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertStringToSqlValue()
+        public void EscapeValue_should_convert_a_string_into_a_sql_value()
         {
             Assert.AreEqual("'the dog''s bowl. ''_'' ^_^ ''_'''", SqlWriter.EscapeValue("the dog's bowl. '_' ^_^ '_'"));
         }
 
-        /// <summary>
-        /// Assert <see cref="SqlWriter.EscapeValue(object)"/> escapes a <see cref="Enum"/> value.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void ConvertEnumToSqlValue()
+        public void EscapeValue_should_convert_a_enum_object_into_a_sql_value()
         {
             Assert.AreEqual("'0'", SqlWriter.EscapeValue(DayOfWeek.Sunday));
         }

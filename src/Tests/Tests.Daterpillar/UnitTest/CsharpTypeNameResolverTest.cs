@@ -16,14 +16,10 @@ namespace Tests.Daterpillar.UnitTest
             AssertTestDataIsValid();
         }
 
-        /// <summary>
-        /// Assert <see cref="CSharpTypeNameResolver.GetName(DataType)"/> returns a valid C# type
-        /// name that best match the specified data type.
-        /// </summary>
         [TestMethod]
         [Owner(Dev.Ackara)]
         [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
-        public void ResolveCsharpTypeName()
+        public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
