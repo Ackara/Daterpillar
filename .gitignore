@@ -259,4 +259,5 @@ paket-files/
 *.sln.iml
 
 # Solution specific files
+*.received.*
 
