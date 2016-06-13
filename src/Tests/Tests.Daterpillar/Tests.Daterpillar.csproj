@@ -156,8 +156,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Sample Data\songs.csv" />
+    <None Include="Sample Data\text_formats.csv" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Sample Data\data_types.csv" />
     <None Include="Sample Data\music.tsql.xddl.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
