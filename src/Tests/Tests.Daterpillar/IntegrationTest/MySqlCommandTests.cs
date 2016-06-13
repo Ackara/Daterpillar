@@ -24,7 +24,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropDatabaseIfExist = true
             }));
 
-            _connectionString += (_connectionString.Last() == ';' ? string.Empty : ";") + $"database={schema.Name}";
+            _connectionString += ((_connectionString.Last() == ';' ? string.Empty : ";") + $"database={schema.Name}");
         }
 
         [TestMethod]

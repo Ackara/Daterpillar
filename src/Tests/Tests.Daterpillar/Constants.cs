@@ -19,7 +19,7 @@
     {
         public const string
             XDDL = "xddl.xsd",
-            SampleDataDir = "SampleData",
+            SampleDataDir = "Sample Data",
             DataXLSX = SampleDataDir + "\\data.xlsx",
             x86SQLiteInterop = "x86\\SQLite.Interop.dll",
             x64SQLiteInterop = "x64\\SQLite.Interop.dll",

@@ -83,7 +83,7 @@
     </column>
 
     <column name="Name">
-      <dataType scale="64">varchar</dataType>
+      <dataType scale="256">varchar</dataType>
       <modifier>NOT NULL</modifier>
     </column>
 
@@ -106,10 +106,16 @@
 
     <foreignKey localColumn="Genre_Id"
                 foreignTable="genre"
-                foreignColumn="Id" />
+                foreignColumn="Id">
+      <onUpdate>CASCADE</onUpdate>
+      <onDelete>CASCADE</onDelete>
+    </foreignKey>
     <foreignKey localColumn="Artist_Id"
                 foreignTable="artist"
-                foreignColumn="Id" />
+                foreignColumn="Id">
+      <onUpdate>CASCADE</onUpdate>
+      <onDelete>CASCADE</onDelete>
+    </foreignKey>
 
     <index type="index"
            table="song"
@@ -410,6 +416,5 @@
     insert into song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) values (9, 8, 1, 'ultrices', 1.22, 99, 0);
     insert into song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) values (1, 8, 2, 'nibh in', 1.42, 94, 1);
     insert into song (Album_Id, Artist_Id, Genre_Id, Name, Length, Price, On_Device) values (4, 6, 3, 'ipsum', 1.06, 38, 1);
-
   </script>
 </schema>

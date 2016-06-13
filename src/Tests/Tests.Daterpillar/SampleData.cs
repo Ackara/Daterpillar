@@ -112,7 +112,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(GetFile(MusicxddlXML).OpenRead());
+            var schema = Schema.Load(GetFile(SampleData.MusicXddlXML).OpenRead());
             return TryCreateSampleDatabase(connection, schema, template);
         }
 
@@ -126,6 +126,7 @@ namespace Tests.Daterpillar
                     using (IDbCommand command = connection.CreateCommand())
                     {
                         command.CommandText = template.Transform(schema);
+                        File.WriteAllText(@"C:\Users\Ackeem\Downloads\test-schema.txt", command.CommandText);
                         command.ExecuteNonQuery();
                     }
                 }
