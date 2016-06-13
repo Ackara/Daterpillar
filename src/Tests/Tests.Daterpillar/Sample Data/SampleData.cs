@@ -4,7 +4,7 @@
 	{
 		public const string MusicCS = @"Sample Data\Music.cs";
 		public const string DataXLSX = @"Sample Data\data.xlsx";
-		public const string MusicxddlXML = @"Sample Data\music.xddl.xml";
-		public const string MusictsqlxddlXML = @"Sample Data\music.tsql.xddl.xml";
+		public const string MusicXddlXML = @"Sample Data\music.xddl.xml";
+		public const string MusicTsqlXddlXML = @"Sample Data\music.tsql.xddl.xml";
 	}
 }

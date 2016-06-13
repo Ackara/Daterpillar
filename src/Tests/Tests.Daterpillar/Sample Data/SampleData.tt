@@ -18,7 +18,7 @@ namespace Tests.Daterpillar
 			foreach(var path in Directory.GetFiles(currentDirectory).Where(x => !x.Contains(Path.GetFileNameWithoutExtension(Host.TemplateFile))).OrderBy(x => x.Length))
             {
 				string filename = Path.GetFileName(path);
-				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((char.ToUpper(filename[0]) + Path.GetFileNameWithoutExtension(filename).Substring(1) + Path.GetExtension(path).ToUpper()), "");
+				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((string.Join("", Path.GetFileNameWithoutExtension(filename).Split(new char[] { '.', '-'}).Select(x => (char.ToUpper(x[0]) + x.Substring(1)))) + Path.GetExtension(filename).ToUpper()), "");
 				string relativePath = (folderName + "\\" + Path.GetFileName(path));
 				WriteLine("public const string {0} = @\"{1}\";", variableName, relativePath);
             }
