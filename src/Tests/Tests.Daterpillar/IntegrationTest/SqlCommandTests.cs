@@ -16,7 +16,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicxddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString.Trim();
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
             {

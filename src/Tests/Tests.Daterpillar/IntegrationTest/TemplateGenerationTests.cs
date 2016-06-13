@@ -12,7 +12,7 @@ using System.IO;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.SampleSchema)]
+    [DeploymentItem(SampleData.MusicXddlXML)]
     [DeploymentItem(Artifact.TSqlSampleSchema)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropTableIfExist = true
             };
 
-            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             var sut = new SQLiteTemplate(settings, new SQLiteTypeNameResolver());
 
             // Act
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_csharp_classes_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             var sut = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -80,7 +80,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_csharp_classes_that_implement_INotifyPropertyChanged_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 DataContractsEnabled = true,
@@ -114,7 +114,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_mysql_schema_when_invoked()
         {
             // Arrange
-            using (var fileStream = SampleData.GetFile(Artifact.SampleSchema).OpenRead())
+            using (var fileStream = SampleData.GetFile(SampleData.MusicXddlXML).OpenRead())
             {
                 var settings = new MySqlTemplateSettings()
                 {
@@ -161,7 +161,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropDatabaseIfExist = true,
             };
 
-            var schema = Schema.Load(SampleData.GetFile(Artifact.SampleSchema).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act

@@ -7,7 +7,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Artifact.XDDL)]
-    [DeploymentItem(Artifact.SampleSchema)]
+    [DeploymentItem(SampleData.MusicXddlXML)]
     public class SchemaTest
     {
         [TestMethod]
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Assert_that_the_schema_object_can_be_deserialized_by_the_xml_serializer()
         {
             // Arrange
-            var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
+            var schemaFile = SampleData.GetFile(SampleData.MusicXddlXML);
 
             // Act
             using (var stream = schemaFile.OpenRead())
@@ -52,7 +52,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Parse_should_return_a_schema_object_from_a_xml_formatted_string()
         {
             // Arrange
-            var schemaFile = SampleData.GetFile(Artifact.SampleSchema);
+            var schemaFile = SampleData.GetFile(SampleData.MusicXddlXML);
 
             // Act
             var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));

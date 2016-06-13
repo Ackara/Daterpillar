@@ -12,7 +12,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.SampleSchema)]
+    [DeploymentItem(SampleData.MusicXddlXML)]
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
     public class SQLiteCommandTests
@@ -20,21 +20,12 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            // Create SQLite database
-            string path = SampleData.GetFile(Artifact.SampleSchema).FullName;
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var schema = Schema.Load(stream);
-                string sqlite = new SQLiteTemplate().Transform(schema);
-
-                using (var connection = DbFactory.CreateSQLiteConnection(sqlite))
-                {
-                    var builder = new SQLiteConnectionStringBuilder();
-                    builder.DataSource = connection.FileName;
-
-                    _connectionString = builder.ConnectionString;
-                }
-            }
+            string databaseFilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SqlCommandTests)}-{DateTime.Now.ToString("ddhhmmss")}.db");
+            if (File.Exists(databaseFilename)) File.Delete(databaseFilename);
+            SQLiteConnection.CreateFile(databaseFilename);
+            _connectionString = new SQLiteConnectionStringBuilder() { DataSource = databaseFilename }.ConnectionString;
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            SampleData.TryCreateSampleDatabase(new SQLiteConnection(_connectionString), schema, new SQLiteTemplate(new SQLiteTemplateSettings()));
         }
 
         [TestMethod]
@@ -87,7 +78,7 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(Commit_should_execute_an_insert_command_against_sqlite_a_database), song.Name);
+                Assert.AreEqual(track1.Name, song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
@@ -135,7 +126,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 sut.ExceptionHandler = ExceptionHandler;
 
                 // Act
-                sut.ExecuteNonQuery("Invalid SQL command.");
+                sut.ExecuteNonQuery(nameof(SQLiteCommandTests));
                 sut.Commit();
             }
 
@@ -177,7 +168,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         private void ExceptionHandler(Exception ex, string command, out bool handled)
         {
-            _exceptionHandlerCalled = (command == nameof(ExceptionHandler_should_call_the_method_assigned_when_an_exception_is_thrown));
+            _exceptionHandlerCalled = (command == nameof(SQLiteCommandTests));
             handled = true;
         }
 

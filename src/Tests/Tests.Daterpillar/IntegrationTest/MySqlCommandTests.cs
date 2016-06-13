@@ -16,7 +16,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicxddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString.Trim();
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
             {
@@ -81,7 +81,7 @@ namespace Tests.Daterpillar.IntegrationTest
                     .First();
 
                 // Assert
-                Assert.AreEqual(nameof(Commit_should_execute_an_insert_command_against_mysql_a_database), song.Name);
+                Assert.AreEqual(track1.Name, song.Name);
                 Assert.AreNotEqual(track1.Id, song.Id);
             }
         }
