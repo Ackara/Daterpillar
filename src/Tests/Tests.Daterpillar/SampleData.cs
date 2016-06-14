@@ -126,7 +126,6 @@ namespace Tests.Daterpillar
                     using (IDbCommand command = connection.CreateCommand())
                     {
                         command.CommandText = template.Transform(schema);
-                        File.WriteAllText(@"C:\Users\Ackeem\Downloads\test-schema.txt", command.CommandText);
                         command.ExecuteNonQuery();
                     }
                 }
