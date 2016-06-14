@@ -10,19 +10,47 @@ namespace Tests.Daterpillar
 	public static partial class SampleData
 	{
 		<#
+			PushIndent("\t\t");
+
+			string currentDirectory = Path.GetDirectoryName(Host.TemplateFile);
+			WriteLine("public const string Directory = @\"{0}\";", currentDirectory);
+			WriteLine("");
+
 			/// The following creates a const with the file names of each file within
 			/// this file current directory.
-			PushIndent("\t\t");
-			string currentDirectory = Path.GetDirectoryName(Host.TemplateFile);
+			
 			string folderName = currentDirectory.Split('\\').Last();
 			foreach(var path in Directory.GetFiles(currentDirectory).Where(x => !x.Contains(Path.GetFileNameWithoutExtension(Host.TemplateFile))).OrderBy(x => x.Length))
             {
 				string filename = Path.GetFileName(path);
-				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((string.Join("", Path.GetFileNameWithoutExtension(filename).Split(new char[] { '.', '-'}).Select(x => (char.ToUpper(x[0]) + x.Substring(1)))) + Path.GetExtension(filename).ToUpper()), "");
+				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((string.Join("", Path.GetFileNameWithoutExtension(filename).Split(new char[] { '.', '-', '_'}).Select(x => (char.ToUpper(x[0]) + x.Substring(1)))) + Path.GetExtension(filename).ToUpper()), "");
 				string relativePath = (folderName + "\\" + Path.GetFileName(path));
 				WriteLine("public const string {0} = @\"{1}\";", variableName, relativePath);
             }
+			
+			WriteLine("");
+		 
+			foreach(var path in GetSampleFiles())
+            {
+				string filename = Path.GetFileName(path);
+				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((string.Join("", Path.GetFileNameWithoutExtension(filename).Split(new char[] { '.', '-', '_'}).Select(x => (char.ToUpper(x[0]) + x.Substring(1))))), "");
+				string relativePath = (folderName + "\\" + Path.GetFileName(path));
+				
+				WriteLine("public const string {0}ConnStr = \"|DataDirectory|\\\\{1}\";", variableName, filename, (currentDirectory.Split('\\').Last()));
+            }
+
 			PopIndent();
 		#>
 	}
 }
+<#+ 
+	public IEnumerable<string> GetSampleFiles()
+	{
+		string currentDirectory = Path.GetDirectoryName(Host.TemplateFile);
+		string folderName = currentDirectory.Split('\\').Last();
+		foreach(var path in Directory.GetFiles(currentDirectory).Where(x => !x.Contains(Path.GetFileNameWithoutExtension(Host.TemplateFile))).OrderBy(x => x.Length))
+		{
+			yield return path;
+		}
+    }
+#>

@@ -12,6 +12,7 @@
         public const string
             DataTypesSheet = "DataTypes$",
             ExcelProvider = "System.Data.Odbc",
+            CsvProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV",
             ExcelConnStr = "Dsn=Excel Files;dbq=|DataDirectory|\\data.xlsx";
     }
 
