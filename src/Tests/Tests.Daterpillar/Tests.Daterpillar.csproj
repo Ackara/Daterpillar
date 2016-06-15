@@ -160,7 +160,9 @@
     <None Include="Sample Data\text_formats.csv" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sample Data\data_types.csv" />
+    <None Include="Sample Data\data_types.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Sample Data\music.tsql.xddl.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
