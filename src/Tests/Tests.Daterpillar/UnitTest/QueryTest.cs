@@ -97,7 +97,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GetValue_should_return_a_mysql_query_when_the_appropreaite_enum_is_supplied()
+        public void GetValue_should_return_a_mysql_query_when_the_appropriate_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.MySQL)
                 .Select("Id", "Name")
@@ -112,7 +112,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void GetValue_should_return_a_sqlite_query_when_the_appropreaite_enum_is_supplied()
+        public void GetValue_should_return_a_sqlite_query_when_the_appropriate_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.SQLite)
                 .Select("Id", "Name")

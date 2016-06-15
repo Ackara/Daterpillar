@@ -1,0 +1,8 @@
+﻿SELECT
+	*
+FROM
+	tableA
+GROUP BY
+	Name,
+	Age
+;

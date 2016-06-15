@@ -1,0 +1,17 @@
+﻿USE [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null];
+
+-- ------------------------------------
+-- CREATE EMPLOYEE TABLE
+-- ------------------------------------
+CREATE TABLE [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null].[dbo].[Employee]
+(
+	[Id]  NOT NULL IDENTITY(1, 1),
+	[Full_Name]  not null default 'n/a',
+	[Salary]  not null,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+ALTER TABLE [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null].[dbo].[Employee] ADD CONSTRAINT [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null_Employee_pk] PRIMARY KEY ([Id] ASC);
+CREATE UNIQUE INDEX [employee_idx] ON [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null].[dbo].[Employee] ([Full_Name] DESC);
+
+-- Script Goes Here

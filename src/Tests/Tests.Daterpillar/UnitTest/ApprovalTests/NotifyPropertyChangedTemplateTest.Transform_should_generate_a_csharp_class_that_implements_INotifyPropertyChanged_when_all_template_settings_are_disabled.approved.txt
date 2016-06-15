@@ -1,0 +1,99 @@
+﻿public partial class Employee : INotifyPropertyChanged
+{
+	public string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_fullName = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
+}
+
+public partial class Manager : INotifyPropertyChanged
+{
+	public string Id
+	{
+		get { return _id; }
+		set
+		{
+			_id = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string FullName
+	{
+		get { return _fullName; }
+		set
+		{
+			_fullName = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public string Salary
+	{
+		get { return _salary; }
+		set
+		{
+			_salary = value;
+			RaisePropertyChanged();
+		}
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	#region Private Members
+
+	private string _id;
+
+	private string _fullName;
+
+	private string _salary;
+
+	#endregion Private Members
+}
