@@ -4,7 +4,7 @@
 	{
 		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
 
-		public const string Directory = @"C:\Users\Ackee\Projects\Daterpillar\src\Tests\Tests.Daterpillar\Sample Data";
+		public const string Directory = @"C:\Users\Ackeem\Projects\Daterpillar\src\Tests.Daterpillar\Sample Data";
 
 		public const string MusicCS = @"Sample Data\Music.cs";
 		public const string DataXLSX = @"Sample Data\data.xlsx";

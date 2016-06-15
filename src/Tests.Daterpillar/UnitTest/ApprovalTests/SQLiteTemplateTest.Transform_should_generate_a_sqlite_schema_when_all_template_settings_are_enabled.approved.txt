@@ -1,4 +1,8 @@
-﻿CREATE TABLE IF NOT EXISTS [Employee]
+﻿-- -----------------------------------
+-- EMPLOYEE TABLE
+-- -----------------------------------
+DROP TABLE IF EXISTS [Employee];
+CREATE TABLE IF NOT EXISTS [Employee]
 (
 	[Id] INTEGER NOT NULL AUTOINCREMENT,
 	[Full_Name] INTEGER not null default 'n/a',
@@ -7,8 +11,12 @@
 	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS employee_idx ON [Employee] ([Full_Name] DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS [employee_idx] ON [Employee] ([Full_Name] DESC);
 
+-- -----------------------------------
+-- MANAGER TABLE
+-- -----------------------------------
+DROP TABLE IF EXISTS [Manager];
 CREATE TABLE IF NOT EXISTS [Manager]
 (
 	[Id] INTEGER NOT NULL AUTOINCREMENT,
@@ -18,6 +26,6 @@ CREATE TABLE IF NOT EXISTS [Manager]
 	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS manager_idx ON [Manager] ([Full_Name] DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS [manager_idx] ON [Manager] ([Full_Name] DESC);
 
 -- Script Goes Here
