@@ -6,21 +6,14 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.DataXLSX)]
-    [DeploymentItem(Artifact.XDDL)]
-    public class SQLiteTypeNameResolverTest : TypeNameResolverTestBase
+    [DeploymentItem(SampleData.DataTypesCSV)]
+    public class SQLiteTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
-
-        [ClassInitialize]
-        public static void PreTestValidation(TestContext context)
-        {
-            AssertTestDataIsValid();
-        }
-
+        
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, Data.DataTypesSheet, DataAccessMethod.Sequential)]
+        [DataSource(SampleData.CsvDataProvider, SampleData.DataTypesConnStr, SampleData.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_sqlite_type_when_a_data_type_is_passed()
         {
             // Arrange

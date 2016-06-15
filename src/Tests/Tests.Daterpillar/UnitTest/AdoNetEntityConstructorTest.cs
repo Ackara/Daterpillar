@@ -5,14 +5,14 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.DataXLSX)]
+    [DeploymentItem(SampleData.SongsCSV)]
     public class AdoNetEntityConstructorTest
     {
         public TestContext TestContext { get; set; }
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "Songs$", DataAccessMethod.Sequential)]
+        [DataSource(SampleData.CsvDataProvider, SampleData.SongsConnStr, SampleData.SongsTable, DataAccessMethod.Sequential)]
         public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {
             // Arrange

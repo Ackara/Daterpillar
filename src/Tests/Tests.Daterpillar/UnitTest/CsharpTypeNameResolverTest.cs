@@ -6,19 +6,15 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    public class CSharpTypeNameResolverTest : TypeNameResolverTestBase
+    [DeploymentItem(SampleData.DataTypesCSV)]
+    public class CSharpTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
-
-        [ClassInitialize]
-        public static void PreTestValidation(TestContext context)
-        {
-            AssertTestDataIsValid();
-        }
+        
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
+        [DataSource(SampleData.CsvDataProvider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
             // Arrange

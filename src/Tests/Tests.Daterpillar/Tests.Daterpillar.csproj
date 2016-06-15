@@ -153,11 +153,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Sample Data\data.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Sample Data\songs.csv" />
-    <None Include="Sample Data\text_formats.csv" />
+    <None Include="Sample Data\songs.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sample Data\text_formats.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Sample Data\data_types.csv">
@@ -167,10 +171,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Sample Data\music.xddl.xml">
+    <None Include="Sample Data\music.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Content Include="Sample Data\SampleData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SampleData.cs</LastGenOutput>

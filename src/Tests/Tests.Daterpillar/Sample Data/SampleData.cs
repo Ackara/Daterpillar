@@ -2,7 +2,9 @@
 {
 	public static partial class SampleData
 	{
-		public const string Directory = @"C:\Users\Ackeem\Projects\Daterpillar\src\Tests\Tests.Daterpillar\Sample Data";
+		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
+
+		public const string Directory = @"C:\Users\Ackee\Projects\Daterpillar\src\Tests\Tests.Daterpillar\Sample Data";
 
 		public const string MusicCS = @"Sample Data\Music.cs";
 		public const string DataXLSX = @"Sample Data\data.xlsx";
@@ -19,5 +21,13 @@
 		public const string MusicXddlConnStr = "|DataDirectory|\\music.xddl.xml";
 		public const string TextFormatsConnStr = "|DataDirectory|\\text_formats.csv";
 		public const string MusicTsqlXddlConnStr = "|DataDirectory|\\music.tsql.xddl.xml";
+
+		public const string MusicTable = "Music.cs";
+		public const string DataTable = "data.xlsx";
+		public const string SongsTable = "songs.csv";
+		public const string DataTypesTable = "data_types.csv";
+		public const string MusicXddlTable = "music.xddl.xml";
+		public const string TextFormatsTable = "text_formats.csv";
+		public const string MusicTsqlXddlTable = "music.tsql.xddl.xml";
 	}
 }

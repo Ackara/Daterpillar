@@ -9,6 +9,8 @@ namespace Tests.Daterpillar
 {
 	public static partial class SampleData
 	{
+		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
+
 		<#
 			PushIndent("\t\t");
 
@@ -37,6 +39,15 @@ namespace Tests.Daterpillar
 				string relativePath = (folderName + "\\" + Path.GetFileName(path));
 				
 				WriteLine("public const string {0}ConnStr = \"|DataDirectory|\\\\{1}\";", variableName, filename, (currentDirectory.Split('\\').Last()));
+            }
+
+			WriteLine("");
+
+			foreach(var path in GetSampleFiles())
+            {
+				string filename = Path.GetFileName(path);
+				string variableName = new System.Text.RegularExpressions.Regex("[ .-]").Replace((string.Join("", Path.GetFileNameWithoutExtension(filename).Split(new char[] { '.', '-', '_'}).Select(x => (char.ToUpper(x[0]) + x.Substring(1))))), "");
+				WriteLine("public const string {0}Table = \"{1}\";", variableName, filename);
             }
 
 			PopIndent();

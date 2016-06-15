@@ -6,21 +6,14 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.XDDL)]
-    [DeploymentItem(Artifact.DataXLSX)]
-    public class MySqlTypeNameResolverTest : TypeNameResolverTestBase
+    [DeploymentItem(SampleData.DataTypesCSV)]
+    public class MySqlTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
 
-        [ClassInitialize]
-        public static void PreTestValidation(TestContext context)
-        {
-            AssertTestDataIsValid();
-        }
-
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.ExcelProvider, Data.ExcelConnStr, "DataTypes$", DataAccessMethod.Sequential)]
+        [DataSource(SampleData.CsvDataProvider, SampleData.DataTypesConnStr, SampleData.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_mysql_type_when_a_data_type_is_passed()
         {
             // Arrange
