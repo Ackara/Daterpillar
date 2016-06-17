@@ -148,8 +148,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IntegrationTest\ApprovalTests\TemplateGenerationTests.GenerateSqlSchemaFromFile.approved.txt" />
-    <Content Include="IntegrationTest\ApprovalTests\TemplateGenerationTests.Transform_should_generate_a_tsql_schema_when_invoked.approved.txt" />
     <None Include="Sample Data\music.tsql.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
