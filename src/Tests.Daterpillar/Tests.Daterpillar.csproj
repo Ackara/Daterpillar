@@ -93,7 +93,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -155,9 +157,15 @@
     <None Include="Sample Data\music.tsql.xddl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sample Data\music.xddl.xml">
+    <None Include="Sample Data\mock-schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Sample Data\Database1.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample Data\mock-database.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sample Data\SampleData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SampleData.cs</LastGenOutput>
@@ -198,31 +206,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>sqlite.sql</LastGenOutput>
     </Content>
-    <Content Include="UnitTest\ApprovalTests\CSharpTemplateTest.Transform_should_generate_a_csharp_classes_when_all_template_settings_are_disabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\CSharpTemplateTest.Transform_should_generate_a_csharp_classes_when_all_template_settings_are_enabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\MySqlTemplateTest.Transform_should_assign_the_mysql_schema_index_tableName_property_when_null.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\MySqlTemplateTest.Transform_should_generate_a_mysql_schema_when_all_template_settings_are_disabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\MySqlTemplateTest.Transform_should_generate_a_mysql_schema_when_all_template_settings_are_enabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\NotifyPropertyChangedTemplateTest.Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_disabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\NotifyPropertyChangedTemplateTest.Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_enabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_minified_non_tsql_query.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_minified_tsql_query.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_mysql_query_when_the_appropreaite_enum_is_supplied.received.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_mysql_query_when_the_appropriate_enum_is_supplied.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_query_with_a_limit_clause.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_query_with_a_orderby_clause.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_query_with_a_select_and_from_clause_only.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_query_with_a_top_clause.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_query_with_a_where_clause.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_sqlite_query_when_the_appropreaite_enum_is_supplied.received.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_a_sqlite_query_when_the_appropriate_enum_is_supplied.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\QueryTest.GetValue_should_return_query_with_a_groupby_clause.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SQLiteTemplateTest.Transform_should_assign_the_sqlite_schema_index_tableName_property_when_null.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SQLiteTemplateTest.Transform_should_generate_a_sqlite_schema_when_all_template_settings_are_disabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SQLiteTemplateTest.Transform_should_generate_a_sqlite_schema_when_all_template_settings_are_enabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SqlTemplateTest.Transform_should_assign_the_tsql_schema_index_tableName_property_when_null.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SqlTemplateTest.Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled.approved.txt" />
-    <Content Include="UnitTest\ApprovalTests\SqlTemplateTest.Transform_should_generate_a_mssql_schema_when_all_template_settings_are_enabled.approved.txt" />
     <Content Include="x64\SQLite.Interop.dll" />
     <Content Include="x86\SQLite.Interop.dll" />
   </ItemGroup>
@@ -270,6 +253,13 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

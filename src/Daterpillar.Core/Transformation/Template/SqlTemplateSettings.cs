@@ -5,7 +5,7 @@
         public static SqlTemplateSettings Default = new SqlTemplateSettings()
         {
             AddScript = true,
-            UseDatabase = true,
+            UseDatabase = false,
             CreateSchema = false,
             CommentsEnabled = true,
             DropDatabaseIfExist = false

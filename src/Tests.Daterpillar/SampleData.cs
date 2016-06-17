@@ -112,7 +112,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(GetFile(SampleData.MockSchemaXML).OpenRead());
             return TryCreateSampleDatabase(connection, schema, template);
         }
 
@@ -126,6 +126,7 @@ namespace Tests.Daterpillar
                     using (IDbCommand command = connection.CreateCommand())
                     {
                         command.CommandText = template.Transform(schema);
+                        File.WriteAllText(@"C:\Users\Ackeem\Downloads\script.sql", command.CommandText);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -136,6 +137,22 @@ namespace Tests.Daterpillar
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.ErrorCode}");
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        public static void TruncateDatabase(IDbConnection connection, Schema schema)
+        {
+            using (connection)
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    for (int i = schema.Tables.Count - 1; i >= 0; i--)
+                    {
+                        command.CommandText = $"DROP TABLE {schema.Tables[i].Name};";
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
         }
 

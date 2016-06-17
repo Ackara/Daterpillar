@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
                 UseDatabase = true,
                 CreateSchema = true,
                 CommentsEnabled = true,
-                DropDatabaseIfExist = true,
+                DropDatabaseIfExist = true
             };
 
             RunTemplateTest(settings);

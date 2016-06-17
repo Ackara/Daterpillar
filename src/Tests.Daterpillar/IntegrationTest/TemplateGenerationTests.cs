@@ -6,13 +6,14 @@ using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.MusicXddlXML)]
+    [DeploymentItem(SampleData.MockSchemaXML)]
     [DeploymentItem(Artifact.TSqlSampleSchema)]
     [DeploymentItem((Artifact.x86SQLiteInterop))]
     [DeploymentItem((Artifact.x64SQLiteInterop))]
@@ -34,7 +35,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropTableIfExist = true
             };
 
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
             var sut = new SQLiteTemplate(settings, new SQLiteTypeNameResolver());
 
             // Act
@@ -53,7 +54,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_csharp_classes_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
             var sut = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -80,7 +81,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_csharp_classes_that_implement_INotifyPropertyChanged_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 DataContractsEnabled = true,
@@ -114,7 +115,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_mysql_schema_when_invoked()
         {
             // Arrange
-            using (var fileStream = SampleData.GetFile(SampleData.MusicXddlXML).OpenRead())
+            using (var fileStream = SampleData.GetFile(SampleData.MockSchemaXML).OpenRead())
             {
                 var settings = new MySqlTemplateSettings()
                 {
@@ -155,19 +156,17 @@ namespace Tests.Daterpillar.IntegrationTest
             var settings = new SqlTemplateSettings()
             {
                 AddScript = true,
+                CreateSchema = false,
                 UseDatabase = true,
-                CreateSchema = true,
                 CommentsEnabled = true,
-                DropDatabaseIfExist = true,
+                DropDatabaseIfExist = false,
             };
 
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act
-            Approvals.Verify(script);
-
-            using (var connection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString))
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString))
             {
                 connection.Open();
 
@@ -176,7 +175,13 @@ namespace Tests.Daterpillar.IntegrationTest
                     command.CommandText = script;
                     command.ExecuteNonQuery();
                 }
+
+                // Cleanup
+                SampleData.TruncateDatabase(connection, schema);
             }
+
+            // Assert
+            Approvals.Verify(script);
         }
     }
 }

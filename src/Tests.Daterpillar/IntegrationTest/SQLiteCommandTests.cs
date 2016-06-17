@@ -12,7 +12,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.MusicXddlXML)]
+    [DeploymentItem(SampleData.MockSchemaXML)]
     [DeploymentItem(Artifact.x86SQLiteInterop)]
     [DeploymentItem(Artifact.x64SQLiteInterop)]
     public class SQLiteCommandTests
@@ -24,7 +24,7 @@ namespace Tests.Daterpillar.IntegrationTest
             if (File.Exists(databaseFilename)) File.Delete(databaseFilename);
             SQLiteConnection.CreateFile(databaseFilename);
             _connectionString = new SQLiteConnectionStringBuilder() { DataSource = databaseFilename }.ConnectionString;
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
             SampleData.TryCreateSampleDatabase(new SQLiteConnection(_connectionString), schema, new SQLiteTemplate(new SQLiteTemplateSettings()));
         }
 

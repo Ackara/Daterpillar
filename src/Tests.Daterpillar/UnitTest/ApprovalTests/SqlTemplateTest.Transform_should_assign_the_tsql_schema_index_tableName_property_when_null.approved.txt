@@ -1,5 +1,4 @@
-﻿USE [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null];
-
+﻿
 -- ------------------------------------
 -- CREATE EMPLOYEE TABLE
 -- ------------------------------------

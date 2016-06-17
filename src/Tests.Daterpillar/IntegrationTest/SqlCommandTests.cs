@@ -11,23 +11,33 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
+    [DeploymentItem(SampleData.MockSchemaXML)]
+    [DeploymentItem(SampleData.MockDatabaseSDF)]
     public class SqlCommandTests
     {
-        [ClassInitialize]
-        public static void Setup(TestContext context)
+        [TestInitialize]
+        public void Setup()
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MusicXddlXML).OpenRead());
-            _connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString.Trim();
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
+            _connectionString = System.Environment.ExpandEnvironmentVariables(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString);
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
             {
                 AddScript = true,
-                CreateSchema = true,
+                CreateSchema = false,
                 UseDatabase = true,
                 CommentsEnabled = false,
-                DropDatabaseIfExist = true,
+                DropDatabaseIfExist = false,
             }));
 
             _connectionString += (_connectionString.Last() == ';' ? string.Empty : ";") + $"database={schema.Name}";
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
+            SampleData.TruncateDatabase(new SqlConnection(_connectionString), schema);
+            
         }
 
         [TestMethod]

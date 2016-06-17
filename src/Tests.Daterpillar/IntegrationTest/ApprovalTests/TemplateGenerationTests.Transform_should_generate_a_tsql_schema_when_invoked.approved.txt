@@ -1,11 +1,4 @@
-﻿BEGIN TRY
-DROP DATABASE [zune];
-END TRY
-BEGIN CATCH
-END CATCH;
-
-CREATE DATABASE [zune];
-USE [zune];
+﻿USE [zune];
 
 -- ------------------------------------
 -- CREATE GENRE TABLE
