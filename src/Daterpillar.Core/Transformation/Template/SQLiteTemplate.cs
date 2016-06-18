@@ -104,7 +104,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
             tableName = (string.IsNullOrEmpty(index.Table) ? tableName : index.Table);
 
-            _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS {index.Name} ON [{tableName}] ({columns});");
+            _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.Name}] ON [{tableName}] ({columns});");
         }
 
         private void AppendComments(Table table)

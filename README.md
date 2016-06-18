@@ -1,4 +1,5 @@
 # Daterpillar
+
 Daterpillar allows you to write your database schema in XML then transform that document into MySQL, SQLite or even C# classes.
 
 ## How It Works
@@ -42,8 +43,14 @@ public class Employee
 Creating your own template or customizing an existing one is also easy.
 
 ## Getting Started
-The easiest way to get started is by installing the NuGet package.
-[Install-Package Gigobyte.Daterpillar.Core](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core).
+The easiest way to get started is by installing the [NuGet](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core) package. `` Install-Package Gigobyte.Daterpillar.Core ``
 
 ## License
-[MIT License](https://github.com/Ackara/Daterpillar/blob/master/LICENSE)
+Daterpillar is Copyright © 2016 Ackara and other contributors under the [MIT License](https://github.com/Ackara/Daterpillar/blob/master/LICENSE).
+
+## Builds
+|**master**|**development**|
+|----------|---------------|
+|![master](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/20/badge)|![development](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/19/badge)|
+
+

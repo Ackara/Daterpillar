@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public struct MySqlTemplateSettings
+    public class MySqlTemplateSettings
     {
         public static MySqlTemplateSettings Default = new MySqlTemplateSettings()
         {

@@ -1,0 +1,4 @@
+Id,Name,Length,Price,Album_Id,Artist_Id,Genre_Id,On_Device
+1,Folgers Crystals,2.23,1.29,1,1,1,1
+2,Orange,26.03,9.99,2,2,5,0
+3,,,1.29,,,,0

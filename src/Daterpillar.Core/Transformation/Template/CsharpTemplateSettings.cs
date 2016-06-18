@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public struct CSharpTemplateSettings
+    public class CSharpTemplateSettings
     {
         public static CSharpTemplateSettings Default = new CSharpTemplateSettings()
         {
