@@ -188,6 +188,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>mysql.sql</LastGenOutput>
     </Content>
+    <Content Include="T4 Template\schema.csharp.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>schema.csharp.txt</LastGenOutput>
+    </Content>
+    <Content Include="T4 Template\schema.csharp.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>schema.csharp.tt</DependentUpon>
+    </Content>
+    <Content Include="T4 Template\schema.xddl.xml" />
     <Content Include="T4 Template\sqlite.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

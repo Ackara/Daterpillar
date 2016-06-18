@@ -1,0 +1,93 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="$(TargetDir)\Gigobyte.Daterpillar.Core.dll" #>
+<#@ assembly name="System.Collections" #>
+<#@ assembly name="System.Runtime" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.IO" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Gigobyte.Daterpillar.Transformation" #>
+<#@ import namespace="Gigobyte.Daterpillar.Transformation.Template" #>
+<#@ output extension=".txt" #>
+using System;
+using Gigobyte.Daterpillar.Data;
+using System.Runtime.Serialization;
+using Gigobyte.Daterpillar.Annotation;
+
+namespace GeneratedCode
+{
+<# 
+	/* *** INSTRUCTIONS *** */
+	// 
+	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xddl.xml");
+	var schema = Schema.Load(File.OpenRead(schemaPath));
+	var settings = new CSharpTemplateSettings()
+	{
+		CommentsEnabled = true,
+		DataContractsEnabled = true,
+		SchemaAnnotationsEnabled = true,
+		VirtualPropertiesEnabled = true
+	};
+
+	/// 
+	//ExcludeTable(schema, "TableName");
+	//RenameTable(schema, "oldName", "newName");
+	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
+
+	WriteOut(schema, new CSharpTemplate(settings));
+#>
+}
+<#+
+
+public void ExcludeTable(Schema schema, params string[] tables)
+{
+	foreach(var item in tables)
+    {
+		int index = schema.Tables.FindIndex(x=> x.Name.Equals(item, StringComparison.CurrentCultureIgnoreCase));
+		if(index >= 0) schema.Tables.RemoveAt(index);
+    }
+}
+
+public void RenameTable(Schema schema, string oldName, string newName)
+{
+	int index = schema.Tables.FindIndex(x=> x.Name.Equals(oldName, StringComparison.CurrentCultureIgnoreCase));
+	if(index >= 0) schema.Tables[index].Name = newName;
+}
+
+public void GenerateEnumFromTable(IDbConnection database, string enumName, string tableName, string nameColumn, string valueColumn)
+{
+	if (database.State != ConnectionState.Open) database.Open();
+    using(var cmd = database.CreateCommand())
+    {
+		cmd.CommandText = string.Format("SELECT {1}, {2} FROM {0};", tableName, nameColumn, valueColumn);
+        using(var queryResults = new DataTable())
+        {
+			queryResults.Load(cmd.ExecuteReader());
+
+			PushIndent("\t");
+			WriteLine("public enum {0}", enumName.ToPascalCase());
+			WriteLine("{");
+            foreach (DataRow row in queryResults.Rows)
+            {
+				string name = Convert.ToString(row[nameColumn]);
+				int value = Convert.ToInt32(row[valueColumn]);
+				WriteLine("\t{0} = {1};", name.ToPascalCase(), value);
+            }
+			WriteLine("}"); WriteLine("");
+			PopIndent();
+        }
+    }
+}
+
+public void WriteOut(Schema schema, ITemplate tempalate)
+{
+	PushIndent("\t");
+	WriteLine(tempalate.Transform(schema));
+	PopIndent();
+}
+
+#>
