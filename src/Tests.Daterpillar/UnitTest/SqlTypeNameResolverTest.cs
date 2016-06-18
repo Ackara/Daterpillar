@@ -7,7 +7,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(SampleData.DataTypesCSV)]
-    public class SqlTypeNameResolverTest : TypeNameResolverTestBase
+    public class SqlTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
 

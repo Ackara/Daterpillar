@@ -14,9 +14,8 @@ namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
     [DeploymentItem(SampleData.MockSchemaXML)]
-    [DeploymentItem(Artifact.TSqlSampleSchema)]
-    [DeploymentItem((Artifact.x86SQLiteInterop))]
-    [DeploymentItem((Artifact.x64SQLiteInterop))]
+    [DeploymentItem((SampleData.x86SQLiteInterop))]
+    [DeploymentItem((SampleData.x64SQLiteInterop))]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class TemplateGenerationTests

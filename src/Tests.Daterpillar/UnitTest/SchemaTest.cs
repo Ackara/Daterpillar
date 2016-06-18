@@ -6,7 +6,7 @@ using System.Linq;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Artifact.XDDL)]
+    [DeploymentItem(SampleData.XDDL)]
     [DeploymentItem(SampleData.MockSchemaXML)]
     public class SchemaTest
     {

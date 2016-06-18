@@ -101,8 +101,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Category.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="DbFactory.cs" />
+    <Compile Include="Dev.cs" />
     <Compile Include="IntegrationTest\MySqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
@@ -129,7 +129,6 @@
     <Compile Include="UnitTest\SqlTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\SqlWriterTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
-    <Compile Include="UnitTest\TypeNameResolverTestBase.cs" />
     <Compile Include="XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>

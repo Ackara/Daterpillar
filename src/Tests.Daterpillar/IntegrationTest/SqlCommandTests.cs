@@ -12,7 +12,6 @@ namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
     [DeploymentItem(SampleData.MockSchemaXML)]
-    [DeploymentItem(SampleData.MockDatabaseSDF)]
     public class SqlCommandTests
     {
         [TestInitialize]
