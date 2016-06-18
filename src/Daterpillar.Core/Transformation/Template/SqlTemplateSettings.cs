@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public struct SqlTemplateSettings
+    public class SqlTemplateSettings
     {
         public static SqlTemplateSettings Default = new SqlTemplateSettings()
         {
