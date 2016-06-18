@@ -13,16 +13,18 @@
     <description>$description$</description>
     <copyright>Copyright 2016</copyright>
     <language>en-US</language>
-    <tags>database sqlite schema c#</tags>
+    <tags>orm database sqlite schema c#</tags>
   </metadata>
   <files>
     <file src="..\xddl.xsd"
           target="content" />
-    <file src="..\Daterpillar.T4Template\schema.xddl.xml"
+    <file src="..\Tests.Daterpillar\T4 Template\schema.csharp.tt"
           target="content" />
-    <file src="..\Daterpillar.T4Template\schema.csharp.tt"
+    <file src="..\Tests.Daterpillar\T4 Template\schema.xddl.xml"
           target="content" />
     <file src="bin\release\Gigobyte.Daterpillar.Core.dll"
           target="lib" />
+    <file src="bin\release\Gigobyte.Daterpillar.Core.dll"
+          target="content\bin\Debug\" />
   </files>
 </package>
