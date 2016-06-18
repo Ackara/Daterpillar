@@ -16,6 +16,8 @@ Properties {
 Task default -depends Publish-NuGetPackages;
 
 Task Init -description "Initialize the build n' deploy procedure." -action {
+    Assert(Test-Path $ProjectDirectory -PathType Container) "'ProjectDirectory' do not exist.";
+    
     Write-Host "`t* cleaning up directores...";
         foreach($dir in @($TempDirectory, $NugetPackages))
         {
@@ -43,7 +45,7 @@ Task Compile -description "Build the solution." -depends Init -action {
 
 Task Create-Packages -description "Create nuget packages." -depends Compile -action {
     Push-Location $NugetPackages;
-    foreach($project in (Get-ChildItem "$ProjectDirectory\src" -Recurse -Filter "*.csproj"))
+    foreach($project in (Get-ChildItem "$ProjectDirectory\src" -Recurse -Filter "*.csproj" | Select-Object -ExpandProperty FullName))
     {
         $nuspec = [System.IO.Path]::ChangeExtension($project, ".nuspec");
         if(Test-Path $nuspec -PathType Leaf)
