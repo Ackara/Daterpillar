@@ -6,12 +6,18 @@ This script initiates this project deployment process.
 .PARAMETER TaskList
 A collection of tasks to invoke.
 
+.PARAMETER NugetKey
+The nuget.org API key.
+
 .NOTES
 This script depends on the psake module.
 
 #>
 
 Param(
+    [Parameter(Position=1)]
+    [string]$NugetKey,
+
     [Parameter()]
     [string[]]$TaskList = @("default")
 )
@@ -38,7 +44,8 @@ Invoke-psake -buildFile "$PWD\build\deploy.ps1" `
     -taskList $TaskList `
     -framework 4.5.2 `
     -properties @{
-        "Nuget"=$nuget
+        "NugetEXE"=$nuget;
+        "NugetKey"=$NugetKey.Trim()
     };
 
 Pop-Location;
