@@ -53,11 +53,11 @@ Task Create-Packages -description "Create nuget packages." -depends Compile -act
     Pop-Location;
 }
 
-Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -action {
+Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -depends Init -action {
     Assert(-not [System.String]::IsNullOrEmpty($NugetKey)) "The 'NugetKey' cannot be null or empty.";
 
-    foreach($package in (Get-ChildItem $NugetPackages))
+    foreach($package in (Get-ChildItem $NugetPackages | Select-Object -ExpandProperty FullName))
     {
-        Exec { (& $NugetEXE push $($package) $($NugetKey)) | Out-Null }
+        Exec { & $NugetEXE push $($package) $($NugetKey) -Source "https://www.nuget.org"; }
     }
 }
