@@ -58,6 +58,6 @@ Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -d
 
     foreach($package in (Get-ChildItem $NugetPackages | Select-Object -ExpandProperty FullName))
     {
-        Exec { & $NugetEXE push $($package) $($NugetKey) -Source "https://www.nuget.org"; }
+        & $NugetEXE push $($package) $($NugetKey) -Source "https://www.nuget.org";
     }
 }
