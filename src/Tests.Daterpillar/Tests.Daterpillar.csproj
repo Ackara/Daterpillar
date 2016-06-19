@@ -190,12 +190,7 @@
     </Content>
     <Content Include="T4 Template\schema.csharp.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>schema.csharp.txt</LastGenOutput>
-    </Content>
-    <Content Include="T4 Template\schema.csharp.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>schema.csharp.tt</DependentUpon>
+      <LastGenOutput>schema.csharp.cs</LastGenOutput>
     </Content>
     <Content Include="T4 Template\schema.xddl.xml" />
     <Content Include="T4 Template\sqlite.sql">

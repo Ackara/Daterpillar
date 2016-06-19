@@ -12,7 +12,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Gigobyte.Daterpillar.Transformation" #>
 <#@ import namespace="Gigobyte.Daterpillar.Transformation.Template" #>
-<#@ output extension=".txt" #>
+<#@ output extension=".cs" #>
 using System;
 using Gigobyte.Daterpillar.Data;
 using System.Runtime.Serialization;
