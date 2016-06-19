@@ -28,10 +28,6 @@ Task Init -description "Initialize the build n' deploy procedure." -action {
             }
             else { New-Item $dir -ItemType Directory | Out-Null; }
         }
-
-    Write-Host "`t* importing nuget module...";
-        $nugetModule = (Get-ChildItem "$ProjectDirectory\src\packages\Gigobyte.DevOps*\tools\nuget.psm1").FullName | Sort-Object $_ | Select-Object -Last 1;
-        Import-Module $nugetModule;
 }
 
 Task Compile -description "Build the solution." -depends Init -action {
