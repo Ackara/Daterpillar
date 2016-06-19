@@ -13,7 +13,7 @@ Properties {
     $BuildPlatform = "Any CPU";
 }
 
-Task default -depends Publish-NuGetPackages;
+Task default -depends  Init, Create-Packages, Publish-NuGetPackages;
 
 Task Init -description "Initialize the build n' deploy procedure." -action {
     Assert(Test-Path $ProjectDirectory -PathType Container) "'ProjectDirectory' do not exist.";
@@ -57,7 +57,7 @@ Task Create-Packages -description "Create nuget packages." -depends Compile -act
     Pop-Location;
 }
 
-Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -depends Create-Packages -action {
+Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -action {
     Assert(-not [System.String]::IsNullOrEmpty($NugetKey)) "The 'NugetKey' cannot be null or empty.";
 
     foreach($package in (Get-ChildItem $NugetPackages))
