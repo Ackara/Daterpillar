@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar.IntegrationTest
@@ -36,7 +37,6 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
             SampleData.TruncateDatabase(new SqlConnection(_connectionString), schema);
-            
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
             // Arrange
             var trackName = nameof(Commit_should_execute_a_insert_command_against_sql_server_database);
-            var track1 = SampleData.CreateSong(trackName);
+            var track1 = CreateSong(trackName);
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -107,7 +107,7 @@ namespace Tests.Daterpillar.IntegrationTest
             IgnoreTestIfDbConnectionIsUnavailable();
 
             // Arrange
-            var track1 = SampleData.CreateSong();
+            var track1 = CreateSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -149,6 +149,21 @@ namespace Tests.Daterpillar.IntegrationTest
                 Assert.Fail(failureMessage);
 #endif
             }
+        }
+
+        private static Song CreateSong([CallerMemberName]string name = null)
+        {
+            return new Song()
+            {
+                Id = 154,
+                Name = name,
+                Length = 12,
+                Price = 1.29M,
+                AlbumId = 1,
+                ArtistId = 1,
+                GenreId = 1,
+                OnDevice = true
+            };
         }
 
         #endregion Private Members

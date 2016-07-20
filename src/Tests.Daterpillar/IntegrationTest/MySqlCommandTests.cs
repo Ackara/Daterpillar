@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar.IntegrationTest
@@ -65,7 +66,7 @@ namespace Tests.Daterpillar.IntegrationTest
             IgnoreTestIfDbConnectionIsUnavailable();
 
             // Arrange
-            var track1 = SampleData.CreateSong();
+            var track1 = CreateSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -94,7 +95,7 @@ namespace Tests.Daterpillar.IntegrationTest
             IgnoreTestIfDbConnectionIsUnavailable();
 
             // Arrange
-            var track1 = SampleData.CreateSong();
+            var track1 = CreateSong();
             var query = new Query()
                 .SelectAll()
                 .From(Song.Table)
@@ -136,6 +137,21 @@ namespace Tests.Daterpillar.IntegrationTest
                 Assert.Fail(failureMessage);
 #endif
             }
+        }
+
+        private static Song CreateSong([CallerMemberName]string name = null)
+        {
+            return new Song()
+            {
+                Id = 154,
+                Name = name,
+                Length = 12,
+                Price = 1.29M,
+                AlbumId = 1,
+                ArtistId = 1,
+                GenreId = 1,
+                OnDevice = true
+            };
         }
 
         #endregion Private Members

@@ -9,8 +9,6 @@ namespace Tests.Daterpillar
         public struct Trait
         {
             public const string Integration = "Integration";
-
-            
         }
 
         public static class Data

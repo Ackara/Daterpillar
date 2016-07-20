@@ -1,10 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Tests.Daterpillar.Sample;
 
@@ -13,23 +10,6 @@ namespace Tests.Daterpillar
     public static partial class SampleData
     {
         
-
-        
-
-        public static Song CreateSong([CallerMemberName]string name = null)
-        {
-            return new Song()
-            {
-                Id = 154,
-                Name = name,
-                Length = 12,
-                Price = 1.29M,
-                AlbumId = 1,
-                ArtistId = 1,
-                GenreId = 1,
-                OnDevice = true
-            };
-        }
 
         public static Schema CreateSchema([CallerMemberName]string name = null)
         {

@@ -1,6 +1,11 @@
-﻿using Gigobyte.Daterpillar.Data.Linq;
+﻿using Gigobyte.Daterpillar.Annotation;
+using Gigobyte.Daterpillar.Data;
+using Gigobyte.Daterpillar.Data.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar.UnitTest
 {
@@ -13,7 +18,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertToSelectCommand_should_format_an_entity_object_into_a_select_query()
         {
-            var song = SampleData.CreateSong();
+            var song = CreateSong();
             var query = SqlWriter.ConvertToSelectCommand(song, QueryStyle.SQL);
             string expected = $"SELECT * FROM song WHERE Id='{song.Id}';";
 
@@ -27,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertToInsertCommand_should_format_an_entity_object_into_a_insert_command()
         {
-            var song = SampleData.CreateSong();
+            var song = CreateSong();
             var query = SqlWriter.ConvertToInsertCommand(song, QueryStyle.SQLite);
             string expected = $"INSERT INTO [song] ([Album_Id], [Artist_Id], [Genre_Id], [Name], [Length], [Price], [On_Device]) VALUES ('{song.AlbumId}', '{song.ArtistId}', '{song.GenreId}', '{song.Name}', '{song.Length}', '{song.Price}', '1');";
 
@@ -41,7 +46,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Dev.Ackara)]
         public void ConvertToDeleteCommand_should_format_an_entity_object_into_a_delete_command()
         {
-            var song = SampleData.CreateSong();
+            var song = CreateSong();
             var query = SqlWriter.ConvertToDeleteCommand(song, QueryStyle.SQLite);
             string expected = $"DELETE FROM [song] WHERE [Id]='{song.Id}';";
 
@@ -92,5 +97,25 @@ namespace Tests.Daterpillar.UnitTest
         {
             Assert.AreEqual("'0'", SqlWriter.EscapeValue(DayOfWeek.Sunday));
         }
+
+        #region Private Members
+
+        private static Song CreateSong([CallerMemberName]string name = null)
+        {
+            return new Song()
+            {
+                Id = 154,
+                Name = name,
+                Length = 12,
+                Price = 1.29M,
+                AlbumId = 1,
+                ArtistId = 1,
+                GenreId = 1,
+                OnDevice = true
+            };
+        }
+
+        
+        #endregion Private Members
     }
 }
