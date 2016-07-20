@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Automation\Discrepancy.cs" />
+    <Compile Include="Automation\ISchemaAggregator.cs" />
+    <Compile Include="Automation\SchemaComparerBase.cs" />
+    <Compile Include="Automation\Outcome.cs" />
+    <Compile Include="Automation\ISchemaComparer.cs" />
+    <Compile Include="Automation\SchemaDiscrepancy.cs" />
     <Compile Include="Data\AdoNetConnectionWrapper.cs" />
     <Compile Include="Data\AdoNetEntityConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +61,7 @@
       <Name>Daterpillar.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
