@@ -41,7 +41,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [TestCategory(Category.Integration)]
+        [TestCategory(Test.Trait.Integration)]
         public void Execute_should_retrieve_query_results_from_sql_server_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
@@ -71,7 +71,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [TestCategory(Category.Integration)]
+        [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_a_insert_command_against_sql_server_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
@@ -101,7 +101,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [TestCategory(Category.Integration)]
+        [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_a_delete_command_against_sql_server_database()
         {
             IgnoreTestIfDbConnectionIsUnavailable();
