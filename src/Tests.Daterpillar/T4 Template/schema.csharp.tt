@@ -22,7 +22,6 @@ namespace GeneratedCode
 {
 <# 
 	/* *** INSTRUCTIONS *** */
-	// 
 	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xddl.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
 	var settings = new CSharpTemplateSettings()
@@ -33,12 +32,11 @@ namespace GeneratedCode
 		VirtualPropertiesEnabled = true
 	};
 
-	/// 
 	//ExcludeTable(schema, "TableName");
 	//RenameTable(schema, "oldName", "newName");
 	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
 
-	WriteOut(schema, new CSharpTemplate(settings));
+	GenerateCode(schema, new CSharpTemplate(settings));
 #>
 }
 <#+
@@ -83,7 +81,7 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
     }
 }
 
-public void WriteOut(Schema schema, ITemplate tempalate)
+public void GenerateCode(Schema schema, ITemplate tempalate)
 {
 	PushIndent("\t");
 	WriteLine(tempalate.Transform(schema));
