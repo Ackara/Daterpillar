@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7178415E-3FBC-4E66-A897-1BD5B92A5A9A}</ProjectGuid>
+    <ProjectGuid>{785E04BF-F296-481B-983A-E3EFBA3E8F06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gigobyte.Daterpillar</RootNamespace>
-    <AssemblyName>Gigobyte.Daterpillar.DotNet</AssemblyName>
+    <AssemblyName>Gigobyte.Daterpillar.NET</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>1.1.16052.74</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,9 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <DocumentationFile>
-    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +28,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Gigobyte.Daterpillar.DotNet.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,9 +42,9 @@
   <ItemGroup>
     <Compile Include="Automation\Discrepancy.cs" />
     <Compile Include="Automation\ISchemaAggregator.cs" />
-    <Compile Include="Automation\SchemaComparerBase.cs" />
-    <Compile Include="Automation\Outcome.cs" />
     <Compile Include="Automation\ISchemaComparer.cs" />
+    <Compile Include="Automation\Outcome.cs" />
+    <Compile Include="Automation\SchemaComparerBase.cs" />
     <Compile Include="Automation\SchemaDiscrepancy.cs" />
     <Compile Include="Data\AdoNetConnectionWrapper.cs" />
     <Compile Include="Data\AdoNetEntityConstructor.cs" />
@@ -61,7 +56,6 @@
       <Name>Daterpillar.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
