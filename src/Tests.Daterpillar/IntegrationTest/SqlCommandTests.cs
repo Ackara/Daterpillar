@@ -17,7 +17,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestInitialize]
         public void Setup()
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
             _connectionString = System.Environment.ExpandEnvironmentVariables(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString);
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
             {
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestCleanup]
         public void Cleanup()
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
             SampleData.TruncateDatabase(new SqlConnection(_connectionString), schema);
             
         }

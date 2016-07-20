@@ -16,7 +16,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var schema = Schema.Load(SampleData.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString.Trim();
             _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
             {

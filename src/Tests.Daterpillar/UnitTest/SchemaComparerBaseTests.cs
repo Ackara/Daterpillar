@@ -18,8 +18,8 @@ namespace Tests.Daterpillar.UnitTest
         {
             // Arrange
             var serializer = new DataContractSerializer(typeof(Schema));
-            var source = serializer.ReadObject(SampleData.GetFile("").OpenRead());
-            var target = serializer.ReadObject(SampleData.GetFile("").OpenRead());
+            var source = serializer.ReadObject(Test.Data.GetFile("").OpenRead());
+            var target = serializer.ReadObject(Test.Data.GetFile("").OpenRead());
             
             var sourceMockAggregator = Mock.Create<ISchemaAggregator>();
             sourceMockAggregator.Arrange(x => x.FetchSchema())

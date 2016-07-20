@@ -12,20 +12,9 @@ namespace Tests.Daterpillar
 {
     public static partial class SampleData
     {
-        public static FileInfo GetFile(string filename)
-        {
-            filename = Path.GetFileName(filename);
-            string ext = "*" + Path.GetExtension(filename);
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        
 
-            return new DirectoryInfo(baseDirectory).GetFiles(ext, SearchOption.AllDirectories)
-                .First(x => x.Name == filename);
-        }
-
-        public static string GetFileContent(string filename)
-        {
-            return File.ReadAllText(GetFile(filename).FullName);
-        }
+        
 
         public static Song CreateSong([CallerMemberName]string name = null)
         {
@@ -112,7 +101,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
             return TryCreateSampleDatabase(connection, schema, template);
         }
 
