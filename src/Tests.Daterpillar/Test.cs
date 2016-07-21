@@ -19,6 +19,13 @@ namespace Tests.Daterpillar
             public const string Integration = "Integration";
         }
 
+        public struct File
+        {
+            public const string XDDL = "xddl.xsd";
+            public const string x86SQLiteInterop = "x86\\SQLite.Interop.dll";
+            public const string x64SQLiteInterop = "x64\\SQLite.Interop.dll";
+        }
+
         public static class Data
         {
             public const string DirectoryName = "Sample Data";
