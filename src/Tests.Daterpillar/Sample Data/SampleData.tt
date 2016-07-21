@@ -9,7 +9,6 @@ namespace Tests.Daterpillar
 {
 	public static partial class SampleData
 	{
-		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
 		<#
 			PushIndent("\t\t");
 

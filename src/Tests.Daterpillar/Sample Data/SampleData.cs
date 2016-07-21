@@ -2,7 +2,6 @@
 {
 	public static partial class SampleData
 	{
-		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
 		public const string Directory = @"C:\Users\Ackeem\Projects\Daterpillar\src\Tests.Daterpillar\Sample Data";
 
 		public const string MusicCS = @"Sample Data\Music.cs";
