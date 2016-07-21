@@ -1,5 +1,13 @@
 # Daterpillar
 
+[![license](https://img.shields.io/packagist/l/doctrine/orm.svg?maxAge=2592000?style=flat-square)](https://github.com/Ackara/Daterpillar/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/Gigobyte.Daterpillar.Core.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core)
+
+|            |**master**|**development**|
+|------------|----------|---------------|
+|**build status:**|![master](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/20/badge)|![development](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/32/badge)|
+
+----------
+
 Daterpillar allows you to write your database schema in XML then transform that document into MySQL, SQLite or even C# classes.
 
 ## How It Works
@@ -47,10 +55,5 @@ The easiest way to get started is by installing the [NuGet](https://www.nuget.or
 
 ## License
 Daterpillar is Copyright © 2016 Ackara and other contributors under the [MIT License](https://github.com/Ackara/Daterpillar/blob/master/LICENSE).
-
-## Builds
-|**master**|**development**|
-|----------|---------------|
-|![master](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/20/badge)|![development](https://gigobyte.visualstudio.com/_apis/public/build/definitions/3c8aa1f9-90bb-4c8d-8f21-aef356db450e/19/badge)|
 
 
