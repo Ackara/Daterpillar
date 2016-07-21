@@ -7,7 +7,7 @@ using Tests.Daterpillar.Utilities;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.XDDL)]
+    [DeploymentItem(Test.File.XDDL)]
     [DeploymentItem(SampleData.MockSchemaXML)]
     public class SchemaTest
     {
