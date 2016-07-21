@@ -15,7 +15,7 @@ namespace Tests.Daterpillar.UnitTest
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void ConvertToSelectCommand_should_format_an_entity_object_into_a_select_query()
         {
             var song = CreateSong();
@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void ConvertToInsertCommand_should_format_an_entity_object_into_a_insert_command()
         {
             var song = CreateSong();
@@ -43,7 +43,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void ConvertToDeleteCommand_should_format_an_entity_object_into_a_delete_command()
         {
             var song = CreateSong();
@@ -57,42 +57,42 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_date_object_into_a_sql_value()
         {
             Assert.AreEqual("'2015-01-01 13:11:11'", SqlWriter.EscapeValue(new DateTime(2015, 01, 01, 13, 11, 11, DateTimeKind.Utc)));
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_integer_object_into_a_sql_value()
         {
             Assert.AreEqual("'123'", SqlWriter.EscapeValue(123));
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_float_object_into_a_sql_value()
         {
             Assert.AreEqual("'123.45'", SqlWriter.EscapeValue(123.45F));
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_boolean_object_into_a_sql_value()
         {
             Assert.AreEqual("'1'", SqlWriter.EscapeValue(true));
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_string_into_a_sql_value()
         {
             Assert.AreEqual("'the dog''s bowl. ''_'' ^_^ ''_'''", SqlWriter.EscapeValue("the dog's bowl. '_' ^_^ '_'"));
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void EscapeValue_should_convert_a_enum_object_into_a_sql_value()
         {
             Assert.AreEqual("'0'", SqlWriter.EscapeValue(DayOfWeek.Sunday));

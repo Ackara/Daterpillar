@@ -20,7 +20,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_enabled()
         {
             // Arrange
@@ -54,7 +54,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_disabled()
         {
             // Arrange

@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.UnitTest
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [DataSource(SampleData.CsvDataProvider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_mssql_type_when_a_data_type_is_passed()
         {

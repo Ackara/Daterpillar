@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.UnitTest
     public class SchemaTest
     {
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void WriteTo_should_serialize_its_schema_object_into_a_stream()
         {
             // Arrange
@@ -31,7 +31,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Assert_that_the_schema_object_can_be_deserialized_by_the_xml_serializer()
         {
             // Arrange
@@ -49,7 +49,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Parse_should_return_a_schema_object_from_a_xml_formatted_string()
         {
             // Arrange
@@ -64,7 +64,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void RemoveTable_should_delete_a_table_object_from_a_schema_object_when_a_valid_name_is_given()
         {
             // Arrange

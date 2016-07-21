@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
     public class SchemaComparerBaseTests
     {
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void TestMethod1()
         {
             // Arrange
@@ -42,7 +42,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void MyTestMethod()
         {
             // Arrange
@@ -58,7 +58,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void MyTestMethod2()
         {
             // Arrange

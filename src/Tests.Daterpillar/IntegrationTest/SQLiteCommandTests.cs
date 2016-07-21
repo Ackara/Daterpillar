@@ -30,7 +30,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Execute_should_retrieve_query_results_from_a_sqlite_database()
         {
@@ -58,7 +58,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_an_insert_command_against_sqlite_a_database()
         {
@@ -85,7 +85,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_a_delete_command_against_sqlite_a_database()
         {
@@ -117,7 +117,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void ExceptionHandler_should_call_the_method_assigned_when_an_exception_is_thrown()
         {
@@ -136,7 +136,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Commit_should_raise_the_error_event_when_an_exception_is_thrown()
         {

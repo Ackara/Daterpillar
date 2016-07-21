@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void FetchData_should_retrieve_query_results_from_mysql_a_database()
         {
@@ -59,7 +59,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_an_insert_command_against_mysql_a_database()
         {
@@ -88,7 +88,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Commit_should_execute_a_delete_command_against_mysql_a_database()
         {

@@ -11,7 +11,7 @@ namespace Tests.Daterpillar.UnitTest
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [DataSource(Test.Data.Provider, SampleData.SongsConnStr, SampleData.SongsTable, DataAccessMethod.Sequential)]
         public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {

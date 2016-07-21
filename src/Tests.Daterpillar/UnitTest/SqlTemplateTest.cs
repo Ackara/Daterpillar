@@ -22,7 +22,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
@@ -39,7 +39,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
@@ -56,7 +56,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void Transform_should_assign_the_tsql_schema_index_tableName_property_when_null()
         {
             // Arrange

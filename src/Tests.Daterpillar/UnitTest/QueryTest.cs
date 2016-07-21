@@ -18,7 +18,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_an_empty_string_when_query_is_instantiated()
         {
             var query = new Query();
@@ -26,7 +26,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_query_with_a_select_and_from_clause_only()
         {
             var sut = new Query()
@@ -37,7 +37,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_query_with_a_where_clause()
         {
             var sut = new Query()
@@ -49,7 +49,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_query_with_a_groupby_clause()
         {
             var sut = new Query()
@@ -61,7 +61,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_query_with_a_orderby_clause()
         {
             var sut = new Query()
@@ -73,7 +73,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_query_with_a_limit_clause()
         {
             var sut = new Query()
@@ -85,7 +85,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_query_with_a_top_clause()
         {
             var sut = new Query(QueryStyle.TSQL)
@@ -96,7 +96,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_mysql_query_when_the_appropriate_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.MySQL)
@@ -111,7 +111,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_sqlite_query_when_the_appropriate_enum_is_supplied()
         {
             var sut = new Query(QueryStyle.SQLite)
@@ -126,7 +126,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_minified_non_tsql_query()
         {
             var sut = new Query()
@@ -141,7 +141,7 @@ namespace Tests.Daterpillar.UnitTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         public void GetValue_should_return_a_minified_tsql_query()
         {
             var sut = new Query(QueryStyle.TSQL)

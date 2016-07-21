@@ -23,7 +23,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Transform_should_generate_a_sqlite_schema_when_invoked()
         {
@@ -48,7 +48,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Transform_should_generate_a_csharp_classes_when_invoked()
         {
@@ -75,7 +75,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Transform_should_generate_csharp_classes_that_implement_INotifyPropertyChanged_when_invoked()
         {
@@ -109,7 +109,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Transform_should_generate_a_mysql_schema_when_invoked()
         {
@@ -147,7 +147,7 @@ namespace Tests.Daterpillar.IntegrationTest
         }
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
         public void Transform_should_generate_a_tsql_schema_when_invoked()
         {

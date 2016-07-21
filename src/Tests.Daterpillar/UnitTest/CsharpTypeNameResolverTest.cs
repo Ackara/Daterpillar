@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
         
 
         [TestMethod]
-        [Owner(Dev.Ackara)]
+        [Owner(Test.Dev.Ackara)]
         [DataSource(Test.Data.Provider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
