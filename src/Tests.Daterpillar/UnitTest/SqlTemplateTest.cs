@@ -61,7 +61,7 @@ namespace Tests.Daterpillar.UnitTest
         {
             // Arrange
             var sut = new SqlTemplate(SqlTemplateSettings.Default, Mock.Create<ITypeNameResolver>());
-            var schema = SampleData.CreateSchema();
+            var schema = Test.Data.CreateSchema();
             schema.Tables[0].Indexes[0].Table = "";
 
             // Act
@@ -75,7 +75,7 @@ namespace Tests.Daterpillar.UnitTest
         {
             // Arrange
             var schema = SampleData.CreateSchema(name);
-            var managerTable = SampleData.CreateTableSchema("Manager");
+            var managerTable = Test.Data.CreateTableSchema("Manager");
             managerTable.Comment = "this is a comment";
             schema.Tables.Add(managerTable);
 

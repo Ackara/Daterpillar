@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
+using Tests.Daterpillar.Utilities;
 
 namespace Tests.Daterpillar.UnitTest
 {
@@ -15,7 +16,7 @@ namespace Tests.Daterpillar.UnitTest
         public void WriteTo_should_serialize_its_schema_object_into_a_stream()
         {
             // Arrange
-            Schema sut = SampleData.CreateSchema();
+            Schema sut = Test.Data.CreateSchema();
             using (var stream = new MemoryStream())
             {
                 // Act
@@ -67,9 +68,9 @@ namespace Tests.Daterpillar.UnitTest
         public void RemoveTable_should_delete_a_table_object_from_a_schema_object_when_a_valid_name_is_given()
         {
             // Arrange
-            var schema = SampleData.CreateSchema();
+            var schema = Test.Data.CreateSchema();
             var nameOfTableToRemove = "RemoveMe";
-            var tableToRemove = SampleData.CreateTableSchema(nameOfTableToRemove);
+            var tableToRemove = Test.Data.CreateTableSchema(nameOfTableToRemove);
 
             schema.Tables.Add(tableToRemove);
 

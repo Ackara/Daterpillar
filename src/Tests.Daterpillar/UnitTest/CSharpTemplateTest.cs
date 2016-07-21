@@ -14,18 +14,23 @@ namespace Tests.Daterpillar.UnitTest
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpTemplateTest
     {
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
+        }
+
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void Transform_should_generate_a_csharp_classes_when_all_template_settings_are_enabled()
+        public void Transform_should_generate_csharp_classes_when_all_template_settings_are_enabled()
         {
             // Arrange
-            Schema schema = SampleData.CreateSchema();
-            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
+            Schema schema = Test.Data.CreateSchema();
+            schema.Tables.Add(Test.Data.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {
                 Namespace = Schema.Xmlns,
-
                 CommentsEnabled = true,
                 DataContractsEnabled = true,
                 SchemaAnnotationsEnabled = true,
@@ -49,11 +54,11 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        public void Transform_should_generate_a_csharp_classes_when_all_template_settings_are_disabled()
+        public void Transform_should_generate_csharp_classes_when_all_template_settings_are_disabled()
         {
             // Arrange
-            Schema schema = SampleData.CreateSchema();
-            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
+            Schema schema = Test.Data.CreateSchema();
+            schema.Tables.Add(Test.Data.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {

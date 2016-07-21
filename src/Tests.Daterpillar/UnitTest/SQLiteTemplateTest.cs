@@ -30,8 +30,8 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("INTEGER")
                 .OccursAtLeast(1);
 
-            var sample = SampleData.CreateSchema();
-            sample.Tables.Add(SampleData.CreateTableSchema("Manager"));
+            var sample = Test.Data.CreateSchema();
+            sample.Tables.Add(Test.Data.CreateTableSchema("Manager"));
 
             var settings = new SQLiteTemplateSettings()
             {
@@ -58,8 +58,8 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("INTEGER")
                 .OccursAtLeast(1);
 
-            var sample = SampleData.CreateSchema();
-            sample.Tables.Add(SampleData.CreateTableSchema("Manager"));
+            var sample = Test.Data.CreateSchema();
+            sample.Tables.Add(Test.Data.CreateTableSchema("Manager"));
 
             var settings = new SQLiteTemplateSettings()
             {
@@ -81,7 +81,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_assign_the_sqlite_schema_index_tableName_property_when_null()
         {
             // Arrange
-            var sample = SampleData.CreateSchema();
+            var sample = Test.Data.CreateSchema();
             sample.Tables[0].Indexes[1].Table = string.Empty;
 
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
