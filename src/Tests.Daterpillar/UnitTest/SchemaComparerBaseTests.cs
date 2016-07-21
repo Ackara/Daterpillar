@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
-using Gigobyte.Daterpillar.Automation;
+using Gigobyte.Daterpillar.Management;
 using System.Linq;
 using Gigobyte.Daterpillar.Transformation;
 using System.Runtime.Serialization;
