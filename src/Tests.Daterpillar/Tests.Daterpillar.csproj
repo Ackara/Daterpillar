@@ -139,7 +139,7 @@
     <Compile Include="UnitTest\SqlWriterTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
     <Compile Include="UnitTest\SchemaComparerBaseTests.cs" />
-    <Compile Include="XmlValidator.cs" />
+    <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xddl.xsd">
@@ -167,6 +167,7 @@
     <None Include="Sample Data\mock-schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Sample Data\datasoft.xddl.xml" />
     <Content Include="Sample Data\SampleData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SampleData.cs</LastGenOutput>
@@ -223,6 +224,7 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
