@@ -14,8 +14,8 @@ namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
     [DeploymentItem(SampleData.MockSchemaXML)]
-    [DeploymentItem(SampleData.x86SQLiteInterop)]
-    [DeploymentItem(SampleData.x64SQLiteInterop)]
+    [DeploymentItem(Test.File.x86SQLiteInterop)]
+    [DeploymentItem(Test.File.x64SQLiteInterop)]
     public class SQLiteCommandTests
     {
         [ClassInitialize]

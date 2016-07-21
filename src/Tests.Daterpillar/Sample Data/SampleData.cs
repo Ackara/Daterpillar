@@ -2,9 +2,6 @@
 {
 	public static partial class SampleData
 	{
-		
-		public const string x86SQLiteInterop = "x86\\SQLite.Interop.dll";
-		public const string x64SQLiteInterop = "x64\\SQLite.Interop.dll";
 		public const string CsvDataProvider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
 		public const string Directory = @"C:\Users\Ackeem\Projects\Daterpillar\src\Tests.Daterpillar\Sample Data";
 
