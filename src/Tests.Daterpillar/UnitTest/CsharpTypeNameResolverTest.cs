@@ -14,7 +14,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(SampleData.CsvDataProvider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
+        [DataSource(Test.Data.Provider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
             // Arrange
