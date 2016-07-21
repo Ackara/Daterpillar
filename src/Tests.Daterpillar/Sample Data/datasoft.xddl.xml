@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<schema xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
+  <table name="employee">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Dob">
+      <dataType>dateTime</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="First_Name">
+      <dataType>varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Last_Name">
+      <dataType>varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Gender">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+  </table>
+
+  <table name="department">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType>varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+  </table>
+
+  <table name="salary">
+    <column name="Employee_Id">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="Start">
+      <dataType>date</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <column name="End">
+      <dataType>date</dataType>
+    </column>
+
+    <column name="Amount">
+      <dataType scale="12" precision="2">decimal</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+
+    <foreignKey localColumn="Employee_Id" foreignTable="employee" foreignColumn="Id">
+      <onUpdate>CASCADE</onUpdate>
+      <onDelete>CASCADE</onDelete>
+    </foreignKey>
+
+    <index type="primaryKey">
+      <columnName>Employee_Id</columnName>
+      <columnName>Start</columnName>
+    </index>
+  </table>
+
+  <table name="gender">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+      <modifier>NOT NULL</modifier>
+      <modifier>PRIMARY KEY</modifier>
+    </column>
+
+    <column name="Name">
+      <dataType>varchar</dataType>
+      <modifier>NOT NULL</modifier>
+    </column>
+  </table>
+
+  <script>
+    INSERT INTO gender (Name) VALUES ('Male', 'Female', 'Trans');
+  </script>
+</schema>

@@ -14,6 +14,7 @@
 		public const string DataTypesCSV = @"Sample Data\data_types.csv";
 		public const string MockSchemaXML = @"Sample Data\mock-schema.xml";
 		public const string TextFormatsCSV = @"Sample Data\text_formats.csv";
+		public const string DatasoftXddlXML = @"Sample Data\datasoft.xddl.xml";
 		public const string MusicTsqlXddlXML = @"Sample Data\music.tsql.xddl.xml";
 
 		public const string MusicConnStr = "|DataDirectory|\\Music.cs";
@@ -22,6 +23,7 @@
 		public const string DataTypesConnStr = "|DataDirectory|\\data_types.csv";
 		public const string MockSchemaConnStr = "|DataDirectory|\\mock-schema.xml";
 		public const string TextFormatsConnStr = "|DataDirectory|\\text_formats.csv";
+		public const string DatasoftXddlConnStr = "|DataDirectory|\\datasoft.xddl.xml";
 		public const string MusicTsqlXddlConnStr = "|DataDirectory|\\music.tsql.xddl.xml";
 
 		public const string MusicTable = "Music.cs";
@@ -30,6 +32,7 @@
 		public const string DataTypesTable = "data_types.csv";
 		public const string MockSchemaTable = "mock-schema.xml";
 		public const string TextFormatsTable = "text_formats.csv";
+		public const string DatasoftXddlTable = "datasoft.xddl.xml";
 		public const string MusicTsqlXddlTable = "music.tsql.xddl.xml";
 	}
 }
