@@ -51,6 +51,12 @@
     <Compile Include="Data\Linq\Query.cs" />
     <Compile Include="Data\Linq\SqlWriter.cs" />
     <Compile Include="Data\Linq\QueryStyle.cs" />
+    <Compile Include="Management\Discrepancy.cs" />
+    <Compile Include="Management\ISchemaAggregator.cs" />
+    <Compile Include="Management\ISchemaComparer.cs" />
+    <Compile Include="Management\Outcome.cs" />
+    <Compile Include="Management\SchemaComparerBase.cs" />
+    <Compile Include="Management\SchemaDiscrepancy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transformation\Template\NotifyPropertyChangedTemplateSettings.cs" />
     <Compile Include="Transformation\Template\NotifyPropertyChangedTemplate.cs" />

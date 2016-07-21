@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Automation
+namespace Gigobyte.Daterpillar.Management
 {
     
     public enum Outcome

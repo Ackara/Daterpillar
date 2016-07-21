@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Gigobyte.Daterpillar.Automation
+namespace Gigobyte.Daterpillar.Management
 {
     public abstract class SchemaComparerBase : ISchemaComparer
     {

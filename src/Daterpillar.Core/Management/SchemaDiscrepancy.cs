@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Automation
+namespace Gigobyte.Daterpillar.Management
 {
     public class SchemaDiscrepancy
     {
