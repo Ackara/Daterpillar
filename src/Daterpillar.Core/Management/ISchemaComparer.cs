@@ -1,5 +1,4 @@
-﻿
-namespace Gigobyte.Daterpillar.Management
+﻿namespace Gigobyte.Daterpillar.Management
 {
     public interface ISchemaComparer : System.IDisposable
     {

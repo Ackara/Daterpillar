@@ -105,7 +105,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DbFactory.cs" />
-    <Compile Include="Dev.cs" />
     <Compile Include="IntegrationTest\MySqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SqlCommandTests.cs" />
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="UnitTest\SqlWriterTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
     <Compile Include="UnitTest\SchemaComparerBaseTests.cs" />
+    <Compile Include="Utilities\DatabaseBuilder.cs" />
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>

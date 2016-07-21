@@ -74,7 +74,7 @@ namespace Tests.Daterpillar.UnitTest
         private void RunTemplateTest(SqlTemplateSettings settings, [CallerMemberName]string name = null)
         {
             // Arrange
-            var schema = SampleData.CreateSchema(name);
+            var schema = Test.Data.CreateSchema(name);
             var managerTable = Test.Data.CreateTableSchema("Manager");
             managerTable.Comment = "this is a comment";
             schema.Tables.Add(managerTable);
