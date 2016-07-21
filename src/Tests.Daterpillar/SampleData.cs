@@ -3,14 +3,11 @@ using Gigobyte.Daterpillar.Transformation.Template;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
-using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar
 {
     public static partial class SampleData
     {
-        
-
         public static Schema CreateSchema([CallerMemberName]string name = null)
         {
             var schema = new Schema();

@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDCC3763-A4ED-4B12-9F13-43610728FE38}"
 	ProjectSection(SolutionItems) = preProject
 		Daterpillar.Core\Daterpillar.Core.nuspec = Daterpillar.Core\Daterpillar.Core.nuspec
-		Daterpillar.DotNet\Daterpillar.DotNet.nuspec = Daterpillar.DotNet\Daterpillar.DotNet.nuspec
+		xddl.xsd = xddl.xsd
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Daterpillar", "Tests.Daterpillar\Tests.Daterpillar.csproj", "{4E2023F0-2452-4F5A-8DCB-F9F854751965}"
