@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropTableIfExist = true
             };
 
-            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
             var sut = new SQLiteTemplate(settings, new SQLiteTypeNameResolver());
 
             // Act
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_csharp_classes_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
             var sut = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -80,7 +80,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_csharp_classes_that_implement_INotifyPropertyChanged_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 DataContractsEnabled = true,
@@ -114,7 +114,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_mysql_schema_when_invoked()
         {
             // Arrange
-            using (var fileStream = Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead())
+            using (var fileStream = Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead())
             {
                 var settings = new MySqlTemplateSettings()
                 {
@@ -161,7 +161,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropDatabaseIfExist = false,
             };
 
-            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act

@@ -10,7 +10,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateSampleDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(Test.Data.GetFile(SampleData.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
             return TryCreateSampleDatabase(connection, schema, template);
         }
 

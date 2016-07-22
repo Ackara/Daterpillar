@@ -35,7 +35,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Assert_that_the_schema_object_can_be_deserialized_by_the_xml_serializer()
         {
             // Arrange
-            var schemaFile = Test.Data.GetFile(SampleData.MockSchemaXML);
+            var schemaFile = Test.Data.GetFile(Test.File.MockSchemaXML);
 
             // Act
             using (var stream = schemaFile.OpenRead())
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Parse_should_return_a_schema_object_from_a_xml_formatted_string()
         {
             // Arrange
-            var schemaFile = Test.Data.GetFile(SampleData.MockSchemaXML);
+            var schemaFile = Test.Data.GetFile(Test.File.MockSchemaXML);
 
             // Act
             var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));
