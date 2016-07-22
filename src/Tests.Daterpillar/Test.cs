@@ -24,6 +24,8 @@ namespace Tests.Daterpillar
             public const string XDDL = "xddl.xsd";
             public const string x86SQLiteInterop = "x86\\SQLite.Interop.dll";
             public const string x64SQLiteInterop = "x64\\SQLite.Interop.dll";
+            public const string DataTypesCSV = (Data.DirectoryName + "\\data_types.csv");
+            public const string DataSoftXDDL = (Data.DirectoryName + "\\datasoft.xddl.xml");
         }
 
         public static class Data
