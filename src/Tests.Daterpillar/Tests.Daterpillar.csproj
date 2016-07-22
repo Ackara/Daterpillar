@@ -172,9 +172,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sample Data\music.tsql.xddl.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Sample Data\mock-schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

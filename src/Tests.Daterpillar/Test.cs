@@ -31,6 +31,11 @@ namespace Tests.Daterpillar
 
         public static class Data
         {
+            public struct ConnectionStr
+            {
+                
+            }
+
             public const string DirectoryName = "Sample Data";
 
             public const string Provider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
