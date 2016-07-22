@@ -12,7 +12,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.MockSchemaXML)]
+    [DeploymentItem(Test.Data.DirectoryName)]
     public class SqlCommandTests
     {
         [TestInitialize]

@@ -6,7 +6,7 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.DataTypesCSV)]
+    [DeploymentItem(Test.Data.DirectoryName)]
     public class SQLiteTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }

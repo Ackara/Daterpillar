@@ -13,7 +13,7 @@ using System.IO;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(SampleData.MockSchemaXML)]
+    [DeploymentItem(Test.Data.DirectoryName)]
     [DeploymentItem((Test.File.x86SQLiteInterop))]
     [DeploymentItem((Test.File.x64SQLiteInterop))]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
