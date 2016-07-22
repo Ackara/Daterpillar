@@ -28,7 +28,7 @@ Param(
     [string]$Cloudinary_CloudName = "",
 
     [Parameter()]
-    [string[]]$TaskList = @("default")
+    [string[]]$TaskList = @("Create-MockDatabases")
 )
 
 Clear-Host;

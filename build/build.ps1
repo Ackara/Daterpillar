@@ -1,5 +1,8 @@
 Properties {
     # Credentials
+    $SQLiteConnectionString = "";
+    $MsSQLConnectionString = "";
+    $MySQLConnectionString = "";
     $NuGetKey = "";
 
     $Cloudinary_CloudName = "";
@@ -45,6 +48,15 @@ Task Compile -description "Build the solution." -depends Init -action {
     # Build Visual Studio solution.
     $solution = (Get-ChildItem $ProjectDirectory -Recurse -Filter "*.sln" | Select-Object -ExpandProperty FullName -First 1);
     Exec { msbuild $solution "/p:Configuration=$BuildConfiguration;Platform=$BuildPlatform" | Out-Null }
+}
+
+Task Create-MockDatabases -description "Stage databases for testing." -depends Compile -action {
+    Write-Host "Creating database schema...";
+        Import-Module "$ProjectDirectory\src\Daterpillar.Core\bin\$BuildConfiguration\Gigobyte.Daterpillar.Core.dll";
+        $schema = [Gigobyte.Daterpillar.Transformation.Schema]::Load((Get-ChildItem "$ProjectDirectory\src\Tests.Daterpillar\datasoft.xddl.xml").OpenRead());
+
+    Write-Host "Creating SQL Server database...";
+    
 }
 
 Task Create-NuGetPackages -description "Create a nuget package for all non test projects." -depends Compile -action {
