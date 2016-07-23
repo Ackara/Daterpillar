@@ -13,7 +13,7 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    [DeploymentItem(Test.Data.DirectoryName)]
+    [DeploymentItem(Test.Data.Samples)]
     [DeploymentItem(Test.File.x86SQLiteInterop)]
     [DeploymentItem(Test.File.x64SQLiteInterop)]
     public class SQLiteCommandTests

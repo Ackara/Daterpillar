@@ -6,7 +6,7 @@ using System;
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    [DeploymentItem(Test.Data.DirectoryName)]
+    [DeploymentItem(Test.Data.Samples)]
     public class SqlTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }

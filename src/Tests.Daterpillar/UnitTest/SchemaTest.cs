@@ -8,7 +8,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Test.File.XDDL)]
-    [DeploymentItem(Test.Data.DirectoryName)]
+    [DeploymentItem(Test.Data.Samples)]
     public class SchemaTest
     {
         [TestMethod]

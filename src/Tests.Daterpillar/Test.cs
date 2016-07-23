@@ -36,7 +36,7 @@ namespace Tests.Daterpillar
         {
             public const string Dire = "|DataDirectory|\\";
 
-            public const string DirectoryName = "Sample Data";
+            public const string Samples = "Sample Data";
 
             public const string Provider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
 
