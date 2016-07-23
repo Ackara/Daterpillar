@@ -24,17 +24,17 @@ namespace Tests.Daterpillar
             public const string XDDL = "xddl.xsd";
             public const string x86SQLiteInterop = "x86\\SQLite.Interop.dll";
             public const string x64SQLiteInterop = "x64\\SQLite.Interop.dll";
-            public const string DataTypesCSV = (Data.DirectoryName + "\\data_types.csv");
-            public const string MockSchemaXML = (Data.DirectoryName + "\\mock-schema.xml");
-            public const string DataSoftXDDL = (Data.DirectoryName + "\\datasoft.xddl.xml");
+
+            public const string SongCSV = "songs.csv";
+            public const string DataTypesCSV = "data_types.csv";
+            public const string MockSchemaXML = "mock-schema.xml";
+            public const string DataSoftXDDL = "datasoft.xddl.xml";
+            public const string TextFormatCSV = "text_formats.csv";
         }
 
         public static class Data
         {
-            public struct ConnectionStr
-            {
-                
-            }
+            public const string Dire = "|DataDirectory|\\";
 
             public const string DirectoryName = "Sample Data";
 

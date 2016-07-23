@@ -11,7 +11,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        [DataSource(Test.Data.Provider, SampleData.TextFormatsConnStr, SampleData.TextFormatsTable, DataAccessMethod.Sequential)]
+        [DataSource(Test.Data.Provider, (Test.Data.Dire + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToPascalCase_should_format_a_string_into_pascal_case()
         {
             // Arrange
@@ -28,7 +28,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        [DataSource(Test.Data.Provider, SampleData.TextFormatsConnStr, SampleData.TextFormatsTable, DataAccessMethod.Sequential)]
+        [DataSource(Test.Data.Provider, (Test.Data.Dire + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToCamelCase_should_format_a_string_into_camel_case()
         {
             // Arrange

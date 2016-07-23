@@ -175,6 +175,9 @@
     <None Include="Sample Data\mock-schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="datasoft.xddl.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sample Data\datasoft.xddl.xml" />
     <Content Include="Sample Data\SampleData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

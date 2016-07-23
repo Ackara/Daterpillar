@@ -10,11 +10,11 @@ namespace Tests.Daterpillar.UnitTest
     public class CSharpTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
-        
+
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        [DataSource(Test.Data.Provider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
+        [DataSource(Test.Data.Provider, (Test.Data.Dire + Test.File.DataTypesCSV), Test.File.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
             // Arrange

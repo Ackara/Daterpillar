@@ -10,10 +10,10 @@ namespace Tests.Daterpillar.UnitTest
     public class SQLiteTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
-        
+
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        [DataSource(Test.Data.Provider, SampleData.DataTypesConnStr, SampleData.DataTypesTable, DataAccessMethod.Sequential)]
+        [DataSource(Test.Data.Provider, (Test.Data.Dire + Test.File.DataTypesCSV), Test.File.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_sqlite_type_when_a_data_type_is_passed()
         {
             // Arrange
