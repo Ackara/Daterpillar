@@ -59,6 +59,9 @@ Task Create-MockDatabases -description "Stage databases for testing." -depends C
     
 }
 
+Task Push-XmlSchema -description "Upload the 'xddl.xsd' file to the FTP server." -action {
+}
+
 Task Create-NuGetPackages -description "Create a nuget package for all non test projects." -depends Compile -action {
     Assert(Test-Path $NuGetPackageDirectory -PathType Container) "Could not find '$NuGetPackageDirectory'.";
 
