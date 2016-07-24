@@ -13,7 +13,7 @@ This script depends on the psake module.
 
 Param(
     [Parameter()]
-    [string]$NuGetExeUri = "https://dist.nuget.org/win-x86-commandline/v3.4.3/nuget.exe",
+    [string]$NuGetUri = "https://dist.nuget.org/win-x86-commandline/v3.4.3/nuget.exe",
 
     [Parameter()]
     [string]$NuGetSource = "",
@@ -43,7 +43,7 @@ Push-Location (Split-Path $PSScriptRoot -Parent);
     {
         $toolsDir = "$PWD\tools";
         if(-not (Test-Path $toolsDir -PathType Container)) { New-Item  $toolsDir -ItemType Directory | Out-Null; }
-        Invoke-WebRequest -Uri $NuGetExeUri -OutFile $nuget;
+        Invoke-WebRequest -Uri $NuGetUri -OutFile $nuget;
     }
     & $nuget restore $(Get-ChildItem -Filter "*.sln" -Recurse | Select-Object -ExpandProperty FullName -First 1);
 
