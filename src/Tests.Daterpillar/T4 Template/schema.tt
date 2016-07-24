@@ -41,6 +41,13 @@ namespace GeneratedCode
 }
 <#+
 
+public void GenerateCode(Schema schema, ITemplate tempalate)
+{
+	PushIndent("\t");
+	WriteLine(tempalate.Transform(schema));
+	PopIndent();
+}
+
 public void ExcludeTable(Schema schema, params string[] tables)
 {
 	foreach(var item in tables)
@@ -79,13 +86,6 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
 			PopIndent();
         }
     }
-}
-
-public void GenerateCode(Schema schema, ITemplate tempalate)
-{
-	PushIndent("\t");
-	WriteLine(tempalate.Transform(schema));
-	PopIndent();
 }
 
 #>
