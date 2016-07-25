@@ -1,22 +1,19 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 
 namespace Gigobyte.Daterpillar.Management
 {
-    public abstract class SchemaComparerBase : ISchemaComparer
+    public class SchemaComparer : ISchemaComparer
     {
         public SchemaDiscrepancy Compare(ISchemaAggregator source, ISchemaAggregator target)
         {
-            _source = source;
-            _target = target;
-            _discrepancy = new SchemaDiscrepancy();
+            return Compare(source.FetchSchema(), target.FetchSchema());
+        }
 
-            CompareSchemas(source.FetchSchema(), target.FetchSchema());
-            SummaryDiscrepancies(_discrepancy);
-
-            return _discrepancy;
+        public SchemaDiscrepancy Compare(Schema source, Schema target)
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()
@@ -27,18 +24,12 @@ namespace Gigobyte.Daterpillar.Management
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _source?.Dispose();
-                _target?.Dispose();
-            }
         }
 
         protected virtual void CompareSchemas(Schema source, Schema target)
         {
             _discrepancy.Counters.SourceTables = source.Tables.Count;
             _discrepancy.Counters.DestTables = target.Tables.Count;
-
 
             // TODO: Normalize dataset
 
@@ -73,7 +64,6 @@ namespace Gigobyte.Daterpillar.Management
 
         #region Private Members
 
-        private ISchemaAggregator _source, _target;
         private SchemaDiscrepancy _discrepancy;
 
         private bool CheckIfSourceContainsTarget(IList<Table> source, Table target, out int sourceIndex)

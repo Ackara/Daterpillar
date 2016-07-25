@@ -1,37 +1,30 @@
-﻿using System;
+﻿using Gigobyte.Daterpillar.Management;
+using Gigobyte.Daterpillar.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
-using Gigobyte.Daterpillar.Management;
-using System.Linq;
-using Gigobyte.Daterpillar.Transformation;
-using System.Runtime.Serialization;
 
 namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
-    public class SchemaComparerBaseTests
+    public class SchemaComparerTests
     {
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void TestMethod1()
+        public void Compare_should_return_equal_when_the_specified_schemas_are_the_same()
         {
             // Arrange
-            var serializer = new DataContractSerializer(typeof(Schema));
-            var source = serializer.ReadObject(Test.Data.GetFile("").OpenRead());
-            var target = serializer.ReadObject(Test.Data.GetFile("").OpenRead());
-            
             var sourceMockAggregator = Mock.Create<ISchemaAggregator>();
             sourceMockAggregator.Arrange(x => x.FetchSchema())
-                .Returns(source)
+                .Returns(Test.Data.CreateSchema())
                 .OccursOnce();
 
             var targetMockAggregator = Mock.Create<ISchemaAggregator>();
             targetMockAggregator.Arrange(x => x.FetchSchema())
-                .Returns(target)
+                .Returns(Test.Data.CreateSchema())
                 .OccursOnce();
 
-            var sut = Mock.Create<SchemaComparerBase>();
+            var sut = Mock.Create<SchemaComparer>();
 
             // Act
             var report = sut.Compare(sourceMockAggregator, targetMockAggregator);
@@ -43,36 +36,36 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void MyTestMethod()
+        public void Compare_should_return_not_equal_when_the_specified_schemas_are_not_the_same()
         {
             // Arrange
-            var sut = Mock.Create<SchemaComparerBase>();
+            var source = Test.Data.CreateSchema();
+            var target = Test.Data.CreateSchema();
+
+            var sut = new SchemaComparer();
 
             // Act
-            var report = sut.Compare(null, null);
+            var report = sut.Compare(source, target);
 
             // Assert
-            Assert.IsTrue(report.Discrepancies.Count > 0);
+            Assert.AreEqual(3, report.Discrepancies.Count);
             Assert.AreEqual(Outcome.NotEqual, report.Summary);
-            Assert.AreEqual(Outcome.SourceEmpty, report.Summary);
         }
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void MyTestMethod2()
+        public void Compare_should_determine_the_specified_schemas_are_empty_when_they_have_no_tables()
         {
             // Arrange
-            var sut = Mock.Create<SchemaComparerBase>();
+            var sut = Mock.Create<SchemaComparer>();
 
             // Act
-            var report = sut.Compare(null, null);
+            var report = sut.Compare(new Schema(), new Schema());
 
             // Assert
-            Assert.AreEqual(Outcome.NotEqual, report.Summary);
+            Assert.AreEqual(0, report.Discrepancies.Count);
+            Assert.AreEqual(Outcome.SourceEmpty, report.Summary);
             Assert.AreEqual(Outcome.TargetEmpty, report.Summary);
-            CollectionAssert.AllItemsAreNotNull(report.Discrepancies.ToArray());
         }
-
-        
     }
 }

@@ -149,7 +149,7 @@
     <Compile Include="UnitTest\SqlTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\SqlWriterTest.cs" />
     <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
-    <Compile Include="UnitTest\SchemaComparerBaseTests.cs" />
+    <Compile Include="UnitTest\SchemaComparerTests.cs" />
     <Compile Include="Utilities\DatabaseBuilder.cs" />
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
