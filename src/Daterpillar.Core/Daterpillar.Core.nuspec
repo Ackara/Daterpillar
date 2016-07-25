@@ -24,7 +24,7 @@
           target="content" />
     <file src="..\Tests.Daterpillar\T4 Template\schema.xddl.xml"
           target="content" />
-    <file src="..\Tests.Daterpillar\T4 Template\schema.csharp.tt"
+    <file src="..\Tests.Daterpillar\T4 Template\schema.tt"
           target="content" />
   </files>
 </package>
