@@ -2,12 +2,12 @@
 
 namespace Gigobyte.Daterpillar.Management
 {
-    
+    [Flags]
     public enum Outcome
     {
-        Equal,
-        NotEqual,
-        SourceEmpty,
-        TargetEmpty
+        Equal = 2,
+        NotEqual = 4,
+        SourceEmpty = 8,
+        TargetEmpty = 16
     }
 }
