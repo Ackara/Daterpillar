@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.Compare
 {
-    public interface ISchemaComparer : System.IDisposable
+    public interface ISchemaComparer : IComparer<Schema>
     {
-        ComparisonReport Compare(Schema source, Schema target);
+        ComparisonReport GenerateReport(Schema source, Schema target);
 
-        ComparisonReport Compare(ISchemaAggregator source, ISchemaAggregator target);
+        ComparisonReport GenerateReport(ISchemaAggregator source, ISchemaAggregator target);
     }
 }
