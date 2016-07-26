@@ -2,7 +2,7 @@
 
 namespace Gigobyte.Daterpillar.Management
 {
-    public class SchemaDiscrepancy
+    public class ComparisonReport
     {
         public Counter Counters;
         public Outcome Summary { get; set; }

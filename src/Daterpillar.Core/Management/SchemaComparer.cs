@@ -6,14 +6,16 @@ namespace Gigobyte.Daterpillar.Management
 {
     public class SchemaComparer : ISchemaComparer
     {
-        public SchemaDiscrepancy Compare(ISchemaAggregator source, ISchemaAggregator target)
+        public ComparisonReport Compare(ISchemaAggregator source, ISchemaAggregator target)
         {
             return Compare(source.FetchSchema(), target.FetchSchema());
         }
 
-        public SchemaDiscrepancy Compare(Schema source, Schema target)
+        public ComparisonReport Compare(Schema source, Schema target)
         {
-            throw new NotImplementedException();
+            
+
+            throw new System.NotImplementedException();
         }
 
         public void Dispose()
@@ -58,13 +60,13 @@ namespace Gigobyte.Daterpillar.Management
             }
         }
 
-        protected virtual void SummaryDiscrepancies(SchemaDiscrepancy report)
+        protected virtual void SummaryDiscrepancies(ComparisonReport report)
         {
         }
 
         #region Private Members
 
-        private SchemaDiscrepancy _discrepancy;
+        private ComparisonReport _discrepancy;
 
         private bool CheckIfSourceContainsTarget(IList<Table> source, Table target, out int sourceIndex)
         {
