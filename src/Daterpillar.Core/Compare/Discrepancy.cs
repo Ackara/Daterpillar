@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gigobyte.Daterpillar.Management
+namespace Gigobyte.Daterpillar.Compare
 {
     public class Discrepancy
     {

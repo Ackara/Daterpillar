@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Management
+namespace Gigobyte.Daterpillar.Compare
 {
     [Flags]
     public enum Outcome

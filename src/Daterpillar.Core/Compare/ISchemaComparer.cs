@@ -1,7 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Management
+namespace Gigobyte.Daterpillar.Compare
 {
     public interface ISchemaComparer : System.IDisposable
     {

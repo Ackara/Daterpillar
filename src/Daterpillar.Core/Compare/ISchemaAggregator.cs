@@ -1,6 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 
-namespace Gigobyte.Daterpillar.Management
+namespace Gigobyte.Daterpillar.Compare
 {
     public interface ISchemaAggregator : System.IDisposable
     {

@@ -1,4 +1,4 @@
-﻿using Gigobyte.Daterpillar.Management;
+﻿using Gigobyte.Daterpillar.Compare;
 using Gigobyte.Daterpillar.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;

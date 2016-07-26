@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Management
+namespace Gigobyte.Daterpillar.Compare
 {
     public class SchemaComparer : ISchemaComparer
     {
