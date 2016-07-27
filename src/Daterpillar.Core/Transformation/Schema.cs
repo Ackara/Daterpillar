@@ -1,25 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar.Transformation
 {
-    /// <summary>
-    /// Represents a database schema.
-    /// </summary>
+    /// <summary>Represents a database schema.</summary>
     [XmlRoot("schema", Namespace = Xmlns)]
-    public class Schema
+    public class Schema : IEnumerable<Table>
     {
         #region Static Members
 
-        /// <summary>
-        /// The XML document default namespace.
-        /// </summary>
+        /// <summary>The XML document default namespace.</summary>
         public const string Xmlns = "http://api.gigobyte.com/schema/v1/xddl.xsd";
 
-        /// <summary>
-        /// Creates a <see cref="Schema"/> by using the specified <paramref name="stream"/>.
-        /// </summary>
+        /// <summary>Creates a <see cref="Schema"/> by using the specified <paramref name="stream"/>.</summary>
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
         public static Schema Load(Stream stream)
@@ -48,23 +43,17 @@ namespace Gigobyte.Daterpillar.Transformation
 
         #endregion Static Members
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
+        /// <summary>Gets or sets the name.</summary>
         /// <value>The name.</value>
         [XmlAttribute("name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the author.
-        /// </summary>
+        /// <summary>Gets or sets the author.</summary>
         /// <value>The author.</value>
         [XmlAttribute("author")]
         public string Author { get; set; }
 
-        /// <summary>
-        /// Gets or sets the tables.
-        /// </summary>
+        /// <summary>Gets or sets the tables.</summary>
         /// <value>The tables.</value>
         [XmlElement("table")]
         public List<Table> Tables
@@ -81,16 +70,12 @@ namespace Gigobyte.Daterpillar.Transformation
             set { _tables = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the script.
-        /// </summary>
+        /// <summary>Gets or sets the script.</summary>
         /// <value>The script.</value>
         [XmlElement("script")]
         public string Script { get; set; }
 
-        /// <summary>
-        /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
-        /// </summary>
+        /// <summary>Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.</summary>
         /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
         public void WriteTo(Stream stream)
         {
@@ -99,9 +84,7 @@ namespace Gigobyte.Daterpillar.Transformation
             stream.Position = 0;
         }
 
-        /// <summary>
-        /// Removes all <see cref="Table"/> object with the specified name.
-        /// </summary>
+        /// <summary>Removes all <see cref="Table"/> object with the specified name.</summary>
         /// <param name="tableName">Name of the table.</param>
         public void RemoveTable(string tableName)
         {
@@ -110,6 +93,16 @@ namespace Gigobyte.Daterpillar.Transformation
                 {
                     _tables.RemoveAt(i);
                 }
+        }
+
+        public IEnumerator<Table> GetEnumerator()
+        {
+            return Tables.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #region Private Member
