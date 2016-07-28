@@ -3,11 +3,12 @@
 namespace Gigobyte.Daterpillar.Compare
 {
     [Flags]
-    public enum Outcome
+    public enum Outcomes
     {
-        Equal = 2,
-        NotEqual = 4,
-        SourceEmpty = 8,
-        TargetEmpty = 16
+        None = 0,
+        Equal = 1,
+        NotEqual = 2,
+        SourceEmpty = 4,
+        TargetEmpty = 8
     }
 }
