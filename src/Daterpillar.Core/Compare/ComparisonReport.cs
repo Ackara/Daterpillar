@@ -4,20 +4,24 @@ using System.Runtime.Serialization;
 
 namespace Gigobyte.Daterpillar.Compare
 {
-    [DataContract]
     public class ComparisonReport : IEnumerable<Discrepancy>
     {
-        public Counter Counters;
+        public ComparisonReport()
+        {
+            Discrepancies = new List<Discrepancy>();
+        }
 
-        [DataMember]
-        public Outcome Summary { get; set; }
+        public Outcomes Summary { get; set; }
 
-        [DataMember]
+        public int TotalSourceTables { get; set; }
+
+        public int TotalTargetTables { get; set; }
+
         public IList<Discrepancy> Discrepancies { get; set; }
 
         public IEnumerator<Discrepancy> GetEnumerator()
         {
-            foreach (var item in Discrepancies) { yield return item; }
+            return Discrepancies.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -25,11 +29,12 @@ namespace Gigobyte.Daterpillar.Compare
             return GetEnumerator();
         }
 
-        public struct Counter
+        public void Summarize()
         {
-            public int SourceTables;
-
-            public int DestTables;
+            if (Discrepancies.Count == 0)
+            {
+                Summary = Outcomes.Equal;
+            }
         }
     }
 }
