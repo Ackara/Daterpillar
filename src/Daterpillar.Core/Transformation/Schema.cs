@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -7,7 +6,7 @@ namespace Gigobyte.Daterpillar.Transformation
 {
     /// <summary>Represents a database schema.</summary>
     [XmlRoot("schema", Namespace = Xmlns)]
-    public class Schema : IEnumerable<Table>
+    public class Schema
     {
         #region Static Members
 
@@ -93,16 +92,6 @@ namespace Gigobyte.Daterpillar.Transformation
                 {
                     _tables.RemoveAt(i);
                 }
-        }
-
-        public IEnumerator<Table> GetEnumerator()
-        {
-            return Tables.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         #region Private Member

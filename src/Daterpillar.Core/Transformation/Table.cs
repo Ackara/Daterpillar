@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar.Transformation
 {
     /// <summary>Represents a database table.</summary>
-    public class Table : IEnumerable<Column>
+    public class Table
     {
         /// <summary>Gets or sets the name.</summary>
         /// <value>The name.</value>
@@ -36,15 +35,5 @@ namespace Gigobyte.Daterpillar.Transformation
         /// <value>The indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
-
-        public IEnumerator<Column> GetEnumerator()
-        {
-            return Columns.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }
