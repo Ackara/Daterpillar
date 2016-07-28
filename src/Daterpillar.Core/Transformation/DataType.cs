@@ -1,46 +1,61 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar.Transformation
 {
-    /// <summary>
-    /// Represents a SQL type.
-    /// </summary>
-    public struct DataType
+    /// <summary>Represents a SQL type.</summary>
+    public struct DataType : IEquatable<DataType>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataType"/> struct.
-        /// </summary>
+        #region Operators
+
+        public static bool operator ==(DataType left, DataType right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(DataType left, DataType right)
+        {
+            return !left.Equals(right);
+        }
+
+        #endregion Operators
+
+        /// <summary>Initializes a new instance of the <see cref="DataType"/> struct.</summary>
         /// <param name="typeName">Name of the type.</param>
         public DataType(string typeName) : this()
         {
             Name = typeName;
         }
 
-        /// <summary>
-        /// Gets or sets the scale.
-        /// </summary>
-        /// <value>
-        /// The scale.
-        /// </value>
+        /// <summary>Gets or sets the scale.</summary>
+        /// <value>The scale.</value>
         [XmlAttribute("scale")]
         public int Scale { get; set; }
 
-        /// <summary>
-        /// Gets or sets the precision.
-        /// </summary>
-        /// <value>
-        /// The precision.
-        /// </value>
+        /// <summary>Gets or sets the precision.</summary>
+        /// <value>The precision.</value>
         [XmlAttribute("precision")]
         public int Precision { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
+        /// <summary>Gets or sets the name.</summary>
+        /// <value>The name.</value>
         [XmlText]
         public string Name { get; set; }
+
+        public bool Equals(DataType other)
+        {
+            return Name == other.Name && Precision == other.Precision && Scale == other.Scale;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DataType) return Equals((DataType)obj);
+            else return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^ Precision ^ Scale;
+        }
     }
 }
