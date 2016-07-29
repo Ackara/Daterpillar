@@ -32,6 +32,19 @@ namespace Gigobyte.Daterpillar.Transformation
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DataType"/> struct.
+        /// </summary>
+        /// <param name="typeName">Name of the type.</param>
+        /// <param name="scale">The scale.</param>
+        /// <param name="precision">The precision.</param>
+        public DataType(string typeName, int scale, int precision)
+        {
+            Name = typeName;
+            Scale = scale;
+            Precision = precision;
+        }
+
+        /// <summary>
         /// Gets or sets the scale.
         /// </summary>
         /// <value>The scale.</value>
