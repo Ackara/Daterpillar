@@ -42,6 +42,24 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var source = Test.Data.CreateSchema();
             var target = Test.Data.CreateSchema();
+            target.Tables.Add(new Table()
+            {
+                Name = "AnotherTable",
+                Columns = new List<Column>(new Column[]
+                {
+                    new Column()
+                    {
+                        Name = "Id",
+                        DataType = new DataType("INT"),
+                        Modifiers = new List<string>(new string[] { "NOT NULL", "PRIMARY KEY" })
+                    },
+                    new Column ()
+                    {
+                        Name = "Id",
+                        DataType = new DataType("Name", 64, 0)
+                    }
+                })
+            });
 
             var sut = new SchemaComparer();
 

@@ -28,7 +28,7 @@ namespace Gigobyte.Daterpillar.Compare
 
         public int Compare(Schema source, Schema target)
         {
-            var report = GenerateReport(source, target);
+            GenerateReport(source, target);
 
             throw new System.NotImplementedException();
         }
@@ -62,11 +62,11 @@ namespace Gigobyte.Daterpillar.Compare
             for (int i = 0; i < left.Length; i++)
             {
                 l = left[i];
-                SwapMactchingItems(ref right, (l?.Name), i);
+                SwapMatchingItems(ref right, (l?.Name), i);
             }
         }
 
-        private static void SwapMactchingItems<T>(ref T[] right, string name, int targetIdx)
+        private static void SwapMatchingItems<T>(ref T[] right, string name, int targetIdx)
         {
             dynamic r; T temp;
             for (int i = targetIdx; i < right.Length; i++)
@@ -115,14 +115,12 @@ namespace Gigobyte.Daterpillar.Compare
                     });
                 }
 
-                if (left[i].DataType == right[i].DataType)
+                if (left[i].DataType != right[i].DataType)
                 {
                     _report.Discrepancies.Add(new Discrepancy()
                     {
                     });
                 }
-
-
             }
         }
 
