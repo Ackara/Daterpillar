@@ -11,7 +11,7 @@ namespace Gigobyte.Daterpillar.Compare
             Discrepancies = new List<Discrepancy>();
         }
 
-        public Outcomes Summary { get; set; }
+        public ReportConclusions Summary { get; set; }
 
         public int TotalSourceTables { get; set; }
 
@@ -33,7 +33,7 @@ namespace Gigobyte.Daterpillar.Compare
         {
             if (Discrepancies.Count == 0)
             {
-                Summary = Outcomes.Equal;
+                Summary = ReportConclusions.Equal;
             }
         }
     }

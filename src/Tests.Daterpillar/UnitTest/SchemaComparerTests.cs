@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.AreEqual(Outcomes.Equal, report.Summary);
+            Assert.AreEqual(ReportConclusions.Equal, report.Summary);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(3, report.Discrepancies.Count);
-            Assert.AreEqual(Outcomes.NotEqual, report.Summary);
+            Assert.AreEqual(ReportConclusions.NotEqual, report.Summary);
         }
 
         [TestMethod]
@@ -65,8 +65,8 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.AreEqual(Outcomes.SourceEmpty, report.Summary);
-            Assert.AreEqual(Outcomes.TargetEmpty, report.Summary);
+            Assert.AreEqual(ReportConclusions.SourceEmpty, report.Summary);
+            Assert.AreEqual(ReportConclusions.TargetEmpty, report.Summary);
         }
 
         [TestMethod]
