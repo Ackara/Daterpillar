@@ -54,7 +54,7 @@
     <Compile Include="Compare\Discrepancy.cs" />
     <Compile Include="Compare\ISchemaAggregator.cs" />
     <Compile Include="Compare\ISchemaComparer.cs" />
-    <Compile Include="Compare\ReportConclusions.cs" />
+    <Compile Include="Compare\ComparisionReportConclusions.cs" />
     <Compile Include="Compare\SchemaComparer.cs" />
     <Compile Include="Compare\ComparisonReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

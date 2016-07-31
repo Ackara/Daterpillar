@@ -1,7 +1,7 @@
 ﻿namespace Gigobyte.Daterpillar.Compare
 {
     [System.Flags]
-    public enum ReportConclusions
+    public enum ComparisionReportConclusions
     {
         None = 0x0,
         NotEqual = 0x1,

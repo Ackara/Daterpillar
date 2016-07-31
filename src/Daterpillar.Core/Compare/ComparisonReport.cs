@@ -10,11 +10,10 @@ namespace Gigobyte.Daterpillar.Compare
             Discrepancies = new List<Discrepancy>();
         }
 
-        public ReportConclusions Summary { get; set; }
+        public Counter Source;
+        public Counter Target;
 
-        public Counter Source { get; set; }
-
-        public Counter Target { get; set; }
+        public ComparisionReportConclusions Summary { get; set; }
 
         public int TotalSourceTables { get; set; }
 
@@ -34,18 +33,20 @@ namespace Gigobyte.Daterpillar.Compare
 
         public void Summarize()
         {
-            var conclusion = ReportConclusions.None;
+            var conclusion = ComparisionReportConclusions.None;
             if (Source.TotalObjects == 0)
-                conclusion |= ReportConclusions.SourceEmpty;
+                conclusion |= ComparisionReportConclusions.SourceEmpty;
 
             if (Target.TotalObjects == 0)
-                conclusion |= ReportConclusions.TargetEmpty;
+                conclusion |= ComparisionReportConclusions.TargetEmpty;
 
             if (Discrepancies.Count > 0)
-                conclusion |= ReportConclusions.NotEqual;
+                conclusion |= ComparisionReportConclusions.NotEqual;
 
             if (Discrepancies.Count == 0)
-                conclusion |= ReportConclusions.Equal;
+                conclusion |= ComparisionReportConclusions.Equal;
+
+            Summary = conclusion;
         }
 
         public struct Counter

@@ -1,4 +1,5 @@
-﻿using Gigobyte.Daterpillar.Transformation;
+﻿using System;
+using Gigobyte.Daterpillar.Transformation;
 
 namespace Gigobyte.Daterpillar.Compare
 {
@@ -18,13 +19,14 @@ namespace Gigobyte.Daterpillar.Compare
         public ComparisonReport GenerateReport(Schema source, Schema target)
         {
             _report = new ComparisonReport();
-            _report.TotalSourceTables = source.Tables.Count;
-            _report.TotalTargetTables = target.Tables.Count;
 
             FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
-            _report.Summarize();
+            SummarizeReport(source, target);
+
             return _report;
         }
+
+        
 
         public int Compare(Schema source, Schema target)
         {
@@ -122,6 +124,28 @@ namespace Gigobyte.Daterpillar.Compare
                     });
                 }
             }
+        }
+
+        private void SummarizeReport(Schema source, Schema target)
+        {
+            _report.Source.TotalTables = source.Tables.Count;
+            _report.Target.TotalTables = target.Tables.Count;
+
+            foreach (var table in source.Tables)
+            {
+                _report.Source.TotalColumns = table.Columns.Count;
+                _report.Source.TotalIndexes = table.Indexes.Count;
+                _report.Source.TotalForeignKeys = table.ForeignKeys.Count;
+            }
+
+            foreach (var table in target.Tables)
+            {
+                _report.Target.TotalColumns = table.Columns.Count;
+                _report.Target.TotalIndexes = table.Indexes.Count;
+                _report.Target.TotalForeignKeys = table.ForeignKeys.Count;
+            }
+
+            _report.Summarize();
         }
 
         #endregion Private Members

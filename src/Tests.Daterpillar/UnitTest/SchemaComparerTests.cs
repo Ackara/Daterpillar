@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.AreEqual(ReportConclusions.Equal, report.Summary);
+            Assert.AreEqual(ComparisionReportConclusions.Equal, report.Summary);
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(3, report.Discrepancies.Count);
-            Assert.AreEqual(ReportConclusions.NotEqual, report.Summary);
+            Assert.AreEqual(ComparisionReportConclusions.NotEqual, report.Summary);
         }
 
         [TestMethod]
@@ -83,8 +83,9 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.AreEqual(ReportConclusions.SourceEmpty, report.Summary);
-            Assert.AreEqual(ReportConclusions.TargetEmpty, report.Summary);
+            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.Equal));
+            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.SourceEmpty));
+            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.TargetEmpty));
         }
 
         [TestMethod]
@@ -98,7 +99,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_less_then_zero_when_the_left_schema_has_less_DB_objects()
+        public void Compare_should_return_an_int_less_than_zero_when_the_left_schema_has_less_DB_objects()
         {
             // Arrange
             var schemaA = Test.Data.CreateSchema();
@@ -117,13 +118,31 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_greater_then_zero_when_the_right_schema_has_more_DB_objects()
+        public void Compare_should_return_an_int_greater_than_zero_when_the_right_schema_has_more_DB_objects()
         {
             // Arrange
             var schemaA = Test.Data.CreateSchema();
             schemaA.Tables.Add(CreateMockTable("anotherOne"));
 
             var schemaB = Test.Data.CreateSchema();
+
+            var sut = new SchemaComparer();
+
+            // Act
+            var result = sut.Compare(schemaA, schemaB);
+
+            // Assert
+            Assert.IsTrue(result > 0);
+        }
+
+        [TestMethod]
+        [Owner(Test.Dev.Ackara)]
+        public void Compare_should_return_an_int_greater_than_zero_when_both_schemas_has_the_same_db_objects_but_has_descrepancies()
+        {
+            // Arrange
+            var schemaA = Test.Data.CreateSchema();
+            var schemaB = Test.Data.CreateSchema();
+            schemaB.Tables[0].Columns[0].DataType = new DataType("BIGINT");
 
             var sut = new SchemaComparer();
 
