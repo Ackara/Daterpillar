@@ -1,4 +1,5 @@
-﻿using Gigobyte.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Data;
+using Gigobyte.Daterpillar.Transformation;
 
 namespace Gigobyte.Daterpillar.Compare
 {
