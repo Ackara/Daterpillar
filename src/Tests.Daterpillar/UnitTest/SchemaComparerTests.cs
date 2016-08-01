@@ -42,24 +42,7 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var source = Test.Data.CreateSchema();
             var target = Test.Data.CreateSchema();
-            target.Tables.Add(new Table()
-            {
-                Name = "AnotherTable",
-                Columns = new List<Column>(new Column[]
-                {
-                    new Column()
-                    {
-                        Name = "Id",
-                        DataType = new DataType("INT"),
-                        Modifiers = new List<string>(new string[] { "NOT NULL", "PRIMARY KEY" })
-                    },
-                    new Column ()
-                    {
-                        Name = "Id",
-                        DataType = new DataType("Name", 64, 0)
-                    }
-                })
-            });
+            target.Tables.Add(CreateMockTable("anotherOne"));
 
             var sut = new SchemaComparer();
 
@@ -67,7 +50,7 @@ namespace Tests.Daterpillar.UnitTest
             var report = sut.GenerateReport(source, target);
 
             // Assert
-            Assert.AreEqual(3, report.Discrepancies.Count);
+            Assert.AreEqual(1, report.Discrepancies.Count);
             Assert.AreEqual(ComparisionReportConclusions.NotEqual, report.Summary);
         }
 
@@ -137,7 +120,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_greater_than_zero_when_both_schemas_has_the_same_db_objects_but_has_descrepancies()
+        public void Compare_should_return_an_int_greater_than_zero_when_both_schemas_has_the_same_db_objects_but_has_discrepancies()
         {
             // Arrange
             var schemaA = Test.Data.CreateSchema();

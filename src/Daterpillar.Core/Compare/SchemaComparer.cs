@@ -1,5 +1,4 @@
-﻿using System;
-using Gigobyte.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Transformation;
 
 namespace Gigobyte.Daterpillar.Compare
 {
@@ -26,13 +25,13 @@ namespace Gigobyte.Daterpillar.Compare
             return _report;
         }
 
-        
-
         public int Compare(Schema source, Schema target)
         {
             GenerateReport(source, target);
 
-            throw new System.NotImplementedException();
+            if (_report.Summary.HasFlag(ComparisionReportConclusions.Equal)) return 0;
+            else if ((_report.Source.TotalObjects >= _report.Target.TotalObjects)) return 1;
+            else return -1;
         }
 
         #region Private Members
@@ -91,7 +90,15 @@ namespace Gigobyte.Daterpillar.Compare
 
             for (int i = 0; i < left.Length; i++)
             {
-                FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
+                if (left[i] == null && right[i] != null)
+                {
+                    _report.Discrepancies.Add(new Discrepancy());
+                }
+                else if (left[i] != null && right[i] == null)
+                {
+                    _report.Discrepancies.Add(new Discrepancy());
+                }
+                else FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
             }
         }
 
@@ -128,21 +135,21 @@ namespace Gigobyte.Daterpillar.Compare
 
         private void SummarizeReport(Schema source, Schema target)
         {
-            _report.Source.TotalTables = source.Tables.Count;
-            _report.Target.TotalTables = target.Tables.Count;
+            _report.Source.TotalTables = ((source?.Tables?.Count) ?? 0);
+            _report.Target.TotalTables = ((target?.Tables?.Count) ?? 0);
 
             foreach (var table in source.Tables)
             {
-                _report.Source.TotalColumns = table.Columns.Count;
-                _report.Source.TotalIndexes = table.Indexes.Count;
-                _report.Source.TotalForeignKeys = table.ForeignKeys.Count;
+                _report.Source.TotalColumns += ((table?.Columns?.Count) ?? 0);
+                _report.Source.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
+                _report.Source.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
             }
 
             foreach (var table in target.Tables)
             {
-                _report.Target.TotalColumns = table.Columns.Count;
-                _report.Target.TotalIndexes = table.Indexes.Count;
-                _report.Target.TotalForeignKeys = table.ForeignKeys.Count;
+                _report.Target.TotalColumns += ((table?.Columns?.Count) ?? 0);
+                _report.Target.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
+                _report.Target.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
             }
 
             _report.Summarize();
