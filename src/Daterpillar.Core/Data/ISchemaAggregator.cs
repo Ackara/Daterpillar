@@ -4,6 +4,6 @@ namespace Gigobyte.Daterpillar.Data
 {
     public interface ISchemaAggregator : System.IDisposable
     {
-        Schema FetchSchema();
+        Schema FetchSchema(string connectionString);
     }
 }

@@ -17,12 +17,12 @@ namespace Tests.Daterpillar.UnitTest
         {
             // Arrange
             var sourceMockAggregator = Mock.Create<ISchemaAggregator>();
-            sourceMockAggregator.Arrange(x => x.FetchSchema())
+            sourceMockAggregator.Arrange(x => x.FetchSchema(Arg.AnyString))
                 .Returns(Test.Data.CreateSchema())
                 .OccursOnce();
 
             var targetMockAggregator = Mock.Create<ISchemaAggregator>();
-            targetMockAggregator.Arrange(x => x.FetchSchema())
+            targetMockAggregator.Arrange(x => x.FetchSchema(Arg.AnyString))
                 .Returns(Test.Data.CreateSchema())
                 .OccursOnce();
 
