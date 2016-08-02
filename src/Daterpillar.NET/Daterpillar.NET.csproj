@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Data\AdoNetConnectionWrapper.cs" />
     <Compile Include="Data\AdoNetEntityConstructor.cs" />
-    <Compile Include="Data\MSSQLSchemaAggregator.cs" />
+    <Compile Include="Data\SchemaAggregatorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
