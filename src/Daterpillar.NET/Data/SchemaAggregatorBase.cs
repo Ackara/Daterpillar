@@ -92,8 +92,6 @@ namespace Gigobyte.Daterpillar.Data
                         newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                         newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
                         newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
-
-                        
                     }
                 }
             }
@@ -113,9 +111,13 @@ namespace Gigobyte.Daterpillar.Data
 
         public struct ColumnName
         {
-            public const string Name = "";
-            public const string Comment = "";
-            public const string Auto = "";
+            public const string Name = "Name";
+            public const string Auto = "Auto";
+            public const string Scale = "Scale";
+            public const string DataType = "Type";
+            public const string Comment = "Comment";
+            public const string Nullable = "Nullable";
+            public const string Precision = "Precision";
         }
     }
 }
