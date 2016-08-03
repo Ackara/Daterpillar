@@ -125,11 +125,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sample Data\Music.cs" />
     <Compile Include="SampleData.cs" />
-    <Compile Include="datasoft.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>datasoft.tt</DependentUpon>
-    </Compile>
     <Compile Include="T4 Template\schema.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -176,11 +171,6 @@
     <None Include="Sample Data\mock-schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="datasoft.xddl.xml" />
-    <Content Include="datasoft.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>datasoft.cs</LastGenOutput>
-    </Content>
     <Content Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.cs</LastGenOutput>
@@ -206,7 +196,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Fakes\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
