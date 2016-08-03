@@ -1,6 +1,8 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -46,19 +48,6 @@ namespace Tests.Daterpillar
 
                 return new DirectoryInfo(baseDirectory).GetFiles(ext, SearchOption.AllDirectories)
                     .First(x => x.Name == filename);
-            }
-
-            public static Schema CreateSchema([CallerMemberName]string name = null)
-            {
-                var schema = new Schema();
-                schema.Name = name;
-                schema.Author = "johnDoe@example.com";
-
-                var employeeTable = CreateTableSchema();
-                schema.Tables.Add(employeeTable);
-                schema.Script = "-- Script Goes Here";
-
-                return schema;
             }
 
             public static Table CreateTableSchema(string name = "Employee")
@@ -112,6 +101,76 @@ namespace Tests.Daterpillar
                 table.Indexes = new List<Index>() { pKey, idx1 };
 
                 return table;
+            }
+
+            public static Schema CreateSchema([CallerMemberName]string name = null)
+            {
+                var schema = new Schema();
+                schema.Name = name;
+                schema.Author = "johnDoe@example.com";
+
+                var employeeTable = CreateTableSchema();
+                schema.Tables.Add(employeeTable);
+                schema.Script = "-- Script Goes Here";
+
+                return schema;
+            }
+
+            public static Schema CreateMockSchema(string filename = File.MockSchemaXML)
+            {
+                return Schema.Load(GetFile(filename).OpenRead());
+            }
+
+            public static bool TryCreateDatabase(IDbConnection connection, Schema schema, ITemplate template)
+            {
+                try
+                {
+                    using (connection)
+                    {
+                        if (connection.State != ConnectionState.Open) connection.Open();
+
+                        TryTruncateDatabase(connection, schema, false);
+                        using (IDbCommand command = connection.CreateCommand())
+                        {
+                            command.CommandText = template.Transform(schema);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    return true;
+                }
+                catch (System.Data.Common.DbException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error: {ex.ErrorCode}");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+
+            public static bool TryTruncateDatabase(IDbConnection connection, Schema schema, bool shouldDisposeConnection = true)
+            {
+                try
+                {
+                    if (connection.State != ConnectionState.Open) connection.Open();
+                    using (var command = connection.CreateCommand())
+                    {
+                        for (int i = schema.Tables.Count - 1; i >= 0; i--)
+                        {
+                            command.CommandText = $"DROP TABLE {schema.Tables[i].Name};";
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    return true;
+                }
+                catch (System.Data.Common.DbException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error: {ex.ErrorCode}");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    if (shouldDisposeConnection) connection?.Dispose();
+                }
             }
         }
     }

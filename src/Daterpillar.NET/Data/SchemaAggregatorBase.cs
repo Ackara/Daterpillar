@@ -7,16 +7,16 @@ namespace Gigobyte.Daterpillar.Data
 {
     public abstract class SchemaAggregatorBase : ISchemaAggregator
     {
-        public SchemaAggregatorBase(string connectionString)
+        public SchemaAggregatorBase(IDbConnection connection)
         {
-            ConnectionString = connectionString;
+            _connection = connection;
         }
 
-        protected string ConnectionString;
-
-        protected IDbConnection Database;
-
-        protected Schema Schema;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         public Schema FetchSchema()
         {
@@ -28,17 +28,21 @@ namespace Gigobyte.Daterpillar.Data
             return Schema;
         }
 
-        public void Dispose()
+        protected Schema GetSchema()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            return Schema;
+        }
+
+        protected IDbConnection GetConnection()
+        {
+            return _connection;
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                Database?.Dispose();
+                _connection?.Dispose();
             }
         }
 
@@ -48,17 +52,23 @@ namespace Gigobyte.Daterpillar.Data
 
         #region Private Members
 
+        private string ConnectionString;
+
+        private IDbConnection _connection;
+
+        private Schema Schema;
+
         private void OpenConnectionIfClosed()
         {
-            if (Database != null) Database.Dispose();
+            if (_connection != null) _connection.Dispose();
 
-            Database = new SqlConnection(ConnectionString);
-            if (Database.State != ConnectionState.Open) Database.Open();
+            _connection = new SqlConnection(ConnectionString);
+            if (_connection.State != ConnectionState.Open) _connection.Open();
         }
 
         private void FetchTableInformation()
         {
-            using (var command = Database.CreateCommand())
+            using (var command = _connection.CreateCommand())
             {
                 command.CommandText = GetTableInfoQuery();
                 using (var results = new DataTable())
@@ -80,7 +90,7 @@ namespace Gigobyte.Daterpillar.Data
 
         private void FetchColumnInformation(Table table)
         {
-            using (var command = Database.CreateCommand())
+            using (var command = _connection.CreateCommand())
             {
                 command.CommandText = GetColumnInfoQuery(table.Name);
                 using (var results = new DataTable())
@@ -109,6 +119,8 @@ namespace Gigobyte.Daterpillar.Data
 
         #endregion Private Members
 
+        #region Constants
+
         public struct ColumnName
         {
             public const string Name = "Name";
@@ -119,5 +131,7 @@ namespace Gigobyte.Daterpillar.Data
             public const string Nullable = "Nullable";
             public const string Precision = "Precision";
         }
+
+        #endregion Constants
     }
 }
