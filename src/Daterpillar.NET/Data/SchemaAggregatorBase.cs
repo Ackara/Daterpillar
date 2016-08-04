@@ -1,7 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using System;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace Gigobyte.Daterpillar.Data
 {
@@ -20,17 +19,17 @@ namespace Gigobyte.Daterpillar.Data
 
         public Schema FetchSchema()
         {
-            Schema = new Schema();
+            _schema = new Schema();
 
             OpenConnectionIfClosed();
             FetchTableInformation();
 
-            return Schema;
+            return _schema;
         }
 
         protected Schema GetSchema()
         {
-            return Schema;
+            return _schema;
         }
 
         protected IDbConnection GetConnection()
@@ -48,7 +47,11 @@ namespace Gigobyte.Daterpillar.Data
 
         protected abstract string GetTableInfoQuery();
 
+        protected abstract string GetIndexInfoQuery(string tableName);
+
         protected abstract string GetColumnInfoQuery(string tableName);
+
+        protected abstract string GetForeignKeyInfoQuery(string tableName);
 
         #region Private Members
 
@@ -56,13 +59,10 @@ namespace Gigobyte.Daterpillar.Data
 
         private IDbConnection _connection;
 
-        private Schema Schema;
+        private Schema _schema;
 
         private void OpenConnectionIfClosed()
         {
-            if (_connection != null) _connection.Dispose();
-
-            _connection = new SqlConnection(ConnectionString);
             if (_connection.State != ConnectionState.Open) _connection.Open();
         }
 
@@ -81,8 +81,9 @@ namespace Gigobyte.Daterpillar.Data
                         newTable.Comment = Convert.ToString(row[ColumnName.Comment]);
 
                         FetchColumnInformation(newTable);
-                        FetchIndexInformation(newTable);
-                        FetchForeignKeyInformation(newTable);
+                        //FetchIndexInformation(newTable);
+                        //FetchForeignKeyInformation(newTable);
+                        _schema.Tables.Add(newTable);
                     }
                 }
             }
@@ -98,10 +99,23 @@ namespace Gigobyte.Daterpillar.Data
                     results.Load(command.ExecuteReader());
                     foreach (DataRow row in results.Rows)
                     {
+                        string primaryKey = Convert.ToString(row[ColumnName.Key]);
+                        string nullable = Convert.ToString(row[ColumnName.Nullable]);
+                        string defaultValue = Convert.ToString(row[ColumnName.Default]);
+                        string typeName = Convert.ToString(row[ColumnName.DataType]);
+                        int scale = Convert.ToInt32(row[ColumnName.Scale]);
+                        int precision = Convert.ToInt32(row[ColumnName.Precision]);
+
                         var newColumn = new Column();
                         newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                         newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
+                        newColumn.DataType = new DataType(typeName, scale, precision);
                         newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
+                        if (!string.IsNullOrEmpty(nullable)) newColumn.Modifiers.Add(nullable);
+                        if (!string.IsNullOrEmpty(primaryKey)) newColumn.Modifiers.Add(primaryKey);
+                        if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+
+                        table.Columns.Add(newColumn);
                     }
                 }
             }
@@ -123,6 +137,7 @@ namespace Gigobyte.Daterpillar.Data
 
         public struct ColumnName
         {
+            public const string Key = "Key";
             public const string Name = "Name";
             public const string Auto = "Auto";
             public const string Scale = "Scale";
@@ -130,6 +145,7 @@ namespace Gigobyte.Daterpillar.Data
             public const string Comment = "Comment";
             public const string Nullable = "Nullable";
             public const string Precision = "Precision";
+            public const string Default = "Default";
         }
 
         #endregion Constants

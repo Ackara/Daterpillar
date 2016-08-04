@@ -1,4 +1,6 @@
-﻿using Gigobyte.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Compare;
+using Gigobyte.Daterpillar.Data;
+using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
@@ -16,12 +18,17 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             // Arrange
             var schema = Test.Data.CreateMockSchema();
-            var connection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString);
-            IgnoreTestIfDbConnectionIsUnavailable(schema, connection, new SqlTemplate());
+            var connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
+            IgnoreTestIfDbConnectionIsUnavailable(schema, new System.Data.SqlClient.SqlConnection(connectionString), new SqlTemplate());
+
+            var sut = new MSSQLSchemaAggregator(new System.Data.SqlClient.SqlConnection(connectionString));
 
             // Act
+            var remoteSchema =  sut.FetchSchema();
+            var schemasAreSame = new SchemaComparer().GenerateReport(schema, remoteSchema).Summary;
 
             // Assert
+            Assert.AreEqual(ComparisionReportConclusions.Equal, schemasAreSame);
         }
 
         [TestMethod]

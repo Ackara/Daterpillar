@@ -129,6 +129,7 @@ namespace Tests.Daterpillar
                     {
                         if (connection.State != ConnectionState.Open) connection.Open();
 
+                        schema.Name = connection.Database;
                         TryTruncateDatabase(connection, schema, false);
                         using (IDbCommand command = connection.CreateCommand())
                         {
