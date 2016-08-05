@@ -82,7 +82,7 @@ namespace Gigobyte.Daterpillar.Data
 
                         FetchColumnInformation(newTable);
                         //FetchIndexInformation(newTable);
-                        //FetchForeignKeyInformation(newTable);
+                        FetchForeignKeyInformation(newTable);
                         _schema.Tables.Add(newTable);
                     }
                 }
@@ -99,7 +99,6 @@ namespace Gigobyte.Daterpillar.Data
                     results.Load(command.ExecuteReader());
                     foreach (DataRow row in results.Rows)
                     {
-                        string primaryKey = Convert.ToString(row[ColumnName.Key]);
                         string nullable = Convert.ToString(row[ColumnName.Nullable]);
                         string defaultValue = Convert.ToString(row[ColumnName.Default]);
                         string typeName = Convert.ToString(row[ColumnName.DataType]);
@@ -112,10 +111,26 @@ namespace Gigobyte.Daterpillar.Data
                         newColumn.DataType = new DataType(typeName, scale, precision);
                         newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
                         if (!string.IsNullOrEmpty(nullable)) newColumn.Modifiers.Add(nullable);
-                        if (!string.IsNullOrEmpty(primaryKey)) newColumn.Modifiers.Add(primaryKey);
                         if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+                        if (newColumn.AutoIncrement) newColumn.Modifiers.Add("PRIMARY KEY");
 
                         table.Columns.Add(newColumn);
+                    }
+                }
+            }
+        }
+
+        private void FetchForeignKeyInformation(Table table)
+        {
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = GetForeignKeyInfoQuery(table.Name);
+                using (var results = new DataTable())
+                {
+                    results.Load(command.ExecuteReader());
+                    foreach (DataRow row in results.Rows)
+                    {
+
                     }
                 }
             }
@@ -126,10 +141,6 @@ namespace Gigobyte.Daterpillar.Data
             throw new System.NotImplementedException();
         }
 
-        private void FetchForeignKeyInformation(Table table)
-        {
-            throw new System.NotImplementedException();
-        }
 
         #endregion Private Members
 
