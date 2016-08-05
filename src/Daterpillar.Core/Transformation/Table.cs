@@ -6,6 +6,14 @@ namespace Gigobyte.Daterpillar.Transformation
     /// <summary>Represents a database table.</summary>
     public class Table
     {
+        public Table()
+        {
+            Columns = new List<Column>();
+            Modifiers = new List<string>();
+            ForeignKeys = new List<ForeignKey>();
+            Indexes = new List<Index>();
+        }
+
         /// <summary>Gets or sets the name.</summary>
         /// <value>The name.</value>
         [XmlAttribute("name")]
