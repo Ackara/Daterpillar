@@ -31,8 +31,8 @@ namespace Tests.Daterpillar.UnitTest
                 DropDatabaseIfExist = true
             };
 
-            var schema = Test.Data.CreateSchema();
-            var managerTable = Test.Data.CreateTableSchema("Manager");
+            var schema = SampleData.CreateSchema();
+            var managerTable = SampleData.CreateTableSchema("Manager");
             managerTable.Comment = "this is a table";
             schema.Tables.Add(managerTable);
 
@@ -62,8 +62,8 @@ namespace Tests.Daterpillar.UnitTest
                 DropDatabaseIfExist = false
             };
 
-            var schema = Test.Data.CreateSchema();
-            var managerTable = Test.Data.CreateTableSchema("Manager");
+            var schema = SampleData.CreateSchema();
+            var managerTable = SampleData.CreateTableSchema("Manager");
             schema.Tables.Add(managerTable);
 
             var mockResolver = Mock.Create<ITypeNameResolver>();
@@ -86,7 +86,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_assign_the_mysql_schema_index_tableName_property_when_null()
         {
             // Arrange
-            var sample = Test.Data.CreateSchema();
+            var sample = SampleData.CreateSchema();
             sample.Tables[0].Indexes[1].Table = string.Empty;
 
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();

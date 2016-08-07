@@ -25,8 +25,8 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_csharp_classes_when_all_template_settings_are_enabled()
         {
             // Arrange
-            Schema schema = Test.Data.CreateSchema();
-            schema.Tables.Add(Test.Data.CreateTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {
@@ -57,8 +57,8 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_csharp_classes_when_all_template_settings_are_disabled()
         {
             // Arrange
-            Schema schema = Test.Data.CreateSchema();
-            schema.Tables.Add(Test.Data.CreateTableSchema("Manager"));
+            Schema schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("Manager"));
 
             var settings = new CSharpTemplateSettings()
             {

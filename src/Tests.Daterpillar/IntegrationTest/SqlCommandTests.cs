@@ -18,9 +18,9 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestInitialize]
         public void Setup()
         {
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             _connectionString = System.Environment.ExpandEnvironmentVariables(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString);
-            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
+            _unableToRunTests = !SampleData.TryCreateDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
             {
                 AddScript = true,
                 CreateSchema = false,
@@ -35,8 +35,8 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestCleanup]
         public void Cleanup()
         {
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
-            SampleData.TruncateDatabase(new SqlConnection(_connectionString), schema);
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
+            SampleData.TryTruncateDatabase(new SqlConnection(_connectionString), schema);
         }
 
         [TestMethod]
@@ -142,7 +142,7 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             if (_unableToRunTests)
             {
-                string failureMessage = $"The {nameof(SampleData)}.{nameof(SampleData.TryCreateSampleDatabase)}() method was unable to create a sample database.";
+                string failureMessage = $"The {nameof(SampleData)}.{nameof(SampleData.TryCreateDatabase)}() method was unable to create a sample database.";
 #if DEBUG
                 Assert.Inconclusive(failureMessage);
 #else

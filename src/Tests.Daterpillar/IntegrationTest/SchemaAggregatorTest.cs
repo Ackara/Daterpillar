@@ -17,7 +17,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void FetchSchema_should_build_a_schema_object_from_a_active_mssql_database()
         {
             // Arrange
-            var schema = Test.Data.CreateMockSchema();
+            var schema = SampleData.CreateMockSchema();
             var connectionString = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
             IgnoreTestIfDbConnectionIsUnavailable(schema, new System.Data.SqlClient.SqlConnection(connectionString), new SqlTemplate());
 
@@ -51,7 +51,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
         private static void IgnoreTestIfDbConnectionIsUnavailable(Schema schema, IDbConnection connection, ITemplate template)
         {
-            bool wasNotSuccessful = !Test.Data.TryCreateDatabase(connection, schema, template);
+            bool wasNotSuccessful = !SampleData.TryCreateDatabase(connection, schema, template);
 #if DEBUG
             if (wasNotSuccessful) Assert.Inconclusive();
 #else

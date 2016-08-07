@@ -17,15 +17,13 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString.Trim();
-            _unableToRunTests = !SampleData.TryCreateSampleDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
+            _unableToRunTests = !SampleData.TryCreateDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
             {
                 CommentsEnabled = false,
-                DropDatabaseIfExist = true
+                DropDatabaseIfExist = false
             }));
-
-            _connectionString += ((_connectionString.Last() == ';' ? string.Empty : ";") + $"database={schema.Name}");
         }
 
         [TestMethod]
@@ -130,7 +128,7 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             if (_unableToRunTests)
             {
-                string failureMessage = $"The {nameof(SampleData.TryCreateSampleDatabase)}() method was unable to create a sample database.";
+                string failureMessage = $"The {nameof(SampleData.TryCreateDatabase)}() method was unable to create a sample database.";
 #if DEBUG
                 Assert.Inconclusive(failureMessage);
 #else

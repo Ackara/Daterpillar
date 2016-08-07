@@ -18,12 +18,12 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var sourceMockAggregator = Mock.Create<ISchemaAggregator>();
             sourceMockAggregator.Arrange(x => x.FetchSchema())
-                .Returns(Test.Data.CreateSchema())
+                .Returns(SampleData.CreateSchema())
                 .OccursOnce();
 
             var targetMockAggregator = Mock.Create<ISchemaAggregator>();
             targetMockAggregator.Arrange(x => x.FetchSchema())
-                .Returns(Test.Data.CreateSchema())
+                .Returns(SampleData.CreateSchema())
                 .OccursOnce();
 
             var sut = Mock.Create<SchemaComparer>();
@@ -41,8 +41,8 @@ namespace Tests.Daterpillar.UnitTest
         public void GenerateReport_should_return_not_equal_when_the_specified_schemas_are_not_the_same()
         {
             // Arrange
-            var source = Test.Data.CreateSchema();
-            var target = Test.Data.CreateSchema();
+            var source = SampleData.CreateSchema();
+            var target = SampleData.CreateSchema();
             target.Tables.Add(CreateMockTable("anotherOne"));
 
             var sut = new SchemaComparer();
@@ -76,7 +76,7 @@ namespace Tests.Daterpillar.UnitTest
         [Owner(Test.Dev.Ackara)]
         public void Compare_should_return_zero_when_the_specified_schemas_are_equal()
         {
-            var result = new SchemaComparer().Compare(Test.Data.CreateSchema(), Test.Data.CreateSchema());
+            var result = new SchemaComparer().Compare(SampleData.CreateSchema(), SampleData.CreateSchema());
 
             Assert.AreEqual(0, result);
         }
@@ -86,9 +86,9 @@ namespace Tests.Daterpillar.UnitTest
         public void Compare_should_return_an_int_less_than_zero_when_the_left_schema_has_less_DB_objects()
         {
             // Arrange
-            var schemaA = Test.Data.CreateSchema();
+            var schemaA = SampleData.CreateSchema();
 
-            var schemaB = Test.Data.CreateSchema();
+            var schemaB = SampleData.CreateSchema();
             schemaB.Tables.Add(CreateMockTable("anotherOne"));
 
             var sut = new SchemaComparer();
@@ -105,10 +105,10 @@ namespace Tests.Daterpillar.UnitTest
         public void Compare_should_return_an_int_greater_than_zero_when_the_right_schema_has_more_DB_objects()
         {
             // Arrange
-            var schemaA = Test.Data.CreateSchema();
+            var schemaA = SampleData.CreateSchema();
             schemaA.Tables.Add(CreateMockTable("anotherOne"));
 
-            var schemaB = Test.Data.CreateSchema();
+            var schemaB = SampleData.CreateSchema();
 
             var sut = new SchemaComparer();
 
@@ -124,8 +124,8 @@ namespace Tests.Daterpillar.UnitTest
         public void Compare_should_return_an_int_greater_than_zero_when_both_schemas_has_the_same_db_objects_but_has_discrepancies()
         {
             // Arrange
-            var schemaA = Test.Data.CreateSchema();
-            var schemaB = Test.Data.CreateSchema();
+            var schemaA = SampleData.CreateSchema();
+            var schemaB = SampleData.CreateSchema();
             schemaB.Tables[0].Columns[0].DataType = new DataType("BIGINT");
 
             var sut = new SchemaComparer();

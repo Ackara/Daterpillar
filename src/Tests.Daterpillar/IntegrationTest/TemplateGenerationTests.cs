@@ -34,12 +34,12 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropTableIfExist = true
             };
 
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             var sut = new SQLiteTemplate(settings, new SQLiteTypeNameResolver());
 
             // Act
             var script = sut.Transform(schema);
-            var connection = DbFactory.CreateSQLiteConnection(script);
+            var connection = SampleData.CreateSQLiteConnection(script);
 
             // Assert
             Assert.IsNotNull(connection);
@@ -53,7 +53,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_csharp_classes_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             var sut = new CSharpTemplate(CSharpTemplateSettings.Default, new CSharpTypeNameResolver());
 
             // Act
@@ -80,7 +80,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_csharp_classes_that_implement_INotifyPropertyChanged_when_invoked()
         {
             // Arrange
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             var settings = new NotifyPropertyChangedTemplateSettings()
             {
                 DataContractsEnabled = true,
@@ -114,7 +114,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_mysql_schema_when_invoked()
         {
             // Arrange
-            using (var fileStream = Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead())
+            using (var fileStream = SampleData.GetFile(Test.File.MockSchemaXML).OpenRead())
             {
                 var settings = new MySqlTemplateSettings()
                 {
@@ -130,7 +130,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 var script = sut.Transform(schema);
                 TestContext.WriteLine(script);
 
-                using (var connection = DbFactory.CreateMySqlConnection())
+                using (var connection = new MySql.Data.MySqlClient.MySqlConnection(ConfigurationManager.ConnectionStrings["mysql"].ConnectionString))
                 {
                     connection.Open();
                     using (var command = connection.CreateCommand())
@@ -161,7 +161,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropDatabaseIfExist = false,
             };
 
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act
@@ -176,7 +176,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 }
 
                 // Cleanup
-                SampleData.TruncateDatabase(connection, schema);
+                SampleData.TryTruncateDatabase(connection, schema);
             }
 
             // Assert

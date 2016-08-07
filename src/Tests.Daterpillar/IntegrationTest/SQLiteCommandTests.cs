@@ -25,8 +25,8 @@ namespace Tests.Daterpillar.IntegrationTest
             if (File.Exists(databaseFilename)) File.Delete(databaseFilename);
             SQLiteConnection.CreateFile(databaseFilename);
             _connectionString = new SQLiteConnectionStringBuilder() { DataSource = databaseFilename }.ConnectionString;
-            var schema = Schema.Load(Test.Data.GetFile(Test.File.MockSchemaXML).OpenRead());
-            SampleData.TryCreateSampleDatabase(new SQLiteConnection(_connectionString), schema, new SQLiteTemplate(new SQLiteTemplateSettings()));
+            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
+            SampleData.TryCreateDatabase(new SQLiteConnection(_connectionString), schema, new SQLiteTemplate(new SQLiteTemplateSettings()));
         }
 
         [TestMethod]
