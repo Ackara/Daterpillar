@@ -8,6 +8,11 @@ namespace Gigobyte.Daterpillar.Transformation
     /// </summary>
     public class Index
     {
+        public Index()
+        {
+            Columns = new List<IndexColumn>();
+        }
+
         /// <summary>
         /// Gets or sets the type.
         /// </summary>

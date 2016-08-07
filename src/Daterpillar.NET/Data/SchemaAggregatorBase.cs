@@ -1,6 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
 using System;
 using System.Data;
+using System.Linq;
 
 namespace Gigobyte.Daterpillar.Data
 {
@@ -11,10 +12,14 @@ namespace Gigobyte.Daterpillar.Data
             _connection = connection;
         }
 
-        public void Dispose()
+        protected Schema Schema
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            get { return _schema; }
+        }
+
+        protected IDbConnection Connection
+        {
+            get { return _connection; }
         }
 
         public Schema FetchSchema()
@@ -27,14 +32,10 @@ namespace Gigobyte.Daterpillar.Data
             return _schema;
         }
 
-        protected Schema GetSchema()
+        public void Dispose()
         {
-            return _schema;
-        }
-
-        protected IDbConnection GetConnection()
-        {
-            return _connection;
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -45,13 +46,99 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        protected virtual void LoadColumnInformationIntoSchema(Table table, DataTable columnInfo)
+        {
+            foreach (DataRow row in columnInfo.Rows)
+            {
+                int scale = Convert.ToInt32(row[ColumnName.Scale]);
+                string typeName = Convert.ToString(row[ColumnName.Type]);
+                int precision = Convert.ToInt32(row[ColumnName.Precision]);
+                string nullable = Convert.ToString(row[ColumnName.Nullable]);
+                string defaultValue = Convert.ToString(row[ColumnName.Default]);
+
+                var newColumn = new Column();
+                newColumn.Name = Convert.ToString(row[ColumnName.Name]);
+                newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
+                newColumn.DataType = new DataType(typeName, scale, precision);
+                newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
+                if (newColumn.AutoIncrement) newColumn.Modifiers.Add("PRIMARY KEY");
+                if (!string.IsNullOrEmpty(nullable)) newColumn.Modifiers.Add(nullable);
+                if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+
+                table.Columns.Add(newColumn);
+            }
+        }
+
+        protected virtual void LoadForeignKeyInformationIntoSchema(Table table, DataTable foreignKeyInfo)
+        {
+            foreach (DataRow row in foreignKeyInfo.Rows)
+            {
+                var newForeignKey = new ForeignKey();
+                newForeignKey.Name = Convert.ToString(row[ColumnName.Name]);
+                newForeignKey.LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]);
+                newForeignKey.ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]);
+                newForeignKey.ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]);
+                newForeignKey.OnDelete = Convert.ToString(row[ColumnName.OnDelete]);
+                newForeignKey.OnUpdate = Convert.ToString(row[ColumnName.OnUpdate]);
+                table.ForeignKeys.Add(newForeignKey);
+            }
+        }
+
+        protected virtual void LoadIndexInformationIntoSchema(Table table, DataTable indexInfo)
+        {
+            string autoColumn = ((from x in table.Columns where x.AutoIncrement select x.Name).FirstOrDefault());
+
+            foreach (DataRow row in indexInfo.Rows)
+            {
+                bool shouldInsertIndex = true;
+
+                var newIndex = new Index();
+                newIndex.Name = Convert.ToString(row[ColumnName.Name]);
+                newIndex.Type = Convert.ToString(row[ColumnName.Type]);
+                newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
+
+                // Find and load the index columns
+                using (var command = _connection.CreateCommand())
+                {
+                    command.CommandText = GetIndexColumnsQuery(Convert.ToString(row[ColumnName.Id]));
+                    using (var results = new DataTable())
+                    {
+                        results.Load(command.ExecuteReader());
+                        foreach (DataRow nestedRow in results.Rows)
+                        {
+                            string name = Convert.ToString(nestedRow[ColumnName.Name]);
+
+                            if (name == autoColumn)
+                            {
+                                shouldInsertIndex = false;
+                                break;
+                            }
+                            newIndex.Columns.Add(new IndexColumn()
+                            {
+                                Name = name,
+                                Order = (SortOrder)Enum.Parse(typeof(SortOrder), Convert.ToString(nestedRow[ColumnName.Order]))
+                            });
+                        }
+                    }
+                }
+
+                if (shouldInsertIndex) table.Indexes.Add(newIndex);
+            }
+        }
+
+        #region Abstract Methods
+
         protected abstract string GetTableInfoQuery();
 
         protected abstract string GetIndexInfoQuery(string tableName);
 
+        protected abstract string GetIndexColumnsQuery(string indexIdentifier);
+
         protected abstract string GetColumnInfoQuery(string tableName);
 
         protected abstract string GetForeignKeyInfoQuery(string tableName);
+
+        #endregion Abstract Methods
 
         #region Private Members
 
@@ -81,7 +168,7 @@ namespace Gigobyte.Daterpillar.Data
                         newTable.Comment = Convert.ToString(row[ColumnName.Comment]);
 
                         FetchColumnInformation(newTable);
-                        //FetchIndexInformation(newTable);
+                        FetchIndexInformation(newTable);
                         FetchForeignKeyInformation(newTable);
                         _schema.Tables.Add(newTable);
                     }
@@ -97,25 +184,7 @@ namespace Gigobyte.Daterpillar.Data
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());
-                    foreach (DataRow row in results.Rows)
-                    {
-                        string nullable = Convert.ToString(row[ColumnName.Nullable]);
-                        string defaultValue = Convert.ToString(row[ColumnName.Default]);
-                        string typeName = Convert.ToString(row[ColumnName.DataType]);
-                        int scale = Convert.ToInt32(row[ColumnName.Scale]);
-                        int precision = Convert.ToInt32(row[ColumnName.Precision]);
-
-                        var newColumn = new Column();
-                        newColumn.Name = Convert.ToString(row[ColumnName.Name]);
-                        newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
-                        newColumn.DataType = new DataType(typeName, scale, precision);
-                        newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
-                        if (!string.IsNullOrEmpty(nullable)) newColumn.Modifiers.Add(nullable);
-                        if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
-                        if (newColumn.AutoIncrement) newColumn.Modifiers.Add("PRIMARY KEY");
-
-                        table.Columns.Add(newColumn);
-                    }
+                    LoadColumnInformationIntoSchema(table, results);
                 }
             }
         }
@@ -128,37 +197,50 @@ namespace Gigobyte.Daterpillar.Data
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());
-                    foreach (DataRow row in results.Rows)
-                    {
-
-                    }
+                    LoadForeignKeyInformationIntoSchema(table, results);
                 }
             }
         }
 
         private void FetchIndexInformation(Table table)
         {
-            throw new System.NotImplementedException();
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = GetIndexInfoQuery(table.Name);
+                using (var results = new DataTable())
+                {
+                    results.Load(command.ExecuteReader());
+                    LoadIndexInformationIntoSchema(table, results);
+                }
+            }
         }
-
 
         #endregion Private Members
 
-        #region Constants
+        #region ColumnNames
 
-        public struct ColumnName
+        protected struct ColumnName
         {
+            public const string Id = "Id";
             public const string Key = "Key";
+            public const string Type = "Type";
             public const string Name = "Name";
             public const string Auto = "Auto";
+            public const string Order = "Order";
             public const string Scale = "Scale";
-            public const string DataType = "Type";
+            public const string Unique = "Unique";
             public const string Comment = "Comment";
-            public const string Nullable = "Nullable";
-            public const string Precision = "Precision";
             public const string Default = "Default";
+            public const string OnMatch = "On_Match";
+            public const string Nullable = "Nullable";
+            public const string OnUpdate = "On_Update";
+            public const string OnDelete = "On_Delete";
+            public const string LocalColumn = "Column";
+            public const string Precision = "Precision";
+            public const string ForeignTable = "Referecne_Table";
+            public const string ForeignColumn = "Reference_Column";
         }
 
-        #endregion Constants
+        #endregion ColumnNames
     }
 }

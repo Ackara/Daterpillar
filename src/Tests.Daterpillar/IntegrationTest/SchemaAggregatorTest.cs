@@ -24,11 +24,11 @@ namespace Tests.Daterpillar.IntegrationTest
             var sut = new MSSQLSchemaAggregator(new System.Data.SqlClient.SqlConnection(connectionString));
 
             // Act
-            var remoteSchema =  sut.FetchSchema();
-            var schemasAreSame = new SchemaComparer().GenerateReport(schema, remoteSchema).Summary;
+            var remoteSchema = sut.FetchSchema();
+            var comparisonReport = new SchemaComparer().GenerateReport(schema, remoteSchema);
 
             // Assert
-            Assert.AreEqual(ComparisionReportConclusions.Equal, schemasAreSame);
+            Assert.AreEqual(comparisonReport.Source.TotalObjects, comparisonReport.Target.TotalObjects);
         }
 
         [TestMethod]
