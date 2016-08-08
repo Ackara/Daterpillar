@@ -5,8 +5,10 @@ using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 
@@ -39,7 +41,7 @@ namespace Tests.Daterpillar.IntegrationTest
 
             // Act
             var script = sut.Transform(schema);
-            var connection = SampleData.CreateSQLiteConnection(script);
+            var connection = CreateSQLiteConnection(script);
 
             // Assert
             Assert.IsNotNull(connection);
@@ -182,5 +184,30 @@ namespace Tests.Daterpillar.IntegrationTest
             // Assert
             Approvals.Verify(script);
         }
+
+        #region Private Members
+
+        private SQLiteConnection CreateSQLiteConnection(string schema)
+        {
+            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"temp{DateTime.Now.ToString("HHmmssfff")}.db");
+            if (File.Exists(dbPath)) File.Delete(dbPath);
+
+            string connectionString = new SQLiteConnectionStringBuilder() { DataSource = dbPath }.ConnectionString;
+            var connection = new SQLiteConnection(connectionString);
+
+            if (schema != null)
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = schema;
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            return connection;
+        }
+
+        #endregion Private Members
     }
 }

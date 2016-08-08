@@ -3,7 +3,6 @@ using Gigobyte.Daterpillar.Transformation.Template;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -94,27 +93,6 @@ namespace Tests.Daterpillar
         }
 
         #region Database Methods
-
-        public static SQLiteConnection CreateSQLiteConnection(string schema = null)
-        {
-            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"temp{DateTime.Now.ToString("HHmmssfff")}.db");
-            if (File.Exists(dbPath)) File.Delete(dbPath);
-
-            string connectionString = new SQLiteConnectionStringBuilder() { DataSource = dbPath }.ConnectionString;
-            var connection = new SQLiteConnection(connectionString);
-
-            if (schema != null)
-            {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = schema;
-                    command.ExecuteNonQuery();
-                }
-            }
-
-            return connection;
-        }
 
         public static bool TryCreateDatabase(IDbConnection connection, ITemplate template)
         {
