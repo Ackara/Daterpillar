@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 
 namespace Gigobyte.Daterpillar.Data
 {
@@ -21,12 +20,13 @@ namespace Gigobyte.Daterpillar.Data
 
         protected override string GetIndexColumnsQuery(string indexIdentifier)
         {
-            throw new NotImplementedException();
+            string[] values = indexIdentifier.Split(':');
+            return $"SELECT s.COLUMN_NAME AS `Name`, 'ASC' AS `Order` FROM information_schema.STATISTICS s WHERE s.TABLE_SCHEMA = '{Schema.Name}' AND s.TABLE_NAME = '{values[0]}' AND s.INDEX_NAME = '{values[1]}';";
         }
 
         protected override string GetIndexInfoQuery(string tableName)
         {
-            throw new NotImplementedException();
+            return $"SELECT s.INDEX_NAME AS `Name`, if(tc.CONSTRAINT_TYPE <> 'PRIMARY KEY' OR tc.CONSTRAINT_TYPE IS NULL, 'index', 'primaryKey') AS `Type`, if(tc.CONSTRAINT_TYPE = 'UNIQUE', 1, 0) AS `Unique`, concat(s.`TABLE_NAME`, ':', s.INDEX_NAME) AS `Id` FROM information_schema.STATISTICS s LEFT JOIN information_schema.TABLE_CONSTRAINTS tc ON tc.`CONSTRAINT_NAME` = s.INDEX_NAME AND tc.TABLE_SCHEMA = s.INDEX_SCHEMA AND tc.`TABLE_NAME` = s.`TABLE_NAME` AND tc.CONSTRAINT_TYPE <> 'FOREIGN KEY' WHERE s.INDEX_SCHEMA = '{Schema.Name}' AND s.`TABLE_NAME` = '{tableName}';";
         }
 
         protected override string GetTableInfoQuery()
