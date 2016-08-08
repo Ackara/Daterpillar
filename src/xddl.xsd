@@ -48,6 +48,10 @@
                   type="xs:string"
                   use="required" />
 
+    <xs:attribute name="nullable"
+                  type="xs:boolean"
+                  default="0" />
+
     <xs:attribute name="autoIncrement"
                   type="xs:boolean"
                   use="optional" />

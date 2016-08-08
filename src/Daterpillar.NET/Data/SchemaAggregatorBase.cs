@@ -53,7 +53,6 @@ namespace Gigobyte.Daterpillar.Data
                 int scale = Convert.ToInt32(row[ColumnName.Scale]);
                 string typeName = Convert.ToString(row[ColumnName.Type]);
                 int precision = Convert.ToInt32(row[ColumnName.Precision]);
-                string nullable = Convert.ToString(row[ColumnName.Nullable]);
                 string defaultValue = Convert.ToString(row[ColumnName.Default]);
 
                 var newColumn = new Column();
@@ -61,8 +60,7 @@ namespace Gigobyte.Daterpillar.Data
                 newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
                 newColumn.DataType = new DataType(typeName, scale, precision);
                 newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
-                if (newColumn.AutoIncrement) newColumn.Modifiers.Add("PRIMARY KEY");
-                if (!string.IsNullOrEmpty(nullable)) newColumn.Modifiers.Add(nullable);
+                newColumn.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
                 if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
 
                 table.Columns.Add(newColumn);
