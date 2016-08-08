@@ -1,4 +1,7 @@
-﻿namespace Tests.Daterpillar
+﻿using System;
+using System.Configuration;
+
+namespace Tests.Daterpillar
 {
     public class Test
     {
@@ -25,11 +28,18 @@
             public const string TextFormatCSV = "text_formats.csv";
         }
 
-        public static class Data
+        public struct Data
         {
             public const string Samples = "Sample Data";
             public const string Directory = "|DataDirectory|\\";
             public const string Provider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
+        }
+
+        public struct ConnectionString
+        {
+            public static readonly string MySQL = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString;
+            public static readonly string MSSQL = ConfigurationManager.ConnectionStrings["mssql"].ConnectionString;
+            public static readonly string SQLite = string.Concat("Data Source=", System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"temp{DateTime.Now.ToString("yyMddhhmmss")}.db"));
         }
     }
 }
