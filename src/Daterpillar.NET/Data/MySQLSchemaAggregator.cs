@@ -10,7 +10,7 @@ namespace Gigobyte.Daterpillar.Data
 
         protected override string GetColumnInfoQuery(string tableName)
         {
-            return $"SELECT c.`COLUMN_NAME` AS `Name`, c.DATA_TYPE AS `Type`, if(c.CHARACTER_MAXIMUM_LENGTH IS NULL, if(c.NUMERIC_PRECISION IS NULL, 0, c.NUMERIC_PRECISION), c.CHARACTER_MAXIMUM_LENGTH) AS `Scale`, if(c.NUMERIC_SCALE IS NULL, 0, c.NUMERIC_SCALE) AS `Precision`, c.IS_NULLABLE AS `Nullable`, c.COLUMN_DEFAULT AS `Default`, if(c.EXTRA = 'auto_increment', 1, 0) AS `Auto`, c.COLUMN_COMMENT AS `Comment` FROM information_schema.`COLUMNS` c WHERE c.TABLE_SCHEMA = '{Schema.Name}' AND c.`TABLE_NAME` = '{tableName}';";
+            return $"SELECT c.`COLUMN_NAME` AS `Name`, c.DATA_TYPE AS `Type`, if(c.CHARACTER_MAXIMUM_LENGTH IS NULL, if(c.NUMERIC_PRECISION IS NULL, 0, c.NUMERIC_PRECISION), c.CHARACTER_MAXIMUM_LENGTH) AS `Scale`, if(c.NUMERIC_SCALE IS NULL, 0, c.NUMERIC_SCALE) AS `Precision`, if(c.IS_NULLABLE = 'NO', 0, 1) AS `Nullable`, c.COLUMN_DEFAULT AS `Default`, if(c.EXTRA = 'auto_increment', 1, 0) AS `Auto`, c.COLUMN_COMMENT AS `Comment` FROM information_schema.`COLUMNS` c WHERE c.TABLE_SCHEMA = '{Schema.Name}' AND c.`TABLE_NAME` = '{tableName}';";
         }
 
         protected override string GetForeignKeyInfoQuery(string tableName)
@@ -26,7 +26,7 @@ namespace Gigobyte.Daterpillar.Data
 
         protected override string GetIndexInfoQuery(string tableName)
         {
-            return $"SELECT s.INDEX_NAME AS `Name`, if(tc.CONSTRAINT_TYPE <> 'PRIMARY KEY' OR tc.CONSTRAINT_TYPE IS NULL, 'index', 'primaryKey') AS `Type`, if(tc.CONSTRAINT_TYPE = 'UNIQUE', 1, 0) AS `Unique`, concat(s.`TABLE_NAME`, ':', s.INDEX_NAME) AS `Id` FROM information_schema.STATISTICS s LEFT JOIN information_schema.TABLE_CONSTRAINTS tc ON tc.`CONSTRAINT_NAME` = s.INDEX_NAME AND tc.TABLE_SCHEMA = s.INDEX_SCHEMA AND tc.`TABLE_NAME` = s.`TABLE_NAME` AND tc.CONSTRAINT_TYPE <> 'FOREIGN KEY' WHERE s.INDEX_SCHEMA = '{Schema.Name}' AND s.`TABLE_NAME` = '{tableName}';";
+            return $"SELECT s.INDEX_NAME AS `Name`, if(tc.CONSTRAINT_TYPE <> 'PRIMARY KEY' OR tc.CONSTRAINT_TYPE IS NULL, 'index', 'primaryKey') AS `Type`, if(tc.CONSTRAINT_TYPE = 'UNIQUE', 1, 0) AS `Unique`, concat(s.`TABLE_NAME`, ':', s.INDEX_NAME) AS `Id` FROM information_schema.STATISTICS s LEFT JOIN information_schema.TABLE_CONSTRAINTS tc ON tc.`CONSTRAINT_NAME` = s.INDEX_NAME AND tc.TABLE_SCHEMA = s.INDEX_SCHEMA AND tc.`TABLE_NAME` = s.`TABLE_NAME` AND tc.CONSTRAINT_TYPE <> 'FOREIGN KEY' WHERE s.INDEX_SCHEMA = '{Schema.Name}' AND s.`TABLE_NAME` = '{tableName}' GROUP BY s.INDEX_NAME, s.`TABLE_NAME`, tc.`CONSTRAINT_TYPE`;";
         }
 
         protected override string GetTableInfoQuery()

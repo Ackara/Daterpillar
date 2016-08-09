@@ -32,6 +32,10 @@
     <column name="Bio">
       <dataType>text</dataType>
     </column>
+
+    <index type="index" unique="1">
+      <columnName order="DESC" >Name</columnName>
+    </index>
   </table>
 
   <table name="album">

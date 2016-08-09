@@ -25,6 +25,7 @@ namespace Gigobyte.Daterpillar.Data
         public Schema FetchSchema()
         {
             _schema = new Schema();
+            _schema.Name = _connection.Database;
 
             OpenConnectionIfClosed();
             FetchTableInformation();
