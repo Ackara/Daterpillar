@@ -7,11 +7,13 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 		#region Keys
 
 		public const string BOOL = "bool";
+		public const string BOOLEAN = "boolean";
 		public const string BLOB = "blob";
 		public const string CHAR = "char";
 		public const string TEXT = "text";
 		public const string VARCHAR = "varchar";
 		public const string INT = "int";
+		public const string INTEGER = "integer";
 		public const string BIGINT = "bigInt";
 		public const string MEDIUMINT = "mediumInt";
 		public const string SMALLINT = "smallInt";
@@ -32,11 +34,13 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 			TypeNames = new Dictionary<string, string>();
 		
 			TypeNames.Add("bool", "bool");
+			TypeNames.Add("boolean", "boolean");
 			TypeNames.Add("blob", "blob");
 			TypeNames.Add("char", "char");
 			TypeNames.Add("text", "text");
 			TypeNames.Add("varchar", "varchar");
 			TypeNames.Add("int", "int");
+			TypeNames.Add("integer", "integer");
 			TypeNames.Add("bigInt", "bigInt");
 			TypeNames.Add("mediumInt", "mediumInt");
 			TypeNames.Add("smallInt", "smallInt");
