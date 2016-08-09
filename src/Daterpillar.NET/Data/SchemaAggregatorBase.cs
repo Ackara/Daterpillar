@@ -67,7 +67,7 @@ namespace Gigobyte.Daterpillar.Data
                 table.Columns.Add(newColumn);
             }
         }
-
+         
         protected virtual void LoadForeignKeyInformationIntoSchema(Table table, DataTable foreignKeyInfo)
         {
             foreach (DataRow row in foreignKeyInfo.Rows)

@@ -65,6 +65,7 @@ namespace Tests.Daterpillar.Utilities
 
         protected void HandleValidationEvent(object sender, ValidationEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"{e.Severity}: {e.Message}");
             _errorList.Add(e);
         }
 

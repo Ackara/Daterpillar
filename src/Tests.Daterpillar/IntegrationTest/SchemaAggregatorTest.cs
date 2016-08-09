@@ -1,7 +1,6 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Gigobyte.Daterpillar.Compare;
 using Gigobyte.Daterpillar.Data;
 using Gigobyte.Daterpillar.Transformation;
 using Gigobyte.Daterpillar.Transformation.Template;
@@ -32,8 +31,12 @@ namespace Tests.Daterpillar.IntegrationTest
             var memoryStream = new MemoryStream();
             remoteSchema.WriteTo(memoryStream);
 
+            var validator = new Utilities.XmlValidator();
+            validator.Load(memoryStream);
+
             // Assert
             Approvals.VerifyBinaryFile(memoryStream.ToArray(), "xml");
+            Assert.IsTrue(validator.XmlDocIsValid);
         }
 
         [TestMethod]
@@ -52,8 +55,12 @@ namespace Tests.Daterpillar.IntegrationTest
             var memoryStream = new MemoryStream();
             remoteSchema.WriteTo(memoryStream);
 
+            var validator = new Utilities.XmlValidator();
+            validator.Load(memoryStream);
+
             // Assert
             Approvals.VerifyBinaryFile(memoryStream.ToArray(), "xml");
+            Assert.IsTrue(validator.XmlDocIsValid);
         }
 
         [TestMethod]
@@ -74,8 +81,12 @@ namespace Tests.Daterpillar.IntegrationTest
             var memoryStream = new MemoryStream();
             remoteSchema.WriteTo(memoryStream);
 
+            var validator = new Utilities.XmlValidator();
+            validator.Load(memoryStream);
+
             // Assert
             Approvals.VerifyBinaryFile(memoryStream.ToArray(), "xml");
+            Assert.IsTrue(validator.XmlDocIsValid);
         }
 
         #region Private Members
