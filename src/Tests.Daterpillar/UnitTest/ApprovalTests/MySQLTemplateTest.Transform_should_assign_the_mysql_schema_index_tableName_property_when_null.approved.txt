@@ -1,0 +1,15 @@
+﻿CREATE DATABASE IF NOT EXISTS `Transform_should_assign_the_mysql_schema_index_tableName_property_when_null`;
+USE `Transform_should_assign_the_mysql_schema_index_tableName_property_when_null`;
+
+CREATE TABLE IF NOT EXISTS `Employee`
+(
+	`Id` INT NOT NULL AUTO_INCREMENT COMMENT '',
+	`Full_Name` INT not null default 'n/a' COMMENT 'The first name column.',
+	`Salary` INT not null COMMENT 'The salary column',
+	PRIMARY KEY (`Id` ASC),
+	FOREIGN KEY (`Id`) REFERENCES `Card`(`Id`) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX `employee_idx` ON `Employee` (`Full_Name` DESC);
+
+-- Script Goes Here
