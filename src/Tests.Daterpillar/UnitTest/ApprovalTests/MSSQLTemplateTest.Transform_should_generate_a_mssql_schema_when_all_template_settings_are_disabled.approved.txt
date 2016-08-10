@@ -1,9 +1,9 @@
 ﻿
 CREATE TABLE [Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled].[dbo].[Employee]
 (
-	[Id] int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	[Full_Name] int not null default 'n/a',
-	[Salary] int not null,
+	[Id] int NOT NULL  PRIMARY KEY IDENTITY(1, 1),
+	[Full_Name] int NOT NULL default 'n/a',
+	[Salary] int NOT NULL ,
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 
@@ -11,9 +11,9 @@ ALTER TABLE [Transform_should_generate_a_mssql_schema_when_all_template_settings
 CREATE UNIQUE INDEX [employee_idx] ON [Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled].[dbo].[Employee] ([Full_Name] DESC);
 CREATE TABLE [Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled].[dbo].[Manager]
 (
-	[Id] int NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	[Full_Name] int not null default 'n/a',
-	[Salary] int not null,
+	[Id] int NOT NULL  PRIMARY KEY IDENTITY(1, 1),
+	[Full_Name] int NOT NULL default 'n/a',
+	[Salary] int NOT NULL ,
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 

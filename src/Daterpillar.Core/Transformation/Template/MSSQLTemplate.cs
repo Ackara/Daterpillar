@@ -104,13 +104,14 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private void Transform(Column column)
         {
+            if (column.AutoIncrement) column.IsNullable = false;
             
             string modifiers = string.Join(" ", column.Modifiers);
             string dataType = _typeNameResolver.GetName(column.DataType);
-            
+            string notNull = (column.IsNullable ? string.Empty : " NOT NULL ");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
+            _text.AppendLine($"\t[{column.Name}] {dataType}{notNull}{modifiers}{autoIncrement},");
         }
 
         private void Transform(ForeignKey key, string tableName)

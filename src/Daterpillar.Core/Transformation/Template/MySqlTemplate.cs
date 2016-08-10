@@ -93,10 +93,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private void Transform(Column column)
         {
             string dataType = _nameResolver.GetName(column.DataType);
+            string notNull = (column.IsNullable ? string.Empty : " NOT NULL ");
             string modifiers = string.Join(" ", column.Modifiers);
             string autoIncrement = column.AutoIncrement ? " PRIMARY KEY AUTO_INCREMENT " : " ";
 
-            _text.AppendLine($"\t`{column.Name}` {dataType} {modifiers}{autoIncrement}COMMENT '{column.Comment?.Replace("'", "''")}',");
+            _text.AppendLine($"\t`{column.Name}` {dataType}{notNull}{modifiers}{autoIncrement}COMMENT '{column.Comment?.Replace("'", "''")}',");
         }
 
         private void Transform(ForeignKey foreignKey)

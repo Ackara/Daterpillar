@@ -7,7 +7,6 @@
     <column name="Id"
             autoIncrement="true">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Name">
@@ -19,15 +18,13 @@
     <column name="Id"
             autoIncrement="true">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Name">
       <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
-    <column name="Bio">
+    <column name="Bio" nullable="true">
       <dataType>text</dataType>
     </column>
 
@@ -39,15 +36,13 @@
   <table name="album">
     <column name="Artist_Id">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Name">
       <dataType scale="64">varchar</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
-    <column name="Release_Date">
+    <column name="Release_Date" nullable="true">
       <dataType>date</dataType>
     </column>
 
@@ -65,43 +60,36 @@
     <column name="Id"
             autoIncrement="true">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Album_Id">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Artist_Id">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Genre_Id">
       <dataType>int</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="Name">
       <dataType scale="256">varchar</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
-    <column name="Length">
-      <dataType scale="4"
-                precision="2">decimal</dataType>
+    <column name="Length" nullable="true">
+      <dataType scale="4" precision="2">decimal</dataType>
     </column>
 
     <column name="Price">
       <dataType scale="12"
                 precision="2">decimal</dataType>
-      <modifier>NOT NULL</modifier>
     </column>
 
     <column name="On_Device">
       <dataType>bool</dataType>
-      <modifier>NOT NULL</modifier>
+
       <modifier>DEFAULT '0'</modifier>
     </column>
 

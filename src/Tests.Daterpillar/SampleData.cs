@@ -30,19 +30,17 @@ namespace Tests.Daterpillar
             id.Name = "Id";
             id.AutoIncrement = true;
             id.DataType = new DataType() { Name = "int" };
-            id.Modifiers = new List<string>(new string[] { "NOT NULL" });
 
             var fullName = new Column();
             fullName.Name = "Full_Name";
             fullName.Comment = "The first name column.";
             fullName.DataType = new DataType() { Name = "varchar", Scale = 64 };
-            fullName.Modifiers = new List<string>(new string[] { "not null", "default 'n/a'" });
+            fullName.Modifiers = new List<string>(new string[] { "default 'n/a'" });
 
             var salary = new Column();
             salary.Name = "Salary";
             salary.Comment = "The salary column";
             salary.DataType = new DataType() { Name = "decimal", Scale = 12, Precision = 2 };
-            salary.Modifiers = new List<string>(new string[] { "not null" });
 
             // Define foreign keys
             var fKey = new ForeignKey();
