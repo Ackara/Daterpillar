@@ -6,7 +6,7 @@
 CREATE TABLE [daterpillar].[dbo].[genre]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	[Name] VARCHAR(64) 
+	[Name] VARCHAR(64) NOT NULL
 );
 
 -- ------------------------------------
@@ -16,7 +16,7 @@ CREATE TABLE [daterpillar].[dbo].[artist]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
 	[Name] VARCHAR(64) NOT NULL,
-	[Bio] TEXT 
+	[Bio] TEXT
 );
 
 CREATE UNIQUE INDEX [daterpillar_artist_idx1] ON [daterpillar].[dbo].[artist] ([Name] DESC);
@@ -27,7 +27,7 @@ CREATE TABLE [daterpillar].[dbo].[album]
 (
 	[Artist_Id] INT NOT NULL,
 	[Name] VARCHAR(64) NOT NULL,
-	[Release_Date] DATE ,
+	[Release_Date] DATE,
 	CONSTRAINT [album_artist_id_to_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE [daterpillar].[dbo].[song]
 	[Artist_Id] INT NOT NULL,
 	[Genre_Id] INT NOT NULL,
 	[Name] VARCHAR(256) NOT NULL,
-	[Length] DECIMAL(4, 2) ,
+	[Length] DECIMAL(4, 2),
 	[Price] DECIMAL(12, 2) NOT NULL,
 	[On_Device] BIT NOT NULL DEFAULT '0',
 	CONSTRAINT [song_genre_id_to_genre_id_fkey3] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,

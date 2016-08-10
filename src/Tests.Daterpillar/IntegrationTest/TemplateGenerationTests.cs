@@ -52,7 +52,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
         [TestCategory(Test.Trait.Integration)]
-        public void Transform_should_generate_a_csharp_classes_when_invoked()
+        public void Transform_should_generate_csharp_classes_when_invoked()
         {
             // Arrange
             var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());

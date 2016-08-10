@@ -81,10 +81,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         private void Transform(Column column)
         {
             string dataType = _typeResolver.GetName(column.DataType);
+            string notNull = (column.IsNullable ? string.Empty : " NOT NULL ");
             string modifiers = string.Join(" ", column.Modifiers);
             string autoIncrement = column.AutoIncrement ? " PRIMARY KEY AUTOINCREMENT" : string.Empty;
 
-            _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
+            _text.AppendLine($"\t[{column.Name}] {dataType}{notNull}{modifiers}{autoIncrement},");
         }
 
         private void TransformPrimaryKey(Index primaryKey)

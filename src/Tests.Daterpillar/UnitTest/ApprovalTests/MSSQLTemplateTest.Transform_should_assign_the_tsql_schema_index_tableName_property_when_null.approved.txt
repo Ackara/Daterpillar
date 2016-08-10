@@ -5,8 +5,8 @@
 CREATE TABLE [Transform_should_assign_the_tsql_schema_index_tableName_property_when_null].[dbo].[Employee]
 (
 	[Id]  NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	[Full_Name]  not null default 'n/a',
-	[Salary]  not null,
+	[Full_Name]  NOT NULL default 'n/a',
+	[Salary]  NOT NULL,
 	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
 

@@ -1,8 +1,8 @@
 ﻿CREATE TABLE IF NOT EXISTS [Employee]
 (
-	[Id] INT NOT NULL AUTOINCREMENT,
-	[Full_Name] INT not null default 'n/a',
-	[Salary] INT not null,
+	[Id] INT NOT NULL  PRIMARY KEY AUTOINCREMENT,
+	[Full_Name] INT NOT NULL default 'n/a',
+	[Salary] INT NOT NULL ,
 	PRIMARY KEY ([Id] ASC),
 	FOREIGN KEY ([Id]) REFERENCES [Card] ([Id]) ON UPDATE SET NULL ON DELETE CASCADE
 );
