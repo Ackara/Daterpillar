@@ -3,26 +3,26 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public sealed class MySqlTemplate : ITemplate
+    public sealed class MySQLTemplate : ITemplate
     {
-        public MySqlTemplate() : this(MySqlTemplateSettings.Default, new MySqlTypeNameResolver())
+        public MySQLTemplate() : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
         {
         }
 
-        public MySqlTemplate(bool dropDatabase) : this(MySqlTemplateSettings.Default, new MySqlTypeNameResolver())
+        public MySQLTemplate(bool dropDatabase) : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
         {
             _settings.DropDatabaseIfExist = dropDatabase;
         }
 
-        public MySqlTemplate(ITypeNameResolver nameResolver) : this(MySqlTemplateSettings.Default, nameResolver)
+        public MySQLTemplate(ITypeNameResolver nameResolver) : this(MySQLTemplateSettings.Default, nameResolver)
         {
         }
 
-        public MySqlTemplate(MySqlTemplateSettings settings) : this(settings, new MySqlTypeNameResolver())
+        public MySQLTemplate(MySQLTemplateSettings settings) : this(settings, new MySQLTypeNameResolver())
         {
         }
 
-        public MySqlTemplate(MySqlTemplateSettings settings, ITypeNameResolver nameResolver)
+        public MySQLTemplate(MySQLTemplateSettings settings, ITypeNameResolver nameResolver)
         {
             _settings = settings;
             _nameResolver = nameResolver;
@@ -53,7 +53,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         #region Private Members
 
         private int _seed = 1;
-        private MySqlTemplateSettings _settings;
+        private MySQLTemplateSettings _settings;
         private ITypeNameResolver _nameResolver;
         private StringBuilder _text = new StringBuilder();
 

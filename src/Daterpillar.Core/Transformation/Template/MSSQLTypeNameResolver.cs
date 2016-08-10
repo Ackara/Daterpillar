@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public class SqlTypeNameResolver : TypeNameResolverBase
+    public class MSSQLTypeNameResolver : TypeNameResolverBase
     {
-        public SqlTypeNameResolver()
+        public MSSQLTypeNameResolver()
         {
             TypeNames[BOOL] = "bit";
             TypeNames[BLOB] = "varbinary";

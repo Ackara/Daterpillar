@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public class MySqlTemplateSettings
+    public class MySQLTemplateSettings
     {
-        public static MySqlTemplateSettings Default = new MySqlTemplateSettings()
+        public static MySQLTemplateSettings Default = new MySQLTemplateSettings()
         {
             AddScript = true,
             CommentsEnabled = true,

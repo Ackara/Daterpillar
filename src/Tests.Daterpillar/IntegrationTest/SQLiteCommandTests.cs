@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.IntegrationTest
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            string databaseFilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(SqlCommandTests)}-{DateTime.Now.ToString("ddhhmmss")}.db");
+            string databaseFilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(MSSQLCommandTests)}-{DateTime.Now.ToString("ddhhmmss")}.db");
             if (File.Exists(databaseFilename)) File.Delete(databaseFilename);
             SQLiteConnection.CreateFile(databaseFilename);
             _connectionString = new SQLiteConnectionStringBuilder() { DataSource = databaseFilename }.ConnectionString;

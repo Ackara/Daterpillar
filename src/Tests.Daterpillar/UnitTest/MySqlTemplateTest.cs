@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.UnitTest
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class MySqlTemplateTest
+    public class MySQLTemplateTest
     {
         [ClassCleanup]
         public static void Cleanup()
@@ -25,7 +25,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_a_mysql_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
-            var settings = new MySqlTemplateSettings()
+            var settings = new MySQLTemplateSettings()
             {
                 CommentsEnabled = true,
                 DropDatabaseIfExist = true
@@ -41,7 +41,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("int")
                 .OccursAtLeast(1);
 
-            var sut = new MySqlTemplate(settings, mockResolver);
+            var sut = new MySQLTemplate(settings, mockResolver);
 
             // Act
             var result = sut.Transform(schema);
@@ -56,7 +56,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_a_mysql_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
-            var settings = new MySqlTemplateSettings()
+            var settings = new MySQLTemplateSettings()
             {
                 CommentsEnabled = false,
                 DropDatabaseIfExist = false
@@ -71,7 +71,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("int")
                 .OccursAtLeast(1);
 
-            var sut = new MySqlTemplate(settings, mockResolver);
+            var sut = new MySQLTemplate(settings, mockResolver);
 
             // Act
             var result = sut.Transform(schema);
@@ -94,7 +94,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("INT")
                 .OccursAtLeast(1);
 
-            var sut = new MySqlTemplate(new MySqlTemplateSettings(), mockTypeResolver);
+            var sut = new MySQLTemplate(new MySQLTemplateSettings(), mockTypeResolver);
 
             // Act
             var script = sut.Transform(sample);

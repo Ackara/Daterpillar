@@ -12,14 +12,14 @@ using Tests.Daterpillar.Sample;
 namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
-    public class MySqlCommandTests
+    public class MySQLCommandTests
     {
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
             var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             _connectionString = ConfigurationManager.ConnectionStrings["mysql"].ConnectionString.Trim();
-            _unableToRunTests = !SampleData.TryCreateDatabase(new MySqlConnection(_connectionString), schema, new MySqlTemplate(new MySqlTemplateSettings()
+            _unableToRunTests = !SampleData.TryCreateDatabase(new MySqlConnection(_connectionString), schema, new MySQLTemplate(new MySQLTemplateSettings()
             {
                 CommentsEnabled = false,
                 DropDatabaseIfExist = false

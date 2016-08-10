@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public sealed class MySqlTypeNameResolver : TypeNameResolverBase
+    public sealed class MySQLTypeNameResolver : TypeNameResolverBase
     {
-        public MySqlTypeNameResolver()
+        public MySQLTypeNameResolver()
         {
         }
 

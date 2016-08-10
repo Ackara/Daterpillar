@@ -118,14 +118,14 @@ namespace Tests.Daterpillar.IntegrationTest
             // Arrange
             using (var fileStream = SampleData.GetFile(Test.File.MockSchemaXML).OpenRead())
             {
-                var settings = new MySqlTemplateSettings()
+                var settings = new MySQLTemplateSettings()
                 {
                     CommentsEnabled = true,
                     DropDatabaseIfExist = true
                 };
 
                 var schema = Schema.Load(fileStream);
-                var sut = new MySqlTemplate(settings, new MySqlTypeNameResolver());
+                var sut = new MySQLTemplate(settings, new MySQLTypeNameResolver());
                 int nChanges;
 
                 // Act
@@ -154,7 +154,7 @@ namespace Tests.Daterpillar.IntegrationTest
         public void Transform_should_generate_a_tsql_schema_when_invoked()
         {
             // Arrange
-            var settings = new SqlTemplateSettings()
+            var settings = new MSSQLTemplateSettings()
             {
                 AddScript = true,
                 CreateSchema = false,
@@ -164,7 +164,7 @@ namespace Tests.Daterpillar.IntegrationTest
             };
 
             var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
-            var script = new SqlTemplate(settings).Transform(schema);
+            var script = new MSSQLTemplate(settings).Transform(schema);
 
             // Act
             using (var connection = new SqlConnection(Test.ConnectionString.MSSQL))

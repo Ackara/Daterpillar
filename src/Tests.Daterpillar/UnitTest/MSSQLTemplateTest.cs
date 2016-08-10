@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class SqlTemplateTest
+    public class MSSQLTemplateTest
     {
         [ClassCleanup]
         public static void Cleanup()
@@ -26,7 +26,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_enabled()
         {
             // Arrange
-            var settings = new SqlTemplateSettings()
+            var settings = new MSSQLTemplateSettings()
             {
                 AddScript = true,
                 UseDatabase = true,
@@ -43,7 +43,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_generate_a_mssql_schema_when_all_template_settings_are_disabled()
         {
             // Arrange
-            var settings = new SqlTemplateSettings()
+            var settings = new MSSQLTemplateSettings()
             {
                 AddScript = false,
                 UseDatabase = false,
@@ -60,7 +60,7 @@ namespace Tests.Daterpillar.UnitTest
         public void Transform_should_assign_the_tsql_schema_index_tableName_property_when_null()
         {
             // Arrange
-            var sut = new SqlTemplate(SqlTemplateSettings.Default, Mock.Create<ITypeNameResolver>());
+            var sut = new MSSQLTemplate(MSSQLTemplateSettings.Default, Mock.Create<ITypeNameResolver>());
             var schema = SampleData.CreateSchema();
             schema.Tables[0].Indexes[0].Table = "";
 
@@ -71,7 +71,7 @@ namespace Tests.Daterpillar.UnitTest
             Approvals.Verify(script);
         }
 
-        private void RunTemplateTest(SqlTemplateSettings settings, [CallerMemberName]string name = null)
+        private void RunTemplateTest(MSSQLTemplateSettings settings, [CallerMemberName]string name = null)
         {
             // Arrange
             var schema = SampleData.CreateSchema(name);
@@ -84,7 +84,7 @@ namespace Tests.Daterpillar.UnitTest
                 .Returns("int")
                 .OccursAtLeast(1);
 
-            var sut = new SqlTemplate(settings, mockTypeResolver);
+            var sut = new MSSQLTemplate(settings, mockTypeResolver);
 
             // Act
             var script = sut.Transform(schema);

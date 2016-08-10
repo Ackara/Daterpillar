@@ -13,14 +13,14 @@ namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
     [DeploymentItem(Test.Data.Samples)]
-    public class SqlCommandTests
+    public class MSSQLCommandTests
     {
         [TestInitialize]
         public void Setup()
         {
             var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
             _connectionString = System.Environment.ExpandEnvironmentVariables(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString);
-            _unableToRunTests = !SampleData.TryCreateDatabase(new SqlConnection(_connectionString), schema, new SqlTemplate(new SqlTemplateSettings()
+            _unableToRunTests = !SampleData.TryCreateDatabase(new SqlConnection(_connectionString), schema, new MSSQLTemplate(new MSSQLTemplateSettings()
             {
                 AddScript = true,
                 CreateSchema = false,

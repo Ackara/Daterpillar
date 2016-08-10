@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public class SqlTemplateSettings
+    public class MSSQLTemplateSettings
     {
-        public static SqlTemplateSettings Default = new SqlTemplateSettings()
+        public static MSSQLTemplateSettings Default = new MSSQLTemplateSettings()
         {
             AddScript = true,
             UseDatabase = false,

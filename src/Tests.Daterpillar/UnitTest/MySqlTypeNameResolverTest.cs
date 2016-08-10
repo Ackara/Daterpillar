@@ -7,7 +7,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Test.Data.Samples)]
-    public class MySqlTypeNameResolverTest
+    public class MySQLTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
 
@@ -19,7 +19,7 @@ namespace Tests.Daterpillar.UnitTest
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
             var expected = TestContext.DataRow["MySQL"].ToString();
-            var sut = new MySqlTypeNameResolver();
+            var sut = new MySQLTypeNameResolver();
 
             // Act
             var result = sut.GetName(dataType);

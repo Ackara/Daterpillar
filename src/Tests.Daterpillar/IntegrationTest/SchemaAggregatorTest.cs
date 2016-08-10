@@ -22,7 +22,7 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             // Arrange
             var connectionString = Test.ConnectionString.MSSQL;
-            IgnoreTestIfDbConnectionIsUnavailable(SampleData.CreateMockSchema(), new System.Data.SqlClient.SqlConnection(connectionString), new SqlTemplate());
+            IgnoreTestIfDbConnectionIsUnavailable(SampleData.CreateMockSchema(), new System.Data.SqlClient.SqlConnection(connectionString), new MSSQLTemplate());
 
             var sut = new MSSQLSchemaAggregator(new System.Data.SqlClient.SqlConnection(connectionString));
 
@@ -46,7 +46,7 @@ namespace Tests.Daterpillar.IntegrationTest
         {
             // Arrange
             var connectionString = Test.ConnectionString.MySQL;
-            IgnoreTestIfDbConnectionIsUnavailable(SampleData.CreateMockSchema(), new MySql.Data.MySqlClient.MySqlConnection(connectionString), new MySqlTemplate());
+            IgnoreTestIfDbConnectionIsUnavailable(SampleData.CreateMockSchema(), new MySql.Data.MySqlClient.MySqlConnection(connectionString), new MySQLTemplate());
 
             var sut = new MySQLSchemaAggregator(new MySql.Data.MySqlClient.MySqlConnection(connectionString));
 

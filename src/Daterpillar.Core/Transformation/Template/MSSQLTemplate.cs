@@ -3,22 +3,22 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.Transformation.Template
 {
-    public class SqlTemplate : ITemplate
+    public class MSSQLTemplate : ITemplate
     {
-        public SqlTemplate() : this(SqlTemplateSettings.Default, new SqlTypeNameResolver())
+        public MSSQLTemplate() : this(MSSQLTemplateSettings.Default, new MSSQLTypeNameResolver())
         {
         }
 
-        public SqlTemplate(bool dropDatabase) : this(SqlTemplateSettings.Default, new SqlTypeNameResolver())
+        public MSSQLTemplate(bool dropDatabase) : this(MSSQLTemplateSettings.Default, new MSSQLTypeNameResolver())
         {
             _settings.DropDatabaseIfExist = dropDatabase;
         }
 
-        public SqlTemplate(SqlTemplateSettings settings) : this(settings, new SqlTypeNameResolver())
+        public MSSQLTemplate(MSSQLTemplateSettings settings) : this(settings, new MSSQLTypeNameResolver())
         {
         }
 
-        public SqlTemplate(SqlTemplateSettings settings, ITypeNameResolver typeResolver)
+        public MSSQLTemplate(MSSQLTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeNameResolver = typeResolver;
@@ -68,7 +68,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private int _seed;
         private string _schemaName;
-        private SqlTemplateSettings _settings;
+        private MSSQLTemplateSettings _settings;
         private ITypeNameResolver _typeNameResolver;
         private StringBuilder _text = new StringBuilder();
 
