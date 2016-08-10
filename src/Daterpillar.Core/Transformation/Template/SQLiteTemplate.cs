@@ -34,6 +34,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         #region Private Members
 
+        private int _seed = 1;
         private ITypeNameResolver _typeResolver;
         private SQLiteTemplateSettings _settings;
         private StringBuilder _text = new StringBuilder();
@@ -102,7 +103,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string unique = index.Unique ? " UNIQUE " : " ";
             string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
-            tableName = (string.IsNullOrEmpty(index.Table) ? tableName : index.Table);
+            index.Name = (string.IsNullOrEmpty(index.Name) ? $"{tableName}_idx{_seed++}" : index.Name);
 
             _text.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.Name}] ON [{tableName}] ({columns});");
         }

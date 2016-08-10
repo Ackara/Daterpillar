@@ -118,8 +118,8 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string onUpdate = (key.OnUpdateRule != ForeignKeyRule.RESTRICT ? $" ON UPDATE {key.OnUpdate}" : string.Empty);
             string onDelete = (key.OnDeleteRule != ForeignKeyRule.RESTRICT ? $" ON DELETE {key.OnDeleteRule}" : string.Empty);
-            string name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignTable}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
-            _text.AppendLine($"\tCONSTRAINT [{name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]){onUpdate}{onDelete},");
+            key.Name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignTable}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
+            _text.AppendLine($"\tCONSTRAINT [{key.Name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
         private void TransformPrimaryKey(Index key, string tableName)
@@ -136,9 +136,9 @@ namespace Gigobyte.Daterpillar.Transformation.Template
             index.Table = (string.IsNullOrEmpty(index.Table) ? tableName : index.Table);
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => $"[{x.Name}] {x.Order}"));
-            string name = (string.IsNullOrEmpty(index.Name) ? $"{_schemaName}_{index.Table}_idx{++_seed}" : index.Name).ToLower();
+            index.Name = (string.IsNullOrEmpty(index.Name) ? $"{_schemaName}_{index.Table}_idx{++_seed}" : index.Name).ToLower();
 
-            _text.AppendLine($"CREATE{unique}INDEX [{name}] ON [{_schemaName}].[dbo].[{index.Table}] ({columns});");
+            _text.AppendLine($"CREATE{unique}INDEX [{index.Name}] ON [{_schemaName}].[dbo].[{index.Table}] ({columns});");
         }
 
         private void AppendTableComment(Table table)

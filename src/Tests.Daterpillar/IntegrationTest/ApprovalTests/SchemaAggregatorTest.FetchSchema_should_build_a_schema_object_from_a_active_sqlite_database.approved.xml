@@ -20,7 +20,7 @@
     <column name="Bio" nullable="true" autoIncrement="false">
       <dataType scale="0" precision="0">text</dataType>
     </column>
-    <index type="index" unique="true" name="">
+    <index type="index" unique="true" name="artist_idx1">
       <columnName order="DESC">Name</columnName>
     </index>
   </table>

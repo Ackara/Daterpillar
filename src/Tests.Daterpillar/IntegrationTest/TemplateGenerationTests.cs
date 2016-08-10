@@ -167,7 +167,7 @@ namespace Tests.Daterpillar.IntegrationTest
             var script = new SqlTemplate(settings).Transform(schema);
 
             // Act
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString))
+            using (var connection = new SqlConnection(Test.ConnectionString.MSSQL))
             {
                 connection.Open();
 

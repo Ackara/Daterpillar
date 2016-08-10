@@ -108,7 +108,6 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string unique = index.Unique ? " UNIQUE " : " ";
             string columns = string.Join(", ", index.Columns.Select(x => $"`{x.Name}` {x.Order}"));
-            tableName = (string.IsNullOrEmpty(index.Name) ? tableName : tableName);
             index.Name = (string.IsNullOrEmpty(index.Name) ? $"{tableName}_idx{_seed++}" : index.Name);
 
             _text.AppendLine($"CREATE{unique}INDEX `{index.Name}` ON `{tableName}` ({columns});");
