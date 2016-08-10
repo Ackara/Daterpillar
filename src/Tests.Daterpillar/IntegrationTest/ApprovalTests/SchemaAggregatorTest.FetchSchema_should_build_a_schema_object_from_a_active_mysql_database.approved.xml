@@ -84,7 +84,7 @@
     </column>
     <column name="On_Device" nullable="false" autoIncrement="false">
       <comment />
-      <dataType scale="3" precision="0">tinyint</dataType>
+      <dataType scale="3" precision="0">bool</dataType>
       <modifier>0</modifier>
     </column>
     <foreignKey name="song_ibfk_1" localColumn="Genre_Id" foreignTable="genre" foreignColumn="Id">

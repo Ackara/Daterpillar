@@ -1,4 +1,5 @@
 ﻿using Gigobyte.Daterpillar.Transformation;
+using Gigobyte.Daterpillar.Transformation.Template;
 using System;
 using System.Data;
 using System.Linq;
@@ -47,39 +48,38 @@ namespace Gigobyte.Daterpillar.Data
             }
         }
 
+        protected virtual string GetTypeName(string typeName)
+        {
+            switch (typeName.ToLower())
+            {
+                case "bit":
+                case "boolean":
+                case "tinyint":
+                    return TypeNameResolverBase.BOOL;
+
+                case "integer":
+                    return TypeNameResolverBase.INT;
+
+                default:
+                    return typeName.ToLower();
+            }
+        }
+
         protected virtual void LoadColumnInformationIntoSchema(Table table, DataTable columnInfo)
         {
             foreach (DataRow row in columnInfo.Rows)
             {
-                int scale = Convert.ToInt32(row[ColumnName.Scale]);
-                string typeName = Convert.ToString(row[ColumnName.Type]);
-                int precision = Convert.ToInt32(row[ColumnName.Precision]);
                 string defaultValue = Convert.ToString(row[ColumnName.Default]);
 
                 var newColumn = new Column();
                 newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                 newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
-                newColumn.DataType = new DataType(typeName, scale, precision);
                 newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
                 newColumn.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
                 if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+                newColumn.DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]));
 
                 table.Columns.Add(newColumn);
-            }
-        }
-         
-        protected virtual void LoadForeignKeyInformationIntoSchema(Table table, DataTable foreignKeyInfo)
-        {
-            foreach (DataRow row in foreignKeyInfo.Rows)
-            {
-                var newForeignKey = new ForeignKey();
-                newForeignKey.Name = Convert.ToString(row[ColumnName.Name]);
-                newForeignKey.LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]);
-                newForeignKey.ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]);
-                newForeignKey.ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]);
-                newForeignKey.OnDelete = Convert.ToString(row[ColumnName.OnDelete]);
-                newForeignKey.OnUpdate = Convert.ToString(row[ColumnName.OnUpdate]);
-                table.ForeignKeys.Add(newForeignKey);
             }
         }
 
@@ -122,6 +122,21 @@ namespace Gigobyte.Daterpillar.Data
                 }
 
                 if (shouldInsertIndex) table.Indexes.Add(newIndex);
+            }
+        }
+
+        protected virtual void LoadForeignKeyInformationIntoSchema(Table table, DataTable foreignKeyInfo)
+        {
+            foreach (DataRow row in foreignKeyInfo.Rows)
+            {
+                var newForeignKey = new ForeignKey();
+                newForeignKey.Name = Convert.ToString(row[ColumnName.Name]);
+                newForeignKey.LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]);
+                newForeignKey.ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]);
+                newForeignKey.ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]);
+                newForeignKey.OnDelete = Convert.ToString(row[ColumnName.OnDelete]);
+                newForeignKey.OnUpdate = Convert.ToString(row[ColumnName.OnUpdate]);
+                table.ForeignKeys.Add(newForeignKey);
             }
         }
 

@@ -16,11 +16,9 @@ namespace Gigobyte.Daterpillar.Data
         {
             foreach (DataRow row in columnInfo.Rows)
             {
-                string temp;
-
                 string typeName = _dataTypeRegex.Match(Convert.ToString(row[ColumnName.Type])).Groups["type"]?.Value;
-                typeName = (typeName == "INTEGER" ? "int" : typeName.ToLower());
 
+                string temp;
                 temp = _dataTypeRegex.Match(Convert.ToString(row[ColumnName.Type]))?.Groups["scale"]?.Value;
                 int scale = Convert.ToInt32((string.IsNullOrEmpty(temp) ? "0" : temp));
 
@@ -31,7 +29,7 @@ namespace Gigobyte.Daterpillar.Data
 
                 var newColumn = new Column();
                 newColumn.Name = Convert.ToString(row[ColumnName.Name]);
-                newColumn.DataType = new DataType(typeName, scale, precision);
+                newColumn.DataType = new DataType(GetTypeName(typeName), scale, precision);
                 newColumn.IsNullable = !Convert.ToBoolean(row["notnull"]);
                 if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
 

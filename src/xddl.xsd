@@ -200,7 +200,6 @@
   <xs:simpleType name="TypeName">
     <xs:restriction base="xs:string">
       <xs:enumeration value="bool" />
-      <xs:enumeration value="boolean" />
 
       <xs:enumeration value="blob" />
       <xs:enumeration value="char" />
@@ -208,7 +207,6 @@
       <xs:enumeration value="varchar" />
 
       <xs:enumeration value="int" />
-      <xs:enumeration value="integer" />
       <xs:enumeration value="bigInt" />
       <xs:enumeration value="mediumInt" />
       <xs:enumeration value="smallInt" />

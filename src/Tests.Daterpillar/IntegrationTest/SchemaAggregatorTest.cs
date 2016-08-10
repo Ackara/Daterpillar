@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.IntegrationTest
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SchemaAggregatorTest
     {
         [TestMethod]
