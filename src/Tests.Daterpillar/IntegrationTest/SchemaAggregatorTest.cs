@@ -97,7 +97,7 @@ namespace Tests.Daterpillar.IntegrationTest
 #if DEBUG
             if (wasNotSuccessful) Assert.Inconclusive();
 #else
-            throw new System.ArgumentException($"Cannot connection to '{connection.Database}' database.");
+            if (wasNotSuccessful) throw new System.ArgumentException($"Cannot connection to '{connection.Database}' database.");
 #endif
         }
 
