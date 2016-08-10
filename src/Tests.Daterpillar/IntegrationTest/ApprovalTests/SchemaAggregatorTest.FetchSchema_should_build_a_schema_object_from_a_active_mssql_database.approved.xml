@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="testDB" xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="daterpillar" xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
   <table name="genre">
     <comment />
     <column name="Id" nullable="false" autoIncrement="true">
@@ -25,7 +25,7 @@
       <comment />
       <dataType scale="2147483647" precision="0">text</dataType>
     </column>
-    <index type="index" unique="false" name="testdb_artist_idx1">
+    <index type="index" unique="false" name="daterpillar_artist_idx1">
       <columnName order="DESC">Name</columnName>
     </index>
   </table>
@@ -47,7 +47,7 @@
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
     </foreignKey>
-    <index type="primaryKey" unique="false" name="testDB_album_pk">
+    <index type="primaryKey" unique="false" name="daterpillar_album_pk">
       <columnName order="ASC">Artist_Id</columnName>
       <columnName order="ASC">Name</columnName>
     </index>
@@ -87,11 +87,11 @@
       <dataType scale="0" precision="0">bool</dataType>
       <modifier>('0')</modifier>
     </column>
-    <foreignKey name="song_artist_id_to_artist_id_fkey4" localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id">
+    <foreignKey name="song_genre_id_to_genre_id_fkey3" localColumn="Genre_Id" foreignTable="genre" foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
     </foreignKey>
-    <foreignKey name="song_genre_id_to_genre_id_fkey3" localColumn="Genre_Id" foreignTable="genre" foreignColumn="Id">
+    <foreignKey name="song_artist_id_to_artist_id_fkey4" localColumn="Artist_Id" foreignTable="artist" foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
     </foreignKey>

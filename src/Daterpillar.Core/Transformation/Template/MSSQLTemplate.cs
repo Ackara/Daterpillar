@@ -104,12 +104,11 @@ namespace Gigobyte.Daterpillar.Transformation.Template
 
         private void Transform(Column column)
         {
-            string dataType = _typeNameResolver.GetName(column.DataType);
+            
             string modifiers = string.Join(" ", column.Modifiers);
-
-            int seed = column.DataType.Scale;
-            int increment = column.DataType.Precision;
-            string autoIncrement = (column.AutoIncrement ? $" IDENTITY({(seed == 0 ? 1 : seed)}, {(increment == 0 ? 1 : increment)})" : string.Empty);
+            string dataType = _typeNameResolver.GetName(column.DataType);
+            
+            string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }

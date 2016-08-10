@@ -163,7 +163,7 @@ namespace Tests.Daterpillar.IntegrationTest
                 DropDatabaseIfExist = false,
             };
 
-            var schema = Schema.Load(SampleData.GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = SampleData.CreateMockSchema();
             var script = new MSSQLTemplate(settings).Transform(schema);
 
             // Act

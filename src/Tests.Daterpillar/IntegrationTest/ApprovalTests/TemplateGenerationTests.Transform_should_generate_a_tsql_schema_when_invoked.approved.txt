@@ -1,9 +1,9 @@
-﻿USE [zune];
+﻿USE [daterpillar];
 
 -- ------------------------------------
 -- CREATE GENRE TABLE
 -- ------------------------------------
-CREATE TABLE [zune].[dbo].[genre]
+CREATE TABLE [daterpillar].[dbo].[genre]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
 	[Name] VARCHAR(64) 
@@ -12,18 +12,18 @@ CREATE TABLE [zune].[dbo].[genre]
 -- ------------------------------------
 -- CREATE ARTIST TABLE
 -- ------------------------------------
-CREATE TABLE [zune].[dbo].[artist]
+CREATE TABLE [daterpillar].[dbo].[artist]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
 	[Name] VARCHAR(64) NOT NULL,
 	[Bio] TEXT 
 );
 
-CREATE UNIQUE INDEX [zune_artist_idx1] ON [zune].[dbo].[artist] ([Name] DESC);
+CREATE UNIQUE INDEX [daterpillar_artist_idx1] ON [daterpillar].[dbo].[artist] ([Name] DESC);
 -- ------------------------------------
 -- CREATE ALBUM TABLE
 -- ------------------------------------
-CREATE TABLE [zune].[dbo].[album]
+CREATE TABLE [daterpillar].[dbo].[album]
 (
 	[Artist_Id] INT NOT NULL,
 	[Name] VARCHAR(64) NOT NULL,
@@ -31,11 +31,11 @@ CREATE TABLE [zune].[dbo].[album]
 	CONSTRAINT [album_artist_id_to_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-ALTER TABLE [zune].[dbo].[album] ADD CONSTRAINT [zune_album_pk] PRIMARY KEY ([Artist_Id] ASC, [Name] ASC);
+ALTER TABLE [daterpillar].[dbo].[album] ADD CONSTRAINT [daterpillar_album_pk] PRIMARY KEY ([Artist_Id] ASC, [Name] ASC);
 -- ------------------------------------
 -- CREATE SONG TABLE
 -- ------------------------------------
-CREATE TABLE [zune].[dbo].[song]
+CREATE TABLE [daterpillar].[dbo].[song]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
 	[Album_Id] INT NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE [zune].[dbo].[song]
 	CONSTRAINT [song_artist_id_to_artist_id_fkey4] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE INDEX [song_idx] ON [zune].[dbo].[song] ([Name] ASC);
+CREATE INDEX [song_idx] ON [daterpillar].[dbo].[song] ([Name] ASC);
 
 
     /* *** SEED *** */

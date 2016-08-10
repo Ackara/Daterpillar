@@ -82,7 +82,7 @@ namespace Gigobyte.Daterpillar.Transformation.Template
         {
             string dataType = _typeResolver.GetName(column.DataType);
             string modifiers = string.Join(" ", column.Modifiers);
-            string autoIncrement = column.AutoIncrement ? " AUTOINCREMENT" : string.Empty;
+            string autoIncrement = column.AutoIncrement ? " PRIMARY KEY AUTOINCREMENT" : string.Empty;
 
             _text.AppendLine($"\t[{column.Name}] {dataType} {modifiers}{autoIncrement},");
         }
