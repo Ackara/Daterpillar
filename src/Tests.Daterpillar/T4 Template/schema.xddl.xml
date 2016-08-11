@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<schema xmlns="http://static.gigobyte.comhttp://static.gigobyte.com/schema/v1/xddl.xsd">
+<schema xmlns="http://static.gigobyte.com/schema/v1/xddl.xsd">
   <table name="TableA">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
