@@ -1,7 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Data.Linq;
-using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
+using Gigobyte.Daterpillar.Linq;
+using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.SQLite;
@@ -167,17 +166,6 @@ namespace Tests.Daterpillar.IntegrationTest
         private static string _connectionString;
         private static bool _exceptionHandlerCalled, _eventRaised;
 
-        private void ExceptionHandler(Exception ex, string command, out bool handled)
-        {
-            _exceptionHandlerCalled = (command == nameof(SQLiteCommandTests));
-            handled = true;
-        }
-
-        private void Connection_Error(object sender, DbExceptionEventArgs e)
-        {
-            _eventRaised = true;
-        }
-
         private static Song CreateSong([CallerMemberName]string name = null)
         {
             return new Song()
@@ -191,6 +179,17 @@ namespace Tests.Daterpillar.IntegrationTest
                 GenreId = 1,
                 OnDevice = true
             };
+        }
+
+        private void ExceptionHandler(Exception ex, string command, out bool handled)
+        {
+            _exceptionHandlerCalled = (command == nameof(SQLiteCommandTests));
+            handled = true;
+        }
+
+        private void Connection_Error(object sender, DbExceptionEventArgs e)
+        {
+            _eventRaised = true;
         }
 
         #endregion Private Members

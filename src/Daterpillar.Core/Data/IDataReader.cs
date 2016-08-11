@@ -5,7 +5,7 @@ namespace Gigobyte.Daterpillar.Data
     /// <summary>
     /// Provide methods to create an object mapped to an database table.
     /// </summary>
-    public interface IEntityConstructor
+    public interface IDataReader
     {
         /// <summary>
         /// Creates the instance.

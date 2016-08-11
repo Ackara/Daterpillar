@@ -1,5 +1,4 @@
-﻿using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
+﻿using Gigobyte.Daterpillar.TextTransformation;
 using System;
 using System.Collections.Generic;
 using System.Data;

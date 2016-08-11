@@ -1,5 +1,4 @@
-﻿using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
+﻿using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -10,7 +9,6 @@ namespace Tests.Daterpillar.UnitTest
     public class CSharpTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
-
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]

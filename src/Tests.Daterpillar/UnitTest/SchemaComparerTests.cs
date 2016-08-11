@@ -1,6 +1,6 @@
-﻿using Gigobyte.Daterpillar.Compare;
-using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Transformation;
+﻿using Gigobyte.Daterpillar.Aggregation;
+using Gigobyte.Daterpillar.Compare;
+using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Telerik.JustMock;
@@ -33,7 +33,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.AreEqual(ComparisionReportConclusions.Equal, report.Summary);
+            Assert.AreEqual(ComparisonReportConclusions.Equal, report.Summary);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(1, report.Discrepancies.Count);
-            Assert.AreEqual(ComparisionReportConclusions.NotEqual, report.Summary);
+            Assert.AreEqual(ComparisonReportConclusions.NotEqual, report.Summary);
         }
 
         [TestMethod]
@@ -67,9 +67,9 @@ namespace Tests.Daterpillar.UnitTest
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
-            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.Equal));
-            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.SourceEmpty));
-            Assert.IsTrue(report.Summary.HasFlag(ComparisionReportConclusions.TargetEmpty));
+            Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.Equal));
+            Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.SourceEmpty));
+            Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.TargetEmpty));
         }
 
         [TestMethod]

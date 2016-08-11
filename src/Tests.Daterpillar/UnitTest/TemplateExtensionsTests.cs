@@ -1,5 +1,5 @@
-﻿using Gigobyte.Daterpillar.Transformation.Template;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Gigobyte.Daterpillar.TextTransformation;
 
 namespace Tests.Daterpillar.UnitTest
 {

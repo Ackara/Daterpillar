@@ -1,5 +1,4 @@
-﻿using Gigobyte.Daterpillar.Annotation;
-using Gigobyte.Daterpillar.Data;
+﻿using Gigobyte.Daterpillar.Data;
 using System;
 using System.Runtime.Serialization;
 

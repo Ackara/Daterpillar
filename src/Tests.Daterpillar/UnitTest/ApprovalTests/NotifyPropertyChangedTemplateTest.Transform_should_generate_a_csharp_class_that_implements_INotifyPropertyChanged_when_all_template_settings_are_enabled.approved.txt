@@ -2,7 +2,7 @@
 /// Represents the [Employee] table.
 /// </summary>
 [Table("Employee")]
-[DataContract(Namespace = "http://api.gigobyte.com/schema/v1/xddl.xsd")]
+[DataContract(Namespace = "http://static.gigobyte.com/schema/v1/xddl.xsd")]
 public partial class Employee : EntityBase, INotifyPropertyChanged
 {
 	#region Constants
@@ -92,7 +92,7 @@ public partial class Employee : EntityBase, INotifyPropertyChanged
 /// Represents the [Manager] table.
 /// </summary>
 [Table("Manager")]
-[DataContract(Namespace = "http://api.gigobyte.com/schema/v1/xddl.xsd")]
+[DataContract(Namespace = "http://static.gigobyte.com/schema/v1/xddl.xsd")]
 public partial class Manager : EntityBase, INotifyPropertyChanged
 {
 	#region Constants

@@ -5,7 +5,7 @@ namespace Gigobyte.Daterpillar.Data
     /// <summary>
     /// Provides a mechanism to interact with relational databases.
     /// </summary>
-    /// <seealso cref="System.IDisposable" />
+    /// <seealso cref="System.IDisposable"/>
     public interface IDbConnectionWrapper : System.IDisposable
     {
         /// <summary>

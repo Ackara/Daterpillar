@@ -1,10 +1,7 @@
-﻿using Gigobyte.Daterpillar.Annotation;
-using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Data.Linq;
+﻿using Gigobyte.Daterpillar.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using Tests.Daterpillar.Sample;
 
 namespace Tests.Daterpillar.UnitTest
@@ -115,7 +112,6 @@ namespace Tests.Daterpillar.UnitTest
             };
         }
 
-        
         #endregion Private Members
     }
 }

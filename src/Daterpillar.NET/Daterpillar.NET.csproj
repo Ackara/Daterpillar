@@ -41,11 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AdoNetConnectionWrapper.cs" />
-    <Compile Include="Data\AdoNetEntityConstructor.cs" />
-    <Compile Include="Data\MySQLSchemaAggregator.cs" />
-    <Compile Include="Data\SchemaAggregatorBase.cs" />
-    <Compile Include="Data\MSSQLSchemaAggregator.cs" />
-    <Compile Include="Data\SQLiteSchemaAggregator.cs" />
+    <Compile Include="Data\AdoNetDataReader.cs" />
+    <Compile Include="Aggregation\MySQLSchemaAggregator.cs" />
+    <Compile Include="Aggregation\SchemaAggregatorBase.cs" />
+    <Compile Include="Aggregation\MSSQLSchemaAggregator.cs" />
+    <Compile Include="Aggregation\SQLiteSchemaAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +55,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Management\" />
+    <Folder Include="Linq\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

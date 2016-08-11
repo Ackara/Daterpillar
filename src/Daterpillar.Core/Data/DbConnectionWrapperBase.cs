@@ -1,13 +1,12 @@
-﻿using Gigobyte.Daterpillar.Data.Linq;
+﻿using Gigobyte.Daterpillar.Linq;
 using System;
 using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.Data
 {
     /// <summary>
-    ///
     /// </summary>
-    /// <seealso cref="IDbConnectionWrapper" />
+    /// <seealso cref="IDbConnectionWrapper"/>
     public abstract class DbConnectionWrapperBase : IDbConnectionWrapper
     {
         /// <summary>
@@ -32,17 +31,16 @@ namespace Gigobyte.Daterpillar.Data
         public ExceptionHandlerDelegate ExceptionHandler;
 
         /// <summary>
-        /// Occurs when connected database throw an error.
-        /// </summary>
-        public event EventHandler<DbExceptionEventArgs> Error;
-
-        /// <summary>
-        ///
         /// </summary>
         /// <param name="ex">The ex.</param>
         /// <param name="command">The command.</param>
         /// <param name="handled">if set to <c>true</c> [handled].</param>
         public delegate void ExceptionHandlerDelegate(Exception ex, string command, out bool handled);
+
+        /// <summary>
+        /// Occurs when connected database throw an error.
+        /// </summary>
+        public event EventHandler<DbExceptionEventArgs> Error;
 
         /// <summary>
         /// Executes the specified query.
@@ -123,7 +121,8 @@ namespace Gigobyte.Daterpillar.Data
         public abstract void Commit();
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting
+        /// unmanaged resources.
         /// </summary>
         public void Dispose()
         {
@@ -138,7 +137,9 @@ namespace Gigobyte.Daterpillar.Data
         /// <summary>
         /// Raises the error event.
         /// </summary>
-        /// <param name="args">The <see cref="DbExceptionEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">
+        /// The <see cref="DbExceptionEventArgs"/> instance containing the event data.
+        /// </param>
         protected void RaiseError(DbExceptionEventArgs args)
         {
             Error?.Invoke(this, args);
@@ -155,7 +156,10 @@ namespace Gigobyte.Daterpillar.Data
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        /// <param name="disposing">
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        /// unmanaged resources.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

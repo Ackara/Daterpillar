@@ -6,7 +6,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Test.Data.Samples)]
-    public class AdoNetEntityConstructorTest
+    public class AdoNetDataReaderTest
     {
         public TestContext TestContext { get; set; }
 
@@ -21,7 +21,7 @@ namespace Tests.Daterpillar.UnitTest
             var onDevice = Convert.ToBoolean(TestContext.DataRow["On_Device"]);
 
             var returnType = typeof(Sample.Song);
-            var sut = new AdoNetEntityConstructor();
+            var sut = new AdoNetDataReader();
 
             // Act
             var entity = (Sample.Song)sut.CreateInstance(returnType, TestContext.DataRow);

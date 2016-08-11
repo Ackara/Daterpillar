@@ -6,8 +6,8 @@ namespace Gigobyte.Daterpillar.Data
     /// <summary>
     /// Create a <see cref="EntityBase"/> object from a <see cref="System.Data.DataRow"/> object.
     /// </summary>
-    /// <seealso cref="Gigobyte.Daterpillar.Data.IEntityConstructor"/>
-    public class AdoNetEntityConstructor : IEntityConstructor
+    /// <seealso cref="Gigobyte.Daterpillar.Data.IDataReader"/>
+    public class AdoNetDataReader : IDataReader
     {
         /// <summary>
         /// Creates the instance.

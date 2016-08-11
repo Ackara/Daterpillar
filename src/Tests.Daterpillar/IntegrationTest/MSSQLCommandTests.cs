@@ -1,7 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Data.Linq;
-using Gigobyte.Daterpillar.Transformation;
-using Gigobyte.Daterpillar.Transformation.Template;
+using Gigobyte.Daterpillar.Linq;
+using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
 using System.Data.SqlClient;

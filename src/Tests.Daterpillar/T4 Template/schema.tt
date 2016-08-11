@@ -10,13 +10,11 @@
 <#@ import namespace="System.Data" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="Gigobyte.Daterpillar.Transformation" #>
-<#@ import namespace="Gigobyte.Daterpillar.Transformation.Template" #>
-<#@ output extension=".cs" #>
+<#@ import namespace="Gigobyte.Daterpillar.TextTransformation" #>
+<#@ output extension=".text" #>
 using System;
 using Gigobyte.Daterpillar.Data;
 using System.Runtime.Serialization;
-using Gigobyte.Daterpillar.Annotation;
 
 namespace GeneratedCode
 {
@@ -51,10 +49,10 @@ public void Generate(Schema schema, ITemplate tempalate)
 public void ExcludeTable(Schema schema, params string[] tables)
 {
 	foreach(var item in tables)
-    {
+	{
 		int index = schema.Tables.FindIndex(x=> x.Name.Equals(item, StringComparison.CurrentCultureIgnoreCase));
 		if(index >= 0) schema.Tables.RemoveAt(index);
-    }
+	}
 }
 
 public void RenameTable(Schema schema, string oldName, string newName)
@@ -66,26 +64,26 @@ public void RenameTable(Schema schema, string oldName, string newName)
 public void GenerateEnumFromTable(IDbConnection database, string enumName, string tableName, string nameColumn, string valueColumn)
 {
 	if (database.State != ConnectionState.Open) database.Open();
-    using(var cmd = database.CreateCommand())
-    {
+	using(var cmd = database.CreateCommand())
+	{
 		cmd.CommandText = string.Format("SELECT {1}, {2} FROM {0};", tableName, nameColumn, valueColumn);
-        using(var queryResults = new DataTable())
-        {
+		using(var queryResults = new DataTable())
+		{
 			queryResults.Load(cmd.ExecuteReader());
 
 			PushIndent("\t");
 			WriteLine("public enum {0}", enumName.ToPascalCase());
 			WriteLine("{");
-            foreach (DataRow row in queryResults.Rows)
-            {
+			foreach (DataRow row in queryResults.Rows)
+			{
 				string name = Convert.ToString(row[nameColumn]);
 				int value = Convert.ToInt32(row[valueColumn]);
 				WriteLine("\t{0} = {1};", name.ToPascalCase(), value);
-            }
+			}
 			WriteLine("}"); WriteLine("");
 			PopIndent();
-        }
-    }
+		}
+	}
 }
 
 #>

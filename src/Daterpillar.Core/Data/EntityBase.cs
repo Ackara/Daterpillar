@@ -1,5 +1,4 @@
-﻿using Gigobyte.Daterpillar.Annotation;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 namespace Gigobyte.Daterpillar.Data

@@ -1,4 +1,4 @@
-﻿using Gigobyte.Daterpillar.Data.Linq;
+﻿using Gigobyte.Daterpillar.Linq;
 using System.Collections.Generic;
 using System.Data;
 
@@ -10,7 +10,7 @@ namespace Gigobyte.Daterpillar.Data
         /// Initializes a new instance of the <see cref="AdoNetConnectionWrapper"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public AdoNetConnectionWrapper(IDbConnection connection) : this(connection, new AdoNetEntityConstructor(), QueryStyle.SQL)
+        public AdoNetConnectionWrapper(IDbConnection connection) : this(connection, new AdoNetDataReader(), QueryStyle.SQL)
         {
         }
 
@@ -19,7 +19,7 @@ namespace Gigobyte.Daterpillar.Data
         /// </summary>
         /// <param name="connection">The connection.</param>
         /// <param name="style">The style.</param>
-        public AdoNetConnectionWrapper(IDbConnection connection, QueryStyle style) : this(connection, new AdoNetEntityConstructor(), style)
+        public AdoNetConnectionWrapper(IDbConnection connection, QueryStyle style) : this(connection, new AdoNetDataReader(), style)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Gigobyte.Daterpillar.Data
         /// <param name="connection">The connection.</param>
         /// <param name="constructor">The constructor.</param>
         /// <param name="style">The style.</param>
-        public AdoNetConnectionWrapper(IDbConnection connection, IEntityConstructor constructor, QueryStyle style) : base(style)
+        public AdoNetConnectionWrapper(IDbConnection connection, IDataReader constructor, QueryStyle style) : base(style)
         {
             _constructor = constructor;
             Connection = connection;
@@ -116,7 +116,7 @@ namespace Gigobyte.Daterpillar.Data
 
         #region Private Member
 
-        private IEntityConstructor _constructor;
+        private IDataReader _constructor;
 
         private void OpenConnectionIfClosed()
         {

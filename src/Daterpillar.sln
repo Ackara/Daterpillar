@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Core", "Daterpillar.Core\Daterpillar.Core.csproj", "{EEE56AC1-7B0E-49CA-985E-7F00E3A88C81}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDCC3763-A4ED-4B12-9F13-43610728FE38}"
 	ProjectSection(SolutionItems) = preProject
 		Daterpillar.Core\Daterpillar.Core.nuspec = Daterpillar.Core\Daterpillar.Core.nuspec
@@ -16,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Daterpillar", "Tests.Daterpillar\Tests.Daterpillar.csproj", "{4E2023F0-2452-4F5A-8DCB-F9F854751965}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.NET", "Daterpillar.NET\Daterpillar.NET.csproj", "{785E04BF-F296-481B-983A-E3EFBA3E8F06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F2B89B7A-B701-49D7-9014-B1EA0E0F26D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +82,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4E2023F0-2452-4F5A-8DCB-F9F854751965} = {7A13E6D0-F85A-4BE8-BEB4-69A0AD18A5C3}
+		{4E2023F0-2452-4F5A-8DCB-F9F854751965} = {F2B89B7A-B701-49D7-9014-B1EA0E0F26D0}
 	EndGlobalSection
 EndGlobal
