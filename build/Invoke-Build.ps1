@@ -12,26 +12,20 @@ This script depends on the psake module.
 #>
 
 Param(
-    [Parameter()]
-    [string]$NuGetUri = "https://dist.nuget.org/win-x86-commandline/v3.4.3/nuget.exe",
+    [Parameter(Position = 1)]
+    [string[]]$TaskList = @("default"),
 
     [Parameter()]
-    [string]$NuGetSource = "",
+    [string]$NuGetUri = "https://dist.nuget.org/win-x86-commandline/v3.4.3/nuget.exe",
     
     [Parameter()]
     [string]$NuGetAPIKey = "",
-    
-    [Parameter()]
-    [string]$Cloudinary_APIKey = "",
 
     [Parameter()]
-    [string]$Cloudinary_Secret = "",
+    [string]$FtpUser = "",
 
     [Parameter()]
-    [string]$Cloudinary_CloudName = "",
-
-    [Parameter()]
-    [string[]]$TaskList = @("Create-MockDatabases")
+    [string]$FtpPassword = ""
 )
 
 Clear-Host;
@@ -60,11 +54,9 @@ Invoke-psake `
     -properties @{
         "NugetEXE" = $nuget;
         "NuGetKey" = $NuGetAPIKey;
-        "NuGetSource" = $NuGetSource;
 
-        "Cloudinary_APIKey" = $Cloudinary_APIKey;
-        "Cloudinary_Secret" = $Cloudinary_Secret;
-        "Cloudinary_CloudName" = $Cloudinary_CloudName;
+        "Username" = $FtpUser;
+        "Password" = $FtpPassword;
     };
 
 Pop-Location;

@@ -1,13 +1,8 @@
 Properties {
     # Credentials
-    $SQLiteConnectionString = "";
-    $MsSQLConnectionString = "";
-    $MySQLConnectionString = "";
+    $Password = "";
+    $Username = "";
     $NuGetKey = "";
-
-    $Cloudinary_CloudName = "";
-    $Cloudinary_APIKey = "";
-    $Cloudinary_Secret = "";
     
     # Paths and URIs
     $ProjectDirectory = (Split-Path $PSScriptRoot -Parent);
@@ -23,11 +18,12 @@ Properties {
     $BuildPlatform = "Any CPU";
 }
 
-Task default -depends Init, Compile, Push-NuGetIconToCDN, Publish-NuGetPackages;
+Task default -depends Init, Compile, Push-NuGetIconToCDN, Push-XmlSchemaToServer, Publish-NuGetPackages;
 
 Task Init -description "Initialize the build n' deploy procedure." -action {
     Assert(Test-Path $ProjectDirectory -PathType Container) "`$ProjectionDirectory cannot be null or empty.";
     Import-Module ((Get-ChildItem "$ProjectDirectory\src\packages\Gigobyte.DevOps.*\tools\Gigobyte.DevOps.dll").FullName | Sort-Object $_ | Select-Object -Last 1);
+    Import-Module "$ProjectDirectory\tools\ftp.psm1";
 
     # Cleanup directories.
     foreach($dir in @($BinDirectory, $NuGetPackageDirectory, $TempDirectory))
@@ -50,16 +46,34 @@ Task Compile -description "Build the solution." -depends Init -action {
     Exec { msbuild $solution "/p:Configuration=$BuildConfiguration;Platform=$BuildPlatform" | Out-Null }
 }
 
-Task Create-MockDatabases -description "Stage databases for testing." -depends Compile -action {
-    Write-Host "Creating database schema...";
-        Import-Module "$ProjectDirectory\src\Daterpillar.Core\bin\$BuildConfiguration\Gigobyte.Daterpillar.Core.dll";
-        $schema = [Gigobyte.Daterpillar.Transformation.Schema]::Load((Get-ChildItem "$ProjectDirectory\src\Tests.Daterpillar\datasoft.xddl.xml").OpenRead());
-
-    Write-Host "Creating SQL Server database...";
+Task Push-NuGetIconToCDN -description "Upload an image to https://cloudinary.com CDN." -depends Init -action {
+    Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' cannot be null or empty";
+    Assert(-not [String]::IsNullOrEmpty($Password)) "'FtpPassword' cannot be null or empty";
     
+    $icon = "$ProjectDirectory\daterpillar.png";
+    if(Test-Path $icon -PathType Leaf)
+    {
+        Write-Host "Upload '$icon' to server...";
+            $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $icon -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/images/daterpillar.png";
+            if($successful) { Write-Host "`t* '$icon' was uploaded successfully."; }
+            else { throw "`t* Failed to upload '$icon' to FTP server"; }
+    }
+    else { throw "Could not find '$icon'."; }
 }
 
-Task Push-XmlSchema -description "Upload the 'xddl.xsd' file to the FTP server." -action {
+Task Push-XmlSchemaToServer -description "Upload the 'xddl.xsd' file to the FTP server." -depend Init -action {
+    Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' cannot be null or empty";
+    Assert(-not [String]::IsNullOrEmpty($Password)) "'FtpPassword' cannot be null or empty";
+
+    $xddl = "$ProjectDirectory\src\xddl.xsd";
+    if(Test-Path $xddl -PathType Leaf)
+    {
+        Write-Host "Upload '$xddl' to server...";
+            $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $xddl -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/schema/v1/xddl.xsd";
+            if($successful) { Write-Host "`t* '$xddl' was uploaded successfully."; }
+            else { throw "`t* Failed to upload '$xddl' to FTP server"; }
+    }
+    else { throw "Could not find '$xddl'."; }
 }
 
 Task Create-NuGetPackages -description "Create a nuget package for all non test projects." -depends Compile -action {
@@ -88,19 +102,4 @@ Task Publish-NuGetPackages -description "Publish nuget packages to nuget.org" -d
     {
         Exec { & $NugetEXE push $($package) $($NuGetKey) -Source $($NuGetSource); }
     }
-}
-
-Task Push-NuGetIconToCDN -description "Upload an image to https://cloudinary.com CDN." -depends Init -action {
-    Assert(-not [String]::IsNullOrEmpty($Cloudinary_APIKey)) "'Cloudinary_APIKey' cannot be null nor empty.";
-    Assert(-not [String]::IsNullOrEmpty($Cloudinary_Secret)) "'Cloudinary_Secret' cannot be null nor empty.";
-    Assert(-not [String]::IsNullOrEmpty($Cloudinary_CloudName)) "'Cloudinary_CloundName' cannot be null nor empty.";
-    
-    #Write-Host "`t* Uploading 'mockaroo-net.png' to 'https://api.cloudinary.com'...";
-    #$imageUrl = Push-ImageToCloudinary "$ProjectDirectory\mockaroo-net.png" -CloudName $Cloudinary_CloudName -APIKey $Cloudinary_APIKey -Secret $Cloudinary_Secret;
-
-    #Write-Host "`t* Replacing all .nuspec files <iconUrl> element with image url...";
-    #foreach($nuspec in (Get-ChildItem "$ProjectDirectory\src" -Recurse -Filter "*.nuspec" | Select-Object -ExpandProperty FullName))
-    #{
-    #    Edit-Xml $nuspec -XPath "package/metadata/iconUrl" -Value $imageUrl;
-    #}
 }
