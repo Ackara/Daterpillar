@@ -6,12 +6,14 @@
 <#@ assembly name="System.Data" #>
 <#@ assembly name="System.Xml" #>
 <#@ assembly name="System.IO" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Data" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Gigobyte.Daterpillar.TextTransformation" #>
-<#@ output extension=".text" #>
+<#@ output extension=".cs" #>
 using System;
 using Gigobyte.Daterpillar.Data;
 using System.Runtime.Serialization;
@@ -26,7 +28,7 @@ namespace GeneratedCode
 	{
 		CommentsEnabled = true,
 		DataContractsEnabled = true,
-		SchemaAnnotationsEnabled = true,
+		SchemaAttributesEnabled = true,
 		VirtualPropertiesEnabled = true
 	};
 
@@ -35,6 +37,7 @@ namespace GeneratedCode
 	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
 
 	Generate(schema, new CSharpTemplate(settings));
+	
 #>
 }
 <#+
@@ -44,6 +47,17 @@ public void Generate(Schema schema, ITemplate tempalate)
 	PushIndent("\t");
 	WriteLine(tempalate.Transform(schema));
 	PopIndent();
+}
+
+public void GenerateAsFile(Schema schema, ITemplate template, string fileName)
+{
+	var tempFile = Path.GetTempFileName();
+	File.WriteAllText(tempFile, template.Transform(schema));
+
+	var dte = (EnvDTE.DTE)((IServiceProvider)this.Host).GetService(typeof(EnvDTE.DTE));
+	var thisTemplateFile = dte.Solution.FindProjectItem(this.Host.TemplateFile);
+	DeleteTextTemplateSubItem(thisTemplateFile, fileName);
+	thisTemplateFile.ProjectItems.AddFromTemplate(tempFile, fileName);
 }
 
 public void ExcludeTable(Schema schema, params string[] tables)
@@ -84,6 +98,20 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
 			PopIndent();
 		}
 	}
+}
+
+public void DeleteTextTemplateSubItem(ProjectItem template, string fileName)
+{
+	foreach(ProjectItem subItem in template.ProjectItems)
+    {
+		string subItemPath = subItem.FileNames[1];
+		if(Path.GetFileName(subItemPath) == fileName)
+        {
+			File.Delete(subItem.FileNames[1]);
+			subItem.Delete();
+			break;
+        }
+    }
 }
 
 #>
