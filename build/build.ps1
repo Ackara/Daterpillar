@@ -47,12 +47,12 @@ Task Compile -description "Build the solution." -depends Init -action {
 
 Task Push-NuGetIconToCDN -description "Upload an image to https://cloudinary.com CDN." -depends Init -action {
     Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' cannot be null or empty";
-    Assert(-not [String]::IsNullOrEmpty($Password)) "'FtpPassword' cannot be null or empty";
+    Assert(-not [String]::IsNullOrEmpty($Password)) "'Password' cannot be null or empty";
     
     $icon = "$ProjectDirectory\daterpillar.png";
     if(Test-Path $icon -PathType Leaf)
     {
-        Write-Host "Upload '$icon' to server...";
+        Write-Host "`t* Uploading '$icon' to server...";
             $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $icon -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/images/daterpillar.png";
             if($successful) { Write-Host "`t* '$icon' was uploaded successfully."; }
             else { throw "`t* Failed to upload '$icon' to FTP server"; }
@@ -67,9 +67,9 @@ Task Push-XmlSchemaToServer -description "Upload the 'xddl.xsd' file to the FTP 
     $xddl = "$ProjectDirectory\src\xddl.xsd";
     if(Test-Path $xddl -PathType Leaf)
     {
-        Write-Host "Upload '$xddl' to server...";
+        Write-Host "`t* Uploading '$xddl' to server...";
             $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $xddl -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/schema/v1/xddl.xsd";
-            if($successful) { Write-Host "`t* '$xddl' was uploaded successfully."; }
+            if($successful) { Write-Host "`t* '$xddl' was uploaded successfully." -ForegroundColor Green; }
             else { throw "`t* Failed to upload '$xddl' to FTP server"; }
     }
     else { throw "Could not find '$xddl'."; }
