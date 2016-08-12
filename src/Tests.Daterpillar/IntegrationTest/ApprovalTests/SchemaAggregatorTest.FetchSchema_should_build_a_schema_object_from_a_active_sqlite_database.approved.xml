@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="main" xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="main" xmlns="http://static.gigobyte.com/schema/v1/xddl.xsd">
   <table name="genre">
     <comment />
     <column name="Id" nullable="false" autoIncrement="false">
