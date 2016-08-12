@@ -22,7 +22,6 @@ Task default -depends Init, Compile, Push-NuGetIconToCDN, Push-XmlSchemaToServer
 
 Task Init -description "Initialize the build n' deploy procedure." -action {
     Assert(Test-Path $ProjectDirectory -PathType Container) "`$ProjectionDirectory cannot be null or empty.";
-    Import-Module ((Get-ChildItem "$ProjectDirectory\src\packages\Gigobyte.DevOps.*\tools\Gigobyte.DevOps.dll").FullName | Sort-Object $_ | Select-Object -Last 1);
     Import-Module "$ProjectDirectory\tools\ftp.psm1";
 
     # Cleanup directories.
