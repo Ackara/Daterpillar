@@ -8,7 +8,7 @@
 
             CommentsEnabled = true,
             DataContractsEnabled = true,
-            SchemaAnnotationsEnabled = true,
+            SchemaAttributesEnabled = true,
             VirtualPropertiesEnabled = true
         };
 
@@ -18,7 +18,7 @@
 
         public bool DataContractsEnabled { get; set; }
 
-        public bool SchemaAnnotationsEnabled { get; set; }
+        public bool SchemaAttributesEnabled { get; set; }
 
         public bool VirtualPropertiesEnabled { get; set; }
     }

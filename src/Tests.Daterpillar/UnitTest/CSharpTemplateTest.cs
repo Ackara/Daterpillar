@@ -32,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
                 Namespace = Schema.Xmlns,
                 CommentsEnabled = true,
                 DataContractsEnabled = true,
-                SchemaAnnotationsEnabled = true,
+                SchemaAttributesEnabled = true,
                 VirtualPropertiesEnabled = true
             };
 
@@ -65,7 +65,7 @@ namespace Tests.Daterpillar.UnitTest
 
                 CommentsEnabled = false,
                 DataContractsEnabled = false,
-                SchemaAnnotationsEnabled = false,
+                SchemaAttributesEnabled = false,
                 VirtualPropertiesEnabled = false
             };
 

@@ -47,7 +47,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void GenerateConstants(Table table)
         {
-            if (_settings.SchemaAnnotationsEnabled)
+            if (_settings.SchemaAttributesEnabled)
             {
                 _text.AppendLine("\t#region Constants");
                 _text.AppendLine();
@@ -87,7 +87,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             AppendDataContract(table);
             AppendSchemaAttribute(table);
 
-            string baseType = _settings.SchemaAnnotationsEnabled ? (" : " + typeof(Data.EntityBase).Name) : string.Empty;
+            string baseType = _settings.SchemaAttributesEnabled ? (" : " + typeof(Data.EntityBase).Name) : string.Empty;
             _text.AppendLine($"public partial class {table.Name.ToPascalCase(' ', '_')}{baseType}");
             _text.AppendLine("{");
 
@@ -171,7 +171,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void AppendSchemaAttribute(Table table)
         {
-            if (_settings.SchemaAnnotationsEnabled)
+            if (_settings.SchemaAttributesEnabled)
             {
                 string attribute = GetAttributeShortName(typeof(TableAttribute).Name);
                 _text.AppendLine($"[{attribute}(\"{table.Name}\")]");
@@ -180,7 +180,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void AppendSchemaAttribute(Column column)
         {
-            if (_settings.SchemaAnnotationsEnabled)
+            if (_settings.SchemaAttributesEnabled)
             {
                 string attribute = GetAttributeShortName(typeof(ColumnAttribute).Name);
                 bool isKey = _currentTable.Indexes.IsKey(column.Name) || column.AutoIncrement;
