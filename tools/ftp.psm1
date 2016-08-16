@@ -46,11 +46,12 @@ This cmdlet uploads a file to an ftp server.
     }
     catch
     {
+        Write-Error $_;
         return $false;
     }
     finally
     {
-        $requestStream.Dispose();
+        $request.Dispose();
     }
 }
 
