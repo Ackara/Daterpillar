@@ -50,7 +50,7 @@ BEGIN
     {
         Write-Host "- Downloading 'WinSCP.exe' ...";
         $winscpZip = "$PWD\winscp-portable.zip";
-        if (-not (Test-Path $winscpZip -PathType Leaf)) { Invoke-WebRequest "https://sourceforge.net/projects/winscp/files/WinSCP/5.9.1/WinSCP-5.9.1-Portable.zip/download" -OutFile $winscpZip; }
+        if (-not (Test-Path $winscpZip -PathType Leaf)) { Invoke-WebRequest "https://winscp.net/download/WinSCP-5.9.1-Portable.zip" -OutFile $winscpZip; }
 
         $tempDir = "$PWD\winscp-portable";
         if (Test-Path $tempDir -PathType Container) { Remove-Item $tempDir -Recurse -Force; }
