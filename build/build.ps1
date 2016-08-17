@@ -53,9 +53,7 @@ Task Push-NuGetIconToCDN -description "Upload an image to https://cloudinary.com
     if(Test-Path $icon -PathType Leaf)
     {
         Write-Host "`t* Uploading '$icon' to server...";
-            $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $icon -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/images/daterpillar.png";
-            if($successful) { Write-Host "`t* '$icon' was uploaded successfully."; }
-            else { throw "`t* Failed to upload '$icon' to FTP server"; }
+            ..\tools\Push-ItemWithWinSCP.ps1 -Hostname "gigobyte.com" -Username $Username -Password $Password -Path $icon -Destination "static.gigobyte.com/wwwroot/images/daterpillar.png";
     }
     else { throw "Could not find '$icon'."; }
 }
@@ -68,9 +66,7 @@ Task Push-XmlSchemaToServer -description "Upload the 'xddl.xsd' file to the FTP 
     if(Test-Path $xddl -PathType Leaf)
     {
         Write-Host "`t* Uploading '$xddl' to server...";
-            $successful = Send-FileToFtpServer -Username $Username -Password $Password -Path $xddl -Destination "ftp://static.gigobyte.com/static.gigobyte.com/wwwroot/schema/v1/xddl.xsd";
-            if($successful) { Write-Host "`t* '$xddl' was uploaded successfully." -ForegroundColor Green; }
-            else { throw "`t* Failed to upload '$xddl' to FTP server"; }
+            ..\tools\Push-ItemWithWinSCP.ps1 -Hostname "gigobyte.com" -Username $Username -Password $Password -Path $xddl -Destination "static.gigobyte.com/wwwroot/schema/v1/xddl.xsd";
     }
     else { throw "Could not find '$xddl'."; }
 }
