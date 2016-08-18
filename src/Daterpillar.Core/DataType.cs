@@ -65,17 +65,40 @@ namespace Gigobyte.Daterpillar.TextTransformation
         [XmlText]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Determines whether this instance and another specified <see cref="DataType"/> object have
+        /// the same value.
+        /// </summary>
+        /// <param name="other">The instance to compare to this instance.</param>
+        /// <returns>
+        /// <c>true</c> if the value of the parameter is the same as this instance; <c>false</c> otherwise.
+        /// </returns>
         public bool Equals(DataType other)
         {
             return Name == other.Name && Precision == other.Precision && Scale == other.Scale;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current instance.</param>
+        /// <returns>
+        /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance;
+        /// otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (obj is DataType) return Equals((DataType)obj);
             else return false;
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.
+        /// </returns>
         public override int GetHashCode()
         {
             return Name.GetHashCode() ^ Precision.GetHashCode() ^ Scale.GetHashCode();
