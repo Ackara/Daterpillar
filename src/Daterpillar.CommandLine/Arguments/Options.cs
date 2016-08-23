@@ -7,13 +7,10 @@ namespace Gigobyte.Daterpillar.Arguments
         [VerbOption(MountVerb.Name, HelpText = "")]
         public MountVerb MountOption { get; set; }
 
-        [VerbOption("compare", HelpText = "")]
-        public CompareVerb CompareOption { get; set; }
-
         [VerbOption("sync", HelpText = "")]
         public SyncVerb SyncOption { get; set; }
 
-        [CommandLine.HelpOption]
+        [HelpOption]
         public string GetHelp()
         {
             return CommandLine.Text.HelpText.AutoBuild(this);

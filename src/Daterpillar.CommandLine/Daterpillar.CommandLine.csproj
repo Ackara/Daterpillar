@@ -54,8 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments\CompareVerb.cs" />
-    <Compile Include="Arguments\ConnectionType.cs" />
     <Compile Include="Arguments\Options.cs" />
     <Compile Include="Arguments\SyncVerb.cs" />
     <Compile Include="Commands\CommandBase.cs" />
@@ -64,6 +62,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\MountCommand.cs" />
     <Compile Include="Commands\NullCommand.cs" />
+    <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Commands\VerbLinkAttribute.cs" />
     <Compile Include="ExitCode.cs" />
     <Compile Include="Program.cs" />

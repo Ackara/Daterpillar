@@ -11,6 +11,7 @@ namespace Gigobyte.Daterpillar.Compare
         }
 
         public Counter Source;
+
         public Counter Target;
 
         public ComparisonReportConclusions Summary { get; set; }

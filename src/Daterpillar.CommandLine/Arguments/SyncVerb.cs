@@ -9,6 +9,7 @@ namespace Gigobyte.Daterpillar.Arguments
 {
     public class SyncVerb
     {
+        public const string Name = "sync";
 
         [Option('s', "source", Required = true, HelpText = "The source connection string.")]
         public string Source { get; set; }
@@ -20,6 +21,6 @@ namespace Gigobyte.Daterpillar.Arguments
         public string OutFile { get; set; }
 
         [Option('p', "platform", Required = true, HelpText = "The database platform in which to target.")]
-        public ConnectionType Platform { get; set; }
+        public SupportedDatabase Platform { get; set; }
     }
 }

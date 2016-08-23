@@ -8,39 +8,39 @@ namespace Gigobyte.Daterpillar.Commands
     {
         public abstract int Execute(object args);
 
-        public ITemplate GetTemplate(ConnectionType type)
+        protected ITemplate GetTemplate(SupportedDatabase type)
         {
             switch (type)
             {
                 default:
-                case ConnectionType.MSSQL:
+                case SupportedDatabase.MSSQL:
                     return new MSSQLTemplate();
 
-                case ConnectionType.MySQL:
+                case SupportedDatabase.MySQL:
                     return new MySQLTemplate();
 
-                case ConnectionType.SQLite:
+                case SupportedDatabase.SQLite:
                     return new SQLiteTemplate();
             }
         }
 
-        public IDbConnection AsConnection(ConnectionType type)
+        protected IDbConnection GetConnection(SupportedDatabase type)
         {
-            return AsConnection(type, string.Empty);
+            return GetConnection(type, string.Empty);
         }
 
-        public IDbConnection AsConnection(ConnectionType type, string connectionString)
+        protected IDbConnection GetConnection(SupportedDatabase type, string connectionString)
         {
             switch (type)
             {
                 default:
-                case ConnectionType.MSSQL:
+                case SupportedDatabase.MSSQL:
                     return new System.Data.SqlClient.SqlConnection(connectionString);
 
-                case ConnectionType.MySQL:
+                case SupportedDatabase.MySQL:
                     return new MySql.Data.MySqlClient.MySqlConnection(connectionString);
 
-                case ConnectionType.SQLite:
+                case SupportedDatabase.SQLite:
                     return new System.Data.SQLite.SQLiteConnection(connectionString);
             }
         }

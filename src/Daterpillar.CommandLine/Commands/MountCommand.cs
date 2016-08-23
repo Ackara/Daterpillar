@@ -14,7 +14,7 @@ namespace Gigobyte.Daterpillar.Commands
 
             var schema = Schema.Load(File.OpenRead(options.Path));
             ITemplate template = GetTemplate(options.Platform);
-            IDbConnection connection = AsConnection(options.Platform, options.ConnectionString);
+            IDbConnection connection = GetConnection(options.Platform, options.ConnectionString);
 
             if (options.Override) TruncateDatabase(schema, connection);
             ExecuteSchema(schema, connection, template);
