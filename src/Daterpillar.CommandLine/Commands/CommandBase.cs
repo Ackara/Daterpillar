@@ -1,28 +1,10 @@
-﻿using Gigobyte.Daterpillar.Arguments;
-using Gigobyte.Daterpillar.TextTransformation;
-using System.Data;
+﻿using System.Data;
 
 namespace Gigobyte.Daterpillar.Commands
 {
     public abstract class CommandBase : ICommand
     {
         public abstract int Execute(object args);
-
-        protected ITemplate GetTemplate(SupportedDatabase type)
-        {
-            switch (type)
-            {
-                default:
-                case SupportedDatabase.MSSQL:
-                    return new MSSQLTemplate();
-
-                case SupportedDatabase.MySQL:
-                    return new MySQLTemplate();
-
-                case SupportedDatabase.SQLite:
-                    return new SQLiteTemplate();
-            }
-        }
 
         protected IDbConnection GetConnection(SupportedDatabase type)
         {

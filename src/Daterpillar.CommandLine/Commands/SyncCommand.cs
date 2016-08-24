@@ -1,7 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.Arguments;
 using Gigobyte.Daterpillar.Compare;
-using System.Data;
 
 namespace Gigobyte.Daterpillar.Commands
 {
@@ -11,18 +10,20 @@ namespace Gigobyte.Daterpillar.Commands
         public override int Execute(object args)
         {
             var options = (SyncVerb)args;
-            var source = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Source));
-            var target = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Target));
+            ISchemaAggregator source = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Source));
+            ISchemaAggregator target = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Target));
 
             ComparisonReport report = new SchemaComparer().GenerateReport(source, target);
             switch (report.Summary)
             {
-                case ComparisonReportConclusions.NotEqual:
+                default:
+                case ComparisonReportConclusions.Equal:
                     // TODO: Add code here
                     break;
 
-                case ComparisonReportConclusions.Equal:
+                case ComparisonReportConclusions.NotEqual:
                     // TODO: Add code here
+
                     break;
 
                 case ComparisonReportConclusions.SourceEmpty:
@@ -40,7 +41,7 @@ namespace Gigobyte.Daterpillar.Commands
         #region Private Members
 
         private readonly SchemaAggregatorFactory _aggregatorFactory = new SchemaAggregatorFactory();
-        
+
         #endregion Private Members
     }
 }
