@@ -12,6 +12,7 @@ namespace Gigobyte.Daterpillar
 
             int exitCode = 0;
             var options = new Options();
+            
             if (args.Length > 0)
             {
                 var errorOccurred = CommandLine.Parser.Default.ParseArguments(args, options,
@@ -28,6 +29,7 @@ namespace Gigobyte.Daterpillar
                     });
             }
             else Console.WriteLine(options.GetHelp());
+
             Environment.Exit(exitCode);
         }
 

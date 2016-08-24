@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregation\SchemaAggregatorFactory.cs" />
     <Compile Include="Data\AdoNetConnectionWrapper.cs" />
     <Compile Include="Data\AdoNetDataReader.cs" />
     <Compile Include="Aggregation\MySQLSchemaAggregator.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="Aggregation\MSSQLSchemaAggregator.cs" />
     <Compile Include="Aggregation\SQLiteSchemaAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextTransformation\TemplateFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Daterpillar.Core\Daterpillar.Core.csproj">
@@ -56,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Linq\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,7 +13,7 @@ namespace Gigobyte.Daterpillar.Commands
             var options = (MountVerb)args;
 
             var schema = Schema.Load(File.OpenRead(options.Path));
-            ITemplate template = GetTemplate(options.Platform);
+            ITemplate template = new TemplateFactory().CreateInstance(options.Platform);
             IDbConnection connection = GetConnection(options.Platform, options.ConnectionString);
 
             if (options.Override) TruncateDatabase(schema, connection);
