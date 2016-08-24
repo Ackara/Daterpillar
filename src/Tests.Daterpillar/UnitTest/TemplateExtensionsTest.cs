@@ -5,7 +5,7 @@ namespace Tests.Daterpillar.UnitTest
 {
     [TestClass]
     [DeploymentItem(Test.Data.Samples)]
-    public class TemplateExtensionsTests
+    public class TemplateExtensionsTest
     {
         public TestContext TestContext { get; set; }
 
