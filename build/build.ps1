@@ -45,6 +45,18 @@ Task Compile -description "Build the solution." -depends Init -action {
     Exec { msbuild $solution "/p:Configuration=$BuildConfiguration;Platform=$BuildPlatform" | Out-Null }
 }
 
+Task Merge-CLIDependencies -description "Merge 'Daterpillar.CommandLine.exe' assemblies into one .exe." -depends Compile -action {
+    $ilmerge = ((Get-ChildItem "$ProjectDirectory\src\packages\ILMerge.*\tools\ILMerge.exe").FullName | Sort-Object $_ | Select-Object -Last 1);
+    
+    Push-Location "$ProjectDirectory\src\Daterpillar.CommandLine\bin\$BuildConfiguration\";
+    $primary = (Get-ChildItem -Filter "Gigobyte.Daterpillar.CommandLine.exe" | Select-Object -ExpandProperty FullName);
+    $secondary = (Get-ChildItem -Filter "*.dll" | Select-Object -ExpandProperty FullName);
+    $mergedExe = "$ProjectDirectory\src\Daterpillar.CommandLine\bin\$BuildConfiguration\daterpillar.exe";
+    Pop-Location;
+
+    Exec { & $ilmerge /out:$($mergedExe) $($primary) $($secondary); }
+}
+
 Task Push-NuGetIconToCDN -description "Upload an image to https://cloudinary.com CDN." -depends Init -action {
     Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' cannot be null or empty";
     Assert(-not [String]::IsNullOrEmpty($Password)) "'Password' cannot be null or empty";
