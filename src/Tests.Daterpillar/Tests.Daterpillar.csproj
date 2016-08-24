@@ -127,8 +127,10 @@
     <Compile Include="UnitTest\MSSQLTemplateTest.cs" />
     <Compile Include="UnitTest\MSSQLTypeNameResolverTest.cs" />
     <Compile Include="UnitTest\SqlWriterTest.cs" />
-    <Compile Include="UnitTest\TemplateExtensionsTests.cs" />
+    <Compile Include="UnitTest\TemplateExtensionsTest.cs" />
     <Compile Include="UnitTest\SchemaComparerTests.cs" />
+    <Compile Include="UnitTest\TemplateFactoryTest.cs" />
+    <Compile Include="UnitTest\SchemaAggregatorFactoryTest.cs" />
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>

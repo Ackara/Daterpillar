@@ -87,7 +87,6 @@
     <Compile Include="ForeignKey.cs" />
     <Compile Include="Column.cs" />
     <Compile Include="Schema.cs" />
-    <Compile Include="TextTransformation\TemplateFactory.cs" />
     <Compile Include="TextTransformation\TypeNameResolverBase.cs">
       <DependentUpon>TypeNameResolverBase.tt</DependentUpon>
       <DesignTime>True</DesignTime>

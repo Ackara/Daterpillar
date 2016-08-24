@@ -11,8 +11,8 @@ namespace Gigobyte.Daterpillar.Commands
         public override int Execute(object args)
         {
             var options = (SyncVerb)args;
-            var source = GetSchemaAggregator(options.Platform, GetConnection(options.Platform, options.Source));
-            var target = GetSchemaAggregator(options.Platform, GetConnection(options.Platform, options.Target));
+            var source = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Source));
+            var target = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Target));
 
             ComparisonReport report = new SchemaComparer().GenerateReport(source, target);
             switch (report.Summary)
@@ -39,22 +39,8 @@ namespace Gigobyte.Daterpillar.Commands
 
         #region Private Members
 
-        private ISchemaAggregator GetSchemaAggregator(SupportedDatabase type, IDbConnection connection)
-        {
-            switch (type)
-            {
-                default:
-                case SupportedDatabase.MSSQL:
-                    return new MSSQLSchemaAggregator(connection);
-
-                case SupportedDatabase.MySQL:
-                    return new MySQLSchemaAggregator(connection);
-
-                case SupportedDatabase.SQLite:
-                    return new SQLiteSchemaAggregator(connection);
-            }
-        }
-
+        private readonly SchemaAggregatorFactory _aggregatorFactory = new SchemaAggregatorFactory();
+        
         #endregion Private Members
     }
 }
