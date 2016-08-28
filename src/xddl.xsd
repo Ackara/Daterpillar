@@ -48,6 +48,10 @@
                   type="xs:string"
                   use="required" />
 
+    <xs:attribute name="order"
+                  type="xs:int"
+                  use="optional" />
+
     <xs:attribute name="nullable"
                   type="xs:boolean"
                   use="optional"

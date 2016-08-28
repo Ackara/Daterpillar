@@ -15,6 +15,16 @@ namespace Gigobyte.Daterpillar.TextTransformation
         [XmlAttribute("name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
+        /// <value>The comment.</value>
+        [XmlElement("comment")]
+        public string Comment { get; set; }
+
+        [XmlElement("order")]
+        public int OrdinalPosition { get; set; }
+
         [XmlAttribute("nullable")]
         public bool IsNullable { get; set; }
 
@@ -24,13 +34,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
         /// <value><c>true</c> if [automatic increment]; otherwise, <c>false</c>.</value>
         [XmlAttribute("autoIncrement")]
         public bool AutoIncrement { get; set; }
-
-        /// <summary>
-        /// Gets or sets the comment.
-        /// </summary>
-        /// <value>The comment.</value>
-        [XmlElement("comment")]
-        public string Comment { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the data.
