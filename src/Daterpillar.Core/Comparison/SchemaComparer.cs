@@ -5,20 +5,20 @@ namespace Gigobyte.Daterpillar.Compare
 {
     public class SchemaComparer : ISchemaComparer
     {
-        public ComparisonReport GenerateReport(ISchemaAggregator source, ISchemaAggregator target)
+        public ChangeLog GetChanges(ISchemaAggregator source, ISchemaAggregator target)
         {
             using (source)
             {
                 using (target)
                 {
-                    return GenerateReport(source.FetchSchema(), target.FetchSchema());
+                    return GetChanges(source.FetchSchema(), target.FetchSchema());
                 }
             }
         }
 
-        public ComparisonReport GenerateReport(Schema source, Schema target)
+        public ChangeLog GetChanges(Schema source, Schema target)
         {
-            _report = new ComparisonReport();
+            _report = new ChangeLog();
 
             FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
             SummarizeReport(source, target);
@@ -28,7 +28,7 @@ namespace Gigobyte.Daterpillar.Compare
 
         public int Compare(Schema source, Schema target)
         {
-            GenerateReport(source, target);
+            GetChanges(source, target);
 
             if (_report.Summary.HasFlag(ComparisonReportConclusions.Equal)) return 0;
             else if ((_report.Source.TotalObjects >= _report.Target.TotalObjects)) return 1;
@@ -37,7 +37,7 @@ namespace Gigobyte.Daterpillar.Compare
 
         #region Private Members
 
-        private ComparisonReport _report;
+        private ChangeLog _report;
 
         private static void EnsureBothArraysAreOfTheSameSize<T>(ref T[] left, ref T[] right)
         {

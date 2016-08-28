@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
     {
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void GenerateReport_should_return_equal_when_the_specified_schemas_are_the_same()
+        public void GetChanges_should_return_equal_when_the_specified_schemas_are_the_same()
         {
             // Arrange
             var sourceMockAggregator = Mock.Create<ISchemaAggregator>();
@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.UnitTest
             var sut = Mock.Create<SchemaComparer>();
 
             // Act
-            var report = sut.GenerateReport(sourceMockAggregator, targetMockAggregator);
+            var report = sut.GetChanges(sourceMockAggregator, targetMockAggregator);
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);
@@ -38,7 +38,7 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void GenerateReport_should_return_not_equal_when_the_specified_schemas_are_not_the_same()
+        public void GetChanges_should_return_not_equal_when_the_specified_schemas_are_not_the_same()
         {
             // Arrange
             var source = SampleData.CreateSchema();
@@ -48,7 +48,7 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new SchemaComparer();
 
             // Act
-            var report = sut.GenerateReport(source, target);
+            var report = sut.GetChanges(source, target);
 
             // Assert
             Assert.AreEqual(1, report.Discrepancies.Count);
@@ -57,13 +57,13 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void GenerateReport_should_determine_the_specified_schemas_are_empty_when_they_have_no_tables()
+        public void GetChanges_should_determine_the_specified_schemas_are_empty_when_they_have_no_tables()
         {
             // Arrange
             var sut = Mock.Create<SchemaComparer>();
 
             // Act
-            var report = sut.GenerateReport(new Schema(), new Schema());
+            var report = sut.GetChanges(new Schema(), new Schema());
 
             // Assert
             Assert.AreEqual(0, report.Discrepancies.Count);

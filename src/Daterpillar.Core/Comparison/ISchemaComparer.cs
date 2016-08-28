@@ -6,8 +6,8 @@ namespace Gigobyte.Daterpillar.Compare
 {
     public interface ISchemaComparer : IComparer<Schema>
     {
-        ComparisonReport GenerateReport(Schema source, Schema target);
+        ChangeLog GetChanges(Schema source, Schema target);
 
-        ComparisonReport GenerateReport(ISchemaAggregator source, ISchemaAggregator target);
+        ChangeLog GetChanges(ISchemaAggregator source, ISchemaAggregator target);
     }
 }
