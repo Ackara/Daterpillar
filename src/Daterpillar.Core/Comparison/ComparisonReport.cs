@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.Compare
 {
-    public class ComparisonReport : IEnumerable<Discrepancy>
+    public class ComparisonReport : IEnumerable<Modification>
     {
         public ComparisonReport()
         {
-            Discrepancies = new List<Discrepancy>();
+            Discrepancies = new List<Modification>();
         }
 
         public Counter Source;
@@ -20,9 +20,9 @@ namespace Gigobyte.Daterpillar.Compare
 
         public int TotalTargetTables { get; set; }
 
-        public IList<Discrepancy> Discrepancies { get; set; }
+        public IList<Modification> Discrepancies { get; set; }
 
-        public IEnumerator<Discrepancy> GetEnumerator()
+        public IEnumerator<Modification> GetEnumerator()
         {
             return Discrepancies.GetEnumerator();
         }

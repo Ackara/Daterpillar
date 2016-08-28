@@ -93,11 +93,11 @@ namespace Gigobyte.Daterpillar.Compare
             {
                 if (left[i] == null && right[i] != null)
                 {
-                    _report.Discrepancies.Add(new Discrepancy());
+                    _report.Discrepancies.Add(new Modification());
                 }
                 else if (left[i] != null && right[i] == null)
                 {
-                    _report.Discrepancies.Add(new Discrepancy());
+                    _report.Discrepancies.Add(new Modification());
                 }
                 else FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
             }
@@ -113,21 +113,21 @@ namespace Gigobyte.Daterpillar.Compare
             {
                 if (left[i].Name != right[i].Name)
                 {
-                    _report.Discrepancies.Add(new Discrepancy()
+                    _report.Discrepancies.Add(new Modification()
                     {
                     });
                 }
 
                 if (left[i].AutoIncrement != right[i].AutoIncrement)
                 {
-                    _report.Discrepancies.Add(new Discrepancy()
+                    _report.Discrepancies.Add(new Modification()
                     {
                     });
                 }
 
                 if (left[i].DataType != right[i].DataType)
                 {
-                    _report.Discrepancies.Add(new Discrepancy()
+                    _report.Discrepancies.Add(new Modification()
                     {
                     });
                 }

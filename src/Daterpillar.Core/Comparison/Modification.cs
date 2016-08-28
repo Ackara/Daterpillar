@@ -3,7 +3,7 @@
 namespace Gigobyte.Daterpillar.Compare
 {
     [DataContract]
-    public class Discrepancy
+    public class Modification
     {
     }
 }

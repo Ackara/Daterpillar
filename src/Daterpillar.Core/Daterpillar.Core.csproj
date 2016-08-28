@@ -51,7 +51,7 @@
     <Compile Include="Linq\Query.cs" />
     <Compile Include="Linq\SqlWriter.cs" />
     <Compile Include="Linq\QueryStyle.cs" />
-    <Compile Include="Comparison\Discrepancy.cs" />
+    <Compile Include="Comparison\Modification.cs" />
     <Compile Include="Aggregation\ISchemaAggregator.cs" />
     <Compile Include="Comparison\ISchemaComparer.cs" />
     <Compile Include="Comparison\ComparisonReportConclusions.cs" />
