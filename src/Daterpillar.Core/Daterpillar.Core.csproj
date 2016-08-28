@@ -56,7 +56,7 @@
     <Compile Include="Comparison\ISchemaComparer.cs" />
     <Compile Include="Comparison\ComparisonReportConclusions.cs" />
     <Compile Include="Comparison\SchemaComparer.cs" />
-    <Compile Include="Comparison\ComparisonReport.cs" />
+    <Compile Include="Comparison\ChangeLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportedDatabase.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplateSettings.cs" />

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.Compare
 {
-    public class ComparisonReport : IEnumerable<Modification>
+    public class ChangeLog : IEnumerable<Modification>
     {
-        public ComparisonReport()
+        public ChangeLog()
         {
             Discrepancies = new List<Modification>();
         }
