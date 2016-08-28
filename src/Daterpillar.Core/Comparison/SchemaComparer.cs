@@ -25,16 +25,7 @@ namespace Gigobyte.Daterpillar.Compare
 
             return _report;
         }
-
-        public int Compare(Schema source, Schema target)
-        {
-            GetChanges(source, target);
-
-            if (_report.Summary.HasFlag(ComparisonReportConclusions.Equal)) return 0;
-            else if ((_report.Source.TotalObjects >= _report.Target.TotalObjects)) return 1;
-            else return -1;
-        }
-
+        
         #region Private Members
 
         private ChangeLog _report;

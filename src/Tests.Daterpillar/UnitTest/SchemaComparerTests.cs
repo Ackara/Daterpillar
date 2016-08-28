@@ -71,71 +71,7 @@ namespace Tests.Daterpillar.UnitTest
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.SourceEmpty));
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.TargetEmpty));
         }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_zero_when_the_specified_schemas_are_equal()
-        {
-            var result = new SchemaComparer().Compare(SampleData.CreateSchema(), SampleData.CreateSchema());
-
-            Assert.AreEqual(0, result);
-        }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_less_than_zero_when_the_left_schema_has_less_DB_objects()
-        {
-            // Arrange
-            var schemaA = SampleData.CreateSchema();
-
-            var schemaB = SampleData.CreateSchema();
-            schemaB.Tables.Add(CreateMockTable("anotherOne"));
-
-            var sut = new SchemaComparer();
-
-            // Act
-            var result = sut.Compare(schemaA, schemaB);
-
-            // Assert
-            Assert.IsTrue(result < 0);
-        }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_greater_than_zero_when_the_right_schema_has_more_DB_objects()
-        {
-            // Arrange
-            var schemaA = SampleData.CreateSchema();
-            schemaA.Tables.Add(CreateMockTable("anotherOne"));
-
-            var schemaB = SampleData.CreateSchema();
-
-            var sut = new SchemaComparer();
-
-            // Act
-            var result = sut.Compare(schemaA, schemaB);
-
-            // Assert
-            Assert.IsTrue(result > 0);
-        }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void Compare_should_return_an_int_greater_than_zero_when_both_schemas_has_the_same_db_objects_but_has_discrepancies()
-        {
-            // Arrange
-            var schemaA = SampleData.CreateSchema();
-            var schemaB = SampleData.CreateSchema();
-            schemaB.Tables[0].Columns[0].DataType = new DataType("BIGINT");
-
-            var sut = new SchemaComparer();
-
-            // Act
-            var result = sut.Compare(schemaA, schemaB);
-
-            // Assert
-            Assert.IsTrue(result > 0);
-        }
+        
 
         #region Private Members
 
