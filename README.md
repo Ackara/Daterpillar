@@ -16,14 +16,14 @@ Let say you have the following XML document
 ```xml
 <schema xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
   <table name="employee">
-    <column name="Id" autoIncrement="true">
-      <dataType>int</dataType>
-      <modifier>PRIMARY KEY</modifier>
-    </column>
+	<column name="Id" autoIncrement="true">
+	  <dataType>int</dataType>
+	  <modifier>PRIMARY KEY</modifier>
+	</column>
 
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-    </column>
+	<column name="Name">
+	  <dataType scale="64">varchar</dataType>
+	</column>
   </table>
 </schema>
 ```
