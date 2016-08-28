@@ -22,7 +22,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         [XmlElement("comment")]
         public string Comment { get; set; }
 
-        [XmlElement("order")]
+        [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
         [XmlAttribute("nullable")]
