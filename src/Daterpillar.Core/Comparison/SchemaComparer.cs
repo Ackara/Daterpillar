@@ -5,6 +5,16 @@ namespace Gigobyte.Daterpillar.Compare
 {
     public class SchemaComparer : ISchemaComparer
     {
+        public ChangeLog GetChanges(Schema source, Schema target)
+        {
+            _changes = new ChangeLog();
+
+            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
+            SummarizeReport(source, target);
+
+            return _changes;
+        }
+
         public ChangeLog GetChanges(ISchemaAggregator source, ISchemaAggregator target)
         {
             using (source)
@@ -16,19 +26,9 @@ namespace Gigobyte.Daterpillar.Compare
             }
         }
 
-        public ChangeLog GetChanges(Schema source, Schema target)
-        {
-            _report = new ChangeLog();
-
-            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
-            SummarizeReport(source, target);
-
-            return _report;
-        }
-        
         #region Private Members
 
-        private ChangeLog _report;
+        private ChangeLog _changes;
 
         private static void EnsureBothArraysAreOfTheSameSize<T>(ref T[] left, ref T[] right)
         {
@@ -84,13 +84,21 @@ namespace Gigobyte.Daterpillar.Compare
             {
                 if (left[i] == null && right[i] != null)
                 {
-                    _report.Discrepancies.Add(new Modification());
+                    // TODO: Drop table from the right
+                    _changes.Discrepancies.Add(new Modification());
                 }
                 else if (left[i] != null && right[i] == null)
                 {
-                    _report.Discrepancies.Add(new Modification());
+                    // TODO: Add table from the left
+                    _changes.Discrepancies.Add(new Modification());
+                }
+                else if(left[i].Name != right[i].Name)
+                {
+                    // TODO: Drop table from the right
+                    // TODO: Add table from the left
                 }
                 else FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
+                
             }
         }
 
@@ -104,21 +112,21 @@ namespace Gigobyte.Daterpillar.Compare
             {
                 if (left[i].Name != right[i].Name)
                 {
-                    _report.Discrepancies.Add(new Modification()
+                    _changes.Discrepancies.Add(new Modification()
                     {
                     });
                 }
 
                 if (left[i].AutoIncrement != right[i].AutoIncrement)
                 {
-                    _report.Discrepancies.Add(new Modification()
+                    _changes.Discrepancies.Add(new Modification()
                     {
                     });
                 }
 
                 if (left[i].DataType != right[i].DataType)
                 {
-                    _report.Discrepancies.Add(new Modification()
+                    _changes.Discrepancies.Add(new Modification()
                     {
                     });
                 }
@@ -127,24 +135,24 @@ namespace Gigobyte.Daterpillar.Compare
 
         private void SummarizeReport(Schema source, Schema target)
         {
-            _report.Source.TotalTables = ((source?.Tables?.Count) ?? 0);
-            _report.Target.TotalTables = ((target?.Tables?.Count) ?? 0);
+            _changes.Source.TotalTables = ((source?.Tables?.Count) ?? 0);
+            _changes.Target.TotalTables = ((target?.Tables?.Count) ?? 0);
 
             foreach (var table in source.Tables)
             {
-                _report.Source.TotalColumns += ((table?.Columns?.Count) ?? 0);
-                _report.Source.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
-                _report.Source.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
+                _changes.Source.TotalColumns += ((table?.Columns?.Count) ?? 0);
+                _changes.Source.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
+                _changes.Source.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
             }
 
             foreach (var table in target.Tables)
             {
-                _report.Target.TotalColumns += ((table?.Columns?.Count) ?? 0);
-                _report.Target.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
-                _report.Target.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
+                _changes.Target.TotalColumns += ((table?.Columns?.Count) ?? 0);
+                _changes.Target.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
+                _changes.Target.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
             }
 
-            _report.Summarize();
+            _changes.Summarize();
         }
 
         #endregion Private Members
