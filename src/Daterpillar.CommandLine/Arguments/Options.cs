@@ -4,10 +4,10 @@ namespace Gigobyte.Daterpillar.Arguments
 {
     public class Options
     {
-        [VerbOption(MountVerb.Name, HelpText = "")]
+        [VerbOption(MountVerb.Name, HelpText = "Push schema to database.")]
         public MountVerb MountOption { get; set; }
 
-        [VerbOption("sync", HelpText = "")]
+        [VerbOption(SyncVerb.Name, HelpText = "Synchronize database schema and/or data.")]
         public SyncVerb SyncOption { get; set; }
 
         [HelpOption]

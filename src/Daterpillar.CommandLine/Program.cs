@@ -10,6 +10,7 @@ namespace Gigobyte.Daterpillar
         {
             InitializeWindow();
 
+            start:
             var options = new Options();
             if (args.Length > 0)
             {
@@ -26,7 +27,12 @@ namespace Gigobyte.Daterpillar
                         }
                     });
             }
-            else Console.WriteLine(options.GetHelp());
+            else
+            {
+                Console.WriteLine(options.GetHelp());
+                args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
+                goto start;
+            }
             Environment.Exit(_exitCode);
         }
 
