@@ -53,7 +53,7 @@
     <Compile Include="Linq\QueryStyle.cs" />
     <Compile Include="Migration\Modification.cs" />
     <Compile Include="Aggregation\ISchemaAggregator.cs" />
-    <Compile Include="Migration\ISchemaComparer.cs" />
+    <Compile Include="Migration\ISynchronizer.cs" />
     <Compile Include="Migration\ComparisonReportConclusions.cs" />
     <Compile Include="Migration\SchemaComparer.cs" />
     <Compile Include="Migration\ChangeLog.cs" />

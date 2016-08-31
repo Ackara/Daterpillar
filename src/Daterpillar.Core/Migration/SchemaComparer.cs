@@ -3,7 +3,7 @@ using Gigobyte.Daterpillar.TextTransformation;
 
 namespace Gigobyte.Daterpillar.Migration
 {
-    public class SchemaComparer : ISchemaComparer
+    public class SchemaComparer : ISynchronizer
     {
         public ChangeLog GetChanges(Schema source, Schema target)
         {
