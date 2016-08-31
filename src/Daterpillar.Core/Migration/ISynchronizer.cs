@@ -5,8 +5,8 @@ namespace Gigobyte.Daterpillar.Migration
 {
     public interface ISynchronizer
     {
-        ChangeLog GetChanges(Schema source, Schema target);
+        ChangeLog GenerateScript(Schema source, Schema target);
 
-        ChangeLog GetChanges(ISchemaAggregator source, ISchemaAggregator target);
+        ChangeLog GenerateScript(ISchemaAggregator source, ISchemaAggregator target);
     }
 }

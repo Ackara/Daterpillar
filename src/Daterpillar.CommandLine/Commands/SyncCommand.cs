@@ -13,7 +13,7 @@ namespace Gigobyte.Daterpillar.Commands
             ISchemaAggregator source = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Source));
             ISchemaAggregator target = _aggregatorFactory.CreateInstance(options.Platform, GetConnection(options.Platform, options.Target));
 
-            ChangeLog report = new SchemaComparer().GetChanges(source, target);
+            ChangeLog report = new SchemaComparer().GenerateScript(source, target);
             switch (report.Summary)
             {
                 default:

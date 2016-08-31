@@ -5,7 +5,7 @@ namespace Gigobyte.Daterpillar.Migration
 {
     public class SchemaComparer : ISynchronizer
     {
-        public ChangeLog GetChanges(Schema source, Schema target)
+        public ChangeLog GenerateScript(Schema source, Schema target)
         {
             _changes = new ChangeLog();
 
@@ -15,13 +15,13 @@ namespace Gigobyte.Daterpillar.Migration
             return _changes;
         }
 
-        public ChangeLog GetChanges(ISchemaAggregator source, ISchemaAggregator target)
+        public ChangeLog GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
         {
             using (source)
             {
                 using (target)
                 {
-                    return GetChanges(source.FetchSchema(), target.FetchSchema());
+                    return GenerateScript(source.FetchSchema(), target.FetchSchema());
                 }
             }
         }
