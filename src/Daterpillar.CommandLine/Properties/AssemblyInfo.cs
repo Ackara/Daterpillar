@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Daterpillar.CommandLine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Daterpillar CLI")]
+[assembly: AssemblyDescription("A cross-platform database management tool.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Gigobyte")]
 [assembly: AssemblyProduct("Daterpillar.CommandLine")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © Gigobyte 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.16237.14")]
-[assembly: AssemblyFileVersion("1.0.16237.14")]
+[assembly: AssemblyVersion("1.0.16244.24")]
+[assembly: AssemblyFileVersion("1.0.16244.24")]
+
+// CommandLine assembly attributes.
+[assembly: CommandLine.AssemblyLicense("This is free software. You may redistribute copies of it under the terms of", "the MIT License <https://github.com/Ackara/Daterpillar/blob/master/LICENSE>.")]
+[assembly: CommandLine.AssemblyUsage("Usage: Try one of the following commands.")]
