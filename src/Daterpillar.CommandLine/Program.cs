@@ -10,46 +10,39 @@ namespace Gigobyte.Daterpillar
         {
             InitializeWindow();
 
-            int exitCode = 0;
+            start:
             var options = new Options();
-            
             if (args.Length > 0)
             {
-                var errorOccurred = CommandLine.Parser.Default.ParseArguments(args, options,
+                CommandLine.Parser.Default.ParseArguments(args, options,
                     onVerbCommand: (verb, arg) =>
                     {
                         ICommand command = new CommandFactory().CrateInstance(verb);
-                        try { exitCode = command.Execute(arg); }
+                        try { _exitCode = command.Execute(arg); }
                         catch (Exception ex)
                         {
+                            _exitCode = ExitCode.UnhandledException;
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(ex);
-                            exitCode = 1;
                         }
                     });
             }
-            else Console.WriteLine(options.GetHelp());
-
-            Environment.Exit(exitCode);
+            else
+            {
+                Console.WriteLine(options.GetHelp());
+                args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
+                goto start;
+            }
+            Environment.Exit(_exitCode);
         }
 
         #region Private Members
 
-        private static readonly string _logo = @"
-  _____        _                  _ _ _
- |  __ \      | |                (_) | |
- | |  | | __ _| |_ ___ _ __ _ __  _| | | __ _ _ __
- | |  | |/ _` | __/ _ \ '__| '_ \| | | |/ _` | '__|
- | |__| | (_| | ||  __/ |  | |_) | | | | (_| | |
- |_____/ \__,_|\__\___|_|  | .__/|_|_|_|\__,_|_|
-                           | |
-                           |_|
-";
+        private static int _exitCode;
 
         private static void InitializeWindow()
         {
             Console.Title = $"{nameof(Daterpillar)} CLI";
-            Console.WriteLine(_logo.Trim());
         }
 
         #endregion Private Members
