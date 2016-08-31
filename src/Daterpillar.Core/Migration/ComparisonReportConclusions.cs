@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Compare
+﻿namespace Gigobyte.Daterpillar.Migration
 {
     [System.Flags]
     public enum ComparisonReportConclusions

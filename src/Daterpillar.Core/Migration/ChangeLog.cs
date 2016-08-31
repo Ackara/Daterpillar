@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Compare
+namespace Gigobyte.Daterpillar.Migration
 {
     public class ChangeLog : IEnumerable<Modification>
     {

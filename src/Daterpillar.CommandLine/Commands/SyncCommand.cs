@@ -1,6 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.Arguments;
-using Gigobyte.Daterpillar.Compare;
+using Gigobyte.Daterpillar.Migration;
 
 namespace Gigobyte.Daterpillar.Commands
 {

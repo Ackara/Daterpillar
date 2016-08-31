@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Gigobyte.Daterpillar.Compare
+namespace Gigobyte.Daterpillar.Migration
 {
     [DataContract]
     public class Modification

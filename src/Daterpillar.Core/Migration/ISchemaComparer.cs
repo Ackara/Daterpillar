@@ -1,7 +1,7 @@
 ﻿using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.TextTransformation;
 
-namespace Gigobyte.Daterpillar.Compare
+namespace Gigobyte.Daterpillar.Migration
 {
     public interface ISchemaComparer
     {
