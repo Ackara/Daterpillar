@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.16244.24")]
-[assembly: AssemblyFileVersion("1.0.16244.24")]
+[assembly: AssemblyVersion("1.0.16245.25")]
+[assembly: AssemblyFileVersion("1.0.16245.25")]
 
 // CommandLine assembly attributes.
 [assembly: CommandLine.AssemblyLicense("This is free software. You may redistribute copies of it under the terms of", "the MIT License <https://github.com/Ackara/Daterpillar/blob/master/LICENSE>.")]
