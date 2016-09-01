@@ -29,10 +29,10 @@ namespace Tests.Daterpillar.UnitTest
             var sut = Mock.Create<SchemaComparer>();
 
             // Act
-            var report = sut.GenerateScript(sourceMockAggregator, targetMockAggregator);
+            var report = sut.GetChanges(sourceMockAggregator, targetMockAggregator);
 
             // Assert
-            Assert.AreEqual(0, report.Discrepancies.Count);
+            Assert.AreEqual(0, report.Discrepancies);
             Assert.AreEqual(ComparisonReportConclusions.Equal, report.Summary);
         }
 
@@ -48,10 +48,10 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new SchemaComparer();
 
             // Act
-            var report = sut.GenerateScript(source, target);
+            var report = sut.GetChanges(source, target);
 
             // Assert
-            Assert.AreEqual(1, report.Discrepancies.Count);
+            Assert.AreEqual(1, report.Discrepancies);
             Assert.AreEqual(ComparisonReportConclusions.NotEqual, report.Summary);
         }
 
@@ -63,10 +63,10 @@ namespace Tests.Daterpillar.UnitTest
             var sut = Mock.Create<SchemaComparer>();
 
             // Act
-            var report = sut.GenerateScript(new Schema(), new Schema());
+            var report = sut.GetChanges(new Schema(), new Schema());
 
             // Assert
-            Assert.AreEqual(0, report.Discrepancies.Count);
+            Assert.AreEqual(0, report.Discrepancies);
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.Equal));
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.SourceEmpty));
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.TargetEmpty));

@@ -3,11 +3,11 @@ using Gigobyte.Daterpillar.TextTransformation;
 
 namespace Gigobyte.Daterpillar.Migration
 {
-    public class SchemaComparer : ISynchronizer
+    public class SchemaComparer : ISchemaComparer
     {
-        public ChangeLog GenerateScript(Schema source, Schema target)
+        public ComparisonReport GetChanges(Schema source, Schema target)
         {
-            _changes = new ChangeLog();
+            _changes = new ComparisonReport();
 
             FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
             SummarizeReport(source, target);
@@ -15,20 +15,20 @@ namespace Gigobyte.Daterpillar.Migration
             return _changes;
         }
 
-        public ChangeLog GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
+        public ComparisonReport GetChanges(ISchemaAggregator source, ISchemaAggregator target)
         {
             using (source)
             {
                 using (target)
                 {
-                    return GenerateScript(source.FetchSchema(), target.FetchSchema());
+                    return GetChanges(source.FetchSchema(), target.FetchSchema());
                 }
             }
         }
 
         #region Private Members
 
-        private ChangeLog _changes;
+        private ComparisonReport _changes;
 
         private static void EnsureBothArraysAreOfTheSameSize<T>(ref T[] left, ref T[] right)
         {
@@ -85,20 +85,19 @@ namespace Gigobyte.Daterpillar.Migration
                 if (left[i] == null && right[i] != null)
                 {
                     // TODO: Drop table from the right
-                    _changes.Discrepancies.Add(new Modification());
+                    _changes.Discrepancies++;
                 }
                 else if (left[i] != null && right[i] == null)
                 {
                     // TODO: Add table from the left
-                    _changes.Discrepancies.Add(new Modification());
+                    _changes.Discrepancies++;
                 }
-                else if(left[i].Name != right[i].Name)
+                else if (left[i].Name != right[i].Name)
                 {
                     // TODO: Drop table from the right
                     // TODO: Add table from the left
                 }
                 else FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
-                
             }
         }
 
@@ -112,23 +111,17 @@ namespace Gigobyte.Daterpillar.Migration
             {
                 if (left[i].Name != right[i].Name)
                 {
-                    _changes.Discrepancies.Add(new Modification()
-                    {
-                    });
+                    _changes.Discrepancies++;
                 }
 
                 if (left[i].AutoIncrement != right[i].AutoIncrement)
                 {
-                    _changes.Discrepancies.Add(new Modification()
-                    {
-                    });
+                    _changes.Discrepancies++;
                 }
 
                 if (left[i].DataType != right[i].DataType)
                 {
-                    _changes.Discrepancies.Add(new Modification()
-                    {
-                    });
+                    _changes.Discrepancies++;
                 }
             }
         }

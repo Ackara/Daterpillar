@@ -1,36 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace Gigobyte.Daterpillar.Migration
+﻿namespace Gigobyte.Daterpillar.Migration
 {
-    public class ChangeLog : IEnumerable<Modification>
+    public class ComparisonReport
     {
-        public ChangeLog()
-        {
-            Discrepancies = new List<Modification>();
-        }
-
         public Counter Source;
 
         public Counter Target;
 
+        public int Discrepancies { get; set; }
+
         public ComparisonReportConclusions Summary { get; set; }
-
-        public int TotalSourceTables { get; set; }
-
-        public int TotalTargetTables { get; set; }
-
-        public IList<Modification> Discrepancies { get; set; }
-
-        public IEnumerator<Modification> GetEnumerator()
-        {
-            return Discrepancies.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
 
         public void Summarize()
         {
@@ -41,10 +19,10 @@ namespace Gigobyte.Daterpillar.Migration
             if (Target.TotalObjects == 0)
                 conclusion |= ComparisonReportConclusions.TargetEmpty;
 
-            if (Discrepancies.Count > 0)
+            if (Discrepancies > 0)
                 conclusion |= ComparisonReportConclusions.NotEqual;
 
-            if (Discrepancies.Count == 0)
+            if (Discrepancies == 0)
                 conclusion |= ComparisonReportConclusions.Equal;
 
             Summary = conclusion;
