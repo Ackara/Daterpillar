@@ -51,14 +51,17 @@
     <Compile Include="Linq\Query.cs" />
     <Compile Include="Linq\SqlWriter.cs" />
     <Compile Include="Linq\QueryStyle.cs" />
+    <Compile Include="Migration\ISynchronizer.cs" />
     <Compile Include="Migration\Modification.cs" />
     <Compile Include="Aggregation\ISchemaAggregator.cs" />
     <Compile Include="Migration\ISchemaComparer.cs" />
     <Compile Include="Migration\ComparisonReportConclusions.cs" />
     <Compile Include="Migration\SchemaComparer.cs" />
     <Compile Include="Migration\ComparisonReport.cs" />
+    <Compile Include="Migration\SynchronizerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportedDatabase.cs" />
+    <Compile Include="TextTransformation\IScriptBuilder.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplateSettings.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplate.cs" />
     <Compile Include="TextTransformation\CSharpTemplate.cs" />
