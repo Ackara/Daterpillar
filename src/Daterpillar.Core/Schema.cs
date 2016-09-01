@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Gigobyte.Daterpillar
 {
     /// <summary>
     /// Represents a database schema.

@@ -61,6 +61,7 @@
     <Compile Include="Migration\SynchronizerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportedDatabase.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="TextTransformation\IScriptBuilder.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplateSettings.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplate.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="TextTransformation\MSSQLTemplate.cs" />
     <Compile Include="TextTransformation\MSSQLTemplateSettings.cs" />
     <Compile Include="TextTransformation\MSSQLTypeNameResolver.cs" />
-    <Compile Include="TextTransformation\TemplateExtensions.cs" />
     <Compile Include="ForeignKeyRule.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Index.cs" />

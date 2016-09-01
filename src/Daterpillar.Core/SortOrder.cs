@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.TextTransformation
+﻿namespace Gigobyte.Daterpillar
 {
     /// <summary>
     /// Sorting direction.

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Gigobyte.Daterpillar
 {
     /// <summary>
     /// Represents a database index.

@@ -1,4 +1,5 @@
-﻿using Gigobyte.Daterpillar.Aggregation;
+﻿using Gigobyte.Daterpillar;
+using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.Migration;
 using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
