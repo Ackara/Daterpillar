@@ -1,5 +1,4 @@
 ﻿using Gigobyte.Daterpillar.Aggregation;
-using Gigobyte.Daterpillar.TextTransformation;
 
 namespace Gigobyte.Daterpillar.Migration
 {

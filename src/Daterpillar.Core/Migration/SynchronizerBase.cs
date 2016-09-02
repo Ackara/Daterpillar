@@ -2,46 +2,25 @@
 using Gigobyte.Daterpillar.TextTransformation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gigobyte.Daterpillar.Migration
 {
-    public abstract class SynchronizerBase
+    public abstract class SynchronizerBase : ISynchronizer
     {
-        public ComparisonReport GetChanges(Schema source, Schema target)
+        public byte[] GenerateScript(Schema source, Schema target)
         {
-            _changes = new ComparisonReport();
-
-            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
-            SummarizeReport(source, target);
-
-            return _changes;
+            a(source.Tables, source.Tables);
+            throw new NotImplementedException();
         }
 
-        public ComparisonReport GetChanges(ISchemaAggregator source, ISchemaAggregator target)
+        public byte[] GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
         {
-            using (source)
-            {
-                using (target)
-                {
-                    return GetChanges(source.FetchSchema(), target.FetchSchema());
-                }
-            }
+            using (source) { using (target) { return GenerateScript(source.FetchSchema(), target.FetchSchema()); } }
         }
 
         #region Private Members
 
-        private ComparisonReport _changes;
-
-        private static void EnsureBothArraysAreOfTheSameSize<T>(ref T[] left, ref T[] right)
-        {
-            if (left.Length > right.Length)
-                IncreaseLengthOfArray(ref right, left.Length);
-            else if (left.Length < right.Length)
-                IncreaseLengthOfArray(ref left, right.Length);
-        }
+        private IScriptBuilder _scriptBuilder;
 
         private static void IncreaseLengthOfArray<T>(ref T[] array, int capacity)
         {
@@ -52,6 +31,14 @@ namespace Gigobyte.Daterpillar.Migration
             }
 
             array = newArray;
+        }
+
+        private static void EnsureBothArraysAreOfTheSameSize<T>(ref T[] left, ref T[] right)
+        {
+            if (left.Length > right.Length)
+                IncreaseLengthOfArray(ref right, left.Length);
+            else if (left.Length < right.Length)
+                IncreaseLengthOfArray(ref left, right.Length);
         }
 
         private static void AlignTheItemsOfBothArraysByName<T>(ref T[] left, ref T[] right)
@@ -80,77 +67,61 @@ namespace Gigobyte.Daterpillar.Migration
             }
         }
 
-        private void FindDiscrepanciesBetween(Table[] left, Table[] right)
+        private static void GetTheItemsOfBothCollectionsAlignedByNameInAnArray<T>(ICollection<T> source, ICollection<T> target, out T[] leftArray, out T[] rightArray)
         {
-            EnsureBothArraysAreOfTheSameSize(ref left, ref right);
-            AlignTheItemsOfBothArraysByName(ref left, ref right);
+            int maxLength = ((source.Count >= target.Count) ? source.Count : target.Count);
+            leftArray = new T[maxLength];
+            rightArray = new T[maxLength];
 
-            for (int i = 0; i < left.Length; i++)
+            source.CopyTo(leftArray, 0);
+            target.CopyTo(rightArray, 0);
+
+            dynamic lItem, rItem;
+            string lName, rName;
+            for (int i = 0; i < maxLength; i++)
             {
-                if (left[i] == null && right[i] != null)
+                lItem = leftArray[i];
+                rItem = rightArray[i];
+
+                for (int n = 0; n < (maxLength - i); n++)
                 {
-                    // TODO: Drop table from the right
-                    _changes.Discrepancies++;
+
                 }
-                else if (left[i] != null && right[i] == null)
-                {
-                    // TODO: Add table from the left
-                    _changes.Discrepancies++;
-                }
-                else if (left[i].Name != right[i].Name)
-                {
-                    // TODO: Drop table from the right
-                    // TODO: Add table from the left
-                }
-                else FindDiscrepanciesBetween(left[i].Columns.ToArray(), right[i].Columns.ToArray());
             }
+            throw new System.NotImplementedException();
         }
 
-        private void FindDiscrepanciesBetween(Column[] left, Column[] right)
+        private void a(ICollection<Table> source, ICollection<Table> target)
         {
-            EnsureBothArraysAreOfTheSameSize(ref left, ref right);
-            AlignTheItemsOfBothArraysByName(ref left, ref right);
+            Table[] left, right;
+            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target, out left, out right);
 
-            // TODO: compare each column.
+            string lName, rName;
             for (int i = 0; i < left.Length; i++)
             {
-                if (left[i].Name != right[i].Name)
-                {
-                    _changes.Discrepancies++;
-                }
+                lName = left[i]?.Name;
+                rName = right[i]?.Name;
 
-                if (left[i].AutoIncrement != right[i].AutoIncrement)
+                if (lName == rName)
                 {
-                    _changes.Discrepancies++;
+                    // TODO: Compare columns
+                    // TODO: Compare indexes
+                    // TODO: Compare foreign keys
                 }
-
-                if (left[i].DataType != right[i].DataType)
+                else if (lName == null && rName != null)
                 {
-                    _changes.Discrepancies++;
+                    // TODO: Drop table on the right
+                }
+                else if (lName != null && rName == null)
+                {
+                    // TODO: Add table on the left
+                }
+                else if (lName != null && rName != null)
+                {
+                    // TODO: Drop table on the right
+                    // TODO: Add table on the left
                 }
             }
-        }
-
-        private void SummarizeReport(Schema source, Schema target)
-        {
-            _changes.Source.TotalTables = ((source?.Tables?.Count) ?? 0);
-            _changes.Target.TotalTables = ((target?.Tables?.Count) ?? 0);
-
-            foreach (var table in source.Tables)
-            {
-                _changes.Source.TotalColumns += ((table?.Columns?.Count) ?? 0);
-                _changes.Source.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
-                _changes.Source.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
-            }
-
-            foreach (var table in target.Tables)
-            {
-                _changes.Target.TotalColumns += ((table?.Columns?.Count) ?? 0);
-                _changes.Target.TotalIndexes += ((table?.Indexes?.Count) ?? 0);
-                _changes.Target.TotalForeignKeys += ((table?.ForeignKeys?.Count) ?? 0);
-            }
-
-            _changes.Summarize();
         }
 
         #endregion Private Members
