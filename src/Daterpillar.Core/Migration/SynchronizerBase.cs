@@ -9,8 +9,9 @@ namespace Gigobyte.Daterpillar.Migration
     {
         public byte[] GenerateScript(Schema source, Schema target)
         {
-            a(source.Tables, source.Tables);
-            throw new NotImplementedException();
+            FindDiscrepanciesBetween(source.Tables, source.Tables);
+
+            return _scriptBuilder.GetContentAsBytes();
         }
 
         public byte[] GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
@@ -99,7 +100,7 @@ namespace Gigobyte.Daterpillar.Migration
             target = new List<T>(rightArray);
         }
 
-        private void a(IList<Table> source, IList<Table> target)
+        private void FindDiscrepanciesBetween(IList<Table> source, IList<Table> target)
         {
             GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target);
             
