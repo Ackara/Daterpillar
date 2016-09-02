@@ -10,29 +10,31 @@ namespace Gigobyte.Daterpillar
         {
             InitializeWindow();
 
-            start:
-            var options = new Options();
-            if (args.Length > 0)
+            do
             {
-                CommandLine.Parser.Default.ParseArguments(args, options,
-                    onVerbCommand: (verb, arg) =>
-                    {
-                        ICommand command = new CommandFactory().CrateInstance(verb);
-                        try { _exitCode = command.Execute(arg); }
-                        catch (Exception ex)
+                var commandLineOptions = new Options();
+                if (args.Length > 0)
+                {
+                    CommandLine.Parser.Default.ParseArguments(args, commandLineOptions,
+                        onVerbCommand: (verb, arg) =>
                         {
-                            _exitCode = ExitCode.UnhandledException;
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(ex);
-                        }
-                    });
-            }
-            else
-            {
-                Console.WriteLine(options.GetHelp());
-                args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
-                goto start;
-            }
+                            ICommand command = new CommandFactory().CrateInstance(verb);
+                            try { _exitCode = command.Execute(arg); }
+                            catch (Exception ex)
+                            {
+                                _exitCode = ExitCode.UnhandledException;
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(ex);
+                            }
+                            finally { Console.ResetColor(); }
+                        }); break;
+                }
+                else
+                {
+                    Console.WriteLine(commandLineOptions.GetHelp());
+                    args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
+                }
+            } while (true);
             Environment.Exit(_exitCode);
         }
 
