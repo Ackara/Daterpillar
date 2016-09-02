@@ -131,6 +131,7 @@
     <Compile Include="UnitTest\SchemaComparerTests.cs" />
     <Compile Include="UnitTest\TemplateFactoryTest.cs" />
     <Compile Include="UnitTest\SchemaAggregatorFactoryTest.cs" />
+    <Compile Include="UnitTest\SynchronizerBaseTest.cs" />
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
