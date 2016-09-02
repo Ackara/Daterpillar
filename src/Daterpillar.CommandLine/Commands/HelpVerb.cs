@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.Commands
 {
-    public class HelpVerb
+    public sealed class HelpVerb
     {
         public const string Name = "help";
     }

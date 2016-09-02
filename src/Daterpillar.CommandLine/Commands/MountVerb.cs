@@ -2,7 +2,7 @@
 
 namespace Gigobyte.Daterpillar.Commands
 {
-    public class MountVerb
+    public sealed class MountVerb
     {
         public const string Name = "mount";
 

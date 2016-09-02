@@ -2,7 +2,7 @@
 
 namespace Gigobyte.Daterpillar.Commands
 {
-    public class Options
+    public sealed class Options
     {
         
 

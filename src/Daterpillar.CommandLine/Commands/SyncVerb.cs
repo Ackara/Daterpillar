@@ -2,7 +2,7 @@
 
 namespace Gigobyte.Daterpillar.Commands
 {
-    public class SyncVerb
+    public sealed class SyncVerb
     {
         public const string Name = "sync";
 

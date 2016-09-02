@@ -31,7 +31,7 @@ namespace Gigobyte.Daterpillar
                 {
                     Console.WriteLine(_commandLineOptions.GetHelp());
                     Console.Write("> ");
-                    args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
                 }
             } while (true);
             Environment.Exit(_exitCode);
