@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Gigobyte.Daterpillar.Arguments
+namespace Gigobyte.Daterpillar.Commands
 {
     public class MountVerb
     {

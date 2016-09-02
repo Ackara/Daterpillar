@@ -1,5 +1,4 @@
-﻿using Gigobyte.Daterpillar.Arguments;
-using Gigobyte.Daterpillar.Commands;
+﻿using Gigobyte.Daterpillar.Commands;
 using System;
 
 namespace Gigobyte.Daterpillar
@@ -12,10 +11,9 @@ namespace Gigobyte.Daterpillar
 
             do
             {
-                var commandLineOptions = new Options();
                 if (args.Length > 0)
                 {
-                    CommandLine.Parser.Default.ParseArguments(args, commandLineOptions,
+                    CommandLine.Parser.Default.ParseArguments(args, _commandLineOptions,
                         onVerbCommand: (verb, arg) =>
                         {
                             ICommand command = new CommandFactory().CrateInstance(verb);
@@ -31,8 +29,9 @@ namespace Gigobyte.Daterpillar
                 }
                 else
                 {
-                    Console.WriteLine(commandLineOptions.GetHelp());
-                    args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' });
+                    Console.WriteLine(_commandLineOptions.GetHelp());
+                    Console.Write("> ");
+                    args = Console.ReadLine().Split(new char[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 }
             } while (true);
             Environment.Exit(_exitCode);
@@ -41,6 +40,7 @@ namespace Gigobyte.Daterpillar
         #region Private Members
 
         private static int _exitCode;
+        private static Options _commandLineOptions;
 
         private static void InitializeWindow()
         {

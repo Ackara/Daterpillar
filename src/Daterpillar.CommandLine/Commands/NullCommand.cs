@@ -2,9 +2,6 @@
 {
     public class NullCommand : ICommand
     {
-        public int Execute(object args)
-        {
-            return 0;
-        }
+        public int Execute(object args) => ExitCode.Success;
     }
 }

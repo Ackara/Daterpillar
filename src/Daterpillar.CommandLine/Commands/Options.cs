@@ -1,9 +1,11 @@
 ﻿using CommandLine;
 
-namespace Gigobyte.Daterpillar.Arguments
+namespace Gigobyte.Daterpillar.Commands
 {
     public class Options
     {
+        
+
         [VerbOption(MountVerb.Name, HelpText = "Push schema to database.")]
         public MountVerb MountOption { get; set; }
 
