@@ -1,6 +1,7 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using Gigobyte.Daterpillar;
 using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
