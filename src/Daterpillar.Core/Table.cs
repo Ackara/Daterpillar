@@ -8,11 +8,20 @@ namespace Gigobyte.Daterpillar
     /// </summary>
     public class Table
     {
-        public Table()
+        public Table() : this(string.Empty, new Column[0])
         {
-            Columns = new List<Column>();
-            Modifiers = new List<string>();
+        }
+
+        public Table(string name) : this(name, new Column[0])
+        {
+        }
+
+        public Table(string name, IEnumerable<Column> columns)
+        {
+            Name = name;
+            Columns = new List<Column>(columns);
             ForeignKeys = new List<ForeignKey>();
+            Modifiers = new List<string>();
             Indexes = new List<Index>();
         }
 
