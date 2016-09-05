@@ -6,16 +6,29 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database table.
     /// </summary>
-    public class Table
+    [System.Diagnostics.DebuggerDisplay("{{Name}}")]
+    public sealed class Table
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Table"/> class.
+        /// </summary>
         public Table() : this(string.Empty, new Column[0])
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Table"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public Table(string name) : this(name, new Column[0])
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Table"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="columns">The columns.</param>
         public Table(string name, IEnumerable<Column> columns)
         {
             Name = name;
