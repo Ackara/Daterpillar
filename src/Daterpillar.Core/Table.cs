@@ -6,7 +6,7 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database table.
     /// </summary>
-    [System.Diagnostics.DebuggerDisplay("{{Name}}")]
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public sealed class Table
     {
         /// <summary>
@@ -79,5 +79,14 @@ namespace Gigobyte.Daterpillar
         /// <value>The indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
+
+        #region Private Members
+
+        private string ToDebuggerDisplay()
+        {
+            return $"{Name}";
+        }
+
+        #endregion Private Members
     }
 }
