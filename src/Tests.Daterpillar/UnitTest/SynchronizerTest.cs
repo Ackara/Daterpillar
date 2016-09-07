@@ -13,7 +13,7 @@ namespace Tests.Daterpillar.UnitTest
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class SynchronizerBaseTest
+    public class SynchronizerTest
     {
         [ClassCleanup]
         public static void Cleanup()

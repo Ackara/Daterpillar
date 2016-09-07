@@ -1,0 +1,3 @@
+﻿drop table [b]
+create table [a]
+drop table [c]

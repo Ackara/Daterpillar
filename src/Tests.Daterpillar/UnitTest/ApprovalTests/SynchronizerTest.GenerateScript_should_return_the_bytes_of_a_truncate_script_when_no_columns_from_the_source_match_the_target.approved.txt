@@ -1,0 +1,2 @@
+﻿drop [c2] column from [a] table
+drop [c3] column from [a] table
