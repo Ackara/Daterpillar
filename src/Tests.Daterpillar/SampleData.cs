@@ -21,6 +21,31 @@ namespace Tests.Daterpillar
                 .First(x => x.Name == filename);
         }
 
+        public static Table CreateTable([CallerMemberName]string name = null)
+        {
+            return new Table(name);
+        }
+
+        public static Column CreateIdColumn(string table = "a")
+        {
+            return new Column() { Name = "Id", DataType = new DataType("int"), AutoIncrement = true, Table = table };
+        }
+
+        public static Column CreateStringColumn(string name, string table = "")
+        {
+            return new Column() { Name = name, DataType = new DataType("varchar", 64, 0), Table = table };
+        }
+
+        public static Column CreateIntegerColumn(string name, string table = "")
+        {
+            return new Column() { Name = name, DataType = new DataType("int"), Table = table };
+        }
+
+        public static Column CreateDateTimeColumn(string name, string table = "")
+        {
+            return new Column() { Name = name, DataType = new DataType("datetime"), Table = table };
+        }
+
         public static Table CreateTableSchema(string name = "Employee")
         {
             var table = new Table() { Name = name };
