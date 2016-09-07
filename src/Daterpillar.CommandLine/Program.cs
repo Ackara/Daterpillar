@@ -40,7 +40,7 @@ namespace Gigobyte.Daterpillar
         #region Private Members
 
         private static int _exitCode;
-        private static Options _commandLineOptions;
+        private static Options _commandLineOptions = new Options();
 
         private static void InitializeWindow()
         {
