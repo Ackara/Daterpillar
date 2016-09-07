@@ -65,6 +65,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="TextTransformation\IScriptBuilder.cs" />
     <Compile Include="TextTransformation\MSSQLScriptBuilder.cs" />
+    <Compile Include="TextTransformation\MSSQLScriptBuilderSettings.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplateSettings.cs" />
     <Compile Include="TextTransformation\NotifyPropertyChangedTemplate.cs" />
     <Compile Include="TextTransformation\CSharpTemplate.cs" />
