@@ -23,6 +23,10 @@
       <xs:attribute name="author"
                     type="xs:string"
                     use="optional" />
+
+      <xs:attribute name="lastUpdate"
+                    type="xs:dateTime"
+                    use="optional" />
     </xs:complexType>
   </xs:element>
 
@@ -89,6 +93,10 @@
     </xs:all>
 
     <xs:attribute name="name"
+                  type="xs:string"
+                  use="optional" />
+
+    <xs:attribute name="table"
                   type="xs:string"
                   use="optional" />
 
