@@ -176,6 +176,20 @@ namespace Tests.Daterpillar.UnitTest
 
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
+        public void Drop_should_return_a_tsql_command_for_dropping_a_schema()
+        {
+            // Arrange
+            var sut = new MSSQLScriptBuilder();
+
+            // Act
+            sut.Drop(SampleData.CreateSchema());
+
+            // Assert
+            Approvals.Verify(sut.GetContent());
+        }
+
+        [TestMethod]
+        [Owner(Test.Dev.Ackara)]
         public void AlterTable_should_return_a_tsql_command_for_altering_a_table()
         {
             // Arrange

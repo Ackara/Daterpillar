@@ -1,9 +1,23 @@
 ﻿using System;
+using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
     public class MSSQLScriptBuilder : IScriptBuilder
     {
+        public MSSQLScriptBuilder() : this(MSSQLScriptBuilderSettings.Default, new MSSQLTypeNameResolver())
+        {
+        }
+
+        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
+        {
+        }
+
+        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        {
+            _typeResolver = typeResolver;
+        }
+
         public void AlterTable(Column oldColumn, Column newColumn)
         {
             throw new NotImplementedException();
@@ -16,12 +30,12 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Append(string text)
         {
-            throw new NotImplementedException();
+            _text.Append(text);
         }
 
         public void AppendLine(string text)
         {
-            throw new NotImplementedException();
+            _text.AppendLine(text);
         }
 
         public void Create(ForeignKey foreignKey)
@@ -39,9 +53,14 @@ namespace Gigobyte.Daterpillar.TextTransformation
             throw new NotImplementedException();
         }
 
+        public void Create(Schema schema)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Create(Table table)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Drop(Index index)
@@ -59,6 +78,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
             throw new NotImplementedException();
         }
 
+        public void Drop(Schema schema)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Drop(Table table)
         {
             throw new NotImplementedException();
@@ -66,7 +90,15 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public string GetContent()
         {
-            throw new NotImplementedException();
+            return _text.ToString();
         }
+
+        #region Private Members
+
+        private int _seed = 0;
+        private readonly ITypeNameResolver _typeResolver;
+        private readonly StringBuilder _text = new StringBuilder();
+
+        #endregion Private Members
     }
 }

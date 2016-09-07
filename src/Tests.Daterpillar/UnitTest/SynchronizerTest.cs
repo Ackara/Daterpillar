@@ -238,6 +238,16 @@ namespace Tests.Daterpillar.UnitTest
             {
                 _text.AppendLine($"drop foreignkey {foreignKey.Name}");
             }
+
+            public void Drop(Schema schema)
+            {
+                _text.Append($"drop {schema.Name} schema");
+            }
+
+            public void Create(Schema schema)
+            {
+                _text.AppendLine($"create schema [{schema.Name}]");
+            }
         }
 
         #endregion Fakes

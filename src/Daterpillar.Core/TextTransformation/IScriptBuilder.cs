@@ -8,6 +8,8 @@
 
         void AppendLine(string text);
 
+        void Create(Schema schema);
+
         void Create(Table table);
 
         void Create(Column column);
@@ -23,6 +25,8 @@
         void Drop(Index index);
 
         void Drop(ForeignKey foreignKey);
+
+        void Drop(Schema schema);
 
         void AlterTable(Table oldTable, Table newTable);
 
