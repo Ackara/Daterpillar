@@ -25,6 +25,13 @@ namespace Gigobyte.Daterpillar
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the table this constraint belongs to.
+        /// </summary>
+        /// <value>The local table.</value>
+        [XmlAttribute("table")]
+        public string LocalTable { get; set; }
+
+        /// <summary>
         /// Gets or sets the local column.
         /// </summary>
         /// <value>The local column.</value>
