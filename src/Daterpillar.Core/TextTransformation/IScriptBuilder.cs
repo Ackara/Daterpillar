@@ -2,11 +2,15 @@
 {
     public interface IScriptBuilder
     {
+        string GetContent();
+
         void Append(string text);
-        
+
         void AppendLine(string text);
 
         void Create(Table table);
+
+        void Create(Column column);
 
         void Create(Index index);
 
@@ -14,14 +18,14 @@
 
         void Drop(Table table);
 
+        void Drop(Column column);
+
         void Drop(Index index);
 
         void Drop(ForeignKey foreignKey);
 
-        void AlterTable(Table tableA, Table tableB);
-                
-        byte[] GetContentAsBytes();
+        void AlterTable(Table oldTable, Table newTable);
 
-        string GetContentAsString();
+        void AlterTable(Column oldColumn, Column newColumn);
     }
 }
