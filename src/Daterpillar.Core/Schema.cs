@@ -112,6 +112,28 @@ namespace Gigobyte.Daterpillar
                 }
         }
 
+        public IEnumerable<Index> GetIndexes()
+        {
+            foreach (var table in Tables)
+            {
+                foreach (var index in table.Indexes)
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        public IEnumerable<ForeignKey> GetForeignKeys()
+        {
+            foreach (var table in Tables)
+            {
+                foreach (var key in table.ForeignKeys)
+                {
+                    yield return key;
+                }
+            }
+        }
+
         #region Private Member
 
         private List<Table> _tables;
