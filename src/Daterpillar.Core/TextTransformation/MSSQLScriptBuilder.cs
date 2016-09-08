@@ -14,10 +14,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
         }
 
-        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver, string schema = null)
         {
             _settings = settings;
             _typeResolver = typeResolver;
+            _schemaName = schema;
         }
 
         public void Append(string text)
@@ -96,7 +97,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Schema schema, Column column)
         {
-            RemoveAllConstraintsThatReferenceThisColumn(schema, column);
+            foreach (var index in schema.GetIndexes()) RemoveAllColumnReferences(index, column.Name);
+            foreach (var constraint in schema.GetForeignKeys()) RemoveAllColumnReferences(constraint, column.Table, column.Name);
 
             _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.Table}] DROP COLUMN [{column.Name}];");
         }
@@ -155,10 +157,27 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine($"\tCONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
-        private void RemoveAllConstraintsThatReferenceThisColumn(Schema schema, Column column)
-        {
 
+        private void RemoveAllColumnReferences(Index index, string columnName)
+        {
+            int columnsRemoved = index.Columns.RemoveAll(x => x.Name == columnName);
+
+            if (columnsRemoved > 0)
+            {
+                Drop(index);
+                Create(index);
+            }
         }
+
+        private void RemoveAllColumnReferences(ForeignKey constraint, string tableName, string columnName)
+        {
+            if ((constraint.LocalTable == tableName && constraint.LocalColumn == columnName)
+                || constraint.ForeignTable == tableName && constraint.ForeignColumn == columnName)
+            {
+
+            }
+        }
+
 
         #endregion Private Members
     }
