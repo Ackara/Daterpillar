@@ -20,7 +20,7 @@
 
         void Drop(Table table);
 
-        void Drop(Column column);
+        void Drop(Schema schema, Column column);
 
         void Drop(Index index);
 

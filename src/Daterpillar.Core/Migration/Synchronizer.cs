@@ -18,6 +18,7 @@ namespace Gigobyte.Daterpillar.Migration
 
         public string GenerateScript(Schema source, Schema target)
         {
+            _source = source; _target = target;
             GetChangesBetween(source.Tables, target.Tables);
 
             return _scriptBuilder.GetContent();
@@ -32,6 +33,8 @@ namespace Gigobyte.Daterpillar.Migration
 
         private readonly IScriptBuilder _scriptBuilder;
         private readonly SynchronizerSettings _settings;
+
+        private Schema _source, _target;
 
         private static void GetTheItemsOfBothCollectionsAlignedByNameInAnArray<T>(ICollection<T> source, ICollection<T> target, out T[] leftArray, out T[] rightArray)
         {
@@ -116,7 +119,7 @@ namespace Gigobyte.Daterpillar.Migration
 
                 if (lColumn == null && rColumn != null)
                 {
-                    _scriptBuilder.Drop(rColumn);
+                    _scriptBuilder.Drop(_target, rColumn);
                 }
                 else if (lColumn != null && rColumn == null)
                 {
@@ -127,7 +130,7 @@ namespace Gigobyte.Daterpillar.Migration
                     if (lColumn.Name == rColumn.Name) _scriptBuilder.AlterTable(lColumn, rColumn);
                     else
                     {
-                        _scriptBuilder.Drop(rColumn);
+                        _scriptBuilder.Drop(_target, rColumn);
                         _scriptBuilder.Create(lColumn);
                     }
                 }

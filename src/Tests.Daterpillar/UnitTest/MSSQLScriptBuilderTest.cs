@@ -15,6 +15,20 @@ namespace Tests.Daterpillar.UnitTest
     {
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
+        public void Create_should_return_a_tsql_command_for_adding_a_schema()
+        {
+            // Arrange
+            var sut = new MSSQLScriptBuilder();
+
+            // Act
+            sut.Create(SampleData.CreateSchema());
+
+            // Assert
+            Approvals.Verify(sut.GetContent());
+        }
+
+        [TestMethod]
+        [Owner(Test.Dev.Ackara)]
         public void Create_should_return_a_tsql_command_for_adding_a_new_table()
         {
             // Arrange
@@ -60,7 +74,6 @@ namespace Tests.Daterpillar.UnitTest
             // Act
             sut.Create(new ForeignKey()
             {
-                Name = "fk1",
                 LocalTable = "dept",
                 LocalColumn = "Name",
                 ForeignTable = "location",
@@ -158,17 +171,13 @@ namespace Tests.Daterpillar.UnitTest
         public void Drop_should_return_a_tsql_command_for_dropping_a_column()
         {
             // Arrange
+            var schema = SampleData.CreateSchema();
+            var column = schema.Tables[0].Columns[0];
+
             var sut = new MSSQLScriptBuilder();
 
             // Act
-            sut.Drop(new Column()
-            {
-                Name = "Name",
-                DataType = new DataType("varchar", 64, 0),
-                Table = "User",
-                Comment = "This is a comment",
-                AutoIncrement = true
-            });
+            sut.Drop(schema, column);
 
             // Assert
             Approvals.Verify(sut.GetContent());
