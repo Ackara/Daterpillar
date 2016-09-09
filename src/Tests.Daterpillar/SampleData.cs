@@ -102,6 +102,8 @@ namespace Tests.Daterpillar
             var schema = new Schema();
             schema.Name = name;
             schema.Author = "johnDoe@example.com";
+            schema.Description = "This is a useful description";
+            schema.CreatedOn = new DateTime(2016, 9, 9);
 
             var employeeTable = CreateTableSchema();
             schema.Tables.Add(employeeTable);

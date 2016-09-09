@@ -16,9 +16,9 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver, string schema = null)
         {
+            _schemaName = schema;
             _settings = settings;
             _typeResolver = typeResolver;
-            _schemaName = schema;
         }
 
         public void Append(string text)
@@ -33,8 +33,29 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Create(Schema schema)
         {
+            string lineBreak = "-- ======================================================================";
+
+            _text.AppendLine(lineBreak);
+            _text.AppendLine($"-- Name: {schema.Name}");
+            _text.AppendLine($"-- Desc: {schema.Description}");
+            _text.AppendLine($"-- Auth: {schema.Author}");
+            _text.AppendLine($"-- Date: {schema.CreatedOn.ToString("ddd dd, MMM yyyy hh:mm tt")}");
+            _text.AppendLine(lineBreak);
+            _text.AppendLine();
+
+            _text.AppendLine($"CREATE DATABASE [{schema.Name}];");
+            _text.AppendLine();
+
             _schemaName = (string.IsNullOrEmpty(schema.Name) ? string.Empty : $"[{schema.Name}].");
             foreach (var table in schema.Tables) Create(table);
+
+            lineBreak = "-- =================";
+            _text.AppendLine(lineBreak);
+            _text.AppendLine($"-- SCRIPTS (000)");
+            _text.AppendLine(lineBreak);
+            _text.AppendLine();
+
+            _text.AppendLine(schema.Script);
         }
 
         public void Create(Table table)
@@ -97,8 +118,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Schema schema, Column column)
         {
-            foreach (var index in schema.GetIndexes()) RemoveAllColumnReferences(index, column.Name);
-            foreach (var constraint in schema.GetForeignKeys()) RemoveAllColumnReferences(constraint, column.Table, column.Name);
+            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
+            foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, column.Table, column.Name);
 
             _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.Table}] DROP COLUMN [{column.Name}];");
         }
@@ -157,8 +178,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine($"\tCONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
-
-        private void RemoveAllColumnReferences(Index index, string columnName)
+        private void RemoveAllReferencesToColumn(Index index, string columnName)
         {
             int columnsRemoved = index.Columns.RemoveAll(x => x.Name == columnName);
 
@@ -169,15 +189,14 @@ namespace Gigobyte.Daterpillar.TextTransformation
             }
         }
 
-        private void RemoveAllColumnReferences(ForeignKey constraint, string tableName, string columnName)
+        private void RemoveAllReferencesToColumn(ForeignKey constraint, string tableName, string columnName)
         {
             if ((constraint.LocalTable == tableName && constraint.LocalColumn == columnName)
                 || constraint.ForeignTable == tableName && constraint.ForeignColumn == columnName)
             {
-
+                Drop(constraint);
             }
         }
-
 
         #endregion Private Members
     }

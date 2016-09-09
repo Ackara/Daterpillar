@@ -209,7 +209,7 @@ namespace Tests.Daterpillar.UnitTest
                 _text.AppendLine($"add column [{column.Name}] to [{column.Table}]");
             }
 
-            public void Drop(Column column)
+            public void Drop(Schema schema, Column column)
             {
                 _text.AppendLine($"drop [{column.Name}] column from [{column.Table}] table");
             }

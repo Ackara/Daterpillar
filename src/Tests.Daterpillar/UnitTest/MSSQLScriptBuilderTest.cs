@@ -18,10 +18,13 @@ namespace Tests.Daterpillar.UnitTest
         public void Create_should_return_a_tsql_command_for_adding_a_schema()
         {
             // Arrange
+            var schema = SampleData.CreateSchema();
+            schema.Tables.Add(SampleData.CreateTableSchema("supervisor"));
+
             var sut = new MSSQLScriptBuilder();
 
             // Act
-            sut.Create(SampleData.CreateSchema());
+            sut.Create(schema);
 
             // Assert
             Approvals.Verify(sut.GetContent());

@@ -1,0 +1,36 @@
+﻿-- ======================================================================
+-- Name: Create_should_return_a_tsql_command_for_adding_a_schema
+-- Desc: This is a useful description
+-- Auth: johnDoe@example.com
+-- Date: Fri 09, Sep 2016 12:00 AM
+-- ======================================================================
+
+CREATE DATABASE [Create_should_return_a_tsql_command_for_adding_a_schema];
+
+CREATE TABLE [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[Employee]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Full_Name] VARCHAR(64) NOT NULL,
+	[Salary] DECIMAL(12, 2) NOT NULL,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+CREATE INDEX [employee_idx1] ON [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[Employee] ([Id] ASC);
+CREATE UNIQUE INDEX [employee_idx] ON [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[Employee] ([Full_Name] DESC);
+
+CREATE TABLE [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[supervisor]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Full_Name] VARCHAR(64) NOT NULL,
+	[Salary] DECIMAL(12, 2) NOT NULL,
+	CONSTRAINT [fkey1] FOREIGN KEY ([Id]) REFERENCES [Card]([Id]) ON UPDATE SET NULL ON DELETE CASCADE
+);
+
+CREATE INDEX [supervisor_idx2] ON [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[supervisor] ([Id] ASC);
+CREATE UNIQUE INDEX [supervisor_idx] ON [Create_should_return_a_tsql_command_for_adding_a_schema].[dbo].[supervisor] ([Full_Name] DESC);
+
+-- =================
+-- SCRIPTS (000)
+-- =================
+
+-- Script Goes Here
