@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -56,11 +57,25 @@ namespace Gigobyte.Daterpillar
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        [XmlAttribute("description")]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the author.
         /// </summary>
         /// <value>The author.</value>
         [XmlAttribute("author")]
         public string Author { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date the schema was created.
+        /// </summary>
+        /// <value>The created on.</value>
+        [XmlAttribute("created")]
+        public DateTime CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the tables.
