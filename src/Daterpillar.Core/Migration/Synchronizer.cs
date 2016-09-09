@@ -16,17 +16,17 @@ namespace Gigobyte.Daterpillar.Migration
             _scriptBuilder = scriptBuilder;
         }
 
-        public string GenerateScript(Schema source, Schema target)
+        public string GenerateScript(Schema source, Schema destination)
         {
-            _source = source; _target = target;
-            GetChangesBetween(source.Tables, target.Tables);
+            _schema1 = source; _schema2 = destination;
+            GetChangesBetween(source.Tables, destination.Tables);
 
             return _scriptBuilder.GetContent();
         }
 
-        public string GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
+        public string GenerateScript(ISchemaAggregator source, ISchemaAggregator destination)
         {
-            using (source) { using (target) { return GenerateScript(source.FetchSchema(), target.FetchSchema()); } }
+            using (source) { using (destination) { return GenerateScript(source.FetchSchema(), destination.FetchSchema()); } }
         }
 
         #region Private Members
@@ -34,7 +34,7 @@ namespace Gigobyte.Daterpillar.Migration
         private readonly IScriptBuilder _scriptBuilder;
         private readonly SynchronizerSettings _settings;
 
-        private Schema _source, _target;
+        private Schema _schema1, _schema2;
 
         private static void GetTheItemsOfBothCollectionsAlignedByNameInAnArray<T>(ICollection<T> source, ICollection<T> target, out T[] leftArray, out T[] rightArray)
         {
@@ -65,10 +65,10 @@ namespace Gigobyte.Daterpillar.Migration
             }
         }
 
-        private void GetChangesBetween(IList<Table> source, IList<Table> target)
+        private void GetChangesBetween(IList<Table> source, IList<Table> destination)
         {
             Table[] left, right;
-            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target, out left, out right);
+            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, destination, out left, out right);
 
             string lTable, rTable;
             for (int i = 0; i < left.Length; i++)
@@ -104,11 +104,11 @@ namespace Gigobyte.Daterpillar.Migration
             }
         }
 
-        private void GetChangesBetween(ICollection<Column> source, ICollection<Column> target)
+        private void GetChangesBetween(ICollection<Column> source, ICollection<Column> destination)
         {
             Column[] left, right;
             var comparer = new Equality.ColumnEqualityComparer();
-            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target, out left, out right);
+            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, destination, out left, out right);
 
             Column lColumn, rColumn;
 
@@ -119,7 +119,7 @@ namespace Gigobyte.Daterpillar.Migration
 
                 if (lColumn == null && rColumn != null)
                 {
-                    _scriptBuilder.Drop(_target, rColumn);
+                    _scriptBuilder.Drop(_schema2, rColumn);
                 }
                 else if (lColumn != null && rColumn == null)
                 {
@@ -130,17 +130,17 @@ namespace Gigobyte.Daterpillar.Migration
                     if (lColumn.Name == rColumn.Name) _scriptBuilder.AlterTable(lColumn, rColumn);
                     else
                     {
-                        _scriptBuilder.Drop(_target, rColumn);
+                        _scriptBuilder.Drop(_schema2, rColumn);
                         _scriptBuilder.Create(lColumn);
                     }
                 }
             }
         }
 
-        private void GetChangesBetween(ICollection<Index> source, ICollection<Index> target)
+        private void GetChangesBetween(ICollection<Index> source, ICollection<Index> destination)
         {
             Index[] left, right;
-            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target, out left, out right);
+            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, destination, out left, out right);
 
             for (int i = 0; i < left.Length; i++)
             {
@@ -149,10 +149,10 @@ namespace Gigobyte.Daterpillar.Migration
             }
         }
 
-        private void GetChangesBetween(ICollection<ForeignKey> source, ICollection<ForeignKey> target)
+        private void GetChangesBetween(ICollection<ForeignKey> source, ICollection<ForeignKey> destination)
         {
             ForeignKey[] left, right;
-            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, target, out left, out right);
+            GetTheItemsOfBothCollectionsAlignedByNameInAnArray(source, destination, out left, out right);
 
             for (int i = 0; i < left.Length; i++)
             {
