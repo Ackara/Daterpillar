@@ -8,6 +8,9 @@ namespace Gigobyte.Daterpillar
     /// </summary>
     public class Column
     {
+        [XmlIgnore]
+        public Table TableRef;
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -57,9 +60,6 @@ namespace Gigobyte.Daterpillar
         /// <value>The comment.</value>
         [XmlElement("comment")]
         public string Comment { get; set; }
-
-        [XmlIgnore]
-        public string Table { get; set; }
 
         [XmlIgnore]
         public int OrdinalPosition { get; set; }

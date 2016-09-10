@@ -39,6 +39,12 @@ namespace Gigobyte.Daterpillar
         }
 
         /// <summary>
+        /// The schema reference
+        /// </summary>
+        [XmlIgnore]
+        public Schema SchemaRef;
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -79,6 +85,30 @@ namespace Gigobyte.Daterpillar
         /// <value>The indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
+
+        public Column CreateColumn()
+        {
+            var newColumn = new Column() { TableRef = this };
+            Columns.Add(newColumn);
+
+            return newColumn;
+        }
+
+        public Index CreateIndex()
+        {
+            var newIndex = new Index() { TableRef = this };
+            Indexes.Add(newIndex);
+
+            return newIndex;
+        }
+
+        public ForeignKey CreateForeignKey()
+        {
+            var newKey = new ForeignKey() { TableRef = this };
+            ForeignKeys.Add(newKey);
+
+            return newKey;
+        }
 
         #region Private Members
 

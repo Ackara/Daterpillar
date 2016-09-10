@@ -13,6 +13,8 @@ namespace Gigobyte.Daterpillar
             Columns = new List<IndexColumn>();
         }
 
+        public Table TableRef;
+
         /// <summary>
         /// Gets or sets the type.
         /// </summary>

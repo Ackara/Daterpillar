@@ -17,6 +17,8 @@ namespace Gigobyte.Daterpillar
             OnDeleteRule = ForeignKeyRule.CASCADE;
         }
 
+        public Table TableRef;
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
