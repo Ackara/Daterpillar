@@ -127,7 +127,7 @@ namespace Gigobyte.Daterpillar.Migration
                 }
                 else if (!comparer.Equals(lColumn, rColumn))
                 {
-                    if (lColumn.Name == rColumn.Name) _scriptBuilder.AlterTable(lColumn, rColumn);
+                    if (lColumn.Name == rColumn.Name) _scriptBuilder.AlterTable(oldColumn: rColumn, newColumn: lColumn);
                     else
                     {
                         _scriptBuilder.Drop(_schema2, rColumn);
