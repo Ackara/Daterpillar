@@ -18,15 +18,15 @@
 
         void Create(ForeignKey foreignKey);
 
+        void Drop(Schema schema);
+
         void Drop(Table table);
 
-        void Drop(Schema schema, Column column);
+        void Drop(Column column);
 
         void Drop(Index index);
 
         void Drop(ForeignKey foreignKey);
-
-        void Drop(Schema schema);
 
         void AlterTable(Table oldTable, Table newTable);
 

@@ -36,10 +36,17 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string lineBreak = "-- ======================================================================";
 
             _text.AppendLine(lineBreak);
-            _text.AppendLine($"-- Name: {schema.Name}");
-            _text.AppendLine($"-- Desc: {schema.Description}");
-            _text.AppendLine($"-- Auth: {schema.Author}");
-            _text.AppendLine($"-- Date: {schema.CreatedOn.ToString("ddd dd, MMM yyyy hh:mm tt")}");
+            _text.AppendLine("-- NAME:");
+            _text.AppendLine($"-- {schema.Name}");
+            _text.AppendLine();
+            _text.AppendLine("-- DESCRIPTION:");
+            _text.AppendLine($"-- {schema.Description}");
+            _text.AppendLine();
+            _text.AppendLine("-- AUTHOR:");
+            _text.AppendLine($"-- {schema.Author}");
+            _text.AppendLine();
+            _text.AppendLine("-- DATE:");
+            _text.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
             _text.AppendLine(lineBreak);
             _text.AppendLine();
 
@@ -88,7 +95,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.Table}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
+            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.TableRef}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
         }
 
         public void Create(Index index)
@@ -106,24 +113,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{foreignKey.LocalTable}]  WITH CHECK ADD  CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES {_schemaName}[dbo].[{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate} ON DELETE {foreignKey.OnDelete};");
         }
 
-        public void Drop(Index index)
-        {
-            _text.AppendLine($"DROP INDEX {_schemaName}[dbo].[{index.Name}];");
-        }
-
-        public void Drop(ForeignKey foreignKey)
-        {
-            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{foreignKey.LocalTable}] DROP CONSTRAINT [{foreignKey.Name}];");
-        }
-
-        public void Drop(Schema schema, Column column)
-        {
-            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
-            foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, column.Table, column.Name);
-
-            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.Table}] DROP COLUMN [{column.Name}];");
-        }
-
         public void Drop(Schema schema)
         {
             _text.AppendLine($"DROP DATABASE [{schema.Name}];");
@@ -134,9 +123,33 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine($"DROP TABLE {_schemaName}[dbo].[{table.Name}];");
         }
 
+        public void Drop(Column column)
+        {
+            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
+            foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, column.TableRef.Name, column.Name);
+
+            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{column.TableRef.Name}] DROP COLUMN [{column.Name}];");
+        }
+
+        public void Drop(Index index)
+        {
+            _text.AppendLine($"DROP INDEX {_schemaName}[dbo].[{index.Name}];");
+        }
+
+        public void Drop(ForeignKey foreignKey)
+        {
+            _text.AppendLine($"ALTER TABLE {_schemaName}[dbo].[{foreignKey.LocalTable}] DROP CONSTRAINT [{foreignKey.Name}];");
+        }
+
         public void AlterTable(Column oldColumn, Column newColumn)
         {
-            throw new NotImplementedException();
+            if (newColumn.AutoIncrement) newColumn.IsNullable = false;
+
+            string dataType = _typeResolver.GetName(newColumn.DataType);
+            string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
+            string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
+
+            _text.AppendLine($"ALTER TABLE [{oldColumn.TableRef}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
         }
 
         public void AlterTable(Table oldTable, Table newTable)

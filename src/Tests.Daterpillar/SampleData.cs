@@ -28,22 +28,22 @@ namespace Tests.Daterpillar
 
         public static Column CreateIdColumn(string table = "a")
         {
-            return new Column() { Name = "Id", DataType = new DataType("int"), AutoIncrement = true, Table = table };
+            return new Column() { Name = "Id", DataType = new DataType("int"), AutoIncrement = true, TableRef = table };
         }
 
         public static Column CreateStringColumn(string name, string table = "")
         {
-            return new Column() { Name = name, DataType = new DataType("varchar", 64, 0), Table = table };
+            return new Column() { Name = name, DataType = new DataType("varchar", 64, 0), TableRef = table };
         }
 
         public static Column CreateIntegerColumn(string name, string table = "")
         {
-            return new Column() { Name = name, DataType = new DataType("int"), Table = table };
+            return new Column() { Name = name, DataType = new DataType("int"), TableRef = table };
         }
 
         public static Column CreateDateTimeColumn(string name, string table = "")
         {
-            return new Column() { Name = name, DataType = new DataType("datetime"), Table = table };
+            return new Column() { Name = name, DataType = new DataType("datetime"), TableRef = table };
         }
 
         public static Table CreateTableSchema(string name = "Employee")

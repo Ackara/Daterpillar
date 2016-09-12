@@ -206,17 +206,17 @@ namespace Tests.Daterpillar.UnitTest
 
             public void Create(Column column)
             {
-                _text.AppendLine($"add column [{column.Name}] to [{column.Table}]");
+                _text.AppendLine($"add column [{column.Name}] to [{column.TableRef}]");
             }
 
             public void Drop(Schema schema, Column column)
             {
-                _text.AppendLine($"drop [{column.Name}] column from [{column.Table}] table");
+                _text.AppendLine($"drop [{column.Name}] column from [{column.TableRef}] table");
             }
 
             public void AlterTable(Column oldColumn, Column newColumn)
             {
-                _text.AppendLine($"alter [{oldColumn.Table}] table [{oldColumn.Name}] column");
+                _text.AppendLine($"alter [{oldColumn.TableRef}] table [{oldColumn.Name}] column");
             }
 
             public void Create(Index index)

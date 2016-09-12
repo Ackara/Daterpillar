@@ -1,8 +1,15 @@
 ﻿-- ======================================================================
--- Name: Create_should_return_a_tsql_command_for_adding_a_schema
--- Desc: This is a useful description
--- Auth: johnDoe@example.com
--- Date: Fri 09, Sep 2016 12:00 AM
+-- NAME:
+-- Create_should_return_a_tsql_command_for_adding_a_schema
+
+-- DESCRIPTION:
+-- This is a useful description
+
+-- AUTHOR:
+-- johnDoe@example.com
+
+-- DATE:
+-- Fri 09, 2016 12:00 AM
 -- ======================================================================
 
 CREATE DATABASE [Create_should_return_a_tsql_command_for_adding_a_schema];

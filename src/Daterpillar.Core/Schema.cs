@@ -103,30 +103,6 @@ namespace Gigobyte.Daterpillar
         [XmlElement("script")]
         public string Script { get; set; }
 
-        /// <summary>
-        /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
-        public void WriteTo(Stream stream)
-        {
-            var serializer = new XmlSerializer(typeof(Schema));
-            serializer.Serialize(stream, this);
-            stream.Position = 0;
-        }
-
-        /// <summary>
-        /// Removes all <see cref="Table"/> object with the specified name.
-        /// </summary>
-        /// <param name="tableName">Name of the table.</param>
-        public void RemoveTable(string tableName)
-        {
-            for (int i = 0; i < _tables.Count; i++)
-                if (_tables[i].Name.Equals(tableName, System.StringComparison.CurrentCultureIgnoreCase))
-                {
-                    _tables.RemoveAt(i);
-                }
-        }
-
         public IEnumerable<Index> GetIndexes()
         {
             foreach (var table in Tables)
@@ -147,6 +123,58 @@ namespace Gigobyte.Daterpillar
                     yield return key;
                 }
             }
+        }
+
+        /// <summary>
+        /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
+        public void WriteTo(Stream stream)
+        {
+            var serializer = new XmlSerializer(typeof(Schema));
+            serializer.Serialize(stream, this);
+            stream.Position = 0;
+        }
+
+        public Table CreateTable(string name)
+        {
+            var newTable = new Table(name) { SchemaRef = this };
+            _tables.Add(newTable);
+
+            return newTable;
+        }
+
+        public void Drop(Table table)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Drop(Column column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Drop(ForeignKey foreignKey)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Drop(Index index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes all <see cref="Table"/> object with the specified name.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        public void RemoveTable(string tableName)
+        {
+            for (int i = 0; i < _tables.Count; i++)
+                if (_tables[i].Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    _tables.RemoveAt(i);
+                }
         }
 
         #region Private Member
