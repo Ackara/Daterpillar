@@ -1,5 +1,4 @@
 ﻿using Gigobyte.Daterpillar;
-using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
