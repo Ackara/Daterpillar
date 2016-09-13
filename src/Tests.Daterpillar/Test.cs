@@ -33,8 +33,6 @@ namespace Tests.Daterpillar
             public const string Samples = "Sample Data";
             public const string Directory = "|DataDirectory|\\";
             public const string Provider = "Microsoft.VisualStudio.TestTools.DataSource.CSV";
-
-            public static readonly Repository Repo = new Repository();
         }
 
         public struct ConnectionString
