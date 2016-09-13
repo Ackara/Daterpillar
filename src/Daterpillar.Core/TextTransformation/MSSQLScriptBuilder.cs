@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
@@ -125,6 +124,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Column column)
         {
+            var schema = column.TableRef.SchemaRef;
+
             foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
             foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, column.TableRef.Name, column.Name);
 
@@ -149,12 +150,12 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _text.AppendLine($"ALTER TABLE [{oldColumn.TableRef}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
+            _text.AppendLine($"ALTER TABLE [{oldColumn.TableRef.Name}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
         }
 
         public void AlterTable(Table oldTable, Table newTable)
         {
-            throw new NotImplementedException();
+            // Do nothing.
         }
 
         public string GetContent()
