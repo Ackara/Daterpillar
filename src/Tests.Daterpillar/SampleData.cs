@@ -26,26 +26,6 @@ namespace Tests.Daterpillar
             return new Table(name);
         }
 
-        public static Column CreateIdColumn(string table = "a")
-        {
-            return new Column() { Name = "Id", DataType = new DataType("int"), AutoIncrement = true, TableRef = table };
-        }
-
-        public static Column CreateStringColumn(string name, string table = "")
-        {
-            return new Column() { Name = name, DataType = new DataType("varchar", 64, 0), TableRef = table };
-        }
-
-        public static Column CreateIntegerColumn(string name, string table = "")
-        {
-            return new Column() { Name = name, DataType = new DataType("int"), TableRef = table };
-        }
-
-        public static Column CreateDateTimeColumn(string name, string table = "")
-        {
-            return new Column() { Name = name, DataType = new DataType("datetime"), TableRef = table };
-        }
-
         public static Table CreateTableSchema(string name = "Employee")
         {
             var table = new Table() { Name = name };

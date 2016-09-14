@@ -97,14 +97,10 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new MSSQLScriptBuilder();
 
             // Act
-            sut.Create(new Column()
-            {
-                Name = "Name",
-                DataType = new DataType("varchar", 64, 0),
-                TableRef = "User",
-                Comment = "This is a comment",
-                AutoIncrement = true
-            });
+            var table = new Table("tbl1");
+            var column = table.CreateColumn("Name", new DataType("varchar", 64, 0));
+            column.Comment = "This is a comment";
+            sut.Create(column);
 
             // Assert
             Approvals.Verify(sut.GetContent());
@@ -180,7 +176,7 @@ namespace Tests.Daterpillar.UnitTest
             var sut = new MSSQLScriptBuilder();
 
             // Act
-            sut.Drop(schema, column);
+            sut.Drop(column);
 
             // Assert
             Approvals.Verify(sut.GetContent());
@@ -250,5 +246,10 @@ namespace Tests.Daterpillar.UnitTest
             // Assert
             Approvals.Verify(sut.GetContent());
         }
+
+        #region Private Members
+        
+
+        #endregion Private Members
     }
 }
