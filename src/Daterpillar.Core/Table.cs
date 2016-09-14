@@ -88,7 +88,24 @@ namespace Gigobyte.Daterpillar
 
         public Column CreateColumn()
         {
-            var newColumn = new Column() { TableRef = this };
+            return CreateColumn("", new DataType("INTEGER", 32, 0), false, false);
+        }
+
+        public Column CreateColumn(string name)
+        {
+            return CreateColumn(name, new DataType("INTEGER", 32, 0), false, false);
+        }
+
+        public Column CreateColumn(string name, DataType type, bool autoIncrement = false, bool nullable = false)
+        {
+            var newColumn = new Column()
+            {
+                TableRef = this,
+                Name = name,
+                DataType = type,
+                AutoIncrement = autoIncrement,
+                IsNullable = nullable
+            };
             Columns.Add(newColumn);
 
             return newColumn;
