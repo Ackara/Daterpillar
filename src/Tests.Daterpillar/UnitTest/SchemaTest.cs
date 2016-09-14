@@ -1,7 +1,6 @@
 ﻿using Gigobyte.Daterpillar;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Linq;
 using Tests.Daterpillar.Utilities;
 
 namespace Tests.Daterpillar.UnitTest
@@ -61,24 +60,6 @@ namespace Tests.Daterpillar.UnitTest
             // Assert
             Assert.IsNotNull(obj);
             Assert.IsNotNull(obj.Tables);
-        }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void RemoveTable_should_delete_a_table_object_from_a_schema_object_when_a_valid_name_is_given()
-        {
-            // Arrange
-            var schema = SampleData.CreateSchema();
-            var nameOfTableToRemove = "RemoveMe";
-            var tableToRemove = SampleData.CreateTableSchema(nameOfTableToRemove);
-
-            schema.Tables.Add(tableToRemove);
-
-            // Act
-            schema.RemoveTable(nameOfTableToRemove);
-
-            // Assert
-            Assert.IsNull(schema.Tables.FirstOrDefault(x => x.Name == nameOfTableToRemove));
         }
     }
 }

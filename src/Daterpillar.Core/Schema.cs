@@ -144,30 +144,11 @@ namespace Gigobyte.Daterpillar
             return newTable;
         }
 
-        public void Drop(Table table)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Drop(Column column)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Drop(ForeignKey foreignKey)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Drop(Index index)
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Removes all <see cref="Table"/> object with the specified name.
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
+        [Obsolete("This method will no longer be provided as a member. However it will be available as a helper method in the T4 template.")]
         public void RemoveTable(string tableName)
         {
             for (int i = 0; i < _tables.Count; i++)
