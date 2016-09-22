@@ -223,7 +223,7 @@ namespace Tests.Daterpillar.UnitTest
             {
                 Name = "Name",
                 DataType = new DataType("varchar", 64, 0),
-                TableRef = "User",
+                //TableRef = "User",
                 Comment = "This is a comment",
                 AutoIncrement = true
             };
@@ -232,7 +232,7 @@ namespace Tests.Daterpillar.UnitTest
             {
                 Name = "Fullname",
                 DataType = new DataType("varchar", 64, 0),
-                TableRef = "User",
+                //TableRef = "User",
                 IsNullable = true,
                 Comment = "This is a comment",
                 AutoIncrement = true
