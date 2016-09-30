@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar
@@ -48,6 +50,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
+        [DataMember]
         [XmlAttribute("name")]
         public string Name { get; set; }
 
@@ -55,6 +58,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
+        [DataMember]
         [XmlElement("comment")]
         public string Comment { get; set; }
 
@@ -62,6 +66,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the modifiers.
         /// </summary>
         /// <value>The modifiers.</value>
+        [DataMember]
         [XmlElement("modifier")]
         public List<string> Modifiers { get; set; }
 
@@ -69,6 +74,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the columns.
         /// </summary>
         /// <value>The columns.</value>
+        [DataMember]
         [XmlElement("column")]
         public List<Column> Columns { get; set; }
 
@@ -76,6 +82,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the foreign keys.
         /// </summary>
         /// <value>The foreign keys.</value>
+        [DataMember]
         [XmlElement("foreignKey")]
         public List<ForeignKey> ForeignKeys { get; set; }
 
@@ -83,6 +90,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the indexes.
         /// </summary>
         /// <value>The indexes.</value>
+        [DataMember]
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
 
@@ -93,20 +101,23 @@ namespace Gigobyte.Daterpillar
 
         public Column CreateColumn(string name)
         {
-            return CreateColumn(name, new DataType("INTEGER", 32, 0), false, false);
+            return CreateColumn(name, new DataType("VARCHAR", 64, 0));
         }
 
-        public Column CreateColumn(string name, DataType type, bool autoIncrement = false, bool nullable = false)
+        public Column CreateColumn(string name, DataType type, bool autoIncrement = false, bool nullable = false, string comment = "")
         {
             var newColumn = new Column()
             {
                 TableRef = this,
+
                 Name = name,
                 DataType = type,
-                AutoIncrement = autoIncrement,
-                IsNullable = nullable
+                Comment = comment,
+                IsNullable = nullable,
+                AutoIncrement = autoIncrement
             };
             Columns.Add(newColumn);
+            newColumn.OrdinalPosition = Columns.Count;
 
             return newColumn;
         }
@@ -116,6 +127,23 @@ namespace Gigobyte.Daterpillar
             var newIndex = new Index() { TableRef = this };
             Indexes.Add(newIndex);
 
+            return newIndex;
+        }
+
+        public Index CreateIndex(string name, IndexType type, bool unique, params IndexColumn[] columns)
+        {
+            var newIndex = new Index()
+            {
+                TableRef = this,
+
+                Name = name,
+                IndexType = type,
+                Table = this.Name,
+                Unique = unique,
+                Columns = columns.ToList()
+            };
+
+            Indexes.Add(newIndex);
             return newIndex;
         }
 
