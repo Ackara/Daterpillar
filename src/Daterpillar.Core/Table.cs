@@ -8,6 +8,7 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database table.
     /// </summary>
+    [DataContract]
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public sealed class Table
     {
