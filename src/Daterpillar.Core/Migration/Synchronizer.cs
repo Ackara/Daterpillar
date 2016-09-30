@@ -16,17 +16,18 @@ namespace Gigobyte.Daterpillar.Migration
             _scriptBuilder = scriptBuilder;
         }
 
-        public string GenerateScript(Schema source, Schema destination)
+        public string GenerateScript(ISchemaAggregator source, ISchemaAggregator target)
         {
-            _schema1 = source; _schema2 = destination;
-            GetChangesBetween(source.Tables, destination.Tables);
-
-            return _scriptBuilder.GetContent();
+            using (source) { using (target) { return GenerateScript(source.FetchSchema(), target.FetchSchema()); } }
         }
 
-        public string GenerateScript(ISchemaAggregator source, ISchemaAggregator destination)
+        public string GenerateScript(Schema source, Schema target)
         {
-            using (source) { using (destination) { return GenerateScript(source.FetchSchema(), destination.FetchSchema()); } }
+            _sourceSchema = source;
+            _targetSchema = target;
+            GetChangesBetween(source.Tables, target.Tables);
+
+            return _scriptBuilder.GetContent();
         }
 
         #region Private Members
@@ -34,7 +35,7 @@ namespace Gigobyte.Daterpillar.Migration
         private readonly IScriptBuilder _scriptBuilder;
         private readonly SynchronizerSettings _settings;
 
-        private Schema _schema1, _schema2;
+        private Schema _sourceSchema, _targetSchema;
 
         private static void GetTheItemsOfBothCollectionsAlignedByNameInAnArray<T>(ICollection<T> source, ICollection<T> target, out T[] leftArray, out T[] rightArray)
         {
@@ -119,7 +120,7 @@ namespace Gigobyte.Daterpillar.Migration
 
                 if (lColumn == null && rColumn != null)
                 {
-                    _scriptBuilder.Drop(_schema2, rColumn);
+                    _scriptBuilder.Drop(rColumn);
                 }
                 else if (lColumn != null && rColumn == null)
                 {
@@ -130,7 +131,7 @@ namespace Gigobyte.Daterpillar.Migration
                     if (lColumn.Name == rColumn.Name) _scriptBuilder.AlterTable(oldColumn: rColumn, newColumn: lColumn);
                     else
                     {
-                        _scriptBuilder.Drop(_schema2, rColumn);
+                        _scriptBuilder.Drop(rColumn);
                         _scriptBuilder.Create(lColumn);
                     }
                 }
