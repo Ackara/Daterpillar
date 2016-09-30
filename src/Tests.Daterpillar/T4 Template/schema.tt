@@ -14,7 +14,7 @@
 <#@ import namespace="Gigobyte.Daterpillar" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Gigobyte.Daterpillar.TextTransformation" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".txt" #>
 using System;
 using Gigobyte.Daterpillar.Data;
 using System.Runtime.Serialization;
@@ -104,15 +104,15 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
 public void DeleteTextTemplateSubItem(ProjectItem template, string fileName)
 {
 	foreach(ProjectItem subItem in template.ProjectItems)
-    {
+	{
 		string subItemPath = subItem.FileNames[1];
 		if(Path.GetFileName(subItemPath) == fileName)
-        {
+		{
 			File.Delete(subItem.FileNames[1]);
 			subItem.Delete();
 			break;
-        }
-    }
+		}
+	}
 }
 
 #>

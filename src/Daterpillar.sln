@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{92D73D
 		..\build\Invoke-Build.ps1 = ..\build\Invoke-Build.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tools", ".tools", "{F2829119-2D95-4F4C-A3B9-41741ACCBF9E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,5 +107,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E2023F0-2452-4F5A-8DCB-F9F854751965} = {F2B89B7A-B701-49D7-9014-B1EA0E0F26D0}
+		{92D73DC6-62A2-4E7D-A074-6AD2CF2E6B60} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
 	EndGlobalSection
 EndGlobal
