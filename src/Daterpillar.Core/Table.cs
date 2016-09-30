@@ -155,6 +155,25 @@ namespace Gigobyte.Daterpillar
             return newKey;
         }
 
+        public ForeignKey CreateForeignKey(string column, string foreignTable, string foreignColumn, ForeignKeyRule onUpdate = ForeignKeyRule.CASCADE, ForeignKeyRule onDelete = ForeignKeyRule.RESTRICT, string name = null)
+        {
+            var newConstraint = new ForeignKey()
+            {
+                TableRef = this,
+
+                Name = name ?? $"{Name}_{column}_TO_{foreignTable}_{foreignColumn}_fx{ForeignKeys.Count + 1}",
+                LocalTable = Name,
+                LocalColumn = column,
+                ForeignTable = foreignTable,
+                ForeignColumn = foreignColumn,
+                OnUpdateRule = onUpdate,
+                OnDeleteRule = onDelete
+            };
+
+            ForeignKeys.Add(newConstraint);
+            return newConstraint;
+        }
+
         #region Private Members
 
         private string ToDebuggerDisplay()
