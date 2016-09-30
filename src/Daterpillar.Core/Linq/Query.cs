@@ -62,7 +62,7 @@ namespace Gigobyte.Daterpillar.Linq
         }
 
         /// <summary>
-        /// WHERE [columA]='value'.
+        /// WHERE [columnA]='value'.
         /// </summary>
         /// <param name="expression">The expression.</param>
         /// <returns></returns>
