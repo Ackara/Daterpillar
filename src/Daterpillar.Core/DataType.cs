@@ -26,9 +26,17 @@ namespace Gigobyte.Daterpillar
         /// Initializes a new instance of the <see cref="DataType"/> struct.
         /// </summary>
         /// <param name="typeName">Name of the type.</param>
-        public DataType(string typeName) : this()
+        public DataType(string typeName) : this(typeName, 0, 0)
         {
-            Name = typeName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataType"/> struct.
+        /// </summary>
+        /// <param name="typeName">Name of the type.</param>
+        /// <param name="scale">The scale.</param>
+        public DataType(string typeName, int scale) : this(typeName, scale, 0)
+        {
         }
 
         /// <summary>
