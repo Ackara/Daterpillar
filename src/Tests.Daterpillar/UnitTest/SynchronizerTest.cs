@@ -113,21 +113,9 @@ namespace Tests.Daterpillar.UnitTest
             string tableName = "a";
 
             var source = new Schema();
-            source.Tables.Add(new Table(tableName, new Column[]
-            {
-                SampleData.CreateIntegerColumn("c1", tableName),
-                SampleData.CreateIntegerColumn("c2", tableName),
-                SampleData.CreateIntegerColumn("c4", tableName),
-                SampleData.CreateIntegerColumn("c5", tableName),
-            }));
 
             var target = new Schema();
-            target.Tables.Add(new Table("a", new Column[]
-            {
-                SampleData.CreateIntegerColumn("c1" , tableName),
-                SampleData.CreateStringColumn("c2"  , tableName),
-                SampleData.CreateDateTimeColumn("c3", tableName),
-            }));
+            
 
             var sut = new Synchronizer(new FakeScriptBuilder());
 
@@ -146,18 +134,8 @@ namespace Tests.Daterpillar.UnitTest
             string tableName = "a";
 
             var source = new Schema();
-            source.Tables.Add(new Table("a", new Column[]
-            {
-                SampleData.CreateIntegerColumn("c1", tableName)
-            }));
 
             var target = new Schema();
-            target.Tables.Add(new Table("a", new Column[]
-            {
-                SampleData.CreateIntegerColumn("c1", tableName),
-                SampleData.CreateIntegerColumn("c2", tableName),
-                SampleData.CreateIntegerColumn("c3", tableName),
-            }));
 
             var sut = new Synchronizer(new FakeScriptBuilder());
 
@@ -209,7 +187,7 @@ namespace Tests.Daterpillar.UnitTest
                 _text.AppendLine($"add column [{column.Name}] to [{column.TableRef}]");
             }
 
-            public void Drop(Schema schema, Column column)
+            public void Drop(Column column)
             {
                 _text.AppendLine($"drop [{column.Name}] column from [{column.TableRef}] table");
             }
