@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-namespace Tests.Daterpillar.Globals
+namespace Tests.Daterpillar.Helper
 {
     public static class ConnectionString
     {
