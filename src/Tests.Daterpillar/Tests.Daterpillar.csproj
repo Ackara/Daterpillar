@@ -114,6 +114,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Globals\ConnectionString.cs" />
+    <Compile Include="Globals\Data.cs" />
+    <Compile Include="Globals\Dev.cs" />
+    <Compile Include="Globals\File.cs" />
+    <Compile Include="Globals\Trait.cs" />
+    <Compile Include="Helper\ConnectionFactory.cs" />
     <Compile Include="IntegrationTest\MySQLCommandTests.cs" />
     <Compile Include="IntegrationTest\MSSQLCommandTests.cs" />
     <Compile Include="IntegrationTest\SQLiteCommandTests.cs" />
@@ -169,6 +175,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="database.config.xml" />
     <Content Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.txt</LastGenOutput>
@@ -199,10 +206,7 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fakes\" />
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

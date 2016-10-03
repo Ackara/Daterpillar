@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Core", "Daterpi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{FDCC3763-A4ED-4B12-9F13-43610728FE38}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
 		..\README.md = ..\README.md
 		xddl.xsd = xddl.xsd
 	EndProjectSection
@@ -24,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{92D73D
 		..\build\start-build.ps1 = ..\build\start-build.ps1
 		..\build\tasks.ps1 = ..\build\tasks.ps1
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C97A2BCA-9885-4D96-87FE-E6A718079991}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,5 +111,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4E2023F0-2452-4F5A-8DCB-F9F854751965} = {F2B89B7A-B701-49D7-9014-B1EA0E0F26D0}
 		{92D73DC6-62A2-4E7D-A074-6AD2CF2E6B60} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
+		{C97A2BCA-9885-4D96-87FE-E6A718079991} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
 	EndGlobalSection
 EndGlobal
