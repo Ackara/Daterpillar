@@ -266,3 +266,5 @@ paket-files/
 # Approval Tests
 *.received.*
 
+# Sensitive Files
+src/Tests.Daterpillar/database.config.xml
