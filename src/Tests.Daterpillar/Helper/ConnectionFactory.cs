@@ -6,22 +6,6 @@ namespace Tests.Daterpillar.Helper
 {
     public static class ConnectionFactory
     {
-        public static IDbConnection CreateMySQLConnection(string database = null)
-        {
-            var connStr = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder("");
-            if (!string.IsNullOrEmpty(database)) connStr.Database = database;
-
-            return new MySql.Data.MySqlClient.MySqlConnection(connStr.ConnectionString);
-        }
-
-        public static IDbConnection CreateMSSQLConnection(string database = null)
-        {
-            var connStr = new System.Data.SqlClient.SqlConnectionStringBuilder("");
-            if (!string.IsNullOrEmpty(database)) connStr.Add("database", database);
-
-            return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
-        }
-
         public static IDbConnection CreateSQLiteConnection(string filePath = "")
         {
             if (!File.Exists(filePath))
@@ -32,6 +16,22 @@ namespace Tests.Daterpillar.Helper
 
             var connStr = new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = filePath };
             return new System.Data.SQLite.SQLiteConnection(connStr.ConnectionString);
+        }
+
+        public static IDbConnection CreateMySQLConnection(string database = "daterpillar")
+        {
+            var connStr = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(ConnectionString.GetMySQLServerConnectionString());
+            if (!string.IsNullOrEmpty(database)) connStr.Database = database;
+
+            return new MySql.Data.MySqlClient.MySqlConnection(connStr.ConnectionString);
+        }
+
+        public static IDbConnection CreateMSSQLConnection(string database = "daterpillar")
+        {
+            var connStr = new System.Data.SqlClient.SqlConnectionStringBuilder(ConnectionString.GetSQLServerConnectionString());
+            if (!string.IsNullOrEmpty(database)) connStr.Add("database", database);
+
+            return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
         }
     }
 }
