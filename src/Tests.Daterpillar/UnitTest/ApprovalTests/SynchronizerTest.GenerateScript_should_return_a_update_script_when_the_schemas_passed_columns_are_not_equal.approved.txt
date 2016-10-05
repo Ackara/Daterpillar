@@ -1,4 +1,0 @@
-﻿alter [a] table [c2] column
-drop [c3] column from [a] table
-add column [c4] to [a]
-add column [c5] to [a]

@@ -1,1 +1,0 @@
-﻿ALTER TABLE [dbo].[dept]  WITH CHECK ADD  CONSTRAINT [dept_Name_to_location_street_fkey1] FOREIGN KEY ([Name]) REFERENCES [dbo].[location] ([street]) ON UPDATE CASCADE ON DELETE RESTRICT;

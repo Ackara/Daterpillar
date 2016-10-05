@@ -1,1 +1,0 @@
-﻿CREATE UNIQUE INDEX [idx1] ON [dbo].[tblA] ([Name] ASC, [Age] DESC);
