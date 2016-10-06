@@ -49,13 +49,5 @@ namespace Gigobyte.Daterpillar
         /// <value>The columns.</value>
         [XmlElement("columnName")]
         public List<IndexColumn> Columns { get; set; }
-
-
-
-        #region Private Members
-
-        private readonly string _primaryKey = "primaryKey", _index = "index";
-
-        #endregion Private Members
     }
 }
