@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<schema xmlns="http://static.gigobyte.com/schema/v1/xddl.xsd"
+<schema xmlns="http://static.acklann.com/schema/v1/daterpillar.xsd"
         name="daterpillar"
         author="john@example.com">
   <table name="genre">

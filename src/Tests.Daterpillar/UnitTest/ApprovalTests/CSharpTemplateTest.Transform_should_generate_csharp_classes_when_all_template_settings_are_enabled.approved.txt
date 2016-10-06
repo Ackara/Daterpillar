@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Represents the [Employee] table.
 /// </summary>
-[DataContract(Namespace = "http://static.gigobyte.com/schema/v1/xddl.xsd")]
+[DataContract(Namespace = "http://static.acklann.com/schema/v1/daterpillar.xsd")]
 [Table("Employee")]
 public partial class Employee : EntityBase
 {
@@ -54,7 +54,7 @@ public partial class Employee : EntityBase
 /// <summary>
 /// Represents the [Manager] table.
 /// </summary>
-[DataContract(Namespace = "http://static.gigobyte.com/schema/v1/xddl.xsd")]
+[DataContract(Namespace = "http://static.acklann.com/schema/v1/daterpillar.xsd")]
 [Table("Manager")]
 public partial class Manager : EntityBase
 {
