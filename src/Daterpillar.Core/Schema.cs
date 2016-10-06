@@ -16,10 +16,10 @@ namespace Gigobyte.Daterpillar
         /// <summary>
         /// The XML document default namespace.
         /// </summary>
-        public const string Xmlns = "http://static.gigobyte.com/schema/v1/xddl.xsd";
+        public const string Xmlns = "http://static.acklann.com/schema/v1/daterpillar.xsd";
 
         /// <summary>
-        /// Creates a <see cref="Schema"/> by using the specified <paramref name="stream"/>.
+        /// Creates a <see cref="Schema" /> by using the specified <paramref name="stream" />.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
@@ -33,17 +33,16 @@ namespace Gigobyte.Daterpillar
         }
 
         /// <summary>
-        /// Convert the string representation of a <see cref="Schema"/> to it's <see
-        /// cref="System.Object"/> equivalent.
+        /// Convert the string representation of a <see cref="Schema" /> to it's <see
+        /// cref="System.Object" /> equivalent.
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="xml">The text.</param>
         /// <returns></returns>
-        public static Schema Parse(string text)
+        public static Schema Load(string xml)
         {
-            using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(text)))
+            using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xml)))
             {
-                var serializer = new XmlSerializer(typeof(Schema));
-                return (Schema)serializer.Deserialize(stream);
+                return Load(stream);
             }
         }
 
@@ -126,9 +125,9 @@ namespace Gigobyte.Daterpillar
         }
 
         /// <summary>
-        /// Write this <see cref="Schema"/> to the specified <see cref="Stream"/>.
+        /// Write this <see cref="Schema" /> to the specified <see cref="Stream" />.
         /// </summary>
-        /// <param name="stream">The stream to output this <see cref="Schema"/> to.</param>
+        /// <param name="stream">The stream to output this <see cref="Schema" /> to.</param>
         public void WriteTo(Stream stream)
         {
             var serializer = new XmlSerializer(typeof(Schema));
@@ -145,7 +144,7 @@ namespace Gigobyte.Daterpillar
         }
 
         /// <summary>
-        /// Removes all <see cref="Table"/> object with the specified name.
+        /// Removes all <see cref="Table" /> object with the specified name.
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
         [Obsolete("This method will no longer be provided as a member. However it will be available as a helper method in the T4 template.")]

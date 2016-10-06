@@ -1,6 +1,8 @@
 ﻿using Gigobyte.Daterpillar;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using Tests.Daterpillar.Globals;
+using Tests.Daterpillar.Helper;
 using Tests.Daterpillar.Utilities;
 
 namespace Tests.Daterpillar.UnitTest
@@ -12,10 +14,13 @@ namespace Tests.Daterpillar.UnitTest
     {
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void WriteTo_should_serialize_its_schema_object_into_a_stream()
+        public void WriteTo_should_serialize_a_schema_object_into_a_stream()
         {
             // Arrange
-            Schema sut = SampleData.CreateSchema();
+            var sut = new Schema()
+            {
+            };
+
             using (var stream = new MemoryStream())
             {
                 // Act
@@ -28,34 +33,16 @@ namespace Tests.Daterpillar.UnitTest
                 Assert.IsTrue(validator.XmlDocIsValid, validator.GetErrorLog());
             }
         }
-
+        
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
-        public void Assert_that_the_schema_object_can_be_deserialized_by_the_xml_serializer()
+        public void Load_should_deserialize_a_schema_object_when_xml_data_is_passed()
         {
             // Arrange
-            var schemaFile = SampleData.GetFile(Test.File.MockSchemaXML);
+            var schemaFile = TestData.GetFile(KnownFile.MockSchemaXML);
 
             // Act
-            using (var stream = schemaFile.OpenRead())
-            {
-                var obj = Schema.Load(stream);
-
-                // Assert
-                Assert.IsNotNull(obj);
-                Assert.IsNotNull(obj.Tables);
-            }
-        }
-
-        [TestMethod]
-        [Owner(Test.Dev.Ackara)]
-        public void Parse_should_return_a_schema_object_from_a_xml_formatted_string()
-        {
-            // Arrange
-            var schemaFile = SampleData.GetFile(Test.File.MockSchemaXML);
-
-            // Act
-            var obj = Schema.Parse(File.ReadAllText(schemaFile.FullName));
+            var obj = Schema.Load(File.ReadAllText(schemaFile.FullName));
 
             // Assert
             Assert.IsNotNull(obj);
