@@ -13,10 +13,10 @@ namespace Gigobyte.Daterpillar
         [XmlEnum]
         CASCADE,
 
-        [XmlEnum]
+        [XmlEnum("SET NULL")]
         SET_NULL,
 
-        [XmlEnum]
+        [XmlEnum("SET DEFAULT")]
         SET_DEFAULT,
 
         [XmlEnum]

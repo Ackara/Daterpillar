@@ -10,13 +10,13 @@ namespace Gigobyte.Daterpillar
         /// <summary>
         /// A primary key.
         /// </summary>
-        [XmlEnum]
-        Primary = 0,
+        [XmlEnum("primaryKey")]
+        PrimaryKey = 0,
 
         /// <summary>
         /// A index
         /// </summary>
-        [XmlEnum]
+        [XmlEnum("index")]
         Index = 1
     }
 }
