@@ -1,11 +1,11 @@
 ﻿namespace Gigobyte.Daterpillar
 {
     /// <summary>
-    /// Provide extension methods for the <see cref="Daterpillar"/> namespace.
+    /// Provide extension methods for the <see cref="Daterpillar" /> namespace.
     /// </summary>
     public static class Extensions
     {
-        internal static string ToText(this ForeignKeyRule rule)
+        public static string ToText(this ForeignKeyRule rule)
         {
             string output;
 
@@ -34,6 +34,17 @@
             }
 
             return output;
+        }
+
+        public static ForeignKeyRule ToEnum(this string value)
+        {
+            value = value.Replace(' ', '_').ToUpper();
+            return (ForeignKeyRule)System.Enum.Parse(typeof(ForeignKeyRule), value);
+        }
+
+        public static IndexType ToIndexType(this string value)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

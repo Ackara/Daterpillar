@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar
 {
@@ -9,12 +8,12 @@ namespace Gigobyte.Daterpillar
     public class ForeignKey
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ForeignKey"/> class.
+        /// Initializes a new instance of the <see cref="ForeignKey" /> class.
         /// </summary>
         public ForeignKey()
         {
-            OnUpdateRule = ForeignKeyRule.CASCADE;
-            OnDeleteRule = ForeignKeyRule.CASCADE;
+            OnUpdate = ForeignKeyRule.CASCADE;
+            OnDelete = ForeignKeyRule.CASCADE;
         }
 
         public Table TableRef;
@@ -31,7 +30,23 @@ namespace Gigobyte.Daterpillar
         /// </summary>
         /// <value>The local table.</value>
         [XmlAttribute("table")]
-        public string LocalTable { get; set; }
+        public string LocalTable
+        {
+            get
+            {
+                if (TableRef == null) return string.Empty;
+                else return TableRef.Name;
+            }
+            set
+            {
+                if (TableRef == null)
+                {
+                    TableRef = new Table();
+                }
+
+                TableRef.Name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the local column.
@@ -57,37 +72,15 @@ namespace Gigobyte.Daterpillar
         /// <summary>
         /// Gets or sets the on update rule.
         /// </summary>
-        /// <value>The on update.</value>
-        [XmlElement("onUpdate")]
-        public string OnUpdate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the on delete.
-        /// </summary>
-        /// <value>The on delete.</value>
-        [XmlElement("onDelete")]
-        public string OnDelete { get; set; }
-
-        /// <summary>
-        /// Gets or sets the on update rule.
-        /// </summary>
         /// <value>The on update rule.</value>
-        [XmlIgnore]
-        public ForeignKeyRule OnUpdateRule
-        {
-            get { return (ForeignKeyRule)Enum.Parse(typeof(ForeignKeyRule), OnUpdate.Replace(" ", "_")); }
-            set { OnUpdate = value.ToText(); }
-        }
+        [XmlAttribute("onUpdate")]
+        public ForeignKeyRule OnUpdate { get; set; }
 
         /// <summary>
         /// Gets or sets the on delete rule.
         /// </summary>
         /// <value>The on delete rule.</value>
-        [XmlIgnore]
-        public ForeignKeyRule OnDeleteRule
-        {
-            get { return (ForeignKeyRule)Enum.Parse(typeof(ForeignKeyRule), OnDelete.Replace(" ", "_")); }
-            set { OnDelete = value.ToText(); }
-        }
+        [XmlAttribute("onDelete")]
+        public ForeignKeyRule OnDelete { get; set; }
     }
 }

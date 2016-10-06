@@ -46,8 +46,8 @@ namespace Gigobyte.Daterpillar.Aggregation
                 newForeignKey.LocalColumn = Convert.ToString(row["from"]);
                 newForeignKey.ForeignTable = Convert.ToString(row["table"]);
                 newForeignKey.ForeignColumn = Convert.ToString(row["to"]);
-                newForeignKey.OnDelete = Convert.ToString(row["on_delete"]);
-                newForeignKey.OnUpdate = Convert.ToString(row["on_update"]);
+                newForeignKey.OnDelete = (Convert.ToString(row["on_delete"])).ToEnum();
+                newForeignKey.OnUpdate = (Convert.ToString(row["on_update"])).ToEnum();
                 table.ForeignKeys.Add(newForeignKey);
             }
         }
@@ -62,7 +62,7 @@ namespace Gigobyte.Daterpillar.Aggregation
 
                 var newIndex = new Index();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
-                newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? "primaryKey" : "index");
+                newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? "primaryKey" : "index").ToIndexType();
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
 
                 // Find and load the index columns

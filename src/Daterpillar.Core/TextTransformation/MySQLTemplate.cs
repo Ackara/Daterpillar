@@ -67,7 +67,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
                 Transform(column);
             }
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Primary))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.PrimaryKey))
             {
                 _text.AppendLine($"\tPRIMARY KEY ({string.Join(", ", index.Columns.Select(x => $"`{x.Name}` {x.Order}"))}),");
             }
@@ -82,7 +82,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine();
 
             bool hasIndex = false;
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.Index))
             {
                 hasIndex = true;
                 Transform(index, table.Name);

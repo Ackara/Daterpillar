@@ -56,7 +56,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
                 Transform(column);
             }
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Primary))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.PrimaryKey))
             {
                 TransformPrimaryKey(index);
             }
@@ -70,7 +70,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine(");");
             _text.AppendLine();
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.Index))
             {
                 TransformIndex(index, table.Name);
             }

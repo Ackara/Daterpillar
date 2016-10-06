@@ -92,7 +92,7 @@ namespace Gigobyte.Daterpillar.Aggregation
 
                 var newIndex = new Index();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
-                newIndex.Type = Convert.ToString(row[ColumnName.Type]);
+                newIndex.Type = (Convert.ToString(row[ColumnName.Type])).ToIndexType();
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
 
                 // Find and load the index columns
@@ -133,8 +133,8 @@ namespace Gigobyte.Daterpillar.Aggregation
                 newForeignKey.LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]);
                 newForeignKey.ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]);
                 newForeignKey.ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]);
-                newForeignKey.OnDelete = Convert.ToString(row[ColumnName.OnDelete]);
-                newForeignKey.OnUpdate = Convert.ToString(row[ColumnName.OnUpdate]);
+                newForeignKey.OnDelete = (Convert.ToString(row[ColumnName.OnDelete])).ToEnum();
+                newForeignKey.OnUpdate = (Convert.ToString(row[ColumnName.OnUpdate])).ToEnum();
                 table.ForeignKeys.Add(newForeignKey);
             }
         }

@@ -81,7 +81,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         internal static bool IsKey(this IEnumerable<Index> indexes, string columnName)
         {
-            foreach (var index in indexes.Where(x => x.IndexType == IndexType.Primary))
+            foreach (var index in indexes.Where(x => x.Type == IndexType.PrimaryKey))
             {
                 if (index.Columns.Exists(x => x.Name == columnName))
                 {

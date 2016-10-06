@@ -91,12 +91,12 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _text.AppendLine(");");
             _text.AppendLine();
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Primary))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.PrimaryKey))
             {
                 TransformPrimaryKey(index, table.Name);
             }
 
-            foreach (var index in table.Indexes.Where(x => x.IndexType == IndexType.Index))
+            foreach (var index in table.Indexes.Where(x => x.Type == IndexType.Index))
             {
                 Transform(index, table.Name);
             }
@@ -116,8 +116,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void Transform(ForeignKey key, string tableName)
         {
-            string onUpdate = (key.OnUpdateRule != ForeignKeyRule.RESTRICT ? $" ON UPDATE {key.OnUpdate}" : string.Empty);
-            string onDelete = (key.OnDeleteRule != ForeignKeyRule.RESTRICT ? $" ON DELETE {key.OnDeleteRule}" : string.Empty);
+            string onUpdate = (key.OnUpdate != ForeignKeyRule.RESTRICT ? $" ON UPDATE {key.OnUpdate}" : string.Empty);
+            string onDelete = (key.OnDelete != ForeignKeyRule.RESTRICT ? $" ON DELETE {key.OnDelete}" : string.Empty);
             key.Name = (string.IsNullOrEmpty(key.Name) ? $"{tableName}_{key.LocalColumn}_to_{key.ForeignTable}_{key.ForeignColumn}_fkey{++_seed}" : key.Name).ToLower();
             _text.AppendLine($"\tCONSTRAINT [{key.Name}] FOREIGN KEY ([{key.LocalColumn}]) REFERENCES [{key.ForeignTable}]([{key.ForeignColumn}]){onUpdate}{onDelete},");
         }

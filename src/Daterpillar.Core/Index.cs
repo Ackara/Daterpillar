@@ -16,18 +16,18 @@ namespace Gigobyte.Daterpillar
         public Table TableRef;
 
         /// <summary>
-        /// Gets or sets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        [XmlAttribute("type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Index"/> is unique.
+        /// Gets or sets a value indicating whether this <see cref="Index" /> is unique.
         /// </summary>
         /// <value><c>true</c> if unique; otherwise, <c>false</c>.</value>
         [XmlAttribute("unique")]
         public bool Unique { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the index.
+        /// </summary>
+        /// <value>The type of the index.</value>
+        [XmlAttribute("type")]
+        public IndexType Type { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -50,28 +50,7 @@ namespace Gigobyte.Daterpillar
         [XmlElement("columnName")]
         public List<IndexColumn> Columns { get; set; }
 
-        /// <summary>
-        /// Gets or sets the type of the index.
-        /// </summary>
-        /// <value>The type of the index.</value>
-        [XmlIgnore]
-        public IndexType IndexType
-        {
-            get { return Type == _primaryKey ? IndexType.Primary : IndexType.Index; }
-            set
-            {
-                switch (value)
-                {
-                    case IndexType.Primary:
-                        Type = _primaryKey;
-                        break;
 
-                    case IndexType.Index:
-                        Type = _index;
-                        break;
-                }
-            }
-        }
 
         #region Private Members
 

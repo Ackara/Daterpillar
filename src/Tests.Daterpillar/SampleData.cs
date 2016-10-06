@@ -53,18 +53,18 @@ namespace Tests.Daterpillar
             fKey.LocalColumn = "Id";
             fKey.ForeignTable = "Card";
             fKey.ForeignColumn = "Id";
-            fKey.OnUpdateRule = ForeignKeyRule.SET_NULL;
-            fKey.OnDeleteRule = ForeignKeyRule.CASCADE;
+            fKey.OnUpdate = ForeignKeyRule.SET_NULL;
+            fKey.OnDelete = ForeignKeyRule.CASCADE;
 
             // Define index
             var pKey = new Index();
             pKey.Table = table.Name;
-            pKey.Type = "primaryKey";
+            pKey.Type = IndexType.PrimaryKey;
             pKey.Columns = new List<IndexColumn>() { new IndexColumn() { Name = "Id" } };
 
             var idx1 = new Index();
             idx1.Name = $"{name}_idx".ToLower();
-            idx1.Type = "index";
+            idx1.Type = IndexType.Index;
             idx1.Unique = true;
             idx1.Table = table.Name;
             idx1.Columns = new List<IndexColumn>() { new IndexColumn() { Name = fullName.Name, Order = SortOrder.DESC } };

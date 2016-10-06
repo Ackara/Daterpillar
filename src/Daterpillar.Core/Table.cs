@@ -138,7 +138,7 @@ namespace Gigobyte.Daterpillar
                 TableRef = this,
 
                 Name = name,
-                IndexType = type,
+                Type = type,
                 Table = this.Name,
                 Unique = unique,
                 Columns = columns.ToList()
@@ -167,8 +167,8 @@ namespace Gigobyte.Daterpillar
                 LocalColumn = column,
                 ForeignTable = foreignTable,
                 ForeignColumn = foreignColumn,
-                OnUpdateRule = onUpdate,
-                OnDeleteRule = onDelete
+                OnUpdate = onUpdate,
+                OnDelete = onDelete
             };
 
             ForeignKeys.Add(newConstraint);
