@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.Serialization;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -12,7 +13,7 @@ namespace Tests.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.SongCSV), Test.File.SongCSV, DataAccessMethod.Sequential)]
         public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {

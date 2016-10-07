@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.Tests
     public class SchemaTest
     {
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void WriteTo_should_serialize_a_schema_object_into_a_stream()
         {
             // Arrange
@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void Load_should_deserialize_a_schema_object_when_xml_data_is_passed()
         {
             // Arrange

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -13,7 +14,7 @@ namespace Tests.Daterpillar.Tests
     public class SchemaComparerTests
     {
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GetChanges_should_return_equal_when_the_specified_schemas_are_the_same()
         {
             // Arrange
@@ -38,7 +39,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GetChanges_should_return_not_equal_when_the_specified_schemas_are_not_the_same()
         {
             // Arrange
@@ -57,7 +58,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void GetChanges_should_determine_the_specified_schemas_are_empty_when_they_have_no_tables()
         {
             // Arrange

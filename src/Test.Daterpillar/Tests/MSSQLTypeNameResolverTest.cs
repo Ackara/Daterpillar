@@ -2,6 +2,7 @@
 using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -12,7 +13,7 @@ namespace Tests.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.DataTypesCSV), Test.File.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_mssql_type_when_a_data_type_is_passed()
         {

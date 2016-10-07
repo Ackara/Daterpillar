@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Gigobyte.Daterpillar.TextTransformation;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -10,7 +11,7 @@ namespace Tests.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToPascalCase_should_format_a_string_into_pascal_case()
         {
@@ -27,7 +28,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToCamelCase_should_format_a_string_into_camel_case()
         {

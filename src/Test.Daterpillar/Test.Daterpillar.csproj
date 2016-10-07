@@ -80,10 +80,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Globals\Data.cs" />
-    <Compile Include="Globals\Dev.cs" />
-    <Compile Include="Globals\KnownFile.cs" />
-    <Compile Include="Globals\Trait.cs" />
+    <Compile Include="Constants\Data.cs" />
+    <Compile Include="Constants\Dev.cs" />
+    <Compile Include="Constants\KnownFile.cs" />
+    <Compile Include="Constants\Trait.cs" />
     <Compile Include="Helpers\ConnectionFactory.cs" />
     <Compile Include="Helpers\ConnectionString.cs" />
     <Compile Include="Helpers\TestData.cs" />

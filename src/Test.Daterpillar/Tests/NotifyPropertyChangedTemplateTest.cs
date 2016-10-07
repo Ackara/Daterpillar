@@ -6,6 +6,7 @@ using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -20,7 +21,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_enabled()
         {
             // Arrange
@@ -54,7 +55,7 @@ namespace Tests.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Owner(Test.Dev.Ackara)]
+        [Owner(Dev.Ackara)]
         public void Transform_should_generate_a_csharp_class_that_implements_INotifyPropertyChanged_when_all_template_settings_are_disabled()
         {
             // Arrange
