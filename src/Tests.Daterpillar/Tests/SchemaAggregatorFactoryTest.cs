@@ -5,7 +5,7 @@ using Gigobyte.Daterpillar;
 using Telerik.JustMock;
 using System.Data;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     public class SchemaAggregatorFactoryTest

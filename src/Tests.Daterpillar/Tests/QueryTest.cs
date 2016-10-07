@@ -4,7 +4,7 @@ using ApprovalTests.Reporters;
 using Gigobyte.Daterpillar.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]

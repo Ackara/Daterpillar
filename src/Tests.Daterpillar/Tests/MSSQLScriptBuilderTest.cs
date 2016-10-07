@@ -6,7 +6,7 @@ using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]

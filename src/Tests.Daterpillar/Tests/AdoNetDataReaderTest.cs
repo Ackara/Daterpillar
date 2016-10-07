@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.Serialization;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [DeploymentItem(Test.Data.Samples)]

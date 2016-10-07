@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]

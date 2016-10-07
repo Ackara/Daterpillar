@@ -4,7 +4,7 @@ using System.IO;
 using Tests.Daterpillar.Globals;
 using Tests.Daterpillar.Helper;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [DeploymentItem(Test.File.XDDL)]

@@ -2,7 +2,7 @@
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]

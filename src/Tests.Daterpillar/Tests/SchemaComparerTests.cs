@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 
-namespace Tests.Daterpillar.UnitTest
+namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     public class SchemaComparerTests
