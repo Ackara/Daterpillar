@@ -7,14 +7,14 @@ using Tests.Daterpillar.Constants;
 namespace Tests.Daterpillar.Tests
 {
     [TestClass]
-    [DeploymentItem(Test.Data.Samples)]
+    [DeploymentItem(Data.Samples)]
     public class AdoNetDataReaderTest
     {
         public TestContext TestContext { get; set; }
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.SongCSV), Test.File.SongCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + Test.File.SongCSV), Test.File.SongCSV, DataAccessMethod.Sequential)]
         public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {
             // Arrange

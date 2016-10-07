@@ -5,14 +5,14 @@ using Tests.Daterpillar.Constants;
 namespace Tests.Daterpillar.Tests
 {
     [TestClass]
-    [DeploymentItem(Test.Data.Samples)]
+    [DeploymentItem(Data.Samples)]
     public class TemplateExtensionsTest
     {
         public TestContext TestContext { get; set; }
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToPascalCase_should_format_a_string_into_pascal_case()
         {
             // Arrange
@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.Tests
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Test.Data.Provider, (Test.Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToCamelCase_should_format_a_string_into_camel_case()
         {
             // Arrange

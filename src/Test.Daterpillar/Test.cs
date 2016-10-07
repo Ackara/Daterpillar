@@ -2,12 +2,6 @@
 {
     public class Test
     {
-        public struct Dev
-        {
-            public const string Ackara = "ackara.dev@outlook.com";
-        }
-
-
         public struct File
         {
             public const string XDDL = "xddl.xsd";
