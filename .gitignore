@@ -268,4 +268,4 @@ src/Tests.Daterpillar/T4 Template/schema.txt
 *.received.*
 
 # Sensitive Files
-src/Tests.Daterpillar/database.config.xml
+database.config.xml

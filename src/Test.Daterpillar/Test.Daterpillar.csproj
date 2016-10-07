@@ -90,7 +90,6 @@
     <Compile Include="Helpers\XmlValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleData.cs" />
-    <Compile Include="Test.cs" />
     <Compile Include="Tests\AdoNetDataReaderTest.cs" />
     <Compile Include="Tests\CSharpTemplateTest.cs" />
     <Compile Include="Tests\CsharpTypeNameResolverTest.cs" />
