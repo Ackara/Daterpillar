@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Daterpillar CLI")]
-[assembly: AssemblyDescription("A cross-platform database management tool.")]
+[assembly: AssemblyTitle("Test.Daterpillar")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Gigobyte")]
-[assembly: AssemblyProduct("Daterpillar.CommandLine")]
-[assembly: AssemblyCopyright("Copyright © Gigobyte 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Test.Daterpillar")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a24d43df-fee2-4565-817a-55c0e1de2407")]
+[assembly: Guid("3d6f2cb8-a9cd-4351-a3ab-3c94c658aecd")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,9 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.16281.0843.60")]
-[assembly: AssemblyFileVersion("1.16281.0843.60")]
-
-// CommandLine assembly attributes.
-[assembly: CommandLine.AssemblyLicense("This is free software. You may redistribute copies of it under the terms of", "the MIT License <https://github.com/Ackara/Daterpillar/blob/master/LICENSE>.")]
-[assembly: CommandLine.AssemblyUsage("Usage: Try one of the following commands.")]
+[assembly: AssemblyVersion("1.16281.0844.0")]
+[assembly: AssemblyFileVersion("1.16281.0844.0")]

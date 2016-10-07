@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<connectionStrings>
+  <add name="mysql"
+       server="192.168.0.121"
+       user="ackeem"
+       password="4653676$Ab$12" />
+
+  <add name="mysql"
+       server="192.168.0.120"
+       user="ackeem"
+       password="4653676$Ab$12" />
+</connectionStrings>
