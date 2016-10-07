@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using Tests.Daterpillar.Globals;
-using Tests.Daterpillar.Helper;
+using Tests.Daterpillar.Helpers;
 
 namespace Tests.Daterpillar.Tests
 {

@@ -2,7 +2,7 @@
 using System.Data;
 using System.IO;
 
-namespace Tests.Daterpillar.Helper
+namespace Tests.Daterpillar.Helpers
 {
     public static class ConnectionFactory
     {

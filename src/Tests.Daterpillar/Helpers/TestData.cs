@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Tests.Daterpillar.Helper
+namespace Tests.Daterpillar.Helpers
 {
     public static class TestData
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace Tests.Daterpillar.Helper
+namespace Tests.Daterpillar.Helpers
 {
     public class XmlValidator
     {
