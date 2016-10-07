@@ -14,7 +14,7 @@ namespace Tests.Daterpillar.Tests
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.Provider, (Data.Directory + Test.File.DataTypesCSV), Test.File.DataTypesCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + KnownFile.DataTypesCSV), KnownFile.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_csharp_type_name_when_data_type_is_passed()
         {
             // Arrange

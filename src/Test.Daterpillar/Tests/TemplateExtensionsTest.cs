@@ -12,7 +12,7 @@ namespace Tests.Daterpillar.Tests
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.Provider, (Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + KnownFile.TextFormatCSV), KnownFile.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToPascalCase_should_format_a_string_into_pascal_case()
         {
             // Arrange
@@ -29,7 +29,7 @@ namespace Tests.Daterpillar.Tests
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.Provider, (Data.Directory + Test.File.TextFormatCSV), Test.File.TextFormatCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + KnownFile.TextFormatCSV), KnownFile.TextFormatCSV, DataAccessMethod.Sequential)]
         public void ToCamelCase_should_format_a_string_into_camel_case()
         {
             // Arrange

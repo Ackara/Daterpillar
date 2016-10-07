@@ -14,7 +14,7 @@ namespace Tests.Daterpillar.Tests
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.Provider, (Data.Directory + Test.File.SongCSV), Test.File.SongCSV, DataAccessMethod.Sequential)]
+        [DataSource(Data.Provider, (Data.Directory + KnownFile.SongCSV), KnownFile.SongCSV, DataAccessMethod.Sequential)]
         public void CreateInstance_should_convert_DataRow_object_to_an_EntityBase_object()
         {
             // Arrange

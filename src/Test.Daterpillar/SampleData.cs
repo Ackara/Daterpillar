@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar
 {
@@ -92,7 +93,7 @@ namespace Tests.Daterpillar
             return schema;
         }
 
-        public static Schema CreateMockSchema(string filename = Test.File.MockSchemaXML)
+        public static Schema CreateMockSchema(string filename = KnownFile.MockSchemaXML)
         {
             return Schema.Load(GetFile(filename).OpenRead());
         }
@@ -101,7 +102,7 @@ namespace Tests.Daterpillar
 
         public static bool TryCreateDatabase(IDbConnection connection, ITemplate template)
         {
-            var schema = Schema.Load(GetFile(Test.File.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(GetFile(KnownFile.MockSchemaXML).OpenRead());
             return TryCreateDatabase(connection, schema, template);
         }
 
