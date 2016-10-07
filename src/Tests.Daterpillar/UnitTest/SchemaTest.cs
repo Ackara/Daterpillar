@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using Tests.Daterpillar.Globals;
 using Tests.Daterpillar.Helper;
-using Tests.Daterpillar.Utilities;
 
 namespace Tests.Daterpillar.UnitTest
 {
@@ -33,7 +32,7 @@ namespace Tests.Daterpillar.UnitTest
                 Assert.IsTrue(validator.XmlDocIsValid, validator.GetErrorLog());
             }
         }
-        
+
         [TestMethod]
         [Owner(Test.Dev.Ackara)]
         public void Load_should_deserialize_a_schema_object_when_xml_data_is_passed()
