@@ -1,7 +1,7 @@
 ﻿using Gigobyte.Daterpillar;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using Tests.Daterpillar.Globals;
+using Tests.Daterpillar.Constants;
 using Tests.Daterpillar.Helpers;
 
 namespace Tests.Daterpillar.Tests

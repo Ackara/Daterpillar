@@ -1,4 +1,4 @@
-﻿namespace Tests.Daterpillar.Globals
+﻿namespace Tests.Daterpillar.Constants
 {
     public static class Data
     {
