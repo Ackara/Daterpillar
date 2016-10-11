@@ -8,7 +8,7 @@ namespace Tests.Daterpillar.Tests
 {
     [TestClass]
     [DeploymentItem(KnownFile.XDDL)]
-    [DeploymentItem(Data.Samples)]
+    [DeploymentItem(DDT.Samples)]
     public class SchemaTest
     {
         [TestMethod]

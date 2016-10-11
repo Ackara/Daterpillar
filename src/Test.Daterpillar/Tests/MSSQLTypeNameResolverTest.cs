@@ -7,14 +7,14 @@ using Tests.Daterpillar.Constants;
 namespace Tests.Daterpillar.Tests
 {
     [TestClass]
-    [DeploymentItem(Data.Samples)]
+    [DeploymentItem(DDT.Samples)]
     public class MSSQLTypeNameResolverTest
     {
         public TestContext TestContext { get; set; }
 
         [TestMethod]
         [Owner(Dev.Ackara)]
-        [DataSource(Data.Provider, (Data.Directory + KnownFile.DataTypesCSV), KnownFile.DataTypesCSV, DataAccessMethod.Sequential)]
+        [DataSource(DDT.Provider, (DDT.Directory + KnownFile.DataTypesCSV), KnownFile.DataTypesCSV, DataAccessMethod.Sequential)]
         public void GetName_should_return_a_valid_mssql_type_when_a_data_type_is_passed()
         {
             // Arrange
