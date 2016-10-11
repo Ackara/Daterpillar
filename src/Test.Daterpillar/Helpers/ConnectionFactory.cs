@@ -18,7 +18,7 @@ namespace Tests.Daterpillar.Helpers
             return new System.Data.SQLite.SQLiteConnection(connStr.ConnectionString);
         }
 
-        public static IDbConnection CreateMySQLConnection(string database = "daterpillar")
+        public static IDbConnection CreateMySQLConnection(string database = "")
         {
             var connStr = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(ConnectionString.GetMySQLServerConnectionString());
             if (!string.IsNullOrEmpty(database)) connStr.Database = database;
@@ -26,7 +26,7 @@ namespace Tests.Daterpillar.Helpers
             return new MySql.Data.MySqlClient.MySqlConnection(connStr.ConnectionString);
         }
 
-        public static IDbConnection CreateMSSQLConnection(string database = "daterpillar")
+        public static IDbConnection CreateMSSQLConnection(string database = "")
         {
             var connStr = new System.Data.SqlClient.SqlConnectionStringBuilder(ConnectionString.GetSQLServerConnectionString());
             if (!string.IsNullOrEmpty(database)) connStr.Add("database", database);
