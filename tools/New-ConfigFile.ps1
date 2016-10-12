@@ -52,7 +52,7 @@ $content = @"
 
 if(-not (Test-Path $userConfig -PathType Leaf))
 {
-    New-Item $userConfig -Value $content | Out-Null;
+    New-Item $userConfig -Value $content -ItemType File | Out-Null;
 }
 elseif ($Overwrite)
 {
@@ -60,6 +60,6 @@ elseif ($Overwrite)
     {
         Write-Host "Overriding '$userConfig'.";
         Remove-Item $userConfig;
-        New-Item $userConfig -Value $content | Out-Null;
+        New-Item $userConfig -Value $content -ItemType File | Out-Null;
     }
 }
