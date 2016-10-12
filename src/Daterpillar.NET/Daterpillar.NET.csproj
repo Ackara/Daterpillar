@@ -11,7 +11,7 @@
     <AssemblyName>Gigobyte.Daterpillar.NET</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>2.16285.1035.345</AssemblyVersion>
+    <AssemblyVersion>2.16286.0929.345</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
