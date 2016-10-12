@@ -261,11 +261,14 @@ paket-files/
 # Generated files
 *.exe
 *.dll
-src/Tests.Daterpillar/T4 Template/schema.cs
-src/Tests.Daterpillar/T4 Template/schema.txt
+tools/*
+!tools/New-ConfigFile.ps1
+T4 Template/*
+!T4 Template/*.tt
 
 # Approval Tests
 *.received.*
 
 # Sensitive Files
 database.config.xml
+user.config
