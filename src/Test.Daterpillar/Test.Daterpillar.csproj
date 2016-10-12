@@ -121,7 +121,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="App.config">
+    <None Include="app.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -152,7 +152,7 @@
       <DesignTime>True</DesignTime>
     </Content>
     <Content Include="T4 Template\schema.xddl.xml" />
-    <None Include="User.config" />
+    <None Include="user.config" />
     <None Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
