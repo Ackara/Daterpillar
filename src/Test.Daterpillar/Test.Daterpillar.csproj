@@ -144,15 +144,15 @@
   <ItemGroup>
     <Content Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>schema.txt</LastGenOutput>
-    </Content>
-    <Content Include="T4 Template\schema.txt">
-      <DependentUpon>schema.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+      <LastGenOutput>schema.xml</LastGenOutput>
     </Content>
     <Content Include="T4 Template\schema.xddl.xml" />
-    <None Include="user.config" />
+    <Content Include="database.config.xml" />
+    <Content Include="T4 Template\schema.xml">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>schema.tt</DependentUpon>
+    </Content>
     <None Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

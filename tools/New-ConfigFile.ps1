@@ -20,46 +20,45 @@ This example adds a new 'user.config' file to the project.
 
 [CmdletBinding()]
 Param(
-    [Parameter(Mandatory=$true, Position=1)]
-    [string]$MySQLConnectionString,
+	[Parameter(Position=1)]
+	[string]$MySQLConnectionString = "your_mysql_connection_string",
 
-    [Parameter(Mandatory=$true, Position=2)]
-    [string]$MSSQLConnectionString,
+	[Parameter(Position=2)]
+	[string]$MSSQLConnectionString = "your_mssql_connection_string",
 
-    [switch]$Overwrite
+	[switch]$Overwrite
 )
-
-$rootDirectory = (Split-Path $PSScriptRoot -Parent);
-$userConfig = "$rootDirectory\src\Test.Daterpillar\user.config";
-
-Write-Host "config: '$userConfig'.";
 
 $content = @"
 <?xml version="1.0" encoding="utf-8" ?>
 
 <configuration>
   <connectionStrings>
-    <add name="mysql"
-         providerName="MySql.Data.MySqlClient.MySqlConnection, MySql.Data.MySqlClient"
-         connectionString="$MySQLConnectionString" />
+	<add name="mysql"
+		 providerName="MySql.Data.MySqlClient.MySqlConnection, MySql.Data.MySqlClient"
+		 connectionString="$MySQLConnectionString" />
 
-    <add name="mssql"
-         providerName="System.Data.SqlClient.SqlConnection, System.Data"
-         connectionString="$MSSQLConnectionString" />
+	<add name="mssql"
+		 providerName="System.Data.SqlClient.SqlConnection, System.Data"
+		 connectionString="$MSSQLConnectionString" />
   </connectionStrings>
 </configuration>
 "@;
 
-if(-not (Test-Path $userConfig -PathType Leaf))
+$rootDirectory = (Split-Path $PSScriptRoot -Parent);
+$databaseConfig = "$rootDirectory\src\Test.Daterpillar\database.config.xml";
+
+if(-not (Test-Path $databaseConfig -PathType Leaf))
 {
-    New-Item $userConfig -Value $content -ItemType File | Out-Null;
+	New-Item $databaseConfig -Value $content -ItemType File | Out-Null;
+	Write-Host "Created '$databaseConfig'.";
 }
 elseif ($Overwrite)
 {
-    if(Test-Path $userConfig -PathType Leaf)
-    {
-        Write-Host "Overriding '$userConfig'.";
-        Remove-Item $userConfig;
-        New-Item $userConfig -Value $content -ItemType File | Out-Null;
-    }
+	if(Test-Path $databaseConfig -PathType Leaf)
+	{
+		Write-Host "Overwritten '$databaseConfig'.";
+		Remove-Item $databaseConfig;
+		New-Item $databaseConfig -Value $content -ItemType File | Out-Null;
+	}
 }

@@ -258,17 +258,15 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Generated files
-*.exe
-*.dll
-tools/*
-!tools/New-ConfigFile.ps1
-T4 Template/*
-!T4 Template/*.tt
-
 # Approval Tests
 *.received.*
 
+# Generated files
+*.exe
+*.dll
+**/T4 Template/**
+!**/T4 Template/schema.tt
+!**/T4 Template/schema.xddl.xml
+
 # Sensitive Files
 database.config.xml
-user.config
