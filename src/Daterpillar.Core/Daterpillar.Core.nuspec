@@ -3,9 +3,9 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
-    <title>$title$</title>
+    <title>Daterpillar.Core</title>
     <authors>Ackara</authors>
-    <owners>Ackara</owners>
+    <owners>Acklann</owners>
     <licenseUrl>https://github.com/Ackara/Daterpillar/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Ackara/Daterpillar</projectUrl>
     <iconUrl>http://static.gigobyte.com/images/daterpillar.png</iconUrl>
