@@ -14,7 +14,7 @@
 <#@ import namespace="Gigobyte.Daterpillar" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Gigobyte.Daterpillar.TextTransformation" #>
-<#@ output extension=".xml" #>
+<#@ output extension=".txt" #>
 using System;
 using Gigobyte.Daterpillar.Data;
 using System.Runtime.Serialization;
