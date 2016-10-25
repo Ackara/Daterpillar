@@ -1,5 +1,5 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
-<#@ assembly name="$(TargetDir)\Gigobyte.Daterpillar.Core.dll" #>
+<#@ assembly name="$(SolutionDir)\Daterpillar.Core\bin\Debug\Gigobyte.Daterpillar.Core.dll" #>
 <#@ assembly name="System.Collections" #>
 <#@ assembly name="System.Runtime" #>
 <#@ assembly name="System.Core" #>
