@@ -34,7 +34,7 @@ namespace Tests.Daterpillar.Tests
             Assert.AreEqual(onDevice, entity.OnDevice);
         }
 
-        #region Private
+        #region Private Member
 
         /// <summary>
         /// Represents the [song] table.
