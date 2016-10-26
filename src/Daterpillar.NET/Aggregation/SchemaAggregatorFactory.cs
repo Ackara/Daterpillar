@@ -15,7 +15,7 @@ namespace Gigobyte.Daterpillar.Aggregation
         public ISchemaAggregator CreateInstance(string name, IDbConnection connection, bool partialMatch = true)
         {
             if (partialMatch) name = ((name.EndsWith(_targetInterface)) ? name : string.Concat(name, _targetInterface));
-            try { return (ISchemaAggregator)Activator.CreateInstance(_aggregatorTypes[name], new object[1] { connection }); }
+            try { return (ISchemaAggregator)Activator.CreateInstance(_aggregatorTypes[name.ToLower()], new object[1] { connection }); }
             catch (KeyNotFoundException) { return null; }
         }
 
@@ -38,7 +38,7 @@ namespace Gigobyte.Daterpillar.Aggregation
             {
                 if (!type.IsAbstract && !type.IsInterface && (type.GetInterface(typeof(ISchemaAggregator).Name) != null))
                 {
-                    _aggregatorTypes.Add(type.Name, type);
+                    _aggregatorTypes.Add(type.Name.ToLower(), type);
                 }
             }
         }
