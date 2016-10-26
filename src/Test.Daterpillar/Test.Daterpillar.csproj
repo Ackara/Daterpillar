@@ -111,7 +111,6 @@
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="Tests\SqlWriterTest.cs" />
-    <Compile Include="Tests\SynchronizerTest.cs" />
     <Compile Include="Tests\TemplateExtensionsTest.cs" />
     <Compile Include="Tests\TemplateFactoryTest.cs" />
   </ItemGroup>
