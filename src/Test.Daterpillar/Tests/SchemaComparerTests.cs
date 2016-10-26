@@ -1,12 +1,12 @@
 ﻿using Gigobyte.Daterpillar;
 using Gigobyte.Daterpillar.Aggregation;
 using Gigobyte.Daterpillar.Migration;
-using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 using Tests.Daterpillar.Constants;
+using Tests.Daterpillar.Helpers;
 
 namespace Tests.Daterpillar.Tests
 {
@@ -73,7 +73,6 @@ namespace Tests.Daterpillar.Tests
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.SourceEmpty));
             Assert.IsTrue(report.Summary.HasFlag(ComparisonReportConclusions.TargetEmpty));
         }
-        
 
         #region Private Members
 
