@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Tests.Daterpillar.Constants;
 
-namespace Tests.Daterpillar
+namespace Tests.Daterpillar.Helpers
 {
     public static partial class SampleData
     {
