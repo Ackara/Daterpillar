@@ -19,30 +19,7 @@ This example increments the solution version number.
 
 #>
 
-function GetRevisionNumber()
-{
-	$datePart = [DateTime]::UtcNow.ToString("yyMM");
-	$revisionFile = [String]::Concat($env:TEMP, "\revision_", $datePart, "_.tmp");
-
-	if(Test-Path $revisionFile -PathType Leaf)
-	{
-		$content = Get-Content $revisionFile;
-		$number = ([Convert]::ToInt32($content.Trim()) + 1);
-		Out-File $revisionFile -InputObject $number;
-		return $number;
-	}
-	else
-	{
-		New-Item $revisionFile -Value "1" | Out-Null;
-		return 1;
-	}
-}
-
-$major = 3;
-$minor = 1;
-$build = [Convert]::ToInt32([DateTime]::UtcNow.ToString("yyMM"));
-$revision = GetRevisionNumber;
-$version = "$major.$minor.$build.$revision";
+$version = .\Get-VersionNumber.ps1;
 
 $rootDirectory = (Split-Path $PSScriptRoot -Parent);
 foreach($project in (Get-ChildItem "$rootDirectory\src" -Filter "*.csproj" -Recurse | Select-Object -ExpandProperty FullName))
