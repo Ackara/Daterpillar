@@ -3,17 +3,17 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class SQLiteTemplate : ITemplate
+    public class SQLiteTemplateBuilder : ITemplate
     {
-        public SQLiteTemplate() : this(SQLiteTemplateSettings.Default, new SQLiteTypeNameResolver())
+        public SQLiteTemplateBuilder() : this(SQLiteTemplateSettings.Default, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplate(SQLiteTemplateSettings settings) : this(settings, new SQLiteTypeNameResolver())
+        public SQLiteTemplateBuilder(SQLiteTemplateSettings settings) : this(settings, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplate(SQLiteTemplateSettings settings, ITypeNameResolver typeResolver)
+        public SQLiteTemplateBuilder(SQLiteTemplateSettings settings, ITypeNameResolver typeResolver)
         {
             _typeResolver = typeResolver;
             _settings = settings;

@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public interface IScriptBuilder
+    public interface ITemplateBuilder
     {
         string GetContent();
 

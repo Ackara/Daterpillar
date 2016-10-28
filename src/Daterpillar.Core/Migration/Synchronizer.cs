@@ -6,11 +6,11 @@ namespace Gigobyte.Daterpillar.Migration
 {
     public class Synchronizer
     {
-        public Synchronizer(IScriptBuilder scriptBuilder) : this(scriptBuilder, SynchronizerSettings.Default)
+        public Synchronizer(ITemplateBuilder scriptBuilder) : this(scriptBuilder, SynchronizerSettings.Default)
         {
         }
 
-        public Synchronizer(IScriptBuilder scriptBuilder, SynchronizerSettings settings)
+        public Synchronizer(ITemplateBuilder scriptBuilder, SynchronizerSettings settings)
         {
             _settings = settings;
             _scriptBuilder = scriptBuilder;
@@ -32,7 +32,7 @@ namespace Gigobyte.Daterpillar.Migration
 
         #region Private Members
 
-        private readonly IScriptBuilder _scriptBuilder;
+        private readonly ITemplateBuilder _scriptBuilder;
         private readonly SynchronizerSettings _settings;
 
         private Schema _sourceSchema, _targetSchema;

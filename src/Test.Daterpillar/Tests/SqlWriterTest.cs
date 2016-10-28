@@ -171,7 +171,7 @@ namespace Tests.Daterpillar.Tests
             /// Get or set the [song].[Id] column value.
             /// </summary>
             [DataMember]
-            [Column("Id", IsKey = true, AutoIncrement = true)]
+            [Column("Id", Key = true, AutoIncrement = true)]
             public virtual int Id { get; set; }
 
             /// <summary>

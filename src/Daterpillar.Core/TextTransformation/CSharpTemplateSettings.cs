@@ -8,8 +8,8 @@
 
             CommentsEnabled = true,
             DataContractsEnabled = true,
-            SchemaAttributesEnabled = true,
-            VirtualPropertiesEnabled = true
+            AppendSchemaInformation = true,
+            VirtualPropertiesEnabled = false
         };
 
         public string Namespace { get; set; }
@@ -18,7 +18,7 @@
 
         public bool DataContractsEnabled { get; set; }
 
-        public bool SchemaAttributesEnabled { get; set; }
+        public bool AppendSchemaInformation { get; set; }
 
         public bool VirtualPropertiesEnabled { get; set; }
     }

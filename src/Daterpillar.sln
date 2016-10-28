@@ -30,12 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{95F37999
 		..\build\tasks.ps1 = ..\build\tasks.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{F1B10AC9-073E-4D67-8286-F3050EACF27E}"
-	ProjectSection(SolutionItems) = preProject
-		Daterpillar.Core\Daterpillar.Core.nuspec = Daterpillar.Core\Daterpillar.Core.nuspec
-		Daterpillar.NET\Daterpillar.NET.nuspec = Daterpillar.NET\Daterpillar.NET.nuspec
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Daterpillar", "Test.Daterpillar\Test.Daterpillar.csproj", "{3D6F2CB8-A9CD-4351-A3AB-3C94C658AECD}"
 EndProject
 Global
@@ -121,6 +115,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C97A2BCA-9885-4D96-87FE-E6A718079991} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
 		{95F37999-42D6-439B-BE19-C0B6DBD34CCA} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
-		{F1B10AC9-073E-4D67-8286-F3050EACF27E} = {FDCC3763-A4ED-4B12-9F13-43610728FE38}
 	EndGlobalSection
 EndGlobal

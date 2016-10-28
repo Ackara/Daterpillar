@@ -27,7 +27,7 @@ namespace Gigobyte.Daterpillar.Data
         /// Gets or sets a value indicating whether this instance is a key.
         /// </summary>
         /// <value><c>true</c> if this instance is key; otherwise, <c>false</c>.</value>
-        public bool IsKey { get; set; }
+        public bool Key { get; set; }
 
         /// <summary>
         /// Gets or sets whether the column is auto incremented.

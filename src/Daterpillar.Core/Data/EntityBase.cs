@@ -58,7 +58,7 @@ namespace Gigobyte.Daterpillar.Data
                     yield return new ColumnInfo(property)
                     {
                         AutoIncremented = column.AutoIncrement,
-                        IsKey = column.IsKey,
+                        IsKey = column.Key,
                         Name = column.Name,
                         Value = data
                     };

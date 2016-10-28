@@ -3,17 +3,17 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class MSSQLScriptBuilder : IScriptBuilder
+    public class MSSQLTemplateBuilder : ITemplateBuilder
     {
-        public MSSQLScriptBuilder() : this(MSSQLScriptBuilderSettings.Default, new MSSQLTypeNameResolver())
+        public MSSQLTemplateBuilder() : this(MSSQLScriptBuilderSettings.Default, new MSSQLTypeNameResolver())
         {
         }
 
-        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
+        public MSSQLTemplateBuilder(MSSQLScriptBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
         {
         }
 
-        public MSSQLScriptBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        public MSSQLTemplateBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;

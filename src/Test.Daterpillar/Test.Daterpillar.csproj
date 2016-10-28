@@ -38,10 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Acklann.Buildbox.Cmdlets, Version=1.1.16274.34, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Acklann.Buildbox.1.1.16274.34\lib\net452\Acklann.Buildbox.Cmdlets.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ApprovalTests, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
       <HintPath>..\packages\ApprovalTests.3.0.13\lib\net40\ApprovalTests.dll</HintPath>
       <Private>True</Private>
@@ -54,16 +50,29 @@
       <HintPath>..\packages\ApprovalUtilities.3.0.13\lib\net45\ApprovalUtilities.Net45.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.103\lib\net451\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Management.Automation.6.1.7601.17515\lib\net45\System.Management.Automation.dll</HintPath>
+    <Reference Include="System.Reflection.Metadata, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
@@ -83,7 +92,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -99,20 +110,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\SampleData.cs" />
     <Compile Include="Tests\AdoNetDataReaderTest.cs" />
-    <Compile Include="Tests\CSharpTemplateTest.cs" />
     <Compile Include="Tests\CsharpTypeNameResolverTest.cs" />
-    <Compile Include="Tests\MSSQLScriptBuilderTest.cs" />
     <Compile Include="Tests\MSSQLTypeNameResolverTest.cs" />
     <Compile Include="Tests\MySqlTypeNameResolverTest.cs" />
-    <Compile Include="Tests\NotifyPropertyChangedTemplateTest.cs" />
     <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Tests\SchemaAggregatorFactoryTest.cs" />
     <Compile Include="Tests\SchemaComparerTests.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="Tests\SqlWriterTest.cs" />
+    <Compile Include="Tests\TemplateBuilderTestBase.cs" />
     <Compile Include="Tests\TemplateExtensionsTest.cs" />
     <Compile Include="Tests\TemplateFactoryTest.cs" />
+    <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xddl.xsd">
@@ -171,6 +181,10 @@
       <Project>{785e04bf-f296-481b-983a-e3efba3e8f06}</Project>
       <Name>Daterpillar.NET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

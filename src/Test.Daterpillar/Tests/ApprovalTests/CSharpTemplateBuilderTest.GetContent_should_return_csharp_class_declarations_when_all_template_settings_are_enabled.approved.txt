@@ -1,0 +1,74 @@
+﻿public class Table1
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [table1] table identifier.
+	/// </summary>
+	public const string Table = "table1";
+
+	/// <summary>
+	/// The [table1].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id"
+
+	/// <summary>
+	/// The [table1].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name"
+
+	/// <summary>
+	/// The [table1].[Date_Created] column identifier.
+	/// </summary>
+	public const string DateCreatedColumn = "Date_Created"
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// This is a comment
+	/// </summary>
+	public virtual string Id { get; set; }
+
+	/// <summary>
+	/// Get or set [table1].[Name] value.
+	/// </summary>
+	public virtual string Name { get; set; }
+
+	/// <summary>
+	/// Get or set [table1].[Date_Created] value.
+	/// </summary>
+	public virtual string DateCreated { get; set; }
+}
+
+public class Table2
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [table2] table identifier.
+	/// </summary>
+	public const string Table = "table2";
+
+	/// <summary>
+	/// The [table2].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id"
+
+	/// <summary>
+	/// The [table2].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name"
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// This is a comment
+	/// </summary>
+	public virtual string Id { get; set; }
+
+	/// <summary>
+	/// Get or set [table2].[Name] value.
+	/// </summary>
+	public virtual string Name { get; set; }
+}
+

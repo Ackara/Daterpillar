@@ -125,7 +125,7 @@ namespace Gigobyte.Daterpillar
         }
 
         /// <summary>
-        /// Write this <see cref="Schema" /> to the specified <see cref="Stream" />.
+        /// Serialize this object into the specified <see cref="Stream" />.
         /// </summary>
         /// <param name="stream">The stream to output this <see cref="Schema" /> to.</param>
         public void WriteTo(Stream stream)
@@ -138,7 +138,7 @@ namespace Gigobyte.Daterpillar
         public Table CreateTable(string name)
         {
             var newTable = new Table(name) { SchemaRef = this };
-            _tables.Add(newTable);
+            Tables.Add(newTable);
 
             return newTable;
         }

@@ -27,17 +27,14 @@ namespace GeneratedCode
 	var schema = Schema.Load(File.OpenRead(schemaPath));
 	var settings = new CSharpTemplateSettings()
 	{
-		CommentsEnabled = true,
-		DataContractsEnabled = true,
-		SchemaAttributesEnabled = true,
-		VirtualPropertiesEnabled = true
+		
 	};
 
 	//ExcludeTable(schema, "TableName");
 	//RenameTable(schema, "oldName", "newName");
 	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
 
-	Generate(schema, new CSharpTemplate(settings));
+	//Generate(schema, new CSharpTemplate(settings));
 	
 #>
 }

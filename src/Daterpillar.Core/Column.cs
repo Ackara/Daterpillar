@@ -27,7 +27,7 @@ namespace Gigobyte.Daterpillar
 
         [XmlAttribute("nullable")]
         public bool IsNullable { get; set; }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether the column is auto incremented.
         /// </summary>
