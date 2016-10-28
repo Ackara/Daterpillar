@@ -19,7 +19,7 @@ This example increments the solution version number.
 
 #>
 
-$version = .\Get-VersionNumber.ps1;
+$version = .\New-VersionNumber.ps1;
 
 $rootDirectory = (Split-Path $PSScriptRoot -Parent);
 foreach($project in (Get-ChildItem "$rootDirectory\src" -Filter "*.csproj" -Recurse | Select-Object -ExpandProperty FullName))
