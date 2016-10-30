@@ -14,3 +14,10 @@ public class Table2
 	public string Name { get; set; }
 }
 
+public class Table3
+{
+	public string Ref1 { get; set; }
+
+	public string Ref2 { get; set; }
+}
+

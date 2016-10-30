@@ -6,20 +6,20 @@
         {
             Namespace = Schema.Xmlns,
 
-            CommentsEnabled = true,
-            DataContractsEnabled = true,
+            AppendComments = true,
+            AppendDataContracts = true,
             AppendSchemaInformation = true,
-            VirtualPropertiesEnabled = false
+            AppendVirtualProperties = false
         };
 
         public string Namespace { get; set; }
 
-        public bool CommentsEnabled { get; set; }
+        public bool AppendComments { get; set; }
 
-        public bool DataContractsEnabled { get; set; }
+        public bool AppendDataContracts { get; set; }
 
         public bool AppendSchemaInformation { get; set; }
 
-        public bool VirtualPropertiesEnabled { get; set; }
+        public bool AppendVirtualProperties { get; set; }
     }
 }

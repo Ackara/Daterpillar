@@ -13,7 +13,7 @@ namespace Test.Daterpillar.Tests
 {
     [TestClass]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpTemplateBuilderTest
     {
         [ClassCleanup]
@@ -28,10 +28,11 @@ namespace Test.Daterpillar.Tests
         {
             RunTest(new CSharpTemplateSettings()
             {
-                CommentsEnabled = true,
-                DataContractsEnabled = true,
+                Namespace = "https://static.testing.com/v1/schema.xsd",
+                AppendComments = true,
+                AppendDataContracts = true,
                 AppendSchemaInformation = true,
-                VirtualPropertiesEnabled = true
+                AppendVirtualProperties = true
             });
         }
 
@@ -41,10 +42,10 @@ namespace Test.Daterpillar.Tests
         {
             RunTest(new CSharpTemplateSettings()
             {
-                CommentsEnabled = false,
-                DataContractsEnabled = false,
+                AppendComments = false,
+                AppendDataContracts = false,
                 AppendSchemaInformation = false,
-                VirtualPropertiesEnabled = false
+                AppendVirtualProperties = false
             });
         }
 

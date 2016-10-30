@@ -61,7 +61,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Create(Column column)
         {
-            if (Settings.CommentsEnabled)
+            if (Settings.AppendComments)
             {
                 string defaultComment = $"\t/// Get or set the {column.Name}.";
                 _content.AppendLine($"\t/// <summary>");
@@ -71,11 +71,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
             string name = column.Name.ToPascalCase(_separators);
             string type = _typeResolver.GetName(column.DataType);
-            string virtualKeyword = (Settings.VirtualPropertiesEnabled ? " virtual " : " ");
+            string virtualKeyword = (Settings.AppendVirtualProperties ? " virtual " : " ");
             string autoIncrement = (column.AutoIncrement ? ", AutoIncrement = true" : string.Empty);
             string key = (IsaKey(column) ? ", Key = true" : string.Empty);
 
-            if (Settings.DataContractsEnabled) _content.AppendLine("\t[DataMember]");
+            if (Settings.AppendDataContracts) _content.AppendLine("\t[DataMember]");
             if (Settings.AppendSchemaInformation) _content.AppendLine($"\t[Column(\"{column.Name}\"{key}{autoIncrement})]");
             _content.AppendLine($"\tpublic{virtualKeyword}{type} {name} {{ get; set; }}");
         }
@@ -83,10 +83,10 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Create(Table table)
         {
             string baseClass = (Settings.AppendSchemaInformation ? $" : {nameof(EntityBase)}" : string.Empty);
-            string theNamespace = "";
-
+            string theNamespace = (!string.IsNullOrEmpty(Settings.Namespace) ? $"(Namespace= \"{Settings.Namespace}\")" : string.Empty);
+            
             if (Settings.AppendSchemaInformation) _content.AppendLine($"[Table(\"{table.Name}\")]");
-            if (Settings.DataContractsEnabled) _content.AppendLine($"[DataContract{theNamespace}]");
+            if (Settings.AppendDataContracts) _content.AppendLine($"[DataContract{theNamespace}]");
             _content.AppendLine($"public class {table.Name.ToPascalCase(_separators)}{baseClass}");
             _content.AppendLine("{");
             AppendSchemaInformation(table);
@@ -165,7 +165,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
                 foreach (var column in table.Columns)
                 {
-                    if (Settings.CommentsEnabled)
+                    if (Settings.AppendComments)
                     {
                         _content.AppendLine("\t/// <summary>");
                         _content.AppendLine($"\t/// The [{table.Name}].[{column.Name}] column identifier.");
