@@ -66,7 +66,7 @@
     <Compile Include="TextTransformation\CSharpTemplateBuilder.cs" />
     <Compile Include="TextTransformation\ITemplateBuilder.cs" />
     <Compile Include="TextTransformation\MSSQLTemplateBuilder.cs" />
-    <Compile Include="TextTransformation\MSSQLScriptBuilderSettings.cs" />
+    <Compile Include="TextTransformation\TemplateBuilderSettings.cs" />
     <Compile Include="TextTransformation\CSharpTemplateSettings.cs" />
     <Compile Include="TextTransformation\CSharpTypeNameResolver.cs" />
     <Compile Include="IndexType.cs" />
@@ -79,7 +79,6 @@
     <Compile Include="TextTransformation\ITemplate.cs" />
     <Compile Include="TextTransformation\SQLiteTemplateSettings.cs" />
     <Compile Include="TextTransformation\SQLiteTypeNameResolver.cs" />
-    <Compile Include="TextTransformation\MSSQLTemplateSettings.cs" />
     <Compile Include="TextTransformation\MSSQLTypeNameResolver.cs" />
     <Compile Include="ForeignKeyRule.cs" />
     <Compile Include="DataType.cs" />

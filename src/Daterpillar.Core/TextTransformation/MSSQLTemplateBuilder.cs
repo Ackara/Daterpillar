@@ -5,15 +5,15 @@ namespace Gigobyte.Daterpillar.TextTransformation
 {
     public class MSSQLTemplateBuilder : ITemplateBuilder
     {
-        public MSSQLTemplateBuilder() : this(MSSQLScriptBuilderSettings.Default, new MSSQLTypeNameResolver())
+        public MSSQLTemplateBuilder() : this(TemplateBuilderSettings.Default, new MSSQLTypeNameResolver())
         {
         }
 
-        public MSSQLTemplateBuilder(MSSQLScriptBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
+        public MSSQLTemplateBuilder(TemplateBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
         {
         }
 
-        public MSSQLTemplateBuilder(MSSQLScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        public MSSQLTemplateBuilder(TemplateBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;
@@ -162,7 +162,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         #region Private Members
 
         private readonly ITypeNameResolver _typeResolver;
-        private readonly MSSQLScriptBuilderSettings _settings;
+        private readonly TemplateBuilderSettings _settings;
         private readonly StringBuilder _script = new StringBuilder();
 
         private int _seed = 1;

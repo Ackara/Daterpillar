@@ -1,8 +1,6 @@
 ﻿using Gigobyte.Daterpillar.Data;
-using System.Linq;
-
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
@@ -84,7 +82,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string baseClass = (Settings.AppendSchemaInformation ? $" : {nameof(EntityBase)}" : string.Empty);
             string theNamespace = (!string.IsNullOrEmpty(Settings.Namespace) ? $"(Namespace= \"{Settings.Namespace}\")" : string.Empty);
-            
+
             if (Settings.AppendSchemaInformation) _content.AppendLine($"[Table(\"{table.Name}\")]");
             if (Settings.AppendDataContracts) _content.AppendLine($"[DataContract{theNamespace}]");
             _content.AppendLine($"public class {table.Name.ToPascalCase(_separators)}{baseClass}");
@@ -148,7 +146,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
         private readonly char[] _separators = new char[] { ' ', '\t', '\n', '\r', '_' };
         private ITypeNameResolver _typeResolver;
         private StringBuilder _content = new StringBuilder();
-
 
         private void AppendSchemaInformation(Table table)
         {
