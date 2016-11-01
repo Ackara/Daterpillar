@@ -26,7 +26,7 @@ namespace Test.Daterpillar.Tests
         [Owner(Dev.Ackara)]
         public void GetContent_should_return_csharp_class_declarations_when_all_template_settings_are_enabled()
         {
-            RunTest(new CSharpTemplateSettings()
+            RunTest(new CSharpScriptBuilderSettings()
             {
                 Namespace = "https://static.testing.com/v1/schema.xsd",
                 AppendComments = true,
@@ -40,7 +40,7 @@ namespace Test.Daterpillar.Tests
         [Owner(Dev.Ackara)]
         public void GetContent_should_return_csharp_class_declarations_when_all_template_settings_are_disabled()
         {
-            RunTest(new CSharpTemplateSettings()
+            RunTest(new CSharpScriptBuilderSettings()
             {
                 AppendComments = false,
                 AppendDataContracts = false,
@@ -49,7 +49,7 @@ namespace Test.Daterpillar.Tests
             });
         }
 
-        internal void RunTest(CSharpTemplateSettings settings)
+        internal void RunTest(CSharpScriptBuilderSettings settings)
         {
             // Arrange
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
@@ -58,7 +58,7 @@ namespace Test.Daterpillar.Tests
                 .Returns("string")
                 .OccursAtLeast(1);
 
-            var sut = new CSharpTemplateBuilder(settings, mockTypeResolver);
+            var sut = new CSharpScriptBuilder(settings, mockTypeResolver);
 
             // Act
             sut.Create(GetSampleSchema());

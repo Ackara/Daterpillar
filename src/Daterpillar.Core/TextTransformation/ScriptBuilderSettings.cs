@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public struct TemplateBuilderSettings
+    public struct ScriptBuilderSettings
     {
-        public static TemplateBuilderSettings Default = new TemplateBuilderSettings()
+        public static ScriptBuilderSettings Default = new ScriptBuilderSettings()
         {
             AppendScripts = true,
             AppendComments = true,

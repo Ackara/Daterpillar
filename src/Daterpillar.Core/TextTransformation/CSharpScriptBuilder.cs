@@ -5,27 +5,27 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class CSharpTemplateBuilder : ITemplateBuilder
+    public class CSharpScriptBuilder : IScriptBuilder
     {
-        public CSharpTemplateBuilder() : this(CSharpTemplateSettings.Default, new CSharpTypeNameResolver())
+        public CSharpScriptBuilder() : this(CSharpScriptBuilderSettings.Default, new CSharpTypeNameResolver())
         {
         }
 
-        public CSharpTemplateBuilder(ITypeNameResolver typeResolver) : this(CSharpTemplateSettings.Default, typeResolver)
+        public CSharpScriptBuilder(ITypeNameResolver typeResolver) : this(CSharpScriptBuilderSettings.Default, typeResolver)
         {
         }
 
-        public CSharpTemplateBuilder(CSharpTemplateSettings settings) : this(settings, new CSharpTypeNameResolver())
+        public CSharpScriptBuilder(CSharpScriptBuilderSettings settings) : this(settings, new CSharpTypeNameResolver())
         {
         }
 
-        public CSharpTemplateBuilder(CSharpTemplateSettings settings, ITypeNameResolver typeResolver)
+        public CSharpScriptBuilder(CSharpScriptBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             Settings = settings;
             _typeResolver = typeResolver;
         }
 
-        public CSharpTemplateSettings Settings { get; private set; }
+        public CSharpScriptBuilderSettings Settings { get; private set; }
 
         public void AlterTable(Column oldColumn, Column newColumn)
         {

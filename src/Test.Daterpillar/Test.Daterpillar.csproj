@@ -123,7 +123,7 @@
     <Compile Include="Tests\TemplateExtensionsTest.cs" />
     <Compile Include="Tests\TemplateFactoryTest.cs" />
     <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
-    <Compile Include="Tests\MSSQLTemplateBuilderTest.cs" />
+    <Compile Include="Tests\TSQLScriptBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xddl.xsd">
@@ -162,7 +162,9 @@
       <DependentUpon>schema.tt</DependentUpon>
     </Content>
     <Content Include="T4 Template\schema.xddl.xml" />
-    <Content Include="database.config.xml" />
+    <None Include="database.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

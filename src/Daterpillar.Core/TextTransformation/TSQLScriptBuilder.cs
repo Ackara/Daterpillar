@@ -3,21 +3,21 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class MSSQLTemplateBuilder : ITemplateBuilder
+    public class TSQLScriptBuilder : IScriptBuilder
     {
-        public MSSQLTemplateBuilder() : this(TemplateBuilderSettings.Default, new MSSQLTypeNameResolver())
+        public TSQLScriptBuilder() : this(ScriptBuilderSettings.Default, new TSQLTypeNameResolver())
         {
         }
 
-        public MSSQLTemplateBuilder(ITypeNameResolver typeResolver) : this(TemplateBuilderSettings.Default, typeResolver)
+        public TSQLScriptBuilder(ITypeNameResolver typeResolver) : this(ScriptBuilderSettings.Default, typeResolver)
         {
         }
 
-        public MSSQLTemplateBuilder(TemplateBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
+        public TSQLScriptBuilder(ScriptBuilderSettings settings) : this(settings, new TSQLTypeNameResolver())
         {
         }
 
-        public MSSQLTemplateBuilder(TemplateBuilderSettings settings, ITypeNameResolver typeResolver)
+        public TSQLScriptBuilder(ScriptBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;
@@ -52,23 +52,30 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine(lineBreak);
             _script.AppendLine();
 
-            _script.AppendLine($"CREATE DATABASE [{schema.Name}];");
+            _script.AppendLine("GO");
+            _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
             _script.AppendLine();
 
             foreach (var table in schema.Tables) Create(table);
 
-            lineBreak = "-- =================";
-            _script.AppendLine(lineBreak);
-            _script.AppendLine($"-- SCRIPTS (000)");
-            _script.AppendLine(lineBreak);
-            _script.AppendLine();
+            if (_settings.AppendScripts)
+            {
+                lineBreak = "-- =================";
+                _script.AppendLine(lineBreak);
+                _script.AppendLine($"-- SCRIPTS (000)");
+                _script.AppendLine(lineBreak);
+                _script.AppendLine();
 
-            _script.AppendLine(schema.Script);
+                _script.AppendLine(schema.Script);
+            }
         }
 
         public void Create(Table table)
         {
-            _script.AppendLine($"CREATE TABLE [{table.SchemaRef.Name}].[dbo].[{table.Name}]");
+            string schema = table.SchemaRef.Name;
+
+            _script.AppendLine("GO");
+            _script.AppendLine($"IF OBJECT_ID('{schema}.dbo.{table.Name}') IS NULL CREATE TABLE [{schema}].[dbo].[{table.Name}]");
             _script.AppendLine("(");
 
             foreach (var column in table.Columns) AppendToTable(column);
@@ -99,11 +106,14 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Create(Index index)
         {
+            string table = index.TableRef.Name;
+            string schema = index.TableRef.SchemaRef.Name;
+
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             index.Name = (string.IsNullOrEmpty(index.Name) ? $"{index.Table}_idx{_seed++}" : index.Name).ToLower();
 
-            _script.AppendLine($"CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
+            _script.AppendLine($"IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{schema}.dbo.{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
@@ -166,7 +176,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         #region Private Members
 
         private readonly ITypeNameResolver _typeResolver;
-        private readonly TemplateBuilderSettings _settings;
+        private readonly ScriptBuilderSettings _settings;
         private readonly StringBuilder _script = new StringBuilder();
 
         private int _seed = 1;

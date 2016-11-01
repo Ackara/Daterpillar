@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Gigobyte.Daterpillar;
+using System;
 using System.Data;
+using System.Data.Common;
 using System.IO;
+using System.Text;
 
 namespace Tests.Daterpillar.Helpers
 {
@@ -33,10 +36,52 @@ namespace Tests.Daterpillar.Helpers
 
             return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
         }
-
-        public static bool TryTruncate(this IDbConnection connection)
+        
+        public static void DropDatabase(this IDbConnection connection, string database)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = $"DROP DATABASE {database};";
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (DbException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public static bool TryTruncateDatabase(this IDbConnection connection, Schema schema, bool dispose = true)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    for (int i = schema.Tables.Count - 1; i >= 0; i--)
+                    {
+                        try
+                        {
+                            command.CommandText = $"DROP TABLE {schema.Tables[i].Name};";
+                            command.ExecuteNonQuery();
+                        }
+                        catch (DbException) { }
+                    }
+                }
+
+                return true;
+            }
+            catch (DbException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return false;
+            }
+            finally { if (dispose) connection.Dispose(); }
         }
     }
 }

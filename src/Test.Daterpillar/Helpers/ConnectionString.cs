@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using Tests.Daterpillar.Constants;
 
 namespace Tests.Daterpillar.Helpers
 {
@@ -16,7 +18,7 @@ namespace Tests.Daterpillar.Helpers
 
         internal static string GetConnectionString(string name)
         {
-            var fileMap = new ExeConfigurationFileMap() { ExeConfigFilename = "user.config" };
+            var fileMap = new ExeConfigurationFileMap() { ExeConfigFilename = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, KnownFile.DbConfig) };
             var config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
 
             return config.ConnectionStrings.ConnectionStrings[name].ConnectionString;

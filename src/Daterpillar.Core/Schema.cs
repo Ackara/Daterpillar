@@ -28,7 +28,10 @@ namespace Gigobyte.Daterpillar
             using (stream)
             {
                 var serializer = new XmlSerializer(typeof(Schema));
-                return (Schema)serializer.Deserialize(stream);
+                var schema = (Schema)serializer.Deserialize(stream);
+                schema.SetReferences();
+
+                return schema;
             }
         }
 
@@ -155,6 +158,29 @@ namespace Gigobyte.Daterpillar
                 {
                     _tables.RemoveAt(i);
                 }
+        }
+
+        internal void SetReferences()
+        {
+            foreach (var table in Tables)
+            {
+                if (table.SchemaRef == null) table.SchemaRef = this;
+
+                foreach (var column in table.Columns)
+                {
+                    if (column.TableRef == null) column.TableRef = table;
+                }
+
+                foreach (var index in table.Indexes)
+                {
+                    if (index.TableRef == null) index.TableRef = table;
+                }
+
+                foreach (var constraint in table.ForeignKeys)
+                {
+                    if (constraint.TableRef == null) constraint.TableRef = table;
+                }
+            }
         }
 
         #region Private Member

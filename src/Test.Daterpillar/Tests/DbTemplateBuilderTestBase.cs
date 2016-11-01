@@ -13,41 +13,37 @@ namespace Test.Daterpillar.Tests
 {
     public abstract class DbTemplateBuilderTestBase
     {
-        public void RunSchemaTest<T>(TemplateBuilderSettings settings, IDbConnection connection) where T : ITemplateBuilder
+        internal void RunSchemaTest<T>(ScriptBuilderSettings settings, IDbConnection connection) where T : IScriptBuilder
         {
             // Arrange
-            var mockTypeResolver = Mock.Create<ITypeNameResolver>();
-            mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
-                .Returns("string")
-                .OccursAtLeast(1);
-
-            ITemplateBuilder sut = (ITemplateBuilder)Activator.CreateInstance(typeof(T), settings, mockTypeResolver);
-
+            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), settings);
             var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
 
             // Act
+            schema.Name = (schema.Name + "1");
+            connection.DropDatabase(schema.Name);
+
             string errorMsg;
             sut.Create(schema);
             var script = sut.GetContent();
             var theScriptWorks = TryRunScript(connection, script, out errorMsg);
 
             // Assert
-            mockTypeResolver.Assert();
             Approvals.Verify(script);
             Assert.IsTrue(theScriptWorks, errorMsg);
         }
 
-        internal void RunIndexTest<T>(IDbConnection connection) where T : ITemplateBuilder
+        internal void RunIndexTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
             // Arrange
-            
+
 
             var mockTypeResolver = Mock.Create<ITypeNameResolver>();
             mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
                 .Returns("string")
                 .OccursAtLeast(1);
 
-            ITemplateBuilder sut = (ITemplateBuilder)Activator.CreateInstance(typeof(T), mockTypeResolver);
+            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), mockTypeResolver);
 
             // Act
             string errorMsg;

@@ -20,7 +20,7 @@ namespace Tests.Daterpillar.Tests
             // Arrange
             var dataType = new DataType(typeName: Convert.ToString(TestContext.DataRow["Type"]));
             var expected = Convert.ToString(TestContext.DataRow["T-SQL"]);
-            var sut = new MSSQLTypeNameResolver();
+            var sut = new TSQLTypeNameResolver();
 
             // Act
             var result = sut.GetName(dataType);

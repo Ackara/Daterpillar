@@ -25,10 +25,7 @@ namespace GeneratedCode
 	/* *** INSTRUCTIONS *** */
 	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xddl.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
-	var settings = new CSharpTemplateSettings()
-	{
-		
-	};
+	
 
 	//ExcludeTable(schema, "TableName");
 	//RenameTable(schema, "oldName", "newName");

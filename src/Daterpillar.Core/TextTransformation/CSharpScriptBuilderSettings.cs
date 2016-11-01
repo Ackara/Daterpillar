@@ -1,8 +1,8 @@
 ﻿namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class CSharpTemplateSettings
+    public class CSharpScriptBuilderSettings
     {
-        public static CSharpTemplateSettings Default = new CSharpTemplateSettings()
+        public static CSharpScriptBuilderSettings Default = new CSharpScriptBuilderSettings()
         {
             Namespace = Schema.Xmlns,
 

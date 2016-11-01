@@ -3,26 +3,26 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public sealed class MySQLTemplateBuilder : ITemplate
+    public sealed class MySQLScriptBuilder : ITemplate
     {
-        public MySQLTemplateBuilder() : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
+        public MySQLScriptBuilder() : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
         {
         }
 
-        public MySQLTemplateBuilder(bool dropDatabase) : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
+        public MySQLScriptBuilder(bool dropDatabase) : this(MySQLTemplateSettings.Default, new MySQLTypeNameResolver())
         {
             _settings.DropDatabaseIfExist = dropDatabase;
         }
 
-        public MySQLTemplateBuilder(ITypeNameResolver nameResolver) : this(MySQLTemplateSettings.Default, nameResolver)
+        public MySQLScriptBuilder(ITypeNameResolver nameResolver) : this(MySQLTemplateSettings.Default, nameResolver)
         {
         }
 
-        public MySQLTemplateBuilder(MySQLTemplateSettings settings) : this(settings, new MySQLTypeNameResolver())
+        public MySQLScriptBuilder(MySQLTemplateSettings settings) : this(settings, new MySQLTypeNameResolver())
         {
         }
 
-        public MySQLTemplateBuilder(MySQLTemplateSettings settings, ITypeNameResolver nameResolver)
+        public MySQLScriptBuilder(MySQLTemplateSettings settings, ITypeNameResolver nameResolver)
         {
             _settings = settings;
             _nameResolver = nameResolver;
