@@ -12,6 +12,8 @@ namespace Tests.Daterpillar.Helpers
 {
     public static partial class SampleData
     {
+        public const string Folder = "Sample Data";
+
         public static FileInfo GetFile(string filename)
         {
             filename = Path.GetFileName(filename);

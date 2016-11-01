@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Tests.Daterpillar.Helpers
 {
-    public static class ConnectionFactory
+    public static class DatabaseHelper
     {
         public static IDbConnection CreateSQLiteConnection(string filePath = "")
         {
@@ -32,6 +32,11 @@ namespace Tests.Daterpillar.Helpers
             if (!string.IsNullOrEmpty(database)) connStr.Add("database", database);
 
             return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
+        }
+
+        public static bool TryTruncate(this IDbConnection connection)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

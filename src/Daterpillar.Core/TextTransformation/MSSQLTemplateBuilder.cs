@@ -9,6 +9,10 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
         }
 
+        public MSSQLTemplateBuilder(ITypeNameResolver typeResolver) : this(TemplateBuilderSettings.Default, typeResolver)
+        {
+        }
+
         public MSSQLTemplateBuilder(TemplateBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
         {
         }
