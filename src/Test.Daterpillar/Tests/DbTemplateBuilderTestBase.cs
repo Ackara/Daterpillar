@@ -4,8 +4,7 @@ using Gigobyte.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
-using Telerik.JustMock;
-using Telerik.JustMock.Helpers;
+using System.Linq;
 using Tests.Daterpillar.Constants;
 using Tests.Daterpillar.Helpers;
 
@@ -13,103 +12,202 @@ namespace Test.Daterpillar.Tests
 {
     public abstract class DbTemplateBuilderTestBase
     {
-        internal void RunSchemaTest<T>(ScriptBuilderSettings settings, IDbConnection connection) where T : IScriptBuilder
+        internal const string DBNAME = "daterpillar1";
+
+        protected void RunSchemaTest<T>(ScriptBuilderSettings settings, IDbConnection connection) where T : IScriptBuilder
         {
             // Arrange
             IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), settings);
             var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
 
             // Act
-            schema.Name = (schema.Name + "1");
-            connection.DropDatabase(schema.Name);
+            schema.Name = DBNAME;
+            connection.TryDropDatabase(schema.Name);
 
             string errorMsg;
             sut.Create(schema);
             var script = sut.GetContent();
-            var theScriptWorks = TryRunScript(connection, script, out errorMsg);
+            var theScriptWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
 
             // Assert
             Approvals.Verify(script);
             Assert.IsTrue(theScriptWorks, errorMsg);
         }
 
-        internal void RunIndexTest<T>(IDbConnection connection) where T : IScriptBuilder
+        protected void RunIndexTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
             // Arrange
+            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
 
-
-            var mockTypeResolver = Mock.Create<ITypeNameResolver>();
-            mockTypeResolver.Arrange(x => x.GetName(Arg.IsAny<DataType>()))
-                .Returns("string")
-                .OccursAtLeast(1);
-
-            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), mockTypeResolver);
+            var schema = new Schema() { Name = DBNAME };
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Col1");
+            tbl1.CreateColumn("Col2");
+            tbl1.CreateColumn("Col3");
+            tbl1.CreateColumn("Col4");
 
             // Act
-            string errorMsg;
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema, false);
 
-            //sut.Create(index1);
-            //sut.Create(index2);
+            Index index1 = tbl1.CreateIndex("idx1", IndexType.PrimaryKey, false, new IndexColumn("Col1"));
+            Index index3 = tbl1.CreateIndex("idx3", IndexType.Index, true, new IndexColumn("Col4", SortOrder.DESC));
+            Index index2 = tbl1.CreateIndex("idx2", IndexType.Index, false, new IndexColumn("Col2"), new IndexColumn("Col3"));
+
+            string errorMsg;
+            sut.Create(index1);
+            sut.Create(index2);
+            sut.Create(index3);
             var script = sut.GetContent();
-            var theScriptsWorks = TryRunScript(connection, script, out errorMsg);
+            var theScriptsWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
 
             // Assert
-            mockTypeResolver.Assert();
             Approvals.Verify(script);
             Assert.IsTrue(theScriptsWorks, errorMsg);
         }
 
-        internal void RunForeignKeyTest()
+        protected void RunForeignKeyTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+
+            var schema = new Schema() { Name = DBNAME };
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Id", new DataType("int"), autoIncrement: true);
+            tbl1.CreateColumn("Name");
+
+            var tbl2 = schema.CreateTable("tbl2");
+            tbl2.CreateColumn("Id", new DataType("int"));
+            tbl2.CreateColumn("Name");
+
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema, false);
+
+            var constraint = tbl2.CreateForeignKey("Id", "tbl1", "Id");
+            sut.Create(constraint);
+
+            string errorMsg;
+            var script = sut.GetContent();
+            var theScriptsWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptsWorks, errorMsg);
         }
 
-        internal void RunSchemaDropTest()
+        protected void RunSchemaDropTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
-            throw new System.NotImplementedException();
+            // Arrnage
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+
+            // Act
+            sut.Drop(schema);
+            var script = sut.GetContent();
+
+            string errorMsg;
+            bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptWorked, errorMsg);
         }
 
-        internal void RunTableDropTest()
+        protected void RunTableDropTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema, false);
+
+            string errorMsg;
+            sut.Drop(schema.Tables.First());
+            string script = sut.GetContent();
+            bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptWorked);
         }
 
-        internal void RunIndexDropTest()
+        protected void RunIndexDropTest<T>(IDbConnection connection)
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema, false);
+
+            string errorMsg;
+            sut.Drop(schema.GetIndexes().First());
+            string script = sut.GetContent();
+            bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptWorked);
         }
 
-        internal void RunForeignKeyDropTest()
+        protected void RunForeignKeyDropTest<T>(IDbConnection connection)
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema, false);
+
+            string errorMsg;
+            sut.Drop(schema.GetForeignKeys().First());
+            string script = sut.GetContent();
+            bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptWorked);
         }
 
-        internal bool TryRunScript(IDbConnection connection, string sql, out string error)
+        protected void RunAlterTableTest<T>(IDbConnection connection)
         {
-            error = "";
-            IDbCommand command = null;
+            // Arrange
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = new Schema() { Name = DBNAME };
 
-            try
-            {
-                if (connection.State != ConnectionState.Open) connection.Open();
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Col1");
+            tbl1.CreateColumn("Col2");
+            tbl1.CreateColumn("Col3");
+            tbl1.CreateColumn("Col4");
+            tbl1.CreateColumn("Col5");
 
-                command = connection.CreateCommand();
-                command.CommandText = sql;
-                command.ExecuteNonQuery();
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema);
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                return false;
-            }
-            finally
-            {
-                command?.Dispose();
-                connection?.Dispose();
-            }
+            var tbl2 = schema.CreateTable("tbl2");
+            tbl2.CreateColumn("Col1");
+            tbl2.CreateColumn("Col2");
+
+            string errorMsg;
+            sut.AlterTable(tbl1, tbl2);
+            string script = sut.GetContent();
+            bool theScriptsWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptsWorked);
+        }
+
+        protected void RunAlterColumnTest<T>(IDbConnection connection)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

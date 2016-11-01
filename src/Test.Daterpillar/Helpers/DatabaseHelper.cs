@@ -1,9 +1,9 @@
 ﻿using Gigobyte.Daterpillar;
+using Gigobyte.Daterpillar.TextTransformation;
 using System;
 using System.Data;
 using System.Data.Common;
 using System.IO;
-using System.Text;
 
 namespace Tests.Daterpillar.Helpers
 {
@@ -36,8 +36,36 @@ namespace Tests.Daterpillar.Helpers
 
             return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
         }
-        
-        public static void DropDatabase(this IDbConnection connection, string database)
+
+        public static bool TryRunScript(IDbConnection connection, string sql, out string error)
+        {
+            error = "";
+            IDbCommand command = null;
+
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+
+                command = connection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                command?.Dispose();
+                connection?.Dispose();
+            }
+        }
+
+        public static bool TryDropDatabase(this IDbConnection connection, string dbName, bool dispose = false)
         {
             try
             {
@@ -45,14 +73,18 @@ namespace Tests.Daterpillar.Helpers
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $"DROP DATABASE {database};";
+                    command.CommandText = $"DROP DATABASE {dbName};";
                     command.ExecuteNonQuery();
                 }
+
+                return true;
             }
             catch (DbException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return false;
             }
+            finally { if (dispose) connection.Dispose(); }
         }
 
         public static bool TryTruncateDatabase(this IDbConnection connection, Schema schema, bool dispose = true)
@@ -80,6 +112,22 @@ namespace Tests.Daterpillar.Helpers
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return false;
+            }
+            finally { if (dispose) connection.Dispose(); }
+        }
+
+        public static void CreateSchema(this IDbConnection connection, IScriptBuilder builder, Schema schema, bool dispose = true)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                builder.Create(schema);
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = builder.GetContent();
+                    command.ExecuteNonQuery();
+                }
             }
             finally { if (dispose) connection.Dispose(); }
         }
