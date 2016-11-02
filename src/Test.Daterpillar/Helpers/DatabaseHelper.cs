@@ -45,17 +45,20 @@ namespace Tests.Daterpillar.Helpers
             try
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
-
                 command = connection.CreateCommand();
-                command.CommandText = sql;
-                command.ExecuteNonQuery();
 
+                string[] statements = sql.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var cmd in statements)
+                {
+                    command.CommandText = cmd.Trim();
+                    command.ExecuteNonQuery();
+                }
                 return true;
             }
-            catch (Exception ex)
+            catch (DbException ex)
             {
                 error = ex.Message;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(error);
                 return false;
             }
             finally
