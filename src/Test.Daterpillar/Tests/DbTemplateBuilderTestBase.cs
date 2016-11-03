@@ -128,6 +128,7 @@ namespace Test.Daterpillar.Tests
             // Act
             DatabaseHelper.TryDropDatabase(connection, DBNAME);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
+            sut.Clear();
 
             string errorMsg;
             sut.Drop(schema.Tables.First());
@@ -149,6 +150,7 @@ namespace Test.Daterpillar.Tests
             // Act
             DatabaseHelper.TryDropDatabase(connection, DBNAME);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
+            sut.Clear();
 
             string errorMsg;
             sut.Drop(schema.GetIndexes().First());
@@ -170,6 +172,7 @@ namespace Test.Daterpillar.Tests
             // Act
             DatabaseHelper.TryDropDatabase(connection, DBNAME);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
+            sut.Clear();
 
             string errorMsg;
             sut.Drop(schema.GetForeignKeys().First());
@@ -199,7 +202,7 @@ namespace Test.Daterpillar.Tests
             DatabaseHelper.TryDropDatabase(connection, DBNAME);
             DatabaseHelper.CreateSchema(connection, sut, schema);
 
-            var tbl2 = schema.CreateTable("tbl2");
+            var tbl2 = schema.CreateTable("tbl1b");
             tbl2.CreateColumn("Col1");
             tbl2.CreateColumn("Col2");
 
@@ -217,6 +220,23 @@ namespace Test.Daterpillar.Tests
         protected void RunAlterColumnTest<T>(IDbConnection connection)
         {
             throw new System.NotImplementedException();
+            // Arrange
+            var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
+            var schema = new Schema() { Name = DBNAME };
+
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Col1");
+            tbl1.CreateColumn("Col2");
+            tbl1.CreateColumn("Col3");
+            tbl1.CreateColumn("Col4");
+            var col5 = tbl1.CreateColumn("Col5");
+
+            // Act
+            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.CreateSchema(connection, sut, schema);
+            sut.Clear();
+
+            // Assert
         }
     }
 }
