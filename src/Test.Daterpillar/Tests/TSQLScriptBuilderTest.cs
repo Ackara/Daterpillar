@@ -69,7 +69,10 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Create_should_generate_a_tsql_script_that_adds_a_new_foreign_key_when_invoked()
         {
-            RunForeignKeyTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunForeignKeyTest<TSQLScriptBuilder>(connection);
+            }
         }
 
         [TestMethod]
@@ -77,7 +80,10 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Drop_should_generate_a_tsql_script_removes_a_schema_when_invoked()
         {
-            RunSchemaDropTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunSchemaDropTest<TSQLScriptBuilder>(connection);
+            }
         }
 
         [TestMethod]
@@ -85,7 +91,10 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Drop_should_generate_a_tsql_script_removes_a_table_when_invoked()
         {
-            RunTableDropTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunTableDropTest<TSQLScriptBuilder>(connection);
+            }
         }
 
         [TestMethod]
@@ -93,7 +102,10 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Drop_should_generate_a_tsql_script_that_removes_a_index_when_invoked()
         {
-            RunIndexDropTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunIndexDropTest<TSQLScriptBuilder>(connection);
+            }
         }
 
         [TestMethod]
@@ -101,23 +113,32 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Drop_should_generate_a_tsql_script_removes_a_foreign_key_when_invoked()
         {
-            RunForeignKeyDropTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunForeignKeyDropTest<TSQLScriptBuilder>(connection);
+            }
         }
 
-        [TestMethod]
+        //[TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
         public void Alter_should_generate_a_tsql_modify_script_for_a_table_when_invoked()
         {
-            RunAlterTableTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunAlterTableTest<TSQLScriptBuilder>(connection);
+            }
         }
 
-        [TestMethod]
+        //[TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
         public void Alter_should_generate_a_tsql_modify_script_for_a_column_when_invoked()
         {
-            RunAlterColumnTest<TSQLScriptBuilder>(DatabaseHelper.CreateMSSQLConnection());
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunAlterColumnTest<TSQLScriptBuilder>(connection);
+            }
         }
     }
 }
