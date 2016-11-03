@@ -141,6 +141,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
             return _content.ToString();
         }
 
+        public void Clear()
+        {
+            _content.Clear();
+        }
+
         #region Private Members
 
         private readonly char[] _separators = new char[] { ' ', '\t', '\n', '\r', '_' };

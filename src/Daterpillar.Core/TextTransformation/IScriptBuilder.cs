@@ -31,5 +31,7 @@
         void AlterTable(Table oldTable, Table newTable);
 
         void AlterTable(Column oldColumn, Column newColumn);
+
+        void Clear();
     }
 }
