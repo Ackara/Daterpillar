@@ -1,0 +1,59 @@
+﻿-- ======================================================================
+-- NAME:
+-- daterpillar1
+
+-- DESCRIPTION:
+-- This is a usefull description.
+
+-- AUTHOR:
+-- john@example.com
+
+-- DATE:
+-- Mon 01, 0001 12:00 AM
+-- ======================================================================
+
+IF DB_ID('daterpillar1') IS NULL CREATE DATABASE [daterpillar1];
+USE [daterpillar1];
+
+IF OBJECT_ID('daterpillar1.dbo.genre') IS NULL CREATE TABLE [daterpillar1].[dbo].[genre]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) NOT NULL
+);
+
+
+IF OBJECT_ID('daterpillar1.dbo.artist') IS NULL CREATE TABLE [daterpillar1].[dbo].[artist]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) NOT NULL,
+	[Bio] TEXT
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.artist') AND [name]='artist_idx1') CREATE UNIQUE INDEX [artist_idx1] ON [daterpillar1].[dbo].[artist] ([Name] DESC);
+
+IF OBJECT_ID('daterpillar1.dbo.album') IS NULL CREATE TABLE [daterpillar1].[dbo].[album]
+(
+	[Artist_Id] INT NOT NULL,
+	[Name] VARCHAR(64) NOT NULL,
+	[Release_Date] DATE,
+	CONSTRAINT [album_artist_id_to_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.album') AND [name]='album_idx3') CREATE INDEX [album_idx3] ON [daterpillar1].[dbo].[album] ([Artist_Id] ASC, [Name] ASC);
+
+IF OBJECT_ID('daterpillar1.dbo.song') IS NULL CREATE TABLE [daterpillar1].[dbo].[song]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Album_Id] INT NOT NULL,
+	[Artist_Id] INT NOT NULL,
+	[Genre_Id] INT NOT NULL,
+	[Name] VARCHAR(256) NOT NULL,
+	[Length] DECIMAL(4, 2),
+	[Price] DECIMAL(12, 2) NOT NULL,
+	[On_Device] BIT NOT NULL,
+	CONSTRAINT [song_genre_id_to_genre_id_fkey4] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [song_artist_id_to_artist_id_fkey5] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.song') AND [name]='song_idx') CREATE INDEX [song_idx] ON [daterpillar1].[dbo].[song] ([Name] ASC);
+

@@ -24,9 +24,9 @@
         public override string GetName(DataType dataType)
         {
             string name = "";
-            string type = dataType.Name;
+            string type = dataType.Name.ToLower();
 
-            switch (type.ToLower())
+            switch (type)
             {
                 case CHAR:
                 case BLOB:

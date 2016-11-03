@@ -49,10 +49,11 @@ namespace Tests.Daterpillar.Helpers
 
                 string[] statements = sql.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var cmd in statements)
-                {
-                    command.CommandText = cmd.Trim();
-                    command.ExecuteNonQuery();
-                }
+                    if (!string.IsNullOrWhiteSpace(cmd))
+                    {
+                        command.CommandText = cmd.Trim();
+                        command.ExecuteNonQuery();
+                    }
                 return true;
             }
             catch (DbException ex)
@@ -119,7 +120,7 @@ namespace Tests.Daterpillar.Helpers
             finally { if (dispose) connection.Dispose(); }
         }
 
-        public static void CreateSchema(this IDbConnection connection, IScriptBuilder builder, Schema schema, bool dispose = true)
+        public static void CreateSchema(this IDbConnection connection, IScriptBuilder builder, Schema schema, bool dispose = false)
         {
             try
             {
@@ -128,8 +129,14 @@ namespace Tests.Daterpillar.Helpers
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = builder.GetContent();
-                    command.ExecuteNonQuery();
+                    string script = builder.GetContent();
+                    string[] statements = script.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var cmd in statements)
+                        if (!string.IsNullOrWhiteSpace(cmd))
+                        {
+                            command.CommandText = cmd.Trim();
+                            command.ExecuteNonQuery();
+                        }
                 }
             }
             finally { if (dispose) connection.Dispose(); }

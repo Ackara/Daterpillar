@@ -27,7 +27,7 @@ namespace Test.Daterpillar.Tests
         {
             var settings = new ScriptBuilderSettings()
             {
-                AppendScripts = false,
+                AppendScripts = true,
                 AppendComments = true,
                 TruncateDatabaseIfItExist = true
             };
@@ -40,14 +40,28 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Create_should_generate_a_tsql_script_that_builds_a_new_schema_when_settings_are_disabled()
         {
-            var settings = new ScriptBuilderSettings()
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                AppendScripts = false,
-                AppendComments = false,
-                TruncateDatabaseIfItExist = false
-            };
+                var settings = new ScriptBuilderSettings()
+                {
+                    AppendScripts = false,
+                    AppendComments = false,
+                    TruncateDatabaseIfItExist = false
+                };
 
-            RunSchemaTest<TSQLScriptBuilder>(settings, DatabaseHelper.CreateMSSQLConnection());
+                RunSchemaTest<TSQLScriptBuilder>(settings, connection);
+            }
+        }
+
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void Create_should_generate_a_tsql_script_that_adds_a_new_index_when_invoked()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunIndexTest<TSQLScriptBuilder>(connection);
+            }
         }
 
         [TestMethod]

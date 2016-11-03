@@ -1,0 +1,3 @@
+﻿IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.tbl1') AND [name]='idx1') CREATE INDEX [idx1] ON [daterpillar1].[dbo].[tbl1] ([Col1] ASC);
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.tbl1') AND [name]='idx2') CREATE INDEX [idx2] ON [daterpillar1].[dbo].[tbl1] ([Col2] ASC, [Col3] ASC);
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('daterpillar1.dbo.tbl1') AND [name]='idx3') CREATE UNIQUE INDEX [idx3] ON [daterpillar1].[dbo].[tbl1] ([Col4] DESC);

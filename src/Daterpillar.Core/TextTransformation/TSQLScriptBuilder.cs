@@ -52,8 +52,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine(lineBreak);
             _script.AppendLine();
 
-            //_script.AppendLine("GO");
             _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
+            _script.AppendLine($"USE [{schema.Name}];");
             _script.AppendLine();
 
             foreach (var table in schema.Tables) Create(table);
@@ -73,8 +73,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Create(Table table)
         {
             string schema = table.SchemaRef.Name;
-
-            //_script.AppendLine("GO");
             _script.AppendLine($"IF OBJECT_ID('{schema}.dbo.{table.Name}') IS NULL CREATE TABLE [{schema}].[dbo].[{table.Name}]");
             _script.AppendLine("(");
 
@@ -113,9 +111,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             index.Name = (string.IsNullOrEmpty(index.Name) ? $"{index.Table}_idx{_seed++}" : index.Name).ToLower();
 
-            //_script.AppendLine("GO");
-            _script.AppendLine($"IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{schema}.dbo.{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
-            //_script.AppendLine($"CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
+            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{schema}.dbo.{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
@@ -173,6 +169,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public string GetContent()
         {
             return _script.ToString();
+        }
+
+        public void Clear()
+        {
+            _script.Clear();
         }
 
         #region Private Members

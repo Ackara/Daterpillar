@@ -27,11 +27,12 @@ namespace Test.Daterpillar.Tests
             string errorMsg;
             sut.Create(schema);
             var script = sut.GetContent();
-            var theScriptWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
-            Assert.IsTrue(theScriptWorks, errorMsg);
+            Assert.IsTrue(theScriptWorked, errorMsg);
         }
 
         protected void RunIndexTest<T>(IDbConnection connection) where T : IScriptBuilder
@@ -48,7 +49,8 @@ namespace Test.Daterpillar.Tests
 
             // Act
             DatabaseHelper.TryDropDatabase(connection, DBNAME);
-            DatabaseHelper.CreateSchema(connection, sut, schema, false);
+            DatabaseHelper.CreateSchema(connection, sut, schema);
+            sut.Clear();
 
             Index index1 = tbl1.CreateIndex("idx1", IndexType.PrimaryKey, false, new IndexColumn("Col1"));
             Index index3 = tbl1.CreateIndex("idx3", IndexType.Index, true, new IndexColumn("Col4", SortOrder.DESC));
@@ -59,11 +61,12 @@ namespace Test.Daterpillar.Tests
             sut.Create(index2);
             sut.Create(index3);
             var script = sut.GetContent();
-            var theScriptsWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
-            Assert.IsTrue(theScriptsWorks, errorMsg);
+            Assert.IsTrue(theScriptWorked, errorMsg);
         }
 
         protected void RunForeignKeyTest<T>(IDbConnection connection) where T : IScriptBuilder
@@ -89,16 +92,17 @@ namespace Test.Daterpillar.Tests
 
             string errorMsg;
             var script = sut.GetContent();
-            var theScriptsWorks = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
-            Assert.IsTrue(theScriptsWorks, errorMsg);
+            Assert.IsTrue(theScriptWorked, errorMsg);
         }
 
         protected void RunSchemaDropTest<T>(IDbConnection connection) where T : IScriptBuilder
         {
-            // Arrnage
+            // Arrange
             var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
             var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
 
@@ -108,6 +112,7 @@ namespace Test.Daterpillar.Tests
 
             string errorMsg;
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
@@ -128,6 +133,7 @@ namespace Test.Daterpillar.Tests
             sut.Drop(schema.Tables.First());
             string script = sut.GetContent();
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
@@ -148,6 +154,7 @@ namespace Test.Daterpillar.Tests
             sut.Drop(schema.GetIndexes().First());
             string script = sut.GetContent();
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
@@ -168,6 +175,7 @@ namespace Test.Daterpillar.Tests
             sut.Drop(schema.GetForeignKeys().First());
             string script = sut.GetContent();
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
@@ -198,11 +206,12 @@ namespace Test.Daterpillar.Tests
             string errorMsg;
             sut.AlterTable(tbl1, tbl2);
             string script = sut.GetContent();
-            bool theScriptsWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
 
             // Assert
             Approvals.Verify(script);
-            Assert.IsTrue(theScriptsWorked);
+            Assert.IsTrue(theScriptWorked);
         }
 
         protected void RunAlterColumnTest<T>(IDbConnection connection)
