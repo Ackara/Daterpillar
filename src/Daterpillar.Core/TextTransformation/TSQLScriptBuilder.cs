@@ -116,13 +116,16 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Create(ForeignKey foreignKey)
         {
+            string table = foreignKey.LocalTable;
+            string schema = foreignKey.TableRef.SchemaRef.Name;
+
             if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"ALTER TABLE [{foreignKey.TableRef.SchemaRef.Name}].[dbo].[{foreignKey.LocalTable}]  WITH CHECK ADD  CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.TableRef.SchemaRef.Name}].[dbo].[{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate} ON DELETE {foreignKey.OnDelete};");
+            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{schema}.dbo.{table}')) ALTER TABLE [{schema}].[dbo].[{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{schema}].[dbo].[{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
         {
-            _script.AppendLine($"DROP DATABASE [{schema.Name}];");
+            _script.AppendLine($"IF DB_ID('{schema.Name}') IS NOT NULL DROP DATABASE [{schema.Name}];");
         }
 
         public void Drop(Table table)
@@ -147,7 +150,11 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(ForeignKey foreignKey)
         {
-            _script.AppendLine($"ALTER TABLE [{foreignKey.TableRef.SchemaRef.Name}].[dbo].[{foreignKey.LocalTable}] DROP CONSTRAINT [{foreignKey.Name}];");
+            string table = foreignKey.LocalTable;
+            string schema = foreignKey.TableRef.SchemaRef.Name;
+
+            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
+            _script.AppendLine($"IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{schema}.dbo.{table}')) ALTER TABLE [{schema}].[dbo].[{table}] DROP CONSTRAINT [{foreignKey.Name}];");
         }
 
         public void AlterTable(Column oldColumn, Column newColumn)

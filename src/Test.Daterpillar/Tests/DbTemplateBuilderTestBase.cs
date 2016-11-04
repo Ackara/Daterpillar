@@ -48,7 +48,7 @@ namespace Test.Daterpillar.Tests
             tbl1.CreateColumn("Col4");
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema);
             sut.Clear();
 
@@ -76,18 +76,21 @@ namespace Test.Daterpillar.Tests
 
             var schema = new Schema() { Name = DBNAME };
             var tbl1 = schema.CreateTable("tbl1");
-            tbl1.CreateColumn("Id", new DataType("int"), autoIncrement: true);
+            tbl1.CreateColumn("Id", new DataType("int"), true);
             tbl1.CreateColumn("Name");
-
+            tbl1.CreateColumn("CategoryId", new DataType("int"));
+            tbl1.CreateIndex("cat_idx", IndexType.Index, false, new IndexColumn("CategoryId"));
+            
             var tbl2 = schema.CreateTable("tbl2");
-            tbl2.CreateColumn("Id", new DataType("int"));
+            tbl2.CreateColumn("Id", new DataType("int"), autoIncrement: true);
             tbl2.CreateColumn("Name");
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
+            sut.Clear();
 
-            var constraint = tbl2.CreateForeignKey("Id", "tbl1", "Id");
+            var constraint = tbl1.CreateForeignKey("CategoryId", "tbl2", "Id", ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE);
             sut.Create(constraint);
 
             string errorMsg;
@@ -104,9 +107,16 @@ namespace Test.Daterpillar.Tests
         {
             // Arrange
             var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
-            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+            var schema = new Schema() { Name = DBNAME };
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Id");
+            tbl1.CreateColumn("Name");
 
             // Act
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
+            DatabaseHelper.CreateSchema(connection, sut, schema);
+            sut.Clear();
+            
             sut.Drop(schema);
             var script = sut.GetContent();
 
@@ -126,7 +136,7 @@ namespace Test.Daterpillar.Tests
             var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
             sut.Clear();
 
@@ -148,7 +158,7 @@ namespace Test.Daterpillar.Tests
             var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
             sut.Clear();
 
@@ -167,15 +177,25 @@ namespace Test.Daterpillar.Tests
         {
             // Arrange
             var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
-            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+            var schema = new Schema() { Name = DBNAME };
+            var tbl1 = schema.CreateTable("tbl1");
+            tbl1.CreateColumn("Id", new DataType("int"), autoIncrement: true);
+            tbl1.CreateColumn("Name");
+            
+            var tbl2 = schema.CreateTable("tbl2");
+            tbl2.CreateColumn("Id", new DataType("int"), autoIncrement: true);
+            tbl2.CreateColumn("Name");
+            tbl2.CreateColumn("CategoryId", new DataType("int"));
+            tbl2.CreateIndex("cat_idx", IndexType.Index, false, new IndexColumn("CategoryId"));
+            var constraint = tbl2.CreateForeignKey("CategoryId", "tbl1", "Id", ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE);
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
             sut.Clear();
 
             string errorMsg;
-            sut.Drop(schema.GetForeignKeys().First());
+            sut.Drop(constraint);
             string script = sut.GetContent();
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
             System.Diagnostics.Debug.WriteLineIf(theScriptWorked, "** The script works! **");
@@ -199,7 +219,7 @@ namespace Test.Daterpillar.Tests
             tbl1.CreateColumn("Col5");
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema);
 
             var tbl2 = schema.CreateTable("tbl1b");
@@ -232,7 +252,7 @@ namespace Test.Daterpillar.Tests
             var col5 = tbl1.CreateColumn("Col5");
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, DBNAME);
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema);
             sut.Clear();
 

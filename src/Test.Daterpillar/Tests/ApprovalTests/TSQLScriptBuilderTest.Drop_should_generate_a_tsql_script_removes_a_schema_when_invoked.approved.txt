@@ -1,0 +1,1 @@
+﻿IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];

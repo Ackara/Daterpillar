@@ -156,7 +156,7 @@ namespace Gigobyte.Daterpillar
             return newKey;
         }
 
-        public ForeignKey CreateForeignKey(string column, string foreignTable, string foreignColumn, ForeignKeyRule onUpdate = ForeignKeyRule.CASCADE, ForeignKeyRule onDelete = ForeignKeyRule.RESTRICT, string name = null)
+        public ForeignKey CreateForeignKey(string column, string foreignTable, string foreignColumn, ForeignKeyRule onUpdate = ForeignKeyRule.CASCADE, ForeignKeyRule onDelete = ForeignKeyRule.CASCADE, string name = null)
         {
             var newConstraint = new ForeignKey()
             {
