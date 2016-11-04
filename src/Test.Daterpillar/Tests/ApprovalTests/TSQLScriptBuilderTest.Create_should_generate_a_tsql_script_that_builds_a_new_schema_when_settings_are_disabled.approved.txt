@@ -12,9 +12,6 @@
 -- Mon 01, 0001 12:00 AM
 -- ======================================================================
 
-IF DB_ID('daterpillar1') IS NULL CREATE DATABASE [daterpillar1];
-USE [daterpillar1];
-
 IF OBJECT_ID('daterpillar1.dbo.genre') IS NULL CREATE TABLE [daterpillar1].[dbo].[genre]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),

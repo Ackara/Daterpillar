@@ -25,14 +25,18 @@ namespace Test.Daterpillar.Tests
         [TestCategory(Trait.Integration)]
         public void Create_should_generate_a_tsql_script_that_builds_a_new_schema_when_settings_are_enabled()
         {
-            var settings = new ScriptBuilderSettings()
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                AppendScripts = true,
-                AppendComments = true,
-                TruncateDatabaseIfItExist = true
-            };
+                var settings = new ScriptBuilderSettings()
+                {
+                    AppendScripts = true,
+                    AppendComments = true,
+                    CreateDatabase = true,
+                    TruncateDatabaseIfItExist = true
+                };
 
-            RunSchemaTest<TSQLScriptBuilder>(settings, DatabaseHelper.CreateMSSQLConnection());
+                RunSchemaTest<TSQLScriptBuilder>(settings, connection);
+            }
         }
 
         [TestMethod]
@@ -50,6 +54,16 @@ namespace Test.Daterpillar.Tests
                 };
 
                 RunSchemaTest<TSQLScriptBuilder>(settings, connection);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(Trait.Integration)]
+        public void Create_should_generate_a_tsql_script_that_adds_a_new_column_when_invoked()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunColumnTest<TSQLScriptBuilder>(connection);
             }
         }
 
@@ -78,7 +92,7 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Drop_should_generate_a_tsql_script_removes_a_schema_when_invoked()
+        public void Drop_should_generate_a_tsql_script_that_removes_a_schema_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
@@ -89,7 +103,18 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Drop_should_generate_a_tsql_script_removes_a_table_when_invoked()
+        public void Drop_should_generate_a_tsql_script_that_removes_a_column_when_invoked()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunColumnDropTest<TSQLScriptBuilder>(connection);
+            }
+        }
+
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void Drop_should_generate_a_tsql_script_that_removes_a_table_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
@@ -111,7 +136,7 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Drop_should_generate_a_tsql_script_removes_a_foreign_key_when_invoked()
+        public void Drop_should_generate_a_tsql_script_that_removes_a_foreign_key_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
@@ -119,7 +144,7 @@ namespace Test.Daterpillar.Tests
             }
         }
 
-        //[TestMethod]
+        [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
         public void Alter_should_generate_a_tsql_modify_script_for_a_table_when_invoked()
@@ -130,7 +155,7 @@ namespace Test.Daterpillar.Tests
             }
         }
 
-        //[TestMethod]
+        [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
         public void Alter_should_generate_a_tsql_modify_script_for_a_column_when_invoked()

@@ -6,12 +6,15 @@
         {
             AppendScripts = true,
             AppendComments = true,
+            CreateDatabase = true,
             TruncateDatabaseIfItExist = false
         };
 
         public bool AppendScripts { get; set; }
 
         public bool AppendComments { get; set; }
+
+        public bool CreateDatabase { get; set; }
 
         public bool TruncateDatabaseIfItExist { get; set; }
     }

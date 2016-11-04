@@ -52,9 +52,12 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine(lineBreak);
             _script.AppendLine();
 
-            _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
-            _script.AppendLine($"USE [{schema.Name}];");
-            _script.AppendLine();
+            if (_settings.CreateDatabase)
+            {
+                _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
+                _script.AppendLine($"USE [{schema.Name}];");
+                _script.AppendLine();
+            }
 
             foreach (var table in schema.Tables) Create(table);
 
@@ -130,7 +133,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Table table)
         {
-            _script.AppendLine($"DROP TABLE [{table.SchemaRef.Name}].[dbo].[{table.Name}];");
+            _script.AppendLine($"IF OBJECT_ID('{table.SchemaRef.Name}.dbo.{table.Name}') IS NOT NULL DROP TABLE [{table.SchemaRef.Name}].[dbo].[{table.Name}];");
         }
 
         public void Drop(Column column)
