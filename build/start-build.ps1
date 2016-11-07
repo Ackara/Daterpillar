@@ -19,12 +19,16 @@ The API key for the nuget feed.
 
 [CmdletBinding()]
 Param(
+    [Parameter(Position=4)]
 	[string[]]$Tasks = @("default"),
-
+    
+    [Parameter(Position=2)]
 	[string]$NugetKey = "",
 
+    [Parameter(Position=1)]
 	[string]$NugetSource = "https://api.nuget.org/v3/index.json",
 
+    [Parameter(Position=3)]
 	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 )
 
