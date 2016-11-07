@@ -12,6 +12,7 @@
 -- Mon 01, 0001 12:00 AM
 -- ======================================================================
 
+IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];
 IF DB_ID('daterpillar1') IS NULL CREATE DATABASE [daterpillar1];
 USE [daterpillar1];
 

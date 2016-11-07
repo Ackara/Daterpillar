@@ -26,7 +26,7 @@ Param(
 	[Parameter(Position=2)]
 	[string]$MSSQLConnectionString = "your_mssql_connection_string",
 
-	[switch]$Overwrite
+	[bool]$Overwrite = $false
 )
 
 $content = @"

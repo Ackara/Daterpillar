@@ -37,15 +37,15 @@ namespace Gigobyte.Daterpillar.TextTransformation
 			TypeNames.Add("text", "text");
 			TypeNames.Add("varchar", "varchar");
 			TypeNames.Add("int", "int");
-			TypeNames.Add("bigInt", "bigInt");
-			TypeNames.Add("mediumInt", "mediumInt");
-			TypeNames.Add("smallInt", "smallInt");
+			TypeNames.Add("bigint", "bigint");
+			TypeNames.Add("mediumint", "mediumint");
+			TypeNames.Add("smallint", "smallint");
 			TypeNames.Add("float", "float");
 			TypeNames.Add("double", "double");
 			TypeNames.Add("decimal", "decimal");
 			TypeNames.Add("date", "date");
 			TypeNames.Add("time", "time");
-			TypeNames.Add("dateTime", "dateTime");
+			TypeNames.Add("datetime", "datetime");
 		}
 
 		/// <summary>

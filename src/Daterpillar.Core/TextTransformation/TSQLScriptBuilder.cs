@@ -52,6 +52,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine(lineBreak);
             _script.AppendLine();
 
+            if (_settings.TruncateDatabaseIfItExist) Drop(schema);
             if (_settings.CreateDatabase)
             {
                 _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");

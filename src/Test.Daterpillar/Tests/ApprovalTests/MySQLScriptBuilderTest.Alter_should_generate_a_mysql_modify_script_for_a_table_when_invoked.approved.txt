@@ -1,0 +1,1 @@
+﻿ALTER TABLE `tbl1` COMMENT 'The comment was changed.';

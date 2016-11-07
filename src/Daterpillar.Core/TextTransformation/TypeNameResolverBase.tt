@@ -42,7 +42,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 	PushIndent("\t\t\t");
 	foreach (var value in GetXsdTypeNames())
 	{
-		WriteLine(string.Format("{0}.Add(\"{1}\", \"{1}\");",dictionaryName, value));
+		WriteLine(string.Format("{0}.Add(\"{1}\", \"{1}\");",dictionaryName, value.ToLower()));
 	}
 	
 	ClearIndent();

@@ -1,0 +1,1 @@
+﻿ALTER TABLE `tbl1` ADD `Address` VARCHAR(0) NOT NULL COMMENT 'This is a comment';

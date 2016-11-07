@@ -49,7 +49,7 @@ namespace Test.Daterpillar.Tests
             sut.Clear();
 
             string errorMsg;
-            sut.Create(tbl1.CreateColumn("Address", new DataType("varchar")));
+            sut.Create(tbl1.CreateColumn("Address", new DataType("varchar"), autoIncrement: false, nullable: false, comment: "This is a comment"));
             var script = sut.GetContent();
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
             System.Diagnostics.Debug.WriteLine(errorMsg);

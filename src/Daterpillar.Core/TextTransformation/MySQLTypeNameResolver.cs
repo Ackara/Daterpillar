@@ -8,7 +8,7 @@
 
         public override string GetName(DataType dataType)
         {
-            string typeName = dataType.Name;
+            string typeName = dataType.Name.ToLower();
             switch (typeName)
             {
                 case CHAR:
