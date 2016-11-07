@@ -11,17 +11,17 @@ namespace Gigobyte.Daterpillar.TextTransformation
             LoadAssemblyTypes();
         }
 
-        public ITemplate CreateInstance(string name, bool partialMatch = true)
+        public IScriptBuilder CreateInstance(string name, bool partialMatch = true)
         {
             try
             {
                 if (partialMatch) name = name.EndsWith(_targetInterface) ? name : (name + _targetInterface);
-                return (ITemplate)Activator.CreateInstance(_templateTypes[name]);
+                return (IScriptBuilder)Activator.CreateInstance(_templateTypes[name]);
             }
-            catch (KeyNotFoundException) { return new NullTemplate(); }
+            catch (KeyNotFoundException) { return new NullScriptBuilder(); }
         }
 
-        public ITemplate CreateInstance(SupportedDatabase databaseType)
+        public IScriptBuilder CreateInstance(SupportedDatabase databaseType)
         {
             string key = string.Concat(databaseType, _targetInterface);
             return CreateInstance(key);
@@ -29,16 +29,16 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         #region Private Members
 
-        private static readonly string _targetInterface = (nameof(ITemplate).Substring(1));
+        private static readonly string _targetInterface = (nameof(IScriptBuilder).Substring(1));
         private IDictionary<string, Type> _templateTypes;
 
         private void LoadAssemblyTypes()
         {
             _templateTypes = new Dictionary<string, Type>();
 
-            foreach (var type in Assembly.GetAssembly(typeof(ITemplate)).GetTypes())
+            foreach (var type in Assembly.GetAssembly(typeof(IScriptBuilder)).GetTypes())
             {
-                if (!type.IsAbstract && !type.IsInterface && type.IsSubclassOf(typeof(ITemplate)))
+                if (!type.IsAbstract && !type.IsInterface && type.IsSubclassOf(typeof(IScriptBuilder)))
                 {
                     _templateTypes.Add(type.Name, type);
                 }

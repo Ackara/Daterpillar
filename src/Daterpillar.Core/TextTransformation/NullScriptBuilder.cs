@@ -1,6 +1,6 @@
 ﻿namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class NullTemplate : IScriptBuilder
+    public class NullScriptBuilder : IScriptBuilder
     {
         public void AlterTable(Column oldColumn, Column newColumn)
         {

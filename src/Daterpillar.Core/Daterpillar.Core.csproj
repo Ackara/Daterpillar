@@ -74,7 +74,7 @@
     <Compile Include="TextTransformation\ITypeNameResolver.cs" />
     <Compile Include="TextTransformation\MySQLScriptBuilder.cs" />
     <Compile Include="TextTransformation\MySQLTypeNameResolver.cs" />
-    <Compile Include="TextTransformation\NullTemplate.cs" />
+    <Compile Include="TextTransformation\NullScriptBuilder.cs" />
     <Compile Include="TextTransformation\SQLiteTemplateBuilder.cs" />
     <Compile Include="TextTransformation\ITemplate.cs" />
     <Compile Include="TextTransformation\SQLiteTemplateSettings.cs" />

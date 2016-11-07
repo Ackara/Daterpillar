@@ -15,7 +15,7 @@ namespace Gigobyte.Daterpillar.Commands
         [Option('o', "override", HelpText = "Drop all DB objects if the database already exist.")]
         public bool Override { get; set; }
 
-        [Option('p', "platform", DefaultValue = SupportedDatabase.MSSQL, HelpText = "The database platform in which to target.")]
+        [Option('p', "platform", DefaultValue = SupportedDatabase.TSQL, HelpText = "The database platform in which to target.")]
         public SupportedDatabase Platform { get; set; }
     }
 }
