@@ -76,7 +76,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Create(Table table)
         {
             string schema = table.SchemaRef.Name;
-            _script.AppendLine($"IF OBJECT_ID('{schema}.dbo.{table.Name}') IS NULL CREATE TABLE [{schema}].[dbo].[{table.Name}]");
+            _script.AppendLine($"IF OBJECT_ID('{table.Name}') IS NULL CREATE TABLE [{table.Name}]");
             _script.AppendLine("(");
 
             foreach (var column in table.Columns) AppendToTable(column);
@@ -98,23 +98,22 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Create(Column column)
         {
+            string table = column.TableRef.Name;
             string dataType = _typeResolver.GetName(column.DataType);
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _script.AppendLine($"ALTER TABLE [{column.TableRef.SchemaRef.Name}].[dbo].[{column.TableRef.Name}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
+            _script.AppendLine($"IF COL_LENGTH('{table}', '{column.Name}') IS NULL ALTER TABLE [{table}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
         }
 
         public void Create(Index index)
         {
             string table = index.TableRef.Name;
-            string schema = index.TableRef.SchemaRef.Name;
-
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             index.Name = (string.IsNullOrEmpty(index.Name) ? $"{index.Table}_idx{_seed++}" : index.Name).ToLower();
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{schema}.dbo.{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Table}] ({columns});");
+            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
@@ -123,7 +122,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
             if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{schema}.dbo.{table}')) ALTER TABLE [{schema}].[dbo].[{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{schema}].[dbo].[{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
@@ -133,22 +132,24 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Table table)
         {
-            _script.AppendLine($"IF OBJECT_ID('{table.SchemaRef.Name}.dbo.{table.Name}') IS NOT NULL DROP TABLE [{table.SchemaRef.Name}].[dbo].[{table.Name}];");
+            _script.AppendLine($"IF OBJECT_ID('{table.Name}') IS NOT NULL DROP TABLE [{table.Name}];");
         }
 
         public void Drop(Column column)
         {
+            var table = column.TableRef.Name;
             var schema = column.TableRef.SchemaRef;
 
             foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
-            foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, column.TableRef.Name, column.Name);
+            foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, table, column.Name);
 
-            _script.AppendLine($"ALTER TABLE [{column.TableRef.SchemaRef.Name}].[dbo].[{column.TableRef.Name}] DROP COLUMN [{column.Name}];");
+            _script.AppendLine($"IF COL_LENGTH('[{table}]', '{column.Name}') IS NOT NULL ALTER TABLE [{table}] DROP COLUMN [{column.Name}];");
         }
 
         public void Drop(Index index)
         {
-            _script.AppendLine($"DROP INDEX [{index.TableRef.SchemaRef.Name}].[dbo].[{index.Name}];");
+            string table = index.TableRef.Name;
+            _script.AppendLine($"IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.Name}') DROP INDEX [{index.Name}] ON [{table}];");
         }
 
         public void Drop(ForeignKey foreignKey)
@@ -157,23 +158,26 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
             if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{schema}.dbo.{table}')) ALTER TABLE [{schema}].[dbo].[{table}] DROP CONSTRAINT [{foreignKey.Name}];");
+            _script.AppendLine($"IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] DROP CONSTRAINT [{foreignKey.Name}];");
+        }
+
+        public void AlterTable(Table oldTable, Table newTable)
+        {
+            // Do nothing.
         }
 
         public void AlterTable(Column oldColumn, Column newColumn)
         {
             if (newColumn.AutoIncrement) newColumn.IsNullable = false;
 
+            string oldTable = oldColumn.TableRef.Name;
+            bool renameRequired = oldColumn.Name != newColumn.Name;
             string dataType = _typeResolver.GetName(newColumn.DataType);
             string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _script.AppendLine($"ALTER TABLE [{oldColumn.TableRef.Name}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
-        }
-
-        public void AlterTable(Table oldTable, Table newTable)
-        {
-            // Do nothing.
+            _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL ALTER TABLE [{oldTable}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
+            if (renameRequired) _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL EXEC sp_rename '{oldTable}.{oldColumn.Name}', '{newColumn.Name}', 'COLUMN';");
         }
 
         public string GetContent()
@@ -216,12 +220,21 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void RemoveAllReferencesToColumn(Index index, string columnName)
         {
-            int columnsRemoved = index.Columns.RemoveAll(x => x.Name == columnName);
-
-            if (columnsRemoved > 0)
+            bool indexColumnsWereRemoved = (index.Columns.RemoveAll(x => x.Name == columnName) > 0);
+            if (indexColumnsWereRemoved)
             {
-                Drop(index);
-                Create(index);
+                bool shouldRemoveIndex = (index.Columns.Count == 0);
+
+                if (shouldRemoveIndex)
+                {
+                    Drop(index);
+                    //index.TableRef.Indexes.Remove(index);
+                }
+                else /* All of the index columns were NOT removed */
+                {
+                    Drop(index);
+                    Create(index);
+                }
             }
         }
 

@@ -1,0 +1,1 @@
+﻿IF COL_LENGTH('tbl1', 'Address') IS NULL ALTER TABLE [tbl1] ADD [Address] VARCHAR(MAX) NOT NULL;

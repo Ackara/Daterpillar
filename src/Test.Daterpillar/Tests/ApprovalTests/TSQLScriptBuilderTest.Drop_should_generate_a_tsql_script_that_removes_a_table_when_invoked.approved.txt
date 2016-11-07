@@ -1,0 +1,1 @@
+﻿IF OBJECT_ID('tbl1') IS NOT NULL DROP TABLE [tbl1];

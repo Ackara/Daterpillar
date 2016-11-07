@@ -11,9 +11,9 @@ namespace Test.Daterpillar.Tests
     [DeploymentItem(SampleData.Folder)]
     [DeploymentItem(KnownFile.DbConfig)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class TSQLScriptBuilderTest : DbTemplateBuilderTestBase
-    {
+    { 
         [ClassCleanup]
         public static void Cleanup()
         {
@@ -33,24 +33,6 @@ namespace Test.Daterpillar.Tests
                     AppendComments = true,
                     CreateDatabase = true,
                     TruncateDatabaseIfItExist = true
-                };
-
-                RunSchemaTest<TSQLScriptBuilder>(settings, connection);
-            }
-        }
-
-        [TestMethod]
-        [Owner(Dev.Ackara)]
-        [TestCategory(Trait.Integration)]
-        public void Create_should_generate_a_tsql_script_that_builds_a_new_schema_when_settings_are_disabled()
-        {
-            using (var connection = DatabaseHelper.CreateMSSQLConnection())
-            {
-                var settings = new ScriptBuilderSettings()
-                {
-                    AppendScripts = false,
-                    AppendComments = false,
-                    TruncateDatabaseIfItExist = false
                 };
 
                 RunSchemaTest<TSQLScriptBuilder>(settings, connection);

@@ -23,7 +23,7 @@
 
         public override string GetName(DataType dataType)
         {
-            return TypeNames[dataType.Name];
+            return TypeNames[dataType.Name.ToLower()];
         }
     }
 }

@@ -111,7 +111,7 @@
     <Compile Include="Helpers\SampleData.cs" />
     <Compile Include="Tests\AdoNetDataReaderTest.cs" />
     <Compile Include="Tests\CsharpTypeNameResolverTest.cs" />
-    <Compile Include="Tests\MSSQLTypeNameResolverTest.cs" />
+    <Compile Include="Tests\TSQLTypeNameResolverTest.cs" />
     <Compile Include="Tests\MySqlTypeNameResolverTest.cs" />
     <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Tests\SchemaAggregatorFactoryTest.cs" />

@@ -12,15 +12,15 @@ namespace Gigobyte.Daterpillar.TextTransformation
 		public const string TEXT = "text";
 		public const string VARCHAR = "varchar";
 		public const string INT = "int";
-		public const string BIGINT = "bigInt";
-		public const string MEDIUMINT = "mediumInt";
-		public const string SMALLINT = "smallInt";
+		public const string BIGINT = "bigint";
+		public const string MEDIUMINT = "mediumint";
+		public const string SMALLINT = "smallint";
 		public const string FLOAT = "float";
 		public const string DOUBLE = "double";
 		public const string DECIMAL = "decimal";
 		public const string DATE = "date";
 		public const string TIME = "time";
-		public const string DATETIME = "dateTime";
+		public const string DATETIME = "datetime";
 
 		#endregion Keys
 

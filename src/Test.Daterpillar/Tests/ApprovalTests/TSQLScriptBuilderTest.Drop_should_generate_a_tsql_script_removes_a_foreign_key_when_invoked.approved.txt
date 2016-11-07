@@ -1,1 +1,0 @@
-﻿IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='tbl2_categoryid_to_tbl1_id_fx1' AND [parent_object_id]=OBJECT_ID('daterpillar1.dbo.tbl2')) ALTER TABLE [daterpillar1].[dbo].[tbl2] DROP CONSTRAINT [tbl2_categoryid_to_tbl1_id_fx1];

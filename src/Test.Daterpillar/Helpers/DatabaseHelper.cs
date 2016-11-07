@@ -37,23 +37,30 @@ namespace Tests.Daterpillar.Helpers
             return new System.Data.SqlClient.SqlConnection(connStr.ConnectionString);
         }
 
-        public static bool TryRunScript(IDbConnection connection, string sql, out string error)
+        public static bool TryRunScript(IDbConnection connection, string script, out string error)
         {
             error = "";
             IDbCommand command = null;
 
             try
             {
-                if (connection.State != ConnectionState.Open) connection.Open();
-                command = connection.CreateCommand();
+                if (!string.IsNullOrWhiteSpace(script))
+                {
+                    if (connection.State != ConnectionState.Open) connection.Open();
+                    command = connection.CreateCommand();
 
-                string[] statements = sql.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var cmd in statements)
-                    if (!string.IsNullOrWhiteSpace(cmd))
-                    {
-                        command.CommandText = cmd.Trim();
-                        command.ExecuteNonQuery();
-                    }
+                    string[] statements = script.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var cmd in statements)
+                        if (!string.IsNullOrWhiteSpace(cmd))
+                        {
+                            command.CommandText = cmd.Trim();
+                            command.ExecuteNonQuery();
+                        }
+
+                    error = "** THE SCRIPT WORKS **";
+                }
+                else error = "** NOTHING WAS GENERATED **";
+
                 return true;
             }
             catch (DbException ex)

@@ -12,7 +12,7 @@
             TypeNames[INT] = "int";
             TypeNames[BIGINT] = "bigInt";
             TypeNames[MEDIUMINT] = "int";
-            TypeNames[SMALLINT] = "smallint";
+            TypeNames[SMALLINT] = "smallInt";
             TypeNames[FLOAT] = "float";
             TypeNames[DOUBLE] = "double";
             TypeNames[DECIMAL] = "decimal";

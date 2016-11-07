@@ -23,6 +23,7 @@ namespace Tests.Daterpillar.Tests
             var sut = new SQLiteTypeNameResolver();
 
             // Act
+            TestContext.WriteLine("Arg: {0}", dataType);
             var result = sut.GetName(dataType);
 
             // Assert
