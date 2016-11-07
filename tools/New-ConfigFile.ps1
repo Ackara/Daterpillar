@@ -46,7 +46,7 @@ $content = @"
 "@;
 
 $rootDirectory = (Split-Path $PSScriptRoot -Parent);
-$databaseConfig = "$rootDirectory\src\Test.Daterpillar\database.config.xml";
+$databaseConfig = "$rootDirectory\src\Test.Daterpillar\database.config";
 
 if(-not (Test-Path $databaseConfig -PathType Leaf))
 {
@@ -62,3 +62,5 @@ elseif ($Overwrite)
 		New-Item $databaseConfig -Value $content -ItemType File | Out-Null;
 	}
 }
+
+Write-Host "database.cong located at: '$databaseConfig'";
