@@ -29,7 +29,7 @@ namespace Test.Daterpillar.Tests
             {
                 var settings = new ScriptBuilderSettings()
                 {
-                    AppendScripts = false,
+                    AppendScripts = true,
                     AppendComments = true,
                     CreateDatabase = true,
                     TruncateDatabaseIfItExist = true
