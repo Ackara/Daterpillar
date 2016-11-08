@@ -11,7 +11,7 @@ namespace Test.Daterpillar.Tests
     [DeploymentItem(SampleData.Folder)]
     [DeploymentItem(KnownFile.DbConfig)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class MySQLScriptBuilderTest : DbTemplateBuilderTestBase
     { 
         [ClassCleanup]

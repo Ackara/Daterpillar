@@ -2,13 +2,13 @@
 
 namespace Gigobyte.Daterpillar.Aggregation
 {
-    public class MSSQLSchemaAggregator : SchemaAggregatorBase
+    public class TSQLSchemaAggregator : SchemaAggregatorBase
     {
-        public MSSQLSchemaAggregator(string connectionString) : this(new System.Data.SqlClient.SqlConnection(connectionString))
+        public TSQLSchemaAggregator(string connectionString) : this(new System.Data.SqlClient.SqlConnection(connectionString))
         {
         }
 
-        public MSSQLSchemaAggregator(IDbConnection connection) : base(connection)
+        public TSQLSchemaAggregator(IDbConnection connection) : base(connection)
         {
         }
 

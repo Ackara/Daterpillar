@@ -14,7 +14,7 @@ namespace Tests.Daterpillar.Tests
         {
             var sut = new TemplateFactory();
             var type = sut.CreateInstance(SupportedDatabase.TSQL.ToString(), partialMatch: true);
-            Assert.IsInstanceOfType(type, typeof(ITemplate));
+            Assert.IsInstanceOfType(type, typeof(IScriptBuilder));
         }
     }
 }
