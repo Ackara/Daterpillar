@@ -114,7 +114,16 @@ namespace Test.Daterpillar.Tests
             DatabaseHelper.CreateSchema(connection, sut, schema, false);
             sut.Clear();
 
-            var constraint = tbl1.CreateForeignKey("CategoryId", "tbl2", "Id", ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE);
+            var constraint = new ForeignKey()
+            {
+                LocalColumn = "CategoryId",
+                ForeignTable = "tbl2",
+                ForeignColumn = "Id",
+                OnUpdate = ForeignKeyRule.CASCADE,
+                OnDelete = ForeignKeyRule.CASCADE,
+                TableRef = tbl1
+            };
+
             sut.Create(constraint);
 
             string errorMsg;

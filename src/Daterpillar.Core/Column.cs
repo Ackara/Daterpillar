@@ -35,6 +35,8 @@ namespace Gigobyte.Daterpillar
         [XmlAttribute("autoIncrement")]
         public bool AutoIncrement { get; set; }
 
+        public object DefaultValue { get; set; }
+
         /// <summary>
         /// Gets or sets the modifiers.
         /// </summary>

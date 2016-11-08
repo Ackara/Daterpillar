@@ -3,21 +3,21 @@ using System.Text;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-    public class SQLiteTemplateBuilder : IScriptBuilder
+    public class SQLiteScriptBuilder : IScriptBuilder
     {
-        public SQLiteTemplateBuilder() : this(ScriptBuilderSettings.Default, new SQLiteTypeNameResolver())
+        public SQLiteScriptBuilder() : this(ScriptBuilderSettings.Default, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplateBuilder(ITypeNameResolver typeResolver) : this(ScriptBuilderSettings.Default, typeResolver)
+        public SQLiteScriptBuilder(ITypeNameResolver typeResolver) : this(ScriptBuilderSettings.Default, typeResolver)
         {
         }
 
-        public SQLiteTemplateBuilder(ScriptBuilderSettings settings) : this(settings, new SQLiteTypeNameResolver())
+        public SQLiteScriptBuilder(ScriptBuilderSettings settings) : this(settings, new SQLiteTypeNameResolver())
         {
         }
 
-        public SQLiteTemplateBuilder(ScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        public SQLiteScriptBuilder(ScriptBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;
@@ -51,15 +51,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
             _script.AppendLine(lineBreak);
             _script.AppendLine();
-
-            if (_settings.TruncateDatabaseIfItExist) Drop(schema);
-            if (_settings.CreateDatabase)
-            {
-                _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
-                _script.AppendLine($"USE [{schema.Name}];");
-                _script.AppendLine();
-            }
-
+            
             foreach (var table in schema.Tables) Create(table);
 
             if (_settings.AppendScripts)
@@ -77,7 +69,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Create(Table table)
         {
             string schema = table.SchemaRef.Name;
-            _script.AppendLine($"IF OBJECT_ID('{table.Name}') IS NULL CREATE TABLE [{table.Name}]");
+            _script.AppendLine($"CREATE TABLE IF NOT EXISTS [{table.Name}]");
             _script.AppendLine("(");
 
             foreach (var column in table.Columns) AppendToTable(column);
@@ -102,9 +94,10 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = column.TableRef.Name;
             string dataType = _typeResolver.GetName(column.DataType);
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
-            string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
+            string defaultValue = (!column.IsNullable ? $" DEFAULT '{column.DefaultValue ?? string.Empty}'" : string.Empty);
+            string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY AUTOINCREMENT" : string.Empty);
 
-            _script.AppendLine($"IF COL_LENGTH('{table}', '{column.Name}') IS NULL ALTER TABLE [{table}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
+            _script.AppendLine($"ALTER TABLE [{table}] ADD COLUMN [{column.Name}] {dataType}{notNull}{defaultValue}{autoIncrement};");
         }
 
         public void Create(Index index)
@@ -114,26 +107,39 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             index.Name = (string.IsNullOrEmpty(index.Name) ? $"{index.Table}_idx{_seed++}" : index.Name).ToLower();
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.Table}] ({columns});");
+            _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.Name}] ON [{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
+            string tempName = $"{table}_temp_table";
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
             if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+
+            _script.AppendLine("PRAGMA foreign_keys = 0;");
+            _script.AppendLine($"CREATE TABLE {tempName} AS SELECT * FROM {table};");
+            _script.AppendLine($"DROP TABLE {table};");
+            foreignKey.TableRef.ForeignKeys.Add(foreignKey);
+            Create(foreignKey.TableRef);
+
+            var columns = string.Join(",", foreignKey.TableRef.Columns.Select(x => $"[{x.Name}]"));
+            _script.AppendLine($"INSERT INTO {table} ({columns}) SELECT {columns} FROM {tempName};");
+
+            _script.AppendLine($"DROP TABLE {tempName};");
+            _script.AppendLine("PRAGMA foreign_keys = 1;");
+
         }
 
         public void Drop(Schema schema)
         {
-            _script.AppendLine($"IF DB_ID('{schema.Name}') IS NOT NULL DROP DATABASE [{schema.Name}];");
+            // DO NOTHING
         }
 
         public void Drop(Table table)
         {
-            _script.AppendLine($"IF OBJECT_ID('{table.Name}') IS NOT NULL DROP TABLE [{table.Name}];");
+            _script.AppendLine($"DROP TABLE IF EXISTS [{table.Name}];");
         }
 
         public void Drop(Column column)
@@ -144,13 +150,13 @@ namespace Gigobyte.Daterpillar.TextTransformation
             foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
             foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, table, column.Name);
 
-            _script.AppendLine($"IF COL_LENGTH('[{table}]', '{column.Name}') IS NOT NULL ALTER TABLE [{table}] DROP COLUMN [{column.Name}];");
+            _script.AppendLine($"ALTER TABLE [{table}] DROP COLUMN [{column.Name}];");
         }
 
         public void Drop(Index index)
         {
             string table = index.TableRef.Name;
-            _script.AppendLine($"IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.Name}') DROP INDEX [{index.Name}] ON [{table}];");
+            _script.AppendLine($"DROP INDEX IF EXISTS [{index.Name}];");
         }
 
         public void Drop(ForeignKey foreignKey)
@@ -159,7 +165,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
             if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] DROP CONSTRAINT [{foreignKey.Name}];");
+            _script.AppendLine($"ALTER TABLE [{table}] DROP CONSTRAINT [{foreignKey.Name}];");
         }
 
         public void AlterTable(Table oldTable, Table newTable)
@@ -205,7 +211,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
             string dataType = _typeResolver.GetName(column.DataType);
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
-            string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
+            string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY AUTOINCREMENT" : string.Empty);
 
             _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{autoIncrement},");
         }

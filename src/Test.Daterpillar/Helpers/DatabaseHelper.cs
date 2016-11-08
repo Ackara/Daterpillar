@@ -14,6 +14,7 @@ namespace Tests.Daterpillar.Helpers
             if (!File.Exists(filePath))
             {
                 filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "daterpillar-test.db3");
+                if (File.Exists(filePath)) File.Delete(filePath);
                 System.Data.SQLite.SQLiteConnection.CreateFile(filePath);
             }
 
