@@ -122,7 +122,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = foreignKey.LocalTable;
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
+            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_TO_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
             _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
@@ -141,8 +141,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
             var table = column.TableRef.Name;
             var schema = column.TableRef.SchemaRef;
 
-            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
             foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, table, column.Name);
+            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
 
             _script.AppendLine($"IF COL_LENGTH('[{table}]', '{column.Name}') IS NOT NULL ALTER TABLE [{table}] DROP COLUMN [{column.Name}];");
         }

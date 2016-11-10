@@ -1,0 +1,15 @@
+﻿PRAGMA foreign_keys = 0;
+CREATE TABLE [tbl2_temp_table] AS SELECT * FROM [tbl2];
+DROP TABLE [tbl2];
+CREATE TABLE IF NOT EXISTS [tbl2]
+(
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Name] VARCHAR(64) NOT NULL,
+	[CategoryId] INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS [cat_idx] ON [tbl2] ([CategoryId] ASC);
+
+INSERT INTO [tbl2] ([Id],[Name],[CategoryId]) SELECT [Id],[Name],[CategoryId] FROM [tbl2_temp_table];
+DROP TABLE [tbl2_temp_table];
+PRAGMA foreign_keys = 1;

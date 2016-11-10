@@ -11,12 +11,12 @@ namespace Tests.Daterpillar.Helpers
     {
         public static IDbConnection CreateSQLiteConnection(string filePath = "")
         {
-            if (!File.Exists(filePath))
+            if (string.IsNullOrEmpty(filePath))
             {
                 filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "daterpillar-test.db3");
-                if (File.Exists(filePath)) File.Delete(filePath);
-                System.Data.SQLite.SQLiteConnection.CreateFile(filePath);
             }
+            if (File.Exists(filePath)) File.Delete(filePath);
+            System.Data.SQLite.SQLiteConnection.CreateFile(filePath);
 
             var connStr = new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = filePath };
             return new System.Data.SQLite.SQLiteConnection(connStr.ConnectionString);

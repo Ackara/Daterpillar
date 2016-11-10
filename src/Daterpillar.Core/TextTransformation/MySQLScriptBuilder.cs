@@ -123,7 +123,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = foreignKey.LocalTable;
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
+            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_TO_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
             _script.AppendLine($"ALTER TABLE `{table}` ADD FOREIGN KEY `{foreignKey.Name}` (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}` (`{foreignKey.ForeignColumn}`) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 

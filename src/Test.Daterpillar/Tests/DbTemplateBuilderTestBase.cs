@@ -11,7 +11,7 @@ namespace Test.Daterpillar.Tests
 {
     public abstract class DbTemplateBuilderTestBase
     {
-        internal const string DBNAME = "daterpillar1";
+        private const string DBNAME = "daterpillar1";
 
         protected void RunSchemaTest<T>(ScriptBuilderSettings settings, IDbConnection connection) where T : IScriptBuilder
         {
@@ -316,7 +316,15 @@ namespace Test.Daterpillar.Tests
             DatabaseHelper.CreateSchema(connection, sut, schema);
             sut.Clear();
 
-            var modifiedCol = tbl1.CreateColumn("Modified", new DataType("varchar", 16), autoIncrement: false, nullable: false, comment: "Modified comment.");
+            var modifiedCol = new Column()
+            {
+                Name = "Modified",
+                DataType = new DataType("varchar", 16),
+                Comment = "Modified comment.",
+                IsNullable = false,
+                TableRef = tbl1
+            };
+
             sut.AlterTable(originalCol, modifiedCol);
             var script = sut.GetContent();
             string errorMsg;

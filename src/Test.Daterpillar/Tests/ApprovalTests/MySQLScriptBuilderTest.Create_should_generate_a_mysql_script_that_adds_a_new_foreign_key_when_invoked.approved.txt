@@ -1,1 +1,1 @@
-﻿ALTER TABLE `tbl1` ADD FOREIGN KEY `tbl1_CategoryId_TO_tbl2_Id_fx1` (`CategoryId`) REFERENCES `tbl2` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE;
+﻿ALTER TABLE `tbl1` ADD FOREIGN KEY `tbl1_CategoryId_TO_tbl2_Id_fkey1` (`CategoryId`) REFERENCES `tbl2` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE;

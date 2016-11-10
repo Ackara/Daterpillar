@@ -51,7 +51,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
             _script.AppendLine(lineBreak);
             _script.AppendLine();
-            
+
             foreach (var table in schema.Tables) Create(table);
 
             if (_settings.AppendScripts)
@@ -116,20 +116,19 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string tempName = $"{table}_temp_table";
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
+            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_TO_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
 
             _script.AppendLine("PRAGMA foreign_keys = 0;");
-            _script.AppendLine($"CREATE TABLE {tempName} AS SELECT * FROM {table};");
-            _script.AppendLine($"DROP TABLE {table};");
+            _script.AppendLine($"CREATE TABLE [{tempName}] AS SELECT * FROM [{table}];");
+            _script.AppendLine($"DROP TABLE [{table}];");
             foreignKey.TableRef.ForeignKeys.Add(foreignKey);
             Create(foreignKey.TableRef);
 
             var columns = string.Join(",", foreignKey.TableRef.Columns.Select(x => $"[{x.Name}]"));
-            _script.AppendLine($"INSERT INTO {table} ({columns}) SELECT {columns} FROM {tempName};");
+            _script.AppendLine($"INSERT INTO [{table}] ({columns}) SELECT {columns} FROM [{tempName}];");
 
-            _script.AppendLine($"DROP TABLE {tempName};");
+            _script.AppendLine($"DROP TABLE [{tempName}];");
             _script.AppendLine("PRAGMA foreign_keys = 1;");
-
         }
 
         public void Drop(Schema schema)
@@ -144,13 +143,24 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         public void Drop(Column column)
         {
-            var table = column.TableRef.Name;
-            var schema = column.TableRef.SchemaRef;
+            string table = column.TableRef.Name;
+            string tempName = $"{table}_temp_table";
+            Schema schema = column.TableRef.SchemaRef;
 
-            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
             foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, table, column.Name);
+            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
 
-            _script.AppendLine($"ALTER TABLE [{table}] DROP COLUMN [{column.Name}];");
+            _script.AppendLine("PRAGMA foreign_keys = 0;");
+            _script.AppendLine($"CREATE TABLE [{tempName}] AS SELECT * FROM [{table}];");
+            _script.AppendLine($"DROP TABLE [{table}];");
+            column.TableRef.Columns.Remove(column);
+            Create(column.TableRef);
+
+            var columns = string.Join(",", column.TableRef.Columns.Select(x => $"[{x.Name}]"));
+            _script.AppendLine($"INSERT INTO [{table}] ({columns}) SELECT {columns} FROM [{tempName}];");
+
+            _script.AppendLine($"DROP TABLE [{tempName}];");
+            _script.AppendLine("PRAGMA foreign_keys = 1;");
         }
 
         public void Drop(Index index)
@@ -162,10 +172,20 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Drop(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
+            string tempName = $"{table}_temp_table";
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"ALTER TABLE [{table}] DROP CONSTRAINT [{foreignKey.Name}];");
+            _script.AppendLine("PRAGMA foreign_keys = 0;");
+            _script.AppendLine($"CREATE TABLE [{tempName}] AS SELECT * FROM [{table}];");
+            _script.AppendLine($"DROP TABLE [{table}];");
+            foreignKey.TableRef.ForeignKeys.Remove(foreignKey);
+            Create(foreignKey.TableRef);
+
+            var columns = string.Join(",", foreignKey.TableRef.Columns.Select(x => $"[{x.Name}]"));
+            _script.AppendLine($"INSERT INTO [{table}] ({columns}) SELECT {columns} FROM [{tempName}];");
+
+            _script.AppendLine($"DROP TABLE [{tempName}];");
+            _script.AppendLine("PRAGMA foreign_keys = 1;");
         }
 
         public void AlterTable(Table oldTable, Table newTable)
@@ -235,7 +255,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
                 if (shouldRemoveIndex)
                 {
                     Drop(index);
-                    //index.TableRef.Indexes.Remove(index);
                 }
                 else /* All of the index columns were NOT removed */
                 {
