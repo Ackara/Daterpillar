@@ -14,7 +14,7 @@ namespace Test.Daterpillar.Tests
     [DeploymentItem(KnownFile.DbConfig)]
     [DeploymentItem(KnownFile.x86SQLiteInterop)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SQLiteScriptBuilderTest : DbTemplateBuilderTestBase
     {
         private static readonly string DataSource = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "datapillar-test.db3");
@@ -23,7 +23,7 @@ namespace Test.Daterpillar.Tests
         public static void Cleanup()
         {
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
-            if (File.Exists(DataSource)) File.Delete(DataSource);
+            //if (File.Exists(DataSource)) File.Delete(DataSource);
         }
 
         [TestMethod]

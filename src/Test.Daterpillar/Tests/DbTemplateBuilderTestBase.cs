@@ -157,7 +157,7 @@ namespace Test.Daterpillar.Tests
             Approvals.Verify(script);
         }
 
-        public void RunColumnDropTest<T>(IDbConnection connection)
+        protected void RunColumnDropTest<T>(IDbConnection connection)
         {
             // Arrange
             var sut = (IScriptBuilder)Activator.CreateInstance(typeof(T));
@@ -165,22 +165,23 @@ namespace Test.Daterpillar.Tests
             var tbl1 = schema.CreateTable("tbl1");
             tbl1.CreateColumn("Id", new DataType("int"), autoIncrement: true);
             tbl1.CreateColumn("Name");
+            var col = tbl1.CreateColumn("RefCol", new DataType("int"));
 
             var tbl2 = schema.CreateTable("tbl2");
             tbl2.CreateColumn("Id", new DataType("int"), autoIncrement: true);
             tbl2.CreateColumn("Name");
-            var col = tbl2.CreateColumn("CategoryId", new DataType("int"));
+            tbl2.CreateColumn("CategoryId", new DataType("int"));
             tbl2.CreateIndex("cat_idx", IndexType.Index, false, new IndexColumn("CategoryId"));
-            tbl2.CreateForeignKey(col.Name, tbl1.Name, "Id");
+            tbl2.CreateForeignKey("CategoryId", tbl1.Name, col.Name);
 
             // Act
             DatabaseHelper.TryDropDatabase(connection, schema.Name);
             DatabaseHelper.CreateSchema(connection, sut, schema);
             sut.Clear();
 
-            string errorMsg;
             sut.Drop(col);
             var script = sut.GetContent();
+            string errorMsg;
             var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
             System.Diagnostics.Debug.WriteLine(errorMsg);
 

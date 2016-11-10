@@ -48,6 +48,7 @@
     <Compile Include="Data\IDbConnectionWrapper.cs" />
     <Compile Include="Data\IDataReader.cs" />
     <Compile Include="Equality\ColumnEqualityComparer.cs" />
+    <Compile Include="ICloneable.cs" />
     <Compile Include="Linq\LinqExtensions.cs" />
     <Compile Include="Linq\Query.cs" />
     <Compile Include="Linq\SqlWriter.cs" />

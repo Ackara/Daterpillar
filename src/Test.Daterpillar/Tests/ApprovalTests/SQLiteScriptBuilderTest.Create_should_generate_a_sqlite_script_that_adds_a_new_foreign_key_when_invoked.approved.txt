@@ -1,6 +1,8 @@
-﻿PRAGMA foreign_keys = 0;
-CREATE TABLE tbl1_temp_table AS SELECT * FROM tbl1;
-DROP TABLE tbl1;
+﻿/* ADD ([tbl1].[]) SCRIPT */
+PRAGMA foreign_keys = 0;
+CREATE TABLE [tbl1_temp_table] AS SELECT * FROM [tbl1];
+DROP TABLE [tbl1];
+
 CREATE TABLE IF NOT EXISTS [tbl1]
 (
 	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -11,6 +13,7 @@ CREATE TABLE IF NOT EXISTS [tbl1]
 
 CREATE INDEX IF NOT EXISTS [cat_idx] ON [tbl1] ([CategoryId] ASC);
 
-INSERT INTO tbl1 ([Id],[Name],[CategoryId]) SELECT [Id],[Name],[CategoryId] FROM tbl1_temp_table;
-DROP TABLE tbl1_temp_table;
+INSERT INTO [tbl1] ([Id], [Name], [CategoryId]) SELECT [Id], [Name], [CategoryId] FROM [tbl1_temp_table];
+DROP TABLE [tbl1_temp_table];
 PRAGMA foreign_keys = 1;
+/* END SCRIPT */

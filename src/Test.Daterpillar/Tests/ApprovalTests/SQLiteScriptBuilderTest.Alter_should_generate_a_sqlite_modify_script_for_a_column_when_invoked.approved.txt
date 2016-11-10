@@ -1,0 +1,16 @@
+﻿/* DROP ([tbl1].[Name]) SCRIPT */
+PRAGMA foreign_keys = 0;
+CREATE TABLE [tbl1_temp_table] AS SELECT * FROM [tbl1];
+DROP TABLE [tbl1];
+CREATE TABLE IF NOT EXISTS [tbl1]
+(
+	[Id] INTEGER NOT NULL
+);
+
+
+INSERT INTO [tbl1] ([Id]) SELECT [Id] FROM [tbl1_temp_table];
+DROP TABLE [tbl1_temp_table];
+PRAGMA foreign_keys = 1;
+/* END SCRIPT */
+
+ALTER TABLE [tbl1] ADD COLUMN [Modified] VARCHAR(16) NOT NULL DEFAULT '';

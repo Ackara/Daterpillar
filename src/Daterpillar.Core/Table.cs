@@ -10,7 +10,7 @@ namespace Gigobyte.Daterpillar
     /// </summary>
     [DataContract]
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public sealed class Table
+    public sealed class Table : ICloneable<Table>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -173,6 +173,72 @@ namespace Gigobyte.Daterpillar
 
             ForeignKeys.Add(newConstraint);
             return newConstraint;
+        }
+
+        public bool RemoveColumn(string name)
+        {
+            for (int i = 0; i < Columns.Count; i++)
+                if (Columns[i].Name == name)
+                {
+                    Columns.RemoveAt(i);
+                    return true;
+                }
+
+            return false;
+        }
+
+        public bool RemoveIndex(string name)
+        {
+            for (int i = 0; i < Indexes.Count; i++)
+                if (Indexes[i].Name == name)
+                {
+                    Indexes.RemoveAt(i);
+                    return true;
+                }
+
+            return false;
+        }
+
+        public bool RemoveForeignKey(string name)
+        {
+            for (int i = 0; i < ForeignKeys.Count; i++)
+                if (ForeignKeys[i].Name == name)
+                {
+                    ForeignKeys.RemoveAt(i);
+                    return true;
+                }
+
+            return false;
+        }
+
+        public Table Clone()
+        {
+            var clone = new Table();
+            clone.Name = Name;
+            clone.Comment = Comment;
+
+            foreach (var column in Columns)
+            {
+                var copy = column.Clone();
+                clone.Columns.Add(copy);
+                copy.TableRef = clone;
+            }
+
+            foreach (var constriant in ForeignKeys)
+            {
+                ForeignKey copy = constriant.Clone();
+                clone.ForeignKeys.Add(copy);
+                copy.TableRef = clone;
+            }
+
+            foreach (var index in Indexes)
+            {
+                Index copy = index.Clone();
+                clone.Indexes.Add(copy);
+                copy.TableRef = clone;
+            }
+
+            return clone;
         }
 
         #region Private Members

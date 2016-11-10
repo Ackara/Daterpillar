@@ -46,5 +46,29 @@
         {
             throw new System.NotImplementedException();
         }
+
+        internal static string GetName(this Index index, int count = 1)
+        {
+            if (string.IsNullOrEmpty(index.Name))
+            {
+                return $"{index.TableRef.Name}_idx{count}".ToLower();
+            }
+            else
+            {
+                return index.Name;
+            }
+        }
+
+        internal static string GetName(this ForeignKey constriant, int count = 1)
+        {
+            if (string.IsNullOrEmpty(constriant.Name))
+            {
+                return $"{constriant.LocalColumn.ToLower()}_TO_{constriant.ForeignTable.ToLower()}_{constriant.ForeignColumn.ToLower()}_fkey{count}";
+            }
+            else
+            {
+                return constriant.Name;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database index.
     /// </summary>
-    public class Index
+    public class Index : ICloneable<Index>
     {
         public Index()
         {
@@ -49,5 +49,16 @@ namespace Gigobyte.Daterpillar
         /// <value>The columns.</value>
         [XmlElement("columnName")]
         public List<IndexColumn> Columns { get; set; }
+
+        public Index Clone()
+        {
+            return new Index()
+            {
+                Name = this.Name,
+                Type = this.Type,
+                Unique = this.Unique,
+                Columns = this.Columns
+            };
+        }
     }
 }

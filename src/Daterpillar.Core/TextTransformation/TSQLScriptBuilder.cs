@@ -102,9 +102,10 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = column.TableRef.Name;
             string dataType = _typeResolver.GetName(column.DataType);
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
+            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT '{column.DefaultValue}'");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _script.AppendLine($"IF COL_LENGTH('{table}', '{column.Name}') IS NULL ALTER TABLE [{table}] ADD [{column.Name}] {dataType}{notNull}{autoIncrement};");
+            _script.AppendLine($"IF COL_LENGTH('{table}', '{column.Name}') IS NULL ALTER TABLE [{table}] ADD [{column.Name}] {dataType}{notNull}{defaultValue}{autoIncrement};");
         }
 
         public void Create(Index index)
@@ -112,18 +113,18 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = index.TableRef.Name;
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
-            index.Name = (string.IsNullOrEmpty(index.Name) ? $"{index.Table}_idx{_seed++}" : index.Name).ToLower();
+            _seed++;
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.Name}') CREATE{unique}INDEX [{index.Name}] ON [{index.Table}] ({columns});");
+            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.GetName(_seed)}') CREATE{unique}INDEX [{index.GetName(_seed)}] ON [{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
             string schema = foreignKey.TableRef.SchemaRef.Name;
+            _seed++;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_TO_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
-            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.GetName(_seed)}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.GetName(_seed)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
@@ -158,7 +159,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = foreignKey.LocalTable;
             string schema = foreignKey.TableRef.SchemaRef.Name;
 
-            if (string.IsNullOrEmpty(foreignKey.Name)) foreignKey.Name = $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}";
             _script.AppendLine($"IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] DROP CONSTRAINT [{foreignKey.Name}];");
         }
 
@@ -175,9 +175,10 @@ namespace Gigobyte.Daterpillar.TextTransformation
             bool renameRequired = oldColumn.Name != newColumn.Name;
             string dataType = _typeResolver.GetName(newColumn.DataType);
             string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
+            string defaultValue = (newColumn.DefaultValue == null ? string.Empty : $" DEFAULT '{newColumn.DefaultValue}'");
             string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
-            _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL ALTER TABLE [{oldTable}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{autoIncrement};");
+            _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL ALTER TABLE [{oldTable}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{defaultValue}{autoIncrement};");
             if (renameRequired) _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL EXEC sp_rename '{oldTable}.{oldColumn.Name}', '{newColumn.Name}', 'COLUMN';");
         }
 
@@ -197,14 +198,12 @@ namespace Gigobyte.Daterpillar.TextTransformation
         private readonly ScriptBuilderSettings _settings;
         private readonly StringBuilder _script = new StringBuilder();
 
-        private int _seed = 1;
+        private int _seed = 0;
 
         private void AppendToTable(Column column)
         {
-            if (column.AutoIncrement) column.IsNullable = false;
-
             string dataType = _typeResolver.GetName(column.DataType);
-            string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
+            string notNull = ((column.IsNullable && !column.AutoIncrement) ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
             _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{autoIncrement},");
@@ -214,9 +213,9 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string onUpdate = (foreignKey.OnUpdate != ForeignKeyRule.RESTRICT ? $" ON UPDATE {foreignKey.OnUpdate}" : string.Empty);
             string onDelete = (foreignKey.OnDelete != ForeignKeyRule.RESTRICT ? $" ON DELETE {foreignKey.OnDelete}" : string.Empty);
-            foreignKey.Name = (string.IsNullOrEmpty(foreignKey.Name) ? $"{foreignKey.LocalTable}_{foreignKey.LocalColumn}_to_{foreignKey.ForeignTable}_{foreignKey.ForeignColumn}_fkey{_seed++}" : foreignKey.Name).ToLower();
+            _seed++;
 
-            _script.AppendLine($"\tCONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
+            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName(_seed)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
         private void RemoveAllReferencesToColumn(Index index, string columnName)

@@ -6,7 +6,7 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database column.
     /// </summary>
-    public class Column
+    public class Column : ICloneable<Column>
     {
         [XmlIgnore]
         public Table TableRef;
@@ -27,7 +27,7 @@ namespace Gigobyte.Daterpillar
 
         [XmlAttribute("nullable")]
         public bool IsNullable { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the column is auto incremented.
         /// </summary>
@@ -65,6 +65,20 @@ namespace Gigobyte.Daterpillar
 
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
+
+        public Column Clone()
+        {
+            return new Column()
+            {
+                Name = this.Name,
+                Comment = this.Comment,
+                DataType = this.DataType,
+                IsNullable = this.IsNullable,
+                AutoIncrement = this.AutoIncrement,
+                DefaultValue = this.DefaultValue,
+                OrdinalPosition = this.OrdinalPosition
+            };
+        }
 
         #region Private Members
 

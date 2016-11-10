@@ -1,4 +1,4 @@
-﻿/* DROP ([tbl2].[tbl2_CategoryId_TO_tbl1_Id_fx1]) SCRIPT */
+﻿/* DROP ([tbl2].[tbl2_CategoryId_TO_tbl1_RefCol_fx1]) SCRIPT */
 PRAGMA foreign_keys = 0;
 CREATE TABLE [tbl2_temp_table] AS SELECT * FROM [tbl2];
 DROP TABLE [tbl2];
@@ -16,3 +16,18 @@ DROP TABLE [tbl2_temp_table];
 PRAGMA foreign_keys = 1;
 /* END SCRIPT */
 
+/* DROP ([tbl1].[RefCol]) SCRIPT */
+PRAGMA foreign_keys = 0;
+CREATE TABLE [tbl1_temp_table] AS SELECT * FROM [tbl1];
+DROP TABLE [tbl1];
+CREATE TABLE IF NOT EXISTS [tbl1]
+(
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Name] VARCHAR(64) NOT NULL
+);
+
+
+INSERT INTO [tbl1] ([Id], [Name]) SELECT [Id], [Name] FROM [tbl1_temp_table];
+DROP TABLE [tbl1_temp_table];
+PRAGMA foreign_keys = 1;
+/* END SCRIPT */

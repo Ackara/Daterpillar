@@ -5,7 +5,7 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database foreign key.
     /// </summary>
-    public class ForeignKey
+    public class ForeignKey : ICloneable<ForeignKey>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey" /> class.
@@ -82,5 +82,19 @@ namespace Gigobyte.Daterpillar
         /// <value>The on delete rule.</value>
         [XmlAttribute("onDelete")]
         public ForeignKeyRule OnDelete { get; set; }
+
+        public ForeignKey Clone()
+        {
+            return new ForeignKey()
+            {
+                Name = this.Name,
+                LocalTable = this.LocalTable,
+                LocalColumn = this.LocalColumn,
+                ForeignTable = this.ForeignTable,
+                ForeignColumn = this.ForeignColumn,
+                OnDelete = this.OnDelete,
+                OnUpdate = this.OnUpdate
+            };
+        }
     }
 }
