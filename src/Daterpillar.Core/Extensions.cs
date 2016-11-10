@@ -51,7 +51,7 @@
         {
             if (string.IsNullOrEmpty(index.Name))
             {
-                return $"{index.TableRef.Name}_idx{count}".ToLower();
+                return  $"{index.TableRef.Name}_idx{count}".ToLower();
             }
             else
             {

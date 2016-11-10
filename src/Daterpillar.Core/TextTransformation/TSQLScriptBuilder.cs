@@ -113,18 +113,17 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = index.TableRef.Name;
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
-            _seed++;
+            string indexName = index.GetName(_seed++);
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{index.GetName(_seed)}') CREATE{unique}INDEX [{index.GetName(_seed)}] ON [{index.Table}] ({columns});");
+            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{indexName}') CREATE{unique}INDEX [{indexName}] ON [{index.Table}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
             string schema = foreignKey.TableRef.SchemaRef.Name;
-            _seed++;
 
-            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.GetName(_seed)}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.GetName(_seed)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
@@ -198,7 +197,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         private readonly ScriptBuilderSettings _settings;
         private readonly StringBuilder _script = new StringBuilder();
 
-        private int _seed = 0;
+        private int _seed = 1;
 
         private void AppendToTable(Column column)
         {
@@ -213,9 +212,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string onUpdate = (foreignKey.OnUpdate != ForeignKeyRule.RESTRICT ? $" ON UPDATE {foreignKey.OnUpdate}" : string.Empty);
             string onDelete = (foreignKey.OnDelete != ForeignKeyRule.RESTRICT ? $" ON DELETE {foreignKey.OnDelete}" : string.Empty);
-            _seed++;
 
-            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName(_seed)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
+            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName(_seed++)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
         private void RemoveAllReferencesToColumn(Index index, string columnName)
@@ -228,7 +226,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
                 if (shouldRemoveIndex)
                 {
                     Drop(index);
-                    //index.TableRef.Indexes.Remove(index);
                 }
                 else /* All of the index columns were NOT removed */
                 {
