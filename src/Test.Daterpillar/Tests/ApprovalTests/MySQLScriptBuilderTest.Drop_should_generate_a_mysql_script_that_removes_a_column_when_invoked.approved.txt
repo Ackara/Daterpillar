@@ -1,3 +1,3 @@
-﻿ALTER TABLE `tbl2` DROP FOREIGN KEY `tbl2_categoryid_to_tbl1_id_fx1`;
-DROP INDEX `cat_idx` ON `tbl2`;
-ALTER TABLE `tbl2` DROP COLUMN `CategoryId`;
+﻿ALTER TABLE `tbl2` DROP FOREIGN KEY `categoryid_TO_tbl1_refcol_fkey1`;
+DROP INDEX `refCol_idx` ON `tbl1`;
+ALTER TABLE `tbl1` DROP COLUMN `RefCol`;

@@ -147,6 +147,11 @@ namespace Tests.Daterpillar.Helpers
                         }
                 }
             }
+            catch (DbException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                throw;
+            }
             finally { if (dispose) connection.Dispose(); }
         }
     }

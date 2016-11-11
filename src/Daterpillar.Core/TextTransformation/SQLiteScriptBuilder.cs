@@ -81,7 +81,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
             foreach (var index in table.Indexes)
             {
-                index.Table = table.Name;
                 Create(index);
             }
 
@@ -104,8 +103,8 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string table = index.TableRef.Name;
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
-            
-            _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.GetName(_seed++)}] ON [{index.Table}] ({columns});");
+
+            _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.GetName(_seed++)}] ON [{index.TableRef.Name}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
@@ -151,7 +150,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             var columns = string.Join(", ", copyOfTable.Columns.Select(x => $"[{x.Name}]"));
 
             foreach (var constraint in schema.GetForeignKeys()) RemoveAllReferencesToColumn(constraint, table, column.Name);
-            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(index, column.Name);
+            foreach (var index in schema.GetIndexes()) RemoveAllReferencesToColumn(copyOfTable, index, column.Name);
 
             _script.AppendLine($"/* DROP ([{table}].[{column.Name}]) SCRIPT */");
             _script.AppendLine("PRAGMA foreign_keys = 0;");
@@ -176,10 +175,9 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string table = foreignKey.LocalTable;
             string tempName = $"{table}_temp_table";
-            string schema = foreignKey.TableRef.SchemaRef.Name;
+            var columns = string.Join(", ", foreignKey.TableRef.Columns.Select(x => $"[{x.Name}]"));
             var copyOfTable = foreignKey.TableRef.Clone();
             copyOfTable.RemoveForeignKey(foreignKey.Name);
-            var columns = string.Join(", ", foreignKey.TableRef.Columns.Select(x => $"[{x.Name}]"));
 
             _script.AppendLine($"/* DROP ([{table}].[{foreignKey.Name}]) SCRIPT */");
             _script.AppendLine("PRAGMA foreign_keys = 0;");
@@ -202,6 +200,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void AlterTable(Column oldColumn, Column newColumn)
         {
             Drop(oldColumn);
+            _script.AppendLine();
             Create(newColumn);
         }
 
@@ -237,26 +236,28 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string onUpdate = (foreignKey.OnUpdate != ForeignKeyRule.RESTRICT ? $" ON UPDATE {foreignKey.OnUpdate}" : string.Empty);
             string onDelete = (foreignKey.OnDelete != ForeignKeyRule.RESTRICT ? $" ON DELETE {foreignKey.OnDelete}" : string.Empty);
-            
+
             _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName(_seed++)}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
-        private void RemoveAllReferencesToColumn(Index index, string columnName)
+        private void RemoveAllReferencesToColumn(Table clone, Index index, string columnName)
         {
-            Index clone = index.Clone();
-            bool indexColumnsWereRemoved = (clone.Columns.RemoveAll(x => x.Name == columnName) > 0);
+            var copy = clone.Indexes.Find(x => x.Name == index.Name);
+            bool indexColumnsWereRemoved = (copy?.Columns.RemoveAll(x => x.Name == columnName) > 0);
+
             if (indexColumnsWereRemoved)
             {
-                bool shouldRemoveIndex = (clone.Columns.Count == 0);
+                bool shouldRemoveIndex = (copy.Columns.Count == 0);
 
                 if (shouldRemoveIndex)
                 {
-                    Drop(clone);
+                    clone.RemoveIndex(index.Name);
+                    Drop(copy);
                 }
                 else /* All of the index columns were NOT removed */
                 {
-                    Drop(clone);
-                    Create(clone);
+                    Drop(copy);
+                    Create(copy);
                 }
             }
         }

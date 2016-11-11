@@ -166,6 +166,7 @@ namespace Test.Daterpillar.Tests
             tbl1.CreateColumn("Id", new DataType("int"), autoIncrement: true);
             tbl1.CreateColumn("Name");
             var col = tbl1.CreateColumn("RefCol", new DataType("int"));
+            tbl1.CreateIndex("refCol_idx", IndexType.Index, true, new IndexColumn(col.Name));
 
             var tbl2 = schema.CreateTable("tbl2");
             tbl2.CreateColumn("Id", new DataType("int"), autoIncrement: true);

@@ -121,9 +121,9 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Create(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
-            string schema = foreignKey.TableRef.SchemaRef.Name;
+            string name = foreignKey.GetName(foreignKey.TableRef.ForeignKeys.Count + 1);
 
-            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{foreignKey.Name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            _script.AppendLine($"IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='{name}' AND [parent_object_id]=OBJECT_ID('{table}')) ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
@@ -218,19 +218,22 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
         private void RemoveAllReferencesToColumn(Index index, string columnName)
         {
-            bool indexColumnsWereRemoved = (index.Columns.RemoveAll(x => x.Name == columnName) > 0);
+            Index clone = index.Clone();
+            clone.TableRef = new Table(index.TableRef.Name);
+            bool indexColumnsWereRemoved = (clone.Columns.RemoveAll(x => x.Name == columnName) > 0);
+
             if (indexColumnsWereRemoved)
             {
-                bool shouldRemoveIndex = (index.Columns.Count == 0);
+                bool shouldRemoveIndex = (clone.Columns.Count == 0);
 
                 if (shouldRemoveIndex)
                 {
-                    Drop(index);
+                    Drop(clone);
                 }
                 else /* All of the index columns were NOT removed */
                 {
-                    Drop(index);
-                    Create(index);
+                    Drop(clone);
+                    Create(clone);
                 }
             }
         }

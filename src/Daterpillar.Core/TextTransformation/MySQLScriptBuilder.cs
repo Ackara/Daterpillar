@@ -112,13 +112,14 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string unique = (index.Unique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"`{x.Name}` {x.Order}")));
-            
+
             _script.AppendLine($"CREATE{unique}INDEX `{index.GetName(_seed++)}` ON `{index.TableRef.Name}` ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)
         {
-            _script.AppendLine($"ALTER TABLE `{foreignKey.LocalTable}` ADD FOREIGN KEY `{foreignKey.Name}` (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}` (`{foreignKey.ForeignColumn}`) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            string name = foreignKey.GetName((foreignKey.TableRef.ForeignKeys.Count + 1));
+            _script.AppendLine($"ALTER TABLE `{foreignKey.LocalTable}` ADD FOREIGN KEY `{name}` (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}` (`{foreignKey.ForeignColumn}`) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
         }
 
         public void Drop(Schema schema)
@@ -207,25 +208,28 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string onUpdate = (foreignKey.OnUpdate != ForeignKeyRule.RESTRICT ? $" ON UPDATE {foreignKey.OnUpdate}" : string.Empty);
             string onDelete = (foreignKey.OnDelete != ForeignKeyRule.RESTRICT ? $" ON DELETE {foreignKey.OnDelete}" : string.Empty);
-            
+
             _script.AppendLine($"\tCONSTRAINT `{foreignKey.GetName(_seed++)}` FOREIGN KEY (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}`(`{foreignKey.ForeignColumn}`){onUpdate}{onDelete},");
         }
 
         private void RemoveAllReferencesToColumn(Index index, string columnName)
         {
-            bool indexColumnsWereRemoved = (index.Columns.RemoveAll(x => x.Name == columnName) > 0);
+            Index clone = index.Clone();
+            clone.TableRef = new Table(index.TableRef.Name);
+            bool indexColumnsWereRemoved = (clone.Columns.RemoveAll(x => x.Name == columnName) > 0);
+
             if (indexColumnsWereRemoved)
             {
-                bool shouldRemoveIndex = (index.Columns.Count == 0);
+                bool shouldRemoveIndex = (clone.Columns.Count == 0);
 
                 if (shouldRemoveIndex)
                 {
-                    Drop(index);
+                    Drop(clone);
                 }
                 else /* All of the index columns were NOT removed */
                 {
-                    Drop(index);
-                    Create(index);
+                    Drop(clone);
+                    Create(clone);
                 }
             }
         }

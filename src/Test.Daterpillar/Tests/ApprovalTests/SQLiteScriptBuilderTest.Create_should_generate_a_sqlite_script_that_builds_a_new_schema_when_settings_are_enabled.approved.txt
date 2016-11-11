@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS [album]
 	[Artist_Id] INTEGER NOT NULL,
 	[Name] VARCHAR(64) NOT NULL,
 	[Release_Date] DATE,
-	CONSTRAINT [album_artist_id_to_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT [artist_id_TO_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS [album_idx3] ON [album] ([Artist_Id] ASC, [Name] ASC);
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS [song]
 	[Length] DECIMAL(4, 2),
 	[Price] DECIMAL(12, 2) NOT NULL,
 	[On_Device] BOOLEAN NOT NULL,
-	CONSTRAINT [song_genre_id_to_genre_id_fkey4] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT [song_artist_id_to_artist_id_fkey5] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT [genre_id_TO_genre_id_fkey4] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [artist_id_TO_artist_id_fkey5] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS [song_idx] ON [song] ([Name] ASC);

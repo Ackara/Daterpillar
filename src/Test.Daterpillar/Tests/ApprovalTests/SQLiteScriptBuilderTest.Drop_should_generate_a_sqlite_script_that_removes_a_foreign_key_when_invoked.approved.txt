@@ -1,4 +1,4 @@
-﻿/* DROP ([tbl2].[tbl2_CategoryId_TO_tbl1_Id_fx1]) SCRIPT */
+﻿/* DROP ([tbl2].[categoryid_TO_tbl1_id_fkey1]) SCRIPT */
 PRAGMA foreign_keys = 0;
 CREATE TABLE [tbl2_temp_table] AS SELECT * FROM [tbl2];
 DROP TABLE [tbl2];
@@ -15,4 +15,3 @@ INSERT INTO [tbl2] ([Id], [Name], [CategoryId]) SELECT [Id], [Name], [CategoryId
 DROP TABLE [tbl2_temp_table];
 PRAGMA foreign_keys = 1;
 /* END SCRIPT */
-

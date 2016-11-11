@@ -161,8 +161,6 @@ namespace Gigobyte.Daterpillar
             var newConstraint = new ForeignKey()
             {
                 TableRef = this,
-
-                Name = name ?? $"{Name}_{column}_TO_{foreignTable}_{foreignColumn}_fx{ForeignKeys.Count + 1}",
                 LocalTable = Name,
                 LocalColumn = column,
                 ForeignTable = foreignTable,
@@ -170,6 +168,7 @@ namespace Gigobyte.Daterpillar
                 OnUpdate = onUpdate,
                 OnDelete = onDelete
             };
+            newConstraint.Name = newConstraint.GetName((ForeignKeys.Count + 1));
 
             ForeignKeys.Add(newConstraint);
             return newConstraint;
@@ -224,9 +223,9 @@ namespace Gigobyte.Daterpillar
                 copy.TableRef = clone;
             }
 
-            foreach (var constriant in ForeignKeys)
+            foreach (var constraint in ForeignKeys)
             {
-                ForeignKey copy = constriant.Clone();
+                ForeignKey copy = constraint.Clone();
                 clone.ForeignKeys.Add(copy);
                 copy.TableRef = clone;
             }
