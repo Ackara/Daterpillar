@@ -23,7 +23,9 @@ namespace Test.Daterpillar.Tests
         public static void Cleanup()
         {
             ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
-            //if (File.Exists(DataSource)) File.Delete(DataSource);
+#if !DEBUG
+            if (System.IO.File.Exists(DataSource)) System.IO.File.Delete(DataSource);
+#endif
         }
 
         [TestMethod]

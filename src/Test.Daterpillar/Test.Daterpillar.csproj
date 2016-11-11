@@ -112,7 +112,6 @@
     <Compile Include="Tests\AdoNetDataReaderTest.cs" />
     <Compile Include="Tests\CsharpTypeNameResolverTest.cs" />
     <Compile Include="Tests\MySQLScriptBuilderTest.cs" />
-    <Compile Include="Tests\SchemaAggregatorBaseTestBase.cs" />
     <Compile Include="Tests\SQLiteScriptBuilderTest.cs" />
     <Compile Include="Tests\TSQLTypeNameResolverTest.cs" />
     <Compile Include="Tests\MySqlTypeNameResolverTest.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="Tests\TemplateFactoryTest.cs" />
     <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
     <Compile Include="Tests\TSQLScriptBuilderTest.cs" />
+    <Compile Include="Tests\SchemaAggregatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xddl.xsd">
