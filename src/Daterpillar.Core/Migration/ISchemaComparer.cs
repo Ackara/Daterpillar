@@ -1,6 +1,4 @@
-﻿using Gigobyte.Daterpillar.Aggregation;
-
-namespace Gigobyte.Daterpillar.Migration
+﻿namespace Gigobyte.Daterpillar.Migration
 {
     public interface ISchemaComparer
     {

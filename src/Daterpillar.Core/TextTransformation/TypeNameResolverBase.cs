@@ -2,7 +2,7 @@
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-	public abstract class TypeNameResolverBase : ITypeNameResolver
+	public abstract partial class TypeNameResolverBase : ITypeNameResolver
 	{
 		#region Keys
 

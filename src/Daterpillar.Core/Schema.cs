@@ -138,6 +138,11 @@ namespace Gigobyte.Daterpillar
             stream.Position = 0;
         }
 
+        public Table CreateTable()
+        {
+            return CreateTable(string.Empty);
+        }
+
         public Table CreateTable(string name)
         {
             var newTable = new Table(name) { SchemaRef = this };

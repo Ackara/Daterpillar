@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 namespace Gigobyte.Daterpillar.TextTransformation
 {
-	public abstract class <#= className #> : ITypeNameResolver
+	public abstract partial class <#= className #> : ITypeNameResolver
 	{
 		#region Keys
 

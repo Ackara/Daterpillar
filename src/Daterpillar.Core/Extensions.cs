@@ -47,11 +47,11 @@
             throw new System.NotImplementedException();
         }
 
-        internal static string GetName(this Index index, int count = 1)
+        public static string GetName(this Index index, int count = 1)
         {
             if (string.IsNullOrEmpty(index.Name))
             {
-                return  $"{index.TableRef.Name}_idx{count}".ToLower();
+                return $"{index.TableRef.Name}_idx{count}".ToLower();
             }
             else
             {
@@ -59,15 +59,15 @@
             }
         }
 
-        internal static string GetName(this ForeignKey constriant, int count = 1)
+        public static string GetName(this ForeignKey constraint, int count = 1)
         {
-            if (string.IsNullOrEmpty(constriant.Name))
+            if (string.IsNullOrEmpty(constraint.Name))
             {
-                return $"{constriant.LocalColumn.ToLower()}_TO_{constriant.ForeignTable.ToLower()}_{constriant.ForeignColumn.ToLower()}_fkey{count}";
+                return $"{constraint.LocalColumn.ToLower()}_TO_{constraint.ForeignTable.ToLower()}_{constraint.ForeignColumn.ToLower()}_fkey{count}";
             }
             else
             {
-                return constriant.Name;
+                return constraint.Name;
             }
         }
     }

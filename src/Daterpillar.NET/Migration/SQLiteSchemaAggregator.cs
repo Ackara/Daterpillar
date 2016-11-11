@@ -1,10 +1,9 @@
-﻿using Gigobyte.Daterpillar.TextTransformation;
-using System;
+﻿using System;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Gigobyte.Daterpillar.Aggregation
+namespace Gigobyte.Daterpillar.Migration
 {
     public class SQLiteSchemaAggregator : SchemaAggregatorBase
     {
@@ -27,7 +26,7 @@ namespace Gigobyte.Daterpillar.Aggregation
 
                 string defaultValue = Convert.ToString(row["dflt_value"]);
 
-                var newColumn = new Column();
+                Column newColumn = table.CreateColumn();
                 newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                 newColumn.DataType = new DataType(GetTypeName(typeName), scale, precision);
                 newColumn.IsNullable = !Convert.ToBoolean(row["notnull"]);
@@ -39,15 +38,17 @@ namespace Gigobyte.Daterpillar.Aggregation
 
         protected override void LoadForeignKeyInformationIntoSchema(Table table, DataTable foreignKeyInfo)
         {
+            int counter = 1;
+
             foreach (DataRow row in foreignKeyInfo.Rows)
             {
-                var newForeignKey = new ForeignKey();
-                newForeignKey.Name = $"{table.Name}_fk{Convert.ToString(row["id"])}";
+                ForeignKey newForeignKey = table.CreateForeignKey();
                 newForeignKey.LocalColumn = Convert.ToString(row["from"]);
                 newForeignKey.ForeignTable = Convert.ToString(row["table"]);
                 newForeignKey.ForeignColumn = Convert.ToString(row["to"]);
                 newForeignKey.OnDelete = (Convert.ToString(row["on_delete"])).ToEnum();
                 newForeignKey.OnUpdate = (Convert.ToString(row["on_update"])).ToEnum();
+                newForeignKey.Name = newForeignKey.GetName(counter++);
                 table.ForeignKeys.Add(newForeignKey);
             }
         }
@@ -60,7 +61,7 @@ namespace Gigobyte.Daterpillar.Aggregation
             {
                 bool shouldInsertIndex = true;
 
-                var newIndex = new Index();
+                Index newIndex = table.CreateIndex();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
                 newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? "primaryKey" : "index").ToIndexType();
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
@@ -68,7 +69,7 @@ namespace Gigobyte.Daterpillar.Aggregation
                 // Find and load the index columns
                 using (var command = Connection.CreateCommand())
                 {
-                    command.CommandText = GetIndexColumnsQuery(Convert.ToString(row[ColumnName.Name]));
+                    command.CommandText = GetQueryThatFindsAllColumnsInaIndex(Convert.ToString(row[ColumnName.Name]));
                     using (var results = new DataTable())
                     {
                         results.Load(command.ExecuteReader());
@@ -95,27 +96,27 @@ namespace Gigobyte.Daterpillar.Aggregation
             }
         }
 
-        protected override string GetColumnInfoQuery(string tableName)
+        protected override string GetQueryThatFindsAllColumnsInaTable(string tableName)
         {
             return $"PRAGMA table_info('{tableName}');";
         }
 
-        protected override string GetForeignKeyInfoQuery(string tableName)
+        protected override string GetQueryThatFindsAllForeignKeysInaTable(string tableName)
         {
             return $"PRAGMA foreign_key_list('{tableName}');";
         }
 
-        protected override string GetIndexColumnsQuery(string indexIdentifier)
+        protected override string GetQueryThatFindsAllColumnsInaIndex(string indexIdentifier)
         {
             return $"PRAGMA index_xinfo('{indexIdentifier}');";
         }
 
-        protected override string GetIndexInfoQuery(string tableName)
+        protected override string GetQueryThatFindsAllIndexesInaTable(string tableName)
         {
             return $"PRAGMA index_list('{tableName}');";
         }
 
-        protected override string GetTableInfoQuery()
+        protected override string GetQueryThatFindAllTables()
         {
             return $"select sm.tbl_name AS [Name], '' AS [Comment] from sqlite_master sm WHERE sm.sql IS NOT NULL AND sm.name <> 'sqlite_sequence' AND sm.type = 'table';";
         }

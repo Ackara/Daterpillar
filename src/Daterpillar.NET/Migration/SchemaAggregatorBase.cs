@@ -3,7 +3,7 @@ using System;
 using System.Data;
 using System.Linq;
 
-namespace Gigobyte.Daterpillar.Aggregation
+namespace Gigobyte.Daterpillar.Migration
 {
     public abstract class SchemaAggregatorBase : ISchemaAggregator
     {
@@ -68,14 +68,12 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             foreach (DataRow row in columnInfo.Rows)
             {
-                string defaultValue = Convert.ToString(row[ColumnName.Default]);
-
-                var newColumn = new Column();
+                Column newColumn = table.CreateColumn();
                 newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                 newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
                 newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
                 newColumn.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
-                if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+                newColumn.DefaultValue = Convert.ToString(row[ColumnName.Default]);
                 newColumn.DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]));
 
                 table.Columns.Add(newColumn);
@@ -90,7 +88,7 @@ namespace Gigobyte.Daterpillar.Aggregation
             {
                 bool shouldInsertIndex = true;
 
-                var newIndex = new Index();
+                Index newIndex = table.CreateIndex();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
                 newIndex.Type = (Convert.ToString(row[ColumnName.Type])).ToIndexType();
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
@@ -98,7 +96,7 @@ namespace Gigobyte.Daterpillar.Aggregation
                 // Find and load the index columns
                 using (var command = _connection.CreateCommand())
                 {
-                    command.CommandText = GetIndexColumnsQuery(Convert.ToString(row[ColumnName.Id]));
+                    command.CommandText = GetQueryThatFindsAllColumnsInaIndex(Convert.ToString(row[ColumnName.Id]));
                     using (var results = new DataTable())
                     {
                         results.Load(command.ExecuteReader());
@@ -128,7 +126,7 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             foreach (DataRow row in foreignKeyInfo.Rows)
             {
-                var newForeignKey = new ForeignKey();
+                ForeignKey newForeignKey = table.CreateForeignKey();
                 newForeignKey.Name = Convert.ToString(row[ColumnName.Name]);
                 newForeignKey.LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]);
                 newForeignKey.ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]);
@@ -141,15 +139,15 @@ namespace Gigobyte.Daterpillar.Aggregation
 
         #region Abstract Methods
 
-        protected abstract string GetTableInfoQuery();
+        protected abstract string GetQueryThatFindAllTables();
 
-        protected abstract string GetIndexInfoQuery(string tableName);
+        protected abstract string GetQueryThatFindsAllIndexesInaTable(string tableName);
 
-        protected abstract string GetIndexColumnsQuery(string indexIdentifier);
+        protected abstract string GetQueryThatFindsAllColumnsInaIndex(string indexIdentifier);
 
-        protected abstract string GetColumnInfoQuery(string tableName);
+        protected abstract string GetQueryThatFindsAllColumnsInaTable(string tableName);
 
-        protected abstract string GetForeignKeyInfoQuery(string tableName);
+        protected abstract string GetQueryThatFindsAllForeignKeysInaTable(string tableName);
 
         #endregion Abstract Methods
 
@@ -170,13 +168,13 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             using (var command = _connection.CreateCommand())
             {
-                command.CommandText = GetTableInfoQuery();
+                command.CommandText = GetQueryThatFindAllTables();
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());
                     foreach (DataRow row in results.Rows)
                     {
-                        var newTable = new Table();
+                        var newTable = _schema.CreateTable();
                         newTable.Name = Convert.ToString(row[ColumnName.Name]);
                         newTable.Comment = Convert.ToString(row[ColumnName.Comment]);
 
@@ -193,7 +191,7 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             using (var command = _connection.CreateCommand())
             {
-                command.CommandText = GetColumnInfoQuery(table.Name);
+                command.CommandText = GetQueryThatFindsAllColumnsInaTable(table.Name);
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());
@@ -206,7 +204,7 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             using (var command = _connection.CreateCommand())
             {
-                command.CommandText = GetForeignKeyInfoQuery(table.Name);
+                command.CommandText = GetQueryThatFindsAllForeignKeysInaTable(table.Name);
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());
@@ -219,7 +217,7 @@ namespace Gigobyte.Daterpillar.Aggregation
         {
             using (var command = _connection.CreateCommand())
             {
-                command.CommandText = GetIndexInfoQuery(table.Name);
+                command.CommandText = GetQueryThatFindsAllIndexesInaTable(table.Name);
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());

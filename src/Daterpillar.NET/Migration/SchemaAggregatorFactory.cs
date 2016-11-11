@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
-namespace Gigobyte.Daterpillar.Aggregation
+namespace Gigobyte.Daterpillar.Migration
 {
     public class SchemaAggregatorFactory
     {

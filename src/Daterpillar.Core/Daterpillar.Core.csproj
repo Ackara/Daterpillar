@@ -54,7 +54,7 @@
     <Compile Include="Linq\SqlWriter.cs" />
     <Compile Include="Linq\QueryStyle.cs" />
     <Compile Include="Migration\Modification.cs" />
-    <Compile Include="Aggregation\ISchemaAggregator.cs" />
+    <Compile Include="Migration\ISchemaAggregator.cs" />
     <Compile Include="Migration\ISchemaComparer.cs" />
     <Compile Include="Migration\ComparisonReportConclusions.cs" />
     <Compile Include="Migration\SchemaComparer.cs" />
