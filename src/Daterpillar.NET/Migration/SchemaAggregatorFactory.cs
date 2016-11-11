@@ -12,21 +12,20 @@ namespace Gigobyte.Daterpillar.Migration
             LoadAggregatorTypes();
         }
 
-        public ISchemaAggregator CreateInstance(string name, IDbConnection connection, bool partialMatch = true)
+        public ISchemaAggregator CreateInstance(string name, IDbConnection connection)
         {
-            if (partialMatch) name = ((name.EndsWith(_targetInterface)) ? name : string.Concat(name, _targetInterface));
             try { return (ISchemaAggregator)Activator.CreateInstance(_aggregatorTypes[name.ToLower()], new object[1] { connection }); }
-            catch (KeyNotFoundException) { return null; }
+            catch (KeyNotFoundException) { return new NullSchemaAggregator(); }
         }
 
         public ISchemaAggregator CreateInstance(SupportedDatabase dbType, IDbConnection connection)
         {
-            return CreateInstance(string.Concat(dbType, _targetInterface), connection, partialMatch: false);
+            return CreateInstance(string.Concat(dbType, _targetInterface), connection);
         }
 
         #region Private Members
 
-        private static readonly string _targetInterface = (nameof(ISchemaAggregator).Substring(1));
+        private readonly string _targetInterface = (nameof(ISchemaAggregator).Substring(1));
 
         private IDictionary<string, Type> _aggregatorTypes;
 

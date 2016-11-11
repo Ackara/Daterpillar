@@ -52,6 +52,14 @@ namespace Gigobyte.Daterpillar
         #endregion Static Members
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Schema"/> class.
+        /// </summary>
+        public Schema()
+        {
+            Tables = new List<Table>();
+        }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -84,19 +92,7 @@ namespace Gigobyte.Daterpillar
         /// </summary>
         /// <value>The tables.</value>
         [XmlElement("table")]
-        public List<Table> Tables
-        {
-            get
-            {
-                if (_tables == null)
-                {
-                    _tables = new List<Table>();
-                }
-
-                return _tables;
-            }
-            set { _tables = value; }
-        }
+        public List<Table> Tables { get; set; }
 
         /// <summary>
         /// Gets or sets the script.
@@ -104,28 +100,6 @@ namespace Gigobyte.Daterpillar
         /// <value>The script.</value>
         [XmlElement("script")]
         public string Script { get; set; }
-
-        public IEnumerable<Index> GetIndexes()
-        {
-            foreach (var table in Tables)
-            {
-                foreach (var index in table.Indexes)
-                {
-                    yield return index;
-                }
-            }
-        }
-
-        public IEnumerable<ForeignKey> GetForeignKeys()
-        {
-            foreach (var table in Tables)
-            {
-                foreach (var key in table.ForeignKeys)
-                {
-                    yield return key;
-                }
-            }
-        }
 
         /// <summary>
         /// Serialize this object into the specified <see cref="Stream" />.
@@ -155,14 +129,38 @@ namespace Gigobyte.Daterpillar
         /// Removes all <see cref="Table" /> object with the specified name.
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
-        [Obsolete("This method will no longer be provided as a member. However it will be available as a helper method in the T4 template.")]
-        public void RemoveTable(string tableName)
+        public bool RemoveTable(string tableName)
         {
-            for (int i = 0; i < _tables.Count; i++)
-                if (_tables[i].Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase))
+            for (int i = 0; i < Tables.Count; i++)
+                if (Tables[i].Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    _tables.RemoveAt(i);
+                    Tables.RemoveAt(i);
+                    return true;
                 }
+
+            return false;
+        }
+
+        public IEnumerable<Index> GetIndexes()
+        {
+            foreach (var table in Tables)
+            {
+                foreach (var index in table.Indexes)
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        public IEnumerable<ForeignKey> GetForeignKeys()
+        {
+            foreach (var table in Tables)
+            {
+                foreach (var key in table.ForeignKeys)
+                {
+                    yield return key;
+                }
+            }
         }
 
         internal void SetReferences()
@@ -187,11 +185,5 @@ namespace Gigobyte.Daterpillar
                 }
             }
         }
-
-        #region Private Member
-
-        private List<Table> _tables;
-
-        #endregion Private Member
     }
 }

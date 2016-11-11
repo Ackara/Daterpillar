@@ -31,8 +31,6 @@ namespace Gigobyte.Daterpillar.Migration
                 newColumn.DataType = new DataType(GetTypeName(typeName), scale, precision);
                 newColumn.IsNullable = !Convert.ToBoolean(row["notnull"]);
                 if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
-
-                table.Columns.Add(newColumn);
             }
         }
 
@@ -49,7 +47,6 @@ namespace Gigobyte.Daterpillar.Migration
                 newForeignKey.OnDelete = (Convert.ToString(row["on_delete"])).ToEnum();
                 newForeignKey.OnUpdate = (Convert.ToString(row["on_update"])).ToEnum();
                 newForeignKey.Name = newForeignKey.GetName(counter++);
-                table.ForeignKeys.Add(newForeignKey);
             }
         }
 
@@ -61,9 +58,9 @@ namespace Gigobyte.Daterpillar.Migration
             {
                 bool shouldInsertIndex = true;
 
-                Index newIndex = table.CreateIndex();
+                Index newIndex = new Index();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
-                newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? "primaryKey" : "index").ToIndexType();
+                newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? IndexType.PrimaryKey : IndexType.Index);
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
 
                 // Find and load the index columns
@@ -92,7 +89,11 @@ namespace Gigobyte.Daterpillar.Migration
                     }
                 }
 
-                if (shouldInsertIndex) table.Indexes.Add(newIndex);
+                if (shouldInsertIndex)
+                {
+                    table.Indexes.Add(newIndex);
+                    newIndex.TableRef = table;
+                }
             }
         }
 
@@ -118,7 +119,7 @@ namespace Gigobyte.Daterpillar.Migration
 
         protected override string GetQueryThatFindAllTables()
         {
-            return $"select sm.tbl_name AS [Name], '' AS [Comment] from sqlite_master sm WHERE sm.sql IS NOT NULL AND sm.name <> 'sqlite_sequence' AND sm.type = 'table';";
+            return $"SELECT [sm].[tbl_name] AS [Name], '' AS [Comment] FROM [sqlite_master] sm WHERE sm.[sql] IS NOT NULL AND sm.[name] <> 'sqlite_sequence' AND sm.[type] = 'table';";
         }
 
         #region Private Members

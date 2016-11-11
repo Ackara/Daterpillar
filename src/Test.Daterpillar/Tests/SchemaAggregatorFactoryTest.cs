@@ -18,14 +18,5 @@ namespace Tests.Daterpillar.Tests
             var type = sut.CreateInstance(SupportedDatabase.MySQL, Mock.Create<IDbConnection>());
             Assert.IsInstanceOfType(type, typeof(ISchemaAggregator));
         }
-
-        [TestMethod]
-        [Owner(Dev.Ackara)]
-        public void CreateInstance_should_instantiate_a_schema_aggregator_when_the_partial_match_flag_is_enabled()
-        {
-            var sut = new SchemaAggregatorFactory();
-            var type = sut.CreateInstance(nameof(SupportedDatabase.TSQL), Mock.Create<IDbConnection>(), partialMatch: true);
-            Assert.IsInstanceOfType(type, typeof(ISchemaAggregator));
-        }
     }
 }

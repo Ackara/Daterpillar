@@ -37,30 +37,36 @@ namespace Gigobyte.Daterpillar.TextTransformation
         {
             string lineBreak = "-- ======================================================================";
 
-            _script.AppendLine(lineBreak);
-            _script.AppendLine("-- NAME:");
-            _script.AppendLine($"-- {schema.Name}");
-            _script.AppendLine();
-            _script.AppendLine("-- DESCRIPTION:");
-            _script.AppendLine($"-- {schema.Description}");
-            _script.AppendLine();
-            _script.AppendLine("-- AUTHOR:");
-            _script.AppendLine($"-- {schema.Author}");
-            _script.AppendLine();
-            _script.AppendLine("-- DATE:");
-            _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
-            _script.AppendLine(lineBreak);
-            _script.AppendLine();
+            if (_settings.AppendComments)
+            {
+                _script.AppendLine(lineBreak);
+                _script.AppendLine("-- NAME:");
+                _script.AppendLine($"-- {schema.Name}");
+                _script.AppendLine();
+                _script.AppendLine("-- DESCRIPTION:");
+                _script.AppendLine($"-- {schema.Description}");
+                _script.AppendLine();
+                _script.AppendLine("-- AUTHOR:");
+                _script.AppendLine($"-- {schema.Author}");
+                _script.AppendLine();
+                _script.AppendLine("-- DATE:");
+                _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
+                _script.AppendLine(lineBreak);
+                _script.AppendLine();
+            }
 
             foreach (var table in schema.Tables) Create(table);
 
             if (_settings.AppendScripts)
             {
-                lineBreak = "-- =================";
-                _script.AppendLine(lineBreak);
-                _script.AppendLine($"-- SCRIPTS (000)");
-                _script.AppendLine(lineBreak);
-                _script.AppendLine();
+                if (_settings.AppendComments)
+                {
+                    lineBreak = "-- =================";
+                    _script.AppendLine(lineBreak);
+                    _script.AppendLine($"-- SCRIPTS (000)");
+                    _script.AppendLine(lineBreak);
+                    _script.AppendLine();
+                }
 
                 _script.AppendLine(schema.Script);
             }
@@ -212,6 +218,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
         public void Clear()
         {
             _script.Clear();
+            _seed = 1;
         }
 
         #region Private Members

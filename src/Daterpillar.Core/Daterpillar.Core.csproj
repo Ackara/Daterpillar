@@ -57,6 +57,7 @@
     <Compile Include="Migration\ISchemaAggregator.cs" />
     <Compile Include="Migration\ISchemaComparer.cs" />
     <Compile Include="Migration\ComparisonReportConclusions.cs" />
+    <Compile Include="Migration\NullSchemaAggregator.cs" />
     <Compile Include="Migration\SchemaComparer.cs" />
     <Compile Include="Migration\ComparisonReport.cs" />
     <Compile Include="Migration\Synchronizer.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="TextTransformation\CSharpScriptBuilder.cs" />
     <Compile Include="TextTransformation\IScriptBuilder.cs" />
+    <Compile Include="TextTransformation\ScriptBuilderFactory.cs" />
     <Compile Include="TextTransformation\TSQLScriptBuilder.cs" />
     <Compile Include="TextTransformation\ScriptBuilderSettings.cs" />
     <Compile Include="TextTransformation\CSharpScriptBuilderSettings.cs" />

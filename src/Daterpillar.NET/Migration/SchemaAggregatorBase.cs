@@ -181,14 +181,13 @@ namespace Gigobyte.Daterpillar.Migration
                         FetchColumnInformation(newTable);
                         FetchIndexInformation(newTable);
                         FetchForeignKeyInformation(newTable);
-                        _schema.Tables.Add(newTable);
                     }
                 }
             }
         }
 
         private void FetchColumnInformation(Table table)
-        {
+         {
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = GetQueryThatFindsAllColumnsInaTable(table.Name);
