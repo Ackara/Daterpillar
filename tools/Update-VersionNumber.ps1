@@ -48,4 +48,4 @@ foreach($project in (Get-ChildItem "$rootDirectory\src" -Filter "*.csproj" -Recu
 	}
 }
 
-& git commit --message "Update version number to $version" | Out-Null;
+& git commit --message "Update version numbers to $version" | Out-Null;

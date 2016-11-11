@@ -2,6 +2,7 @@ Properties {
 	# Paths
 	$RootDirectory = (Split-Path $PSScriptRoot -Parent);
 	$PackageDirectory = "$RootDirectory\build\packages";
+    $ToolsDirectory = "$RootDirectory\tools";
 
 	# Nuget
 	$Nuget = "$RootDirectory\tools\nuget.exe";
@@ -18,11 +19,17 @@ Task default -depends Init, Build-Solution, Run-Tests, Create-Packages, Publish-
 
 Task Init -description "Create and cleanup all working folders." `
 -action{
-	foreach($directory in @($PackageDirectory))
+	foreach($directory in @($PackageDirectory, $ToolsDirectory))
 	{
 		if(Test-Path $directory -PathType Container) { Remove-Item $directory -Recurse; }
 		New-Item $directory -ItemType Directory | Out-Null;
 	}
+
+    # Import modules
+    foreach($module in (Get-ChildItem $ToolsDirectory -Filter "*.psm1"))
+    {
+        Import-Module $module -Force;
+    }
 }
 
 
@@ -75,4 +82,12 @@ Task Publish-Packages -description "Publish all nuget packages." `
 	{
 		Exec { & $nuget push $nupkg $NugetKey -Source $NugetSource; }
 	}
+}
+
+Task Tag-NewRelease -description "Tag the repo with the current version number." `
+-depends Init `
+-action {
+    $versionNumber = Get-VersionNumber;
+    Write-Host "git tag v$versionNumber";
+    Write-Host "git push origin v$versionNumber";
 }
