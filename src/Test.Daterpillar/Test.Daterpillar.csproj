@@ -127,6 +127,7 @@
     <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
     <Compile Include="Tests\TSQLScriptBuilderTest.cs" />
     <Compile Include="Tests\SchemaAggregatorTest.cs" />
+    <Compile Include="Tests\SqlComparerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xddl.xsd">

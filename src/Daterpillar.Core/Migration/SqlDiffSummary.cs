@@ -1,7 +1,7 @@
 ﻿namespace Gigobyte.Daterpillar.Migration
 {
     [System.Flags]
-    public enum ComparisonReportConclusions
+    public enum SqlDiffSummary
     {
         None = 0x0,
         NotEqual = 0x1,

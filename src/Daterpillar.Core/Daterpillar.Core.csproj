@@ -53,13 +53,11 @@
     <Compile Include="Linq\Query.cs" />
     <Compile Include="Linq\SqlWriter.cs" />
     <Compile Include="Linq\QueryStyle.cs" />
-    <Compile Include="Migration\Modification.cs" />
     <Compile Include="Migration\ISchemaAggregator.cs" />
-    <Compile Include="Migration\ISchemaComparer.cs" />
-    <Compile Include="Migration\ComparisonReportConclusions.cs" />
+    <Compile Include="Migration\SqlDiffSummary.cs" />
     <Compile Include="Migration\NullSchemaAggregator.cs" />
-    <Compile Include="Migration\SchemaComparer.cs" />
-    <Compile Include="Migration\ComparisonReport.cs" />
+    <Compile Include="Migration\SqlComparer.cs" />
+    <Compile Include="Migration\SqlDiff.cs" />
     <Compile Include="Migration\Synchronizer.cs" />
     <Compile Include="Migration\SynchronizerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
