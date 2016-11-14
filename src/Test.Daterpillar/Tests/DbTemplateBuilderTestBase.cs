@@ -17,7 +17,7 @@ namespace Test.Daterpillar.Tests
         {
             // Arrange
             IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), settings);
-            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchema1XML).OpenRead());
 
             // Act
             schema.Name = DBNAME;

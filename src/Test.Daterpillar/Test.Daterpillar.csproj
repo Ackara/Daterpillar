@@ -118,7 +118,6 @@
     <Compile Include="Tests\MySqlTypeNameResolverTest.cs" />
     <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Tests\SchemaAggregatorFactoryTest.cs" />
-    <Compile Include="Tests\SchemaComparerTests.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\SQLiteTypeNameResolverTest.cs" />
     <Compile Include="Tests\SqlWriterTest.cs" />
@@ -150,12 +149,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sample Data\mock-schema.xml">
+    <None Include="Sample Data\mock-schema1.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Sample Data\mock-schema2.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.txt</LastGenOutput>

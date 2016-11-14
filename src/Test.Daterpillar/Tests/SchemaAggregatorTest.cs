@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
 using System.IO;
+using System.Text;
 using Tests.Daterpillar.Constants;
 using Tests.Daterpillar.Helpers;
 
@@ -38,43 +39,58 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void FetchSchema_should_return_a_schema_object_modeled_from_a_valid_db_connection()
+        public void FetchSchema_should_return_a_schema_object_modeled_from_a_valid_tsql_database()
         {
-            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ($"{nameof(Daterpillar)}-test.db3").ToLower());
-
-            using (var connection = DatabaseHelper.CreateSQLiteConnection(fileName))
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                var builder = new SQLiteScriptBuilder(_settings);
-                var sut = new SQLiteSchemaAggregator(connection);
+                var builder = new TSQLScriptBuilder(_settings);
+                var sut = new TSQLSchemaAggregator(connection);
 
                 RunFetchSchemaTest(sut, builder, connection);
             }
+        }
 
-#if !DEBUG
-            if (File.Exists(fileName)) File.Delete(fileName);
-#endif
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void FetchSchema_should_return_a_schema_object_modeled_from_a_valid_mysql_database()
+        {
+            using (var connection = DatabaseHelper.CreateMySQLConnection())
+            {
+                var builder = new MySQLScriptBuilder(_settings);
+                var sut = new MySQLSchemaAggregator(connection);
+
+                RunFetchSchemaTest(sut, builder, connection);
+            }
         }
 
         public void RunFetchSchemaTest(ISchemaAggregator sut, IScriptBuilder builder, IDbConnection connection)
         {
             // Arrange
-            var expectedSchema = Schema.Load(SampleData.GetFile(KnownFile.MockSchemaXML).OpenRead());
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchema2XML).OpenRead());
+
+            Func<Schema, string> getContent = (x) =>
+            {
+                //builder.Clear();
+                //builder.Create(x);
+                //return builder.GetContent();
+                using (var stream = new MemoryStream())
+                {
+                    x.WriteTo(stream);
+                    return Encoding.UTF8.GetString(stream.ToArray());
+                }
+            };
 
             // Act
-            DatabaseHelper.TryDropDatabase(connection, connection.Database);
-            DatabaseHelper.CreateSchema(connection, builder, expectedSchema);
-            builder.Clear();
-            var actualShema = sut.FetchSchema();
+            DatabaseHelper.TryDropDatabase(connection, schema.Name);
+            DatabaseHelper.CreateSchema(connection, builder, schema);
+            connection.ChangeDatabase(schema.Name);
 
-            builder.Create(expectedSchema);
-            string expectedContent = builder.GetContent();
-
-            builder.Clear();
-            builder.Create(actualShema);
-            string actualContent = builder.GetContent();
+            string expectedResult = getContent(schema);
+            string actualResult = getContent(sut.FetchSchema());
 
             // Assert
-            Approvals.AssertEquals(expectedContent, actualContent);
+            Approvals.AssertEquals(expectedResult, actualResult);
         }
     }
 }

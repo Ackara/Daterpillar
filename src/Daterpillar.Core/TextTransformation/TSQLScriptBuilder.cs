@@ -90,7 +90,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
             foreach (var index in table.Indexes)
             {
-                index.Table = table.Name;
                 Create(index);
             }
 
@@ -115,7 +114,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             string indexName = index.GetName(_seed++);
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{indexName}') CREATE{unique}INDEX [{indexName}] ON [{index.Table}] ({columns});");
+            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{indexName}') CREATE{unique}INDEX [{indexName}] ON [{index.TableRef.Name}] ({columns});");
         }
 
         public void Create(ForeignKey foreignKey)

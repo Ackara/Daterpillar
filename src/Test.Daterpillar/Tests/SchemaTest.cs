@@ -38,7 +38,7 @@ namespace Tests.Daterpillar.Tests
         public void Load_should_deserialize_a_schema_object_when_xml_data_is_passed()
         {
             // Arrange
-            var schemaFile = TestData.GetFile(KnownFile.MockSchemaXML);
+            var schemaFile = TestData.GetFile(KnownFile.MockSchema1XML);
 
             // Act
             var obj = Schema.Load(File.ReadAllText(schemaFile.FullName));

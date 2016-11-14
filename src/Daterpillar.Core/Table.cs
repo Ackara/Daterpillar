@@ -39,6 +39,8 @@ namespace Gigobyte.Daterpillar
             ForeignKeys = new List<ForeignKey>();
             Modifiers = new List<string>();
             Indexes = new List<Index>();
+
+            Comment = string.Empty;
         }
 
         /// <summary>
@@ -139,7 +141,6 @@ namespace Gigobyte.Daterpillar
 
                 Name = name,
                 Type = type,
-                Table = this.Name,
                 Unique = unique,
                 Columns = columns.ToList()
             };

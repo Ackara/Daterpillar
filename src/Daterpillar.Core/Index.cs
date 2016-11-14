@@ -13,6 +13,7 @@ namespace Gigobyte.Daterpillar
             Columns = new List<IndexColumn>();
         }
 
+        [XmlIgnore]
         public Table TableRef;
 
         /// <summary>
@@ -35,13 +36,6 @@ namespace Gigobyte.Daterpillar
         /// <value>The name.</value>
         [XmlAttribute("name")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name table of the associated table.
-        /// </summary>
-        /// <value>The table.</value>
-        [XmlAttribute("table")]
-        public string Table { get; set; }
 
         /// <summary>
         /// Gets or sets the associated columns.

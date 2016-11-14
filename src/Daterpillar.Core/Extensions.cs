@@ -1,4 +1,6 @@
-﻿namespace Gigobyte.Daterpillar
+﻿using System;
+
+namespace Gigobyte.Daterpillar
 {
     /// <summary>
     /// Provide extension methods for the <see cref="Daterpillar" /> namespace.
@@ -44,7 +46,13 @@
 
         public static IndexType ToIndexType(this string value)
         {
-            throw new System.NotImplementedException();
+            foreach (var name in Enum.GetNames(typeof(IndexType)))
+                if (string.Equals(name, value, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return (IndexType)Enum.Parse(typeof(IndexType), name);
+                }
+
+            throw new ArgumentException($"[IndexType] do not contain the value '{value}'.", nameof(value));
         }
 
         public static string GetName(this Index index, int count = 1)

@@ -30,7 +30,7 @@ namespace Gigobyte.Daterpillar.Migration
                 newColumn.Name = Convert.ToString(row[ColumnName.Name]);
                 newColumn.DataType = new DataType(GetTypeName(typeName), scale, precision);
                 newColumn.IsNullable = !Convert.ToBoolean(row["notnull"]);
-                if (!string.IsNullOrEmpty(defaultValue)) newColumn.Modifiers.Add(defaultValue);
+                newColumn.DefaultValue = string.IsNullOrEmpty(defaultValue) ? null : defaultValue;
             }
         }
 

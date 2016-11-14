@@ -89,7 +89,6 @@ namespace Gigobyte.Daterpillar.TextTransformation
 
             foreach (var index in table.Indexes)
             {
-                index.Table = table.Name;
                 Create(index);
             }
 

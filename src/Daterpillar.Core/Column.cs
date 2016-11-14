@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Gigobyte.Daterpillar
 {
@@ -8,6 +7,15 @@ namespace Gigobyte.Daterpillar
     /// </summary>
     public class Column : ICloneable<Column>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// </summary>
+        public Column()
+        {
+            Comment = string.Empty;
+            DefaultValue = null;
+        }
+
         [XmlIgnore]
         public Table TableRef;
 
@@ -35,26 +43,8 @@ namespace Gigobyte.Daterpillar
         [XmlAttribute("autoIncrement")]
         public bool AutoIncrement { get; set; }
 
+        [XmlElement("default")]
         public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the modifiers.
-        /// </summary>
-        /// <value>The modifiers.</value>
-        [XmlElement("modifier")]
-        public List<string> Modifiers
-        {
-            get
-            {
-                if (_modifiers == null)
-                {
-                    _modifiers = new List<string>();
-                }
-
-                return _modifiers;
-            }
-            set { _modifiers = value; }
-        }
 
         /// <summary>
         /// Gets or sets the comment.
@@ -79,11 +69,5 @@ namespace Gigobyte.Daterpillar
                 OrdinalPosition = this.OrdinalPosition
             };
         }
-
-        #region Private Members
-
-        private List<string> _modifiers;
-
-        #endregion Private Members
     }
 }

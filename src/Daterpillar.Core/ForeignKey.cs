@@ -16,6 +16,7 @@ namespace Gigobyte.Daterpillar
             OnDelete = ForeignKeyRule.CASCADE;
         }
 
+        [XmlIgnore]
         public Table TableRef;
 
         /// <summary>
@@ -29,7 +30,7 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the name of the table this constraint belongs to.
         /// </summary>
         /// <value>The local table.</value>
-        [XmlAttribute("table")]
+        [XmlIgnore]
         public string LocalTable
         {
             get

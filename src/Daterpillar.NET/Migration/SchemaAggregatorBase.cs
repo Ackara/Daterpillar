@@ -73,10 +73,9 @@ namespace Gigobyte.Daterpillar.Migration
                 newColumn.Comment = Convert.ToString(row[ColumnName.Comment]);
                 newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
                 newColumn.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
-                newColumn.DefaultValue = Convert.ToString(row[ColumnName.Default]);
                 newColumn.DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]));
-
-                table.Columns.Add(newColumn);
+                newColumn.DefaultValue = row[ColumnName.Default];
+                newColumn.DefaultValue = (newColumn.DefaultValue == DBNull.Value ? null : newColumn.DefaultValue);
             }
         }
 
@@ -86,12 +85,14 @@ namespace Gigobyte.Daterpillar.Migration
 
             foreach (DataRow row in indexInfo.Rows)
             {
-                bool shouldInsertIndex = true;
+                bool shouldAddIndex = true;
 
-                Index newIndex = table.CreateIndex();
+                Index newIndex = new Index();
                 newIndex.Name = Convert.ToString(row[ColumnName.Name]);
                 newIndex.Type = (Convert.ToString(row[ColumnName.Type])).ToIndexType();
                 newIndex.Unique = Convert.ToBoolean(row[ColumnName.Unique]);
+                newIndex.TableRef = table;
+                shouldAddIndex = !string.IsNullOrEmpty(newIndex.Name);
 
                 // Find and load the index columns
                 using (var command = _connection.CreateCommand())
@@ -106,7 +107,7 @@ namespace Gigobyte.Daterpillar.Migration
 
                             if (name == autoColumn)
                             {
-                                shouldInsertIndex = false;
+                                shouldAddIndex = false;
                                 break;
                             }
                             newIndex.Columns.Add(new IndexColumn()
@@ -118,7 +119,7 @@ namespace Gigobyte.Daterpillar.Migration
                     }
                 }
 
-                if (shouldInsertIndex) table.Indexes.Add(newIndex);
+                if (shouldAddIndex) table.Indexes.Add(newIndex);
             }
         }
 
@@ -133,7 +134,6 @@ namespace Gigobyte.Daterpillar.Migration
                 newForeignKey.ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]);
                 newForeignKey.OnDelete = (Convert.ToString(row[ColumnName.OnDelete])).ToEnum();
                 newForeignKey.OnUpdate = (Convert.ToString(row[ColumnName.OnUpdate])).ToEnum();
-                table.ForeignKeys.Add(newForeignKey);
             }
         }
 
@@ -187,7 +187,7 @@ namespace Gigobyte.Daterpillar.Migration
         }
 
         private void FetchColumnInformation(Table table)
-         {
+        {
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = GetQueryThatFindsAllColumnsInaTable(table.Name);
@@ -217,6 +217,7 @@ namespace Gigobyte.Daterpillar.Migration
             using (var command = _connection.CreateCommand())
             {
                 command.CommandText = GetQueryThatFindsAllIndexesInaTable(table.Name);
+                System.Diagnostics.Debug.WriteLine(command.CommandText);
                 using (var results = new DataTable())
                 {
                     results.Load(command.ExecuteReader());

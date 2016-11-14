@@ -8,15 +8,15 @@ namespace Gigobyte.Daterpillar
     public enum IndexType
     {
         /// <summary>
-        /// A primary key.
-        /// </summary>
-        [XmlEnum("primaryKey")]
-        PrimaryKey = 0,
-
-        /// <summary>
         /// A index
         /// </summary>
         [XmlEnum("index")]
-        Index = 1
+        Index,
+
+        /// <summary>
+        /// A primary key.
+        /// </summary>
+        [XmlEnum("primaryKey")]
+        PrimaryKey,
     }
 }

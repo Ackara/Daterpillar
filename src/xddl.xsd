@@ -45,11 +45,6 @@
 
       <xs:element name="dataType"
                   type="DataType" />
-
-      <xs:element name="modifier"
-                  type="xs:string"
-                  minOccurs="0"
-                  maxOccurs="unbounded" />
     </xs:sequence>
 
     <xs:attribute name="name"
@@ -66,6 +61,14 @@
                   default="0"
                   use="optional" />
   </xs:complexType>
+
+  <xs:simpleType name="ConnectionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TSQL" />
+      <xs:enumeration value="MySQL" />
+      <xs:enumeration value="SQLite" />
+    </xs:restriction>
+  </xs:simpleType>
 
   <!-- D -->
 
@@ -97,10 +100,6 @@
     </xs:all>
 
     <xs:attribute name="name"
-                  type="xs:string"
-                  use="optional" />
-
-    <xs:attribute name="table"
                   type="xs:string"
                   use="optional" />
 
@@ -144,10 +143,6 @@
                   type="xs:boolean"
                   default="0" />
 
-    <xs:attribute name="table"
-                  type="xs:string"
-                  use="optional" />
-
     <xs:attribute name="type">
       <xs:simpleType>
         <xs:restriction base="xs:string">
@@ -169,6 +164,16 @@
   </xs:complexType>
 
   <!-- S -->
+
+  <xs:complexType name="Script">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="format"
+                      type="ConnectionType"
+                      use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
 
   <xs:simpleType name="SortOrder">
     <xs:restriction base="xs:string">

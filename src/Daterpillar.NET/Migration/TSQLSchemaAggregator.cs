@@ -30,7 +30,7 @@ namespace Gigobyte.Daterpillar.Migration
 
         protected override string GetQueryThatFindsAllIndexesInaTable(string tableName)
         {
-            return $"SELECT CASE  WHEN i.is_primary_key = 1 THEN 'primaryKey'  WHEN i.is_primary_key = 0 THEN 'index' END AS [Type], i.name AS [Name], i.is_unique_constraint AS [Unique], CONCAT(i.object_id, ':', i.index_id) AS [Id] FROM sys.indexes i JOIN sys.tables t ON t.object_id = i.object_id WHERE t.name = '{tableName}';";
+            return $"SELECT CASE  WHEN i.is_primary_key = 1 THEN 'primaryKey'  WHEN i.is_primary_key = 0 THEN 'index' END AS [Type], i.name AS [Name], i.is_unique AS [Unique], CONCAT(i.object_id, ':', i.index_id) AS [Id] FROM sys.indexes i JOIN sys.tables t ON t.object_id = i.object_id WHERE t.name = '{tableName}';";
         }
 
         protected override string GetQueryThatFindAllTables()
