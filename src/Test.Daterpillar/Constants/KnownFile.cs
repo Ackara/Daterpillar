@@ -10,6 +10,7 @@
         public const string DataTypesCSV = "data_types.csv";
         public const string MockSchema1XML = "mock-schema1.xml";
         public const string MockSchema2XML = "mock-schema2.xml";
+        public const string MockSchema3XML = "mock-schema3.xml";
         public const string TextFormatCSV = "text_formats.csv";
     }
 }

@@ -37,7 +37,7 @@ namespace Gigobyte.Daterpillar
 
             return output;
         }
-
+        
         public static ForeignKeyRule ToEnum(this string value)
         {
             value = value.Replace(' ', '_').ToUpper();

@@ -1,5 +1,4 @@
 ﻿using Gigobyte.Daterpillar.TextTransformation;
-using System.Text;
 
 namespace Gigobyte.Daterpillar.Migration
 {
@@ -7,12 +6,13 @@ namespace Gigobyte.Daterpillar.Migration
     {
         public SqlDiff Compare(IScriptBuilder builder, Schema source, Schema target)
         {
-            _changes = new SqlDiff();
-            
-            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
-            SummarizeReport(source, target);
+            _script = builder;
+            _diff = new SqlDiff();
 
-            return _changes;
+            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
+            SummarizeChanges(source, target);
+
+            return _diff;
         }
 
         public SqlDiff Compare(IScriptBuilder builder, ISchemaAggregator source, ISchemaAggregator target)
@@ -26,7 +26,12 @@ namespace Gigobyte.Daterpillar.Migration
             }
         }
 
-        protected virtual void FindDiscrepanciesBetween(Table[] left, Table[] right)
+        #region Private Members
+
+        private SqlDiff _diff;
+        private IScriptBuilder _script;
+
+        private void FindDiscrepanciesBetween(Table[] left, Table[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
             SortTheItemsOfBothArraysByName(ref left, ref right);
@@ -39,28 +44,28 @@ namespace Gigobyte.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // TODO: Drop table from the right
+                    _diff.Changes++;
                     _script.Drop(target);
-                    _changes.Discrepancies++;
                 }
                 else if (source != null && target == null)
                 {
                     // TODO: Add table from the left
+                    _diff.Changes++;
                     _script.Create(source);
-                    _changes.Discrepancies++;
                 }
                 else if (source.Name != target.Name)
                 {
                     // TODO: Drop table from the right
                     // TODO: Add table from the left
+                    _diff.Changes++;
                     _script.Drop(target);
                     _script.Create(source);
-                    _changes.Discrepancies++;
                 }
                 else FindDiscrepanciesBetween(left[i].Columns.ToArray(), target.Columns.ToArray());
             }
         }
 
-        protected virtual void FindDiscrepanciesBetween(Column[] left, Column[] right)
+        private void FindDiscrepanciesBetween(Column[] left, Column[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
             SortTheItemsOfBothArraysByName(ref left, ref right);
@@ -75,33 +80,57 @@ namespace Gigobyte.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the column on the right
+                    _diff.Changes++;
                     _script.Drop(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the column on the right
+                    _diff.Changes++;
                     _script.Create(source);
                 }
                 else if (source.Name != target.Name)
                 {
                     // Replace the right with the left
+                    _diff.Changes += 2;
                     _script.Drop(target);
                     _script.Create(source);
                 }
                 else if (equalityChecker.Equals(source, target))
                 {
                     // Change the right column to the left
+                    _diff.Changes++;
                     _script.AlterTable(source, target);
                 }
             }
         }
 
-        #region Private Members
+        private void SummarizeChanges(Schema source, Schema target)
+        {
+            int sourceObjectCount = source.Tables.Count;
+            int targetObjectCount = target.Tables.Count;
 
-        private SqlDiff _changes;
-        private IScriptBuilder _script;
+            if (_diff.Changes == 0)
+            {
+                _diff.Summary = SqlDiffSummary.Equal;
+            }
+            else if (sourceObjectCount == 0 && targetObjectCount > 0)
+            {
+                _diff.Summary = SqlDiffSummary.SourceEmpty | SqlDiffSummary.NotEqual;
+            }
+            else if (sourceObjectCount > 0 && targetObjectCount == 0)
+            {
+                _diff.Summary = SqlDiffSummary.TargetEmpty | SqlDiffSummary.NotEqual;
+            }
+            else if (sourceObjectCount != targetObjectCount)
+            {
+                _diff.Summary = SqlDiffSummary.NotEqual;
+            }
+        }
 
-        private static void EnsureBothArraysAreTheSameSize<T>(ref T[] left, ref T[] right)
+        // Helper Methods
+
+        private void EnsureBothArraysAreTheSameSize<T>(ref T[] left, ref T[] right)
         {
             if (left.Length > right.Length)
                 IncreaseLengthOfArray(ref right, left.Length);
@@ -109,7 +138,17 @@ namespace Gigobyte.Daterpillar.Migration
                 IncreaseLengthOfArray(ref left, right.Length);
         }
 
-        private static void IncreaseLengthOfArray<T>(ref T[] array, int capacity)
+        private void SortTheItemsOfBothArraysByName<T>(ref T[] left, ref T[] right)
+        {
+            dynamic l;
+            for (int i = 0; i < left.Length; i++)
+            {
+                l = left[i];
+                SwapMatchingItems(ref right, (l?.Name), i);
+            }
+        }
+
+        private void IncreaseLengthOfArray<T>(ref T[] array, int capacity)
         {
             var newArray = new T[capacity];
             for (int i = 0; i < array.Length; i++)
@@ -120,17 +159,7 @@ namespace Gigobyte.Daterpillar.Migration
             array = newArray;
         }
 
-        private static void SortTheItemsOfBothArraysByName<T>(ref T[] left, ref T[] right)
-        {
-            dynamic l;
-            for (int i = 0; i < left.Length; i++)
-            {
-                l = left[i];
-                SwapMatchingItems(ref right, (l?.Name), i);
-            }
-        }
-
-        private static void SwapMatchingItems<T>(ref T[] right, string name, int targetIdx)
+        private void SwapMatchingItems<T>(ref T[] right, string name, int targetIdx)
         {
             dynamic r; T temp;
             for (int i = targetIdx; i < right.Length; i++)
@@ -144,10 +173,6 @@ namespace Gigobyte.Daterpillar.Migration
                     break;
                 }
             }
-        }
-
-        private void SummarizeReport(Schema source, Schema target)
-        {
         }
 
         #endregion Private Members
