@@ -138,6 +138,7 @@ namespace Tests.Daterpillar.Helpers
                 using (var command = connection.CreateCommand())
                 {
                     string script = builder.GetContent();
+                    File.WriteAllText(@"C:\Users\Ackeem\Downloads\temp.txt", script);
                     string[] statements = script.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var cmd in statements)
                         if (!string.IsNullOrWhiteSpace(cmd))
@@ -152,7 +153,11 @@ namespace Tests.Daterpillar.Helpers
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 throw;
             }
-            finally { if (dispose) connection.Dispose(); }
+            finally
+            {
+                if (dispose) connection.Dispose();
+                builder.Clear();
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Gigobyte.Daterpillar.Migration
 
         public override bool Equals(object obj)
         {
-            if (obj is SqlDiff) return Equals(obj);
+            if (obj is SqlDiff) return Equals((SqlDiff)obj);
             else return false;
         }
 

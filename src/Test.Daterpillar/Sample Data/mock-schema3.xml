@@ -17,6 +17,9 @@
   </table>
 
   <table name="table2">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
   </table>
 
   <table name="table4">
