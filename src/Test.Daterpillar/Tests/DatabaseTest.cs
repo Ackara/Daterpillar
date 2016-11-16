@@ -22,7 +22,7 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Execute_should_retrieve_database_from_sqlite_database_when_invoked()
+        public void Execute_should_retrieve_data_from_a_sqlite_database_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateSQLiteConnection(SQLiteDb))
             {
@@ -57,7 +57,7 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Execute_should_retrieve_database_from_tql_database_when_invoked()
+        public void Execute_should_retrieve_data_from_a_tql_database_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
@@ -92,7 +92,7 @@ namespace Test.Daterpillar.Tests
         [TestMethod]
         [Owner(Dev.Ackara)]
         [TestCategory(Trait.Integration)]
-        public void Execute_should_retrieve_database_from_mysql_database_when_invoked()
+        public void Execute_should_retrieve_data_from_a_a_mysql_database_when_invoked()
         {
             using (var connection = DatabaseHelper.CreateMySQLConnection())
             {
