@@ -56,7 +56,7 @@ None
 #>
 
 	$build = [Convert]::ToUInt16([DateTime]::UtcNow.ToString("yyMM"));
-	$revision = "$([Convert]::ToUInt16([DateTime]::UtcNow.ToString("dH")))$(New-RevisionNumber)";
+	$revision = "$([Convert]::ToUInt16([DateTime]::UtcNow.ToString("dd")))$(New-RevisionNumber)";
 	return "$Script:Major.$Script:Minor.$build.$revision";
 }
 
