@@ -16,15 +16,9 @@
     <tags>orm database sqlite schema c#</tags>
   </metadata>
   <files>
-  <file src="bin\release\Gigobyte.Daterpillar.Core.dll"
-          target="lib" />
-    <file src="bin\release\Gigobyte.Daterpillar.Core.dll"
-          target="content\bin\Debug\" />
-    <file src="..\xddl.xsd"
-          target="content" />
-    <file src="..\Tests.Daterpillar\T4 Template\schema.xddl.xml"
-          target="content" />
-    <file src="..\Tests.Daterpillar\T4 Template\schema.tt"
-          target="content" />
+    <file src="..\..\README.md" target="" />
+
+    <file src="..\Test.Daterpillar\T4 Template\schema.tt" target="content" />
+    <file src="..\Test.Daterpillar\T4 Template\schema.xml" target="content" />
   </files>
 </package>
