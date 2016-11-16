@@ -178,7 +178,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>schema.tt</DependentUpon>
     </Content>
-    <Content Include="T4 Template\schema.xddl.xml" />
+    <Content Include="T4 Template\schema.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="database.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

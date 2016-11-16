@@ -23,7 +23,7 @@ namespace GeneratedCode
 {
 <# 
 	/* *** INSTRUCTIONS *** */
-	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xddl.xml");
+	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
 	
 
