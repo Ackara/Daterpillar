@@ -25,10 +25,10 @@
   </table>
 
   <script>
-    insert into Record (Id, CharValue, StringValue, DecimalValue, DateValue) values (1, 'c', 'Nancy', '69.21', '2017-07-22 05:49:35');
-    insert into Record (Id, CharValue, StringValue, DecimalValue, DateValue) values (2, 'b', 'Roy', '84.11', '2017-08-22 17:31:19');
-    insert into Record (Id, CharValue, StringValue, DecimalValue, DateValue) values (3, 'a', 'Mildred', '31.23', '2016-05-24 08:23:02');
-    insert into Record (Id, CharValue, StringValue, DecimalValue, DateValue) values (4, 'b', 'Rose', '95.40', '2017-09-25 13:18:41');
-    insert into Record (Id, CharValue, StringValue, DecimalValue, DateValue) values (5, 'c', 'Lawrence', '37.79', '2017-07-08 16:14:16');
+    insert into Record (CharValue, StringValue, DecimalValue, DateValue) values ('c', 'Nancy', '69.21', '2017-07-22 05:49:35');
+    insert into Record (CharValue, StringValue, DecimalValue, DateValue) values ('b', 'Roy', '84.11', '2017-08-22 17:31:19');
+    insert into Record (CharValue, StringValue, DecimalValue, DateValue) values ('a', 'Mildred', '31.23', '2016-05-24 08:23:02');
+    insert into Record (CharValue, StringValue, DecimalValue, DateValue) values ('b', 'Rose', '95.40', '2017-09-25 13:18:41');
+    insert into Record (CharValue, StringValue, DecimalValue, DateValue) values ('c', 'Lawrence', '37.79', '2017-07-08 16:14:16');
   </script>
 </schema>
