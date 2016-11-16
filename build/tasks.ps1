@@ -19,14 +19,14 @@ Task default -depends Init, Build-Solution, Run-Tests, Create-Packages, Publish-
 
 Task Init -description "Create and cleanup all working folders." `
 -action{
-	foreach($directory in @($PackageDirectory, $ToolsDirectory))
+	foreach($directory in @($PackageDirectory))
 	{
 		if(Test-Path $directory -PathType Container) { Remove-Item $directory -Recurse; }
 		New-Item $directory -ItemType Directory | Out-Null;
 	}
 
 	# Import modules
-	foreach($module in (Get-ChildItem $ToolsDirectory -Filter "*.psm1"))
+	foreach($module in (Get-ChildItem $ToolsDirectory -Filter "*.psm1" | Select-Object -ExpandProperty FullName))
 	{
 		Import-Module $module -Force;
 	}
@@ -63,10 +63,10 @@ Task Create-Packages -description "Create all packages." `
 
 	foreach($nuspec in (Get-ChildItem "$RootDirectory\src" -Filter "*.nuspec" -Recurse | Select-Object -ExpandProperty FullName))
 	{
-		$nupkg = [IO.Path]::ChangeExtension($nuspec, ".csproj");
-		if(Test-Path $nupkg -PathType Leaf)
+		$csproj = [IO.Path]::ChangeExtension($nuspec, ".csproj");
+		if(Test-Path $csproj -PathType Leaf)
 		{
-			Exec { & $nuget pack $nupkg -Prop Configuration=$BuildConfiguration -OutputDirectory $PackageDirectory -IncludeReferencedProjects; }
+			Exec { & $nuget pack $csproj -Prop Configuration=$BuildConfiguration -OutputDirectory $PackageDirectory -IncludeReferencedProjects; }
 		}
 	}
 }
