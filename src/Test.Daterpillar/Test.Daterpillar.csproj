@@ -164,6 +164,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sample Data\mock-schema4.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.txt</LastGenOutput>
