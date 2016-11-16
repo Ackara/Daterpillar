@@ -14,8 +14,8 @@ Properties {
 	$BuildPlatform = "Any CPU";
 }
 
-Task VSTS -depends Init, Create-Packages, Publish-Packages;
-Task default -depends Init, Build-Solution, Run-Tests, Create-Packages, Publish-Packages;
+Task VSTS -depends Init, Create-Packages, Publish-Packages, Tag-NewRelease;
+Task default -depends Init, Build-Solution, Run-Tests, Create-Packages, Publish-Packages, Tag-NewRelease;
 
 Task Init -description "Create and cleanup all working folders." `
 -action{
