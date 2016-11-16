@@ -222,10 +222,6 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
-# GhostDoc plugin setting file
-*.GhostDoc.xml
-*.GhostDoc.*
-
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 
@@ -261,15 +257,20 @@ paket-files/
 # Approval Tests
 *.received.*
 
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+*.GhostDoc.*
+!*.GhostDoc.user.dic
+
 # Generated files
 **/T4 Template/**
 !**/T4 Template/schema.tt
 !**/T4 Template/schema.xddl.xml
 
-# Sensitive Files
-database.config
-database.config.xml
-
 # Exceptions
 !**/[Xx]64/SQLite.Interop.dll
 !**/[Xx]86/SQLite.Interop.dll
+
+# Sensitive Files
+database.config
+database.config.xml
