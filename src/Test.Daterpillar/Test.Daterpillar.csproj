@@ -101,7 +101,7 @@
   <ItemGroup>
     <Compile Include="Constants\DDT.cs" />
     <Compile Include="Constants\Dev.cs" />
-    <Compile Include="Constants\KnownFile.cs" />
+    <Compile Include="Constants\TestFile.cs" />
     <Compile Include="Constants\Trait.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\ConnectionString.cs" />
