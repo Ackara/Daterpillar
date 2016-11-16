@@ -23,6 +23,7 @@ namespace Gigobyte.Daterpillar.Data
         public DbConnectionWrapperBase(QueryStyle style)
         {
             _style = style;
+            
         }
 
         /// <summary>
