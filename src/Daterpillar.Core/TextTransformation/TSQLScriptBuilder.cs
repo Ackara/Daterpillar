@@ -174,7 +174,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             string dataType = _typeResolver.GetName(newColumn.DataType);
             string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
             string defaultValue = (newColumn.DefaultValue == null ? string.Empty : $" DEFAULT '{newColumn.DefaultValue}'");
-            string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
+            string autoIncrement = ((!oldColumn.AutoIncrement && newColumn.AutoIncrement) ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
 
             _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL ALTER TABLE [{oldTable}] ALTER COLUMN [{oldColumn.Name}] {dataType}{notNull}{defaultValue}{autoIncrement};");
             if (renameRequired) _script.AppendLine($"IF COL_LENGTH('{oldTable}', '{oldColumn.Name}') IS NOT NULL EXEC sp_rename '{oldTable}.{oldColumn.Name}', '{newColumn.Name}', 'COLUMN';");

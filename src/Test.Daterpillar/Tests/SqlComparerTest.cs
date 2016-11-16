@@ -16,7 +16,7 @@ namespace Test.Daterpillar.Tests
     [DeploymentItem(SampleData.Folder)]
     [DeploymentItem(KnownFile.DbConfig)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SqlComparerTest
     {
         // MySQL
@@ -37,6 +37,21 @@ namespace Test.Daterpillar.Tests
         }
 
         // T-SQL
+
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void Compare_should_return_a_tsql_migration_script_when_two_differentiating_schemas_are_passed()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunSqlComparerTest(connection, new TSQLScriptBuilder(), new SqlDiff()
+                {
+                    Changes = 5,
+                    Summary = SqlDiffSummary.NotEqual
+                });
+            }
+        }
 
         #region Private Members
 
@@ -78,6 +93,7 @@ namespace Test.Daterpillar.Tests
             string errorMsg;
             connection.ChangeDatabase(target.Name);
             bool theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLine(errorMsg);
 
             // Assert
             Approvals.Verify(script);

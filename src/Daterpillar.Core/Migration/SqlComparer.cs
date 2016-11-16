@@ -126,6 +126,10 @@ namespace Gigobyte.Daterpillar.Migration
             {
                 _diff.Summary = SqlDiffSummary.NotEqual;
             }
+            else if (_diff.Changes > 0)
+            {
+                _diff.Summary = SqlDiffSummary.NotEqual;
+            }
         }
 
         // Helper Methods

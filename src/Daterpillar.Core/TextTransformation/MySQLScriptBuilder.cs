@@ -165,7 +165,7 @@ namespace Gigobyte.Daterpillar.TextTransformation
             bool renameRequired = oldColumn.Name != newColumn.Name;
             string dataType = _typeResolver.GetName(newColumn.DataType);
             string notNull = (newColumn.IsNullable ? string.Empty : " NOT NULL");
-            string autoIncrement = (newColumn.AutoIncrement ? $" PRIMARY KEY AUTO_INCREMENT" : string.Empty);
+            string autoIncrement = ((!oldColumn.AutoIncrement && newColumn.AutoIncrement) ? $" PRIMARY KEY AUTO_INCREMENT" : string.Empty);
             string defaultValue = (newColumn.DefaultValue == null ? string.Empty : $" DEFAULT '{newColumn.DefaultValue}'");
             string comment = (string.IsNullOrEmpty(newColumn.Comment) ? string.Empty : $" COMMENT '{newColumn.Comment}'");
 
