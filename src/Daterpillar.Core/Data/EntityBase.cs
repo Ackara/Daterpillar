@@ -6,7 +6,6 @@ namespace Gigobyte.Daterpillar.Data
     /// <summary>
     /// Represents an object that is mapped to a database table.
     /// </summary>
-    [System.Runtime.Serialization.DataContract]
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public abstract class EntityBase
     {

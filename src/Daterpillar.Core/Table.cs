@@ -8,7 +8,6 @@ namespace Gigobyte.Daterpillar
     /// <summary>
     /// Represents a database table.
     /// </summary>
-    [DataContract]
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public sealed class Table : ICloneable<Table>
     {
@@ -53,7 +52,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DataMember]
         [XmlAttribute("name")]
         public string Name { get; set; }
 
@@ -61,7 +59,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [DataMember]
         [XmlElement("comment")]
         public string Comment { get; set; }
 
@@ -69,7 +66,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the modifiers.
         /// </summary>
         /// <value>The modifiers.</value>
-        [DataMember]
         [XmlElement("modifier")]
         public List<string> Modifiers { get; set; }
 
@@ -77,7 +73,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the columns.
         /// </summary>
         /// <value>The columns.</value>
-        [DataMember]
         [XmlElement("column")]
         public List<Column> Columns { get; set; }
 
@@ -85,7 +80,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the foreign keys.
         /// </summary>
         /// <value>The foreign keys.</value>
-        [DataMember]
         [XmlElement("foreignKey")]
         public List<ForeignKey> ForeignKeys { get; set; }
 
@@ -93,7 +87,6 @@ namespace Gigobyte.Daterpillar
         /// Gets or sets the indexes.
         /// </summary>
         /// <value>The indexes.</value>
-        [DataMember]
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
 
