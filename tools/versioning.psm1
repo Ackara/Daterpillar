@@ -75,7 +75,7 @@ function Get-VersionNumber()
 	}
 }
 
-function Update-VersionNumber()
+function Update-VersionNumbers()
 {
 <#
 

@@ -17,4 +17,4 @@ None
 
 $versioningModule = "$PSScriptRoot\versioning.psm1";
 if(!(Get-Module "versioning")) { Import-Module $versioningModule; } else { Write-Host "The versioning module is already imported."; }
-Update-VersionNumber;
+Update-VersionNumbers;
