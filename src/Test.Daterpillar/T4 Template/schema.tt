@@ -25,29 +25,40 @@ namespace GeneratedCode
 	/* *** INSTRUCTIONS *** */
 	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
+
+	var settings = new CSharpScriptBuilderSettings()
+		{
+			Namespace = Schema.Xmlns,
+
+			AppendComments = true,
+			AppendSchemaInformation = true,
+			AppendVirtualProperties = false
+		};
 	
 
 	//ExcludeTable(schema, "TableName");
-	//RenameTable(schema, "oldName", "newName");
+	//RenameTable(schema, "oldTable", "newTable");
 	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
 
-	//Generate(schema, new CSharpTemplate(settings));
+	Generate(schema, new CSharpScriptBuilder(settings));
 	
 #>
 }
 <#+
 
-public void Generate(Schema schema, ITemplate tempalate)
+public void Generate(Schema schema, IScriptBuilder scriptBuilder)
 {
 	PushIndent("\t");
-	WriteLine(tempalate.Transform(schema));
+	scriptBuilder.Create(schema);
+	WriteLine(scriptBuilder.GetContent());
 	PopIndent();
 }
 
-public void GenerateAsFile(Schema schema, ITemplate template, string fileName)
+public void GenerateAsFile(Schema schema, IScriptBuilder scriptBuilder, string fileName)
 {
 	var tempFile = Path.GetTempFileName();
-	File.WriteAllText(tempFile, template.Transform(schema));
+	scriptBuilder.Create(schema);
+	File.WriteAllText(tempFile, scriptBuilder.GetContent());
 
 	var dte = (EnvDTE.DTE)((IServiceProvider)this.Host).GetService(typeof(EnvDTE.DTE));
 	var thisTemplateFile = dte.Solution.FindProjectItem(this.Host.TemplateFile);
@@ -95,7 +106,7 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
 	}
 }
 
-public void DeleteTextTemplateSubItem(ProjectItem template, string fileName)
+private void DeleteTextTemplateSubItem(ProjectItem template, string fileName)
 {
 	foreach(ProjectItem subItem in template.ProjectItems)
 	{
