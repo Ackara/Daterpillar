@@ -29,7 +29,16 @@ Param(
 	[string]$NugetSource = "https://api.nuget.org/v3/index.json",
 
     [Parameter(Position=3)]
-	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe",
+
+    [Parameter(Position=5)]
+    [string]$Server = "",
+
+    [Parameter(Position=6)]
+    [string]$Username = "",
+
+    [Parameter(Position=7)]
+    [string]$Password = ""
 )
 
 $rootDirectory = (Split-Path $PSScriptRoot -Parent);
@@ -62,6 +71,9 @@ Invoke-psake `
 		"Nuget"=$nuget;
 		"NugetKey"=$NugetKey;
 		"NugetSource"=$NugetSource;
+        "Server"=$Server;
+        "Username"=$Username;
+        "Password"=$Password;
 	};
 	
 if(-not $psake.build_success) { exit 1; }

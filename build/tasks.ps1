@@ -1,8 +1,13 @@
 Properties {
-	# Paths
+    # Paths
 	$RootDirectory = (Split-Path $PSScriptRoot -Parent);
 	$PackageDirectory = "$RootDirectory\build\packages";
 	$ToolsDirectory = "$RootDirectory\tools";
+
+    # Ftp Server
+    $Server = $null;
+    $Username = $null;
+    $Password = $null;
 
 	# Nuget
 	$Nuget = "$RootDirectory\tools\nuget.exe";
@@ -84,10 +89,15 @@ Task Publish-Packages -description "Publish all nuget packages." `
 	}
 }
 
+Task Upload-XmlSchema -description "Upload schema.xsd to public server." `
+-depends Init `
+-action {
+}
+
 Task Tag-NewRelease -description "Tag the repo with the current version number." `
 -depends Init `
 -action {
 	$versionNumber = Get-VersionNumber;
-	Write-Host "git tag v$versionNumber";
-	Write-Host "git push origin v$versionNumber";
+	git tag v$versionNumber;
+	git push origin v$versionNumber;
 }
