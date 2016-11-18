@@ -7,7 +7,7 @@ using Tests.Daterpillar.Helpers;
 namespace Tests.Daterpillar.Tests
 {
     [TestClass]
-    [DeploymentItem(KnownFile.XDDL)]
+    [DeploymentItem(KnownFile.XSD)]
     [DeploymentItem(DDT.Samples)]
     public class SchemaTest
     {

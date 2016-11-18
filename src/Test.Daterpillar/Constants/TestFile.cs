@@ -2,7 +2,7 @@
 {
     public static class KnownFile
     {
-        public const string XDDL = "xddl.xsd";
+        public const string XSD = "daterpillar.xsd";
         public const string DbConfig = "database.config";
         public const string x86SQLiteInterop = "x86\\SQLite.Interop.dll";
         public const string x64SQLiteInterop = "x64\\SQLite.Interop.dll";
