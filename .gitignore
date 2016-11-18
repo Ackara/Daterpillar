@@ -265,7 +265,7 @@ paket-files/
 # Generated files
 **/T4 Template/**
 !**/T4 Template/schema.tt
-!**/T4 Template/schema.xddl.xml
+!**/T4 Template/schema.xml
 
 # Exceptions
 !**/[Xx]64/SQLite.Interop.dll

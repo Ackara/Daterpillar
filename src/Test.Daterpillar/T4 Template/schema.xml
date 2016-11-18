@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<schema xmlns="http://static.acklann.com/schema/v1/daterpillar.xsd">
+
+  <table name="TableA">
+    <column name="Id"
+            autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="Name">
+      <dataType scale="64">varchar</dataType>
+    </column>
+  </table>
+</schema>
