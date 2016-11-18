@@ -26,7 +26,7 @@ Param(
 	[Parameter(Position=2)]
 	[string]$MSSQLConnectionString = "your_mssql_connection_string",
 
-    [Parameter(Position=3)]
+	[Parameter(Position=3)]
 	[bool]$Overwrite = $false
 )
 
@@ -64,4 +64,4 @@ elseif ($Overwrite)
 	}
 }
 
-Write-Host "database.cong located at: '$databaseConfig'";
+Write-Host "database.config located at: '$databaseConfig'";
