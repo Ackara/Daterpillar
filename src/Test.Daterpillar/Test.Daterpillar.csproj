@@ -131,8 +131,8 @@
     <Compile Include="Tests\SqlComparerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\xddl.xsd">
-      <Link>xddl.xsd</Link>
+    <None Include="..\daterpillar.xsd">
+      <Link>daterpillar.xsd</Link>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -169,10 +169,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="T4 Template\schema.tt">
+    <None Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.txt</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="T4 Template\schema.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

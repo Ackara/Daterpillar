@@ -10,8 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{FDCC3763
 		..\.gitignore = ..\.gitignore
 		Daterpillar.Core\Daterpillar.Core.nuspec = Daterpillar.Core\Daterpillar.Core.nuspec
 		Daterpillar.NET\Daterpillar.NET.nuspec = Daterpillar.NET\Daterpillar.NET.nuspec
+		daterpillar.xsd = daterpillar.xsd
 		..\README.md = ..\README.md
-		xddl.xsd = xddl.xsd
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.NET", "Daterpillar.NET\Daterpillar.NET.csproj", "{785E04BF-F296-481B-983A-E3EFBA3E8F06}"
