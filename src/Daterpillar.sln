@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C97A2BCA
 		..\tools\New-ConfigFile.ps1 = ..\tools\New-ConfigFile.ps1
 		..\tools\Update-VersionNumber.ps1 = ..\tools\Update-VersionNumber.ps1
 		..\tools\versioning.psm1 = ..\tools\versioning.psm1
+		..\tools\winscp.psm1 = ..\tools\winscp.psm1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{95F37999-42D6-439B-BE19-C0B6DBD34CCA}"
