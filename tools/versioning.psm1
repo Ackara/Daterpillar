@@ -7,7 +7,7 @@ This module provides functions for incrementing and retrieveing the current vers
 
 $Script:Major = 3;
 $Script:Minor = 0;
-$Script:regex = New-Object Regex('(?i)\[assembly:\s*assembly(\w+)?version\s*\("(?<version>(\d+\.){1,2}(\*|\d+)?(\.\d+)?)"\s*\)\s*\]');
+$Script:regex = New-Object Regex('(?i)\[assembly:\s*assembly(\w+)?version\s*\("(?<version>(\d+\.){1,2}(\*|\d+)?(\.(?<rev>\d+))?)"\s*\)\s*\]');
 
 function New-RevisionNumber()
 {
@@ -23,21 +23,9 @@ None
 None
 
 #>
-	$datePart = [DateTime]::UtcNow.ToString("yyMMdd");
-	$revisionFile = [String]::Concat($env:TEMP, "\revision_", $datePart, "_.tmp");
-
-	if(Test-Path $revisionFile -PathType Leaf)
-	{
-		$content = Get-Content $revisionFile;
-		$number = ([Convert]::ToInt32($content.Trim()) + 1);
-		Out-File $revisionFile -InputObject $number;
-		return $number;
-	}
-	else
-	{
-		New-Item $revisionFile -Value "1" | Out-Null;
-		return 1;
-	}
+	[string]$version = Get-VersionNumber;
+    $rev = $version.Split('.')[3];
+    return ([Convert]::ToInt16($rev) + 1);
 }
 
 function New-VersionNumber()
@@ -55,8 +43,8 @@ None
 
 #>
 
-	$build = [Convert]::ToUInt16([DateTime]::UtcNow.ToString("yyMM"));
-	$revision = "$([Convert]::ToUInt16([DateTime]::UtcNow.ToString("dd")))$(New-RevisionNumber)";
+	$build = [Convert]::ToUInt16([DateTime]::UtcNow.DayOfYear);
+	$revision = New-RevisionNumber;
 	return "$Script:Major.$Script:Minor.$build.$revision";
 }
 
