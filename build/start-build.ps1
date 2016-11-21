@@ -19,26 +19,26 @@ The API key for the nuget feed.
 
 [CmdletBinding()]
 Param(
-    [Parameter(Position=4)]
+	[Parameter(Position=4)]
 	[string[]]$Tasks = @("default"),
-    
-    [Parameter(Position=2)]
+	
+	[Parameter(Position=2)]
 	[string]$NugetKey = "",
 
-    [Parameter(Position=1)]
+	[Parameter(Position=1)]
 	[string]$NugetSource = "https://api.nuget.org/v3/index.json",
 
-    [Parameter(Position=3)]
+	[Parameter(Position=3)]
 	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe",
 
-    [Parameter(Position=5)]
-    [string]$Server = "",
+	[Parameter(Position=5)]
+	[string]$Server = "",
 
-    [Parameter(Position=6)]
-    [string]$Username = "",
+	[Parameter(Position=6)]
+	[string]$Username = "",
 
-    [Parameter(Position=7)]
-    [string]$Password = ""
+	[Parameter(Position=7)]
+	[string]$Password = ""
 )
 
 $rootDirectory = (Split-Path $PSScriptRoot -Parent);
@@ -71,9 +71,9 @@ Invoke-psake `
 		"Nuget"=$nuget;
 		"NugetKey"=$NugetKey;
 		"NugetSource"=$NugetSource;
-        "Server"=$Server;
-        "Username"=$Username;
-        "Password"=$Password;
+		"Server"=$Server;
+		"Username"=$Username;
+		"Password"=$Password;
 	};
 	
 if(-not $psake.build_success) { exit 1; }

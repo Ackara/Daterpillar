@@ -1,13 +1,13 @@
 Properties {
-    # Paths
+	# Paths
 	$RootDirectory = (Split-Path $PSScriptRoot -Parent);
 	$PackageDirectory = "$RootDirectory\build\packages";
 	$ToolsDirectory = "$RootDirectory\tools";
 
-    # Ftp Server
-    $Server = $null;
-    $Username = $null;
-    $Password = $null;
+	# Ftp Server
+	$Server = $null;
+	$Username = $null;
+	$Password = $null;
 
 	# Nuget
 	$Nuget = "$RootDirectory\tools\nuget.exe";
@@ -92,12 +92,12 @@ Task Publish-Packages -description "Publish all nuget packages." `
 Task Upload-XmlSchema -description "Upload schema.xsd to public server." `
 -depends Init `
 -action {
-    Assert(-not [String]::IsNullOrEmpty($Server)) "'Server' is not assigned a value.";
-    Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' is not assigned a value.";
-    Assert(-not [String]::IsNullOrEmpty($Password)) "'Password' is not assigned a value.";
+	Assert(-not [String]::IsNullOrEmpty($Server)) "'Server' is not assigned a value.";
+	Assert(-not [String]::IsNullOrEmpty($Username)) "'Username' is not assigned a value.";
+	Assert(-not [String]::IsNullOrEmpty($Password)) "'Password' is not assigned a value.";
 
-    Send-WinSCPItems -From "$RootDirectory\src\daterpillar.xsd" -Host $Server -Path "/static.acklann.com/wwwroot/schema/v1/" -Username $Username -Password $Password;
-    Send-WinSCPItems -From "$RootDirectory\daterpillar.png" -Host $Server -Path "/static.acklann.com/wwwroot/images/" -Username $Username -Password $Password;
+	Send-WinSCPItems -From "$RootDirectory\src\daterpillar.xsd" -Host $Server -Path "/static.acklann.com/wwwroot/schema/v1/" -Username $Username -Password $Password;
+	Send-WinSCPItems -From "$RootDirectory\daterpillar.png" -Host $Server -Path "/static.acklann.com/wwwroot/images/" -Username $Username -Password $Password;
 }
 
 Task Tag-NewRelease -description "Tag the repo with the current version number." `
