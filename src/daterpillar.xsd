@@ -56,19 +56,15 @@
                   use="optional"
                   default="0" />
 
+    <xs:attribute name="default"
+                  type="xs:string"
+                  use="optional" />
+
     <xs:attribute name="autoIncrement"
                   type="xs:boolean"
                   default="0"
                   use="optional" />
   </xs:complexType>
-
-  <xs:simpleType name="ConnectionType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="TSQL" />
-      <xs:enumeration value="MySQL" />
-      <xs:enumeration value="SQLite" />
-    </xs:restriction>
-  </xs:simpleType>
 
   <!-- D -->
 
@@ -169,7 +165,7 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="format"
-                      type="ConnectionType"
+                      type="SQL"
                       use="required" />
       </xs:extension>
     </xs:simpleContent>
@@ -179,6 +175,14 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="ASC" />
       <xs:enumeration value="DESC" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SQL">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TSQL" />
+      <xs:enumeration value="MySQL" />
+      <xs:enumeration value="SQLite" />
     </xs:restriction>
   </xs:simpleType>
 
