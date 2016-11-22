@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Commands
+namespace Acklann.Daterpillar.Commands
 {
     [VerbLink(SyncVerb.Name)]
     public class SyncCommand : ICommand

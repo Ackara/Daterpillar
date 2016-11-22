@@ -1,9 +1,9 @@
-﻿using Gigobyte.Daterpillar.TextTransformation;
+﻿using Acklann.Daterpillar.TextTransformation;
 using System;
 using System.Data;
 using System.Linq;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public abstract class SchemaAggregatorBase : ISchemaAggregator
     {

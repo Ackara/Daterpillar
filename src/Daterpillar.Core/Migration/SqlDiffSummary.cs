@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Migration
+﻿namespace Acklann.Daterpillar.Migration
 {
     [System.Flags]
     public enum SqlDiffSummary

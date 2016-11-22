@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Gigobyte.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     /// <summary>
     /// Represents a SQL query string.

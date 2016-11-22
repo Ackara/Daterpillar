@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Represents an object that is mapped to a database table.

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Represent the current values and meta data of a property member.

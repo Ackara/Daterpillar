@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Represents a SQL type.

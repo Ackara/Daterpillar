@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar
+﻿namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Supports cloning, which creates a new instance of a class with the same value as an existing instance.

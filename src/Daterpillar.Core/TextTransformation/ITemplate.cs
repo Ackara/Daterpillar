@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.TextTransformation
+﻿namespace Acklann.Daterpillar.TextTransformation
 {
     public interface ITemplate
     {

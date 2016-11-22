@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Specifies the database table that a class is mapped to.

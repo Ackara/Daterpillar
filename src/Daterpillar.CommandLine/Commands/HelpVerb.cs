@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Commands
+﻿namespace Acklann.Daterpillar.Commands
 {
     public sealed class HelpVerb
     {

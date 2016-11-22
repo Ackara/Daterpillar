@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Represents the database column that a property is mapped to.

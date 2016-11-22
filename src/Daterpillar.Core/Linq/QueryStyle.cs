@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Linq
+﻿namespace Acklann.Daterpillar.Linq
 {
     /// <summary>
     /// Represent a SQL formatting style.

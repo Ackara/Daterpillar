@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Equality
+namespace Acklann.Daterpillar.Equality
 {
     public class ColumnEqualityComparer : IEqualityComparer<Column>
     {

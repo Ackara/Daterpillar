@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Data
+﻿namespace Acklann.Daterpillar.Data
 {
     public sealed class DbExceptionEventArgs : System.EventArgs
     {

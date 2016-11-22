@@ -1,7 +1,7 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Gigobyte.Daterpillar.Linq;
+using Acklann.Daterpillar.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.Daterpillar.Constants;
 

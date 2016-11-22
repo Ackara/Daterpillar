@@ -1,5 +1,5 @@
-﻿using Gigobyte.Daterpillar;
-using Gigobyte.Daterpillar.Migration;
+﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Migration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using Telerik.JustMock;

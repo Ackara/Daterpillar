@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Acklann.Daterpillar.TextTransformation
 {
     /// <summary>
     /// Provide extension methods for the <see cref="TextTransformation"/> namespace.

@@ -1,6 +1,6 @@
-﻿using Gigobyte.Daterpillar.TextTransformation;
+﻿using Acklann.Daterpillar.TextTransformation;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public class SqlComparer
     {

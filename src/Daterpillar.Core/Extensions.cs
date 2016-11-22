@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Provide extension methods for the <see cref="Daterpillar" /> namespace.

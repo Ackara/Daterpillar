@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public struct SqlDiff : IEquatable<SqlDiff>
     {

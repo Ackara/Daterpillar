@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public class TSQLSchemaAggregator : SchemaAggregatorBase
     {

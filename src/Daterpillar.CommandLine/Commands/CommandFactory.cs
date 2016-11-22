@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Gigobyte.Daterpillar.Commands
+namespace Acklann.Daterpillar.Commands
 {
     public class CommandFactory
     {

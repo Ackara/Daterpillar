@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Create a <see cref="EntityBase"/> object from a <see cref="System.Data.DataRow"/> object.
     /// </summary>
-    /// <seealso cref="Gigobyte.Daterpillar.Data.IDataReader"/>
+    /// <seealso cref="Acklann.Daterpillar.Data.IDataReader"/>
     public class AdoNetDataReader : IDataReader
     {
         /// <summary>

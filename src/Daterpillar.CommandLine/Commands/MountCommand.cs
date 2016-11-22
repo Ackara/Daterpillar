@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gigobyte.Daterpillar.Commands
+namespace Acklann.Daterpillar.Commands
 {
     [VerbLink(MountVerb.Name)]
     public class MountCommand : ICommand

@@ -1,8 +1,8 @@
-﻿using Gigobyte.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Linq;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     public class AdoNetConnectionWrapper : DbConnectionWrapperBase
     {

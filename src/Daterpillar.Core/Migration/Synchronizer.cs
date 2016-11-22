@@ -1,7 +1,7 @@
-﻿using Gigobyte.Daterpillar.TextTransformation;
+﻿using Acklann.Daterpillar.TextTransformation;
 using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public class Synchronizer
     {

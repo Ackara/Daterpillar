@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Database index type

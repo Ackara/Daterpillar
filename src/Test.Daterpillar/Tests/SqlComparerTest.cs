@@ -1,9 +1,9 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
-using Gigobyte.Daterpillar;
-using Gigobyte.Daterpillar.Migration;
-using Gigobyte.Daterpillar.TextTransformation;
+using Acklann.Daterpillar;
+using Acklann.Daterpillar.Migration;
+using Acklann.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Linq;

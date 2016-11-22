@@ -1,9 +1,9 @@
-﻿using Gigobyte.Daterpillar.Data;
+﻿using Acklann.Daterpillar.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Acklann.Daterpillar.TextTransformation
 {
     public class CSharpScriptBuilder : IScriptBuilder
     {

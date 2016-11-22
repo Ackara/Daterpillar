@@ -1,6 +1,6 @@
-﻿using Gigobyte.Daterpillar.Data;
+﻿using Acklann.Daterpillar.Data;
 
-namespace Gigobyte.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     /// <summary>
     /// Provides extension methods for the <see cref="Linq"/> namespace.

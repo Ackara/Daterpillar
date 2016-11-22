@@ -8,8 +8,8 @@
     <ProjectGuid>{EEE56AC1-7B0E-49CA-985E-7F00E3A88C81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gigobyte.Daterpillar</RootNamespace>
-    <AssemblyName>Gigobyte.Daterpillar.Core</AssemblyName>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <AssemblyName>Acklann.Daterpillar.Core</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,7 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Gigobyte.Daterpillar.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Acklann.Daterpillar.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Data\ColumnAttribute.cs" />

@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.TextTransformation
+﻿namespace Acklann.Daterpillar.TextTransformation
 {
     public sealed class CSharpTypeNameResolver : TypeNameResolverBase
     {

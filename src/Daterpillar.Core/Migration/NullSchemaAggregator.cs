@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Migration
+﻿namespace Acklann.Daterpillar.Migration
 {
     public sealed class NullSchemaAggregator : ISchemaAggregator
     {

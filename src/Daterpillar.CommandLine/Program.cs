@@ -1,7 +1,7 @@
-﻿using Gigobyte.Daterpillar.Commands;
+﻿using Acklann.Daterpillar.Commands;
 using System;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     public class Program
     {

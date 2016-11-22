@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Gigobyte.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     public class SQLiteSchemaAggregator : SchemaAggregatorBase
     {

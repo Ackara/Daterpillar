@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Acklann.Daterpillar.TextTransformation
 {
 	public abstract partial class TypeNameResolverBase : ITypeNameResolver
 	{

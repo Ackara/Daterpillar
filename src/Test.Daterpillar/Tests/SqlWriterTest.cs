@@ -1,5 +1,5 @@
-﻿using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Data;
+using Acklann.Daterpillar.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.CompilerServices;

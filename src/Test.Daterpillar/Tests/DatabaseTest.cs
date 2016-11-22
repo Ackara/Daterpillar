@@ -1,7 +1,7 @@
-﻿using Gigobyte.Daterpillar;
-using Gigobyte.Daterpillar.Data;
-using Gigobyte.Daterpillar.Linq;
-using Gigobyte.Daterpillar.TextTransformation;
+﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Data;
+using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

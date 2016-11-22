@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar
+﻿namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Sorting direction.

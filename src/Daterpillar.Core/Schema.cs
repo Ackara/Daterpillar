@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Represents a database schema.

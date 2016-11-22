@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Acklann.Daterpillar.TextTransformation
 {
     public class ScriptBuilderFactory
     {

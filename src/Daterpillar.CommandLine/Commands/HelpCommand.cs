@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar.Commands
+﻿namespace Acklann.Daterpillar.Commands
 {
     [VerbLink(HelpVerb.Name)]
     public class HelpCommand : ICommand

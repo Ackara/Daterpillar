@@ -1,8 +1,8 @@
-﻿using Gigobyte.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// </summary>

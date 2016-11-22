@@ -3,7 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace Gigobyte.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Represents a database table.

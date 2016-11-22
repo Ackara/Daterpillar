@@ -1,9 +1,9 @@
-﻿using Gigobyte.Daterpillar.Data;
+﻿using Acklann.Daterpillar.Data;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Gigobyte.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     public static class SqlWriter
     {

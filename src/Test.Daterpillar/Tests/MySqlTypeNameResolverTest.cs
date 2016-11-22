@@ -1,5 +1,5 @@
-﻿using Gigobyte.Daterpillar;
-using Gigobyte.Daterpillar.TextTransformation;
+﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.TextTransformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tests.Daterpillar.Constants;

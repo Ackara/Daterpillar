@@ -7,8 +7,8 @@
     <ProjectGuid>{785E04BF-F296-481B-983A-E3EFBA3E8F06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gigobyte.Daterpillar</RootNamespace>
-    <AssemblyName>Gigobyte.Daterpillar.NET</AssemblyName>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <AssemblyName>Acklann.Daterpillar.NET</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyVersion>2.16286.0929.345</AssemblyVersion>

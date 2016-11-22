@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gigobyte.Daterpillar.Data
+namespace Acklann.Daterpillar.Data
 {
     /// <summary>
     /// Provides a mechanism to interact with relational databases.

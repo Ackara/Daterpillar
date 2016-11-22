@@ -1,4 +1,4 @@
-﻿namespace Gigobyte.Daterpillar
+﻿namespace Acklann.Daterpillar
 {
     internal struct ExitCode
     {

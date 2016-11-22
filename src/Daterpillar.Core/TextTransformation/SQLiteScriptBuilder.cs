@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Gigobyte.Daterpillar.TextTransformation
+namespace Acklann.Daterpillar.TextTransformation
 {
     public class SQLiteScriptBuilder : IScriptBuilder
     {
