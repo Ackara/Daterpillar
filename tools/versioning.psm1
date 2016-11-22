@@ -24,8 +24,8 @@ None
 
 #>
 	[string]$version = Get-VersionNumber;
-    $rev = $version.Split('.')[3];
-    return ([Convert]::ToInt16($rev) + 1);
+	$rev = $version.Split('.')[3];
+	return ([Convert]::ToInt16($rev) + 1);
 }
 
 function New-VersionNumber()
