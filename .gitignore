@@ -11,6 +11,7 @@
 *.userprefs
 
 # Build results
+[Bb]uild/*/**
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -68,6 +69,7 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+*.exe
 
 # Chutzpah Test files
 _Chutzpah*
@@ -273,4 +275,3 @@ paket-files/
 
 # Sensitive Files
 database.config
-database.config.xml
