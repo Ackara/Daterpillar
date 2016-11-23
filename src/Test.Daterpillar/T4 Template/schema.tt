@@ -16,7 +16,7 @@
 <#@ import namespace="Acklann.Daterpillar.TextTransformation" #>
 <#@ output extension=".txt" #>
 using System;
-using Gigobyte.Daterpillar.Data;
+using Acklann.Daterpillar.Data;
 using System.Runtime.Serialization;
 
 namespace GeneratedCode
