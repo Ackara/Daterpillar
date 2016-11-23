@@ -85,7 +85,7 @@ namespace Acklann.Daterpillar.TextTransformation
 
             if (Settings.AppendSchemaInformation) _content.AppendLine($"[Table(\"{table.Name}\")]");
             if (Settings.AppendDataContracts) _content.AppendLine($"[DataContract{theNamespace}]");
-            _content.AppendLine($"public class {table.Name.ToPascalCase(_separators)}{baseClass}");
+            _content.AppendLine($"public partial class {table.Name.ToPascalCase(_separators)}{baseClass}");
             _content.AppendLine("{");
             AppendSchemaInformation(table);
 

@@ -1,6 +1,6 @@
 ﻿[Table("table1")]
 [DataContract(Namespace= "https://static.testing.com/v1/schema.xsd")]
-public class Table1 : EntityBase
+public partial class Table1 : EntityBase
 {
 	#region Schema Identifiers
 
@@ -50,7 +50,7 @@ public class Table1 : EntityBase
 
 [Table("table2")]
 [DataContract(Namespace= "https://static.testing.com/v1/schema.xsd")]
-public class Table2 : EntityBase
+public partial class Table2 : EntityBase
 {
 	#region Schema Identifiers
 
@@ -88,7 +88,7 @@ public class Table2 : EntityBase
 
 [Table("table3")]
 [DataContract(Namespace= "https://static.testing.com/v1/schema.xsd")]
-public class Table3 : EntityBase
+public partial class Table3 : EntityBase
 {
 	#region Schema Identifiers
 

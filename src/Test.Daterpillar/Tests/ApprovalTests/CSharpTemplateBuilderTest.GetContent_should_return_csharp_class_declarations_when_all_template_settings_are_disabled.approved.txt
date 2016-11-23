@@ -1,4 +1,4 @@
-﻿public class Table1
+﻿public partial class Table1
 {
 	public string Id { get; set; }
 
@@ -7,14 +7,14 @@
 	public string DateCreated { get; set; }
 }
 
-public class Table2
+public partial class Table2
 {
 	public string Id { get; set; }
 
 	public string Name { get; set; }
 }
 
-public class Table3
+public partial class Table3
 {
 	public string Ref1 { get; set; }
 
