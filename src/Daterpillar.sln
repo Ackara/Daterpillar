@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{FDCC3763
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.NET", "Daterpillar.NET\Daterpillar.NET.csproj", "{785E04BF-F296-481B-983A-E3EFBA3E8F06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.CommandLine", "Daterpillar.CommandLine\Daterpillar.CommandLine.csproj", "{A24D43DF-FEE2-4565-817A-55C0E1DE2407}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C97A2BCA-9885-4D96-87FE-E6A718079991}"
 	ProjectSection(SolutionItems) = preProject
 		..\tools\New-ConfigFile.ps1 = ..\tools\New-ConfigFile.ps1
