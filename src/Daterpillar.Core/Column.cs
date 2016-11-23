@@ -43,8 +43,8 @@ namespace Acklann.Daterpillar
         [XmlAttribute("autoIncrement")]
         public bool AutoIncrement { get; set; }
 
-        [XmlElement("default")]
-        public object DefaultValue { get; set; }
+        [XmlAttribute("default")]
+        public string DefaultValue { get; set; }
 
         /// <summary>
         /// Gets or sets the comment.

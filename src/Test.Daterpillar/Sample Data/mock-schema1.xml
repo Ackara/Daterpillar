@@ -10,7 +10,7 @@
       <dataType>int</dataType>
     </column>
 
-    <column name="Name">
+    <column name="Name" default="Other">
       <dataType scale="64">varchar</dataType>
     </column>
   </table>
@@ -79,7 +79,7 @@
       <dataType scale="256">varchar</dataType>
     </column>
 
-    <column name="Length" nullable="true">
+    <column name="Length" nullable="true" default="0">
       <dataType scale="4" precision="2">decimal</dataType>
     </column>
 

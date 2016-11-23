@@ -74,8 +74,9 @@ namespace Acklann.Daterpillar.Migration
                 newColumn.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
                 newColumn.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
                 newColumn.DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]));
-                newColumn.DefaultValue = row[ColumnName.Default];
-                newColumn.DefaultValue = (newColumn.DefaultValue == DBNull.Value ? null : newColumn.DefaultValue);
+
+                var columnDefault = row[ColumnName.Default];
+                newColumn.DefaultValue = (columnDefault == DBNull.Value ? null : newColumn.DefaultValue);
             }
         }
 

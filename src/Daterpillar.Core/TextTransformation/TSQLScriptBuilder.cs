@@ -203,8 +203,9 @@ namespace Acklann.Daterpillar.TextTransformation
             string dataType = _typeResolver.GetName(column.DataType);
             string notNull = ((column.IsNullable && !column.AutoIncrement) ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
+            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT '{column.DefaultValue}'");
 
-            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{autoIncrement},");
+            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{defaultValue}{autoIncrement},");
         }
 
         private void AppendToTable(ForeignKey foreignKey)

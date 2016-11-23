@@ -22,7 +22,9 @@ using System.Runtime.Serialization;
 namespace GeneratedCode
 {
 <# 
-	/* *** INSTRUCTIONS *** */
+	/* *** NOTE *** */
+	// If an error occurs, make sure the 'Acklann.Daterpillar.Core.dll' is in the bin folder.
+
 	string schemaPath = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "schema.xml");
 	var schema = Schema.Load(File.OpenRead(schemaPath));
 

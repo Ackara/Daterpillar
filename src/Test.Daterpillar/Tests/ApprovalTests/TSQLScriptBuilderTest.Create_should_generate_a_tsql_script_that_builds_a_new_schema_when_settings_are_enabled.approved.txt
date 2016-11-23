@@ -19,7 +19,7 @@ USE [daterpillar1];
 IF OBJECT_ID('genre') IS NULL CREATE TABLE [genre]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-	[Name] VARCHAR(64) NOT NULL
+	[Name] VARCHAR(64) NOT NULL DEFAULT 'Other'
 );
 
 
@@ -49,7 +49,7 @@ IF OBJECT_ID('song') IS NULL CREATE TABLE [song]
 	[Artist_Id] INT NOT NULL,
 	[Genre_Id] INT NOT NULL,
 	[Name] VARCHAR(256) NOT NULL,
-	[Length] DECIMAL(4, 2),
+	[Length] DECIMAL(4, 2) DEFAULT '0',
 	[Price] DECIMAL(12, 2) NOT NULL,
 	[On_Device] BIT NOT NULL,
 	CONSTRAINT [genre_id_TO_genre_id_fkey4] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
