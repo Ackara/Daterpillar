@@ -141,6 +141,12 @@ namespace Acklann.Daterpillar
             return false;
         }
 
+        public void Join(Schema otherSchema)
+        {
+            this.Tables.AddRange(otherSchema.Tables);
+            this.Script += otherSchema.Script;
+        }
+
         public IEnumerable<Index> GetIndexes()
         {
             foreach (var table in Tables)
