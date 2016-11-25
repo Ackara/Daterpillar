@@ -13,7 +13,7 @@ namespace Test.Daterpillar.Tests
         public void CreateInstance_should_return_a_script_builder_object_when_a_valid_name_is_passed()
         {
             // Act
-            var instance = new ScriptBuilderFactory().CreateInstance(SupportedDatabase.TSQL);
+            var instance = new ScriptBuilderFactory().CreateInstance(ConnectionType.TSQL);
 
             // Assert
             Assert.IsInstanceOfType(instance, typeof(TSQLScriptBuilder));

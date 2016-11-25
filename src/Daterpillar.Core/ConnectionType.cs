@@ -1,6 +1,6 @@
 ﻿namespace Acklann.Daterpillar
 {
-    public enum SupportedDatabase
+    public enum ConnectionType
     {
         TSQL,
         MySQL,

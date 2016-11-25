@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.TextTransformation
             catch (KeyNotFoundException) { return new NullScriptBuilder(); }
         }
 
-        public IScriptBuilder CreateInstance(SupportedDatabase connectionType)
+        public IScriptBuilder CreateInstance(ConnectionType connectionType)
         {
             return CreateInstance(string.Concat(connectionType, _targetInterface));
         }

@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Migration
             catch (KeyNotFoundException) { return new NullSchemaAggregator(); }
         }
 
-        public ISchemaAggregator CreateInstance(SupportedDatabase dbType, IDbConnection connection)
+        public ISchemaAggregator CreateInstance(ConnectionType dbType, IDbConnection connection)
         {
             return CreateInstance(string.Concat(dbType, _targetInterface), connection);
         }
