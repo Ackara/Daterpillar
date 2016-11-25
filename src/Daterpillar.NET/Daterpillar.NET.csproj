@@ -46,7 +46,7 @@
     <Compile Include="Data\AdoNetDataReader.cs" />
     <Compile Include="Migration\MySQLSchemaAggregator.cs" />
     <Compile Include="Migration\SchemaAggregatorBase.cs" />
-    <Compile Include="Migration\TSQLSchemaAggregator.cs" />
+    <Compile Include="Migration\MSSQLSchemaAggregator.cs" />
     <Compile Include="Migration\SQLiteSchemaAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

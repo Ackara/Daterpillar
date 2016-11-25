@@ -43,8 +43,8 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                var builder = new TSQLScriptBuilder(_settings);
-                var sut = new TSQLSchemaAggregator(connection);
+                var builder = new MSSQLScriptBuilder(_settings);
+                var sut = new MSSQLSchemaAggregator(connection);
 
                 RunFetchSchemaTest(sut, builder, connection);
             }

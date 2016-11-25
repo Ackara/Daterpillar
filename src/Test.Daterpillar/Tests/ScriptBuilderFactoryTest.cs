@@ -16,7 +16,7 @@ namespace Test.Daterpillar.Tests
             var instance = new ScriptBuilderFactory().CreateInstance(ConnectionType.MSSQL);
 
             // Assert
-            Assert.IsInstanceOfType(instance, typeof(TSQLScriptBuilder));
+            Assert.IsInstanceOfType(instance, typeof(MSSQLScriptBuilder));
         }
     }
 }

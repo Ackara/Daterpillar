@@ -1,8 +1,8 @@
 ﻿namespace Acklann.Daterpillar.TextTransformation
 {
-    public class TSQLTypeNameResolver : TypeNameResolverBase
+    public class MSSQLTypeNameResolver : TypeNameResolverBase
     {
-        public TSQLTypeNameResolver()
+        public MSSQLTypeNameResolver()
         {
             TypeNames[BOOL] = "bit";
             TypeNames[BLOB] = "varbinary";

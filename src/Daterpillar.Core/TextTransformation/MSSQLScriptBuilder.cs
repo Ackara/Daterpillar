@@ -3,21 +3,21 @@ using System.Text;
 
 namespace Acklann.Daterpillar.TextTransformation
 {
-    public class TSQLScriptBuilder : IScriptBuilder
+    public class MSSQLScriptBuilder : IScriptBuilder
     {
-        public TSQLScriptBuilder() : this(ScriptBuilderSettings.Default, new TSQLTypeNameResolver())
+        public MSSQLScriptBuilder() : this(ScriptBuilderSettings.Default, new MSSQLTypeNameResolver())
         {
         }
 
-        public TSQLScriptBuilder(ITypeNameResolver typeResolver) : this(ScriptBuilderSettings.Default, typeResolver)
+        public MSSQLScriptBuilder(ITypeNameResolver typeResolver) : this(ScriptBuilderSettings.Default, typeResolver)
         {
         }
 
-        public TSQLScriptBuilder(ScriptBuilderSettings settings) : this(settings, new TSQLTypeNameResolver())
+        public MSSQLScriptBuilder(ScriptBuilderSettings settings) : this(settings, new MSSQLTypeNameResolver())
         {
         }
 
-        public TSQLScriptBuilder(ScriptBuilderSettings settings, ITypeNameResolver typeResolver)
+        public MSSQLScriptBuilder(ScriptBuilderSettings settings, ITypeNameResolver typeResolver)
         {
             _settings = settings;
             _typeResolver = typeResolver;

@@ -2,13 +2,13 @@
 
 namespace Acklann.Daterpillar.Migration
 {
-    public class TSQLSchemaAggregator : SchemaAggregatorBase
+    public class MSSQLSchemaAggregator : SchemaAggregatorBase
     {
-        public TSQLSchemaAggregator(string connectionString) : this(new System.Data.SqlClient.SqlConnection(connectionString))
+        public MSSQLSchemaAggregator(string connectionString) : this(new System.Data.SqlClient.SqlConnection(connectionString))
         {
         }
 
-        public TSQLSchemaAggregator(IDbConnection connection) : base(connection)
+        public MSSQLSchemaAggregator(IDbConnection connection) : base(connection)
         {
         }
 

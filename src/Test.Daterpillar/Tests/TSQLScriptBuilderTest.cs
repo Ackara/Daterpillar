@@ -35,7 +35,7 @@ namespace Test.Daterpillar.Tests
                     TruncateDatabaseIfItExist = true
                 };
 
-                RunSchemaTest<TSQLScriptBuilder>(settings, connection);
+                RunSchemaTest<MSSQLScriptBuilder>(settings, connection);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunColumnTest<TSQLScriptBuilder>(connection);
+                RunColumnTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunIndexTest<TSQLScriptBuilder>(connection);
+                RunIndexTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunForeignKeyTest<TSQLScriptBuilder>(connection);
+                RunForeignKeyTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunSchemaDropTest<TSQLScriptBuilder>(connection);
+                RunSchemaDropTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunColumnDropTest<TSQLScriptBuilder>(connection);
+                RunColumnDropTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunTableDropTest<TSQLScriptBuilder>(connection);
+                RunTableDropTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunIndexDropTest<TSQLScriptBuilder>(connection);
+                RunIndexDropTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunForeignKeyDropTest<TSQLScriptBuilder>(connection);
+                RunForeignKeyDropTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -133,7 +133,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunAlterTableTest<TSQLScriptBuilder>(connection);
+                RunAlterTableTest<MSSQLScriptBuilder>(connection);
             }
         }
 
@@ -144,7 +144,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunAlterColumnTest<TSQLScriptBuilder>(connection);
+                RunAlterColumnTest<MSSQLScriptBuilder>(connection);
             }
         }
     }

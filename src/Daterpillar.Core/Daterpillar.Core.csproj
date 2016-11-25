@@ -66,7 +66,7 @@
     <Compile Include="TextTransformation\CSharpScriptBuilder.cs" />
     <Compile Include="TextTransformation\IScriptBuilder.cs" />
     <Compile Include="TextTransformation\ScriptBuilderFactory.cs" />
-    <Compile Include="TextTransformation\TSQLScriptBuilder.cs" />
+    <Compile Include="TextTransformation\MSSQLScriptBuilder.cs" />
     <Compile Include="TextTransformation\ScriptBuilderSettings.cs" />
     <Compile Include="TextTransformation\CSharpScriptBuilderSettings.cs" />
     <Compile Include="TextTransformation\CSharpTypeNameResolver.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="TextTransformation\SQLiteScriptBuilder.cs" />
     <Compile Include="TextTransformation\ITemplate.cs" />
     <Compile Include="TextTransformation\SQLiteTypeNameResolver.cs" />
-    <Compile Include="TextTransformation\TSQLTypeNameResolver.cs" />
+    <Compile Include="TextTransformation\MSSQLTypeNameResolver.cs" />
     <Compile Include="ForeignKeyRule.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Index.cs" />

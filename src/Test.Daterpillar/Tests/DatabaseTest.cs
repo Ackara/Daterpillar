@@ -61,7 +61,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunSelectQueryTest(connection, new TSQLScriptBuilder());
+                RunSelectQueryTest(connection, new MSSQLScriptBuilder());
             }
         }
 
@@ -72,7 +72,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunSingleRecordInsertionTest(connection, new TSQLScriptBuilder());
+                RunSingleRecordInsertionTest(connection, new MSSQLScriptBuilder());
             }
         }
 
@@ -83,7 +83,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunMultiRecordInsertionTest(connection, new TSQLScriptBuilder());
+                RunMultiRecordInsertionTest(connection, new MSSQLScriptBuilder());
             }
         }
 

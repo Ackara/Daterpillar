@@ -45,7 +45,7 @@ namespace Test.Daterpillar.Tests
         {
             using (var connection = DatabaseHelper.CreateMSSQLConnection())
             {
-                RunSqlComparerTest(connection, new TSQLScriptBuilder(), new SqlDiff()
+                RunSqlComparerTest(connection, new MSSQLScriptBuilder(), new SqlDiff()
                 {
                     Changes = 5,
                     Summary = SqlDiffSummary.NotEqual
