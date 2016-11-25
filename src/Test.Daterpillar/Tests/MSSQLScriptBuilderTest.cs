@@ -12,7 +12,7 @@ namespace Test.Daterpillar.Tests
     [DeploymentItem(KnownFile.DbConfig)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class TSQLScriptBuilderTest : DbTemplateBuilderTestBase
+    public class MSSQLScriptBuilderTest : DbTemplateBuilderTestBase
     { 
         [ClassCleanup]
         public static void Cleanup()

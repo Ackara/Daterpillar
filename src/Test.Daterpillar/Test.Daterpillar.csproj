@@ -115,7 +115,7 @@
     <Compile Include="Tests\MySQLScriptBuilderTest.cs" />
     <Compile Include="Tests\ScriptBuilderFactoryTest.cs" />
     <Compile Include="Tests\SQLiteScriptBuilderTest.cs" />
-    <Compile Include="Tests\TSQLTypeNameResolverTest.cs" />
+    <Compile Include="Tests\MSSQLTypeNameResolverTest.cs" />
     <Compile Include="Tests\MySqlTypeNameResolverTest.cs" />
     <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Tests\SchemaAggregatorFactoryTest.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="Tests\DbTemplateBuilderTestBase.cs" />
     <Compile Include="Tests\TemplateExtensionsTest.cs" />
     <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
-    <Compile Include="Tests\TSQLScriptBuilderTest.cs" />
+    <Compile Include="Tests\MSSQLScriptBuilderTest.cs" />
     <Compile Include="Tests\SchemaAggregatorTest.cs" />
     <Compile Include="Tests\SqlComparerTest.cs" />
   </ItemGroup>
