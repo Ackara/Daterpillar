@@ -2,7 +2,7 @@
 {
     public enum ConnectionType
     {
-        TSQL,
+        MSSQL,
         MySQL,
         SQLite
     }
