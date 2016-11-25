@@ -124,7 +124,6 @@
     <Compile Include="Tests\SqlWriterTest.cs" />
     <Compile Include="Tests\DbTemplateBuilderTestBase.cs" />
     <Compile Include="Tests\TemplateExtensionsTest.cs" />
-    <Compile Include="Tests\TemplateFactoryTest.cs" />
     <Compile Include="Tests\CSharpTemplateBuilderTest.cs" />
     <Compile Include="Tests\TSQLScriptBuilderTest.cs" />
     <Compile Include="Tests\SchemaAggregatorTest.cs" />

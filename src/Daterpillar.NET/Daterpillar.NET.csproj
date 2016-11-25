@@ -49,7 +49,6 @@
     <Compile Include="Migration\TSQLSchemaAggregator.cs" />
     <Compile Include="Migration\SQLiteSchemaAggregator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextTransformation\TemplateFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Daterpillar.Core\Daterpillar.Core.csproj">

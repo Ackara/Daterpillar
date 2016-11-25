@@ -38,7 +38,7 @@ namespace GeneratedCode
 		};
 	
 
-	//ExcludeTable(schema, "TableName");
+	//ExcludeTables(schema, "TableName");
 	//RenameTable(schema, "oldTable", "newTable");
 	//GenerateEnumFromTable(connection, "enumName", "tableName", "nameColumn", "valueColumn");
 
@@ -68,7 +68,7 @@ public void GenerateAsFile(Schema schema, IScriptBuilder scriptBuilder, string f
 	thisTemplateFile.ProjectItems.AddFromTemplate(tempFile, fileName);
 }
 
-public void ExcludeTable(Schema schema, params string[] tables)
+public void ExcludeTables(Schema schema, params string[] tables)
 {
 	foreach(var item in tables)
 	{
