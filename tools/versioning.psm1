@@ -6,7 +6,7 @@ This module provides functions for incrementing and retrieveing the current vers
 #>
 
 $Script:Major = 3;
-$Script:Minor = 0;
+$Script:Minor = 1;
 $Script:regex = New-Object Regex('(?i)\[assembly:\s*assembly(\w+)?version\s*\("(?<version>(\d+\.){1,2}(\*|\d+)?(\.(?<rev>\d+))?)"\s*\)\s*\]');
 
 function New-RevisionNumber()
