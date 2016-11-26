@@ -13,13 +13,23 @@ namespace Acklann.Daterpillar.TextTransformation
 
         public IScriptBuilder CreateInstance(string name)
         {
-            try { return (IScriptBuilder)Activator.CreateInstance(Type.GetType(_scriptBuilderTypes[name.ToLower()])); }
+            return CreateInstance(name, ScriptBuilderSettings.Default);
+        }
+
+        public IScriptBuilder CreateInstance(string name, ScriptBuilderSettings settings)
+        {
+            try { return (IScriptBuilder)Activator.CreateInstance(Type.GetType(_scriptBuilderTypes[name.ToLower()]), settings); }
             catch (KeyNotFoundException) { return new NullScriptBuilder(); }
         }
 
         public IScriptBuilder CreateInstance(ConnectionType connectionType)
         {
-            return CreateInstance(string.Concat(connectionType, _targetInterface));
+            return CreateInstance(string.Concat(connectionType, _targetInterface), ScriptBuilderSettings.Default);
+        }
+
+        public IScriptBuilder CreateInstance(ConnectionType connectionType, ScriptBuilderSettings settings)
+        {
+            return CreateInstance(string.Concat(connectionType, _targetInterface), settings);
         }
 
         #region Private Members
