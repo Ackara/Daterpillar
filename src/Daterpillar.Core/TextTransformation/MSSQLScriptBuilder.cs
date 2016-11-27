@@ -37,20 +37,24 @@ namespace Acklann.Daterpillar.TextTransformation
         {
             string lineBreak = "-- ======================================================================";
 
-            _script.AppendLine(lineBreak);
-            _script.AppendLine("-- NAME:");
-            _script.AppendLine($"-- {schema.Name}");
-            _script.AppendLine();
-            _script.AppendLine("-- DESCRIPTION:");
-            _script.AppendLine($"-- {schema.Description}");
-            _script.AppendLine();
-            _script.AppendLine("-- AUTHOR:");
-            _script.AppendLine($"-- {schema.Author}");
-            _script.AppendLine();
-            _script.AppendLine("-- DATE:");
-            _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
-            _script.AppendLine(lineBreak);
-            _script.AppendLine();
+            if (_settings.AppendComments)
+            {
+
+                _script.AppendLine(lineBreak);
+                _script.AppendLine("-- NAME:");
+                _script.AppendLine($"-- {schema.Name}");
+                _script.AppendLine();
+                _script.AppendLine("-- DESCRIPTION:");
+                _script.AppendLine($"-- {schema.Description}");
+                _script.AppendLine();
+                _script.AppendLine("-- AUTHOR:");
+                _script.AppendLine($"-- {schema.Author}");
+                _script.AppendLine();
+                _script.AppendLine("-- DATE:");
+                _script.AppendLine($"-- {schema.CreatedOn.ToString("ddd dd, yyyy hh:mm tt")}");
+                _script.AppendLine(lineBreak);
+                _script.AppendLine();
+            }
 
             if (_settings.TruncateDatabaseIfItExist) Drop(schema);
             if (_settings.CreateDatabase)
