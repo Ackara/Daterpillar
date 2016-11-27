@@ -49,8 +49,8 @@ namespace Tests.Daterpillar.Helpers
                 {
                     if (connection.State != ConnectionState.Open) connection.Open();
                     command = connection.CreateCommand();
-
-                    string[] statements = script.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    string[] statements = script.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var cmd in statements)
                         if (!string.IsNullOrWhiteSpace(cmd))
                         {
@@ -138,7 +138,7 @@ namespace Tests.Daterpillar.Helpers
                 using (var command = connection.CreateCommand())
                 {
                     string script = builder.GetContent();
-                    string[] statements = script.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] statements = script.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var cmd in statements)
                         if (!string.IsNullOrWhiteSpace(cmd))
                         {

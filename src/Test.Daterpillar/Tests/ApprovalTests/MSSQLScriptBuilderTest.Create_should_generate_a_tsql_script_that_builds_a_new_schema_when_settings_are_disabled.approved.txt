@@ -1,0 +1,43 @@
+﻿IF OBJECT_ID('genre') IS NULL CREATE TABLE [genre]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) NOT NULL DEFAULT 'Other'
+);
+
+
+IF OBJECT_ID('artist') IS NULL CREATE TABLE [artist]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Name] VARCHAR(64) NOT NULL,
+	[Bio] TEXT
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('artist') AND [name]='artist_idx1') CREATE UNIQUE INDEX [artist_idx1] ON [artist] ([Name] DESC);
+
+IF OBJECT_ID('album') IS NULL CREATE TABLE [album]
+(
+	[Artist_Id] INT NOT NULL,
+	[Name] VARCHAR(64) NOT NULL,
+	[Release_Date] DATE,
+	CONSTRAINT [artist_id_TO_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('album') AND [name]='album_idx3') CREATE INDEX [album_idx3] ON [album] ([Artist_Id] ASC, [Name] ASC);
+
+IF OBJECT_ID('song') IS NULL CREATE TABLE [song]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+	[Album_Id] INT NOT NULL,
+	[Artist_Id] INT NOT NULL,
+	[Genre_Id] INT NOT NULL,
+	[Name] VARCHAR(256) NOT NULL,
+	[Length] DECIMAL(4, 2) DEFAULT '0',
+	[Price] DECIMAL(12, 2) NOT NULL,
+	[On_Device] BIT NOT NULL,
+	CONSTRAINT [genre_id_TO_genre_id_fkey4] FOREIGN KEY ([Genre_Id]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [artist_id_TO_artist_id_fkey5] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('song') AND [name]='song_idx') CREATE INDEX [song_idx] ON [song] ([Name] ASC);
+
+GO

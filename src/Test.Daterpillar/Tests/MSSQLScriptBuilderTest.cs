@@ -40,6 +40,25 @@ namespace Test.Daterpillar.Tests
         }
 
         [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void Create_should_generate_a_tsql_script_that_builds_a_new_schema_when_settings_are_disabled()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                var settings = new ScriptBuilderSettings()
+                {
+                    AppendScripts = false,
+                    AppendComments = false,
+                    CreateDatabase = false,
+                    TruncateDatabaseIfItExist = false
+                };
+
+                RunSchemaTest<MSSQLScriptBuilder>(settings, connection);
+            }
+        }
+
+        [TestMethod]
         [TestCategory(Trait.Integration)]
         public void Create_should_generate_a_tsql_script_that_adds_a_new_column_when_invoked()
         {

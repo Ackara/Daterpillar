@@ -13,7 +13,9 @@
 -- ======================================================================
 
 IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];
+GO
 IF DB_ID('daterpillar1') IS NULL CREATE DATABASE [daterpillar1];
+GO
 USE [daterpillar1];
 
 IF OBJECT_ID('genre') IS NULL CREATE TABLE [genre]
@@ -58,6 +60,7 @@ IF OBJECT_ID('song') IS NULL CREATE TABLE [song]
 
 IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('song') AND [name]='song_idx') CREATE INDEX [song_idx] ON [song] ([Name] ASC);
 
+GO
 -- =================
 -- SCRIPTS (000)
 -- =================

@@ -39,7 +39,6 @@ namespace Acklann.Daterpillar.TextTransformation
 
             if (_settings.AppendComments)
             {
-
                 _script.AppendLine(lineBreak);
                 _script.AppendLine("-- NAME:");
                 _script.AppendLine($"-- {schema.Name}");
@@ -60,11 +59,13 @@ namespace Acklann.Daterpillar.TextTransformation
             if (_settings.CreateDatabase)
             {
                 _script.AppendLine($"IF DB_ID('{schema.Name}') IS NULL CREATE DATABASE [{schema.Name}];");
+                _script.AppendLine("GO");
                 _script.AppendLine($"USE [{schema.Name}];");
                 _script.AppendLine();
             }
 
             foreach (var table in schema.Tables) Create(table);
+            _script.AppendLine("GO");
 
             if (_settings.AppendScripts)
             {
@@ -132,6 +133,7 @@ namespace Acklann.Daterpillar.TextTransformation
         public void Drop(Schema schema)
         {
             _script.AppendLine($"IF DB_ID('{schema.Name}') IS NOT NULL DROP DATABASE [{schema.Name}];");
+            _script.AppendLine("GO");
         }
 
         public void Drop(Table table)
