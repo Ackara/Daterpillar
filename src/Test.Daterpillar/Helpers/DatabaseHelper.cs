@@ -41,7 +41,7 @@ namespace Tests.Daterpillar.Helpers
         public static bool TryRunScript(IDbConnection connection, string script, out string error)
         {
 #if DEBUG
-            File.WriteAllText(@"C:\Users\Ackeem\Downloads\foo.sql", script);
+
 #endif
             error = "";
             IDbCommand command = null;
