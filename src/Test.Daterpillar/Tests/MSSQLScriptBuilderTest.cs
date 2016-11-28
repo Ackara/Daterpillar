@@ -54,7 +54,7 @@ namespace Test.Daterpillar.Tests
                     TruncateDatabaseIfItExist = false
                 };
 
-                RunSchemaTest<MSSQLScriptBuilder>(settings, connection);
+                RunSchemaTestWithDisabledSettings<MSSQLScriptBuilder>(settings, connection);
             }
         }
 

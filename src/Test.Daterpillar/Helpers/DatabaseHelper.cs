@@ -40,6 +40,9 @@ namespace Tests.Daterpillar.Helpers
 
         public static bool TryRunScript(IDbConnection connection, string script, out string error)
         {
+#if DEBUG
+            File.WriteAllText(@"C:\Users\Ackeem\Downloads\foo.sql", script);
+#endif
             error = "";
             IDbCommand command = null;
 
@@ -49,7 +52,7 @@ namespace Tests.Daterpillar.Helpers
                 {
                     if (connection.State != ConnectionState.Open) connection.Open();
                     command = connection.CreateCommand();
-                    
+
                     string[] statements = script.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var cmd in statements)
                         if (!string.IsNullOrWhiteSpace(cmd))
@@ -73,7 +76,6 @@ namespace Tests.Daterpillar.Helpers
             finally
             {
                 command?.Dispose();
-                connection?.Dispose();
             }
         }
 

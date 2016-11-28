@@ -42,7 +42,7 @@ IF OBJECT_ID('album') IS NULL CREATE TABLE [album]
 	CONSTRAINT [artist_id_TO_artist_id_fkey2] FOREIGN KEY ([Artist_Id]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('album') AND [name]='album_idx3') CREATE INDEX [album_idx3] ON [album] ([Artist_Id] ASC, [Name] ASC);
+ALTER TABLE [album] ADD PRIMARY KEY ([Artist_Id] ASC, [Name] ASC);
 
 IF OBJECT_ID('song') IS NULL CREATE TABLE [song]
 (

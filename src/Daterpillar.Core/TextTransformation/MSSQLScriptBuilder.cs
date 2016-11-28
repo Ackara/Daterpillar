@@ -115,11 +115,18 @@ namespace Acklann.Daterpillar.TextTransformation
         public void Create(Index index)
         {
             string table = index.TableRef.Name;
-            string unique = (index.Unique ? " UNIQUE " : " ");
-            string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
             string indexName = index.GetName(_seed++);
+            string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order}")));
 
-            _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{indexName}') CREATE{unique}INDEX [{indexName}] ON [{index.TableRef.Name}] ({columns});");
+            if (index.Type == IndexType.PrimaryKey)
+            {
+                _script.AppendLine($"ALTER TABLE [{table}] ADD PRIMARY KEY ({columns});");
+            }
+            else
+            {
+                string unique = (index.Unique ? " UNIQUE " : " ");
+                _script.AppendLine($"IF NOT EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('{table}') AND [name]='{indexName}') CREATE{unique}INDEX [{indexName}] ON [{index.TableRef.Name}] ({columns});");
+            }
         }
 
         public void Create(ForeignKey foreignKey)

@@ -1,6 +1,6 @@
-﻿using ApprovalTests;
-using Acklann.Daterpillar;
+﻿using Acklann.Daterpillar;
 using Acklann.Daterpillar.TextTransformation;
+using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
@@ -24,6 +24,29 @@ namespace Test.Daterpillar.Tests
             connection.TryDropDatabase(schema.Name);
 
             string errorMsg;
+            sut.Create(schema);
+            var script = sut.GetContent();
+            var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
+            System.Diagnostics.Debug.WriteLine(errorMsg);
+
+            // Assert
+            Approvals.Verify(script);
+            Assert.IsTrue(theScriptWorked, errorMsg);
+        }
+
+        protected void RunSchemaTestWithDisabledSettings<T>(ScriptBuilderSettings settings, IDbConnection connection) where T : IScriptBuilder
+        {
+            // Arrange
+            string errorMsg;
+            IScriptBuilder sut = (IScriptBuilder)Activator.CreateInstance(typeof(T), settings);
+            var schema = Schema.Load(SampleData.GetFile(KnownFile.MockSchema1XML).OpenRead());
+
+            // Act
+            schema.Name = DBNAME;
+            connection.TryDropDatabase(schema.Name);
+            DatabaseHelper.TryRunScript(connection, $"CREATE DATABASE [{schema.Name}];", out errorMsg);
+            connection.ChangeDatabase(schema.Name);
+
             sut.Create(schema);
             var script = sut.GetContent();
             var theScriptWorked = DatabaseHelper.TryRunScript(connection, script, out errorMsg);
