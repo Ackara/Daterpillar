@@ -65,15 +65,18 @@ namespace Acklann.Daterpillar.TextTransformation
             }
 
             foreach (var table in schema.Tables) Create(table);
-            _script.AppendLine("GO");
+            if (schema.Tables.Count > 0) _script.AppendLine("GO");
 
             if (_settings.AppendScripts)
             {
-                lineBreak = "-- =================";
-                _script.AppendLine(lineBreak);
-                _script.AppendLine($"-- SCRIPTS (000)");
-                _script.AppendLine(lineBreak);
-                _script.AppendLine();
+                if (_settings.AppendComments)
+                {
+                    lineBreak = "-- =================";
+                    _script.AppendLine(lineBreak);
+                    _script.AppendLine($"-- SCRIPTS (000)");
+                    _script.AppendLine(lineBreak);
+                    _script.AppendLine();
+                }
 
                 _script.AppendLine(schema.Script);
             }
