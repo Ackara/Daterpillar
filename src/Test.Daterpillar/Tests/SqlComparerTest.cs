@@ -1,9 +1,9 @@
-﻿using ApprovalTests;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
-using Acklann.Daterpillar;
+﻿using Acklann.Daterpillar;
 using Acklann.Daterpillar.Migration;
 using Acklann.Daterpillar.TextTransformation;
+using ApprovalTests;
+using ApprovalTests.Namers;
+using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Linq;
@@ -19,6 +19,21 @@ namespace Test.Daterpillar.Tests
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SqlComparerTest
     {
+        [TestMethod]
+        [Owner(Dev.Ackara)]
+        [TestCategory(Trait.Integration)]
+        public void Compare_should_determine_both_specified_schemas_are_the_same()
+        {
+            using (var connection = DatabaseHelper.CreateMSSQLConnection())
+            {
+                RunSqlComparerEqualsTest(connection, new MSSQLScriptBuilder(), new SqlDiff()
+                {
+                    Changes = 0,
+                    Summary = SqlDiffSummary.Equal
+                });
+            }
+        }
+
         // MySQL
 
         [TestMethod]

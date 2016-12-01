@@ -96,11 +96,11 @@ namespace Acklann.Daterpillar.Migration
                     _script.Drop(target);
                     _script.Create(source);
                 }
-                else if (equalityChecker.Equals(source, target))
+                else if (!equalityChecker.Equals(source, target))
                 {
                     // Change the right column to the left
                     _diff.Changes++;
-                    _script.AlterTable(source, target);
+                    _script.AlterTable(target, source);
                 }
             }
         }
