@@ -59,6 +59,9 @@ namespace Acklann.Daterpillar.Migration
                 case "integer":
                     return TypeNameResolverBase.INT;
 
+                case "nvarchar":
+                    return TypeNameResolverBase.VARCHAR;
+
                 default:
                     return typeName.ToLower();
             }

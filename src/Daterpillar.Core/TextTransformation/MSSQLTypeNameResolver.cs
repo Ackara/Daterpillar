@@ -40,7 +40,8 @@
                     break;
 
                 default:
-                    name = TypeNames[type];
+                    if (TypeNames.ContainsKey(type)) name = TypeNames[type];
+                    else throw new System.ArgumentException($"Cannot map '{type}' to a data type. Report this issue https://github.com/Ackara/Daterpillar/issues", nameof(dataType));
                     break;
             }
 
