@@ -100,7 +100,7 @@ public void GenerateEnumFromTable(IDbConnection database, string enumName, strin
 			{
 				string name = Convert.ToString(row[nameColumn]);
 				int value = Convert.ToInt32(row[valueColumn]);
-				WriteLine("\t{0} = {1};", name.ToPascalCase(), value);
+				WriteLine("\t{0} = {1},", name.ToPascalCase(), value);
 			}
 			WriteLine("}"); WriteLine("");
 			PopIndent();
