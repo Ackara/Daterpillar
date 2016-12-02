@@ -19,6 +19,7 @@
             TypeNames[DATE] = "date";
             TypeNames[TIME] = "time";
             TypeNames[DATETIME] = "dateTime";
+            TypeNames[TINYINT] = "tinyInt";
         }
 
         public override string GetName(DataType dataType)

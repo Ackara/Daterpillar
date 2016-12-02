@@ -15,6 +15,7 @@ namespace Acklann.Daterpillar.TextTransformation
 		public const string BIGINT = "bigint";
 		public const string MEDIUMINT = "mediumint";
 		public const string SMALLINT = "smallint";
+		public const string TINYINT = "tinyint";
 		public const string FLOAT = "float";
 		public const string DOUBLE = "double";
 		public const string DECIMAL = "decimal";
@@ -40,6 +41,7 @@ namespace Acklann.Daterpillar.TextTransformation
 			TypeNames.Add("bigint", "bigint");
 			TypeNames.Add("mediumint", "mediumint");
 			TypeNames.Add("smallint", "smallint");
+			TypeNames.Add("tinyint", "tinyint");
 			TypeNames.Add("float", "float");
 			TypeNames.Add("double", "double");
 			TypeNames.Add("decimal", "decimal");

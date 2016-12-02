@@ -233,6 +233,7 @@
       <xs:enumeration value="bigInt" />
       <xs:enumeration value="mediumInt" />
       <xs:enumeration value="smallInt" />
+      <xs:enumeration value="tinyInt" />
 
       <xs:enumeration value="float" />
       <xs:enumeration value="double" />
