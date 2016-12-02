@@ -142,6 +142,8 @@ namespace Acklann.Daterpillar.TextTransformation
 
         public void Drop(Schema schema)
         {
+            _script.AppendLine($"IF DB_ID('{schema.Name}') IS NOT NULL ALTER DATABASE [{schema.Name}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;");
+            _script.AppendLine("GO");
             _script.AppendLine($"IF DB_ID('{schema.Name}') IS NOT NULL DROP DATABASE [{schema.Name}];");
             _script.AppendLine("GO");
         }

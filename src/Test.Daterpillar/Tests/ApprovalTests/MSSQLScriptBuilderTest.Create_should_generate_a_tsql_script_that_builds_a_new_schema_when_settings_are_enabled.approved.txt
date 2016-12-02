@@ -12,6 +12,8 @@
 -- Mon 01, 0001 12:00 AM
 -- ======================================================================
 
+IF DB_ID('daterpillar1') IS NOT NULL ALTER DATABASE [daterpillar1] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
 IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];
 GO
 IF DB_ID('daterpillar1') IS NULL CREATE DATABASE [daterpillar1];

@@ -1,2 +1,4 @@
-﻿IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];
+﻿IF DB_ID('daterpillar1') IS NOT NULL ALTER DATABASE [daterpillar1] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+IF DB_ID('daterpillar1') IS NOT NULL DROP DATABASE [daterpillar1];
 GO
