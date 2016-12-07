@@ -3,9 +3,10 @@
     [System.Flags]
     public enum SqlDiffSummary
     {
-        Equal = 0x0,
-        NotEqual = 0x1,
-        SourceEmpty = 0x2,
-        TargetEmpty = 0x4
+        None = 0x0,
+        Equal = 0x1,
+        NotEqual = 0x2,
+        SourceEmpty = 0x4,
+        TargetEmpty = 0x8
     }
 }
