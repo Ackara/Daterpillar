@@ -11,8 +11,9 @@
             TypeNames[VARCHAR] = "string";
             TypeNames[INT] = "int";
             TypeNames[BIGINT] = "long";
-            TypeNames[MEDIUMINT] = "short";
-            TypeNames[SMALLINT] = "sbyte";
+            TypeNames[MEDIUMINT] = "int";
+            TypeNames[SMALLINT] = "int";
+            TypeNames[TINYINT] = "int";
             TypeNames[FLOAT] = "float";
             TypeNames[DOUBLE] = "double";
             TypeNames[DECIMAL] = "decimal";

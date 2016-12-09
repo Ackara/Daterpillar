@@ -13,6 +13,7 @@
             TypeNames[BIGINT] = "bigInt";
             TypeNames[MEDIUMINT] = "integer";
             TypeNames[SMALLINT] = "integer";
+            TypeNames[TINYINT] = "integer";
             TypeNames[FLOAT] = "float";
             TypeNames[DOUBLE] = "double";
             TypeNames[DECIMAL] = "decimal";
