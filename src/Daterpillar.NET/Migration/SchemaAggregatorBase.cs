@@ -53,7 +53,6 @@ namespace Acklann.Daterpillar.Migration
             {
                 case "bit":
                 case "boolean":
-                case "tinyint":
                     return TypeNameResolverBase.BOOL;
 
                 case "integer":
