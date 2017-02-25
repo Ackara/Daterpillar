@@ -97,7 +97,7 @@ namespace Acklann.Daterpillar.Linq
             }
         }
 
-        private static string GetFields(EntityBase entity, QueryStyle style)
+        internal static string GetFields(EntityBase entity, QueryStyle style)
         {
             var columns =
                 from c in entity.GetColumns()
@@ -107,17 +107,17 @@ namespace Acklann.Daterpillar.Linq
             return String.Join(", ", columns).Trim();
         }
 
-        private static string GetValues(EntityBase entity)
+        internal static string GetValues(EntityBase entity)
         {
             var columns =
                 from c in entity.GetColumns()
                 where !(c.AutoIncremented || c.Value == null)
                 select EscapeValue(c.Value);
 
-            return String.Join(", ", columns).Trim();
+            return string.Join(", ", columns).Trim();
         }
 
-        private static string GetWhereClause(EntityBase entity, QueryStyle style)
+        internal static string GetWhereClause(EntityBase entity, QueryStyle style)
         {
             var keys = from k in entity.GetKeys()
                        select ($"{Escape(k.Name, style)}={EscapeValue(k.Value)}");

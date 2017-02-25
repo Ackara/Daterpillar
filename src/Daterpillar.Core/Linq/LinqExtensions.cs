@@ -41,6 +41,38 @@ namespace Acklann.Daterpillar.Linq
         }
 
         /// <summary>
+        /// Gets the specified entity where clause.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="style">The style.</param>
+        /// <returns>System.String.</returns>
+        public static string GetWhereClause(EntityBase entity, QueryStyle style = QueryStyle.SQL)
+        {
+            return SqlWriter.GetWhereClause(entity, style);
+        }
+
+        /// <summary>
+        /// Gets the specified entity fields.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="style">The style.</param>
+        /// <returns>System.String.</returns>
+        public static string GetFields(EntityBase entity, QueryStyle style = QueryStyle.SQL)
+        {
+            return SqlWriter.GetFields(entity, style);
+        }
+
+        /// <summary>
+        /// Gets the specified entity values.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>System.String.</returns>
+        public static string GetValues(EntityBase entity)
+        {
+            return SqlWriter.GetValues(entity);
+        }
+
+        /// <summary>
         /// Escapes the specified <paramref name="value"/> into a well formatted SQL value.
         /// </summary>
         /// <param name="obj">The object.</param>
