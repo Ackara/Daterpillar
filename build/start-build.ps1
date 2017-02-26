@@ -29,7 +29,7 @@ Param(
 	[string]$NugetSource = "https://api.nuget.org/v3/index.json",
 
 	[Parameter(Position=3)]
-	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe",
+	[string]$NugetClient = "https://dist.nuget.org/win-x86-commandline/v3.4.4/nuget.exe",
 
 	[Parameter(Position=5)]
 	[string]$Server = "",
