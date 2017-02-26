@@ -128,6 +128,7 @@
     <Compile Include="Tests\MSSQLScriptBuilderTest.cs" />
     <Compile Include="Tests\SchemaAggregatorTest.cs" />
     <Compile Include="Tests\SqlComparerTest.cs" />
+    <Compile Include="Tests\BugFixTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\daterpillar.xsd">
@@ -171,6 +172,9 @@
     <None Include="T4 Template\schema.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>schema.txt</LastGenOutput>
+    </None>
+    <None Include="Sample Data\mock-schema5.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="T4 Template\schema.txt">
       <AutoGen>True</AutoGen>

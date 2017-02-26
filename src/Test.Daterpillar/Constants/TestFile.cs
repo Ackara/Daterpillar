@@ -13,5 +13,6 @@
         public const string MockSchema2XML = "mock-schema2.xml";
         public const string MockSchema3XML = "mock-schema3.xml";
         public const string MockSchema4XML = "mock-schema4.xml";
+        public const string MockSchema5XML = "mock-schema5.xml";
     }
 }

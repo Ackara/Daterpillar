@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Linq
         /// <param name="entity">The entity.</param>
         /// <param name="style">The style.</param>
         /// <returns>System.String.</returns>
-        public static string GetWhereClause(EntityBase entity, QueryStyle style = QueryStyle.SQL)
+        public static string GetWhereClause(this EntityBase entity, QueryStyle style = QueryStyle.SQL)
         {
             return SqlWriter.GetWhereClause(entity, style);
         }
@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Linq
         /// <param name="entity">The entity.</param>
         /// <param name="style">The style.</param>
         /// <returns>System.String.</returns>
-        public static string GetFields(EntityBase entity, QueryStyle style = QueryStyle.SQL)
+        public static string GetFields(this EntityBase entity, QueryStyle style = QueryStyle.SQL)
         {
             return SqlWriter.GetFields(entity, style);
         }
@@ -67,7 +67,7 @@ namespace Acklann.Daterpillar.Linq
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns>System.String.</returns>
-        public static string GetValues(EntityBase entity)
+        public static string GetValues(this EntityBase entity)
         {
             return SqlWriter.GetValues(entity);
         }

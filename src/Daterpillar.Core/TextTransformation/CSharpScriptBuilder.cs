@@ -198,7 +198,7 @@ namespace Acklann.Daterpillar.TextTransformation
                 {
                     foreach (var idxColumn in index.Columns)
                     {
-                        if (idxColumn.Name == idxColumn.Name) return true;
+                        if (idxColumn.Name == column.Name) return true;
                     }
                 }
 

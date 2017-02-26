@@ -1,0 +1,942 @@
+﻿[Table("card_type")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardType : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_type] table identifier.
+	/// </summary>
+	public const string Table = "card_type";
+
+	/// <summary>
+	/// The [card_type].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [card_type].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("attribute")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Attribute : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [attribute] table identifier.
+	/// </summary>
+	public const string Table = "attribute";
+
+	/// <summary>
+	/// The [attribute].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [attribute].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("card_icon")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardIcon : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_icon] table identifier.
+	/// </summary>
+	public const string Table = "card_icon";
+
+	/// <summary>
+	/// The [card_icon].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [card_icon].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("monster_type")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class MonsterType : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [monster_type] table identifier.
+	/// </summary>
+	public const string Table = "monster_type";
+
+	/// <summary>
+	/// The [monster_type].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [monster_type].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("ability")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Ability : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [ability] table identifier.
+	/// </summary>
+	public const string Table = "ability";
+
+	/// <summary>
+	/// The [ability].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [ability].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id. This value is a flag/it must be a power of 2.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("status")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Status : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [status] table identifier.
+	/// </summary>
+	public const string Table = "status";
+
+	/// <summary>
+	/// The [status].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [status].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("card")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Card : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card] table identifier.
+	/// </summary>
+	public const string Table = "card";
+
+	/// <summary>
+	/// The [card].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [card].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	/// <summary>
+	/// The [card].[Level] column identifier.
+	/// </summary>
+	public const string LevelColumn = "Level";
+
+	/// <summary>
+	/// The [card].[Scale] column identifier.
+	/// </summary>
+	public const string ScaleColumn = "Scale";
+
+	/// <summary>
+	/// The [card].[Atk] column identifier.
+	/// </summary>
+	public const string AtkColumn = "Atk";
+
+	/// <summary>
+	/// The [card].[Def] column identifier.
+	/// </summary>
+	public const string DefColumn = "Def";
+
+	/// <summary>
+	/// The [card].[Text] column identifier.
+	/// </summary>
+	public const string TextColumn = "Text";
+
+	/// <summary>
+	/// The [card].[Pendulum_Effect] column identifier.
+	/// </summary>
+	public const string PendulumEffectColumn = "Pendulum_Effect";
+
+	/// <summary>
+	/// The [card].[Card_Type_Id] column identifier.
+	/// </summary>
+	public const string CardTypeIdColumn = "Card_Type_Id";
+
+	/// <summary>
+	/// The [card].[Attribute_Id] column identifier.
+	/// </summary>
+	public const string AttributeIdColumn = "Attribute_Id";
+
+	/// <summary>
+	/// The [card].[Card_Icon_Id] column identifier.
+	/// </summary>
+	public const string CardIconIdColumn = "Card_Icon_Id";
+
+	/// <summary>
+	/// The [card].[Monster_Type_Id] column identifier.
+	/// </summary>
+	public const string MonsterTypeIdColumn = "Monster_Type_Id";
+
+	/// <summary>
+	/// The [card].[Status_Id] column identifier.
+	/// </summary>
+	public const string StatusIdColumn = "Status_Id";
+
+	/// <summary>
+	/// The [card].[League_Id] column identifier.
+	/// </summary>
+	public const string LeagueIdColumn = "League_Id";
+
+	/// <summary>
+	/// The [card].[Ability_Id] column identifier.
+	/// </summary>
+	public const string AbilityIdColumn = "Ability_Id";
+
+	/// <summary>
+	/// The [card].[Konami_Id] column identifier.
+	/// </summary>
+	public const string KonamiIdColumn = "Konami_Id";
+
+	/// <summary>
+	/// The [card].[Passcode] column identifier.
+	/// </summary>
+	public const string PasscodeColumn = "Passcode";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+
+	/// <summary>
+	/// Get or set the Level.
+	/// </summary>
+	[DataMember]
+	[Column("Level")]
+	public int Level { get; set; }
+
+	/// <summary>
+	/// Get or set the Scale.
+	/// </summary>
+	[DataMember]
+	[Column("Scale")]
+	public int Scale { get; set; }
+
+	/// <summary>
+	/// Get or set the Atk.
+	/// </summary>
+	[DataMember]
+	[Column("Atk")]
+	public int Atk { get; set; }
+
+	/// <summary>
+	/// Get or set the Def.
+	/// </summary>
+	[DataMember]
+	[Column("Def")]
+	public int Def { get; set; }
+
+	/// <summary>
+	/// Get or set the Text.
+	/// </summary>
+	[DataMember]
+	[Column("Text")]
+	public string Text { get; set; }
+
+	/// <summary>
+	/// Get or set the Pendulum_Effect.
+	/// </summary>
+	[DataMember]
+	[Column("Pendulum_Effect")]
+	public string PendulumEffect { get; set; }
+
+	/// <summary>
+	/// Get or set the Card_Type_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Type_Id")]
+	public int CardTypeId { get; set; }
+
+	/// <summary>
+	/// Get or set the Attribute_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Attribute_Id")]
+	public int AttributeId { get; set; }
+
+	/// <summary>
+	/// Get or set the Card_Icon_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Icon_Id")]
+	public int CardIconId { get; set; }
+
+	/// <summary>
+	/// Get or set the Monster_Type_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Monster_Type_Id")]
+	public int MonsterTypeId { get; set; }
+
+	/// <summary>
+	/// Get or set the Status_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Status_Id")]
+	public int StatusId { get; set; }
+
+	/// <summary>
+	/// Get or set the League_Id.
+	/// </summary>
+	[DataMember]
+	[Column("League_Id")]
+	public int LeagueId { get; set; }
+
+	/// <summary>
+	/// Get or set the Ability_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Ability_Id")]
+	public int AbilityId { get; set; }
+
+	/// <summary>
+	/// Get or set the Konami_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Konami_Id")]
+	public int KonamiId { get; set; }
+
+	/// <summary>
+	/// Get or set the Passcode.
+	/// </summary>
+	[DataMember]
+	[Column("Passcode")]
+	public int Passcode { get; set; }
+}
+
+[Table("card_extras")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardExtras : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_extras] table identifier.
+	/// </summary>
+	public const string Table = "card_extras";
+
+	/// <summary>
+	/// The [card_extras].[Card_Id] column identifier.
+	/// </summary>
+	public const string CardIdColumn = "Card_Id";
+
+	/// <summary>
+	/// The [card_extras].[Rulings] column identifier.
+	/// </summary>
+	public const string RulingsColumn = "Rulings";
+
+	/// <summary>
+	/// The [card_extras].[Tips] column identifier.
+	/// </summary>
+	public const string TipsColumn = "Tips";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Card_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Id")]
+	public int CardId { get; set; }
+
+	/// <summary>
+	/// Get or set the Rulings.
+	/// </summary>
+	[DataMember]
+	[Column("Rulings")]
+	public string Rulings { get; set; }
+
+	/// <summary>
+	/// Get or set the Tips.
+	/// </summary>
+	[DataMember]
+	[Column("Tips")]
+	public string Tips { get; set; }
+}
+
+[Table("product_type")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class ProductType : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [product_type] table identifier.
+	/// </summary>
+	public const string Table = "product_type";
+
+	/// <summary>
+	/// The [product_type].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [product_type].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("pack")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Pack : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [pack] table identifier.
+	/// </summary>
+	public const string Table = "pack";
+
+	/// <summary>
+	/// The [pack].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [pack].[Prefix] column identifier.
+	/// </summary>
+	public const string PrefixColumn = "Prefix";
+
+	/// <summary>
+	/// The [pack].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	/// <summary>
+	/// The [pack].[Description] column identifier.
+	/// </summary>
+	public const string DescriptionColumn = "Description";
+
+	/// <summary>
+	/// The [pack].[Release_Date] column identifier.
+	/// </summary>
+	public const string ReleaseDateColumn = "Release_Date";
+
+	/// <summary>
+	/// The [pack].[Size] column identifier.
+	/// </summary>
+	public const string SizeColumn = "Size";
+
+	/// <summary>
+	/// The [pack].[Konami_Id] column identifier.
+	/// </summary>
+	public const string KonamiIdColumn = "Konami_Id";
+
+	/// <summary>
+	/// The [pack].[Product_Type_Id] column identifier.
+	/// </summary>
+	public const string ProductTypeIdColumn = "Product_Type_Id";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Prefix.
+	/// </summary>
+	[DataMember]
+	[Column("Prefix")]
+	public string Prefix { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+
+	/// <summary>
+	/// Get or set the Description.
+	/// </summary>
+	[DataMember]
+	[Column("Description")]
+	public string Description { get; set; }
+
+	/// <summary>
+	/// Get or set the Release_Date.
+	/// </summary>
+	[DataMember]
+	[Column("Release_Date")]
+	public DateTime ReleaseDate { get; set; }
+
+	/// <summary>
+	/// The number of unique cards in the pack.
+	/// </summary>
+	[DataMember]
+	[Column("Size")]
+	public int Size { get; set; }
+
+	/// <summary>
+	/// Get or set the Konami_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Konami_Id")]
+	public int KonamiId { get; set; }
+
+	/// <summary>
+	/// Get or set the Product_Type_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Product_Type_Id")]
+	public int ProductTypeId { get; set; }
+}
+
+[Table("rarity")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Rarity : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [rarity] table identifier.
+	/// </summary>
+	public const string Table = "rarity";
+
+	/// <summary>
+	/// The [rarity].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [rarity].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	/// <summary>
+	/// The [rarity].[Code] column identifier.
+	/// </summary>
+	public const string CodeColumn = "Code";
+
+	/// <summary>
+	/// The [rarity].[Value] column identifier.
+	/// </summary>
+	public const string ValueColumn = "Value";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+
+	/// <summary>
+	/// Get or set the Code.
+	/// </summary>
+	[DataMember]
+	[Column("Code")]
+	public string Code { get; set; }
+
+	/// <summary>
+	/// Get or set the Value.
+	/// </summary>
+	[DataMember]
+	[Column("Value")]
+	public int Value { get; set; }
+}
+
+[Table("card_number")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardNumber : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_number] table identifier.
+	/// </summary>
+	public const string Table = "card_number";
+
+	/// <summary>
+	/// The [card_number].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [card_number].[Prefix] column identifier.
+	/// </summary>
+	public const string PrefixColumn = "Prefix";
+
+	/// <summary>
+	/// The [card_number].[Language] column identifier.
+	/// </summary>
+	public const string LanguageColumn = "Language";
+
+	/// <summary>
+	/// The [card_number].[Edition] column identifier.
+	/// </summary>
+	public const string EditionColumn = "Edition";
+
+	/// <summary>
+	/// The [card_number].[Number] column identifier.
+	/// </summary>
+	public const string NumberColumn = "Number";
+
+	/// <summary>
+	/// The [card_number].[Rarity_Id] column identifier.
+	/// </summary>
+	public const string RarityIdColumn = "Rarity_Id";
+
+	/// <summary>
+	/// The [card_number].[Art_Index] column identifier.
+	/// </summary>
+	public const string ArtIndexColumn = "Art_Index";
+
+	/// <summary>
+	/// The [card_number].[Card_Id] column identifier.
+	/// </summary>
+	public const string CardIdColumn = "Card_Id";
+
+	/// <summary>
+	/// The [card_number].[Pack_Id] column identifier.
+	/// </summary>
+	public const string PackIdColumn = "Pack_Id";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id")]
+	public string Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Prefix.
+	/// </summary>
+	[DataMember]
+	[Column("Prefix", Key = true)]
+	public string Prefix { get; set; }
+
+	/// <summary>
+	/// Get or set the Language.
+	/// </summary>
+	[DataMember]
+	[Column("Language", Key = true)]
+	public string Language { get; set; }
+
+	/// <summary>
+	/// Get or set the Edition.
+	/// </summary>
+	[DataMember]
+	[Column("Edition", Key = true)]
+	public string Edition { get; set; }
+
+	/// <summary>
+	/// Get or set the Number.
+	/// </summary>
+	[DataMember]
+	[Column("Number", Key = true)]
+	public int Number { get; set; }
+
+	/// <summary>
+	/// Get or set the Rarity_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Rarity_Id", Key = true)]
+	public int RarityId { get; set; }
+
+	/// <summary>
+	/// Get or set the Art_Index.
+	/// </summary>
+	[DataMember]
+	[Column("Art_Index", Key = true)]
+	public int ArtIndex { get; set; }
+
+	/// <summary>
+	/// Get or set the Card_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Id")]
+	public int CardId { get; set; }
+
+	/// <summary>
+	/// Get or set the Pack_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Pack_Id")]
+	public int PackId { get; set; }
+}
+
+[Table("archetype")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class Archetype : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [archetype] table identifier.
+	/// </summary>
+	public const string Table = "archetype";
+
+	/// <summary>
+	/// The [archetype].[Id] column identifier.
+	/// </summary>
+	public const string IdColumn = "Id";
+
+	/// <summary>
+	/// The [archetype].[Name] column identifier.
+	/// </summary>
+	public const string NameColumn = "Name";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Id.
+	/// </summary>
+	[DataMember]
+	[Column("Id", Key = true, AutoIncrement = true)]
+	public int Id { get; set; }
+
+	/// <summary>
+	/// Get or set the Name.
+	/// </summary>
+	[DataMember]
+	[Column("Name")]
+	public string Name { get; set; }
+}
+
+[Table("card_archetype")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardArchetype : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_archetype] table identifier.
+	/// </summary>
+	public const string Table = "card_archetype";
+
+	/// <summary>
+	/// The [card_archetype].[Card_Id] column identifier.
+	/// </summary>
+	public const string CardIdColumn = "Card_Id";
+
+	/// <summary>
+	/// The [card_archetype].[Archetype_Id] column identifier.
+	/// </summary>
+	public const string ArchetypeIdColumn = "Archetype_Id";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Card_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Id")]
+	public int CardId { get; set; }
+
+	/// <summary>
+	/// Get or set the Archetype_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Archetype_Id")]
+	public int ArchetypeId { get; set; }
+}
+
+[Table("card_ability")]
+[DataContract(Namespace= "http://static.acklann.com/schema/v1/daterpillar.xsd")]
+public partial class CardAbility : EntityBase
+{
+	#region Schema Identifiers
+
+	/// <summary>
+	/// The [card_ability] table identifier.
+	/// </summary>
+	public const string Table = "card_ability";
+
+	/// <summary>
+	/// The [card_ability].[Card_Id] column identifier.
+	/// </summary>
+	public const string CardIdColumn = "Card_Id";
+
+	/// <summary>
+	/// The [card_ability].[Ability_Id] column identifier.
+	/// </summary>
+	public const string AbilityIdColumn = "Ability_Id";
+
+	#endregion Schema Identifiers
+
+	/// <summary>
+	/// Get or set the Card_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Card_Id")]
+	public int CardId { get; set; }
+
+	/// <summary>
+	/// Get or set the Ability_Id.
+	/// </summary>
+	[DataMember]
+	[Column("Ability_Id")]
+	public int AbilityId { get; set; }
+}
+
