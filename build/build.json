@@ -1,0 +1,15 @@
+{
+  "semanticVersion":
+  {
+    "major": 1,
+    "minor": 2,
+    "patch": 3,
+    "releaseTag": ""
+  },
+  "metadata":
+  {
+    "projectUrl": "https://github.com/Ackara/Daterpillar",
+    "projectIcon": "",
+    "license": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE"
+  }
+}
