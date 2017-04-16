@@ -1,0 +1,20 @@
+{
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 5,
+    "suffix": ""
+  },
+  "targets": [
+    "dotnetcore",
+    "dotnet",
+    "powershell"
+  ],
+  "branchSuffixMap": {
+    "master": "",
+    "*": "-alpha"
+  },
+  "shouldCommitChanges": false,
+  "shouldTagCommit": false,
+  "shouldAddAllUnstagedFilesWhenCommitting": false
+}
