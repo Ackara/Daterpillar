@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		invoke-tasks.ps1 = invoke-tasks.ps1
 		README.md = README.md
+		releaseNotes.txt = releaseNotes.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTest.Daterpillar", "tests\MSTest.Daterpillar\MSTest.Daterpillar.csproj", "{5D070576-6547-4991-BE19-A3BA9621E77A}"
