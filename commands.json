@@ -1,0 +1,9 @@
+{
+  "commands": {
+    "invoke-tasks": {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1"
+    }
+  }
+}
