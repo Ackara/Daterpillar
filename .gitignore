@@ -269,9 +269,11 @@ paket-files/
 !**/T4 Template/schema.tt
 !**/T4 Template/schema.xml
 
-# Exceptions
+# SQLite dependencies
 !**/[Xx]64/SQLite.Interop.dll
 !**/[Xx]86/SQLite.Interop.dll
 
 # Sensitive Files
 database.config
+
+old/

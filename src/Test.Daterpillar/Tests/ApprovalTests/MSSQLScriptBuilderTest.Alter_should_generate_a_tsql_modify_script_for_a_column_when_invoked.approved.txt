@@ -1,2 +1,0 @@
-﻿IF COL_LENGTH('tbl1', 'Name') IS NOT NULL ALTER TABLE [tbl1] ALTER COLUMN [Name] VARCHAR(16) NOT NULL;
-IF COL_LENGTH('tbl1', 'Name') IS NOT NULL EXEC sp_rename 'tbl1.Name', 'Modified', 'COLUMN';

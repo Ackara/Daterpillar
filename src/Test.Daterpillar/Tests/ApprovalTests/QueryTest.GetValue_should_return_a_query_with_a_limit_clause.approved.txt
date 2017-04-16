@@ -1,6 +1,0 @@
-﻿SELECT
-	*
-FROM
-	tableA
-LIMIT 10
-;

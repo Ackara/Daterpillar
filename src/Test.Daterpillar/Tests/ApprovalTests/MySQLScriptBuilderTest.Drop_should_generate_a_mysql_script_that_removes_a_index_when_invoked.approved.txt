@@ -1,1 +1,0 @@
-﻿DROP INDEX `idx1` ON `tbl1`;

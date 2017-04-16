@@ -1,1 +1,0 @@
-﻿ALTER TABLE `tbl1` CHANGE COLUMN `Name` `Modified` VARCHAR(16) NOT NULL COMMENT 'Modified comment.';

@@ -1,1 +1,0 @@
-﻿IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('tbl1') AND [name]='idx1') DROP INDEX [idx1] ON [tbl1];

@@ -1,1 +1,0 @@
-﻿ALTER TABLE `tbl1` ADD FOREIGN KEY `categoryid_TO_tbl2_id_fkey1` (`CategoryId`) REFERENCES `tbl2` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE;

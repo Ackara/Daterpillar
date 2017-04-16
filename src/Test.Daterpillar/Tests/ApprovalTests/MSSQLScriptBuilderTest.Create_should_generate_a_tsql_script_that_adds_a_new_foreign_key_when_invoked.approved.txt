@@ -1,1 +1,0 @@
-﻿IF NOT EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='categoryid_TO_tbl2_id_fkey1' AND [parent_object_id]=OBJECT_ID('tbl1')) ALTER TABLE [tbl1] WITH CHECK ADD CONSTRAINT [categoryid_TO_tbl2_id_fkey1] FOREIGN KEY ([CategoryId]) REFERENCES [tbl2] ([Id]) ON UPDATE CASCADE ON DELETE CASCADE;

@@ -1,1 +1,0 @@
-﻿ALTER TABLE `tbl2` DROP FOREIGN KEY `categoryid_TO_tbl1_id_fkey1`;

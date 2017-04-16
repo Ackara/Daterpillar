@@ -1,3 +1,0 @@
-﻿IF EXISTS (SELECT * FROM [sys].[foreign_keys] WHERE [name]='categoryid_TO_tbl1_refcol_fkey1' AND [parent_object_id]=OBJECT_ID('tbl2')) ALTER TABLE [tbl2] DROP CONSTRAINT [categoryid_TO_tbl1_refcol_fkey1];
-IF EXISTS(SELECT * FROM [sys].[indexes] WHERE [object_id]=OBJECT_ID('tbl1') AND [name]='refCol_idx') DROP INDEX [refCol_idx] ON [tbl1];
-IF COL_LENGTH('[tbl1]', 'RefCol') IS NOT NULL ALTER TABLE [tbl1] DROP COLUMN [RefCol];
