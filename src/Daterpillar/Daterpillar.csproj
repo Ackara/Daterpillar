@@ -2,10 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>4.0.11</Version>
     <FileVersion>4.0.11</FileVersion>
     <AssemblyVersion>4.0.11</AssemblyVersion>
     <AssemblyName>Ackara.Daterpillar</AssemblyName>
     <RootNamespace>Ackara.Daterpillar</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

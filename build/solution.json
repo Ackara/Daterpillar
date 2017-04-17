@@ -1,0 +1,12 @@
+{
+  "metadata":
+  {
+    "owner": "Ackara",
+    "projectUrl": "https://github.com/Ackara/Daterpillar",
+    "iconUrl": "http://static.gigobyte.com/images/daterpillar.png",
+    "copyright": "Copyright © Ackara 2017, licensed under MIT License",
+    "licenseUrl": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE",
+    "description": "Daterpillar is a miro-orm.",
+    "tags": "orm miroc-orm sql t4"
+  }
+}

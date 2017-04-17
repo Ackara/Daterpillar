@@ -26,7 +26,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="config.json" />
+    <Content Include="solution.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="packages.config" />

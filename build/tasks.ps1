@@ -4,17 +4,19 @@ Psake build tasks.
 #>
 
 Properties {
+	$Config = (Get-Content "$PSScriptRoot\solution.json" | Out-String | ConvertFrom-Json);
+
 	# Paths
 	$RootDir = (Split-Path $PSScriptRoot -Parent);
-	$SemVerJson = "$RootDir\build\version.json";
-	$ConfigJson = "$RootDir\build\config.json";
+	$ReleaseNotesTXT = "$RootDir\releaseNotes.txt";
+	$SemVerJson = "$PSScriptRoot\version.json";
 	$ArtifactsDir = "$RootDir\artifacts";
 	$Nuget = "";
 
 	# User Args
 	$NuGetKey = "";
+	$BranchName = "";
 	$TestNames = @();
-	$VersionSuffix = "";
 	$BuildConfiguration = "";
 
 	$Major = $false;
@@ -65,10 +67,9 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 			$notes = "version $($version.Major).$($version.Minor).$($version.Patch)`n";
 			$notes += "----------------`n";
 			$notes += $commitMsg;
-			
-			$releaseNotesTxt = "$RootDir\releaseNotes.txt";
-			$contents = Get-Content $releaseNotesTxt | Out-String;
-			"$notes`n`n$contents".Trim() | Out-File $releaseNotesTxt -Encoding ascii;
+
+			$contents = Get-Content $ReleaseNotesTXT | Out-String;
+			"$notes`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
 			Exec {
 				& git add releaseNotes.txt;
 				& git add build\version.json;
@@ -89,7 +90,7 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 }
 
 Task "Run-Tests" -alias "test" -description "This task runs all automated tests." `
--depends @() -action {
+-depends @("Build-Solution") -action {
 	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
 
 	foreach ($proj in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*.*proj" | Select-Object -ExpandProperty FullName))
@@ -103,23 +104,39 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 	}
 }
 
-Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." -action {
-	$nupkgsDir = "$Artifacts\nupkgs";
+Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." `
+-depends @("Init") -action {
+	$nupkgsDir = "$ArtifactsDir\nupkgs";
 	if (Test-Path $ArtifactsDir -PathType Container) { Remove-Item $ArtifactsDir -Recurse -Force; }
-	New-Item $ArtifactsDir -ItemType Directory | Out-Null;
+	New-Item $nupkgsDir -ItemType Directory | Out-Null;
 
 	foreach ($proj in (Get-ChildItem "$RootDir\src" -Recurse -Filter "*.*proj" | Select-Object -ExpandProperty FullName))
 	{
 		$nuspec = [IO.Path]::ChangeExtension($proj, ".nuspec");
 		if (Test-Path $nuspec -PathType Leaf)
 		{
+			[xml]$csproj = Get-Content $proj;
+			$version = Get-VersionNumber -ConfigFile $SemVerJson;
+
 			$properties = "";
-			$properties += "Configuration=$BuildConfiguration";
+			$properties += "id=$($csproj.SelectSingleNode('.//Project//AssemblyName').InnerText);";
+			$properties += "version=$($version.Major).$($version.Minor).$($version.Patch);";
+			$properties += "owner=$($Config.metadata.owner);";
+			$properties += "copyright=$($Config.metadata.copyright);";
+			$properties += "license=$($Config.metadata.licenseUrl);";
+			$properties += "projectUrl=$($Config.metadata.projectUrl);";
+			$properties += "iconUrl=$($Config.metadata.iconUrl);";
+			$properties += "description=$($Config.metadata.description);";
+			$properties += "tags=$($Config.metadata.tags);";
+			$properties += "Configuration=$BuildConfiguration;";
+			$properties += "releaseNotes=$(Get-Content $ReleaseNotesTXT | Out-String);";
+			$properties += "targetFramework=$($csproj.SelectSingleNode('.//Project//TargetFramework').InnerText)";
+			$versionSuffix = Get-VersionSuffix;
 
 			if ([String]::IsNullOrEmpty($VersionSuffix))
-			{ Exec { & $nuget $nuspec -OutputDirectory $nupkgsDir -Properties $properties -IncludeReferencedProjects; } }
+			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; } }
 			else
-			{ Exec { & $nuget $nuspec -OutputDirectory $nupkgsDir -Properties $properties -IncludeReferencedProjects -Suffix $VersionSuffix; } }
+			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects -Suffix $versionSuffix; } }
 		}
 	}
 }
@@ -133,4 +150,12 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 		else
 		{ Exec { & $nuget push $nupkg -ApiKey $NuGetKey; } }
 	}
+}
+
+function Get-VersionSuffix()
+{
+	$server = (Get-Content $SemVerJson | Out-String | ConvertFrom-Json);
+	$suffix = $server.branchSuffixMap.$BranchName;
+	if ([string]::IsNullOrEmpty($suffix)) { $suffix = $server.branchSuffixMap."*"; }
+	if ([string]::IsNullOrEmpty($suffix)) { return ""; } else { return $suffix; }
 }

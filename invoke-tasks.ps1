@@ -1,14 +1,13 @@
 <#
 .SYNOPSIS
-
+This script functions as a bootstrapper to other build and developer tasks.
 #>
 
 Param(
-	[string[]]$Tasks = @("setup"),
+	[string[]]$Tasks = @("default"),
 
 	[string]$NuGetKey,
-	[string]$Branch,
-	[string]$ReleaseTag,
+	[string]$BranchName,
 	[string]$BuildConfiguration = "Release",
 
 	[switch]$Major,
@@ -17,6 +16,15 @@ Param(
 )
 
 # Assign Variables
+if ([string]::IsNullOrEmpty($BranchName))
+{
+	$results = (& git branch);
+	$regex = New-Object Regex('\*\s*(?<name>\w+)');
+	if ($regex.IsMatch($results))
+	{
+		$BranchName = $regex.Match($results).Groups["name"].Value;
+	}
+}
 
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
@@ -39,7 +47,9 @@ else
 	Invoke-psake $taskFile -taskList $Tasks -nologo -notr `
 		-properties @{
 			"BuildConfiguration"=$BuildConfiguration;
-
+			"BranchName"=$BranchName;
+			"NuGetKey"=$NuGetKey;
+			"Nuget"=$nuget;
 			"Major"=$Major;
 			"Minor"=$Minor;
 		}

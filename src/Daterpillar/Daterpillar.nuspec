@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<package>
+  <metadata>
+    <id>$id$</id>
+    <title>Daterpillar</title>
+    <version>$version$</version>
+    <description>$description$</description>
+    <tags>$tags$</tags>
+    
+    <owners>$owner$</owners>
+    <authors>$owner$ and Contributors</authors>
+    <projectUrl>$projectUrl$</projectUrl>
+    <iconUrl>$iconUrl$</iconUrl>
+    
+    <copyright>$copyright$</copyright>
+    <licenseUrl>$license$</licenseUrl>
+    <releaseNotes>$releaseNotes$</releaseNotes>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.dll"
+          target="lib\$targetFramework$" />
+
+    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.xml"
+          target="lib\$targetFramework$" />
+
+    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.pdb"
+          target="lib\$targetFramework$" />
+  </files>
+</package>
