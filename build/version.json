@@ -1,20 +1,23 @@
 {
-  "version": {
+  "version":
+  {
     "major": 0,
     "minor": 0,
-    "patch": 5,
+    "patch": 19,
     "suffix": ""
   },
-  "targets": [
+  "targets":
+  [
     "dotnetcore",
     "dotnet",
     "powershell"
   ],
-  "branchSuffixMap": {
+  "branchSuffixMap":
+  {
     "master": "",
     "*": "-alpha"
   },
-  "shouldCommitChanges": false,
+  "shouldCommitChanges": true,
   "shouldTagCommit": false,
   "shouldAddAllUnstagedFilesWhenCommitting": false
 }

@@ -7,15 +7,16 @@ Param(
 	[string[]]$Tasks = @("setup"),
 
 	[string]$NuGetKey,
-    [string]$Branch,
-    [string]$ReleaseTag,    
+	[string]$Branch,
+	[string]$ReleaseTag,
 	[string]$BuildConfiguration = "Release",
 
+	[switch]$Major,
+	[switch]$Minor,
 	[switch]$Help
 )
 
 # Assign Variables
-
 
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
@@ -35,8 +36,11 @@ if ($Help)
 { Invoke-psake -buildFile $taskFile -detailedDocs; }
 else
 {
-    Invoke-psake $taskFile -taskList $Tasks -nologo -notr `
-        -properties @{
-        "BuildConfiguration"=$BuildConfiguration;
-        }
+	Invoke-psake $taskFile -taskList $Tasks -nologo -notr `
+		-properties @{
+			"BuildConfiguration"=$BuildConfiguration;
+
+			"Major"=$Major;
+			"Minor"=$Minor;
+		}
 }
