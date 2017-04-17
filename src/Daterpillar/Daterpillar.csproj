@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Version>4.0.2-alpha</Version>
+    <FileVersion>4.0.2</FileVersion>
+    <AssemblyVersion>4.0.2</AssemblyVersion>
+    <AssemblyName>Ackara.Daterpillar</AssemblyName>
+    <RootNamespace>Ackara.Daterpillar</RootNamespace>
+  </PropertyGroup>
+</Project>
