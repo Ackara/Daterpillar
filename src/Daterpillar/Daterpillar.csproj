@@ -2,9 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>4.0.10</Version>
-    <FileVersion>4.0.10</FileVersion>
-    <AssemblyVersion>4.0.10</AssemblyVersion>
+    <Version>4.0.11</Version>
+    <FileVersion>4.0.11</FileVersion>
+    <AssemblyVersion>4.0.11</AssemblyVersion>
     <AssemblyName>Ackara.Daterpillar</AssemblyName>
     <RootNamespace>Ackara.Daterpillar</RootNamespace>
   </PropertyGroup>
