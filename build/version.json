@@ -1,19 +1,16 @@
 {
-  "version":
-  {
-    "major": 0,
+  "version": {
+    "major": 4,
     "minor": 0,
-    "patch": 19,
+    "patch": 1,
     "suffix": ""
   },
-  "targets":
-  [
+  "targets": [
     "dotnetcore",
     "dotnet",
     "powershell"
   ],
-  "branchSuffixMap":
-  {
+  "branchSuffixMap": {
     "master": "",
     "*": "-alpha"
   },
