@@ -1,9 +1,35 @@
 {
-  "commands": {
-    "invoke-tasks": {
+  "commands":
+  {
+    "version: patch":
+    {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version"
+    },
+    "version: minor":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version -Minor"
+    },
+    "version: major":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version -Major"
+    },
+    "add missing files":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 setup"
+    },
+    "create packages":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 pack"
     }
   }
 }
