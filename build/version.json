@@ -2,7 +2,7 @@
   "version": {
     "major": 4,
     "minor": 0,
-    "patch": 9,
+    "patch": 10,
     "suffix": "-alpha"
   },
   "targets": [
