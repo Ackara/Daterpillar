@@ -1,27 +1,3 @@
-version 4.0.12
+version ..
 ----------------
-This is amend 2
-
-version 4.0.11
-----------------
-This is an amend 1
-
-version 4.0.10
-----------------
-This is test
-
-version 4.0.9
-----------------
-dfasdfadf
-
-version 4.0.8
-----------------
-afadfaf
-
-version 4.0.7
-----------------
-qerqer
-
-version 4.0.6
-----------------
-asdfasdfa
+This is test 1
