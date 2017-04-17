@@ -1,30 +1,8 @@
 {
-  "version":
-  {
-    "major": 0,
-    "minor": 0,
-    "patch": 0,
-    "suffix": ""
-  },
-  "targets":
-  [
-    "dotnetcore",
-    "dotnet",
-    "powershell"
-  ],
-  "branchSuffixMap":
-  {
-    "master": "",
-    "*": "-alpha"
-  },
-  "shouldCommitChanges": true,
-  "shouldTagCommit": true,
-  "shouldAddAllUnstagedFilesWhenCommitting": false,
-  
   "metadata":
   {
     "projectUrl": "https://github.com/Ackara/Daterpillar",
-    "projectIcon": "",
+    "projectIcon": "http://static.gigobyte.com/images/daterpillar.png",
     "license": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE"
   }
 }
