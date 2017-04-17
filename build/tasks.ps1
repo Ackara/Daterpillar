@@ -54,17 +54,29 @@ Task "Setup" -description "This task will generate all missing/sensitive files m
 Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
 -depends @("Init") -action {
 	$commitMsg = Show-Inputbox "please enter your release notes" "RELEASE NOTES";
-	$version = Step-VersionNumber -ConfigFile $SemVerJson -Major:$Major -Minor:$Minor -Patch;
+	Update-VersionNumber "$RootDir\src" -Message $commitMsg -UsecommitMessageAsDescription -ConfigFile $SemVerJson -Major:$Major -Minor:$Minor -Patch;
+	$version = Get-VersionNumber -ConfigFile $SemVerJson;
 
 	if (-not [string]::IsNullOrEmpty($commitMsg))
 	{
-		$notes = "version $($version.Major).$($version.Minor).$($version.Patch)`n";
-		$notes += "----------------`n";
-		$notes += $commitMsg;
-		
-		$releaseNotesTxt = "$RootDir\releaseNotes.txt";
-		$contents = Get-Content $releaseNotesTxt | Out-String;
-		"$notes`n`n$contents".Trim() | Out-File $releaseNotesTxt -Encoding utf8;
+		try
+		{
+			Push-Location $RootDir;
+			$notes = "version $($version.Major).$($version.Minor).$($version.Patch)`n";
+			$notes += "----------------`n";
+			$notes += $commitMsg;
+			
+			$releaseNotesTxt = "$RootDir\releaseNotes.txt";
+			$contents = Get-Content $releaseNotesTxt | Out-String;
+			"$notes`n`n$contents".Trim() | Out-File $releaseNotesTxt -Encoding ascii;
+			Exec {
+				& git add releaseNotes.txt;
+				& git add build\version.json;
+				& git commit --amend --no-edit;
+				& git tag "v$($version.ToString($true))";
+			}
+		}
+		finally { Pop-Location; }
 	}
 }
 
