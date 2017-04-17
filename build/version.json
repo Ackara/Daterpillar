@@ -2,8 +2,8 @@
   "version": {
     "major": 4,
     "minor": 0,
-    "patch": 0,
-    "suffix": ""
+    "patch": 3,
+    "suffix": "-alpha"
   },
   "targets": [
     "dotnetcore",
