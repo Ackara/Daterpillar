@@ -88,7 +88,6 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 
 	Write-LineBreak "MSBUILD";
 	$sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
-	#Exec { msbuild $sln "/p:Configuration=$BuildConfiguration;Platform=Any CPU" "/v:minimal"; };
 	Exec { & dotnet build $sln --configuration $BuildConfiguration; }
 	Write-LineBreak;
 }
