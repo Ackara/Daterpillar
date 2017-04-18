@@ -6,7 +6,7 @@ This script functions as a bootstrapper to other build and developer tasks.
 Param(
 	[string[]]$Tasks = @("default"),
 
-	[Alias("conn", "connstr")]
+	[Alias("conn", "connections")]
 	[hashtable]$ConnectionStrings = @{},
 
 	[string]$NuGetKey,
@@ -52,6 +52,7 @@ else
 	Invoke-psake $taskFile -taskList $Tasks -nologo -notr `
 		-properties @{
 			"BuildConfiguration"=$BuildConfiguration;
+			"ConnectionStrings"=$ConnectionStrings;
 			"BranchName"=$BranchName;
 			"TestCase"=$TestCase;
 			"NuGetKey"=$NuGetKey;

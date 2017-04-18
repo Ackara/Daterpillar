@@ -18,6 +18,7 @@ Properties {
 	$BranchName = "";
 	$TestCase = "";
 	$BuildConfiguration = "";
+	$ConnectionStrings = @{};
 
 	$Major = $false;
 	$Minor = $false;
