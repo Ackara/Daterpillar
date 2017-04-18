@@ -20,6 +20,8 @@ Param(
 	[switch]$Help
 )
 
+Write-Host $ConnectionStrings;
+
 # Assign Variables
 if ([string]::IsNullOrEmpty($BranchName))
 {
