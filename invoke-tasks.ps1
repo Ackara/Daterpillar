@@ -4,11 +4,10 @@ This script functions as a bootstrapper to other build and developer tasks.
 #>
 
 Param(
-	[Parameter(Position=1)]
+	
 	[string[]]$Tasks = @("default"),
 	
-	[Parameter(Position=2)]
-	[Alias("conn")]
+
 	[hashtable]$ConnectionStrings = @{},
 
 	[string]$NuGetKey,
