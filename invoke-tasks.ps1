@@ -21,6 +21,8 @@ Param(
 )
 
 Write-Host $ConnectionStrings;
+Write-Host $ConnectionStrings["mysql"];
+Write-Host "branch: $BranchName";
 
 # Assign Variables
 if ([string]::IsNullOrEmpty($BranchName))
