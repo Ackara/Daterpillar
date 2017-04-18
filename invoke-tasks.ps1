@@ -4,10 +4,9 @@ This script functions as a bootstrapper to other build and developer tasks.
 #>
 
 Param(
-	
 	[string[]]$Tasks = @("default"),
 	
-
+	[Alias("conn")]
 	[hashtable]$ConnectionStrings = @{},
 
 	[string]$NuGetKey,
@@ -19,14 +18,8 @@ Param(
 	[switch]$Help
 )
 
-Write-Host $ConnectionStrings;
-Write-Host $ConnectionStrings["mysql"];
-Write-Host "branch: $BranchName";
-
-
-
-
 # Assign Variables
+$BranchName = $env:BUILD_SOURCEBRANCHNAME;
 if ([string]::IsNullOrEmpty($BranchName))
 {
 	$results = (& git branch);
@@ -35,7 +28,12 @@ if ([string]::IsNullOrEmpty($BranchName))
 	{
 		$BranchName = $regex.Match($results).Groups["name"].Value;
 	}
+	Write-Host "!!! did not find env:BUILD_SOURCEBRANCHNAME !!!";
 }
+
+Write-Host $ConnectionStrings;
+Write-Host $ConnectionStrings["mysql"];
+Write-Host "branch: $BranchName";
 
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
