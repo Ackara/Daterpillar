@@ -106,9 +106,8 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 
 Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." `
 -depends @("Init") -action {
-	$nupkgsDir = "$ArtifactsDir\nupkgs";
 	if (Test-Path $ArtifactsDir -PathType Container) { Remove-Item $ArtifactsDir -Recurse -Force; }
-	New-Item $nupkgsDir -ItemType Directory | Out-Null;
+	New-Item $ArtifactsDir -ItemType Directory | Out-Null;
 
 	foreach ($proj in (Get-ChildItem "$RootDir\src" -Recurse -Filter "*.*proj" | Select-Object -ExpandProperty FullName))
 	{
@@ -116,22 +115,22 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 		if (Test-Path $nuspec -PathType Leaf)
 		{
 			[xml]$csproj = Get-Content $proj;
+			$versionSuffix = Get-VersionSuffix;
 			$version = Get-VersionNumber -ConfigFile $SolutionJSON;
 
 			$properties = "";
-			$properties += "id=$($csproj.SelectSingleNode('.//Project//AssemblyName').InnerText);";
-			$properties += "version=$($version.Major).$($version.Minor).$($version.Patch);";
-			$properties += "owner=$($Config.metadata.owner);";
-			$properties += "copyright=$($Config.metadata.copyright);";
-			$properties += "license=$($Config.metadata.licenseUrl);";
-			$properties += "projectUrl=$($Config.metadata.projectUrl);";
-			$properties += "iconUrl=$($Config.metadata.iconUrl);";
-			$properties += "description=$($Config.metadata.description);";
 			$properties += "tags=$($Config.metadata.tags);";
+			$properties += "owner=$($Config.metadata.owner);";
 			$properties += "Configuration=$BuildConfiguration;";
+			$properties += "iconUrl=$($Config.metadata.iconUrl);";
+			$properties += "license=$($Config.metadata.licenseUrl);";
+			$properties += "copyright=$($Config.metadata.copyright);";
+			$properties += "projectUrl=$($Config.metadata.projectUrl);";
+			$properties += "description=$($Config.metadata.description);";
 			$properties += "releaseNotes=$(Get-Content $ReleaseNotesTXT | Out-String);";
+			$properties += "version=$($version.Major).$($version.Minor).$($version.Patch);";
+			$properties += "id=$($csproj.SelectSingleNode('.//Project//AssemblyName').InnerText);";
 			$properties += "targetFramework=$($csproj.SelectSingleNode('.//Project//TargetFramework').InnerText)";
-			$versionSuffix = Get-VersionSuffix;
 
 			if ([String]::IsNullOrEmpty($VersionSuffix))
 			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; } }
@@ -155,7 +154,7 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 function Get-VersionSuffix()
 {
 	$server = (Get-Content $SolutionJSON | Out-String | ConvertFrom-Json);
-	$suffix = $server.branchSuffixMap.$BranchName;
-	if ([string]::IsNullOrEmpty($suffix)) { $suffix = $server.branchSuffixMap."*"; }
+	$suffix = $server.semanticVersion.branchSuffixMap.$BranchName;
+	if ([string]::IsNullOrEmpty($suffix)) { $suffix = $server.semanticVersion.branchSuffixMap."*"; }
 	if ([string]::IsNullOrEmpty($suffix)) { return ""; } else { return $suffix; }
 }
