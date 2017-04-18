@@ -16,7 +16,7 @@ Properties {
 	# User Args
 	$NuGetKey = "";
 	$BranchName = "";
-	$TestNames = @();
+	$TestCase = "";
 	$BuildConfiguration = "";
 
 	$Major = $false;
@@ -85,8 +85,11 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 -depends @("Init") -action {
 	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
 
+	Write-LineBreak "MSBUILD";
 	$sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
-	Exec { msbuild $sln "/p:Configuration=$BuildConfiguration;Platform=Any CPU"  "/v:minimal"; };
+	#Exec { msbuild $sln "/p:Configuration=$BuildConfiguration;Platform=Any CPU" "/v:minimal"; };
+	Exec { & dotnet build $sln --configuration $BuildConfiguration; }
+	Write-LineBreak;
 }
 
 Task "Run-Tests" -alias "test" -description "This task runs all automated tests." `
@@ -95,12 +98,18 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 
 	foreach ($proj in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*.*proj" | Select-Object -ExpandProperty FullName))
 	{
-		Exec { & dotnet test $proj --configuration $BuildConfiguration --verbosity minimal; }
+		if ([string]::IsNullOrEmpty($TestCase))
+		{ Exec { & dotnet test $proj --configuration $BuildConfiguration --verbosity minimal; } }
+		else
+		{ Exec { & dotnet test $proj --configuration $BuildConfiguration --filter ClassName~$TestCase --verbosity minimal; } }
 	}
 
 	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*test*.ps1" | Select-Object -ExpandProperty FullName))
 	{
-		Invoke-Pester -Script $script;
+		if ([string]::IsNullOrEmpty($TestCase))
+		{ Invoke-Pester -Script $script -ErrorAction Stop; }
+		else
+		{ Invoke-Pester -Script $script -ErrorAction Stop -TestName $TestCase; }
 	}
 }
 

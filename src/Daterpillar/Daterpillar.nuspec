@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <package>
   <metadata>
@@ -7,12 +7,12 @@
     <version>$version$</version>
     <description>$description$</description>
     <tags>$tags$</tags>
-    
+
     <owners>$owner$</owners>
     <authors>$owner$ and Contributors</authors>
     <projectUrl>$projectUrl$</projectUrl>
     <iconUrl>$iconUrl$</iconUrl>
-    
+
     <copyright>$copyright$</copyright>
     <licenseUrl>$license$</licenseUrl>
     <releaseNotes>$releaseNotes$</releaseNotes>

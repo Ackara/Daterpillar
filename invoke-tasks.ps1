@@ -5,12 +5,13 @@ This script functions as a bootstrapper to other build and developer tasks.
 
 Param(
 	[string[]]$Tasks = @("default"),
-	
-	[Alias("conn")]
+
+	[Alias("conn", "connstr")]
 	[hashtable]$ConnectionStrings = @{},
 
 	[string]$NuGetKey,
 	[string]$BranchName,
+	[string[]]$TestCase,
 	[string]$BuildConfiguration = "Release",
 
 	[switch]$Major,
@@ -28,12 +29,7 @@ if ([string]::IsNullOrEmpty($BranchName))
 	{
 		$BranchName = $regex.Match($results).Groups["name"].Value;
 	}
-	Write-Host "!!! did not find env:BUILD_SOURCEBRANCHNAME !!!";
 }
-
-Write-Host $ConnectionStrings;
-Write-Host $ConnectionStrings["mysql"];
-Write-Host "branch: $BranchName";
 
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
@@ -57,6 +53,7 @@ else
 		-properties @{
 			"BuildConfiguration"=$BuildConfiguration;
 			"BranchName"=$BranchName;
+			"TestCase"=$TestCase;
 			"NuGetKey"=$NuGetKey;
 			"Nuget"=$nuget;
 			"Major"=$Major;
