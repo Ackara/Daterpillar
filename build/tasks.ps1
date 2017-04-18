@@ -157,7 +157,7 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 		if ([string]::IsNullOrEmpty($NuGetKey))
 		{ Exec { & $nuget push $nupkg; } }
 		else
-		{ Exec { & $nuget push $nupkg -ApiKey $NuGetKey; } }
+		{ Exec { & $nuget push $nupkg -Source "https://www.nuget.org/api/v2/package" -ApiKey $NuGetKey; } }
 	}
 }
 
