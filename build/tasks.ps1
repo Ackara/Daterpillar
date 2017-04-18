@@ -73,7 +73,7 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 			"$notes`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
 			Exec {
 				& git add releaseNotes.txt;
-				& git add build\version.json;
+				& git add build\solution.json;
 				& git commit --amend --no-edit;
 				& git tag "v$($version.ToString($true))";
 			}
