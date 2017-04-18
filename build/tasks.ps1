@@ -152,12 +152,12 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 
 Task "Publish-Packages" -alias "publish" -description "This task deploys all deployment artifacts." `
 -depends @("Create-Packages") -action {
-	foreach ($nupkg in $ArtifactsDir)
+	foreach ($nupkg in (Get-ChildItem $ArtifactsDir -Recurse -Filter "*.nupkg" | Select-Object -ExpandProperty FullName))
 	{
 		if ([string]::IsNullOrEmpty($NuGetKey))
-		{ Exec { & $nuget push $nupkg; } }
+		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json"; } }
 		else
-		{ Exec { & $nuget push $nupkg -Source "https://www.nuget.org/api/v2/package" -ApiKey $NuGetKey; } }
+		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json" -ApiKey $NuGetKey; } }
 	}
 }
 
