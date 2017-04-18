@@ -31,7 +31,6 @@
   <ItemGroup>
     <Compile Include="packages.config" />
     <Compile Include="tasks.ps1" />
-    <Compile Include="version.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

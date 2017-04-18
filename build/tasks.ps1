@@ -9,7 +9,7 @@ Properties {
 	# Paths
 	$RootDir = (Split-Path $PSScriptRoot -Parent);
 	$ReleaseNotesTXT = "$RootDir\releaseNotes.txt";
-	$SemVerJson = "$PSScriptRoot\version.json";
+	$SolutionJSON = "$PSScriptRoot\solution.json";
 	$ArtifactsDir = "$RootDir\artifacts";
 	$Nuget = "";
 
@@ -56,8 +56,8 @@ Task "Setup" -description "This task will generate all missing/sensitive files m
 Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
 -depends @("Init") -action {
 	$commitMsg = Show-Inputbox "please enter your release notes" "RELEASE NOTES";
-	Update-VersionNumber "$RootDir\src" -Message $commitMsg -UsecommitMessageAsDescription -ConfigFile $SemVerJson -Major:$Major -Minor:$Minor -Patch;
-	$version = Get-VersionNumber -ConfigFile $SemVerJson;
+	Update-VersionNumber "$RootDir\src" -Message $commitMsg -UsecommitMessageAsDescription -ConfigFile $SolutionJSON -Major:$Major -Minor:$Minor -Patch;
+	$version = Get-VersionNumber -ConfigFile $SolutionJSON;
 
 	if (-not [string]::IsNullOrEmpty($commitMsg))
 	{
@@ -116,7 +116,7 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 		if (Test-Path $nuspec -PathType Leaf)
 		{
 			[xml]$csproj = Get-Content $proj;
-			$version = Get-VersionNumber -ConfigFile $SemVerJson;
+			$version = Get-VersionNumber -ConfigFile $SolutionJSON;
 
 			$properties = "";
 			$properties += "id=$($csproj.SelectSingleNode('.//Project//AssemblyName').InnerText);";
@@ -154,7 +154,7 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 
 function Get-VersionSuffix()
 {
-	$server = (Get-Content $SemVerJson | Out-String | ConvertFrom-Json);
+	$server = (Get-Content $SolutionJSON | Out-String | ConvertFrom-Json);
 	$suffix = $server.branchSuffixMap.$BranchName;
 	if ([string]::IsNullOrEmpty($suffix)) { $suffix = $server.branchSuffixMap."*"; }
 	if ([string]::IsNullOrEmpty($suffix)) { return ""; } else { return $suffix; }

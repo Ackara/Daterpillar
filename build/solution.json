@@ -4,9 +4,33 @@
     "owner": "Ackara",
     "projectUrl": "https://github.com/Ackara/Daterpillar",
     "iconUrl": "http://static.gigobyte.com/images/daterpillar.png",
-    "copyright": "Copyright © Ackara 2017, licensed under MIT License",
+    "copyright": "Copyright ï¿½ Ackara 2017, licensed under MIT License",
     "licenseUrl": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE",
     "description": "Daterpillar is a miro-orm.",
     "tags": "orm miroc-orm sql t4"
+  },
+  "semanticVersion":
+  {
+    "version":
+    {
+      "major": 4,
+      "minor": 0,
+      "patch": 13,
+      "suffix": "-alpha"
+    },
+    "targets":
+    [
+      "dotnetcore",
+      "dotnet",
+      "powershell"
+    ],
+    "branchSuffixMap":
+    {
+      "master": "",
+      "*": "alpha"
+    },
+    "shouldCommitChanges": true,
+    "shouldTagCommit": false,
+    "shouldAddAllUnstagedFilesWhenCommitting": false
   }
 }
