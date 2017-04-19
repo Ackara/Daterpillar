@@ -9,7 +9,7 @@
     <tags>$tags$</tags>
 
     <owners>$owner$</owners>
-    <authors>$owner$ and Contributors</authors>
+    <authors>$owner$</authors>
     <projectUrl>$projectUrl$</projectUrl>
     <iconUrl>$iconUrl$</iconUrl>
 
