@@ -275,5 +275,6 @@ paket-files/
 
 # Sensitive Files
 database.config
+tests/MSTest.Daterpillar/app.config
 
 old/
