@@ -51,8 +51,8 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 	}
 }
 
-Task "Setup" -description "This task will generate all missing/sensitive files missing from the project." -action {
-}
+Task "Setup" -description "This task will generate all missing/sensitive files missing from the project." `
+-depends @("Add-AppConfigFiles");
 
 Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
 -depends @("Init") -action {
@@ -157,6 +157,22 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json"; } }
 		else
 		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json" -ApiKey $NuGetKey; } }
+	}
+}
+
+Task "Add-AppConfigFiles" -description "This task creates all missing app.config files within the solution." -action {
+	$mstestProjectConfig = "$RootDir\tests\MSTest.Daterpillar\app.config";
+	if (-not (Test-Path $mstestProjectConfig -PathType Leaf))
+	{
+		@"
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <connectionStrings>
+	<add name="mssql"  connectionString="server=localhost;user=your_username;password=your_password;" />
+	<add name="mysql"  connectionString="server=localhost;user=your_username;password=your_password;" />
+  </connectionStrings>
+</configuration>
+"@ | Out-File $mstestProjectConfig -Encoding utf8;
 	}
 }
 

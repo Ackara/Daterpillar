@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +92,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.props'))" />
     <Error Condition="!Exists('..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.targets'))" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <Exec Command="powershell -ExecutionPolicy Bypass -NonInteractive -command &quot;..\..\invoke-tasks.ps1&quot; &quot;-BuildConfiguration $(Configuration)&quot;" />
   </Target>
   <Import Project="..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.1.14\build\net45\MSTest.TestAdapter.targets')" />
 </Project>
