@@ -31,6 +31,12 @@ if ([string]::IsNullOrEmpty($BranchName))
 	}
 }
 
+if ($ConnectionStrings.Count -eq 0)
+{
+	$ConnectionStrings.Add("mysql", "server=localhost;user=your_username;password=your_password;");
+	$ConnectionStrings.Add("mssql", "server=localhost;user=your_username;password=your_password;");
+}
+
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
 if (-not (Test-Path $nuget -PathType Leaf))

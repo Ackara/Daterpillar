@@ -164,12 +164,15 @@ Task "Add-AppConfigFiles" -description "This task creates all missing app.config
 	$mstestProjectConfig = "$RootDir\tests\MSTest.Daterpillar\app.config";
 	if (-not (Test-Path $mstestProjectConfig -PathType Leaf))
 	{
-		@"
+		$mysqlConnStr = $ConnectionStrings["mysql"];
+		$mssqlConnStr = $ConnectionStrings["mssql"];
+
+@"
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <connectionStrings>
-	<add name="mssql"  connectionString="server=localhost;user=your_username;password=your_password;" />
-	<add name="mysql"  connectionString="server=localhost;user=your_username;password=your_password;" />
+	<add name="mssql"  connectionString="$mssqlConnStr" />
+	<add name="mysql"  connectionString="$mysqlConnStr" />
   </connectionStrings>
 </configuration>
 "@ | Out-File $mstestProjectConfig -Encoding utf8;
