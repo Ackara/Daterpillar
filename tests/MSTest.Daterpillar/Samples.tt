@@ -1,0 +1,44 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+namespace MSTest.Daterpillar
+{
+	public partial class MockData
+	{
+<# GetSampleFiles(); #>
+	}
+}
+<#+
+
+public void GetSampleFiles()
+{
+	var samplesDir = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "Samples");
+	var sampleFiles = (
+		from f in (new DirectoryInfo(samplesDir).GetFiles("*", SearchOption.AllDirectories))
+		select f);
+	
+	PushIndent("\t\t");
+	foreach (var file in sampleFiles)
+	{
+		var format = CultureInfo.CurrentCulture.TextInfo;
+		string relativeDir = file.DirectoryName.Replace(samplesDir, "").Trim('\\', ' ');
+		string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+		string extension = file.Extension;
+
+		string baseName = string.Join("_", relativeDir.Split('\\').Select(x=> $"{x}"));
+		string variableName = $"{baseName}_{(fileNameWithoutExtension)}{file.Extension.Trim('.').ToUpper()}".Trim('_');
+		string relativePath = Path.Combine(relativeDir, $"{file.Name}");
+
+		WriteLine($"public const string {variableName} = @\"{relativePath}\";");
+	}
+	PopIndent();
+}
+
+#>

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MSTest.Daterpillar</RootNamespace>
-    <AssemblyName>MSTest.Daterpillar</AssemblyName>
+    <AssemblyName>Ackara.MSTest.Daterpillar</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -62,16 +62,34 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Telerik.JustMock, Version=2016.2.426.1, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\JustMock.2016.2.426.1\lib\Net35\Telerik.JustMock.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="MockData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Samples.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\ColumnNameTest.cs" />
+    <Compile Include="Tests\SchemaTest.cs" />
+    <Compile Include="Tests\DataTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="..\..\src\daterpillar.xsd">
+      <Link>daterpillar.xsd</Link>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -80,9 +98,27 @@
       <Name>Daterpillar</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Samples\" />
-    <Folder Include="Tests\" />
+    <Content Include="Samples.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Samples.cs</LastGenOutput>
+    </Content>
+    <None Include="Samples\schemaTest\fragment3.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Samples\schemaTest\fragment2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Samples\schemaTest\fragment1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Samples\schemaTest\mock_schema1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<schema name="name1"
+        description="description1"
+        author="author1"
+        created="1900-01-01T01:01:01-04:00"
+        xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
+  <table name="name1">
+    <comment>comment1</comment>
+    <column name="name1"
+            nullable="0"
+            default="default1"
+            autoIncrement="0">
+      <comment>comment1</comment>
+      <dataType scale="1"
+                precision="1">bool</dataType>
+    </column>
+    <column name="name2"
+            nullable="true"
+            default="default2"
+            autoIncrement="true">
+      <comment>comment2</comment>
+      <dataType scale="-2147483647"
+                precision="-2147483647">blob</dataType>
+    </column>
+    <column name="name3"
+            nullable="false"
+            default="default3"
+            autoIncrement="false">
+      <comment>comment3</comment>
+      <dataType scale="2147483647"
+                precision="2147483647">char</dataType>
+    </column>
+    <foreignKey name="name1"
+                localColumn="localColumn1"
+                foreignTable="foreignTable1"
+                foreignColumn="foreignColumn1"
+                onUpdate="NO ACTION"
+                onDelete="NO ACTION">
+      <onDelete>NO ACTION</onDelete>
+      <onUpdate>NO ACTION</onUpdate>
+    </foreignKey>
+    <foreignKey name="name2"
+                localColumn="localColumn2"
+                foreignTable="foreignTable2"
+                foreignColumn="foreignColumn2"
+                onUpdate="NO ACTION"
+                onDelete="NO ACTION">
+      <onDelete>CASCADE</onDelete>
+      <onUpdate>CASCADE</onUpdate>
+    </foreignKey>
+    <foreignKey name="name3"
+                localColumn="localColumn3"
+                foreignTable="foreignTable3"
+                foreignColumn="foreignColumn3"
+                onUpdate="CASCADE"
+                onDelete="CASCADE">
+      <onDelete>RESTRICT</onDelete>
+      <onUpdate>RESTRICT</onUpdate>
+    </foreignKey>
+    <index name="name1"
+           unique="0"
+           type="index">
+      <columnName order="ASC">columnName1</columnName>
+      <columnName order="DESC">columnName2</columnName>
+      <columnName order="ASC">columnName3</columnName>
+    </index>
+    <index name="name2"
+           unique="true"
+           type="primaryKey">
+      <columnName order="DESC">columnName4</columnName>
+      <columnName order="ASC">columnName5</columnName>
+      <columnName order="DESC">columnName6</columnName>
+    </index>
+    <index name="name3"
+           unique="false"
+           type="index">
+      <columnName order="ASC">columnName7</columnName>
+      <columnName order="DESC">columnName8</columnName>
+      <columnName order="ASC">columnName9</columnName>
+    </index>
+  </table>
+  <table name="name2">
+    <comment>comment2</comment>
+    <column name="name4"
+            nullable="true"
+            default="default4"
+            autoIncrement="true">
+      <comment>comment4</comment>
+      <dataType scale="0"
+                precision="0">text</dataType>
+    </column>
+    <column name="name5"
+            nullable="false"
+            default="default5"
+            autoIncrement="false">
+      <comment>comment5</comment>
+      <dataType scale="2"
+                precision="2">varchar</dataType>
+    </column>
+    <column name="name6"
+            nullable="true"
+            default="default6"
+            autoIncrement="true">
+      <comment>comment6</comment>
+      <dataType scale="-2147483646"
+                precision="-2147483646">int</dataType>
+    </column>
+    <foreignKey name="name4"
+                localColumn="localColumn4"
+                foreignTable="foreignTable4"
+                foreignColumn="foreignColumn4"
+                onUpdate="RESTRICT"
+                onDelete="RESTRICT">
+      <onDelete>SET NULL</onDelete>
+      <onUpdate>SET NULL</onUpdate>
+    </foreignKey>
+    <foreignKey name="name5"
+                localColumn="localColumn5"
+                foreignTable="foreignTable5"
+                foreignColumn="foreignColumn5"
+                onUpdate="SET NULL"
+                onDelete="SET NULL">
+      <onDelete>SET DEFAULT</onDelete>
+      <onUpdate>SET DEFAULT</onUpdate>
+    </foreignKey>
+    <foreignKey name="name6"
+                localColumn="localColumn6"
+                foreignTable="foreignTable6"
+                foreignColumn="foreignColumn6"
+                onUpdate="SET DEFAULT"
+                onDelete="SET DEFAULT">
+      <onDelete>NO ACTION</onDelete>
+      <onUpdate>NO ACTION</onUpdate>
+    </foreignKey>
+    <index name="name4"
+           unique="true"
+           type="primaryKey">
+      <columnName order="DESC">columnName10</columnName>
+      <columnName order="ASC">columnName11</columnName>
+      <columnName order="DESC">columnName12</columnName>
+    </index>
+    <index name="name5"
+           unique="false"
+           type="index">
+      <columnName order="ASC">columnName13</columnName>
+      <columnName order="DESC">columnName14</columnName>
+      <columnName order="ASC">columnName15</columnName>
+    </index>
+    <index name="name6"
+           unique="true"
+           type="primaryKey">
+      <columnName order="DESC">columnName16</columnName>
+      <columnName order="ASC">columnName17</columnName>
+      <columnName order="DESC">columnName18</columnName>
+    </index>
+  </table>
+  <table name="name3">
+    <comment>comment3</comment>
+    <column name="name7"
+            nullable="false"
+            default="default7"
+            autoIncrement="false">
+      <comment>comment7</comment>
+      <dataType scale="2147483646"
+                precision="2147483646">bigInt</dataType>
+    </column>
+    <column name="name8"
+            nullable="true"
+            default="default8"
+            autoIncrement="true">
+      <comment>comment8</comment>
+      <dataType scale="-1"
+                precision="-1">mediumInt</dataType>
+    </column>
+    <column name="name9"
+            nullable="false"
+            default="default9"
+            autoIncrement="false">
+      <comment>comment9</comment>
+      <dataType scale="3"
+                precision="3">smallInt</dataType>
+    </column>
+    <foreignKey name="name7"
+                localColumn="localColumn7"
+                foreignTable="foreignTable7"
+                foreignColumn="foreignColumn7"
+                onUpdate="NO ACTION"
+                onDelete="NO ACTION">
+      <onDelete>CASCADE</onDelete>
+      <onUpdate>CASCADE</onUpdate>
+    </foreignKey>
+    <foreignKey name="name8"
+                localColumn="localColumn8"
+                foreignTable="foreignTable8"
+                foreignColumn="foreignColumn8"
+                onUpdate="CASCADE"
+                onDelete="CASCADE">
+      <onDelete>RESTRICT</onDelete>
+      <onUpdate>RESTRICT</onUpdate>
+    </foreignKey>
+    <foreignKey name="name9"
+                localColumn="localColumn9"
+                foreignTable="foreignTable9"
+                foreignColumn="foreignColumn9"
+                onUpdate="RESTRICT"
+                onDelete="RESTRICT">
+      <onDelete>SET NULL</onDelete>
+      <onUpdate>SET NULL</onUpdate>
+    </foreignKey>
+    <index name="name7"
+           unique="false"
+           type="index">
+      <columnName order="ASC">columnName19</columnName>
+      <columnName order="DESC">columnName20</columnName>
+      <columnName order="ASC">columnName21</columnName>
+    </index>
+    <index name="name8"
+           unique="true"
+           type="primaryKey">
+      <columnName order="DESC">columnName22</columnName>
+      <columnName order="ASC">columnName23</columnName>
+      <columnName order="DESC">columnName24</columnName>
+    </index>
+    <index name="name9"
+           unique="false"
+           type="index">
+      <columnName order="ASC">columnName25</columnName>
+      <columnName order="DESC">columnName26</columnName>
+      <columnName order="ASC">columnName27</columnName>
+    </index>
+  </table>
+  <script name="name1"
+          syntax="Generic">script1</script>
+  <script name="name2"
+          syntax="Generic">script2</script>
+  <script name="name3"
+          syntax="MSSQL">script3</script>
+</schema>

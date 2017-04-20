@@ -260,14 +260,8 @@ paket-files/
 *.received.*
 
 # GhostDoc plugin setting file
-*.GhostDoc.xml
 *.GhostDoc.*
 !*.GhostDoc.user.dic
-
-# Generated files
-**/T4 Template/**
-!**/T4 Template/schema.tt
-!**/T4 Template/schema.xml
 
 # SQLite dependencies
 !**/[Xx]64/SQLite.Interop.dll

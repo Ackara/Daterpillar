@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<schema xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
+  <table name="card">
+    
+  </table>
+
+  <table name="attribute">
+    
+  </table>
+</schema>
