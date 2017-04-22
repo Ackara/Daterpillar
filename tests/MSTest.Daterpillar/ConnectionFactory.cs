@@ -1,35 +1,49 @@
-﻿using System.Data;
+﻿using System;
+using System.Configuration;
+using System.Data;
+using System.IO;
 
 namespace MSTest.Daterpillar
 {
-    public class ConnectionFactory
+    public static class ConnectionFactory
     {
-        public static string GetMSSQLConnectionString()
+        public static string GetMSSQLConnectionString(string database = "")
         {
-            throw new System.NotImplementedException();
+            return (new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString) { InitialCatalog = database }.ToString());
         }
 
-        public static string GetMySqlConnectionString()
+        public static string GetMySQLConnectionString(string database = "")
         {
-            throw new System.NotImplementedException();
+            return (new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mysql"].ConnectionString) { Database = database }.ToString());
         }
 
-        public static string GetSQLiteConnectionString()
+        public static string GetSQLiteConnectionString(string filename = null)
         {
-            throw new System.NotImplementedException();
+            string pathToSaveDb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (filename ?? "emptyDb.db3"));
+            if (string.IsNullOrEmpty(filename))
+            {
+                File.Delete(pathToSaveDb);
+                System.Data.SQLite.SQLiteConnection.CreateFile(pathToSaveDb);
+            }
+            return (new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = pathToSaveDb }.ToString());
         }
 
-        public static IDbConnection CreateMSSQLConnection()
+        public static IDbConnection CreateMSSQLConnection(string database = "")
         {
-            throw new System.NotImplementedException();
+            return new System.Data.SqlClient.SqlConnection(GetMSSQLConnectionString(database));
         }
 
-        public static IDbConnection CreateMySqlConnection()
+        public static IDbConnection CreateMySQLConnection(string database = "")
         {
-            throw new System.NotImplementedException();
+            return new MySql.Data.MySqlClient.MySqlConnection(GetMySQLConnectionString(database));
         }
 
-        public static IDbConnection CreateSQLiteConnection()
+        public static IDbConnection CreateSQLiteConnection(string filename = null)
+        {
+            return new System.Data.SQLite.SQLiteConnection(GetSQLiteConnectionString(filename));
+        }
+
+        public static bool TryExecuteScript(this IDbConnection connection, string script, out string errorMsg)
         {
             throw new System.NotImplementedException();
         }

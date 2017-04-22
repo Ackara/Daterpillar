@@ -1,5 +1,6 @@
+using ApprovalTests.Namers;
+using ApprovalTests.Reporters;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("MSTest.Daterpillar")]
@@ -10,9 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
+[assembly: UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
+[assembly: UseApprovalSubdirectory(nameof(ApprovalTests))]
 [assembly: ComVisible(false)]
-
 [assembly: Guid("eb323886-d908-4282-819f-aefd6470923c")]
 
 // [assembly: AssemblyVersion("1.0.*")]

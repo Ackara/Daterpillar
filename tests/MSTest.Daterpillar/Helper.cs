@@ -1,5 +1,6 @@
 ﻿using Ackara.Daterpillar;
 using System;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
@@ -7,14 +8,16 @@ using System.Xml.Schema;
 
 namespace MSTest.Daterpillar
 {
-    public class Helper
+    public static class Helper
     {
+        
+
         public static bool ValidateXml(Stream inputStream, out string errorMsg)
         {
             bool isValid = true;
-            var err = new StringBuilder();
+            var text = new StringBuilder();
 
-            string pathToSchema = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "daterpillar.xsd");
+            string pathToSchema = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MockData.daterpillarXSD);
             var xsd = new XmlSchemaSet();
             xsd.Add(Schema.Namespace, pathToSchema);
 
@@ -22,11 +25,23 @@ namespace MSTest.Daterpillar
             document.Validate(xsd, (sender, e) =>
             {
                 isValid = false;
-                err.AppendLine($"{e.Severity}: {e.Message}");
+                text.AppendLine($"{e.Severity}: {e.Message}");
             });
 
-            errorMsg = err.ToString();
+            errorMsg = text.ToString();
             return isValid;
+        }
+
+        
+
+        internal static void CreateEmptyDatabase(IDbConnection connection)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void OpenFileUsingDefaultApplication(string script)
+        {
+            throw new NotImplementedException();
         }
     }
 }

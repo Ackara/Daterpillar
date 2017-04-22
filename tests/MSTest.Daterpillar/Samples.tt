@@ -1,9 +1,13 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.IO" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml.XPath" #>
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
@@ -12,12 +16,16 @@ namespace MSTest.Daterpillar
 {
 	public partial class MockData
 	{
-<# GetSampleFiles(); #>
+<# WriteSampleFilesConstants(); #>
+		
+		// data source settings
+
+<# AddDataSourcesToAppConfig(); #>
 	}
 }
 <#+
 
-public void GetSampleFiles()
+public void WriteSampleFilesConstants()
 {
 	var samplesDir = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), "Samples");
 	var sampleFiles = (
@@ -39,6 +47,86 @@ public void GetSampleFiles()
 		WriteLine($"public const string {variableName} = @\"{relativePath}\";");
 	}
 	PopIndent();
+}
+
+public void AddDataSourcesToAppConfig()
+{
+	string pathToAppConfig = Host.ResolvePath("app.config");
+	if (File.Exists(pathToAppConfig))
+	{
+		var appConfig = XDocument.Load(pathToAppConfig);
+
+		var section = appConfig.XPathSelectElement(".//configSections/section[@name='microsoft.visualstudio.testtools']");
+		if (section == null)
+		{
+			appConfig.XPathSelectElement(".//configSections").Add(
+				new XElement("section", 
+					new XAttribute("name", "microsoft.visualstudio.testtools"),
+					new XAttribute("type", "Microsoft.VisualStudio.TestTools.UnitTesting.TestConfigurationSection, Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions")));
+		}
+
+		string samplesDir = Host.ResolvePath("Samples");
+		var sampleFiles = (new DirectoryInfo(samplesDir).GetFiles("*.csv"));
+
+		AppendDataSoucesSection(sampleFiles, appConfig);
+		appConfig.Save(pathToAppConfig);
+	}
+}
+
+private void AppendDataSoucesSection (IEnumerable<FileInfo> sampleFiles, XDocument appConfig)
+{
+	var configSection = appConfig.XPathSelectElement(".//configuration");
+	var connStrSection = appConfig.XPathSelectElement(".//configuration/connectionStrings");
+	
+	var dataSourceSection = appConfig.XPathSelectElement(".//configuration/microsoft.visualstudio.testtools/dataSources");
+	if (dataSourceSection == null)
+	{
+		configSection.Add(new XElement("microsoft.visualstudio.testtools", new XElement("dataSources")));
+		dataSourceSection = appConfig.XPathSelectElement(".//configuration/microsoft.visualstudio.testtools/dataSources");
+	}
+
+	foreach (var file in sampleFiles)
+	{
+		string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+		string sourceName = $"{fileNameWithoutExtension}";
+		string variableName = $"{(fileNameWithoutExtension)}";
+
+		PushIndent("\t\t");
+		WriteLine($"public const string {variableName} = \"{sourceName}\";");
+		PopIndent();
+		
+		var target1 = connStrSection.XPathSelectElement($".//add[@name='{sourceName}']");
+		if (target1 == null)
+		{
+			connStrSection.Add(
+			new XElement("add",
+				new XAttribute("name", sourceName),
+				new XAttribute("providerName", "Microsoft.VisualStudio.TestTools.DataSource.CSV"),
+				new XAttribute("connectionString", $"|DataDirectory|\\\\{file.Name}")));
+		}
+
+		var target2 = dataSourceSection.XPathSelectElement($".//add[@name='{sourceName}']");
+		if (target2 == null)
+		{
+			dataSourceSection.Add(new XElement("add",
+				new XAttribute("name", sourceName),
+				new XAttribute("connectionString", sourceName),
+				new XAttribute("dataTableName", file.Name),
+				new XAttribute("dataAccessMethod", "Sequential")));
+		}
+	}
+}
+
+public string TitleCase(string text)
+{
+	var format = CultureInfo.CurrentCulture.TextInfo;
+	return format.ToTitleCase(text);
+}
+
+
+public void Print(object value)
+{
+	WriteLine($"// {value}");
 }
 
 #>

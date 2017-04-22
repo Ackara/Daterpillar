@@ -7,10 +7,13 @@ namespace MSTest.Daterpillar
 {
     public partial class MockData
     {
-        public const string Samples = "Samples";
-        public const string daterpillar = "daterpillar.xsd";
+        internal const string
+            Samples = "Samples",
+            daterpillarXSD = "daterpillar.xsd",
+            X86 = "x86",
+            X64 = "X64";
 
-        public static Schema CreateSchema()
+        public static Schema GetMockSchema()
         {
             var schema = new Schema();
             schema.Add(
@@ -35,6 +38,12 @@ namespace MSTest.Daterpillar
                 new Script("-- seed data", Syntax.SQLite, "seed"));
 
             return schema;
+        }
+
+        public static Schema GetSchema(string relativePath)
+        {
+            var file = GetFile(relativePath, "*.xml");
+            return Schema.Load(file.OpenRead());
         }
 
         public static FileInfo GetFile(string relativePath, string pattern = "*")

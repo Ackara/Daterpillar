@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -67,16 +66,6 @@ namespace Ackara.Daterpillar
         }
 
         /// <summary>
-        /// Deserialize the specified file to a <see cref="Schema"/> object.
-        /// </summary>
-        /// <param name="pathToFiles">The path to file.</param>
-        /// <returns>Schema.</returns>
-        public static Schema Load(params string[] pathToFiles)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
         /// Serialize this instance and writes it to the specified output stream.
         /// </summary>
         /// <param name="outputStream">The output stream.</param>
@@ -115,9 +104,17 @@ namespace Ackara.Daterpillar
             }
         }
 
-        public void Join(Schema schema2)
+        /// <summary>
+        /// Concatenate the SQL objects of the specified schemas with this instance.
+        /// </summary>
+        /// <param name="otherSchemas">The schemas to join.</param>
+        public void Join(params Schema[] otherSchemas)
         {
-            throw new NotImplementedException();
+            foreach (var schema in otherSchemas)
+            {
+                Tables.AddRange(schema.Tables);
+                Scripts.AddRange(schema.Scripts);
+            }
         }
 
         #region Private Members
