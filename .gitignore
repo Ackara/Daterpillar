@@ -261,7 +261,6 @@ paket-files/
 
 # GhostDoc plugin setting file
 *.GhostDoc.*
-!*.GhostDoc.user.dic
 
 # SQLite dependencies
 !**/[Xx]64/SQLite.Interop.dll
