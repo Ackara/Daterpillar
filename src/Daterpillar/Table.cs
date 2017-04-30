@@ -7,7 +7,8 @@ namespace Ackara.Daterpillar
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     /// <seealso cref="Ackara.Daterpillar.ISQLObject" />
-    public class Table
+    [System.Diagnostics.DebuggerDisplay("{AsDebuggerDisplay()}")]
+    public sealed class Table : ICloneable<Table>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -88,5 +89,46 @@ namespace Ackara.Daterpillar
         /// <value>The table indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
+
+        /// <summary>
+        /// Creates a new <see cref="Table"/> object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new <see cref="Table"/> object that is a copy of this instance.</returns>
+        public Table Clone()
+        {
+            var clone = new Table()
+            {
+                Name = this.Name,
+                Comment = this.Comment,
+            };
+
+            foreach (var col in Columns)
+            {
+                var copy = col.Clone();
+                copy.Table = clone;
+                clone.Columns.Add(copy);
+            }
+
+            foreach (var idx in Indexes)
+            {
+                var copy = idx.Clone();
+                copy.Table = clone;
+                clone.Indexes.Add(copy);
+            }
+
+            foreach (var fKey in ForeignKeys)
+            {
+                var copy = fKey.Clone();
+                copy.Table = clone;
+                clone.ForeignKeys.Add(copy);
+            }
+
+            return clone;
+        }
+
+        private string AsDebuggerDisplay()
+        {
+            return $"{Name}";
+        }
     }
 }

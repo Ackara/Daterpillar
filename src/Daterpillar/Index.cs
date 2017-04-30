@@ -6,7 +6,7 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// Represents a <see cref="Table"/> index.
     /// </summary>
-    public class Index
+    public class Index : ICloneable<Index>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Index"/> class.
@@ -70,6 +70,21 @@ namespace Ackara.Daterpillar
         /// <value>The columns referenced by the index.</value>
         [XmlElement("columnName")]
         public ColumnName[] Columns { get; set; }
+
+        /// <summary>
+        /// Creates a new <see cref="Index"/> object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new <see cref="Index"/> object that is a copy of this instance.</returns>
+        public Index Clone()
+        {
+            return new Index()
+            {
+                Columns = this.Columns,
+                IsUnique = this.IsUnique,
+                Name = this.Name,
+                Type = this.Type
+            };
+        }
 
         internal string GetName()
         {

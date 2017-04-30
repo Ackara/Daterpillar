@@ -14,23 +14,20 @@ namespace MSTest.Daterpillar
     {
         public static string GetMSSQLConnectionString(string database = "")
         {
-            return (new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString) { InitialCatalog = database }.ToString());
+            return (new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mssql"].ConnectionString) { InitialCatalog = database }.ToString());
         }
 
         public static string GetMySQLConnectionString(string database = "")
         {
-            return (new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mysql"].ConnectionString) { Database = database }.ToString());
+            return (new MySqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["mysql"].ConnectionString) { Database = database }.ToString());
         }
 
         public static string GetSQLiteConnectionString(string filename = null)
         {
-            string pathToSaveDb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (filename ?? "emptyDb.db3"));
-            if (string.IsNullOrEmpty(filename))
-            {
-                File.Delete(pathToSaveDb);
-                System.Data.SQLite.SQLiteConnection.CreateFile(pathToSaveDb);
-            }
-            return (new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = pathToSaveDb }.ToString());
+            filename = Path.HasExtension(filename) ? filename : $"{filename}.db3";
+            string pathToSaveDb = Path.Combine(Path.GetTempPath(), (filename ?? "dtpl_emptyDb.db3"));
+            if (File.Exists(pathToSaveDb) == false) SQLiteConnection.CreateFile(pathToSaveDb);
+            return (new SQLiteConnectionStringBuilder() { DataSource = pathToSaveDb }.ToString());
         }
 
         public static IDbConnection CreateConnection(string syntax, string database = null)
@@ -73,31 +70,7 @@ namespace MSTest.Daterpillar
 
         public static IDbConnection CreateSQLiteConnection(string filename = null)
         {
-            return new System.Data.SQLite.SQLiteConnection(GetSQLiteConnectionString(filename));
-        }
-
-        public static bool TryExecuteScript(this IDbConnection connection, string script, out string errorMsg)
-        {
-            if (connection.State != ConnectionState.Open) connection.Open();
-            IDbCommand command = connection.CreateCommand();
-            errorMsg = null;
-
-            try
-            {
-                command.CommandText = script;
-                command.ExecuteNonQuery();
-
-                return true;
-            }
-            catch (System.Data.Common.DbException ex)
-            {
-                errorMsg = string.Format("{2}{0}{2}{2}{1}{2}", ex.Message, ex, Environment.NewLine);
-                return false;
-            }
-            finally
-            {
-                command?.Dispose();
-            }
+            return new SQLiteConnection(GetSQLiteConnectionString(filename));
         }
 
         public static void UseSchema(this IDbConnection connection, string relativePath)
@@ -119,8 +92,12 @@ namespace MSTest.Daterpillar
 
                 RebuildMySQLDatabase(connection);
             }
-            else if (connection is SQLiteConnection)
+            else if (connection is SQLiteConnection sqliteConn)
             {
+                var builder = new SQLiteScriptBuilder();
+                builder.Append(schema);
+                script = builder.GetContent();
+
                 RebuildSQLiteDatabase(connection);
             }
 
@@ -146,6 +123,31 @@ namespace MSTest.Daterpillar
             else if (connection is SQLiteConnection sqliteConn)
             {
                 RebuildSQLiteDatabase(connection);
+            }
+        }
+
+        public static bool TryExecuteScript(this IDbConnection connection, string script, out string errorMsg)
+        {
+            if (connection.State != ConnectionState.Open) connection.Open();
+            IDbCommand command = connection.CreateCommand();
+            errorMsg = null;
+
+            try
+            {
+                command.CommandText = script;
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (System.Data.Common.DbException ex)
+            {
+                errorMsg = string.Format("{2}{0}{2}{2}{1}{2}", ex.Message, ex, Environment.NewLine);
+                return false;
+            }
+            finally
+            {
+                System.Diagnostics.Debug.WriteLine($"connection:  {connection.ConnectionString}");
+                command?.Dispose();
             }
         }
 
@@ -184,11 +186,10 @@ namespace MSTest.Daterpillar
         {
             if (connection.State == ConnectionState.Open) connection.Close();
 
-            string databaseName = connection.Database;
-            string pathToSaveDb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{databaseName}.db3");
+            var connStr = new SQLiteConnectionStringBuilder(connection.ConnectionString);
+            string pathToSaveDb = connStr.DataSource;
             if (File.Exists(pathToSaveDb)) File.Delete(pathToSaveDb);
             SQLiteConnection.CreateFile(pathToSaveDb);
-            connection.ConnectionString = new SQLiteConnectionStringBuilder() { DataSource = pathToSaveDb }.ToString();
         }
 
         internal static Microsoft.SqlServer.Management.Smo.Server AsSqlServerInstance(this IDbConnection connection)

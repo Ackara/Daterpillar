@@ -1,12 +1,11 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Ackara.Daterpillar
 {
     /// <summary>
     /// Represents a <see cref="Table"/> foreign key.
     /// </summary>
-    public class ForeignKey
+    public class ForeignKey : ICloneable<ForeignKey>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
@@ -96,10 +95,28 @@ namespace Ackara.Daterpillar
         [XmlAttribute("onDelete")]
         public ReferentialAction OnDelete { get; set; }
 
+        /// <summary>
+        /// Creates a new <see cref="ForeignKey"/> object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new <see cref="ForeignKey"/> object that is a copy of this instance.</returns>
+        public ForeignKey Clone()
+        {
+            return new ForeignKey()
+            {
+                ForeignColumn = this.ForeignColumn,
+                ForeignTable = this.ForeignTable,
+                LocalColumn = this.LocalColumn,
+                LocalTable = this.LocalTable,
+                Name = this.Name,
+                OnDelete = this.OnDelete,
+                OnUpdate = this.OnUpdate
+            };
+        }
+
         internal string GetName()
         {
             string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-            return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
+            return (string.IsNullOrWhiteSpace(Name)? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : Name);
         }
     }
 }

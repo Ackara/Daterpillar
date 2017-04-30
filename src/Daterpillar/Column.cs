@@ -5,7 +5,7 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// Represents a <see cref="Table"/> column.
     /// </summary>
-    public class Column
+    public class Column : ICloneable<Column>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Column"/> class.
@@ -85,5 +85,23 @@ namespace Ackara.Daterpillar
         /// <value>The ordinal position.</value>
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
+
+        /// <summary>
+        /// Creates a new <see cref="Column"/> object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new <see cref="Column"/> object that is a copy of this instance.</returns>
+        public Column Clone()
+        {
+            return new Column()
+            {
+                Name = this.Name,
+                AutoIncrement = this.AutoIncrement,
+                Comment = this.Comment,
+                DataType = this.DataType,
+                DefaultValue = this.DefaultValue,
+                IsNullable = this.IsNullable,
+                OrdinalPosition = this.OrdinalPosition
+            };
+        }
     }
 }

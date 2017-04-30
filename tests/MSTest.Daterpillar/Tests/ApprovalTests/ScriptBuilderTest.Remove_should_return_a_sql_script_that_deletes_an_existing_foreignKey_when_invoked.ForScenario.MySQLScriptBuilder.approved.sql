@@ -1,1 +1,1 @@
-﻿ALTER TABLE `card_extras` DROP FOREIGN KEY `card_extras_Card_Id_TO_card_Id`;
+﻿ALTER TABLE `card_number` DROP FOREIGN KEY `key_with_custom_name`;

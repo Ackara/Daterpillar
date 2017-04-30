@@ -9,7 +9,7 @@ namespace Ackara.Daterpillar
     /// An in-memory representation of a database schema.
     /// </summary>
     [XmlRoot("schema", Namespace = Namespace)]
-    public class Schema
+    public class Schema : ICloneable<Schema>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
@@ -163,6 +163,29 @@ namespace Ackara.Daterpillar
                 Tables.AddRange(schema.Tables);
                 Scripts.AddRange(schema.Scripts);
             }
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Schema"/> object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new <see cref="Schema"/> object that is a copy of this instance.</returns>
+        public Schema Clone()
+        {
+            var clone = new Schema()
+            {
+                Name = this.Name
+            };
+
+            foreach (var table in Tables)
+            {
+                var copy = table.Clone();
+                copy.Schema = clone;
+                clone.Tables.Add(copy);
+            }
+
+            foreach (var script in Scripts) clone.Add(script);
+
+            return clone;
         }
 
         internal void AssignParentNodes()

@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `card_extras`
 	`Card_Id` INT NOT NULL,
 	`Rulings` TEXT,
 	`Tips` TEXT,
+	`Trivia` TEXT,
 	`Passcode` INT NOT NULL,
 	CONSTRAINT `card_extras_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`)
 );
@@ -148,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `card_number`
 	`Art_Index` TINYINT NOT NULL,
 	`Card_Id` INT NOT NULL,
 	`Pack_Id` INT NOT NULL,
-	CONSTRAINT `card_number_Rarity_Id_TO_rarity_Id` FOREIGN KEY (`Rarity_Id`) REFERENCES `rarity`(`Id`),
+	CONSTRAINT `key_with_custom_name` FOREIGN KEY (`Rarity_Id`) REFERENCES `rarity`(`Id`),
 	CONSTRAINT `card_number_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`),
 	CONSTRAINT `card_number_Pack_Id_TO_pack_Id` FOREIGN KEY (`Pack_Id`) REFERENCES `pack`(`Id`)
 );

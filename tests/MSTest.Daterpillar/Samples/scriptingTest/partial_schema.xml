@@ -114,7 +114,8 @@
       <dataType>text</dataType>
     </column>
 
-    <column name="Level" default="0">
+    <column name="Level"
+            default="0">
       <dataType>tinyInt</dataType>
     </column>
 
@@ -182,11 +183,18 @@
       <dataType>int</dataType>
     </column>
 
-    <column name="Rulings" nullable="true">
+    <column name="Rulings"
+            nullable="true">
       <dataType>text</dataType>
     </column>
 
-    <column name="Tips" nullable="true">
+    <column name="Tips"
+            nullable="true">
+      <dataType>text</dataType>
+    </column>
+
+    <column name="Trivia"
+            nullable="true">
       <dataType>text</dataType>
     </column>
 
@@ -298,7 +306,8 @@
       <dataType>int</dataType>
     </column>
 
-    <foreignKey localColumn="Rarity_Id"
+    <foreignKey name="key_with_custom_name"
+                localColumn="Rarity_Id"
                 foreignTable="rarity"
                 foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>

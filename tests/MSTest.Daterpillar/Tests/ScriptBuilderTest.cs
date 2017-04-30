@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -19,7 +18,7 @@ namespace MSTest.Daterpillar.Tests
     [TestClass]
     [DeploymentItem(FName.Samples)]
     [DeploymentItem(FName.X86), DeploymentItem(FName.X64)]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class ScriptBuilderTest
     {
         public static IDictionary<string, Type> SqlScriptBuilders = new Dictionary<string, Type>()
@@ -44,10 +43,10 @@ namespace MSTest.Daterpillar.Tests
                 connection.UseSchema(FName.scriptingTest_partial_schemaXML);
             }
 
-            //using (var connection = ConnectionFactory.CreateSQLiteConnection(MOCKDB))
-            //{
-            //    connection.UseSchema(FName.scriptingTest_partial_schemaXML);
-            //}
+            using (var connection = ConnectionFactory.CreateSQLiteConnection(MOCKDB))
+            {
+                connection.UseSchema(FName.scriptingTest_partial_schemaXML);
+            }
         }
 
         [TestMethod]
@@ -360,9 +359,12 @@ namespace MSTest.Daterpillar.Tests
 
         private void AppendForeignKey(IScriptBuilder builder, IDbConnection connection, [CallerMemberName]string testName = null)
         {
+            TestContext.WriteLine($"sut: {builder.GetType().Name}");
+
             // Arrange
+            var schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
             var constraint = new ForeignKey("Card_Type_Id", "card_type", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade);
-            constraint.Table = new Table("card");
+            constraint.Table = schema.Tables.First(x => x.Name == "card");
 
             // Act
             builder.Append(constraint);
@@ -403,7 +405,7 @@ namespace MSTest.Daterpillar.Tests
         {
             // Arrange
             Schema schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
-            Column obsoleteColumn = schema.Tables.First(x => x.Name == "card_extras").Columns.First(x => x.Name == "Passcode");
+            Column obsoleteColumn = schema.Tables.First(x => x.Name == "card_extras").Columns.First(x => x.Name == "Trivia");
 
             // Act
             builder.Remove(obsoleteColumn);
@@ -430,7 +432,7 @@ namespace MSTest.Daterpillar.Tests
         {
             // Arrange
             Schema schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
-            ForeignKey obsoleteConstraint = schema.Tables.First(x => x.Name == "card_extras").ForeignKeys.First();
+            ForeignKey obsoleteConstraint = schema.Tables.First(x => x.Name == "card_number").ForeignKeys.First(x => x.Name == "key_with_custom_name");
 
             // Act
             builder.Remove(obsoleteConstraint);
@@ -458,13 +460,15 @@ namespace MSTest.Daterpillar.Tests
         private void UpdateColumn(IScriptBuilder builder, IDbConnection connection, [CallerMemberName]string testName = null)
         {
             // Arrange
-            var schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
-            var oldColumn = schema.Tables.First(x => x.Name == "card").Columns.First(x => x.Name == "Name");
+            var schema1 = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
+            var oldColumn = schema1.Tables.First(x => x.Name == "card").Columns.First(x => x.Name == "Name");
 
-            var newColumn = new Column("name_of_card", new DataType("varchar", 256))
-            {
-                Table = new Table("card") { Schema = new Schema() }
-            };
+            var schema2 = schema1.Clone();
+            var newColumn = schema2.Tables.First(x => x.Name == "card").Columns.First(x => x.Name == "Name");
+            var index = schema2.GetIndexes().First(x => x.Table.Name == "card" && x.Columns.Count(y => y.Name == "Name") == 1);
+            newColumn.Name = "name_of_card";
+            newColumn.DataType = new DataType("varchar", 256);
+            index.Columns[0].Name = newColumn.Name;
 
             // Act
             builder.Update(oldColumn, newColumn);
@@ -496,20 +500,5 @@ namespace MSTest.Daterpillar.Tests
         }
 
         #endregion Test Methods
-
-        #region Helper Methods
-
-        private static IScriptBuilder GetBuilder(string platform)
-        {
-            foreach (var type in Assembly.GetAssembly(typeof(IScriptBuilder)).GetTypes())
-            {
-                if (!type.IsAbstract && !type.IsInterface && type.GetInterface(typeof(IScriptBuilder).Name) != null)
-                {
-                }
-            }
-            throw new System.NotImplementedException();
-        }
-
-        #endregion Helper Methods
     }
 }
