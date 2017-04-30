@@ -1,91 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ackara.Daterpillar.TypeResolvers;
 
 namespace Ackara.Daterpillar.Scripting
 {
-    public class SQLiteScriptBuilder : IScriptBuilder
+    public class SQLiteScriptBuilder : SqlScriptBuilderBase
     {
-        public int Length => throw new NotImplementedException();
+        public SQLiteScriptBuilder() : base(new SqlScriptBuilderSettings()
+        {
+            ShowHeader = true,
+            IgnoreScripts = false,
+            IgnoreComments = false,
+            AppendCreateSchemaCommand = false
+        }, new SQLiteTypeResolver())
+        { }
 
-        public bool IsEmpty => throw new NotImplementedException();
+        public SQLiteScriptBuilder(SqlScriptBuilderSettings settings) : base(settings, new SQLiteTypeResolver())
+        {
+        }
 
-        public string Append(string text)
+        public override IScriptBuilder Append(Schema schema)
         {
             throw new NotImplementedException();
         }
 
-        public string Append(Schema schema)
+        public override IScriptBuilder Append(Table table)
         {
             throw new NotImplementedException();
         }
 
-        public string Append(Table table)
+        public override IScriptBuilder Append(Column column)
         {
             throw new NotImplementedException();
         }
 
-        public string Append(Column column)
+        public override IScriptBuilder Append(Index index)
         {
             throw new NotImplementedException();
         }
 
-        public string Append(Index index)
+        public override IScriptBuilder Append(ForeignKey foreignKey)
         {
             throw new NotImplementedException();
         }
 
-        public string Append(ForeignKey foreignKey)
+        public override IScriptBuilder Remove(Schema schema)
         {
             throw new NotImplementedException();
         }
 
-        public string AppendLine(string text)
+        public override IScriptBuilder Remove(Table table)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public override IScriptBuilder Remove(Column column)
         {
             throw new NotImplementedException();
         }
 
-        public string GetContent()
+        public override IScriptBuilder Remove(Index index)
         {
             throw new NotImplementedException();
         }
 
-        public string Remove(Schema schema)
+        public override IScriptBuilder Remove(ForeignKey foreignKey)
         {
             throw new NotImplementedException();
         }
 
-        public string Remove(Table table)
+        public override IScriptBuilder Update(Column oldColumn, Column newColumn)
         {
             throw new NotImplementedException();
         }
 
-        public string Remove(Column column)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Remove(Index index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Remove(ForeignKey foreignKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpdateColumn(Column oldColumn, Column newColumn)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpdateTable(Table oldTable, Table newTable)
+        public override IScriptBuilder Update(Table oldTable, Table newTable)
         {
             throw new NotImplementedException();
         }

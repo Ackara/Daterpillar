@@ -45,6 +45,13 @@ namespace Ackara.Daterpillar
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
+        /// <value>The comment.</value>
+        [XmlIgnore]
+        public string Comment { get; set; }
+
+        /// <summary>
         /// Gets or sets the SQL data-type.
         /// </summary>
         /// <value>The type of the data.</value>
@@ -71,5 +78,12 @@ namespace Ackara.Daterpillar
         /// <value>The default value.</value>
         [XmlAttribute("default")]
         public string DefaultValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ordinal position of the column.
+        /// </summary>
+        /// <value>The ordinal position.</value>
+        [XmlIgnore]
+        public int OrdinalPosition { get; set; }
     }
 }

@@ -7,13 +7,7 @@ namespace MSTest.Daterpillar
 {
     public partial class MockData
     {
-        internal const string
-            Samples = "Samples",
-            daterpillarXSD = "daterpillar.xsd",
-            X86 = "x86",
-            X64 = "X64";
-
-        public static Schema GetMockSchema()
+        public static Schema GetSchema()
         {
             var schema = new Schema();
             schema.Add(
@@ -21,18 +15,30 @@ namespace MSTest.Daterpillar
                     new Column("Id", new DataType("int"), autoIncrement: true),
                     new Column("Name", new DataType("varchar", 64))),
 
+                new Table("attribute",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("varchar", 64))),
+
+                new Table("monster_type",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("varchar", 64))),
+
                 new Table("card",
                     new Column("Id", new DataType("int")),
-                    new Column("Name", new DataType("varchar", 64)),
+                    new Column("Name", new DataType("varchar", 256)),
                     new Column("Text", new DataType("text")),
-                    new Column("Level", new DataType("int")),
+                    new Column("Pendulum_Text", new DataType("text"), autoIncrement: false, nullable: true),
+                    new Column("Attribute_Id", new DataType("int")),
                     new Column("Card_Type_Id", new DataType("int")),
+                    new Column("Monster_Type_Id", new DataType("int")),
 
-                    new Index(true, IndexType.Index, new ColumnName("Name")),
-                    new Index(IndexType.Index, new ColumnName("Level")),
-                    new Index(IndexType.Index, new ColumnName("Card_Type_Id")),
+                    new ForeignKey("Attribute_Id", "attribute", "Id", ReferentialAction.Cascade, ReferentialAction.Restrict),
+                    new ForeignKey("Card_Type_Id", "card_type", "Id", ReferentialAction.Cascade, ReferentialAction.Restrict),
+                    new ForeignKey("Monster_Type_Id", "monster_type", "Id", ReferentialAction.Cascade, ReferentialAction.NoAction),
 
-                    new ForeignKey("Card_Type_Id", "card_type", "Id", onUpdate: ReferentialAction.Cascade, onDelete: ReferentialAction.Restrict)),
+                    new Index(IndexType.PrimaryKey, new ColumnName("Id")),
+                    new Index(true, IndexType.Index, new ColumnName("Name", Order.Descending)),
+                    new Index(true, IndexType.Index, new ColumnName("Text"), new ColumnName("Pendulum_Text"))),
 
                 new Script("-- header"),
                 new Script("-- seed data", Syntax.SQLite, "seed"));

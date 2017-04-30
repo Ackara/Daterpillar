@@ -14,12 +14,17 @@
 
 namespace MSTest.Daterpillar
 {
-	public partial class MockData
+	public struct FName
 	{
-<# WriteSampleFilesConstants(); #>
-		
-		// data source settings
+		internal const string Samples = "Samples";
+		internal const string X86 = "x86", X64 = "x64";
+		internal const string daterpillarXSD = "daterpillar.xsd";
 
+<# WriteSampleFilesConstants(); #>
+	}
+
+	public struct SourceName
+	{
 <# AddDataSourcesToAppConfig(); #>
 	}
 }
@@ -44,7 +49,7 @@ public void WriteSampleFilesConstants()
 		string variableName = $"{baseName}_{(fileNameWithoutExtension)}{file.Extension.Trim('.').ToUpper()}".Trim('_');
 		string relativePath = Path.Combine(relativeDir, $"{file.Name}");
 
-		WriteLine($"public const string {variableName} = @\"{relativePath}\";");
+		WriteLine($"internal const string {variableName} = @\"{relativePath}\";");
 	}
 	PopIndent();
 }

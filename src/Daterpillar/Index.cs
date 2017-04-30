@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Linq;
+using System.Xml.Serialization;
 
 namespace Ackara.Daterpillar
 {
@@ -69,5 +70,17 @@ namespace Ackara.Daterpillar
         /// <value>The columns referenced by the index.</value>
         [XmlElement("columnName")]
         public ColumnName[] Columns { get; set; }
+
+        internal string GetName()
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
+                string columns = string.Join("_and_", Columns.Select(x => x.Name));
+
+                return string.Concat(tableName, columns);
+            }
+            else return Name;
+        }
     }
 }

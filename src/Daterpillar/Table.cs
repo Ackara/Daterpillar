@@ -26,7 +26,7 @@ namespace Ackara.Daterpillar
             Name = name;
             Columns = new List<Column>();
             Indexes = new List<Index>();
-            Constraints = new List<ForeignKey>();
+            ForeignKeys = new List<ForeignKey>();
 
             foreach (var item in sqlObjects)
             {
@@ -43,7 +43,7 @@ namespace Ackara.Daterpillar
                 else if (item is ForeignKey fKey)
                 {
                     fKey.Table = this;
-                    Constraints.Add(fKey);
+                    ForeignKeys.Add(fKey);
                 }
             }
         }
@@ -62,6 +62,13 @@ namespace Ackara.Daterpillar
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
+        /// <value>The comment.</value>
+        [XmlElement("comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
         /// Gets or sets the table columns.
         /// </summary>
         /// <value>The table columns.</value>
@@ -73,7 +80,7 @@ namespace Ackara.Daterpillar
         /// </summary>
         /// <value>The table foreign keys.</value>
         [XmlElement("foreignKey")]
-        public List<ForeignKey> Constraints { get; set; }
+        public List<ForeignKey> ForeignKeys { get; set; }
 
         /// <summary>
         /// Gets or sets the table indexes.

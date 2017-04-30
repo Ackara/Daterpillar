@@ -5,13 +5,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
 using System.Text;
-using static MSTest.Daterpillar.MockData;
 
 namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
-    [DeploymentItem(Samples)]
-    [DeploymentItem(daterpillarXSD)]
+    [DeploymentItem(FName.Samples)]
+    [DeploymentItem(FName.daterpillarXSD)]
     [UseApprovalSubdirectory(nameof(ApprovalTests))]
     [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
     public class SchemaTest
@@ -20,7 +19,7 @@ namespace MSTest.Daterpillar.Tests
         public void Save_should_serialize_a_schema_object_when_invoked()
         {
             // Arrange
-            Schema sut = GetMockSchema();
+            Schema sut = MockData.GetSchema();
 
             // Act
             bool documentIsValid;
@@ -44,7 +43,7 @@ namespace MSTest.Daterpillar.Tests
         public void Load_should_deserialize_a_schema_object_when_invoked()
         {
             // Arrange
-            var file = GetFile(schemaTest_mock_schema1XML);
+            var file = MockData.GetFile(FName.schemaTest_mock_schema1XML);
 
             // Act
             var sut = Schema.Load(file.OpenRead());

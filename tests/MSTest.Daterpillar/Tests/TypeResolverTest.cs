@@ -3,7 +3,8 @@ using Ackara.Daterpillar.TypeResolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using static MSTest.Daterpillar.MockData;
+using static MSTest.Daterpillar.FName;
+using static MSTest.Daterpillar.SourceName;
 
 namespace MSTest.Daterpillar.Tests
 {
@@ -72,7 +73,7 @@ namespace MSTest.Daterpillar.Tests
 
             // Act
             var result = sut.GetTypeName(new DataType(typeName));
-            
+
             // Assert
             result.ShouldBe(expectedValue, customMessage: $"Arg: '{typeName}'");
         }

@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace Ackara.Daterpillar
 {
@@ -36,6 +37,13 @@ namespace Ackara.Daterpillar
         /// </summary>
         [XmlIgnore]
         public Table Table;
+
+        /// <summary>
+        /// Gets or sets the name of the key.
+        /// </summary>
+        /// <value>The name.</value>
+        [XmlAttribute("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the local table name.
@@ -87,5 +95,11 @@ namespace Ackara.Daterpillar
         /// <value>The on delete.</value>
         [XmlAttribute("onDelete")]
         public ReferentialAction OnDelete { get; set; }
+
+        internal string GetName()
+        {
+            string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
+            return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
+        }
     }
 }

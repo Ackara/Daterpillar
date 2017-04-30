@@ -1,0 +1,1 @@
+﻿ALTER TABLE `card` CHANGE COLUMN `Name` `name_of_card` VARCHAR(256) NOT NULL;

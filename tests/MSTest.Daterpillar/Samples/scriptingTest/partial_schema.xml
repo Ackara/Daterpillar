@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <schema xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
-
-  <!-- CARD DATA -->
-
   <table name="card_type">
     <column name="Id">
       <dataType>int</dataType>
@@ -100,25 +97,6 @@
     </index>
   </table>
 
-  <table name="legality">
-    <column name="Id">
-      <dataType>tinyInt</dataType>
-    </column>
-
-    <column name="Name">
-      <dataType scale="16">varchar</dataType>
-    </column>
-
-    <index type="primaryKey">
-      <columnName>Id</columnName>
-    </index>
-
-    <index type="index"
-           unique="true">
-      <columnName>Name</columnName>
-    </index>
-  </table>
-
   <table name="card">
     <column name="Id">
       <dataType>int</dataType>
@@ -136,15 +114,7 @@
       <dataType>text</dataType>
     </column>
 
-    <column name="Archetype">
-      <dataType scale="256">varchar</dataType>
-    </column>
-
-    <column name="Level">
-      <dataType>tinyInt</dataType>
-    </column>
-
-    <column name="Scale">
+    <column name="Level" default="0">
       <dataType>tinyInt</dataType>
     </column>
 
@@ -172,19 +142,7 @@
       <dataType>tinyInt</dataType>
     </column>
 
-    <column name="Legality_Id">
-      <dataType>tinyInt</dataType>
-    </column>
-
-    <column name="League_Id">
-      <dataType>tinyInt</dataType>
-    </column>
-
     <column name="Ability_Id">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="Konami_Id">
       <dataType>int</dataType>
     </column>
 
@@ -209,13 +167,6 @@
       <onDelete>RESTRICT</onDelete>
     </foreignKey>
 
-    <foreignKey localColumn="Legality_Id"
-                foreignTable="legality"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
-    </foreignKey>
-
     <index type="primaryKey">
       <columnName>Id</columnName>
     </index>
@@ -231,11 +182,11 @@
       <dataType>int</dataType>
     </column>
 
-    <column name="Rulings">
+    <column name="Rulings" nullable="true">
       <dataType>text</dataType>
     </column>
 
-    <column name="Tips">
+    <column name="Tips" nullable="true">
       <dataType>text</dataType>
     </column>
 
@@ -244,33 +195,14 @@
     </column>
 
     <foreignKey localColumn="Card_Id"
-                foreignTable="Card"
+                foreignTable="card"
                 foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
     </foreignKey>
 
-    <index type="index">
-      <columnName>Card_Id</columnName>
-    </index>
-  </table>
-
-  <table name="product_type">
-    <column name="Id">
-      <dataType>tinyInt</dataType>
-    </column>
-
-    <column name="Name">
-      <dataType scale="32">varchar</dataType>
-    </column>
-
     <index type="primaryKey">
-      <columnName>Id</columnName>
-    </index>
-
-    <index type="index"
-           unique="true">
-      <columnName>Name</columnName>
+      <columnName>Card_Id</columnName>
     </index>
   </table>
 
@@ -304,17 +236,6 @@
       <dataType>int</dataType>
     </column>
 
-    <column name="Product_Type_Id">
-      <dataType>tinyInt</dataType>
-    </column>
-
-    <foreignKey localColumn="Product_Type_Id"
-                foreignTable="product_type"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
-    </foreignKey>
-
     <index type="primaryKey">
       <columnName>Id</columnName>
     </index>
@@ -322,10 +243,6 @@
     <index type="index"
            unique="true">
       <columnName>Name</columnName>
-    </index>
-
-    <index type="index">
-      <columnName>Product_Type_Id</columnName>
     </index>
   </table>
 
@@ -389,14 +306,14 @@
     </foreignKey>
 
     <foreignKey localColumn="Card_Id"
-                foreignTable="Card"
+                foreignTable="card"
                 foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
     </foreignKey>
 
     <foreignKey localColumn="Pack_Id"
-                foreignTable="Pack"
+                foreignTable="pack"
                 foreignColumn="Id">
       <onUpdate>CASCADE</onUpdate>
       <onDelete>CASCADE</onDelete>
@@ -410,50 +327,8 @@
     </index>
   </table>
 
-  <table name="archetype">
-    <column name="Id"
-            autoIncrement="true">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="Name">
-      <dataType scale="64">varchar</dataType>
-    </column>
-
-    <index type="index"
-           unique="true">
-      <columnName>Name</columnName>
-    </index>
-  </table>
-
-  <table name="card_archetype">
-    <column name="Card_Id">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="Archetype_Id">
-      <dataType>int</dataType>
-    </column>
-
-    <foreignKey localColumn="Card_Id"
-                foreignTable="Card"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>CASCADE</onDelete>
-    </foreignKey>
-
-    <foreignKey localColumn="Archetype_Id"
-                foreignTable="Archetype"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>CASCADE</onDelete>
-    </foreignKey>
-  </table>
-
-  <script>
+  <script name="SEED DATA">
     <![CDATA[
-      /* ** SEED DATA ** */
-
       /* This is a System.Flag */
       INSERT INTO card_type VALUES
       (1, 'Spell'),
@@ -519,26 +394,6 @@
       (21, 'Winged Beast'),
       (22, 'Wyrm'),
       (23, 'Zombie');
-
-      INSERT INTO legality VALUES
-      ('1', 'Unlimited'),
-      ('2', 'Semi-Limited'),
-      ('3', 'Limited'),
-      ('4', 'Banned');
-
-      INSERT INTO product_type VALUES
-      ('01', 'Booster Pack'),
-      ('02', 'Duel Terminal'),
-      ('03', 'Duelist Pack'),
-      ('04', 'Manga'),
-      ('05', 'Others'),
-      ('06', 'Promo'),
-      ('07', 'Special Edition Box'),
-      ('08', 'Starter Deck'),
-      ('09', 'Structure Deck'),
-      ('10', 'Tin'),
-      ('11', 'Tournament'),
-      ('12', 'Video Game');
 
       INSERT INTO rarity VALUES
       (01, 'Common', 'C', '1'),

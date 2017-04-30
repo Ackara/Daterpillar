@@ -16,7 +16,7 @@ namespace Ackara.Daterpillar
         /// </summary>
         public Schema()
         {
-            _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
+            _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[]
             {
                 new XmlQualifiedName(string.Empty, Namespace)
             });
@@ -61,26 +61,55 @@ namespace Ackara.Daterpillar
             using (inputStream)
             {
                 var serializer = new XmlSerializer(typeof(Schema));
-                return (Schema)serializer.Deserialize(inputStream);
+                var schema = (Schema)serializer.Deserialize(inputStream);
+                schema.AssignParentNodes();
+
+                return schema;
             }
         }
 
         /// <summary>
-        /// Serialize this instance and writes it to the specified output stream.
+        /// Gets all foreign keys within the schema.
         /// </summary>
-        /// <param name="outputStream">The output stream.</param>
-        public void Save(Stream outputStream)
+        /// <returns>IEnumerable&lt;ForeignKey&gt;.</returns>
+        public IEnumerable<ForeignKey> GetForeignKeys()
         {
-            var settings = new XmlWriterSettings()
+            foreach (var table in Tables)
             {
-                Indent = true
-            };
+                foreach (var constraint in table.ForeignKeys)
+                {
+                    yield return constraint;
+                }
+            }
+        }
 
-            using (var writer = XmlWriter.Create(outputStream, settings))
+        /// <summary>
+        /// Gets all columns within the schema.
+        /// </summary>
+        /// <returns>IEnumerable&lt;Column&gt;.</returns>
+        public IEnumerable<Column> GetColumns()
+        {
+            foreach (var table in Tables)
             {
-                var serializer = new XmlSerializer(typeof(Schema));
-                serializer.Serialize(writer, this, _namespaces);
-                outputStream.Seek(0, SeekOrigin.Begin);
+                foreach (var column in table.Columns)
+                {
+                    yield return column;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all indexes within the schema.
+        /// </summary>
+        /// <returns>IEnumerable&lt;Index&gt;.</returns>
+        public IEnumerable<Index> GetIndexes()
+        {
+            foreach (var table in Tables)
+            {
+                foreach (var index in table.Indexes)
+                {
+                    yield return index;
+                }
             }
         }
 
@@ -105,6 +134,25 @@ namespace Ackara.Daterpillar
         }
 
         /// <summary>
+        /// Serialize this instance and writes it to the specified output stream.
+        /// </summary>
+        /// <param name="outputStream">The output stream.</param>
+        public void Save(Stream outputStream)
+        {
+            var settings = new XmlWriterSettings()
+            {
+                Indent = true
+            };
+
+            using (var writer = XmlWriter.Create(outputStream, settings))
+            {
+                var serializer = new XmlSerializer(typeof(Schema));
+                serializer.Serialize(writer, this, _namespace);
+                outputStream.Seek(0, SeekOrigin.Begin);
+            }
+        }
+
+        /// <summary>
         /// Concatenate the SQL objects of the specified schemas with this instance.
         /// </summary>
         /// <param name="otherSchemas">The schemas to join.</param>
@@ -117,9 +165,32 @@ namespace Ackara.Daterpillar
             }
         }
 
+        internal void AssignParentNodes()
+        {
+            foreach (var table in Tables)
+            {
+                if (table.Schema == null) table.Schema = this;
+
+                foreach (var column in table.Columns)
+                {
+                    if (column.Table == null) column.Table = table;
+                }
+
+                foreach (var index in table.Indexes)
+                {
+                    if (index.Table == null) index.Table = table;
+                }
+
+                foreach (var constraint in table.ForeignKeys)
+                {
+                    if (constraint.Table == null) constraint.Table = table;
+                }
+            }
+        }
+
         #region Private Members
 
-        private readonly XmlSerializerNamespaces _namespaces;
+        private readonly XmlSerializerNamespaces _namespace;
 
         #endregion Private Members
     }
