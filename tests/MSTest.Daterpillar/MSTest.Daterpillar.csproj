@@ -116,7 +116,7 @@
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\DataTypeTest.cs" />
     <Compile Include="Tests\TypeResolverTest.cs" />
-    <Compile Include="Tests\ScriptBuilderTest.cs" />
+    <Compile Include="Tests\SqlScriptBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\daterpillar.xsd">

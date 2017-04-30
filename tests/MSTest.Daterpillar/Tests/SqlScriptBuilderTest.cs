@@ -19,7 +19,7 @@ namespace MSTest.Daterpillar.Tests
     [DeploymentItem(FName.Samples)]
     [DeploymentItem(FName.X86), DeploymentItem(FName.X64)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
-    public class ScriptBuilderTest
+    public class SqlScriptBuilderTest
     {
         public static IDictionary<string, Type> SqlScriptBuilders = new Dictionary<string, Type>()
         {
