@@ -12,13 +12,13 @@
         public bool ShowHeader { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="Script"/> objects should be rendered. The default is false.
+        /// Gets or sets a value indicating whether the <see cref="Script"/> objects should be removed. The default is false.
         /// </summary>
         /// <value><c>true</c> if <see cref="Script"/> objects should be ignored; otherwise, <c>false</c>.</value>
         public bool IgnoreScripts { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the SQL objects comments should be rendered. The default is false.
+        /// Gets or sets a value indicating whether the SQL objects comments should be removed. The default is false.
         /// </summary>
         /// <value><c>true</c> if all comments should be ignored; otherwise, <c>false</c>.</value>
         public bool IgnoreComments { get; set; }

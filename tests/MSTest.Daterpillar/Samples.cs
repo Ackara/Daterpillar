@@ -9,6 +9,7 @@ namespace MSTest.Daterpillar
 
 		internal const string dataTypeTableCSV = @"dataTypeTable.csv";
 		internal const string supportedDatabasesCSV = @"supportedDatabases.csv";
+		internal const string text_formatsCSV = @"text_formats.csv";
 		internal const string XMLFile1XML = @"XMLFile1.xml";
 		internal const string schemaTest_fragment1XML = @"schemaTest\fragment1.xml";
 		internal const string schemaTest_fragment2XML = @"schemaTest\fragment2.xml";
@@ -21,5 +22,6 @@ namespace MSTest.Daterpillar
 	{
 		public const string dataTypeTable = "dataTypeTable";
 		public const string supportedDatabases = "supportedDatabases";
+		public const string text_formats = "text_formats";
 	}
 }

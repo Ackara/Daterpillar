@@ -149,23 +149,23 @@
 
     <foreignKey localColumn="Attribute_Id"
                 foreignTable="attribute"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
+                foreignColumn="Id"
+                onUpdate="CASCADE"
+                onDelete="RESTRICT">
     </foreignKey>
 
     <foreignKey localColumn="Card_Icon_Id"
                 foreignTable="card_icon"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
+                foreignColumn="Id"
+                onUpdate="CASCADE"
+                onDelete="NO ACTION">
     </foreignKey>
 
     <foreignKey localColumn="Monster_Type_Id"
                 foreignTable="monster_type"
-                foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
+                foreignColumn="Id"
+                onUpdate="CASCADE"
+                onDelete="RESTRICT">
     </foreignKey>
 
     <index type="primaryKey">
@@ -333,6 +333,24 @@
       <columnName>Number</columnName>
       <columnName>Rarity_Id</columnName>
       <columnName>Art_Index</columnName>
+    </index>
+  </table>
+
+  <table name="effect">
+    <comment>A custom table comment.</comment>
+    <column name="Id"
+            autoIncrement="true">
+      <comment>A custom column comment.</comment>
+      <dataType>int</dataType>
+    </column>
+
+    <column name="Name">
+      <dataType scale="32">varchar</dataType>
+    </column>
+
+    <index type="index"
+           unique="true">
+      <columnName>Name</columnName>
     </index>
   </table>
 
