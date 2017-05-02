@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS [card]
 	[Card_Icon_Id] INTEGER NOT NULL,
 	[Monster_Type_Id] INTEGER NOT NULL,
 	[Ability_Id] INTEGER NOT NULL,
-	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]),
-	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]),
-	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id]),
+	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]) ON UPDATE CASCADE,
+	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT [card_Card_Type_Id_TO_card_type_Id] FOREIGN KEY ([Card_Type_Id]) REFERENCES [card_type]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

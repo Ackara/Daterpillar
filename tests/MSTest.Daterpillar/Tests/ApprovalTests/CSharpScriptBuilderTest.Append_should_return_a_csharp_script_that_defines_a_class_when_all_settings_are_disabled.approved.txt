@@ -1,0 +1,136 @@
+﻿public partial class CardType
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+
+public partial class Attribute
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+
+public partial class CardIcon
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+
+public partial class MonsterType
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+
+public partial class Ability
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+
+public partial class Card
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+	public string Text { get; set; }
+
+	public string PendulumEffect { get; set; }
+
+	public int Level { get; set; }
+
+	public int Atk { get; set; }
+
+	public int Def { get; set; }
+
+	public int CardTypeId { get; set; }
+
+	public int AttributeId { get; set; }
+
+	public int CardIconId { get; set; }
+
+	public int MonsterTypeId { get; set; }
+
+	public int AbilityId { get; set; }
+
+}
+
+public partial class CardExtras
+{
+	public int CardId { get; set; }
+
+	public string Rulings { get; set; }
+
+	public string Tips { get; set; }
+
+	public string Trivia { get; set; }
+
+	public int Passcode { get; set; }
+
+}
+
+public partial class Pack
+{
+	public int Id { get; set; }
+
+	public string Acronym { get; set; }
+
+	public string Name { get; set; }
+
+	public string Description { get; set; }
+
+	public DateTime ReleaseDate { get; set; }
+
+	public int Size { get; set; }
+
+	public int KonamiId { get; set; }
+
+}
+
+public partial class Rarity
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+	public string Code { get; set; }
+
+	public int Value { get; set; }
+
+}
+
+public partial class CardNumber
+{
+	public string PackAcronym { get; set; }
+
+	public int Number { get; set; }
+
+	public int RarityId { get; set; }
+
+	public int ArtIndex { get; set; }
+
+	public int CardId { get; set; }
+
+	public int PackId { get; set; }
+
+}
+
+public partial class Effect
+{
+	public int Id { get; set; }
+
+	public string Name { get; set; }
+
+}
+

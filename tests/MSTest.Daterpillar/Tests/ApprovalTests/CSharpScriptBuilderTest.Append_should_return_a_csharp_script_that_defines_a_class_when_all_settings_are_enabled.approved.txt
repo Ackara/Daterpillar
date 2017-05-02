@@ -1,0 +1,448 @@
+﻿/// <summary>
+/// Represents a card_type.
+/// </summary>
+[Table("card_type")]
+public partial class CardType
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "card_type";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+
+/// <summary>
+/// Represents a attribute.
+/// </summary>
+[Table("attribute")]
+public partial class Attribute
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "attribute";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+
+/// <summary>
+/// Represents a card_icon.
+/// </summary>
+[Table("card_icon")]
+public partial class CardIcon
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "card_icon";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+
+/// <summary>
+/// Represents a monster_type.
+/// </summary>
+[Table("monster_type")]
+public partial class MonsterType
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "monster_type";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+
+/// <summary>
+/// Represents a monster's ability.
+/// </summary>
+[Table("ability")]
+public partial class Ability
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "ability";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Get or set the Id. This value is a flag/it must be a power of 2.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+
+/// <summary>
+/// Represents a card.
+/// </summary>
+[Table("card")]
+public partial class Card
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "card";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Text.
+	/// </summary>
+	[Column("Text")]
+	public virtual string Text { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Pendulum_Effect.
+	/// </summary>
+	[Column("Pendulum_Effect")]
+	public virtual string PendulumEffect { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Level.
+	/// </summary>
+	[Column("Level")]
+	public virtual int Level { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Atk.
+	/// </summary>
+	[Column("Atk")]
+	public virtual int Atk { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Def.
+	/// </summary>
+	[Column("Def")]
+	public virtual int Def { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Card_Type_Id.
+	/// </summary>
+	[Column("Card_Type_Id")]
+	public virtual int CardTypeId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Attribute_Id.
+	/// </summary>
+	[Column("Attribute_Id")]
+	[ForeignKey("attribute", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
+	public virtual int AttributeId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Card_Icon_Id.
+	/// </summary>
+	[Column("Card_Icon_Id")]
+	[ForeignKey("card_icon", "Id", OnUpdate = ReferentialAction.Cascade)]
+	public virtual int CardIconId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Monster_Type_Id.
+	/// </summary>
+	[Column("Monster_Type_Id")]
+	[ForeignKey("monster_type", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
+	public virtual int MonsterTypeId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Ability_Id.
+	/// </summary>
+	[Column("Ability_Id")]
+	public virtual int AbilityId { get; set; }
+
+}
+
+/// <summary>
+/// Represents a card_extras.
+/// </summary>
+[Table("card_extras")]
+public partial class CardExtras
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "card_extras";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Card_Id.
+	/// </summary>
+	[Column("Card_Id")]
+	[Index(IndexType.PrimaryKey)]
+	[ForeignKey("card", "Id")]
+	public virtual int CardId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Rulings.
+	/// </summary>
+	[Column("Rulings", Nullable = true)]
+	public virtual string Rulings { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Tips.
+	/// </summary>
+	[Column("Tips", Nullable = true)]
+	public virtual string Tips { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Trivia.
+	/// </summary>
+	[Column("Trivia", Nullable = true)]
+	public virtual string Trivia { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Passcode.
+	/// </summary>
+	[Column("Passcode")]
+	public virtual int Passcode { get; set; }
+
+}
+
+/// <summary>
+/// Represents a pack.
+/// </summary>
+[Table("pack")]
+public partial class Pack
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "pack";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Acronym.
+	/// </summary>
+	[Column("Acronym")]
+	public virtual string Acronym { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Description.
+	/// </summary>
+	[Column("Description")]
+	public virtual string Description { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Release_Date.
+	/// </summary>
+	[Column("Release_Date")]
+	public virtual DateTime ReleaseDate { get; set; }
+
+	/// <summary>
+	/// The number of unique cards in the pack.
+	/// </summary>
+	[Column("Size")]
+	public virtual int Size { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Konami_Id.
+	/// </summary>
+	[Column("Konami_Id")]
+	public virtual int KonamiId { get; set; }
+
+}
+
+/// <summary>
+/// Represents a rarity.
+/// </summary>
+[Table("rarity")]
+public partial class Rarity
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "rarity";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Id.
+	/// </summary>
+	[Column("Id")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Code.
+	/// </summary>
+	[Column("Code")]
+	public virtual string Code { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Value.
+	/// </summary>
+	[Column("Value")]
+	public virtual int Value { get; set; }
+
+}
+
+/// <summary>
+/// Represents a card_number.
+/// </summary>
+[Table("card_number")]
+public partial class CardNumber
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "card_number";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// Gets or Sets the Pack_Acronym.
+	/// </summary>
+	[Column("Pack_Acronym")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual string PackAcronym { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Number.
+	/// </summary>
+	[Column("Number")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int Number { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Rarity_Id.
+	/// </summary>
+	[Column("Rarity_Id")]
+	[Index(IndexType.PrimaryKey)]
+	[ForeignKey("rarity", "Id")]
+	public virtual int RarityId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Art_Index.
+	/// </summary>
+	[Column("Art_Index")]
+	[Index(IndexType.PrimaryKey)]
+	public virtual int ArtIndex { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Card_Id.
+	/// </summary>
+	[Column("Card_Id")]
+	[ForeignKey("card", "Id")]
+	public virtual int CardId { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Pack_Id.
+	/// </summary>
+	[Column("Pack_Id")]
+	[ForeignKey("pack", "Id")]
+	public virtual int PackId { get; set; }
+
+}
+
+/// <summary>
+/// A custom table comment.
+/// </summary>
+[Table("effect")]
+public partial class Effect
+{
+	#region SCHEMA NAMES
+
+	public const string Table = "effect";
+	#endregion SCHEMA NAMES
+
+	/// <summary>
+	/// A custom column comment.
+	/// </summary>
+	[Column("Id", AutoIncrement = true)]
+	public virtual int Id { get; set; }
+
+	/// <summary>
+	/// Gets or Sets the Name.
+	/// </summary>
+	[Column("Name")]
+	[Index(IndexType.Index, Unique = true)]
+	public virtual string Name { get; set; }
+
+}
+

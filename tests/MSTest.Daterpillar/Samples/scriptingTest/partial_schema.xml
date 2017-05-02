@@ -151,7 +151,7 @@
                 foreignTable="attribute"
                 foreignColumn="Id"
                 onUpdate="CASCADE"
-                onDelete="RESTRICT">
+                onDelete="CASCADE">
     </foreignKey>
 
     <foreignKey localColumn="Card_Icon_Id"
@@ -165,7 +165,7 @@
                 foreignTable="monster_type"
                 foreignColumn="Id"
                 onUpdate="CASCADE"
-                onDelete="RESTRICT">
+                onDelete="CASCADE">
     </foreignKey>
 
     <index type="primaryKey">
@@ -310,22 +310,16 @@
                 localColumn="Rarity_Id"
                 foreignTable="rarity"
                 foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>RESTRICT</onDelete>
     </foreignKey>
 
     <foreignKey localColumn="Card_Id"
                 foreignTable="card"
                 foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>CASCADE</onDelete>
     </foreignKey>
 
     <foreignKey localColumn="Pack_Id"
                 foreignTable="pack"
                 foreignColumn="Id">
-      <onUpdate>CASCADE</onUpdate>
-      <onDelete>CASCADE</onDelete>
     </foreignKey>
 
     <index type="primaryKey">

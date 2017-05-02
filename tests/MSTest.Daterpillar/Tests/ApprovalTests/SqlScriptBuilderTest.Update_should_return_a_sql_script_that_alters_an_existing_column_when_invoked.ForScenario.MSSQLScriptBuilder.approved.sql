@@ -1,2 +1,2 @@
-﻿ALTER TABLE [card] ALTER COLUMN [Name] VARCHAR(256) NOT NULL;
-EXEC sp_rename 'card.Name', 'name_of_card', 'COLUMN';
+﻿ALTER TABLE [rarity] ALTER COLUMN [Name] VARCHAR(256) NOT NULL;
+EXEC sp_rename 'rarity.Name', 'name_of_entity', 'COLUMN';

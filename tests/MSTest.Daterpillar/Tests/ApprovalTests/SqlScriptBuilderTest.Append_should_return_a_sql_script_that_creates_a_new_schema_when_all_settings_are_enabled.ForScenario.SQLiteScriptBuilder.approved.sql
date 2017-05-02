@@ -81,9 +81,9 @@ CREATE TABLE IF NOT EXISTS [card]
 	[Card_Icon_Id] INTEGER NOT NULL,
 	[Monster_Type_Id] INTEGER NOT NULL,
 	[Ability_Id] INTEGER NOT NULL,
-	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]),
-	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]),
-	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id])
+	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]) ON UPDATE CASCADE,
+	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS [card_Id] ON [card] ([Id] ASC);
@@ -152,6 +152,17 @@ CREATE TABLE IF NOT EXISTS [card_number]
 );
 
 CREATE INDEX IF NOT EXISTS [card_number_Pack_Acronym_and_Number_and_Rarity_Id_and_Art_Index] ON [card_number] ([Pack_Acronym] ASC, [Number] ASC, [Rarity_Id] ASC, [Art_Index] ASC);
+
+-- ----------------------------------------
+-- TABLE [effect]
+-- ----------------------------------------
+CREATE TABLE IF NOT EXISTS [effect]
+(
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Name] VARCHAR(32) NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS [effect_Name] ON [effect] ([Name] ASC);
 
 -- ----------------------------------------
 -- SCRIPT: SEED DATA

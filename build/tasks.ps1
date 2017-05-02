@@ -170,6 +170,7 @@ Task "Add-AppConfigFiles" -description "This task creates all missing app.config
 @"
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
+  <configSections />
   <connectionStrings>
 	<add name="mssql"  connectionString="$mssqlConnStr" />
 	<add name="mysql"  connectionString="$mysqlConnStr" />

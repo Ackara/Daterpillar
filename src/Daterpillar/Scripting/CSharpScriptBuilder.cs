@@ -56,11 +56,11 @@ namespace Ackara.Daterpillar.Scripting
 
         public IScriptBuilder Append(Table table)
         {
-            //Comment(table);
+            Comment(table);
             AppendAttributes(table);
             _content.AppendLine($"public partial class {table.Name.ToPascalCase()}");
             _content.AppendLine("{");
-            //AppendConstants(table);
+            AppendConstants(table);
             foreach (var column in table.Columns) Append(column);
             _content.AppendLine("}");
             _content.AppendLine();
@@ -72,9 +72,8 @@ namespace Ackara.Daterpillar.Scripting
             string name = column.Name.ToPascalCase();
             string type = _typeResolver.GetTypeName(column.DataType);
             string virtualKeyword = (Settings.UseVirtualProperties ? " virtual " : " ");
-            string autoIncrement = (column.AutoIncrement ? ", AutoIncrement = true" : string.Empty);
 
-            //Comment(column);
+            Comment(column);
             AppendAttributes(column);
             _content.AppendLine($"\tpublic{virtualKeyword}{type} {name} {{ get; set; }}");
             _content.AppendLine();
@@ -91,8 +90,24 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
-        public IScriptBuilder Append(IDictionary<string, int> valuePairs)
+        public IScriptBuilder Append(string name, IDictionary<string, int> valuePairs, bool flag = false, string comment = null)
         {
+            Comment("<summary>");
+            Comment(comment ?? $"Represents a {name}.");
+            Comment("</summary>");
+            if (flag) _content.AppendLine("[System.Flags]");
+            _content.AppendLine($"public enum {name}");
+            _content.AppendLine("{");
+            foreach (var item in valuePairs)
+            {
+                Comment("<summary>", "\t");
+                Comment(comment ?? $"A {item.Key}.", "\t");
+                Comment("</summary>", "\t");
+                _content.AppendLine($"\t{item.Key.ToPascalCase()} = {item.Value},");
+                _content.AppendLine();
+            }
+            _content.Remove((_content.Length - 5), 3);
+            _content.AppendLine("}");
             return this;
         }
 
@@ -161,7 +176,7 @@ namespace Ackara.Daterpillar.Scripting
                 _content.AppendLine($"\tpublic const string Table = \"{table.Name}\";");
                 foreach (var column in table.Columns)
                 {
-                    _content.AppendLine();
+                    //_content.AppendLine();
                 }
 
                 _content.AppendLine($"\t#endregion {regionName}");
@@ -234,6 +249,15 @@ namespace Ackara.Daterpillar.Scripting
                 _content.AppendLine("\t/// <summary>");
                 _content.AppendLine($"\t/// {summary}");
                 _content.AppendLine("\t/// </summary>");
+            }
+        }
+
+        private void Comment(string text, string pre = "")
+        {
+            if (Settings.IgnoreComments) return;
+            else
+            {
+                _content.AppendLine($"{pre}/// {text}");
             }
         }
 

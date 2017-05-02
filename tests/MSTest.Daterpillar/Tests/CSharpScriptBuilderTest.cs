@@ -47,10 +47,12 @@ namespace MSTest.Daterpillar.Tests
             var schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
             var sut = new CSharpScriptBuilder(new CSharpScriptBuilderSettings()
             {
+                AddConstants = false,
                 IgnoreComments = true,
                 AddSchemaAttributes = false,
                 UseVirtualProperties = false,
                 InheritEntityBaseClass = false,
+                AddDataContractAttributes = false,
             });
 
             // Act
@@ -85,7 +87,7 @@ namespace MSTest.Daterpillar.Tests
             });
 
             // Act
-            sut.Append(sample);
+            sut.Append("Color", sample);
             var code = sut.GetContent();
             var codeIsCompilable = TryCompilation(ref code, out string errorMsg);
 
@@ -116,7 +118,7 @@ namespace MSTest.Daterpillar.Tests
             });
 
             // Act
-            sut.Append(sample);
+            sut.Append("Color", sample, flag: true);
             var code = sut.GetContent();
             var codeIsCompilable = TryCompilation(ref code, out string errorMsg);
 

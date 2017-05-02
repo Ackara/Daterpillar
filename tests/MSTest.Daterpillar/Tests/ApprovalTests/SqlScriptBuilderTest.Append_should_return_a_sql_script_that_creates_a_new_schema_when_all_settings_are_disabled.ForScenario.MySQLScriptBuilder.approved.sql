@@ -36,7 +36,7 @@ CREATE UNIQUE INDEX `monster_type_Name` ON `monster_type` (`Name` ASC);
 
 CREATE TABLE IF NOT EXISTS `ability`
 (
-	`Id` INT NOT NULL,
+	`Id` INT NOT NULL COMMENT 'Get or set the Id. This value is a flag/it must be a power of 2.',
 	`Name` VARCHAR(32) NOT NULL
 );
 
@@ -57,9 +57,9 @@ CREATE TABLE IF NOT EXISTS `card`
 	`Card_Icon_Id` TINYINT NOT NULL,
 	`Monster_Type_Id` TINYINT NOT NULL,
 	`Ability_Id` INT NOT NULL,
-	CONSTRAINT `card_Attribute_Id_TO_attribute_Id` FOREIGN KEY (`Attribute_Id`) REFERENCES `attribute`(`Id`),
-	CONSTRAINT `card_Card_Icon_Id_TO_card_icon_Id` FOREIGN KEY (`Card_Icon_Id`) REFERENCES `card_icon`(`Id`),
-	CONSTRAINT `card_Monster_Type_Id_TO_monster_type_Id` FOREIGN KEY (`Monster_Type_Id`) REFERENCES `monster_type`(`Id`)
+	CONSTRAINT `card_Attribute_Id_TO_attribute_Id` FOREIGN KEY (`Attribute_Id`) REFERENCES `attribute`(`Id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `card_Card_Icon_Id_TO_card_icon_Id` FOREIGN KEY (`Card_Icon_Id`) REFERENCES `card_icon`(`Id`) ON UPDATE CASCADE,
+	CONSTRAINT `card_Monster_Type_Id_TO_monster_type_Id` FOREIGN KEY (`Monster_Type_Id`) REFERENCES `monster_type`(`Id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 ALTER TABLE `card` ADD PRIMARY KEY (`Id` ASC);
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `pack`
 	`Name` VARCHAR(128) NOT NULL,
 	`Description` TEXT NOT NULL,
 	`Release_Date` DATE NOT NULL,
-	`Size` INT NOT NULL,
+	`Size` INT NOT NULL COMMENT 'The number of unique cards in the pack.',
 	`Konami_Id` INT NOT NULL
 );
 
@@ -116,6 +116,14 @@ CREATE TABLE IF NOT EXISTS `card_number`
 );
 
 ALTER TABLE `card_number` ADD PRIMARY KEY (`Pack_Acronym` ASC, `Number` ASC, `Rarity_Id` ASC, `Art_Index` ASC);
+
+CREATE TABLE IF NOT EXISTS `effect`
+(
+	`Id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'A custom column comment.',
+	`Name` VARCHAR(32) NOT NULL
+);
+
+CREATE UNIQUE INDEX `effect_Name` ON `effect` (`Name` ASC);
 
 
       /* This is a System.Flag */

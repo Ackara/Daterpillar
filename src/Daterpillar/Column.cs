@@ -48,7 +48,7 @@ namespace Ackara.Daterpillar
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [XmlIgnore]
+        [XmlElement("comment")]
         public string Comment { get; set; }
 
         /// <summary>

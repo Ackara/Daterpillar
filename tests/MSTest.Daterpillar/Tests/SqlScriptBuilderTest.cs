@@ -17,7 +17,7 @@ namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
     [DeploymentItem(FName.Samples)]
-    [DeploymentItem(FName.X86), DeploymentItem(FName.X64)]
+    [DeploymentItem(FName.X86)]
     [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class SqlScriptBuilderTest
     {
@@ -461,12 +461,12 @@ namespace MSTest.Daterpillar.Tests
         {
             // Arrange
             var schema1 = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
-            var oldColumn = schema1.Tables.First(x => x.Name == "card").Columns.First(x => x.Name == "Name");
+            var oldColumn = schema1.Tables.First(x => x.Name == "rarity").Columns.First(x => x.Name == "Name");
 
             var schema2 = schema1.Clone();
-            var newColumn = schema2.Tables.First(x => x.Name == "card").Columns.First(x => x.Name == "Name");
-            var index = schema2.GetIndexes().First(x => x.Table.Name == "card" && x.Columns.Count(y => y.Name == "Name") == 1);
-            newColumn.Name = "name_of_card";
+            var newColumn = schema2.Tables.First(x => x.Name == "rarity").Columns.First(x => x.Name == "Name");
+            var index = schema2.GetIndexes().First(x => x.Table.Name == "rarity" && x.Columns.Count(y => y.Name == "Name") == 1);
+            newColumn.Name = "name_of_entity";
             newColumn.DataType = new DataType("varchar", 256);
             index.Columns[0].Name = newColumn.Name;
 
