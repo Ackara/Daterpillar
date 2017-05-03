@@ -11,7 +11,7 @@ using System.Linq;
 namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
-    [UseReporter(typeof(FileLauncherReporter), typeof(ClipboardReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class CSharpScriptBuilderTest
     {
         [TestMethod]

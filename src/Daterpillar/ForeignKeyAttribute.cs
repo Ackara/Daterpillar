@@ -6,7 +6,7 @@ namespace Ackara.Daterpillar
     /// Indicates that a public field or property represents a SQL foreign key constraint. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage((AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Property), AllowMultiple = false, Inherited = true)]
     public sealed class ForeignKeyAttribute : Attribute
     {
         /// <summary>
@@ -14,15 +14,12 @@ namespace Ackara.Daterpillar
         /// </summary>
         /// <param name="foreignTable">The foreign table.</param>
         /// <param name="foreignColumn">The foreign column.</param>
-        /// <param name="examineType">if set to <c>true</c> [examine type].</param>
-        public ForeignKeyAttribute(string foreignTable, string foreignColumn, bool examineType = true)
+        ///
+        public ForeignKeyAttribute(string foreignTable, string foreignColumn)
         {
-            ShouldExamineType = examineType;
             ForeignColumn = foreignColumn;
             ForeignTable = foreignTable;
         }
-
-        public readonly bool ShouldExamineType;
 
         /// <summary>
         /// The referenced table.

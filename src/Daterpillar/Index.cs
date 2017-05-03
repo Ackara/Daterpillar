@@ -11,7 +11,7 @@ namespace Ackara.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="Index"/> class.
         /// </summary>
-        public Index() : this(false, IndexType.Index, new ColumnName[0])
+        public Index() : this(IndexType.Index, false, new ColumnName[0])
         {
         }
 
@@ -20,17 +20,17 @@ namespace Ackara.Daterpillar
         /// </summary>
         /// <param name="type">The index type.</param>
         /// <param name="columns">The column names.</param>
-        public Index(IndexType type, params ColumnName[] columns) : this(false, type, columns)
+        public Index(IndexType type, params ColumnName[] columns) : this(type, false, columns)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Index" /> class.
         /// </summary>
-        /// <param name="unique">if set to <c>true</c> [unique].</param>
         /// <param name="type">The type type.</param>
+        /// <param name="unique">if set to <c>true</c> [unique].</param>
         /// <param name="columns">The column names.</param>
-        public Index(bool unique, IndexType type, params ColumnName[] columns)
+        public Index(IndexType type, bool unique, params ColumnName[] columns)
         {
             Type = type;
             IsUnique = unique;

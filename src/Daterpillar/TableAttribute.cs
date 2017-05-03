@@ -12,6 +12,12 @@ namespace Ackara.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="TableAttribute"/> class.
         /// </summary>
+        public TableAttribute() : this(null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableAttribute"/> class.
+        /// </summary>
         /// <param name="name">The name.</param>
         public TableAttribute(string name)
         {

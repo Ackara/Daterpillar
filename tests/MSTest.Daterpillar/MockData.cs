@@ -37,8 +37,8 @@ namespace MSTest.Daterpillar
                     new ForeignKey("Monster_Type_Id", "monster_type", "Id", ReferentialAction.Cascade, ReferentialAction.NoAction),
 
                     new Index(IndexType.PrimaryKey, new ColumnName("Id")),
-                    new Index(true, IndexType.Index, new ColumnName("Name", Order.Descending)),
-                    new Index(true, IndexType.Index, new ColumnName("Text"), new ColumnName("Pendulum_Text"))),
+                    new Index(IndexType.Index, true, new ColumnName("Name", Order.Descending)),
+                    new Index(IndexType.Index, true, new ColumnName("Text"), new ColumnName("Pendulum_Text"))),
 
                 new Script("-- header"),
                 new Script("-- seed data", Syntax.SQLite, "seed"));

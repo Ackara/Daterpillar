@@ -28,7 +28,7 @@ namespace Ackara.Daterpillar.TypeResolvers
 	PushIndent("\t\t");
 	foreach (var typeName in GetXsdTypeNames())
 	{
-		 WriteLine($"public const string {typeName.ToUpper()} = \"{typeName.ToLower()}\";");
+		 WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
 	}
 	ClearIndent();
 #>
@@ -46,7 +46,7 @@ namespace Ackara.Daterpillar.TypeResolvers
 	PushIndent("\t\t\t\t");
 	foreach (var value in GetXsdTypeNames())
 	{
-		WriteLine($"{{ {value.ToUpper()}, \"{value.ToLower()}\" }},");
+		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToLower()}\" }},");
 	}
 	
 	ClearIndent();

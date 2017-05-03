@@ -22,6 +22,10 @@
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="SchemaType.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SchemaType.cs</LastGenOutput>
+    </None>
     <None Update="TypeResolvers\TypeResolverBase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeResolverBase.cs</LastGenOutput>
@@ -31,6 +35,11 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="SchemaType.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SchemaType.tt</DependentUpon>
+    </Compile>
     <Compile Update="TypeResolvers\TypeResolverBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

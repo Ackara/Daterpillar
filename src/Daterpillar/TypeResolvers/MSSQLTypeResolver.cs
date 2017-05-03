@@ -13,22 +13,9 @@ namespace Ackara.Daterpillar.TypeResolvers
         /// </summary>
         public MSSQLTypeResolver()
         {
-            TypeMap[BOOL] = "bit";
-            TypeMap[BLOB] = "varbinary";
-            TypeMap[CHAR] = "char";
-            TypeMap[TEXT] = "text";
-            TypeMap[VARCHAR] = "varchar";
-            TypeMap[INT] = "int";
-            TypeMap[BIGINT] = "bigInt";
-            TypeMap[MEDIUMINT] = "int";
-            TypeMap[SMALLINT] = "smallInt";
-            TypeMap[FLOAT] = "float";
-            TypeMap[DOUBLE] = "double";
-            TypeMap[DECIMAL] = "decimal";
-            TypeMap[DATE] = "date";
-            TypeMap[TIME] = "time";
-            TypeMap[DATETIME] = "dateTime";
-            TypeMap[TINYINT] = "tinyInt";
+            TypeMap[BOOL.ToLower()] = "bit";
+            TypeMap[BLOB.ToLower()] = "varbinary";
+            TypeMap[MEDIUMINT.ToLower()] = "int";
         }
 
         /// <summary>

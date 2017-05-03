@@ -12,14 +12,14 @@ public partial class CardType
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "int")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 32)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
@@ -39,14 +39,14 @@ public partial class Attribute
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 16)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
@@ -66,14 +66,14 @@ public partial class CardIcon
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 16)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
@@ -93,14 +93,14 @@ public partial class MonsterType
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 32)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
@@ -120,14 +120,14 @@ public partial class Ability
 	/// <summary>
 	/// Get or set the Id. This value is a flag/it must be a power of 2.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "int")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 32)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
@@ -147,78 +147,78 @@ public partial class Card
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "int")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 128)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Text.
 	/// </summary>
-	[Column("Text")]
+	[Column("Text", "text")]
 	public virtual string Text { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Pendulum_Effect.
 	/// </summary>
-	[Column("Pendulum_Effect")]
+	[Column("Pendulum_Effect", "text")]
 	public virtual string PendulumEffect { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Level.
 	/// </summary>
-	[Column("Level")]
+	[Column("Level", "tinyInt", DefaultValue = "0")]
 	public virtual int Level { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Atk.
 	/// </summary>
-	[Column("Atk")]
+	[Column("Atk", "int")]
 	public virtual int Atk { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Def.
 	/// </summary>
-	[Column("Def")]
+	[Column("Def", "int")]
 	public virtual int Def { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Card_Type_Id.
 	/// </summary>
-	[Column("Card_Type_Id")]
+	[Column("Card_Type_Id", "int")]
 	public virtual int CardTypeId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Attribute_Id.
 	/// </summary>
-	[Column("Attribute_Id")]
+	[Column("Attribute_Id", "tinyInt")]
 	[ForeignKey("attribute", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
 	public virtual int AttributeId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Card_Icon_Id.
 	/// </summary>
-	[Column("Card_Icon_Id")]
+	[Column("Card_Icon_Id", "tinyInt")]
 	[ForeignKey("card_icon", "Id", OnUpdate = ReferentialAction.Cascade)]
 	public virtual int CardIconId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Monster_Type_Id.
 	/// </summary>
-	[Column("Monster_Type_Id")]
+	[Column("Monster_Type_Id", "tinyInt")]
 	[ForeignKey("monster_type", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
 	public virtual int MonsterTypeId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Ability_Id.
 	/// </summary>
-	[Column("Ability_Id")]
+	[Column("Ability_Id", "int")]
 	public virtual int AbilityId { get; set; }
 
 }
@@ -237,7 +237,7 @@ public partial class CardExtras
 	/// <summary>
 	/// Gets or Sets the Card_Id.
 	/// </summary>
-	[Column("Card_Id")]
+	[Column("Card_Id", "int")]
 	[Index(IndexType.PrimaryKey)]
 	[ForeignKey("card", "Id")]
 	public virtual int CardId { get; set; }
@@ -245,25 +245,25 @@ public partial class CardExtras
 	/// <summary>
 	/// Gets or Sets the Rulings.
 	/// </summary>
-	[Column("Rulings", Nullable = true)]
+	[Column("Rulings", "text", Nullable = true)]
 	public virtual string Rulings { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Tips.
 	/// </summary>
-	[Column("Tips", Nullable = true)]
+	[Column("Tips", "text", Nullable = true)]
 	public virtual string Tips { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Trivia.
 	/// </summary>
-	[Column("Trivia", Nullable = true)]
+	[Column("Trivia", "text", Nullable = true)]
 	public virtual string Trivia { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Passcode.
 	/// </summary>
-	[Column("Passcode")]
+	[Column("Passcode", "int")]
 	public virtual int Passcode { get; set; }
 
 }
@@ -282,45 +282,45 @@ public partial class Pack
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "int")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Acronym.
 	/// </summary>
-	[Column("Acronym")]
+	[Column("Acronym", "varchar", 32)]
 	public virtual string Acronym { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 128)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Description.
 	/// </summary>
-	[Column("Description")]
+	[Column("Description", "text")]
 	public virtual string Description { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Release_Date.
 	/// </summary>
-	[Column("Release_Date")]
+	[Column("Release_Date", "date")]
 	public virtual DateTime ReleaseDate { get; set; }
 
 	/// <summary>
 	/// The number of unique cards in the pack.
 	/// </summary>
-	[Column("Size")]
+	[Column("Size", "int")]
 	public virtual int Size { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Konami_Id.
 	/// </summary>
-	[Column("Konami_Id")]
+	[Column("Konami_Id", "int")]
 	public virtual int KonamiId { get; set; }
 
 }
@@ -339,27 +339,27 @@ public partial class Rarity
 	/// <summary>
 	/// Gets or Sets the Id.
 	/// </summary>
-	[Column("Id")]
+	[Column("Id", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 32)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Code.
 	/// </summary>
-	[Column("Code")]
+	[Column("Code", "varchar", 4)]
 	public virtual string Code { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Value.
 	/// </summary>
-	[Column("Value")]
+	[Column("Value", "int")]
 	public virtual int Value { get; set; }
 
 }
@@ -378,21 +378,21 @@ public partial class CardNumber
 	/// <summary>
 	/// Gets or Sets the Pack_Acronym.
 	/// </summary>
-	[Column("Pack_Acronym")]
+	[Column("Pack_Acronym", "varchar", 32)]
 	[Index(IndexType.PrimaryKey)]
 	public virtual string PackAcronym { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Number.
 	/// </summary>
-	[Column("Number")]
+	[Column("Number", "smallInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int Number { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Rarity_Id.
 	/// </summary>
-	[Column("Rarity_Id")]
+	[Column("Rarity_Id", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	[ForeignKey("rarity", "Id")]
 	public virtual int RarityId { get; set; }
@@ -400,21 +400,21 @@ public partial class CardNumber
 	/// <summary>
 	/// Gets or Sets the Art_Index.
 	/// </summary>
-	[Column("Art_Index")]
+	[Column("Art_Index", "tinyInt")]
 	[Index(IndexType.PrimaryKey)]
 	public virtual int ArtIndex { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Card_Id.
 	/// </summary>
-	[Column("Card_Id")]
+	[Column("Card_Id", "int")]
 	[ForeignKey("card", "Id")]
 	public virtual int CardId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Pack_Id.
 	/// </summary>
-	[Column("Pack_Id")]
+	[Column("Pack_Id", "int")]
 	[ForeignKey("pack", "Id")]
 	public virtual int PackId { get; set; }
 
@@ -434,13 +434,13 @@ public partial class Effect
 	/// <summary>
 	/// A custom column comment.
 	/// </summary>
-	[Column("Id", AutoIncrement = true)]
+	[Column("Id", "int", AutoIncrement = true)]
 	public virtual int Id { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Name.
 	/// </summary>
-	[Column("Name")]
+	[Column("Name", "varchar", 32)]
 	[Index(IndexType.Index, Unique = true)]
 	public virtual string Name { get; set; }
 

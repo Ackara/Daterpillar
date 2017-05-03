@@ -8,22 +8,11 @@
     {
         public SQLiteTypeResolver() : base()
         {
-            TypeMap[BOOL] = "boolean";
-            TypeMap[BLOB] = "blob";
-            TypeMap[CHAR] = "char";
-            TypeMap[TEXT] = "text";
-            TypeMap[VARCHAR] = "varchar";
-            TypeMap[INT] = "integer";
-            TypeMap[BIGINT] = "bigInt";
-            TypeMap[MEDIUMINT] = "integer";
-            TypeMap[SMALLINT] = "integer";
-            TypeMap[TINYINT] = "integer";
-            TypeMap[FLOAT] = "float";
-            TypeMap[DOUBLE] = "double";
-            TypeMap[DECIMAL] = "decimal";
-            TypeMap[DATE] = "date";
-            TypeMap[TIME] = "time";
-            TypeMap[DATETIME] = "dateTime";
+            TypeMap[BOOL.ToLower()] = "boolean";
+            TypeMap[INT.ToLower()] = "integer";
+            TypeMap[MEDIUMINT.ToLower()] = "integer";
+            TypeMap[SMALLINT.ToLower()] = "integer";
+            TypeMap[TINYINT.ToLower()] = "integer";
         }
 
         /// <summary>

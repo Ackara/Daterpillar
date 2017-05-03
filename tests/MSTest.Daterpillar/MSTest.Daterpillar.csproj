@@ -173,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="Fake\AnEnum.cs" />
+    <Compile Include="Fake\ComplexTable.cs" />
+    <Compile Include="Fake\SimpleTable.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MockData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -181,6 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Samples.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
     <Compile Include="Tests\ColumnNameTest.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\DataTypeTest.cs" />

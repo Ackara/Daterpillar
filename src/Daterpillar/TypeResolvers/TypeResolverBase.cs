@@ -16,16 +16,16 @@ namespace Ackara.Daterpillar.TypeResolvers
 		public const string TEXT = "text";
 		public const string VARCHAR = "varchar";
 		public const string INT = "int";
-		public const string BIGINT = "bigint";
-		public const string MEDIUMINT = "mediumint";
-		public const string SMALLINT = "smallint";
-		public const string TINYINT = "tinyint";
+		public const string BIGINT = "bigInt";
+		public const string MEDIUMINT = "mediumInt";
+		public const string SMALLINT = "smallInt";
+		public const string TINYINT = "tinyInt";
 		public const string FLOAT = "float";
 		public const string DOUBLE = "double";
 		public const string DECIMAL = "decimal";
 		public const string DATE = "date";
 		public const string TIME = "time";
-		public const string DATETIME = "datetime";
+		public const string DATETIME = "dateTime";
 
 		#endregion Keys
 
@@ -36,22 +36,22 @@ namespace Ackara.Daterpillar.TypeResolvers
 		{
 			TypeMap = new Dictionary<string, string>
 			{
-				{ BOOL, "bool" },
-				{ BLOB, "blob" },
-				{ CHAR, "char" },
-				{ TEXT, "text" },
-				{ VARCHAR, "varchar" },
-				{ INT, "int" },
-				{ BIGINT, "bigint" },
-				{ MEDIUMINT, "mediumint" },
-				{ SMALLINT, "smallint" },
-				{ TINYINT, "tinyint" },
-				{ FLOAT, "float" },
-				{ DOUBLE, "double" },
-				{ DECIMAL, "decimal" },
-				{ DATE, "date" },
-				{ TIME, "time" },
-				{ DATETIME, "datetime" },
+				{ "bool", "bool" },
+				{ "blob", "blob" },
+				{ "char", "char" },
+				{ "text", "text" },
+				{ "varchar", "varchar" },
+				{ "int", "int" },
+				{ "bigint", "bigint" },
+				{ "mediumint", "mediumint" },
+				{ "smallint", "smallint" },
+				{ "tinyint", "tinyint" },
+				{ "float", "float" },
+				{ "double", "double" },
+				{ "decimal", "decimal" },
+				{ "date", "date" },
+				{ "time", "time" },
+				{ "datetime", "datetime" },
 			};
 		}
 

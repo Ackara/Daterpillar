@@ -335,7 +335,7 @@ namespace MSTest.Daterpillar.Tests
                 new Column("Name", new DataType("varchar", 256)),
 
                 new Index(IndexType.PrimaryKey, new ColumnName("Id")),
-                new Index(true, IndexType.Index, new ColumnName("Name", Order.Descending)));
+                new Index(IndexType.Index, true, new ColumnName("Name", Order.Descending)));
 
             // Act
             builder.Append(mockTable);

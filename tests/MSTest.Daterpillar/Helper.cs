@@ -9,7 +9,7 @@ namespace MSTest.Daterpillar
 {
     public static class Helper
     {
-        public static bool ValidateXml(Stream inputStream, out string errorMsg)
+        public static bool ValidateXml(this Stream inputStream, out string errorMsg)
         {
             bool isValid = true;
             var text = new StringBuilder();

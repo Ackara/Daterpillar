@@ -197,15 +197,18 @@ namespace Ackara.Daterpillar.Scripting
             if (Settings.AddSchemaAttributes)
             {
                 // Column
-                string nullable = (column.IsNullable ? $", {nameof(ColumnAttribute.Nullable)} = true" : string.Empty);
+                string scale = (column.DataType.Scale == 0 ? string.Empty : $", {column.DataType.Scale}");
+                string precision = (column.DataType.Precision == 0 ? string.Empty : $", {column.DataType.Precision}");
+                string dataType = $", \"{column.DataType.Name}\"{scale}{precision}";
                 string autoIncrement = (column.AutoIncrement ? $", {nameof(ColumnAttribute.AutoIncrement)} = true" : string.Empty);
-                _content.AppendLine($"\t[{nameof(Column)}(\"{column.Name}\"{nullable}{autoIncrement})]");
+                string nullable = (column.IsNullable ? $", {nameof(ColumnAttribute.Nullable)} = true" : string.Empty);
+                string defaultValue = (column.DefaultValue == null ? string.Empty : $", {nameof(ColumnAttribute.DefaultValue)} = \"{column.DefaultValue}\"");
+                _content.AppendLine($"\t[{nameof(Column)}(\"{column.Name}\"{dataType}{nullable}{autoIncrement}{defaultValue})]");
 
                 // Index
-                var indexes = (
-                    from i in column.Table.Indexes
-                    where i.Columns.Count(x => x.Name == column.Name) > 0
-                    select i);
+                var indexes = from i in column.Table.Indexes
+                              where i.Columns.Count(x => x.Name == column.Name) > 0
+                              select i;
 
                 foreach (var index in indexes)
                 {
@@ -214,16 +217,15 @@ namespace Ackara.Daterpillar.Scripting
                 }
 
                 //Foreign key
-                var foreignKeys = (
-                    from f in column.Table.ForeignKeys
-                    where f.LocalColumn == column.Name
-                    select f);
+                var foreignKeys = from key in column.Table.ForeignKeys
+                                  where key.LocalColumn == column.Name
+                                  select key;
 
-                foreach (var fkey in foreignKeys)
+                foreach (var constraint in foreignKeys)
                 {
-                    string onUpdate = (fkey.OnUpdate == ReferentialAction.NoAction ? string.Empty : $", {nameof(ForeignKeyAttribute.OnUpdate)} = {nameof(ReferentialAction)}.{fkey.OnUpdate}");
-                    string ondelete = (fkey.OnDelete == ReferentialAction.NoAction ? string.Empty : $", {nameof(ForeignKeyAttribute.OnDelete)} = {nameof(ReferentialAction)}.{fkey.OnDelete}");
-                    _content.AppendLine($"\t[{nameof(ForeignKey)}(\"{fkey.ForeignTable}\", \"{fkey.ForeignColumn}\"{onUpdate}{ondelete})]");
+                    string onUpdate = (constraint.OnUpdate == ReferentialAction.NoAction ? string.Empty : $", {nameof(ForeignKeyAttribute.OnUpdate)} = {nameof(ReferentialAction)}.{constraint.OnUpdate}");
+                    string onDelete = (constraint.OnDelete == ReferentialAction.NoAction ? string.Empty : $", {nameof(ForeignKeyAttribute.OnDelete)} = {nameof(ReferentialAction)}.{constraint.OnDelete}");
+                    _content.AppendLine($"\t[{nameof(ForeignKey)}(\"{constraint.ForeignTable}\", \"{constraint.ForeignColumn}\"{onUpdate}{onDelete})]");
                 }
             }
         }

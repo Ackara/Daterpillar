@@ -13,11 +13,11 @@ namespace Ackara.Daterpillar
         /// <param name="content">The content.</param>
         /// <param name="syntax">The syntax.</param>
         /// <param name="name">The name.</param>
-        public Script(string content, Syntax syntax = Syntax.Generic, string name = null)
+        public Script(object content, Syntax syntax = Syntax.Generic, string name = null)
         {
             Name = name;
             Syntax = syntax;
-            Content = content;
+            Content = content.ToString();
         }
 
         /// <summary>
