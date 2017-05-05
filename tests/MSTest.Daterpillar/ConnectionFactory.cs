@@ -141,14 +141,11 @@ namespace MSTest.Daterpillar
             }
             catch (System.Data.Common.DbException ex)
             {
+                System.Diagnostics.Debug.WriteLine($"used connection: {connection.ConnectionString}");
                 errorMsg = string.Format("{2}{0}{2}{2}{1}{2}", ex.Message, ex, Environment.NewLine);
                 return false;
             }
-            finally
-            {
-                System.Diagnostics.Debug.WriteLine($"connection:  {connection.ConnectionString}");
-                command?.Dispose();
-            }
+            finally { command?.Dispose(); }
         }
 
         internal static void RebuildMSSQLDatabase(IDbConnection connection)

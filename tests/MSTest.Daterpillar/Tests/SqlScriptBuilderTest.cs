@@ -465,7 +465,7 @@ namespace MSTest.Daterpillar.Tests
 
             var schema2 = schema1.Clone();
             var newColumn = schema2.Tables.First(x => x.Name == "rarity").Columns.First(x => x.Name == "Name");
-            var index = schema2.GetIndexes().First(x => x.Table.Name == "rarity" && x.Columns.Count(y => y.Name == "Name") == 1);
+            var index = schema2.Tables.First(x=>x.Name == "rarity").Indexes.First(x => x.Columns.Count(y => y.Name == "Name") == 1);
             newColumn.Name = "name_of_entity";
             newColumn.DataType = new DataType("varchar", 256);
             index.Columns[0].Name = newColumn.Name;

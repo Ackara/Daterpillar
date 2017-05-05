@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -166,6 +167,29 @@ namespace Ackara.Daterpillar
         }
 
         /// <summary>
+        /// Rearrange this instance <see cref="Table"/> objects so referenced tables (aka foreign keys) precede their dependants.
+        /// </summary>
+        public void Sort()
+        {
+            if (Tables.IsNotEmpty())
+            {
+                var nodes = new List<Node>();
+                foreach (var table in Tables) nodes.Add(new Node(table));
+                foreach (var parent in nodes) parent.AddChildren(nodes);
+
+                int latestRanking = 0;
+                foreach (var n in nodes)
+                {
+                    latestRanking = Rank(n, latestRanking);
+                }
+
+                Tables.Clear();
+                nodes.Sort(new RankComparer());
+                foreach (var item in nodes) Tables.Add(item.Data);
+            }
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Schema"/> object that is a copy of the current instance.
         /// </summary>
         /// <returns>A new <see cref="Schema"/> object that is a copy of this instance.</returns>
@@ -214,6 +238,88 @@ namespace Ackara.Daterpillar
         #region Private Members
 
         private readonly XmlSerializerNamespaces _namespace;
+
+        private int Rank(Node node, int? rank = 0)
+        {
+            Node nonRankedChild;
+            if (node.Rank == null)
+                do
+                {
+                    nonRankedChild = node.GetNonRankedChild();
+                    if (nonRankedChild == null)
+                    {
+                        /// Here I am ranking the node only when all of it's children
+                        /// has been ranked.
+                        node.Rank = rank = (rank + 1);
+                        System.Diagnostics.Debug.WriteLine(node);
+                    }
+                    else
+                    {
+                        /// Here I am ranking the child node that has not yet been ranked.
+                        /// Also I am updating the parent node rank with the rank of its
+                        /// then ranked child because the parent rank should always be higher.
+                        /// The parent node rank will later be updated when it has no more non ranked child.
+                        Rank(nonRankedChild, (node.Rank ?? 0));
+                        rank = node.Rank = nonRankedChild.Rank;
+                        System.Diagnostics.Debug.WriteLine($"\t\tupdated {node}");
+                    }
+                }
+                while (nonRankedChild != null);
+
+            return rank ?? 0;
+        }
+
+        private class Node
+        {
+            public Node(Table table)
+            {
+                Data = table;
+                Children = new List<Node>();
+            }
+
+            public int? Rank;
+            public Table Data;
+            public IList<Node> Children;
+
+            public string Name
+            {
+                get { return Data.Name; }
+            }
+
+            public void AddChildren(List<Node> nodes)
+            {
+                foreach (var fKey in Data.ForeignKeys)
+                {
+                    var child = nodes.FirstOrDefault(x => x.Name == fKey.ForeignTable);
+                    if (child != null) Children.Add(child);
+                }
+            }
+
+            public Node GetNonRankedChild()
+            {
+                foreach (var item in Children)
+                {
+                    if (item.Rank == null) return item;
+                }
+
+                return null;
+            }
+
+            public override string ToString()
+            {
+                return $"{Name}: {Rank ?? -1}";
+            }
+        }
+
+        private class RankComparer : IComparer<Node>
+        {
+            public int Compare(Node x, Node y)
+            {
+                if (x.Rank > y.Rank) return 1;
+                else if (x.Rank < y.Rank) return -1;
+                else return 0;
+            }
+        }
 
         #endregion Private Members
     }

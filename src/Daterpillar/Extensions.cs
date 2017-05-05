@@ -1,7 +1,29 @@
-﻿namespace Ackara.Daterpillar
+﻿using System.Collections;
+
+namespace Ackara.Daterpillar
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Determines whether the specified list is empty.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns><c>true</c> if the specified list is empty; otherwise, <c>false</c>.</returns>
+        public static bool IsEmpty(this ICollection list)
+        {
+            return list.Count == 0;
+        }
+
+        /// <summary>
+        /// Determines whether the specified list is not empty.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns><c>true</c> if the specified list is not empty; otherwise, <c>false</c>.</returns>
+        public static bool IsNotEmpty(this ICollection list)
+        {
+            return list.Count > 0;
+        }
+
         /// <summary>
         /// Converts the specified string to pascal case.
         /// </summary>
