@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar", "src\Daterpil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTest.Daterpillar", "tests\MSTest.Daterpillar\MSTest.Daterpillar.csproj", "{EB323886-D908-4282-819F-AEFD6470923C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Automation", "src\Daterpillar.Automation\Daterpillar.Automation.csproj", "{7C059A84-FF50-49FF-8262-B86F5A726822}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{EB323886-D908-4282-819F-AEFD6470923C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB323886-D908-4282-819F-AEFD6470923C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB323886-D908-4282-819F-AEFD6470923C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C059A84-FF50-49FF-8262-B86F5A726822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C059A84-FF50-49FF-8262-B86F5A726822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C059A84-FF50-49FF-8262-B86F5A726822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C059A84-FF50-49FF-8262-B86F5A726822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,6 +12,7 @@
 	string className = Path.GetFileNameWithoutExtension(Host.TemplateFile); 
 	string dictionaryName = "TypeMap"; 
 #>
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Ackara.Daterpillar.TypeResolvers

@@ -1,4 +1,4 @@
-﻿using Ackara.Daterpillar.Scripting;
+﻿using Ackara.Daterpillar;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

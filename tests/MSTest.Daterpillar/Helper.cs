@@ -16,7 +16,7 @@ namespace MSTest.Daterpillar
 
             string pathToSchema = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FName.daterpillarXSD);
             var xsd = new XmlSchemaSet();
-            xsd.Add(Schema.Namespace, pathToSchema);
+            xsd.Add(Schema.XMLNS, pathToSchema);
 
             var document = XDocument.Load(inputStream);
             document.Validate(xsd, (sender, e) =>

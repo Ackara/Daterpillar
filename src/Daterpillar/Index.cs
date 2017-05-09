@@ -25,6 +25,14 @@ namespace Ackara.Daterpillar
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Index"/> class.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="columns">The columns.</param>
+        public Index(IndexType type, params string[] columns) : this(type, false, columns.Select(x => new ColumnName(x)).ToArray())
+        { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Index" /> class.
         /// </summary>
         /// <param name="type">The type type.</param>

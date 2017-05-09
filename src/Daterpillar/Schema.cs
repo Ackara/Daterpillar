@@ -9,7 +9,8 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// An in-memory representation of a database schema.
     /// </summary>
-    [XmlRoot("schema", Namespace = Namespace)]
+    [XmlRoot("schema", Namespace = XMLNS)]
+    [System.Diagnostics.DebuggerDisplay("{AsDebuggerDisplay()}")]
     public class Schema : ICloneable<Schema>
     {
         /// <summary>
@@ -19,7 +20,7 @@ namespace Ackara.Daterpillar
         {
             _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[]
             {
-                new XmlQualifiedName(string.Empty, Namespace)
+                new XmlQualifiedName(string.Empty, XMLNS)
             });
 
             Tables = new List<Table>();
@@ -29,7 +30,7 @@ namespace Ackara.Daterpillar
         /// <summary>
         /// The xml namespace.
         /// </summary>
-        public const string Namespace = "http://static.acklann.com/schema/v2/daterpillar.xsd";
+        public const string XMLNS = "http://static.acklann.com/schema/v2/daterpillar.xsd";
 
         /// <summary>
         /// Gets or sets the name of the schema.
@@ -238,6 +239,12 @@ namespace Ackara.Daterpillar
         #region Private Members
 
         private readonly XmlSerializerNamespaces _namespace;
+
+        private string AsDebuggerDisplay()
+        {
+            string name = (string.IsNullOrEmpty(Name) ? "" : "");
+            return $"{name}Tables: {Tables.Count}  Scripts: {Scripts.Count}";
+        }
 
         private int Rank(Node node, int? rank = 0)
         {

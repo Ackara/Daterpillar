@@ -6,7 +6,7 @@
     public interface ITypeResolver
     {
         /// <summary>
-        /// Maps the specified <see cref="DataType"/>.
+        /// Maps the specified <see cref="DataType"/> to another language's type name.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <returns>The type name.</returns>

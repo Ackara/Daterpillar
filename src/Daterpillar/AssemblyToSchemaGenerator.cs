@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Ackara.Daterpillar
 {
     /// <summary>
     /// Contains methods to convert an <see cref="Assembly"/> to a <see cref="Schema"/>.

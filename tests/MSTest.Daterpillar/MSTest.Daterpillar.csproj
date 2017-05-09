@@ -186,12 +186,14 @@
     </Compile>
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
     <Compile Include="Tests\ColumnNameTest.cs" />
+    <Compile Include="Tests\InformationSchemaTest.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\DataTypeTest.cs" />
     <Compile Include="Tests\TypeResolverTest.cs" />
     <Compile Include="Tests\SqlScriptBuilderTest.cs" />
     <Compile Include="Tests\CSharpScriptBuilderTest.cs" />
     <Compile Include="Tests\HelperTest.cs" />
+    <Compile Include="Tests\SchemaComparerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\daterpillar.xsd">
@@ -205,6 +207,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Daterpillar.Automation\Daterpillar.Automation.csproj">
+      <Project>{7c059a84-ff50-49ff-8262-b86f5a726822}</Project>
+      <Name>Daterpillar.Automation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj">
       <Project>{e7e91725-51a4-45fb-a923-e374cf7fe0b7}</Project>
       <Name>Daterpillar</Name>
