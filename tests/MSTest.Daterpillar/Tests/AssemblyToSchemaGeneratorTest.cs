@@ -10,7 +10,6 @@ using System.Text;
 namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
-    [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
     public class AssemblyToSchemaGeneratorTest
     {
         [TestMethod]

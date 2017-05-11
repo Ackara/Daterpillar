@@ -9,11 +9,8 @@
     <AssemblyVersion>4.0.15</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.4\Ackara.Daterpillar.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Daterpillar.nuspec" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />

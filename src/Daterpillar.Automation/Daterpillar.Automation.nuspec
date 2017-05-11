@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<package>
+  <metadata>
+    <id>$id$</id>
+    <title>Daterpillar.Automation</title>
+    <version>$version$</version>
+    <description>$description$</description>
+    <tags>$tags$</tags>
+
+    <owners>$owner$</owners>
+    <authors>$owner$</authors>
+    <projectUrl>$projectUrl$</projectUrl>
+    <iconUrl>$iconUrl$</iconUrl>
+
+    <copyright>$copyright$</copyright>
+    <licenseUrl>$license$</licenseUrl>
+    <releaseNotes>$releaseNotes$</releaseNotes>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\$id$.dll"
+          target="lib\$targetFramework$" />
+
+    <file src="bin\$configuration$\$id$.xml"
+          target="lib\$targetFramework$" />
+
+    <file src="bin\$configuration$\$id$.pdb"
+          target="lib\$targetFramework$" />
+
+    <file src="MSBuild\GenerateSchemaTask.targets"
+          target="build\$targetFramework$\GenerateSchemaTask.targets" />
+  </files>
+</package>

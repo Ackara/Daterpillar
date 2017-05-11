@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
     <Compile Include="Tests\ColumnNameTest.cs" />
+    <Compile Include="Tests\GenerateSchemaTaskTest.cs" />
     <Compile Include="Tests\InformationSchemaTest.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\DataTypeTest.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Tests\CSharpScriptBuilderTest.cs" />
     <Compile Include="Tests\HelperTest.cs" />
     <Compile Include="Tests\SchemaComparerTest.cs" />
+    <Compile Include="Tests\ScriptBuilderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\daterpillar.xsd">
@@ -276,6 +278,7 @@
   <Target Name="BeforeBuild">
     <Exec Command="powershell -ExecutionPolicy Bypass -NonInteractive -command &quot;..\..\invoke-tasks.ps1&quot; &quot;-BuildConfiguration $(Configuration)&quot;" />
   </Target>
+  <Import Project="..\..\src\Daterpillar.Automation\MSBuild\GenerateSchemaTask.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.105.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.105.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Import Project="..\..\packages\MSTest.TestAdapter.1.1.17\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.1.17\build\net45\MSTest.TestAdapter.targets')" />
 </Project>

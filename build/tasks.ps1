@@ -123,9 +123,9 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 		$nuspec = [IO.Path]::ChangeExtension($proj, ".nuspec");
 		if (Test-Path $nuspec -PathType Leaf)
 		{
-			[xml]$csproj = Get-Content $proj;
 			$versionSuffix = Get-VersionSuffix;
 			$version = Get-VersionNumber -ConfigFile $SolutionJSON;
+            $csproj = Get-Content $proj | Out-String;
 
 			$properties = "";
 			$properties += "tags=$($Config.metadata.tags);";
@@ -138,13 +138,22 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 			$properties += "description=$($Config.metadata.description);";
 			$properties += "releaseNotes=$(Get-Content $ReleaseNotesTXT | Out-String);";
 			$properties += "version=$($version.Major).$($version.Minor).$($version.Patch);";
-			$properties += "id=$($csproj.SelectSingleNode('.//Project//AssemblyName').InnerText);";
-			$properties += "targetFramework=$($csproj.SelectSingleNode('.//Project//TargetFramework').InnerText)";
+            $properties += "id=$([Regex]::Match($csproj, '(?i)<AssemblyName>(?<name>[a-z0-9.]+)</AssemblyName>').Groups["name"].Value);";
+
+            $match = [Regex]::Match($csproj, '(?i)<TargetFramework>(?<name>[a-z0-9.]+)</TargetFramework>');
+            if ($match.Success)
+            { $properties += "targetFramework=$($match.Groups["name"].Value)"; }
+
+            if (-not $match.Success)
+            {
+                $match = [Regex]::Match($csproj, '(?i)<TargetFrameworkVersion>(?<name>[a-z0-9.]+)</TargetFrameworkVersion>');
+                $properties += "targetFramework=net$($match.Groups["name"].Value.Replace('.', '').Trim('v'))";
+            }
 
 			if ([String]::IsNullOrEmpty($VersionSuffix))
-			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; } }
+			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -IncludeReferencedProjects -Properties $properties; } }
 			else
-			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects -Suffix $versionSuffix; } }
+			{ Exec { & $nuget pack $nuspec -OutputDirectory $ArtifactsDir -IncludeReferencedProjects -Properties $properties -Suffix $versionSuffix; } }
 		}
 	}
 }
