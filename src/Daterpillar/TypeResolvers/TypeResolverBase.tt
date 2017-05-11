@@ -29,7 +29,8 @@ namespace Ackara.Daterpillar.TypeResolvers
 	PushIndent("\t\t");
 	foreach (var typeName in GetXsdTypeNames())
 	{
-		 WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
+		WriteLine($"/// <summary>{typeName}.</summary>");
+		WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
 	}
 	ClearIndent();
 #>

@@ -11,21 +11,37 @@ namespace Ackara.Daterpillar.TypeResolvers
 	{
 		#region Keys
 
+		/// <summary>bool.</summary>
 		public const string BOOL = "bool";
+		/// <summary>blob.</summary>
 		public const string BLOB = "blob";
+		/// <summary>char.</summary>
 		public const string CHAR = "char";
+		/// <summary>text.</summary>
 		public const string TEXT = "text";
+		/// <summary>varchar.</summary>
 		public const string VARCHAR = "varchar";
+		/// <summary>int.</summary>
 		public const string INT = "int";
+		/// <summary>bigInt.</summary>
 		public const string BIGINT = "bigInt";
+		/// <summary>mediumInt.</summary>
 		public const string MEDIUMINT = "mediumInt";
+		/// <summary>smallInt.</summary>
 		public const string SMALLINT = "smallInt";
+		/// <summary>tinyInt.</summary>
 		public const string TINYINT = "tinyInt";
+		/// <summary>float.</summary>
 		public const string FLOAT = "float";
+		/// <summary>double.</summary>
 		public const string DOUBLE = "double";
+		/// <summary>decimal.</summary>
 		public const string DECIMAL = "decimal";
+		/// <summary>date.</summary>
 		public const string DATE = "date";
+		/// <summary>time.</summary>
 		public const string TIME = "time";
+		/// <summary>dateTime.</summary>
 		public const string DATETIME = "dateTime";
 
 		#endregion Keys

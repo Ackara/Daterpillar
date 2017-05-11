@@ -86,9 +86,15 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 -depends @("Init") -action {
 	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
 
+    Push-Location $RootDir;
 	Write-LineBreak "MSBUILD";
-	$sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
-	Exec { & dotnet build $sln --configuration $BuildConfiguration; }
+    try
+    {
+	    $sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
+        Exec { & dotnet restore; }
+        Exec { & dotnet build $sln --configuration $BuildConfiguration; }
+    }
+    finally { Pop-Location; }
 	Write-LineBreak;
 }
 
