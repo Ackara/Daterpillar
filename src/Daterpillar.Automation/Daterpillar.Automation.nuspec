@@ -3,26 +3,23 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <title>Daterpillar.Automation</title>
-    <version>$version$</version>
-    <description>$description$</description>
-    <tags>$tags$</tags>
+    <version>$PackageVersion$</version>
+    <title>$Title$</title>
+    <description>$Description$</description>
+    <tags>$PackageTags$</tags>
 
-    <owners>$owner$</owners>
-    <authors>$owner$</authors>
-    <projectUrl>$projectUrl$</projectUrl>
-    <iconUrl>$iconUrl$</iconUrl>
+    <owners>$Authors$</owners>
+    <authors>$Authors$ and contributors</authors>
+    <projectUrl>$PackageProjectUrl$</projectUrl>
+    <iconUrl>$PackageIconUrl$</iconUrl>
 
-    <copyright>$copyright$</copyright>
-    <licenseUrl>$license$</licenseUrl>
-    <releaseNotes>$releaseNotes$</releaseNotes>
+    <copyright>$Copyright$</copyright>
+    <licenseUrl>$PackageLicenseUrl$</licenseUrl>
+    <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.*"
-          target="lib\$targetFramework$" />
-
     <file src="MSBuild\GenerateSchemaTask.targets"
-          target="build\$targetFramework$\GenerateSchemaTask.targets" />
+          target="build\GenerateSchemaTask.targets" />
   </files>
 </package>

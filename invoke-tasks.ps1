@@ -13,6 +13,7 @@ Param(
 	[string]$BranchName,
 	[string[]]$TestCase,
 	[string]$BuildConfiguration = "Release",
+	[string]$NuGetVersion = "4.1.0",
 
 	[switch]$Major,
 	[switch]$Minor,
@@ -42,7 +43,7 @@ $nuget = "$PSScriptRoot\tools\nuget.exe";
 if (-not (Test-Path $nuget -PathType Leaf))
 {
 	if (-not (Test-Path "$PSScriptRoot\tools" -PathType Container)) { New-Item "$PSScriptRoot\tools" -ItemType Directory | Out-Null; }
-	Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile $nuget;
+	Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/v$NuGetVersion/nuget.exe -OutFile $nuget;
 }
 
 & $nuget restore "$PSScriptRoot\Daterpillar.sln" | Out-Null;

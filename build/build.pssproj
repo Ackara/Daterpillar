@@ -26,9 +26,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="solution.json" />
+    <Content Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\invoke-tasks.ps1">
+      <Link>invoke-tasks.ps1</Link>
+    </Compile>
     <Compile Include="packages.config" />
     <Compile Include="tasks.ps1" />
   </ItemGroup>
