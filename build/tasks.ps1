@@ -59,7 +59,7 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 
 Task "Setup" -description "This task will generate all missing/sensitive files missing from the project." `
 -depends @("Add-AppConfigFiles");
-Task foo -depends Init -action { Write-Host $([System.Linq.Enumerable]::Repeat("-", 10)); }
+
 Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
 -depends @("Init") -action {
 	$commitMsg = Show-Inputbox "please enter your release notes" "RELEASE NOTES";
