@@ -55,7 +55,7 @@ if ($Help)
 { Invoke-psake -buildFile $taskFile -detailedDocs; }
 else
 {
-	Invoke-psake $taskFile -taskList $Tasks -nologo -notr `
+	Invoke-psake $taskFile -taskList $Tasks -nologo -notr -framework 4.6.1 `
 		-properties @{
 			"BuildConfiguration"=$BuildConfiguration;
 			"ConnectionStrings"=$ConnectionStrings;

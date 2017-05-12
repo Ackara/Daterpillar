@@ -43,6 +43,12 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 		}
 	}
 
+    foreach ($psd1 in (Get-ChildItem "$RootDir\tools" -Recurse -Filter "*.psd1" | Select-Object -ExpandProperty FullName))
+    {
+        Import-Module $psd1;
+        Write-Host "`t* imported $(Split-Path $psd1 -Leaf) module.";
+    }
+
 	$pester = "$RootDir\packages\Pester*\tools\Pester.psd1";
 	if (Test-Path $pester -PathType Leaf)
 	{
@@ -90,9 +96,10 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 	Write-LineBreak "MSBUILD";
     try
     {
+        $msbuild = Find-MSBuildPath;
 	    $sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
         Exec { & dotnet restore; }
-        Exec { & dotnet build $sln --configuration $BuildConfiguration; }
+        Exec { & $msbuild $sln "/p:Configuration=$BuildConfiguration"; }
     }
     finally { Pop-Location; }
 	Write-LineBreak;
