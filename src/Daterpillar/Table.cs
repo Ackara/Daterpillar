@@ -6,7 +6,6 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.ISQLObject" />
     [System.Diagnostics.DebuggerDisplay("{Name}")]
     public sealed class Table : ICloneable<Table>
     {

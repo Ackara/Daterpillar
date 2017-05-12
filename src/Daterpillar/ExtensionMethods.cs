@@ -2,7 +2,10 @@
 
 namespace Ackara.Daterpillar
 {
-    public static class Extensions
+    /// <summary>
+    /// Extension methods.
+    /// </summary>
+    public static class ExtensionMethods
     {
         /// <summary>
         /// Determines whether the specified list is empty.
@@ -28,15 +31,14 @@ namespace Ackara.Daterpillar
         /// Converts the specified string to pascal case.
         /// </summary>
         /// <param name="text">The string to convert to pascal case.</param>
+        /// <param name="separator">The separator.</param>
         /// <returns>The specified string converted to pascal case.</returns>
-        /// <remarks>
-        /// <list type="bullet">
-        /// <listheader>Rules</listheader>
-        /// <item>Capitalize the first letter in the text.</item>
-        /// <item>Capitalize the first letter for each subsequent word.</item>
-        /// <item>Concatenate each word.</item>
-        /// </list>
-        /// </remarks>
+        /// <remarks><list type="bullet">
+        ///   <listheader>Rules</listheader>
+        ///   <item>Capitalize the first letter in the text.</item>
+        ///   <item>Capitalize the first letter for each subsequent word.</item>
+        ///   <item>Concatenate each word.</item>
+        /// </list></remarks>
         public static string ToPascalCase(this string text, params char[] separator)
         {
             if (text.Length == 1) return text.ToUpper();
@@ -59,15 +61,14 @@ namespace Ackara.Daterpillar
         /// Converts the specified string to camel case.
         /// </summary>
         /// <param name="text">The string to convert to camel case.</param>
+        /// <param name="separator">The separator.</param>
         /// <returns>The specified string converted to camel case.</returns>
-        /// <remarks>
-        /// <list type="bullet">
-        /// <listheader>Rules</listheader>
-        /// <item>Lower the first letter in the text.</item>
-        /// <item>Capitalize the first letter for each subsequent word.</item>
-        /// <item>Concatenate each word.</item>
-        /// </list>
-        /// </remarks>
+        /// <remarks><list type="bullet">
+        ///   <listheader>Rules</listheader>
+        ///   <item>Lower the first letter in the text.</item>
+        ///   <item>Capitalize the first letter for each subsequent word.</item>
+        ///   <item>Concatenate each word.</item>
+        /// </list></remarks>
         public static string ToCamelCase(this string text, params char[] separator)
         {
             if (text.Length == 1) return text.ToLower();

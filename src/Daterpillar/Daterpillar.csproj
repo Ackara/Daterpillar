@@ -7,6 +7,7 @@
     <Version>4.1.0</Version>
     <FileVersion>4.1.0</FileVersion>
     <AssemblyVersion>4.1.0</AssemblyVersion>
+    <Owners>Ackara</Owners>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.4\Ackara.Daterpillar.xml</DocumentationFile>
@@ -16,6 +17,10 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </Content>
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>

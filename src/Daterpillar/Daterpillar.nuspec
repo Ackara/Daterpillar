@@ -3,23 +3,19 @@
 <package>
   <metadata>
     <id>$id$</id>
+    <version>$PackageVersion$</version>
     <title>Daterpillar</title>
-    <version>$version$</version>
-    <description>$description$</description>
-    <tags>$tags$</tags>
+    <description>$Description$</description>
+    <tags>$PackageTags$</tags>
 
-    <owners>$owner$</owners>
-    <authors>$owner$</authors>
-    <projectUrl>$projectUrl$</projectUrl>
-    <iconUrl>$iconUrl$</iconUrl>
+    <owners>$Authors$</owners>
+    <authors>$Authors$</authors>
+    <projectUrl>$PackageProjectUrl$</projectUrl>
+    <iconUrl>$PackageIconUrl$</iconUrl>
 
-    <copyright>$copyright$</copyright>
-    <licenseUrl>$license$</licenseUrl>
-    <releaseNotes>$releaseNotes$</releaseNotes>
+    <copyright>$Copyright$</copyright>
+    <licenseUrl>$PackageLicenseUrl$</licenseUrl>
+    <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
-  <files>
-    <file src="bin\$configuration$\$targetFramework$\$id$.*"
-          target="lib\$targetFramework$" />
-  </files>
 </package>

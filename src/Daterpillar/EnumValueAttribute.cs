@@ -9,6 +9,10 @@ namespace Ackara.Daterpillar
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class EnumValueAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnumValueAttribute"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public EnumValueAttribute(string name)
         {
             Name = name;

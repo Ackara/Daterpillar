@@ -4,7 +4,7 @@ using System.Reflection;
 namespace Ackara.Daterpillar.TypeResolvers
 {
     /// <summary>
-    /// Provide methods that maps a <see cref="http://static.acklann.com/schema/v2/daterpillar.xsd"/> TypeName to a clr type name.
+    /// Provide methods that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to a clr type name.
     /// </summary>
     /// <seealso cref="Ackara.Daterpillar.TypeResolvers.TypeResolverBase" />
     public class CSharpTypeResolver : TypeResolverBase

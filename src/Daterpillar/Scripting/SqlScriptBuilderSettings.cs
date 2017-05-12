@@ -1,7 +1,7 @@
 ﻿namespace Ackara.Daterpillar.Scripting
 {
     /// <summary>
-    /// Specifies a set of features to support on the <see cref="IScriptBuilder" object when the <see cref="IScriptBuilder.GetContent"/> method is called./>
+    /// Specifies a set of features to support on the <see cref="IScriptBuilder" /> object when the <see cref="IScriptBuilder.GetContent" /> method is called.
     /// </summary>
     public class SqlScriptBuilderSettings
     {

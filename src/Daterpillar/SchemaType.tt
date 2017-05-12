@@ -15,11 +15,13 @@ namespace Ackara.Daterpillar
 	/// </summary>
 	public enum SchemaType
 	{
+		/// <summary>none</summary>
 		NONE,
 <#
 	PushIndent("\t\t");
 	foreach(var item in GetXsdTypeNames())
 	{
+		WriteLine($"/// <summary>{item}</summary>");
 		WriteLine($"{item.ToUpper()},");
 	}
 	PopIndent();

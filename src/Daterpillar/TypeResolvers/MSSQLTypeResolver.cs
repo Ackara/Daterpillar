@@ -3,7 +3,7 @@
 namespace Ackara.Daterpillar.TypeResolvers
 {
     /// <summary>
-    /// Provides a method that maps a <see cref="http://static.acklann.com/schema/v2/daterpillar.xsd"/> TypeName to to a MSSQL data type.
+    /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MSSQL data type.
     /// </summary>
     /// <seealso cref="Ackara.Daterpillar.TypeResolvers.TypeResolverBase" />
     public class MSSQLTypeResolver : TypeResolverBase

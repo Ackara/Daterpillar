@@ -1,11 +1,14 @@
 ﻿namespace Ackara.Daterpillar.TypeResolvers
 {
     /// <summary>
-    /// Provides a method that maps a <see cref="http://static.acklann.com/schema/v2/daterpillar.xsd"/> TypeName to to a SQLite data type.
+    /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a SQLite data type.
     /// </summary>
     /// <seealso cref="Ackara.Daterpillar.TypeResolvers.TypeResolverBase" />
     public class SQLiteTypeResolver : TypeResolverBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteTypeResolver"/> class.
+        /// </summary>
         public SQLiteTypeResolver() : base()
         {
             TypeMap[BOOL.ToLower()] = "boolean";

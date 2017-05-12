@@ -12,23 +12,6 @@ namespace Ackara.Daterpillar
     /// </summary>
     public static class AssemblyToSchemaGenerator
     {
-        public static string Escape(this string name, Syntax syntax)
-        {
-            switch (syntax)
-            {
-                default:
-                case Syntax.Generic:
-                    return name;
-
-                case Syntax.MySQL:
-                    return $"`{name}`";
-
-                case Syntax.MSSQL:
-                case Syntax.SQLite:
-                    return $"[{name}]";
-            }
-        }
-
         /// <summary>
         /// Converts the specified <see cref="Assembly"/> to an <see cref="Schema"/>.
         /// </summary>
@@ -60,6 +43,23 @@ namespace Ackara.Daterpillar
             }
             schema.AssignParentNodes();
             return schema;
+        }
+
+        internal static string Escape(this string name, Syntax syntax)
+        {
+            switch (syntax)
+            {
+                default:
+                case Syntax.Generic:
+                    return name;
+
+                case Syntax.MySQL:
+                    return $"`{name}`";
+
+                case Syntax.MSSQL:
+                case Syntax.SQLite:
+                    return $"[{name}]";
+            }
         }
 
         private static void ConvertToTable(TypeInfo enumType, Syntax syntax, out Table table, out Script script)

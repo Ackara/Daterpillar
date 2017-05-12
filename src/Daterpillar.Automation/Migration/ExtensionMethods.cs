@@ -2,7 +2,7 @@
 
 namespace Ackara.Daterpillar.Migration
 {
-    public static class ExtensionMethods
+    internal static class ExtensionMethods
     {
         internal static string ToOrder(this string value)
         {

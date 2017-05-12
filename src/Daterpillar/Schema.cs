@@ -255,17 +255,17 @@ namespace Ackara.Daterpillar
                     nonRankedChild = node.GetNonRankedChild();
                     if (nonRankedChild == null)
                     {
-                        /// Here I am ranking the node only when all of it's children
-                        /// has been ranked.
+                        // Here I am ranking the node only when all of it's children
+                        // has been ranked.
                         node.Rank = rank = (rank + 1);
                         System.Diagnostics.Debug.WriteLine(node);
                     }
                     else
                     {
-                        /// Here I am ranking the child node that has not yet been ranked.
-                        /// Also I am updating the parent node rank with the rank of its
-                        /// then ranked child because the parent rank should always be higher.
-                        /// The parent node rank will later be updated when it has no more non ranked child.
+                        // Here I am ranking the child node that has not yet been ranked.
+                        // Also I am updating the parent node rank with the rank of its
+                        // then ranked child because the parent rank should always be higher.
+                        // The parent node rank will later be updated when it has no more non ranked child.
                         Rank(nonRankedChild, (node.Rank ?? 0));
                         rank = node.Rank = nonRankedChild.Rank;
                         System.Diagnostics.Debug.WriteLine($"\t\tupdated {node}");

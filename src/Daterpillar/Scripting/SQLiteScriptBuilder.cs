@@ -3,8 +3,15 @@ using System.Linq;
 
 namespace Ackara.Daterpillar.Scripting
 {
+    /// <summary>
+    /// Provides functions used for building SQLite scripts.
+    /// </summary>
+    /// <seealso cref="Ackara.Daterpillar.Scripting.SqlScriptBuilderBase" />
     public class SQLiteScriptBuilder : SqlScriptBuilderBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteScriptBuilder"/> class.
+        /// </summary>
         public SQLiteScriptBuilder() : base(new SqlScriptBuilderSettings()
         {
             ShowHeader = true,
@@ -14,10 +21,19 @@ namespace Ackara.Daterpillar.Scripting
         }, new SQLiteTypeResolver())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteScriptBuilder"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public SQLiteScriptBuilder(SqlScriptBuilderSettings settings) : base(settings, new SQLiteTypeResolver())
         {
         }
 
+        /// <summary>
+        /// Appends the SQLite representation of a <see cref="T:Ackara.Daterpillar.Schema" /> to this instance.
+        /// </summary>
+        /// <param name="schema">The schema to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(Schema schema)
         {
             foreach (var table in schema.Tables) Append(table);
@@ -33,6 +49,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the SQLite representation of a <see cref="T:Ackara.Daterpillar.Table" /> to this instance.
+        /// </summary>
+        /// <param name="table">The table to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(Table table)
         {
             WriteComment(table);
@@ -53,6 +74,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the SQLite representation of a <see cref="T:Ackara.Daterpillar.Column" /> to this instance.
+        /// </summary>
+        /// <param name="column">The column to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(Column column)
         {
             string table = column.Table.Name;
@@ -65,6 +91,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the SQLite representation of a <see cref="T:Ackara.Daterpillar.Index" /> to this instance.
+        /// </summary>
+        /// <param name="index">The index to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(Index index)
         {
             string table = index.Table.Name;
@@ -75,6 +106,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the SQLite representation of a <see cref="T:Ackara.Daterpillar.ForeignKey" /> to this instance.
+        /// </summary>
+        /// <param name="foreignKey">The foreign key to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
@@ -99,18 +135,33 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to remove a <see cref="T:Ackara.Daterpillar.Schema" /> to this instance.
+        /// </summary>
+        /// <param name="schema">The schema to remove.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(Schema schema)
         {
             _script.AppendLine("/* SQLite do not support DROP DATABASE */");
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to remove a <see cref="T:Ackara.Daterpillar.Table" /> to this instance.
+        /// </summary>
+        /// <param name="table">The table to remove.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(Table table)
         {
             _script.AppendLine($"DROP TABLE IF EXISTS [{table.Name}];");
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to remove a <see cref="T:Ackara.Daterpillar.Column" /> to this instance.
+        /// </summary>
+        /// <param name="column">The column to remove.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(Column column)
         {
             Table table = column.Table;
@@ -133,6 +184,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to remove a <see cref="T:Ackara.Daterpillar.Index" /> to this instance.
+        /// </summary>
+        /// <param name="index">The index to remove.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(Index index)
         {
             string table = index.Table.Name;
@@ -140,6 +196,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to remove a <see cref="T:Ackara.Daterpillar.ForeignKey" /> to this instance.
+        /// </summary>
+        /// <param name="foreignKey">The foreign key to remove.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
@@ -162,6 +223,12 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to update a <see cref="T:Ackara.Daterpillar.Column" /> to this instance.
+        /// </summary>
+        /// <param name="oldColumn">The old column.</param>
+        /// <param name="newColumn">The new column.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Update(Column oldColumn, Column newColumn)
         {
             Table table = oldColumn.Table;
@@ -184,6 +251,12 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the command to update a <see cref="T:Ackara.Daterpillar.Table" /> to this instance.
+        /// </summary>
+        /// <param name="oldTable">The old table.</param>
+        /// <param name="newTable">The new table.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Update(Table oldTable, Table newTable)
         {
             return this;

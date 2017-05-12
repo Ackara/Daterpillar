@@ -11,12 +11,24 @@ namespace Ackara.Daterpillar.Scripting
     /// <seealso cref="Ackara.Daterpillar.Scripting.IScriptBuilder" />
     public class CSharpScriptBuilder : IScriptBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSharpScriptBuilder" /> class.
+        /// </summary>
         public CSharpScriptBuilder() : this(new CSharpScriptBuilderSettings(), new CSharpTypeResolver())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSharpScriptBuilder" /> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public CSharpScriptBuilder(CSharpScriptBuilderSettings settings) : this(settings, new CSharpTypeResolver())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSharpScriptBuilder" /> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="resolver">The resolver.</param>
         public CSharpScriptBuilder(CSharpScriptBuilderSettings settings, ITypeResolver resolver)
         {
             _content = new StringBuilder();
@@ -24,36 +36,67 @@ namespace Ackara.Daterpillar.Scripting
             Settings = settings;
         }
 
+        /// <summary>
+        /// The settings
+        /// </summary>
         public CSharpScriptBuilderSettings Settings;
 
+        /// <summary>
+        /// Gets the number of characters within the script.
+        /// </summary>
+        /// <value>The length of the script.</value>
         public int Length
         {
             get { return _content.Length; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is empty.
+        /// </summary>
+        /// <value><c>true</c> if this instance is empty; otherwise, <c>false</c>.</value>
         public bool IsEmpty
         {
             get { return _content.Length == 0; }
         }
 
+        /// <summary>
+        /// Appends a copy of the specified string to this instance.
+        /// </summary>
+        /// <param name="text">The string to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(string text)
         {
             _content.Append(text);
             return this;
         }
 
+        /// <summary>
+        /// Appends a copy of the specified string followed by the default line terminator to the end of this instance.
+        /// </summary>
+        /// <param name="text">The string to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder AppendLine(string text)
         {
             _content.AppendLine(text);
             return this;
         }
 
+        /// <summary>
+        /// Appends the C# representation of a <see cref="T:Ackara.Daterpillar.Schema" /> to this instance.
+        /// </summary>
+        /// <param name="schema">The schema to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(Schema schema)
         {
             foreach (var table in schema.Tables) Append(table);
             return this;
         }
 
+        /// <summary>
+        /// Appends the C# representation of a <see cref="T:Ackara.Daterpillar.Table" /> to this instance.
+        /// </summary>
+        /// <param name="table">The table to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(Table table)
         {
             Comment(table);
@@ -67,6 +110,11 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the C# representation of a <see cref="T:Ackara.Daterpillar.Column" /> to this instance.
+        /// </summary>
+        /// <param name="column">The column to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(Column column)
         {
             string name = column.Name.ToPascalCase();
@@ -80,16 +128,34 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Appends the C# representation of a <see cref="T:Ackara.Daterpillar.Index" /> to this instance.
+        /// </summary>
+        /// <param name="index">The index to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(Index index)
         {
             return this;
         }
 
+        /// <summary>
+        /// Appends the C# representation of a <see cref="T:Ackara.Daterpillar.ForeignKey" /> to this instance.
+        /// </summary>
+        /// <param name="foreignKey">The foreign key to append.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(ForeignKey foreignKey)
         {
             return this;
         }
 
+        /// <summary>
+        /// Appends the specified name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="valuePairs">The value pairs.</param>
+        /// <param name="flag">if set to <c>true</c> [flag].</param>
+        /// <param name="comment">The comment.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
         public IScriptBuilder Append(string name, IDictionary<string, int> valuePairs, bool flag = false, string comment = null)
         {
             Comment("<summary>");
@@ -111,51 +177,93 @@ namespace Ackara.Daterpillar.Scripting
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="schema">The schema to remove.</param>
         public IScriptBuilder Remove(Schema schema)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="table">The table to remove.</param>
         public IScriptBuilder Remove(Table table)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="column">The column to remove.</param>
         public IScriptBuilder Remove(Column column)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="index">The index to remove.</param>
         public IScriptBuilder Remove(Index index)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="foreignKey">The foreign key to remove.</param>
         public IScriptBuilder Remove(ForeignKey foreignKey)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="oldTable">The old table.</param>
+        /// <param name="newTable">The new table.</param>
         public IScriptBuilder Update(Table oldTable, Table newTable)
         {
             return this;
         }
 
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        /// <param name="oldColumn">The old column.</param>
+        /// <param name="newColumn">The new column.</param>
         public IScriptBuilder Update(Column oldColumn, Column newColumn)
         {
             return this;
         }
 
+        /// <summary>
+        /// Converts the value of this instance to a <see cref="T:System.String" />
+        /// </summary>
+        /// <returns>A string whose value is the same as this instance.</returns>
         public string GetContent()
         {
             return GetContent(string.Empty);
         }
 
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        /// <param name="header">The header.</param>
+        /// <returns>System.String.</returns>
         public string GetContent(string header)
         {
             return string.Concat(header, _content);
         }
 
+        /// <summary>
+        /// Removes all characters from this instance.
+        /// </summary>
         public void Clear()
         {
             _content.Clear();
@@ -164,6 +272,7 @@ namespace Ackara.Daterpillar.Scripting
         #region Private Members
 
         private readonly StringBuilder _content;
+
         private readonly ITypeResolver _typeResolver;
 
         private void AppendConstants(Table table)

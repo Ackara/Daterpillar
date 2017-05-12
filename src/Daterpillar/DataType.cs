@@ -6,7 +6,6 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// Represents a SQL data type.
     /// </summary>
-    /// <seealso cref="System.IEquatable{Ackara.Daterpillar.DataType}" />
     public struct DataType : IEquatable<DataType>
     {
         /// <summary>

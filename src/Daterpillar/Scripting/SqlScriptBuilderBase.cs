@@ -198,7 +198,7 @@ namespace Ackara.Daterpillar.Scripting
         protected StringBuilder _script;
 
         /// <summary>
-        /// The <see cref="ITypeResolver"/> object used for mapping a <see cref="http://static.acklann.com/schema/v2/daterpillar.xsd"/> TypeName to another language's type name.
+        /// The <see cref="ITypeResolver"/> object used for mapping a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to another language's type name.
         /// </summary>
         protected ITypeResolver TypeResolver;
 

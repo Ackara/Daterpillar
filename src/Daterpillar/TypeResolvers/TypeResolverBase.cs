@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Ackara.Daterpillar.TypeResolvers
 {
 	/// <summary>
-	/// Defines a method that maps a <see cref="http://static.acklann.com/schema/v2/daterpillar.xsd"/> TypeName to another language's type name.
+	/// Defines a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to another language's type name.
 	/// </summary>
 	/// <seealso cref="ITypeResolver" />
 	public abstract class TypeResolverBase : ITypeResolver
