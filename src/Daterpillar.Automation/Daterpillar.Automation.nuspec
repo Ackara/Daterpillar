@@ -19,13 +19,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.dll"
-          target="lib\$targetFramework$" />
-
-    <file src="bin\$configuration$\$id$.xml"
-          target="lib\$targetFramework$" />
-
-    <file src="bin\$configuration$\$id$.pdb"
+    <file src="bin\$configuration$\$id$.*"
           target="lib\$targetFramework$" />
 
     <file src="MSBuild\GenerateSchemaTask.targets"

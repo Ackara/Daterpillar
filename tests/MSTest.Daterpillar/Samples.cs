@@ -1,5 +1,4 @@
-﻿
-namespace MSTest.Daterpillar
+﻿namespace MSTest.Daterpillar
 {
 	public struct FName
 	{

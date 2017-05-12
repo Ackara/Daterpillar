@@ -19,13 +19,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.dll"
-          target="lib\$targetFramework$" />
-
-    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.xml"
-          target="lib\$targetFramework$" />
-
-    <file src="bin\$configuration$\$targetFramework$\*.Daterpillar.pdb"
+    <file src="bin\$configuration$\$targetFramework$\$id$.*"
           target="lib\$targetFramework$" />
   </files>
 </package>
