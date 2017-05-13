@@ -16,7 +16,7 @@ Properties {
 	# User Args
 	$NuGetKey = "";
 	$BranchName = "";
-	$TestCase = "";
+	$TestCases = @();
 	$BuildConfiguration = "";
 	$ConnectionStrings = @{};
 
@@ -58,11 +58,8 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 
 	foreach ($folder in @($ArtifactsDir))
 	{
-		if (Test-Path $folder -PathType Container)
-		{
-			Remove-Item $folder -Recurse;
-			New-Item $folder -ItemType Directory | Out-Null;
-		}
+		if (Test-Path $folder -PathType Container) { Remove-Item $folder -Recurse; }
+        New-Item $folder -ItemType Directory | Out-Null;
 	}
 }
 
@@ -136,6 +133,22 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 		{ Invoke-Pester -Script $script -ErrorAction Stop; }
 		else
 		{ Invoke-Pester -Script $script -ErrorAction Stop -TestName $TestCase; }
+	}
+}
+
+
+Task "Run-PowershellTests" -alias "pester" -description "This task runs all powershell test scripts." `
+-depends @() -action {
+	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*tests.ps1"))
+	{
+		if ($TestCases.Length -gt 0)
+		{
+			foreach ($testName in $TestCases)
+			{
+				if ($script.Name -match $testName) { Invoke-Pester -Script $script.FullName; }
+			}
+		}
+		else { Invoke-Pester -Script $script.FullName; }
 	}
 }
 

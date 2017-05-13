@@ -9,6 +9,14 @@ namespace MSTest.Daterpillar
 {
     public static class Helper
     {
+        public static bool ValidateXml(this string xml, out string errorMsg)
+        {
+            using (var input = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            {
+                return ValidateXml(input, out errorMsg);
+            }
+        }
+
         public static bool ValidateXml(this Stream inputStream, out string errorMsg)
         {
             bool isValid = true;

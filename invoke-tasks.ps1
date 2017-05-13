@@ -61,7 +61,7 @@ else
 			"BuildConfiguration"=$BuildConfiguration;
 			"ConnectionStrings"=$ConnectionStrings;
 			"BranchName"=$BranchName;
-			"TestCase"=$TestCase;
+			"TestCases"=$TestCase;
 			"NuGetKey"=$NuGetKey;
 			"Nuget"=$nuget;
 			"Major"=$Major;

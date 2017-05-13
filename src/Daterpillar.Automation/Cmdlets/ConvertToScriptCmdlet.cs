@@ -1,22 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Ackara.Daterpillar.Scripting;
+using System.IO;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ackara.Daterpillar.Cmdlets
 {
     [Cmdlet(VerbsData.ConvertTo, "Script")]
     public class ConvertToScriptCmdlet : Cmdlet
     {
-        public string Path { get; set; }
+        [Parameter(Position = 0, ValueFromPipeline = true)]
+        public object InputObject { get; set; }
 
-        public Schema InputObject { get; set; }
-
+        [Parameter]
+        public Syntax Syntax { get; set; } = Syntax.MSSQL;
+        
         protected override void ProcessRecord()
         {
-            base.ProcessRecord();
+            IScriptBuilder script = new ScriptBuilderFactory().Create(Syntax);
+            
+            if (InputObject is Schema schema)
+            {
+                script.Append(schema);
+                WriteObject(script.GetContent());
+            }
+            else if (InputObject is string path)
+            {
+                script.Append(Schema.Load(File.OpenRead(path)));
+                WriteObject(script.GetContent());
+            }
+            else if (InputObject is PSObject obj)
+            {
+                if (obj.BaseObject is FileInfo file)
+                {
+                    script.Append(Schema.Load(file.OpenRead()));
+                    WriteObject(script.GetContent());
+                }
+            }
         }
     }
 }

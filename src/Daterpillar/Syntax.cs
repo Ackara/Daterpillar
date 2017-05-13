@@ -23,6 +23,11 @@
         /// <summary>
         /// SQLite
         /// </summary>
-        SQLite
+        SQLite,
+
+        /// <summary>
+        /// C#
+        /// </summary>
+        CSharp
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "build", "build\build.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
 EndProject
@@ -19,6 +19,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTest.Daterpillar", "tests\MSTest.Daterpillar\MSTest.Daterpillar.csproj", "{EB323886-D908-4282-819F-AEFD6470923C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Automation", "src\Daterpillar.Automation\Daterpillar.Automation.csproj", "{7C059A84-FF50-49FF-8262-B86F5A726822}"
+EndProject
+Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "Pester.Daterpillar", "tests\Pester.Daterpillar\Pester.Daterpillar.pssproj", "{F1F3B3A7-02DB-4744-AD42-C380810271F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{848DD7B3-73AE-4921-8DFF-6BFF21B47D1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,8 +46,16 @@ Global
 		{7C059A84-FF50-49FF-8262-B86F5A726822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C059A84-FF50-49FF-8262-B86F5A726822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C059A84-FF50-49FF-8262-B86F5A726822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1F3B3A7-02DB-4744-AD42-C380810271F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1F3B3A7-02DB-4744-AD42-C380810271F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1F3B3A7-02DB-4744-AD42-C380810271F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1F3B3A7-02DB-4744-AD42-C380810271F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EB323886-D908-4282-819F-AEFD6470923C} = {848DD7B3-73AE-4921-8DFF-6BFF21B47D1F}
+		{F1F3B3A7-02DB-4744-AD42-C380810271F8} = {848DD7B3-73AE-4921-8DFF-6BFF21B47D1F}
 	EndGlobalSection
 EndGlobal

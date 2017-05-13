@@ -49,15 +49,6 @@ namespace Ackara.Daterpillar.Migration
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing) Connection?.Dispose();
-        }
-        
         internal virtual string GetTypeName(string typeName)
         {
             typeName = typeName.ToLower();
@@ -161,7 +152,16 @@ namespace Ackara.Daterpillar.Migration
                 table.ForeignKeys.Add(foreignKey);
             }
         }
-        
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing) Connection?.Dispose();
+        }
+
         #region Abstract Methods
 
         /// <summary>

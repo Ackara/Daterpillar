@@ -17,11 +17,12 @@ namespace Ackara.Daterpillar.Scripting
         {
             _scriptBuilderTypes = new Dictionary<string, Type>()
             {
-                {"c#", typeof(CSharpScriptBuilder) },
-                {"csharp", typeof(CSharpScriptBuilder) },
-                {nameof(Syntax.MSSQL ).ToLower(), typeof(MSSQLScriptBuilder) },
-                {nameof(Syntax.MySQL ).ToLower(), typeof(MySQLScriptBuilder) },
-                {nameof(Syntax.SQLite).ToLower(), typeof(SQLiteScriptBuilder) }
+                { "cs", typeof(CSharpScriptBuilder) },
+                { "c#", typeof(CSharpScriptBuilder) },
+                { nameof(Syntax.CSharp).ToLower(), typeof(CSharpScriptBuilder) },
+                { nameof(Syntax.MSSQL ).ToLower(), typeof(MSSQLScriptBuilder) },
+                { nameof(Syntax.MySQL ).ToLower(), typeof(MySQLScriptBuilder) },
+                { nameof(Syntax.SQLite).ToLower(), typeof(SQLiteScriptBuilder) }
             };
 
             var assembly = Assembly.Load(new AssemblyName(GetType().AssemblyQualifiedName.Remove(0, GetType().FullName.Length).Trim(' ', ',')));
