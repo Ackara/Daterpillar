@@ -51,11 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
+    <Compile Include="Cmdlets\NewMigrationScriptCmdlet.cs" />
     <Compile Include="Migration\ExtensionMethods.cs" />
     <Compile Include="Migration\InformationSchemaBase.cs" />
+    <Compile Include="Migration\InformationSchemaFactory.cs" />
     <Compile Include="Migration\MSSQLInformationSchema.cs" />
     <Compile Include="Migration\MySQLInformationSchema.cs" />
+    <Compile Include="Migration\NullInformationSchema.cs" />
     <Compile Include="Migration\SQLiteInformationSchema.cs" />
     <Compile Include="MSBuild\GenerateSchemaTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

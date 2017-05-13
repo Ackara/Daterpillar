@@ -81,10 +81,10 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 			Push-Location $RootDir;
 			$ver = "version $($version.Major).$($version.Minor).$($version.Patch)";
 			$notes = "$ver`n";
-			$notes += "$([System.Linq.Enumerable]::Repeat('-', $ver.Length))`n`n";
+			$notes += "$([String]::Join('', [System.Linq.Enumerable]::Repeat('-', $ver.Length)))`n";
 			$notes += $commitMsg;
 			$contents = Get-Content $ReleaseNotesTXT | Out-String;
-			"$notes`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
+			"$notes`n`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
 			Exec {
 				& git add releaseNotes.txt;
 				& git add build\manifest.json;

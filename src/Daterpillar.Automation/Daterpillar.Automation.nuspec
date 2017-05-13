@@ -21,5 +21,11 @@
   <files>
     <file src="MSBuild\GenerateSchemaTask.targets"
           target="build\GenerateSchemaTask.targets" />
+
+    <file src="bin\$Configuration$\*.dll"
+          target="tools" />
+
+    <file src="bin\$Configuration$\*.psd1"
+          target="tools" />
   </files>
 </package>

@@ -4,15 +4,21 @@ This script functions as a bootstrapper to other build and developer tasks.
 #>
 
 Param(
+	[Parameter(Position = 0)]
 	[string[]]$Tasks = @("default"),
 
 	[Alias("conn", "connections")]
 	[hashtable]$ConnectionStrings = @{},
 
+	[Alias("con", "bc")]
+	[string]$BuildConfiguration = "Release",
+
+	[Parameter(Position = 1)]
+	[Alias("tn", "tc", "tests")]
+	[string[]]$TestCases,
+
 	[string]$NuGetKey,
 	[string]$BranchName,
-	[string[]]$TestCase,
-	[string]$BuildConfiguration = "Release",
 	[string]$NuGetVersion = "4.1.0",
 
 	[switch]$Major,
@@ -61,7 +67,7 @@ else
 			"BuildConfiguration"=$BuildConfiguration;
 			"ConnectionStrings"=$ConnectionStrings;
 			"BranchName"=$BranchName;
-			"TestCases"=$TestCase;
+			"TestCases"=$TestCases;
 			"NuGetKey"=$NuGetKey;
 			"Nuget"=$nuget;
 			"Major"=$Major;

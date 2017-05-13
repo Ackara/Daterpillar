@@ -9,6 +9,12 @@
         /// <summary>
         /// Creates a <see cref="Schema"/> instance using the information found for the specified schema.
         /// </summary>
+        /// <returns>A <see cref="Schema"/> instance.</returns>
+        Schema FetchSchema();
+
+        /// <summary>
+        /// Creates a <see cref="Schema"/> instance using the information found for the specified schema.
+        /// </summary>
         /// <param name="name">The name of the schema.</param>
         /// <returns>A <see cref="Schema"/> instance.</returns>
         Schema FetchSchema(string name);

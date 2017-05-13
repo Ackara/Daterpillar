@@ -8,7 +8,15 @@ $samplesDir = Get-MSTestSamplesDirectory;
 Describe "ConvertTo-Script" {
 	It "should return a script when powershell file object is passed." {
 		$schemaFile = Get-ChildItem $samplesDir -Recurse -Filter "*mock_schema*.xml" | Select-Object -First 1;
-		$result = ($schemaFile | ConvertTo-Script);
+		$result = ($schemaFile | ConvertTo-Schema | ConvertTo-Script);
+		
+		#Write-Host "result: [$result]";
+		$result | Should Not BeNullOrEmpty;
+	}
+
+	It "should return a script when multiple schema file paths is passed." {
+		$schemaFile = Get-ChildItem $samplesDir -Recurse -Filter "*fragment*.xml" | Select-Object -ExpandProperty FullName;
+		$result = ($schemaFile | ConvertTo-Schema | ConvertTo-Script);
 		
 		#Write-Host "result: [$result]";
 		$result | Should Not BeNullOrEmpty;

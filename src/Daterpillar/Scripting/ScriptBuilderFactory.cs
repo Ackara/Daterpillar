@@ -40,7 +40,18 @@ namespace Ackara.Daterpillar.Scripting
         /// <summary>
         /// Creates a <see cref="IScriptBuilder"/> instance.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="name">The name of the builder.</param>
+        /// <returns>A <see cref="IScriptBuilder"/> instance.</returns>
+        public static IScriptBuilder CreateInstance(string name)
+        {
+            if (_instance == null) _instance = new ScriptBuilderFactory();
+            return _instance.Create(name);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IScriptBuilder"/> instance.
+        /// </summary>
+        /// <param name="name">The name of the builder.</param>
         /// <returns>A <see cref="IScriptBuilder"/> instance.</returns>
         public IScriptBuilder Create(string name)
         {
@@ -67,6 +78,7 @@ namespace Ackara.Daterpillar.Scripting
 
         #region Private Members
 
+        private static ScriptBuilderFactory _instance;
         private IDictionary<string, Type> _scriptBuilderTypes;
 
         #endregion Private Members

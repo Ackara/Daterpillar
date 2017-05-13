@@ -10,6 +10,8 @@
 		internal const string supportedDatabasesCSV = @"supportedDatabases.csv";
 		internal const string text_formatsCSV = @"text_formats.csv";
 		internal const string XMLFile1XML = @"XMLFile1.xml";
+		internal const string cmdlets_source_schemaXML = @"cmdlets\source_schema.xml";
+		internal const string cmdlets_target_schemaXML = @"cmdlets\target_schema.xml";
 		internal const string schemaTest_fragment1XML = @"schemaTest\fragment1.xml";
 		internal const string schemaTest_fragment2XML = @"schemaTest\fragment2.xml";
 		internal const string schemaTest_fragment3XML = @"schemaTest\fragment3.xml";

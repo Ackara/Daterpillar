@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Automation", "s
 EndProject
 Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "Pester.Daterpillar", "tests\Pester.Daterpillar\Pester.Daterpillar.pssproj", "{F1F3B3A7-02DB-4744-AD42-C380810271F8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{848DD7B3-73AE-4921-8DFF-6BFF21B47D1F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{848DD7B3-73AE-4921-8DFF-6BFF21B47D1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

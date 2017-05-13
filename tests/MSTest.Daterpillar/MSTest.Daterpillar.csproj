@@ -54,6 +54,7 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.SQLServer.SMO.12.0.2000.8\lib\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
       <Private>True</Private>
@@ -201,6 +202,8 @@
     <Compile Include="Tests\SchemaComparerTest.cs" />
     <Compile Include="Tests\ScriptBuilderFactoryTest.cs" />
     <Compile Include="Tests\ConvertToScriptCmdletTest.cs" />
+    <Compile Include="Tests\NewMigrationScriptCmdletTest.cs" />
+    <Compile Include="Tests\ConvertToSchemaCmdletTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\daterpillar.xsd">
@@ -271,6 +274,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Samples.cs</LastGenOutput>
     </Content>
+    <None Include="Samples\cmdlets\target_schema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Samples\cmdlets\source_schema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

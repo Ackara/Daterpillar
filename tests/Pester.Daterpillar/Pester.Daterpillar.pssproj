@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="ConvertToScript.tests.ps1" />
     <Compile Include="helper.psm1" />
+    <Compile Include="NewMigrationScript.tests.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

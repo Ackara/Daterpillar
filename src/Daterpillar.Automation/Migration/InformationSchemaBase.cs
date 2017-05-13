@@ -25,6 +25,15 @@ namespace Ackara.Daterpillar.Migration
         protected readonly IDbConnection Connection;
 
         /// <summary>
+        /// Creates a <see cref="T:Ackara.Daterpillar.Schema" /> instance using the information found for the specified schema.
+        /// </summary>
+        /// <returns>A <see cref="T:Ackara.Daterpillar.Schema" /> instance.</returns>
+        public Schema FetchSchema()
+        {
+            return FetchSchema(Connection.Database);
+        }
+
+        /// <summary>
         /// Creates a <see cref="Ackara.Daterpillar.Schema" /> instance using the information found for the specified schema.
         /// </summary>
         /// <param name="name">The name of the schema.</param>
