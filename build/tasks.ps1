@@ -59,7 +59,7 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 	foreach ($folder in @($ArtifactsDir))
 	{
 		if (Test-Path $folder -PathType Container) { Remove-Item $folder -Recurse; }
-        New-Item $folder -ItemType Directory | Out-Null;
+		New-Item $folder -ItemType Directory | Out-Null;
 	}
 }
 
@@ -87,7 +87,7 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 			"$notes`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
 			Exec {
 				& git add releaseNotes.txt;
-				& git add build\solution.json;
+				& git add build\manifest.json;
 				& git commit --amend --no-edit;
 				& git tag "v$($version.ToString($true))";
 			}
