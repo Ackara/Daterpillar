@@ -1,3 +1,10 @@
+version 4.3.0
+-------------
+* Add ConvertTo-Schema cmdlet
+* Add ConvertTo-Script cmdlet
+* Add New-MigrationScript cmdlet
+
+
 version 4.2.0
 -------------
 * add ConvertTo-Script cmdlet
