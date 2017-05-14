@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <schema xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
-  <table name="card">
-    
-  </table>
+  <table name="book">
+    <column name="Id"
+            autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
 
-  <table name="attribute">
-    
+    <column name="Title">
+      <dataType scale="256">varchar</dataType>
+    </column>
+
+    <column name="Price">
+      <dataType scale="10"
+                precision="2">decimal</dataType>
+    </column>
   </table>
 </schema>

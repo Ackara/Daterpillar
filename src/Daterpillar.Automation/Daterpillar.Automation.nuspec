@@ -3,13 +3,13 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <version>$PackageVersion$</version>
     <title>$Title$</title>
+    <version>$PackageVersion$</version>
     <description>$Description$</description>
     <tags>$PackageTags$</tags>
 
     <owners>$Authors$</owners>
-    <authors>$Authors$ and contributors</authors>
+    <authors>$Authors$</authors>
     <projectUrl>$PackageProjectUrl$</projectUrl>
     <iconUrl>$PackageIconUrl$</iconUrl>
 

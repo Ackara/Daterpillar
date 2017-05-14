@@ -21,7 +21,7 @@ namespace MSTest.Daterpillar.Tests
             var sample = Assembly.GetExecutingAssembly();
 
             // Act
-            var result = AssemblyToSchemaGenerator.ToSchema(sample);
+            var result = AssemblyToSchemaConverter.ToSchema(sample);
 
             using (var xmlData = new MemoryStream())
             {

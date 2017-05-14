@@ -10,7 +10,7 @@ namespace Ackara.Daterpillar
     /// <summary>
     /// Contains methods to convert an <see cref="Assembly"/> to a <see cref="Schema"/>.
     /// </summary>
-    public static class AssemblyToSchemaGenerator
+    public static class AssemblyToSchemaConverter
     {
         /// <summary>
         /// Converts the specified <see cref="Assembly"/> to an <see cref="Schema"/>.
@@ -42,6 +42,7 @@ namespace Ackara.Daterpillar
                 }
             }
             schema.AssignParentNodes();
+            schema.Sort();
             return schema;
         }
 

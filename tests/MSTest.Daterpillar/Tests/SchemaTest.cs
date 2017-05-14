@@ -1,9 +1,10 @@
 ﻿using Ackara.Daterpillar;
 using Ackara.Daterpillar.Scripting;
-using ApprovalTests.Namers;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -58,34 +59,30 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        public void Join_should_append_the_sql_objects_of_another_schema_when_invoked()
+        public void Merge_should_append_the_sql_objects_of_another_schema_when_invoked()
         {
             // Arrange
-            var schema1 = new Schema();
-            schema1.Add(
-                new Table("card_info",
+            var deployDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            var fragments = from f in deployDir.GetFiles("*.xml", SearchOption.AllDirectories)
+                            where f.Name.StartsWith("fragment")
+                            select Schema.Load(f.OpenRead());
+
+            var sut = new Schema();
+            sut.Add(
+                new Table("user",
                 new Column("Id", new DataType("int"), autoIncrement: true),
-                new Column("Number", new DataType("int")),
-                new Column("ExpDate", new DataType("date")),
-                new Column("CVV", new DataType("int"))));
-
-            var schema2 = new Schema();
-            schema2.Add(
-                new Table("Customer",
-                    new Column("Id", new DataType("int"), autoIncrement: true),
-                    new Column("UserId", new DataType("varchar", 64)),
-                    new Column("Password", new DataType("varchar", 64)),
-                    new Column("Card_Id", new DataType("int"))),
-
-                new Script("-- header"),
-                new Script("-- footer"));
+                new Column("Username", new DataType("varchar", 64)),
+                new Column("PasswordHash", new DataType("text")),
+                new Column("Email", new DataType("varchar", 128))));
 
             // Act
-            schema1.Join(schema2);
+            sut.Merge(fragments.ToArray());
+            var xml = sut.ToXml();
 
             // Assert
-            schema1.Tables.Count.ShouldBe(2);
-            schema1.Scripts.Count.ShouldBe(2);
+            sut.Tables.Count.ShouldBe(4);
+            sut.Scripts.Count.ShouldBe(1);
+            Approvals.VerifyXml(xml);
         }
 
         [TestMethod]
@@ -118,7 +115,7 @@ namespace MSTest.Daterpillar.Tests
             }
         }
 
-        #region Cases
+        #region Sorting Cases
 
         private static TestCase Case0()
         {
@@ -188,6 +185,6 @@ namespace MSTest.Daterpillar.Tests
 
         private struct TestCase { public string Name; public Schema Schema; public string[] Expected; }
 
-        #endregion Cases
+        #endregion Sorting Cases
     }
 }

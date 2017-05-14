@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -155,16 +157,77 @@ namespace Ackara.Daterpillar
         }
 
         /// <summary>
+        /// Returns a xml representation of the current object.
+        /// </summary>
+        /// <returns>A xml representation of the current object.</returns>
+        public string ToXml()
+        {
+            string xml;
+            using (var data = new MemoryStream())
+            {
+                Save(data);
+                xml = Encoding.UTF8.GetString(data.ToArray());
+            }
+
+            return xml;
+        }
+
+        /// <summary>
         /// Concatenate the SQL objects of the specified schemas with this instance.
         /// </summary>
         /// <param name="otherSchemas">The schemas to join.</param>
-        public void Join(params Schema[] otherSchemas)
+        public void Merge(params Schema[] otherSchemas)
         {
-            foreach (var schema in otherSchemas)
+            foreach (var item in otherSchemas)
             {
-                Tables.AddRange(schema.Tables);
-                Scripts.AddRange(schema.Scripts);
+                foreach (var t in item.Tables)
+                {
+                    if (ContainsTable(t.Name)) { Tables.RemoveAll(x => x.Name.Equals(t.Name, StringComparison.CurrentCultureIgnoreCase)); }
+                    Tables.Add(t);
+                }
+
+                foreach (var s in item.Scripts)
+                {
+                    if (ContainsScript(s.Name)) { Scripts.RemoveAll(x => x.Name.Equals(s.Name, StringComparison.CurrentCultureIgnoreCase)); }
+                    Scripts.Add(s);
+                }
             }
+        }
+
+        /// <summary>
+        /// Determines whether the current object has a <see cref="Table"/> with the specified name.
+        /// </summary>
+        /// <param name="tableName">The name of the table.</param>
+        /// <returns><c>true</c> if the specified table exist; otherwise, <c>false</c>.</returns>
+        public bool ContainsTable(string tableName)
+        {
+            foreach (var table in Tables)
+            {
+                if (table.Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the current object has a <see cref="Script"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the script.</param>
+        /// <returns><c>true</c> if the specified script exist; otherwise, <c>false</c>.</returns>
+        public bool ContainsScript(string name)
+        {
+            foreach (var script in Scripts)
+            {
+                if (script.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -242,8 +305,8 @@ namespace Ackara.Daterpillar
 
         private string AsDebuggerDisplay()
         {
-            string name = (string.IsNullOrEmpty(Name) ? "" : "");
-            return $"{name}Tables: {Tables.Count}  Scripts: {Scripts.Count}";
+            string name = (string.IsNullOrEmpty(Name) ? "[n/a]" : Name);
+            return $"{name}  Tables: {Tables.Count} Scripts: {Scripts.Count}";
         }
 
         private int Rank(Node node, int? rank = 0)

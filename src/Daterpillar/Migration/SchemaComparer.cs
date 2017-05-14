@@ -110,27 +110,27 @@ namespace Ackara.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the column on the right
-                    _modifications.Add($"Remove: [{target.Name}] column.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] column.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the column on the right
-                    _modifications.Add($"Add: [{source.Name}] column.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] column.");
                     _script.Append(source);
                 }
                 else if (source.Name != target.Name)
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Name}] column.");
-                    _modifications.Add($"Add: [{source.Name}] column.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] column.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] column.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
                 else if (!equalityChecker.Equals(source, target))
                 {
                     // Change the right column to the left
-                    _modifications.Add($"Alter: [{target.Name}] column.");
+                    _modifications.Add($"Alter: [{target.Table.Name}].[{target.Name}] column.");
                     _script.Update(target, source);
                 }
             }
@@ -151,20 +151,20 @@ namespace Ackara.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the foreign key on the right
-                    _modifications.Add($"Remove: [{target.Name}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the foreign key on the right
-                    _modifications.Add($"Add: [{source.Name}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
                     _script.Append(source);
                 }
                 else if (!equalityChecker.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Name}] foreign key.");
-                    _modifications.Add($"Add: [{source.Name}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
@@ -186,20 +186,20 @@ namespace Ackara.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the index on the right
-                    _modifications.Add($"Remove: [{target.Name}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the index on the right
-                    _modifications.Add($"Add: [{source.Name}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
                     _script.Append(source);
                 }
                 else if (!equalityChecker.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Name}] index.");
-                    _modifications.Add($"Add: [{source.Name}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
