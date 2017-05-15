@@ -27,7 +27,7 @@ CompanyName = 'Ackara'
 Copyright = 'Licensed under MIT license.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Daterpillar is a build automation tool and miro-orm.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '5.0'
@@ -48,7 +48,7 @@ CLRVersion = '4.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = @("Convert-DllToSchema.ps1")
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @('*')
@@ -74,7 +74,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/Ackara/Daterpillar'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'http://static.gigobyte.com/images/daterpillar.png'
 
         # ReleaseNotes of this module
         # ReleaseNotes = ''
@@ -85,9 +85,6 @@ PrivateData = @{
 
 # HelpInfo URI of this module
 # HelpInfoURI = ''
-
-# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-# DefaultCommandPrefix = ''
 
 }
 

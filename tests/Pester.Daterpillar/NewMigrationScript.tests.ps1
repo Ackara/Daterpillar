@@ -1,5 +1,5 @@
 ﻿Import-Module "$PSScriptRoot\helper.psm1" -Force;
-$sessionDir = Install-TestEnviroment;
+$sessionDir = Install-TestEnviroment "migration";
 $module = Get-ChildItem $sessionDir -Filter "*Automation.dll" | Select-Object -ExpandProperty FullName -First 1;
 Import-Module $module -Force;
 
