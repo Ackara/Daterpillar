@@ -4,9 +4,9 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>Ackara.Daterpillar</AssemblyName>
     <RootNamespace>Ackara.Daterpillar</RootNamespace>
-    <Version>4.3.3</Version>
-    <FileVersion>4.3.3</FileVersion>
-    <AssemblyVersion>4.3.3</AssemblyVersion>
+    <Version>4.3.4</Version>
+    <FileVersion>4.3.4</FileVersion>
+    <AssemblyVersion>4.3.4</AssemblyVersion>
     <Owners>Ackara</Owners>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
