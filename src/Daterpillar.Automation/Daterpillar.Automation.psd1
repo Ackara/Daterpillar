@@ -21,10 +21,10 @@ GUID = '029d5970-92a0-4c44-81ea-53f9df411f7c'
 Author = 'Ackara'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Ackara'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 Ackeem. All rights reserved.'
+Copyright = 'licensed under MIT License.'
 
 # Description of the functionality provided by this module
 # Description = ''

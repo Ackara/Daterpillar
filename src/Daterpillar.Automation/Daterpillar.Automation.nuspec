@@ -22,7 +22,7 @@
     <file src="MSBuild\GenerateSchemaTask.targets"
           target="build\GenerateSchemaTask.targets" />
 
-    <file src="bin\$Configuration$\*.Daterpillar.*"
+    <file src="bin\$Configuration$\*.deps.json"
           target="tools" />
 
     <file src="bin\$Configuration$\*.dll"
