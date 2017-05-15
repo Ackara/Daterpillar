@@ -191,7 +191,6 @@
     </Compile>
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
     <Compile Include="Tests\ColumnNameTest.cs" />
-    <Compile Include="Tests\GenerateSchemaTaskTest.cs" />
     <Compile Include="Tests\InformationSchemaTest.cs" />
     <Compile Include="Tests\SchemaTest.cs" />
     <Compile Include="Tests\DataTypeTest.cs" />

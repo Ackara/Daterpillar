@@ -62,7 +62,6 @@
     <Compile Include="Migration\MySQLInformationSchema.cs" />
     <Compile Include="Migration\NullInformationSchema.cs" />
     <Compile Include="Migration\SQLiteInformationSchema.cs" />
-    <Compile Include="MSBuild\GenerateSchemaTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
