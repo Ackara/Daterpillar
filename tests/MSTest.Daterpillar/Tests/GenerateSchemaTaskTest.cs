@@ -11,7 +11,7 @@ namespace MSTest.Daterpillar.Tests
     [TestClass]
     public class GenerateSchemaTaskTest
     {
-        [TestMethod]
+        //[TestMethod]
         public void Execute_should_generate_a_xml_schema_file_when_invoked()
         {
             // Arrange
