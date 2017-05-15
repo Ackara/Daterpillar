@@ -19,6 +19,6 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="SchemaXml" />
     </Exec>
 
-    <Message Condition="Exist('$(SchemaXml)')" Text="Created schema file at '$(SchemaXml)'." Importance="normal" />
+    <Message Condition="Exists('$(SchemaXml)')" Text="Created schema file at '$(SchemaXml)'." Importance="normal" />
   </Target>
 </Project>
