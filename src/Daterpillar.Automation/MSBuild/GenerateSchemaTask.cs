@@ -1,7 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Ackara.Daterpillar.MSBuild
 {
@@ -43,23 +42,21 @@ namespace Ackara.Daterpillar.MSBuild
         /// <returns>true if the task executed successfully; otherwise, false.</returns>
         public bool Execute()
         {
+            // Check if the assembly file exist
             AssemblyFile = Path.GetFullPath(Environment.ExpandEnvironmentVariables(AssemblyFile));
             if (File.Exists(AssemblyFile) == false)
             {
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Cannot find the assembly file '{AssemblyFile}'.", "missing", GetType().Name, MessageImportance.High));
+                BuildEngine?.LogMessageEvent(new BuildMessageEventArgs($"Cannot find the assembly file '{AssemblyFile}'.", "missing", GetType().Name, MessageImportance.High));
                 return false;
             }
 
-            var outputDir = Path.GetDirectoryName(AssemblyFile);
-            var fileName = Path.GetFileNameWithoutExtension(AssemblyFile);
-            SchemaPath = Path.Combine(outputDir, $"{fileName}.schema.xml");
+            Schema schema = null;
+            SchemaPath = Path.ChangeExtension(AssemblyFile, "schema.xml");
 
-            //BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"IN: {AssemblyFile} OUT: {SchemaPath}", "schema", nameof(GenerateSchemaTask), MessageImportance.High));
-
-            Schema schema = Assembly.LoadFrom(AssemblyFile).ToSchema();
             using (var outStream = new FileStream(SchemaPath, FileMode.Create, FileAccess.Write, FileShare.Write))
             {
                 schema.Save(outStream);
+                BuildEngine?.LogMessageEvent(new BuildMessageEventArgs($"Created '{SchemaPath}'.", "New", nameof(GenerateSchemaTask), MessageImportance.Normal));
             }
             return true;
         }

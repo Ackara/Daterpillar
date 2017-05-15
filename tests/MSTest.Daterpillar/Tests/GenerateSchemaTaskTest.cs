@@ -1,7 +1,9 @@
 ﻿using Ackara.Daterpillar.MSBuild;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MSTest.Daterpillar.Tests
@@ -22,14 +24,14 @@ namespace MSTest.Daterpillar.Tests
 
             // Act
             if (File.Exists(sut.SchemaPath)) File.Delete(sut.SchemaPath);
-
             sut.Execute();
-            bool schemaWasGenerated = File.Exists(sut.SchemaPath);
+
             string content = File.ReadAllText(sut.SchemaPath);
+            bool schemaWasGenerated = Helper.ValidateXml(content, out string errorMsg);
 
             // Assert
-            schemaWasGenerated.ShouldBeTrue();
             content.ShouldNotBeNullOrWhiteSpace();
+            schemaWasGenerated.ShouldBeTrue(errorMsg);
         }
     }
 }

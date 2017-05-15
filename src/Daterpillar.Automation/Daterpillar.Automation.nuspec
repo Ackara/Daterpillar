@@ -22,10 +22,16 @@
     <file src="MSBuild\GenerateSchemaTask.targets"
           target="build\GenerateSchemaTask.targets" />
 
+    <file src="bin\$Configuration$\*.Daterpillar.*"
+          target="tools" />
+
     <file src="bin\$Configuration$\*.dll"
           target="tools" />
 
-    <file src="bin\$Configuration$\*.psd1"
+    <file src="Cmdlets\*ps*1"
+          target="tools" />
+
+    <file src="*.psd1"
           target="tools" />
   </files>
 </package>

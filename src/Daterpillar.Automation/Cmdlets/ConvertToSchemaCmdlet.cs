@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Management.Automation;
+using System.Reflection;
 
 namespace Ackara.Daterpillar.Cmdlets
 {

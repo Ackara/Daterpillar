@@ -24,7 +24,7 @@ function Install-TestEnviroment([string]$testName = "")
 	if (-not (Test-Path $testResultsDir -PathType Container)) { New-Item $testResultsDir -ItemType Directory | Out-Null; }
 
 	# Build project
-	$buildboxModule = Get-ChildItem "$solutionDir\packages\Ackara.Buildbox.*" -Recurse -Filter "*Buildbox.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
+	$buildboxModule = Get-ChildItem "$solutionDir\packages\Ackara.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
 	Import-Module $buildboxModule -Force;
 
 	$msbuild = Find-MSBuildPath;
@@ -32,6 +32,25 @@ function Install-TestEnviroment([string]$testName = "")
 	Write-Host (& $msbuild $automationProj /v:minimal /p:OutDir=$testResultsDir);
 	if (Get-Module Buildbox.Utils) { Remove-Module Buildbox.Utils; }
 	
+	return $testResultsDir;
+}
+
+function Install-MSTestProject()
+{
+	# Create and assign paths
+	$solutionDir = Get-SolutionDirectory;
+	$testResultsDir = "$solutionDir\TestResults\pester-$testName-$((Get-Date).Ticks)";
+	if (-not (Test-Path $testResultsDir -PathType Container)) { New-Item $testResultsDir -ItemType Directory | Out-Null; }
+
+	# Build project
+	$buildboxModule = Get-ChildItem "$solutionDir\packages\Ackara.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
+	Import-Module $buildboxModule -Force;
+
+	$msbuild = Find-MSBuildPath;
+	$mstesProj = Get-ChildItem "$solutionDir\tests" -Recurse -Filter "*MSTest*.csproj" | Select-Object -ExpandProperty FullName -First 1;
+	Write-Host (& $msbuild $mstesProj /v:minimal /p:OutDir=$testResultsDir);
+	if (Get-Module Buildbox.Utils) { Remove-Module Buildbox.Utils; }
+
 	return $testResultsDir;
 }
 

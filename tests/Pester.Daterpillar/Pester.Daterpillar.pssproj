@@ -27,6 +27,7 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="ConvertDllToSchema.tests.ps1" />
     <Compile Include="ConvertToScript.tests.ps1" />
     <Compile Include="helper.psm1" />
     <Compile Include="NewMigrationScript.tests.ps1" />

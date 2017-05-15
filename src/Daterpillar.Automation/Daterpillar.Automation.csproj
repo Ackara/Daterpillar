@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
+    <Compile Include="Cmdlets\ExtensionMethods.cs" />
     <Compile Include="Cmdlets\NewMigrationScriptCmdlet.cs" />
     <Compile Include="Migration\ExtensionMethods.cs" />
     <Compile Include="Migration\InformationSchemaBase.cs" />
@@ -71,8 +72,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Cmdlets\Convert-DllToSchema.ps1" />
     <None Include="Daterpillar.Automation.nuspec">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Daterpillar.Automation.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
