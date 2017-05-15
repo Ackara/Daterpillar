@@ -300,7 +300,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <Import Project="..\..\src\Daterpillar.Automation\MSBuild\GenerateSchemaTask.targets" />
+  <!--<Import Project="..\..\src\Daterpillar.Automation\Daterpillar.Automation.targets" />-->
   <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.105.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.105.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Import Project="..\..\packages\MSTest.TestAdapter.1.1.17\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.1.17\build\net45\MSTest.TestAdapter.targets')" />

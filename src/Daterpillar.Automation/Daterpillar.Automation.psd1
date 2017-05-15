@@ -24,7 +24,7 @@ Author = 'Ackara'
 CompanyName = 'Ackara'
 
 # Copyright statement for this module
-Copyright = 'licensed under MIT License.'
+Copyright = 'Licensed under MIT license.'
 
 # Description of the functionality provided by this module
 # Description = ''

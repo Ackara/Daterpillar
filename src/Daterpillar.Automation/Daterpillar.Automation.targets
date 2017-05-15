@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="GenerateSchema">
+  <Target Name="GenerateXmlSchema" AfterTargets="Build">
+    <!-- NOTE: MSBuild paths somethings have trailing back lashes (\) so I'm using powershell commands to handle those lashes. -->
+    
     <Exec ConsoleToMSBuild="true"
           Command="powershell -ExecutionPolicy Bypass -NonInteractive -Command Split-Path $(MSBuildThisFileDirectory) -Parent">
       <Output TaskParameter="ConsoleOutput" PropertyName="PackageDir" />
@@ -11,11 +13,12 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="TargetDll" />
     </Exec>
 
-    <Exec ConsoleToMSBuild="true"
+    <Exec Condition="Exists('$(TargetDll)')"
+          ConsoleToMSBuild="true" 
           Command="powershell -ExecutionPolicy Bypass -NonInteractive -File $(PackageDir)\tools\Convert-DllToSchema.ps1 &quot;$(TargetDll)&quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="SchemaXml" />
     </Exec>
 
-    <Message Text="Created schema file at '$(SchemaXml)'." />
+    <Message Condition="Exist('$(SchemaXml)')" Text="Created schema file at '$(SchemaXml)'." Importance="normal" />
   </Target>
 </Project>

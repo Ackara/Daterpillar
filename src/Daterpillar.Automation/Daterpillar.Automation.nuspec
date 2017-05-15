@@ -19,15 +19,15 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
   <files>
-    <file src="MSBuild\GenerateSchemaTask.targets"
-          target="build\GenerateSchemaTask.targets" />
+    <file src="Daterpillar.Automation.targets"
+          target="build\$id$.targets" />
 
     <file src="bin\$Configuration$\*.deps.json"
           target="tools" />
 
     <file src="bin\$Configuration$\*.dll"
           target="tools" />
-
+    
     <file src="Cmdlets\*ps*1"
           target="tools" />
 

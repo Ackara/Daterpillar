@@ -81,7 +81,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MSBuild\GenerateSchemaTask.targets">
+    <None Include="Daterpillar.Automation.targets">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
