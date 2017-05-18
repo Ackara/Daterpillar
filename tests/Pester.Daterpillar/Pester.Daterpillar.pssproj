@@ -27,10 +27,10 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="ConvertDllToSchema.tests.ps1" />
-    <Compile Include="ConvertToScript.tests.ps1" />
+    <Compile Include="Convert-DllToSchema.tests.ps1" />
+    <Compile Include="ConvertTo-Script.tests.ps1" />
     <Compile Include="helper.psm1" />
-    <Compile Include="NewMigrationScript.tests.ps1" />
+    <Compile Include="New-MigrationScript.tests.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

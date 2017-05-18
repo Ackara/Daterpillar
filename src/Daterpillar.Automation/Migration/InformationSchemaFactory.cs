@@ -22,10 +22,10 @@ namespace Ackara.Daterpillar.Migration
                 { nameof(System.Data.SqlClient.SqlConnection).ToLower(), typeof(System.Data.SqlClient.SqlConnection) },
 
                 { nameof(Syntax.MySQL).ToLower(), typeof(MySQLInformationSchema) },
-                { "mysqlconnection", typeof(MySQLInformationSchema) },
+                { nameof(MySql.Data.MySqlClient.MySqlConnection).ToLower(), typeof(MySQLInformationSchema) },
 
                 { nameof(Syntax.SQLite).ToLower(), typeof(SQLiteInformationSchema) },
-                { "sqliteconnection", typeof(SQLiteInformationSchema) },
+                { nameof(System.Data.SQLite.SQLiteConnection).ToLower(), typeof(SQLiteInformationSchema) },
             };
 
             var infoTypes = from t in Assembly.GetAssembly(typeof(InformationSchemaFactory)).GetTypes()

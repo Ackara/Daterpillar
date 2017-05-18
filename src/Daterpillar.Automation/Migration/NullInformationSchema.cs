@@ -1,10 +1,10 @@
 ﻿namespace Ackara.Daterpillar.Migration
 {
     /// <summary>
-    /// Represents a null <see cref="IInformationSchema"/>.
+    /// Represents a null <see cref="IInformationSchema" />.
     /// </summary>
     /// <seealso cref="Ackara.Daterpillar.Migration.IInformationSchema" />
-    internal class NullInformationSchema : IInformationSchema
+    public sealed class NullInformationSchema : IInformationSchema
     {
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

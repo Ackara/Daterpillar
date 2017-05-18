@@ -31,7 +31,7 @@
       "*": "alpha"
     },
     "shouldCommitChanges": true,
-    "shouldTagCommit": true,
+    "shouldTagCommit":false,
     "shouldAddAllUnstagedFilesWhenCommitting": true
   }
 }

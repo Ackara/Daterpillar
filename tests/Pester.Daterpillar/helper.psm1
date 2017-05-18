@@ -12,7 +12,7 @@ function Get-SolutionDirectory()
 function Get-MSTestSamplesDirectory()
 {
 	$path = Split-Path $PSScriptRoot -Parent;
-	$path = Get-Item "$path\mstes*\Samples" | Select-Object -ExpandProperty FullName;
+	$path = Get-Item "$path\mstest*\Samples" | Select-Object -ExpandProperty FullName;
 	return $path;
 }
 
@@ -31,6 +31,7 @@ function Install-TestEnviroment([string]$testName = "")
 	$automationProj = Get-ChildItem "$solutionDir\src" -Recurse -Filter "*Automation.csproj" | Select-Object -ExpandProperty FullName -First 1;
 	Write-Host (& $msbuild $automationProj /v:minimal /p:OutDir=$testResultsDir);
 	if (Get-Module Buildbox.Utils) { Remove-Module Buildbox.Utils; }
+	Get-ChildItem "$testResultsDir\Cmdlets" -Recurse -Filter "*.ps*1" | Move-Item -Destination $testResultsDir;
 	
 	return $testResultsDir;
 }
