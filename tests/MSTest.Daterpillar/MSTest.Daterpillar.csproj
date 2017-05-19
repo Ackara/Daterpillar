@@ -189,6 +189,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Samples.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tests\InvokeSqlCommandCmdletTest.cs" />
     <Compile Include="Tests\RemoveDatabaseCmdletTest.cs" />
     <Compile Include="Tests\AddDatabaseCmdletTest.cs" />
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />

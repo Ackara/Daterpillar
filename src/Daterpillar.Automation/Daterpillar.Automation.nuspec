@@ -25,9 +25,18 @@
     <file src="bin\$Configuration$\*.deps.json"
           target="tools" />
 
+    <file src="bin\$Configuration$\*.config"
+          target="tools" />
+
     <file src="bin\$Configuration$\*.dll"
           target="tools" />
-    
+
+    <file src="bin\$Configuration$\x86\*"
+          target="tools\x86" />
+
+    <file src="bin\$Configuration$\x64\*"
+          target="tools\x64" />
+
     <file src="Cmdlets\*ps*1"
           target="tools" />
 

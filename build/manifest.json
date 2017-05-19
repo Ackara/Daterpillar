@@ -30,8 +30,8 @@
       "master": "",
       "*": "alpha"
     },
+    "shouldTagCommit": false,
     "shouldCommitChanges": true,
-    "shouldTagCommit": true,
     "shouldAddAllUnstagedFilesWhenCommitting": true
   }
 }
