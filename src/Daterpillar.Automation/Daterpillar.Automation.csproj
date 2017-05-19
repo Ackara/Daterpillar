@@ -88,6 +88,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmdlets\RemoveDatabaseCmdlet.cs" />
+    <Compile Include="Cmdlets\AddDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
     <Compile Include="Cmdlets\ExtensionMethods.cs" />
@@ -116,9 +118,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Cmdlets\Convert-DllToSchema.ps1" />
-    <None Include="Cmdlets\daterpillar.psm1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Daterpillar.Automation.nuspec">
       <SubType>Designer</SubType>
     </None>

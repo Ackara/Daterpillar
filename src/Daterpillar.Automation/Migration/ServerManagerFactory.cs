@@ -17,14 +17,14 @@ namespace Ackara.Daterpillar.Migration
         {
             _serverManagerTypes = new Dictionary<string, Type>()
             {
-                { nameof(Syntax.MSSQL).ToString(), typeof(MSSQLServerManager) },
-                { nameof(System.Data.SqlClient.SqlConnection).ToString(), typeof(MSSQLServerManager) },
+                { nameof(Syntax.MSSQL).ToLower(), typeof(MSSQLServerManager) },
+                { nameof(System.Data.SqlClient.SqlConnection).ToLower(), typeof(MSSQLServerManager) },
 
-                { nameof(Syntax.MySQL).ToString(), typeof(MySQLServerManager) },
-                { nameof(MySql.Data.MySqlClient.MySqlConnection).ToString(), typeof(MySQLServerManager) },
+                { nameof(Syntax.MySQL).ToLower(), typeof(MySQLServerManager) },
+                { nameof(MySql.Data.MySqlClient.MySqlConnection).ToLower(), typeof(MySQLServerManager) },
 
-                { nameof(Syntax.SQLite).ToString(), typeof(SQLiteServerManager) },
-                { nameof(System.Data.SQLite.SQLiteConnection).ToString(), typeof(SQLiteServerManager) },
+                { nameof(Syntax.SQLite).ToLower(), typeof(SQLiteServerManager) },
+                { nameof(System.Data.SQLite.SQLiteConnection).ToLower(), typeof(SQLiteServerManager) },
             };
 
             var serverTypes = from type in Assembly.GetAssembly(typeof(IServerManager)).GetExportedTypes()

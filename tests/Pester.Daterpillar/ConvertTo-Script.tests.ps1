@@ -1,9 +1,9 @@
 ﻿Import-Module "$PSScriptRoot\helper.psm1" -Force;
 $sessionDir = Install-TestEnviroment "convert to script";
+$samplesDir = Get-MSTestSamplesDirectory;
 $module = Get-ChildItem $sessionDir -Filter "*Automation.dll" | Select-Object -ExpandProperty FullName -First 1;
 Import-Module $module -Force;
 
-$samplesDir = Get-MSTestSamplesDirectory;
 
 Describe "ConvertTo-Script" {
 	It "should return a script when powershell file object is passed." {
