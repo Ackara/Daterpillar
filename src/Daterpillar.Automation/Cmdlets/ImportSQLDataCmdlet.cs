@@ -1,62 +1,134 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Ackara.Daterpillar.Migration;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
 using System.Management.Automation;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ackara.Daterpillar.Cmdlets
 {
     [Cmdlet(VerbsData.Import, "SQLData")]
     public class ImportSQLDataCmdlet : Cmdlet
     {
+        [Alias("src", "from")]
+        [Parameter(Position = 0, Mandatory = true)]
+        public object Source { get; set; }
 
-        protected override void BeginProcessing()
-        {
+        [Alias("d", "dest", "to", "tgt")]
+        [Parameter(Position = 1, Mandatory = true)]
+        public object Destination { get; set; }
 
-            if (_connection.State != ConnectionState.Open) _connection.Open();
-        }
+        [Alias("t", "tbl")]
+        [Parameter(Position = 2, Mandatory = true)]
+        public string Table { get; set; }
+
+        /// <summary>
+        /// Gets or sets the syntax.
+        /// </summary>
+        /// <value>The syntax.</value>
+        [Alias("s")]
+        [Parameter(Position = 3, Mandatory = true)]
+        [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
+        public string Syntax { get; set; }
 
         protected override void ProcessRecord()
         {
-            
-        }
+            DataTable data;
+            IDbConnection source = GetConnection(Source);
+            string sourceHostName = GetHost(source.ConnectionString);
+            using (source)
+            {
+                source.Open();
+                WriteVerbose($"connected to the '{sourceHostName}' database.");
 
-        protected override void EndProcessing()
-        {
-            _connection?.Dispose();
+                using (var command = source.CreateCommand())
+                {
+                    command.CommandText = $"SELECT * FROM {Table};";
+                    using (data = new DataTable())
+                    {
+                        WriteVerbose($"querying the '{sourceHostName}' database ...");
+                        data.Load(command.ExecuteReader());
+                        WriteVerbose($"query completed; {data.Rows.Count} records were retrieved.");
+                    }
+                }
+            }
+
+            if (data.Rows.Count == 0) { WriteWarning($"The [{Table}] table do not have any records."); }
+            else
+            {
+                IDbConnection destination = GetConnection(Destination);
+                string destinationHostName = GetHost(destination.ConnectionString);
+                using (destination)
+                {
+                    destination.Open();
+                    WriteVerbose($"connected to the '{destinationHostName}' database.");
+
+                    using (var command = destination.CreateCommand())
+                    {
+                        WriteVerbose($"importing {data.Rows.Count} records to the '{destinationHostName}' database ...");
+                        string batchInsert = BuildInsertScript(data);
+                        command.CommandText = batchInsert;
+                        command.ExecuteNonQuery();
+                        WriteVerbose($"import complete.");
+                    }
+                }
+            }
+
+            WriteObject(data);
         }
 
         #region Private Members
 
-        private const string defaultArgs = "default", explictArgs = "explict";
-        private IDbConnection _connection;
+        private IDbConnection GetConnection(object input)
+        {
+            if (input is PSObject ps) input = ps.BaseObject;
+
+            if (input is IDbConnection connection)
+            {
+                return connection;
+            }
+            else
+            {
+                return ServerManagerFactory.CreateInstance(Syntax, input.ToString()).GetConnection();
+            }
+        }
+
+        private string BuildInsertScript(DataTable data)
+        {
+            using (data)
+            {
+                var script = new StringBuilder();
+                script.Append($"INSERT INTO {data.TableName} (");
+
+                foreach (DataColumn column in data.Columns)
+                {
+                    script.Append($"{column.ColumnName}, ");
+                }
+
+                script.Remove((script.Length - 2), 2);
+                script.AppendLine($") VALUES");
+                foreach (DataRow record in data.Rows)
+                {
+                    script.Append("(");
+                    for (int i = 0; i < data.Columns.Count; i++)
+                    {
+                        script.Append($"'{record[i]}', ");
+                    }
+                    script.Remove((script.Length - 2), 2);
+                    script.AppendLine("),");
+                }
+
+                script.Remove((script.Length - 3), 3);
+                script.Append(";");
+
+                return script.ToString();
+            }
+        }
 
         private string GetHost(string connectionString)
         {
             var builder = new SqlConnectionStringBuilder(connectionString);
-            return builder.DataSource;
-        }
-
-        private void BuildConnectionString(out string connectionString)
-        {
-            if (string.IsNullOrEmpty(ConnectionString))
-            {
-                string dataSource = Path.IsPathRooted(Host) ? "Data Source" : "server";
-                var builder = new DbConnectionStringBuilder
-                {
-                    { dataSource, Host },
-                    { "user", User },
-                    { "password", Password },
-                    { "database", Database }
-                };
-                connectionString = builder.ConnectionString;
-            }
-            else { connectionString = ConnectionString; }
+            string databaseName = (string.IsNullOrEmpty(builder.InitialCatalog) ? "master" : builder.InitialCatalog);
+            return $"{builder.DataSource}/{databaseName}";
         }
 
         #endregion Private Members
