@@ -26,7 +26,7 @@ namespace Ackara.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Alias("s")]
-        [Parameter(Position = 3, Mandatory = true)]
+        [Parameter(Position = 3)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 

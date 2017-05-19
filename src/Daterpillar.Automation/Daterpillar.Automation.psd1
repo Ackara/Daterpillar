@@ -12,7 +12,7 @@
 RootModule = 'Ackara.Daterpillar.Automation.dll'
 
 # Version number of this module.
-ModuleVersion = '4.4.0'
+ModuleVersion = '4.5.0'
 
 # ID used to uniquely identify this module
 GUID = '029d5970-92a0-4c44-81ea-53f9df411f7c'
