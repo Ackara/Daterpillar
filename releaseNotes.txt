@@ -1,3 +1,9 @@
+version 4.4.0
+-------------
+* Add add-database cmdlet
+* Add remove-database cmdlet
+
+
 version 4.3.0
 -------------
 * Add ConvertTo-Schema cmdlet

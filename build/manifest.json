@@ -15,8 +15,8 @@
     "version":
     {
       "major": 4,
-      "minor": 3,
-      "patch": 4,
+      "minor": 4,
+      "patch": 0,
       "suffix": "alpha"
     },
     "targets":
@@ -31,7 +31,7 @@
       "*": "alpha"
     },
     "shouldCommitChanges": true,
-    "shouldTagCommit":false,
+    "shouldTagCommit": true,
     "shouldAddAllUnstagedFilesWhenCommitting": true
   }
 }
