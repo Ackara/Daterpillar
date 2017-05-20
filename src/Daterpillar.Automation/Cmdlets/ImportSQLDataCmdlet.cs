@@ -6,17 +6,34 @@ using System.Text;
 
 namespace Ackara.Daterpillar.Cmdlets
 {
+    /// <summary>
+    /// A powershell cmdlet that imports data from one SQL table to another on the same or different server. This class cannot be inherited.
+    /// </summary>
+    /// <remarks>Both the source and target tables must be identical.</remarks>
+    /// <seealso cref="System.Management.Automation.Cmdlet" />
     [Cmdlet(VerbsData.Import, "SQLData")]
-    public class ImportSQLDataCmdlet : Cmdlet
+    public sealed class ImportSQLDataCmdlet : Cmdlet
     {
+        /// <summary>
+        /// Gets or sets the connection to the source database.
+        /// </summary>
+        /// <value>The source.</value>
         [Alias("src", "from")]
         [Parameter(Position = 0, Mandatory = true)]
         public object Source { get; set; }
 
+        /// <summary>
+        /// Gets or sets the connection to the destination.
+        /// </summary>
+        /// <value>The destination.</value>
         [Alias("d", "dest", "to", "tgt")]
         [Parameter(Position = 1, Mandatory = true)]
         public object Destination { get; set; }
 
+        /// <summary>
+        /// Gets or sets the SQL table.
+        /// </summary>
+        /// <value>The table.</value>
         [Alias("t", "tbl")]
         [Parameter(Position = 2, Mandatory = true)]
         public string Table { get; set; }
@@ -30,6 +47,9 @@ namespace Ackara.Daterpillar.Cmdlets
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 
+        /// <summary>
+        /// Processes the record.
+        /// </summary>
         protected override void ProcessRecord()
         {
             DataTable data;

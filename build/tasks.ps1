@@ -63,10 +63,8 @@ Task "Init" -description "This task loads and creates all denpendencies." -actio
 	}
 }
 
-
 Task "Setup" -description "This task will generate all missing/sensitive files missing from the project." `
 -depends @("Add-AppConfigFiles");
-
 
 Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
 -depends @("Init") -action {
@@ -96,7 +94,6 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 	}
 }
 
-
 Task "Build-Solution" -alias "compile" -description "This task complites the solution." `
 -depends @("Init") -action {
 	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
@@ -113,7 +110,6 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 	finally { Pop-Location; }
 	Write-LineBreak;
 }
-
 
 Task "Run-Tests" -alias "test" -description "This task runs all automated tests." `
 -depends @("Build-Solution") -action {
@@ -136,7 +132,6 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 	}
 }
 
-
 Task "Run-PowershellTests" -alias "pester" -description "This task runs all powershell test scripts." `
 -depends @() -action {
 	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*tests.ps1"))
@@ -152,13 +147,12 @@ Task "Run-PowershellTests" -alias "pester" -description "This task runs all powe
 	}
 }
 
-
 Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." `
 -depends @("Init") -action {
 	$version = Get-VersionNumber -ConfigFile $ManifestPath;
 	$suffix = Get-BranchSuffix $BranchName;
 	if (-not [String]::IsNullOrEmpty($suffix)) { $suffix = "-$suffix"; }
-	
+
 	$properties = "";
 	$properties += "PackageVersion=$($version.ToString($true))$suffix;";
 	$properties += "PackageTags=$($Manifest.metadata.tags);";
@@ -192,7 +186,6 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 		}
 		else
 		{
-			
 			try
 			{
 				Split-Path $proj -Parent | Push-Location;
@@ -203,7 +196,6 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 		}
 	}
 }
-
 
 Task "Publish-Packages" -alias "publish" -description "This task deploys all deployment artifacts." `
 -depends @("Create-Packages") -action {
@@ -216,7 +208,6 @@ Task "Publish-Packages" -alias "publish" -description "This task deploys all dep
 	}
 }
 
-
 Task "Add-AppConfigFiles" -description "This task creates all missing app.config files within the solution." -action {
 	$mstestProjectConfig = "$RootDir\tests\MSTest.Daterpillar\app.config";
 	if (-not (Test-Path $mstestProjectConfig -PathType Leaf))
@@ -224,7 +215,7 @@ Task "Add-AppConfigFiles" -description "This task creates all missing app.config
 		$mysqlConnStr = $ConnectionStrings["mysql"];
 		$mssqlConnStr = $ConnectionStrings["mssql"];
 
-@"
+		@"
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <configSections />

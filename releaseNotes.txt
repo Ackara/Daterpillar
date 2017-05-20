@@ -1,6 +1,7 @@
 version 4.5.0
 -------------
 * Add Import-SQLData cmdlet
+* Add Invoke-SQLCommand cmdlet
 
 
 version 4.4.0
@@ -23,5 +24,4 @@ version 4.2.0
 
 version 4.1.0
 -------------
-
 * Add msbuild targets
