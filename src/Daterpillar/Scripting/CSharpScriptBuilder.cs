@@ -14,7 +14,15 @@ namespace Ackara.Daterpillar.Scripting
         /// <summary>
         /// Initializes a new instance of the <see cref="CSharpScriptBuilder" /> class.
         /// </summary>
-        public CSharpScriptBuilder() : this(new CSharpScriptBuilderSettings(), new CSharpTypeResolver())
+        public CSharpScriptBuilder() : this(new CSharpScriptBuilderSettings()
+        {
+            AddConstants = true,
+            IgnoreComments = false,
+            AddSchemaAttributes = true,
+            UseVirtualProperties = true,
+            InheritEntityBaseClass = true,
+            AddDataContractAttributes = false
+        }, new CSharpTypeResolver())
         { }
 
         /// <summary>
@@ -272,7 +280,6 @@ namespace Ackara.Daterpillar.Scripting
         #region Private Members
 
         private readonly StringBuilder _content;
-
         private readonly ITypeResolver _typeResolver;
 
         private void AppendConstants(Table table)
@@ -283,9 +290,11 @@ namespace Ackara.Daterpillar.Scripting
                 _content.AppendLine($"\t#region {regionName}");
                 _content.AppendLine();
                 _content.AppendLine($"\tpublic const string Table = \"{table.Name}\";");
+                _content.AppendLine();
                 foreach (var column in table.Columns)
                 {
-                    //_content.AppendLine();
+                    _content.AppendLine($"\tpublic const string {column.Name.ToPascalCase()}Column = \"{column.Name}\";");
+                    _content.AppendLine();
                 }
 
                 _content.AppendLine($"\t#endregion {regionName}");
@@ -344,9 +353,8 @@ namespace Ackara.Daterpillar.Scripting
             if (Settings.IgnoreComments) return;
             else
             {
-                string summary = (string.IsNullOrEmpty(table.Comment)) ? $"Represents a {table.Name}." : table.Comment;
                 _content.AppendLine("/// <summary>");
-                _content.AppendLine($"/// {summary}");
+                _content.AppendLine($"/// {(string.IsNullOrEmpty(table.Comment) ? $"Represents a {table.Name}." : table.Comment)}");
                 _content.AppendLine("/// </summary>");
             }
         }

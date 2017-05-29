@@ -1,0 +1,1 @@
+﻿INSERT INTO `table_with_no_constraints` (`Name`, `Sex`, `body`, `Created_On`, `amount`, `Rate`, `Day`) VALUES ('foo', 'm', null, '2000-01-01 00:00:00', '123', '123.45', '5');

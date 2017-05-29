@@ -7,6 +7,11 @@ public partial class CardType
 	#region SCHEMA NAMES
 
 	public const string Table = "card_type";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -34,6 +39,11 @@ public partial class Attribute
 	#region SCHEMA NAMES
 
 	public const string Table = "attribute";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -61,6 +71,11 @@ public partial class CardIcon
 	#region SCHEMA NAMES
 
 	public const string Table = "card_icon";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -88,6 +103,11 @@ public partial class MonsterType
 	#region SCHEMA NAMES
 
 	public const string Table = "monster_type";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -115,6 +135,11 @@ public partial class Ability
 	#region SCHEMA NAMES
 
 	public const string Table = "ability";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -142,6 +167,31 @@ public partial class Card
 	#region SCHEMA NAMES
 
 	public const string Table = "card";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
+	public const string TextColumn = "Text";
+
+	public const string PendulumEffectColumn = "Pendulum_Effect";
+
+	public const string LevelColumn = "Level";
+
+	public const string AtkColumn = "Atk";
+
+	public const string DefColumn = "Def";
+
+	public const string CardTypeIdColumn = "Card_Type_Id";
+
+	public const string AttributeIdColumn = "Attribute_Id";
+
+	public const string CardIconIdColumn = "Card_Icon_Id";
+
+	public const string MonsterTypeIdColumn = "Monster_Type_Id";
+
+	public const string AbilityIdColumn = "Ability_Id";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -232,6 +282,17 @@ public partial class CardExtras
 	#region SCHEMA NAMES
 
 	public const string Table = "card_extras";
+
+	public const string CardIdColumn = "Card_Id";
+
+	public const string RulingsColumn = "Rulings";
+
+	public const string TipsColumn = "Tips";
+
+	public const string TriviaColumn = "Trivia";
+
+	public const string PasscodeColumn = "Passcode";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -277,6 +338,21 @@ public partial class Pack
 	#region SCHEMA NAMES
 
 	public const string Table = "pack";
+
+	public const string IdColumn = "Id";
+
+	public const string AcronymColumn = "Acronym";
+
+	public const string NameColumn = "Name";
+
+	public const string DescriptionColumn = "Description";
+
+	public const string ReleaseDateColumn = "Release_Date";
+
+	public const string SizeColumn = "Size";
+
+	public const string KonamiIdColumn = "Konami_Id";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -334,6 +410,15 @@ public partial class Rarity
 	#region SCHEMA NAMES
 
 	public const string Table = "rarity";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
+	public const string CodeColumn = "Code";
+
+	public const string ValueColumn = "Value";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -373,6 +458,19 @@ public partial class CardNumber
 	#region SCHEMA NAMES
 
 	public const string Table = "card_number";
+
+	public const string PackAcronymColumn = "Pack_Acronym";
+
+	public const string NumberColumn = "Number";
+
+	public const string RarityIdColumn = "Rarity_Id";
+
+	public const string ArtIndexColumn = "Art_Index";
+
+	public const string CardIdColumn = "Card_Id";
+
+	public const string PackIdColumn = "Pack_Id";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>
@@ -429,6 +527,11 @@ public partial class Effect
 	#region SCHEMA NAMES
 
 	public const string Table = "effect";
+
+	public const string IdColumn = "Id";
+
+	public const string NameColumn = "Name";
+
 	#endregion SCHEMA NAMES
 
 	/// <summary>

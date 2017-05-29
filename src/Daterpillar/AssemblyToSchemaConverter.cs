@@ -46,23 +46,6 @@ namespace Ackara.Daterpillar
             return schema;
         }
 
-        internal static string Escape(this string name, Syntax syntax)
-        {
-            switch (syntax)
-            {
-                default:
-                case Syntax.Generic:
-                    return name;
-
-                case Syntax.MySQL:
-                    return $"`{name}`";
-
-                case Syntax.MSSQL:
-                case Syntax.SQLite:
-                    return $"[{name}]";
-            }
-        }
-
         private static void ConvertToTable(TypeInfo enumType, Syntax syntax, out Table table, out Script script)
         {
             string tableName = enumType.GetCustomAttribute<TableAttribute>().Name;
@@ -74,7 +57,7 @@ namespace Ackara.Daterpillar
             table.Indexes.Add(new Index(IndexType.Index, true, new ColumnName("Name")));
             // --- script ---
             var content = new StringBuilder();
-            content.Append($"INSERT INTO {Escape(tableName, syntax)} ({Escape("Id", syntax)}, {Escape("Name", syntax)}) VALUES");
+            content.Append($"INSERT INTO {tableName.Escape(syntax)} ({"Id".Escape(syntax)}, {"Name".Escape(syntax)}) VALUES");
             foreach (var field in enumType.DeclaredFields.Where(x => x.FieldType == enumType.AsType()))
             {
                 var attribute = field.GetCustomAttribute<EnumValueAttribute>();

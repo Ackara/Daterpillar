@@ -191,6 +191,8 @@
     </Compile>
     <Compile Include="Tests\ImportSQLDataCmdletTest.cs" />
     <Compile Include="Tests\InvokeSqlCommandCmdletTest.cs" />
+    <Compile Include="Tests\LinqExtensionMethodsTest.cs" />
+    <Compile Include="Tests\QueryTest.cs" />
     <Compile Include="Tests\RemoveDatabaseCmdletTest.cs" />
     <Compile Include="Tests\AddDatabaseCmdletTest.cs" />
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Tests\ConvertToScriptCmdletTest.cs" />
     <Compile Include="Tests\NewMigrationScriptCmdletTest.cs" />
     <Compile Include="Tests\ConvertToSchemaCmdletTest.cs" />
+    <Compile Include="Tests\ExpressionConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\daterpillar.xsd">

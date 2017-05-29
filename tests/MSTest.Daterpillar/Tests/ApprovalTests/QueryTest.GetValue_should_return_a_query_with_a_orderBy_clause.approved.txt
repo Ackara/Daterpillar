@@ -1,0 +1,8 @@
+﻿SELECT
+	*
+FROM
+	tableA
+ORDER BY
+	Name,
+	Age
+;

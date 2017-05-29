@@ -3,9 +3,11 @@ using System;
 
 namespace MSTest.Daterpillar.Fake
 {
-    [Table("table_with_no_constraints")]
+    [Table(Table)]
     public class SimpleTable
     {
+        public const string Table = "table_with_no_constraints";
+
         [Column("Id", AutoIncrement = true)]
         public int Id { get; set; }
 

@@ -79,6 +79,29 @@ namespace Ackara.Daterpillar
             }
         }
 
+        /// <summary>
+        /// Escapes the specified sql object's name according to the rules of the specified <see cref="Syntax"/>.
+        /// </summary>
+        /// <param name="name">The sql object name.</param>
+        /// <param name="syntax">The syntax.</param>
+        /// <returns>An escaped name.</returns>
+        public static string Escape(this string name, Syntax syntax)
+        {
+            switch (syntax)
+            {
+                default:
+                case Syntax.Generic:
+                    return name;
+
+                case Syntax.MySQL:
+                    return $"`{name}`";
+
+                case Syntax.MSSQL:
+                case Syntax.SQLite:
+                    return $"[{name}]";
+            }
+        }
+
         internal static string ToText(this Order order)
         {
             string output;
