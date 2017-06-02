@@ -7,7 +7,6 @@
     "copyright": "licensed under MIT License",
     "licenseUrl": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE",
     "repositoryUrl": "https://github.com/Ackara/Daterpillar.git",
-    "description": "Daterpillar is a build automation tool and miro-orm.",
     "tags": "orm miroc-orm sql t4 build automation"
   },
   "semanticVersion":

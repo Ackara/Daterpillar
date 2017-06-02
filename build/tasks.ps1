@@ -146,6 +146,7 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 	$version = Get-VersionNumber -ConfigFile $ManifestPath;
 	$suffix = Get-BranchSuffix $BranchName;
 	if (-not [String]::IsNullOrEmpty($suffix)) { $suffix = "-$suffix"; }
+	$readme = Get-Content "$PSScriptRoot\package-readme.txt" | Out-String;
 
 	$properties = "";
 	$properties += "PackageVersion=$($version.ToString($true))$suffix;";
@@ -157,7 +158,7 @@ Task "Create-Packages" -alias "pack" -description "This task creates all deploym
 	$properties += "Copyright=$($Manifest.metadata.copyright);";
 	$properties += "PackageProjectUrl=$($Manifest.metadata.projectUrl);";
 	$properties += "RepositoryUrl=$($Manifest.metadata.repositoryUrl);";
-	$properties += "Description=$($Manifest.metadata.description);";
+	$properties += "Description=$readme;";
 	$properties += "PackageRequireLicenseAcceptance=true;";
 	$properties += "PackageReleaseNotes=$(Get-Content $ReleaseNotesTXT | Out-String);";
 

@@ -19,6 +19,9 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
   <files>
+    <file src="..\..\build\package-readme.txt"
+          target="readme.txt" />
+
     <file src="Daterpillar.Automation.targets"
           target="build\$id$.targets" />
 

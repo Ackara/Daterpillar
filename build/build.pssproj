@@ -27,6 +27,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="manifest.json" />
+    <Content Include="package-readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\invoke-tasks.ps1">

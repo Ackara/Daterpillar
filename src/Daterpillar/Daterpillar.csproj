@@ -18,9 +18,9 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\README.md">
+    <Content Include="..\..\build\package-readme.txt">
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>readme.txt</PackagePath>
     </Content>
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
