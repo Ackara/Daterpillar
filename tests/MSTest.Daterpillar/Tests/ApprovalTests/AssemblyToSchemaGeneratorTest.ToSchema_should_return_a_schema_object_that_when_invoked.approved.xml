@@ -98,6 +98,9 @@
     <column name="Day" nullable="false" autoIncrement="false">
       <dataType scale="0" precision="0">int</dataType>
     </column>
+    <column name="Exist" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">bool</dataType>
+    </column>
     <index type="index" unique="false">
       <columnName order="ASC">Name</columnName>
     </index>

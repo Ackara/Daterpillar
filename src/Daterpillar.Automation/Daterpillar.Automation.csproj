@@ -94,7 +94,6 @@
     <Compile Include="Cmdlets\AddDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
-    <Compile Include="Cmdlets\ExtensionMethods.cs" />
     <Compile Include="Cmdlets\NewMigrationScriptCmdlet.cs" />
     <Compile Include="Migration\ExtensionMethods.cs" />
     <Compile Include="Migration\InformationSchemaBase.cs" />

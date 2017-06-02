@@ -5,8 +5,8 @@
     <id>$id$</id>
     <title>$Title$</title>
     <version>$PackageVersion$</version>
-    <description>$Description$</description>
     <tags>$PackageTags$</tags>
+    <description>$Description$</description>
 
     <owners>$Authors$</owners>
     <authors>$Authors$</authors>

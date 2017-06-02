@@ -111,7 +111,7 @@ Task "Build-Solution" -alias "compile" -description "This task complites the sol
 	Write-LineBreak;
 }
 
-Task "Run-Tests" -alias "test" -description "This task runs all automated tests." `
+Task "Run-VsTests" -alias "vstest" -description "This task runs all visual studio tests." `
 -depends @("Build-Solution") -action {
 	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
 
@@ -122,19 +122,11 @@ Task "Run-Tests" -alias "test" -description "This task runs all automated tests.
 		else
 		{ Exec { & dotnet test $proj --configuration $BuildConfiguration --filter ClassName~$TestCase --verbosity minimal; } }
 	}
-
-	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*test*.ps1" | Select-Object -ExpandProperty FullName))
-	{
-		if ([string]::IsNullOrEmpty($TestCase))
-		{ Invoke-Pester -Script $script -ErrorAction Stop; }
-		else
-		{ Invoke-Pester -Script $script -ErrorAction Stop -TestName $TestCase; }
-	}
 }
 
 Task "Run-PowershellTests" -alias "pester" -description "This task runs all powershell test scripts." `
 -depends @() -action {
-	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*tests.ps1"))
+	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*test*.ps1"))
 	{
 		if ($TestCases.Length -gt 0)
 		{
@@ -146,6 +138,8 @@ Task "Run-PowershellTests" -alias "pester" -description "This task runs all powe
 		else { Invoke-Pester -Script $script.FullName; }
 	}
 }
+
+Task "Run-Tests" -alias "test" -description "This task runs all tests." -depends @("Run-VsTests", "Run-PowershellTests");
 
 Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." `
 -depends @("Init") -action {

@@ -25,6 +25,15 @@ namespace Ackara.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
         /// </summary>
+        /// <param name="typeName">Name of the type.</param>
+        /// <param name="scale">The scale.</param>
+        /// <param name="precision">The precision.</param>
+        public ColumnAttribute(string typeName, int scale = 0, int precision = 0) : this(null, typeName, scale, precision)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
+        /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="typeName">Name of the type.</param>
         /// <param name="scale">The scale.</param>
