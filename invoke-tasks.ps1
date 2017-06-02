@@ -37,6 +37,7 @@ if ([string]::IsNullOrEmpty($BranchName))
 		$BranchName = $regex.Match($results).Groups["name"].Value;
 	}
 }
+Write-Host "Branch: '$BranchName'";
 
 if ($ConnectionStrings.Count -eq 0)
 {
