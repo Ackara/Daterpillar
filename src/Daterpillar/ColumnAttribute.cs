@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Indicates that a public field or property represents a SQL table column. This class cannot be inherited.

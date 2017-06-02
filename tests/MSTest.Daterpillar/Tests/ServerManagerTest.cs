@@ -1,4 +1,4 @@
-﻿using Ackara.Daterpillar.Migration;
+﻿using Acklann.Daterpillar.Migration;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;

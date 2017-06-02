@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Migration
+﻿namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Defines methods to create a <see cref="Schema"/> instance using a SQL server "information schema" table.

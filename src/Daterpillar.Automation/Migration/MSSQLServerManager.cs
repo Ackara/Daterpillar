@@ -1,12 +1,12 @@
 ﻿using Microsoft.SqlServer.Management.Smo;
 using System.Data;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provide methods and properties for managing a MSSQL server.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IServerManager" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IServerManager" />
     public class MSSQLServerManager : IServerManager
     {
         /// <summary>

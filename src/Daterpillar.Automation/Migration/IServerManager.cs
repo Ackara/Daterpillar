@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides functionality to manager a SQL server.

@@ -1,12 +1,12 @@
-﻿using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar.TypeResolvers;
 using System.Linq;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Provides functions used for building SQLite scripts.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Scripting.SqlScriptBuilderBase" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.SqlScriptBuilderBase" />
     public class SQLiteScriptBuilder : SqlScriptBuilderBase
     {
         /// <summary>

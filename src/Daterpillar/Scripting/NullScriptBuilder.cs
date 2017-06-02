@@ -1,9 +1,9 @@
-﻿namespace Ackara.Daterpillar.Scripting
+﻿namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Represents a null <see cref="IScriptBuilder"/>.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Scripting.IScriptBuilder" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.IScriptBuilder" />
     public class NullScriptBuilder : IScriptBuilder
     {
         /// <summary>

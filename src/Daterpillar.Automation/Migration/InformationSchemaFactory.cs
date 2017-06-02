@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provide methods to create a new <see cref="IInformationSchema"/> instance.

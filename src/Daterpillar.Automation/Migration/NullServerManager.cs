@@ -1,11 +1,11 @@
 ﻿using System.Data;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Represents a null <see cref="IServerManager"/>. This class cannot be inherited.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IServerManager" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IServerManager" />
     public sealed class NullServerManager : IServerManager
     {
         /// <summary>

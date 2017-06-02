@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Scripting
+﻿namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Specifies a set of features to support on the <see cref="CSharpScriptBuilder" /> object when the <see cref="IScriptBuilder.GetContent" /> method is called.
@@ -12,7 +12,7 @@
         public bool IgnoreComments { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the class should be decorated with <see cref="Ackara.Daterpillar" /> attributes. The default is true.
+        /// Gets or sets a value indicating whether the class should be decorated with <see cref="Acklann.Daterpillar" /> attributes. The default is true.
         /// </summary>
         /// <value><c>true</c> if schema attributes should be appended; otherwise, <c>false</c>.</value>
         public bool AddSchemaAttributes { get; set; }
@@ -24,9 +24,9 @@
         public bool UseVirtualProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="Ackara.Daterpillar"/> class should be inherited. The default is true.
+        /// Gets or sets a value indicating whether the <see cref="Acklann.Daterpillar"/> class should be inherited. The default is true.
         /// </summary>
-        /// <value><c>true</c> if the <see cref="Ackara.Daterpillar"/> should be inherited; otherwise, <c>false</c>.</value>
+        /// <value><c>true</c> if the <see cref="Acklann.Daterpillar"/> should be inherited; otherwise, <c>false</c>.</value>
         public bool InheritEntityBaseClass { get; set; }
 
         /// <summary>

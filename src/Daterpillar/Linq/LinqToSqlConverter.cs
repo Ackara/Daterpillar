@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Ackara.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     public static class LinqToSqlConverter
     {

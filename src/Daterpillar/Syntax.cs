@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar
+﻿namespace Acklann.Daterpillar
 {
     /// <summary>
     /// SQL syntax

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Ackara.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     /// <summary>
     /// Provides extension methods.

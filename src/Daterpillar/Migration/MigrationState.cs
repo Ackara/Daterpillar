@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Migration
+﻿namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Describes the current state between two SQL schemas.

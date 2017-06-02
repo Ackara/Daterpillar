@@ -1,9 +1,9 @@
-﻿using Ackara.Daterpillar.Scripting;
+﻿using Acklann.Daterpillar.Scripting;
 using System;
 using System.Linq;
 using System.Management.Automation;
 
-namespace Ackara.Daterpillar.Cmdlets
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// A powershell cmdlet that generates a script from a <see cref="Schema"/> instance. This class cannot be inherited.

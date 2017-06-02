@@ -1,12 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides methods and properties to manage a MySQL server instance.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IServerManager" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IServerManager" />
     public class MySQLServerManager : IServerManager
     {
         /// <summary>

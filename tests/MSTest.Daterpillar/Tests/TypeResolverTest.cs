@@ -1,5 +1,5 @@
-﻿using Ackara.Daterpillar;
-using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.TypeResolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;

@@ -44,7 +44,7 @@ function Install-MSTestProject()
 	if (-not (Test-Path $testResultsDir -PathType Container)) { New-Item $testResultsDir -ItemType Directory | Out-Null; }
 
 	# Build project
-	$buildboxModule = Get-ChildItem "$solutionDir\packages\Ackara.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
+	$buildboxModule = Get-ChildItem "$solutionDir\packages\*.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
 	Import-Module $buildboxModule -Force;
 
 	$msbuild = Find-MSBuildPath;

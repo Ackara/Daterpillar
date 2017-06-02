@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Ackara.Daterpillar.Linq
+namespace Acklann.Daterpillar.Linq
 {
     /// <summary>
     /// Represents a SQL query string.

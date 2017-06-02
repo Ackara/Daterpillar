@@ -1,10 +1,10 @@
-﻿using Ackara.Daterpillar.Migration;
-using Ackara.Daterpillar.Scripting;
+﻿using Acklann.Daterpillar.Migration;
+using Acklann.Daterpillar.Scripting;
 using System;
 using System.Linq;
 using System.Management.Automation;
 
-namespace Ackara.Daterpillar.Cmdlets
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// A powershell cmdlet that creates a SQL migration script. This class cannot be inherited.

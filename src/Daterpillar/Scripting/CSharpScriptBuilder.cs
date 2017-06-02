@@ -1,14 +1,14 @@
-﻿using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar.TypeResolvers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Provides functions used for building C# scripts.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Scripting.IScriptBuilder" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.IScriptBuilder" />
     public class CSharpScriptBuilder : IScriptBuilder
     {
         /// <summary>

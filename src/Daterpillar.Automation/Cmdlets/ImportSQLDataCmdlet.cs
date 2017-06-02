@@ -1,10 +1,10 @@
-﻿using Ackara.Daterpillar.Migration;
+﻿using Acklann.Daterpillar.Migration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Management.Automation;
 using System.Text;
 
-namespace Ackara.Daterpillar.Cmdlets
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// A powershell cmdlet that imports data from one SQL table to another on the same or different server. This class cannot be inherited.

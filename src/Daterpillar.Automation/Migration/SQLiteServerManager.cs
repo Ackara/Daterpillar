@@ -2,12 +2,12 @@
 using System.Data.SQLite;
 using System.IO;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides methods and properties to manage a SQLite database.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IServerManager" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IServerManager" />
     public class SQLiteServerManager : IServerManager
     {
         /// <summary>

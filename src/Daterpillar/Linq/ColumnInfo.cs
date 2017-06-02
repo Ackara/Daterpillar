@@ -1,4 +1,4 @@
-﻿namespace Ackara.Daterpillar.Linq
+﻿namespace Acklann.Daterpillar.Linq
 {
     public class ColumnInfo
     {

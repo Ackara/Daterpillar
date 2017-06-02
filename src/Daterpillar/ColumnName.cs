@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Represents an <see cref="Index"/> column reference.

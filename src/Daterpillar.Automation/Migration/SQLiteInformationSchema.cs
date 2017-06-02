@@ -4,12 +4,12 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides functions to create a <see cref="Schema"/> instance using a SQL server "information schema" table.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.InformationSchemaBase" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.InformationSchemaBase" />
     public class SQLiteInformationSchema : InformationSchemaBase
     {
         /// <summary>

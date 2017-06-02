@@ -1,13 +1,13 @@
-﻿using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar.TypeResolvers;
 using System;
 using System.Linq;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Provides functions used for building MySQL scripts.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Scripting.SqlScriptBuilderBase" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.SqlScriptBuilderBase" />
     public class MySQLScriptBuilder : SqlScriptBuilderBase
     {
         /// <summary>

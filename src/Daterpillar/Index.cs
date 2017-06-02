@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Represents a <see cref="Table"/> index.

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace Ackara.Daterpillar.TypeResolvers
+namespace Acklann.Daterpillar.TypeResolvers
 {
 	/// <summary>
 	/// Defines a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to another language's type name.

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Foreign key referential actions

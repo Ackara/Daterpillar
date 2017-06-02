@@ -2,12 +2,12 @@
 using System.Data;
 using System.Linq;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides basic functionality to create a <see cref="Schema"/> instance using a SQL server "information schema" table.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IInformationSchema" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IInformationSchema" />
     public abstract class InformationSchemaBase : IInformationSchema
     {
         /// <summary>
@@ -34,10 +34,10 @@ namespace Ackara.Daterpillar.Migration
         }
 
         /// <summary>
-        /// Creates a <see cref="Ackara.Daterpillar.Schema" /> instance using the information found for the specified schema.
+        /// Creates a <see cref="Acklann.Daterpillar.Schema" /> instance using the information found for the specified schema.
         /// </summary>
         /// <param name="name">The name of the schema.</param>
-        /// <returns>A <see cref="Ackara.Daterpillar.Schema" /> instance.</returns>
+        /// <returns>A <see cref="Acklann.Daterpillar.Schema" /> instance.</returns>
         public Schema FetchSchema(string name)
         {
             OpenConnectionIfClosed();

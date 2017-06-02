@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     internal static class ExtensionMethods
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ackara.Daterpillar.Equality
+namespace Acklann.Daterpillar.Equality
 {
     internal class ForeignKeyEqualityComparer : IEqualityComparer<ForeignKey>
     {

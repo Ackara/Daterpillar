@@ -1,11 +1,11 @@
-﻿using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar.TypeResolvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Contains methods to convert an <see cref="Assembly"/> to a <see cref="Schema"/>.
@@ -17,7 +17,7 @@ namespace Ackara.Daterpillar
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <param name="syntax">The syntax.</param>
-        /// <returns>A <see cref="Schema"/> object built using types decorated with <see cref="Ackara.Daterpillar"/> attributes.</returns>
+        /// <returns>A <see cref="Schema"/> object built using types decorated with <see cref="Acklann.Daterpillar"/> attributes.</returns>
         public static Schema ToSchema(this Assembly assembly, Syntax syntax = Syntax.Generic)
         {
             var schema = new Schema();

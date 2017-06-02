@@ -1,9 +1,9 @@
-﻿namespace Ackara.Daterpillar.Migration
+﻿namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Represents a null <see cref="IInformationSchema" />.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Migration.IInformationSchema" />
+    /// <seealso cref="Acklann.Daterpillar.Migration.IInformationSchema" />
     public sealed class NullInformationSchema : IInformationSchema
     {
         /// <summary>

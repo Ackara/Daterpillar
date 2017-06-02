@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Provides methods to create <see cref="IScriptBuilder"/> instances.

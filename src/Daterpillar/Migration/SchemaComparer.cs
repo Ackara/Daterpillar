@@ -1,9 +1,9 @@
-﻿using Ackara.Daterpillar.Equality;
-using Ackara.Daterpillar.Scripting;
+﻿using Acklann.Daterpillar.Equality;
+using Acklann.Daterpillar.Scripting;
 using System;
 using System.Collections.Generic;
 
-namespace Ackara.Daterpillar.Migration
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Provides methods to compare and synchronize two <see cref="Schema"/>.

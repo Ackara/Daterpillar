@@ -7,8 +7,8 @@
     <ProjectGuid>{7C059A84-FF50-49FF-8262-B86F5A726822}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ackara.Daterpillar</RootNamespace>
-    <AssemblyName>Ackara.Daterpillar.Automation</AssemblyName>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <AssemblyName>Acklann.Daterpillar.Automation</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Ackara.Daterpillar.Automation.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Acklann.Daterpillar.Automation.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />

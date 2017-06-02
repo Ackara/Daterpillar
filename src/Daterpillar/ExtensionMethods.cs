@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Extension methods.

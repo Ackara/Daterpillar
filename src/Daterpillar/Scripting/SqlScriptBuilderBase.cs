@@ -1,14 +1,14 @@
-﻿using Ackara.Daterpillar.TypeResolvers;
+﻿using Acklann.Daterpillar.TypeResolvers;
 using System;
 using System.Linq;
 using System.Text;
 
-namespace Ackara.Daterpillar.Scripting
+namespace Acklann.Daterpillar.Scripting
 {
     /// <summary>
     /// Provides basic functionality used for building scripts for a specific SQL language.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.Scripting.IScriptBuilder" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.IScriptBuilder" />
     public abstract class SqlScriptBuilderBase : IScriptBuilder
     {
         /// <summary>
@@ -203,7 +203,7 @@ namespace Ackara.Daterpillar.Scripting
         protected ITypeResolver TypeResolver;
 
         /// <summary>
-        /// Appends the string representation of a <see cref="Ackara.Daterpillar.Script" /> to this instance.
+        /// Appends the string representation of a <see cref="Acklann.Daterpillar.Script" /> to this instance.
         /// </summary>
         /// <param name="script">The script object.</param>
         protected void Append(Script script)

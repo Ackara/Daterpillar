@@ -18,7 +18,7 @@ Describe "New-MigrationScript" {
 		#Write-Host "modifications: [$($result.Modifications)]";
 		$result.Script | Should Not BeNullOrEmpty;
 		$result.Modifications | Should Not BeNullOrEmpty;
-		$result.State | Should BeOfType Ackara.Daterpillar.Migration.MigrationState;
+		$result.State | Should BeOfType Acklann.Daterpillar.Migration.MigrationState;
 	}
 
 	It "should return a migration script when values are passed from the pipeline" {

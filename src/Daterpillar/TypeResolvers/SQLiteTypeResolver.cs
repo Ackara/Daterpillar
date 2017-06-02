@@ -1,9 +1,9 @@
-﻿namespace Ackara.Daterpillar.TypeResolvers
+﻿namespace Acklann.Daterpillar.TypeResolvers
 {
     /// <summary>
     /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a SQLite data type.
     /// </summary>
-    /// <seealso cref="Ackara.Daterpillar.TypeResolvers.TypeResolverBase" />
+    /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
     public class SQLiteTypeResolver : TypeResolverBase
     {
         /// <summary>

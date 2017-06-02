@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
     /// <summary>
     /// Indicates that a enum field represents a table record/row. This class cannot be inherited.

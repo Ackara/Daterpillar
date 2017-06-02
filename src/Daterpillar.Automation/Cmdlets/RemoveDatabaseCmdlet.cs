@@ -1,10 +1,10 @@
-﻿using Ackara.Daterpillar.Migration;
+﻿using Acklann.Daterpillar.Migration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Management.Automation;
 
-namespace Ackara.Daterpillar.Cmdlets
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// A powershell cmdlet that removes an existing database from a SQL server.

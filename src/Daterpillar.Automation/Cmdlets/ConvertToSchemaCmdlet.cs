@@ -1,10 +1,10 @@
-﻿using Ackara.Daterpillar.Migration;
+﻿using Acklann.Daterpillar.Migration;
 using System.Data;
 using System.IO;
 using System.Management.Automation;
 using System.Reflection;
 
-namespace Ackara.Daterpillar.Cmdlets
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// A powershell cmdlet that creates a new <see cref="Schema"/> instance from a file or <see cref="IDbConnection"/> . This class cannot be inherited.
