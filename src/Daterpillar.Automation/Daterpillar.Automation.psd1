@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'Ackara.Daterpillar.Automation.dll'
+RootModule = 'Acklann.Daterpillar.Automation.dll'
 
 # Version number of this module.
 ModuleVersion = '4.6.1'
