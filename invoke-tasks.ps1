@@ -74,4 +74,5 @@ else
 			"Major"=$Major;
 			"Minor"=$Minor;
 		}
+	if(-not $psake.build_success) { exit 1; }
 }
