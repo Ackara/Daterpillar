@@ -32,7 +32,7 @@ Task "deploy" -description "This task will build, test then publish the project.
 # -----
 
 Task "Init" -description "This task loads and creates all denpendencies." -action {
-	$buildboxDir = (Get-Item "$RootDir\packages\Ackara.Buildbox.*\tools" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1);
+	$buildboxDir = (Get-Item "$RootDir\packages\*.Buildbox.*\tools" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1);
 	foreach ($module in @("semver.dll", "utils.psm1"))
 	{
 		$pathToModulue = Get-Item "$buildboxDir\*\*$module" | Select-Object -ExpandProperty FullName;
