@@ -12,7 +12,7 @@
 RootModule = 'Acklann.Daterpillar.Automation.dll'
 
 # Version number of this module.
-ModuleVersion = '4.6.1'
+ModuleVersion = '4.6.2'
 
 # ID used to uniquely identify this module
 GUID = '029d5970-92a0-4c44-81ea-53f9df411f7c'
