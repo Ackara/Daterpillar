@@ -5,31 +5,31 @@
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version"
     },
     "version: minor":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version -Minor"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Minor"
     },
     "version: major":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 version -Major"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Major"
     },
     "add missing files":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 setup"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 setup"
     },
     "create packages":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File invoke-tasks.ps1 pack"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 pack"
     }
   }
 , "-vs-binding":{"ProjectOpened":["add missing files"]}

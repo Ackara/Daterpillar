@@ -3,45 +3,42 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <title>$Title$</title>
-    <version>$PackageVersion$</version>
-    <tags>$PackageTags$</tags>
-    <description>$Description$</description>
+    <version>$packageVersion$</version>
+    <description>$description$</description>
+    <authors>$authors$</authors>
+    <owners>$authors$</owners>
 
-    <owners>$Authors$</owners>
-    <authors>$Authors$</authors>
-    <projectUrl>$PackageProjectUrl$</projectUrl>
-    <iconUrl>$PackageIconUrl$</iconUrl>
-
-    <copyright>$Copyright$</copyright>
-    <licenseUrl>$PackageLicenseUrl$</licenseUrl>
+    <title>$title$</title>
+    <tags>$packageTags$</tags>
+    <copyright>$copyright$</copyright>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
+
+    <iconUrl>$packageIconUrl$</iconUrl>
+    <projectUrl>$packageProjectUrl$</projectUrl>
+    <licenseUrl>$packageLicenseUrl$</licenseUrl>
   </metadata>
   <files>
-    <file src="..\..\build\package-readme.txt"
-          target="readme.txt" />
+    <file src="readme.txt"
+          target="" />
+
+    <file src="Cmdlets\Convert-DllToSchema.ps1"
+          target="build" />
 
     <file src="Daterpillar.Automation.targets"
           target="build\$id$.targets" />
 
-    <file src="bin\$Configuration$\*.deps.json"
+    <file src="bin\$configuration$\*.deps.json"
           target="tools" />
 
-    <file src="bin\$Configuration$\*.config"
+    <file src="bin\$configuration$\*.dll"
           target="tools" />
 
-    <file src="bin\$Configuration$\*.dll"
-          target="tools" />
-
-    <file src="bin\$Configuration$\x86\*"
+    <file src="bin\$configuration$\x86\*"
           target="tools\x86" />
 
-    <file src="bin\$Configuration$\x64\*"
+    <file src="bin\$configuration$\x64\*"
           target="tools\x64" />
-
-    <file src="Cmdlets\*ps*1"
-          target="tools" />
 
     <file src="*.psd1"
           target="tools" />

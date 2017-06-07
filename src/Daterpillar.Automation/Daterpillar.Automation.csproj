@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C059A84-FF50-49FF-8262-B86F5A726822}</ProjectGuid>
+    <ProjectGuid>{1EC5FEF2-159E-478F-9F16-BC77295B06BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
@@ -31,10 +31,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Acklann.Daterpillar.Automation.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.SQLServer.SMO.12.0.2000.8\lib\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
       <Private>True</Private>
@@ -76,7 +74,6 @@
       <HintPath>..\..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,13 +85,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cmdlets\ImportSQLDataCmdlet.cs" />
-    <Compile Include="Cmdlets\InvokeSqlCommandCmdlet.cs" />
-    <Compile Include="Cmdlets\RemoveDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\AddDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
+    <Compile Include="Cmdlets\ImportSQLDataCmdlet.cs" />
+    <Compile Include="Cmdlets\InvokeSqlCommandCmdlet.cs" />
     <Compile Include="Cmdlets\NewMigrationScriptCmdlet.cs" />
+    <Compile Include="Cmdlets\RemoveDatabaseCmdlet.cs" />
     <Compile Include="Migration\ExtensionMethods.cs" />
     <Compile Include="Migration\InformationSchemaBase.cs" />
     <Compile Include="Migration\InformationSchemaFactory.cs" />
@@ -119,18 +116,15 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Cmdlets\Convert-DllToSchema.ps1" />
-    <None Include="Daterpillar.Automation.nuspec">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Daterpillar.Automation.nuspec" />
     <None Include="Daterpillar.Automation.psd1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Daterpillar.Automation.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Daterpillar.Automation.targets">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.105.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.105.1\build\net46\System.Data.SQLite.Core.targets')" />

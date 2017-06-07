@@ -9,12 +9,6 @@ namespace MSTest.Daterpillar.Tests
     [TestClass]
     public class QueryTest
     {
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
-        }
-
         [TestMethod]
         public void ToString_should_return_an_empty_string_when_query_is_instantiated()
         {

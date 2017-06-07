@@ -4,221 +4,167 @@ Psake build tasks.
 #>
 
 Properties {
-	$ManifestPath = "$PSScriptRoot\manifest.json";
-	$Manifest = (Get-Content $ManifestPath | Out-String | ConvertFrom-Json);
-
-	# Paths
-	$RootDir = (Split-Path $PSScriptRoot -Parent);
-	$ReleaseNotesTXT = "$RootDir\releaseNotes.txt";
-	$ArtifactsDir = "$RootDir\artifacts";
+	# Paths & Tools
 	$Nuget = "";
+	$ProjectRoot = "";
+	$ManifestPath = "$PSScriptRoot\manifest.json";
+	$Manifest = Get-Content $ManifestPath | Out-String | ConvertFrom-Json;
 
 	# User Args
-	$NuGetKey = "";
+	$TestCase = "";
 	$BranchName = "";
-	$TestCases = @();
 	$BuildConfiguration = "";
-	$ConnectionStrings = @{};
-
-	$Major = $false;
-	$Minor = $false;
+	$SkipMSBuild = $false;
 }
 
-Task "default" -depends @("Setup");
+Task "default" -description "This task compiles, test and publish the project to nuget.org and powershell gallery." `
+-depends @() -precondition {
+}
 
-Task "deploy" -description "This task will build, test then publish the project." `
--depends @("Build-Solution", "Run-Tests", "Publish-Packages");
+Task "test" -description "This task runs all tests." -depends @("pester", "vstest");
 
-# -----
+#----------
 
-Task "Init" -description "This task loads and creates all denpendencies." -action {
-	$buildboxDir = (Get-Item "$RootDir\packages\*.Buildbox.*\tools" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1);
-	foreach ($module in @("semver.dll", "utils.psm1"))
+Task "init" -description "This task imports all dependencies." -action {
+	foreach ($name in @("vssetup", "Buildbox.SemVer", "Buildbox.Utils"))
 	{
-		$pathToModulue = Get-Item "$buildboxDir\*\*$module" | Select-Object -ExpandProperty FullName;
-		if (Test-Path $pathToModulue -PathType Leaf)
-		{
-			Import-Module $pathToModulue -Force;
-			Write-Host "`t* imported $(Split-Path $pathToModulue -Leaf) module.";
-		}
+		$path = "$ProjectRoot\tools\$name\*\*.psd1";
+		$module = Get-Item $path -ErrorAction SilentlyContinue;
+		if (-not $module) { Save-Module $name -Path "$ProjectRoot\tools"; }
+		Get-Item $path | Import-Module -Force;
+		if (Get-Module $name) { Write-Host "`t* imported $name module"; }
 	}
 
-	foreach ($psd1 in (Get-ChildItem "$RootDir\tools" -Recurse -Filter "*.ps*1" | Select-Object -ExpandProperty FullName))
+	foreach ($psd1 in (Get-ChildItem "$ProjectRoot\packages\*\tools\*.psd1" -Exclude @("*psake*")))
 	{
-		Import-Module $psd1;
-		Write-Host "`t* imported $(Split-Path $psd1 -Leaf) module.";
+		Import-Module $psd1.FullName -Force;
+		if (Get-Module ([IO.Path]::GetFileNameWithoutExtension($psd1.Name))) { Write-Host "`t* imported $($psd1.Name) module"; }
 	}
-
-	$pester = "$RootDir\packages\Pester*\tools\Pester.psd1";
-	if (Test-Path $pester -PathType Leaf)
+	
+	foreach ($psm1 in (Get-ChildItem "$PSScriptRoot\*.psm1"))
 	{
-		Import-Module $pester -Force;
-		Write-Host "`t* imported pester module.";
-	}
-
-	foreach ($folder in @($ArtifactsDir))
-	{
-		if (Test-Path $folder -PathType Container) { Remove-Item $folder -Recurse; }
-		New-Item $folder -ItemType Directory | Out-Null;
+		Import-Module $psm1.FullName -Force;
+		if (Get-Module ([IO.Path]::GetFileNameWithoutExtension($psm1.Name))) { Write-Host "`t* imported $($psm1.Name) module"; }
 	}
 }
 
-Task "Setup" -description "This task will generate all missing/sensitive files missing from the project." `
--depends @("Add-AppConfigFiles");
+Task "compile" -description "This task builds the solution using msbuild." `
+-depends @("init") -precondition { return (-not $SkipMSBuild) } -action {
+	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
 
-Task "Increment-VersionNumber" -alias "version" -description "This task increments the patch version number within all neccessary files." `
--depends @("Init") -action {
-	$commitMsg = Show-Inputbox "please enter your release notes" "RELEASE NOTES";
-	Update-VersionNumber "$RootDir\src" -Message $commitMsg -UsecommitMessageAsDescription -ConfigFile $ManifestPath -Major:$Major -Minor:$Minor -Patch;
-	$version = Get-VersionNumber -ConfigFile $ManifestPath;
+	Write-LineBreak "MSBUILD";
+	$msbuild = Get-MSBuildPath;
+	$sln = (Get-item "$ProjectRoot\*.sln").FullName;
+	Exec { & $msbuild $sln "/p:Configuration=$BuildConfiguration" "/verbosity:minimal"; }
+	Write-LineBreak;
+}
 
-	if (-not [string]::IsNullOrEmpty($commitMsg))
+Task "pester" -description "This task runs all specified pester tests." `
+-depends @("init", "compile") -action {
+	$results = "";
+	if ([String]::IsNullOrEmpty($TestCase))
 	{
+		$results = Invoke-Pester -Script "$ProjectRoot\tests\Pester*\*test*.ps1" -PassThru;
+	}
+	else
+	{
+		$results = Invoke-Pester -Script "$ProjectRoot\tests\Pester*\$($TestCase)*test*.ps1" -PassThru;
+	}
+
+	Assert ($results.FailedCount -eq 0) "'$($results.FailedCount)' pester tests failed.";
+}
+
+Task "vstest" -description "This task runs all visual studio tests." `
+-depends @("init") -action {
+	Write-LineBreak "MSTest";
+	foreach ($csproj in (Get-ChildItem "$ProjectRoot\tests" -Recurse -Filter "*.csproj" | Select-Object -ExpandProperty FullName))
+	{
+		Exec { & dotnet test $csproj --configuration $BuildConfiguration --verbosity minimal; }
+	}
+	Write-LineBreak;
+}
+
+Task "pack" -description "This task packages the project to be published to all online repositories." `
+-depends @("init", "compile") -action {
+	$msbuild = Get-MSBuildPath;
+	$artifactsDir = "$ProjectRoot\artifacts";
+	if (Test-Path $artifactsDir -PathType Container) { Remove-Item $artifactsDir -Recurse -Force; }
+	New-Item $artifactsDir -ItemType Directory | Out-Null;
+	
+	$releaseNotes = Get-Content "$ProjectRoot\releaseNotes.txt" | Out-String;
+	$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
+	$suffix = Get-BranchSuffix $BranchName -config $ManifestPath;
+	$suffix = (& { if ([String]::IsNullOrEmpty($suffix)) { return ""; } else { return "-$suffix"; } })
+	
+	$metadata += "PackageVersion=$version$($suffix);";
+	$metadata += "packageOutputPath=$artifactsDir;";
+	$metadata += "authors=$($Manifest.metadata.author);";
+	$metadata += "copyright=$($Manifest.metadata.copyright);";
+	$metadata += "packageTags=$($Manifest.metadata.tags);";
+	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
+	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
+	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
+	$metadata += "packageRequireLicenseAcceptance=$true;";
+	$metadata += "packageReleaseNotes=$releaseNotes;";
+	$metadata += "configuration=$BuildConfiguration;";
+	
+	foreach ($proj in (Get-ChildItem "$ProjectRoot\src" -Recurse -Filter "*.csproj"))
+	{
+		$contents = Get-Content $proj.FullName | Out-String;
+		$properties = "title=$([IO.Path]::GetFileNameWithoutExtension($proj.Name));";
+		$description = Get-Content "$($proj.DirectoryName)\readme.txt" | Out-String;
+		$properties += "description=$description;";
+		$properties += $metadata.Trim(';');
+		
+		Push-Location $proj.DirectoryName;
 		try
 		{
-			Push-Location $RootDir;
-			$ver = "version $($version.Major).$($version.Minor).$($version.Patch)";
-			$notes = "$ver`n";
-			$notes += "$([String]::Join('', [System.Linq.Enumerable]::Repeat('-', $ver.Length)))`n";
-			$notes += $commitMsg;
-			$contents = Get-Content $ReleaseNotesTXT | Out-String;
-			"$notes`n`n`n$contents".Trim() | Out-File $ReleaseNotesTXT -Encoding ascii;
-			Exec {
-				& git add releaseNotes.txt;
-				& git add build\manifest.json;
-				& git commit --amend --no-edit;
-				& git tag "v$($version.ToString($true))";
+			if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
+			{
+				Write-LineBreak "MSBUILD";
+				Exec { & $msbuild "/t:pack" "/p:$properties" "/verbosity:minimal"; }
+			}
+			else
+			{
+				Write-LineBreak "NUGET";
+				Exec { & $nuget pack $proj.FullName -OutputDirectory $artifactsDir -Properties $properties -IncludeReferencedProjects; }
 			}
 		}
 		finally { Pop-Location; }
 	}
-}
-
-Task "Build-Solution" -alias "compile" -description "This task complites the solution." `
--depends @("Init") -action {
-	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
-
-	Push-Location $RootDir;
-	Write-LineBreak "MSBUILD";
-	try
-	{
-		$msbuild = Find-MSBuildPath;
-		$sln = Get-Item "$RootDir\*.sln" | Select-Object -ExpandProperty FullName;
-		Exec { & dotnet restore; }
-		Exec { & $msbuild $sln "/p:Configuration=$BuildConfiguration"; }
-	}
-	finally { Pop-Location; }
 	Write-LineBreak;
+
+	$moduleDir = "$artifactsDir\Daterpillar.Automation";
+	New-Item $moduleDir -ItemType Directory | Out-Null;
+	Get-ChildItem "$ProjectRoot\src\Daterpillar.Automation\bin\$BuildConfiguation\*\*" | Copy-Item -Destination "$moduleDir" -Recurse;
+	Get-ChildItem $moduleDir -Exclude @("*.dll", "*.psd1", "x*") | Remove-Item;
 }
 
-Task "Run-VsTests" -alias "vstest" -description "This task runs all visual studio tests." `
--depends @("Build-Solution") -action {
-	Assert ("Debug", "Release" -contains $BuildConfiguration) "`$BuildConfiguration was '$BuildConfiguration' but expected 'Debug' or 'Release'.";
-
-	foreach ($proj in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*.*proj" | Select-Object -ExpandProperty FullName))
-	{
-		if ([string]::IsNullOrEmpty($TestCase))
-		{ Exec { & dotnet test $proj --configuration $BuildConfiguration --verbosity minimal; } }
-		else
-		{ Exec { & dotnet test $proj --configuration $BuildConfiguration --filter ClassName~$TestCase --verbosity minimal; } }
-	}
+Task "publish" -description "This task publishes all nuget packages and modules." `
+-depends @("pack") -action {
 }
 
-Task "Run-PowershellTests" -alias "pester" -description "This task runs all powershell test scripts." `
--depends @() -action {
-	foreach ($script in (Get-ChildItem "$RootDir\tests" -Recurse -Filter "*test*.ps1"))
-	{
-		if ($TestCases.Length -gt 0)
-		{
-			foreach ($testName in $TestCases)
-			{
-				if ($script.Name -match $testName) { Invoke-Pester -Script $script.FullName; }
-			}
-		}
-		else { Invoke-Pester -Script $script.FullName; }
-	}
+#----------
+
+Task "version" -description "This task increments the project's version numbers." `
+-depends @("init") -action {
+
 }
 
-Task "Run-Tests" -alias "test" -description "This task runs all tests." -depends @("Run-VsTests", "Run-PowershellTests");
+#region ----- HELPER FUNCTIONS -----
 
-Task "Create-Packages" -alias "pack" -description "This task creates all deployment artifacts." `
--depends @("Init") -action {
-	$version = Get-VersionNumber -ConfigFile $ManifestPath;
-	$suffix = Get-BranchSuffix $BranchName;
-	if (-not [String]::IsNullOrEmpty($suffix)) { $suffix = "-$suffix"; }
-	$readme = Get-Content "$PSScriptRoot\package-readme.txt" | Out-String;
-
-	$properties = "";
-	$properties += "PackageVersion=$($version.ToString($true))$suffix;";
-	$properties += "PackageTags=$($Manifest.metadata.tags);";
-	$properties += "Authors=$($Manifest.metadata.owner);";
-	$properties += "Configuration=$BuildConfiguration;";
-	$properties += "PackageIconUrl=$($Manifest.metadata.iconUrl);";
-	$properties += "PackageLicenseUrl=$($Manifest.metadata.licenseUrl);";
-	$properties += "Copyright=$($Manifest.metadata.copyright);";
-	$properties += "PackageProjectUrl=$($Manifest.metadata.projectUrl);";
-	$properties += "RepositoryUrl=$($Manifest.metadata.repositoryUrl);";
-	$properties += "Description=$readme;";
-	$properties += "PackageRequireLicenseAcceptance=true;";
-	$properties += "PackageReleaseNotes=$(Get-Content $ReleaseNotesTXT | Out-String);";
-
-	foreach ($proj in (Get-ChildItem "$RootDir\src" -Recurse -Filter "*.csproj" | Select-Object -ExpandProperty FullName))
-	{
-		$properties += "Title=$([IO.Path]::GetFileNameWithoutExtension($proj));";
-		$contents = Get-Content $proj | Out-String;
-
-		if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
-		{
-			try
-			{
-				Split-Path $proj -Parent | Push-Location;
-				$properties = $properties.TrimEnd(';');
-				$msbuild = Find-MSBuildPath;
-				Exec { & $msbuild /t:pack /p:$properties; }
-				Get-ChildItem $PWD -Recurse -Filter "*.nupkg" | Move-Item -Destination $ArtifactsDir;
-			}
-			finally { Pop-Location; }
-		}
-		else
-		{
-			try
-			{
-				Split-Path $proj -Parent | Push-Location;
-				$properties = $properties.TrimEnd(';');
-				Exec { & $nuget pack $proj -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; }
-			}
-			finally { Pop-Location; }
-		}
-	}
+function Get-MSBuildPath()
+{
+	$vsPath = Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath;
+	$msbuild = Get-Item "$vsPath\MSBuild\*\Bin\MSBuild.exe";
+	Assert ($msbuild) "unable to find msbuild.exe on this machine.";
+	return $msbuild.FullName;
 }
 
-Task "Publish-Packages" -alias "publish" -description "This task deploys all deployment artifacts." `
--depends @("Create-Packages") -action {
-	foreach ($nupkg in (Get-ChildItem $ArtifactsDir -Recurse -Filter "*.nupkg" | Select-Object -ExpandProperty FullName))
-	{
-		if ([string]::IsNullOrEmpty($NuGetKey))
-		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json"; } }
-		else
-		{ Exec { & $nuget push $nupkg -Source "https://api.nuget.org/v3/index.json" -ApiKey $NuGetKey; } }
-	}
+function Get-PackageSuffix()
+{
+	$suffix = Get-BranchSuffix $BranchName -config $ManifestPath;
+	if ([String]::IsNullOrEmpty($suffix)) { return ""; } else { return "-$suffix"; }
 }
 
-Task "Add-AppConfigFiles" -description "This task creates all missing app.config files within the solution." -action {
-	$mstestProjectConfig = "$RootDir\tests\MSTest.Daterpillar\app.config";
-	if (-not (Test-Path $mstestProjectConfig -PathType Leaf))
-	{
-		$mysqlConnStr = $ConnectionStrings["mysql"];
-		$mssqlConnStr = $ConnectionStrings["mssql"];
-
-		@"
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-  <configSections />
-  <connectionStrings>
-	<add name="mssql" connectionString="$mssqlConnStr" />
-	<add name="mysql" connectionString="$mysqlConnStr" />
-  </connectionStrings>
-</configuration>
-"@ | Out-File $mstestProjectConfig -Encoding utf8;
-	}
-}
+#endregion

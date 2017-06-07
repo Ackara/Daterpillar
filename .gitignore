@@ -266,7 +266,8 @@ paket-files/
 !**/[Xx]64/SQLite.Interop.dll
 !**/[Xx]86/SQLite.Interop.dll
 
-# Sensitive Files
-database.config
-tests/MSTest.Daterpillar/app.config
+# Build tools
+tools/
 
+# Sensitive Files
+app.config

@@ -1,36 +1,29 @@
 {
   "metadata":
   {
-    "owner": "Ackara",
+    "author": "Ackara",
+    "copyright": "licensed under MIT License",
+    "tags": "orm miroc-orm sql t4 build automation",
+
     "projectUrl": "https://github.com/Ackara/Daterpillar",
     "iconUrl": "http://static.gigobyte.com/images/daterpillar.png",
-    "copyright": "licensed under MIT License",
-    "licenseUrl": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE",
-    "repositoryUrl": "https://github.com/Ackara/Daterpillar.git",
-    "tags": "orm miroc-orm sql t4 build automation"
+    "licenseUrl": "https://github.com/Ackara/Daterpillar/blob/master/LICENSE"
   },
-  "semanticVersion":
+  "semver":
   {
     "version":
     {
       "major": 4,
       "minor": 6,
-      "patch": 2,
-      "suffix": "alpha"
+      "patch": 2
     },
-    "targets":
-    [
-      "dotnet",
-      "dotnetcore",
-      "powershell"
-    ],
-    "branchSuffixMap":
+    "stage_all_files": false,
+    "commit_changes": true,
+    "tag_commit": true,
+    "branch_to_suffix":
     {
       "master": "",
       "*": "alpha"
-    },
-    "shouldTagCommit": false,
-    "shouldCommitChanges": true,
-    "shouldAddAllUnstagedFilesWhenCommitting": true
+    }
   }
 }

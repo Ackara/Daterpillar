@@ -27,11 +27,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="manifest.json" />
-    <Content Include="package-readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\invoke-tasks.ps1">
-      <Link>invoke-tasks.ps1</Link>
+    <Compile Include="..\build.ps1">
+      <Link>build.ps1</Link>
     </Compile>
     <Compile Include="packages.config" />
     <Compile Include="tasks.ps1" />

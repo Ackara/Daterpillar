@@ -3,19 +3,19 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <version>$PackageVersion$</version>
-    <title>Daterpillar</title>
-    <description>$Description$</description>
-    <tags>$PackageTags$</tags>
+    <version>$packageVersion$</version>
+    <description>$description$</description>
+    <authors>$authors$</authors>
+    <owners>$authors$</owners>
 
-    <owners>$Authors$</owners>
-    <authors>$Authors$</authors>
-    <projectUrl>$PackageProjectUrl$</projectUrl>
-    <iconUrl>$PackageIconUrl$</iconUrl>
-
-    <copyright>$Copyright$</copyright>
-    <licenseUrl>$PackageLicenseUrl$</licenseUrl>
+    <title>$title$</title>
+    <tags>$packageTags$</tags>
+    <copyright>$copyright$</copyright>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
+
+    <iconUrl>$packageIconUrl$</iconUrl>
+    <projectUrl>$packageProjectUrl$</projectUrl>
+    <licenseUrl>$packageLicenseUrl$</licenseUrl>
   </metadata>
 </package>
