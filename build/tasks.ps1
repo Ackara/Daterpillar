@@ -6,15 +6,18 @@ Psake build tasks.
 Properties {
 	# Paths & Tools
 	$Nuget = "";
-	$ProjectRoot = "";
+	$ProjectRoot = (Split-Path $PSScriptRoot -Parent);
 	$ManifestPath = "$PSScriptRoot\manifest.json";
 	$Manifest = Get-Content $ManifestPath | Out-String | ConvertFrom-Json;
+	$ReleaseNotesPath = "$ProjectRoot\releaseNotes.txt";
 
 	# User Args
 	$TestCase = "";
 	$BranchName = "";
 	$BuildConfiguration = "";
 	$SkipMSBuild = $false;
+    $Major = $false;
+    $Minor = $false;
 }
 
 Task "default" -description "This task compiles, test and publish the project to nuget.org and powershell gallery." `
@@ -91,7 +94,7 @@ Task "pack" -description "This task packages the project to be published to all 
 	if (Test-Path $artifactsDir -PathType Container) { Remove-Item $artifactsDir -Recurse -Force; }
 	New-Item $artifactsDir -ItemType Directory | Out-Null;
 	
-	$releaseNotes = Get-Content "$ProjectRoot\releaseNotes.txt" | Out-String;
+	$releaseNotes = Get-Content $ReleaseNotesPath | Out-String;
 	$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
 	$suffix = Get-BranchSuffix $BranchName -config $ManifestPath;
 	$suffix = (& { if ([String]::IsNullOrEmpty($suffix)) { return ""; } else { return "-$suffix"; } })
@@ -146,9 +149,16 @@ Task "publish" -description "This task publishes all nuget packages and modules.
 
 #----------
 
-Task "version" -description "This task increments the project's version numbers." `
+Task "version" -alias "v" -description "This task increments the project's version numbers." `
 -depends @("init") -action {
-
+	$msg = Show-Inputbox "enter your release notes." "RELEASE NOTES";
+	$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
+	$header = "version $version`n`r";
+	$header += [String]::Join("", [System.Linq.Enumerable]::Repeat("-", $header.Length - 2));
+	$releaseNotes = Get-Content $ReleaseNotesPath | Out-String;
+    "$header`n`r$msg`n`r`n`r`n`r$releaseNotes" | Out-File $ReleaseNotesPath -Encoding utf8;
+	
+	Update-VersionNumber "$ProjectRoot\src" -config $ManifestPath -Major:$Major -Minor:$Minor -Patch -CommitMessage $msg -UseCommitMessageAsDescription;
 }
 
 #region ----- HELPER FUNCTIONS -----

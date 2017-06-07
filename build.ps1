@@ -76,8 +76,8 @@ else
 			"PSGalleryKey"=$PSGalleryKey;
             "SkipMSBuild"=$SkipCompilation;
 			"Nuget"=$nuget;
-			"Major"=$Major;
-			"Minor"=$Minor;
+			"Major"=$Major.IsPresent;
+			"Minor"=$Minor.IsPresent;
 		}
 
 	if (-not $psake.build_success) { exit 1; }
