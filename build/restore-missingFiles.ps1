@@ -23,7 +23,7 @@ foreach ($item in $ConnectionStrings.GetEnumerator())
 	$entries += "<add name=`"$($item.Name)`" connectionString=`"$($item.Value)`" />`n`r"
 }
 
-$appConfig = Get-Item "$projectRoot\tests\MSTest*\app.config";
+$appConfig = Get-Item "$projectRoot\tests\MSTest*\app.config" -ErrorAction SilentlyContinue;
 if (-not $appConfig)
 {
 	$content = @"
