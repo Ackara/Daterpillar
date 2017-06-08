@@ -10,12 +10,15 @@ Properties {
 	$ManifestPath = "$PSScriptRoot\manifest.json";
 	$Manifest = Get-Content $ManifestPath | Out-String | ConvertFrom-Json;
 	$ReleaseNotesPath = "$ProjectRoot\releaseNotes.txt";
+	$ArtifactsDir = "$ProjectRoot\artifacts";
 
 	# User Args
 	$TestCase = "";
+	$NuGetKey = "";
 	$BranchName = "";
-	$BuildConfiguration = "";
+	$PSGalleryKey = "";
 	$SkipMSBuild = $false;
+	$BuildConfiguration = "";
 	$ConnectionStrings = @{};
 	$Major = $false;
 	$Minor = $false;
@@ -91,16 +94,15 @@ Task "vstest" -description "This task runs all visual studio tests." `
 Task "pack" -description "This task packages the project to be published to all online repositories." `
 -depends @("init", "compile") -action {
 	$msbuild = Get-MSBuildPath;
-	$artifactsDir = "$ProjectRoot\artifacts";
-	if (Test-Path $artifactsDir -PathType Container) { Remove-Item $artifactsDir -Recurse -Force; }
-	New-Item $artifactsDir -ItemType Directory | Out-Null;
+	if (Test-Path $ArtifactsDir -PathType Container) { Remove-Item $ArtifactsDir -Recurse -Force; }
+	New-Item $ArtifactsDir -ItemType Directory | Out-Null;
 	
 	$releaseNotes = Get-Content $ReleaseNotesPath | Out-String;
 	$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
 	$suffix = Get-BranchSuffix $BranchName -config $ManifestPath;
 	$suffix = (& { if ([String]::IsNullOrEmpty($suffix)) { return ""; } else { return "-$suffix"; } })
 	
-	$metadata += "packageOutputPath=$artifactsDir;";
+	$metadata += "packageOutputPath=$ArtifactsDir;";
 	$metadata += "PackageVersion=$version$($suffix);";
 	$metadata += "packageReleaseNotes=$releaseNotes;";
 	$metadata += "configuration=$BuildConfiguration;";
@@ -131,7 +133,7 @@ Task "pack" -description "This task packages the project to be published to all 
 			else
 			{
 				Write-LineBreak "NUGET";
-				Exec { & $nuget pack $proj.FullName -OutputDirectory $artifactsDir -Properties $properties -IncludeReferencedProjects; }
+				Exec { & $nuget pack $proj.FullName -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; }
 			}
 		}
 		finally { Pop-Location; }
@@ -142,7 +144,6 @@ Task "pack" -description "This task packages the project to be published to all 
 	{
 		Update-ModuleManifest -Path $module.FullName `
 		-ModuleVersion $version `
-		-Tags $Manifest.metadata.tags `
 		-Author $Manifest.metadata.author `
 		-ReleaseNotes $releaseNotes.Trim() `
 		-IconUri $Manifest.metadata.iconUrl `
@@ -150,18 +151,39 @@ Task "pack" -description "This task packages the project to be published to all 
 		-Copyright $Manifest.metadata.copyright `
 		-ProjectUri $Manifest.metadata.projectUrl `
 		-LicenseUri $Manifest.metadata.licenseUrl `
+		-Tags ($Manifest.metadata.tags.Split(' ')) `
 		-CmdletsToExport "*" -FunctionsToExport "*" `
 		-Description (Get-Content "$($module.DirectoryName)\readme.txt" | Out-String);
 
-		$outDir = "$artifactsDir\$([IO.Path]::GetFileNameWithoutExtension($module.Name))";
+		$outDir = "$ArtifactsDir\$([IO.Path]::GetFileNameWithoutExtension($module.Name))";
 		Get-ChildItem "$($module.DirectoryName)\bin\$BuildConfiguration" -Recurse | Where-Object { $_.Name -notcontains "sqlite.interop.dll" } | Copy-Item -Destination $outDir;
 		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x86" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
 		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x64" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
 	}
 }
 
-Task "publish" -description "This task publishes all nuget packages and modules." `
--depends @("pack") -action {
+Task "publish" -alias "pub" -description "This task publishes all nuget packages and modules." `
+-depends @("init") -action {
+	Write-LineBreak "NUGET";
+	foreach ($nupkg in (Get-ChildItem $ArtifactsDir -Filter "*.nupkg"))
+	{
+		$key = (& { if ([String]::IsNullOrEmpty($NuGetKey)) { return ""; } else { return "-ApiKey $NuGetKey" } });
+		Exec { & $nuget push $nupkg.FullName $key -Source "https://api.nuget.org/v3/index.json"; }
+	}
+
+	if (-not [String]::IsNullOrEmpty($PSGalleryKey) -and ($BranchName -eq "master"))
+	{
+		foreach ($psd1 in (Get-ChildItem $ArtifactsDir -Recurse -Filter "*.psd1"))
+		{
+			if (Test-ModuleManifest -Path $psd1.FullName)
+			{
+				Publish-Module -Path $psd1.DirectoryName -NuGetApiKey $PSGalleryKey;
+			}
+			else { throw "the $($psd1.Name) manifest file contains errors."; }
+		}
+	}
+	else { Write-Host "publishing to powershellgallery.com was intentionally ignored." -ForegroundColor DarkYellow; }
+	Write-LineBreak;
 }
 
 #----------

@@ -11,7 +11,7 @@ Param(
 	[Parameter(Position=2)]
 	[string]$TestCase,
 
-	[Alias("connStr")]
+	[Alias("conn", "connStr")]
 	[hashtable]$ConnectionStrings = @{},
 
 	[Alias("build", "config")]
