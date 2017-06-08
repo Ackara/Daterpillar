@@ -23,8 +23,8 @@ foreach ($item in $ConnectionStrings.GetEnumerator())
 	$entries += "<add name=`"$($item.Name)`" connectionString=`"$($item.Value)`" />`n`r"
 }
 
-$appConfig = Get-Item "$projectRoot\tests\MSTest*\app.config" -ErrorAction SilentlyContinue;
-if (-not $appConfig)
+$appConfig = "$projectRoot\tests\MSTest.Daterpillar\app.config";
+if (-not (Test-Path $appConfig -PathType Leaf))
 {
 	$content = @"
 	<?xml version="1.0" encoding="utf-8"?>
@@ -36,8 +36,8 @@ if (-not $appConfig)
 		</connectionStrings>
 	</configuration>
 "@.Trim() | Out-File $appConfig -Encoding utf8;
-	& $appConfig;
 	Write-Host "`t* restored the 'app.config' file." -ForegroundColor Green;
+    & $appConfig;
 }
 else { Write-Host "`t* app.config already exist." -ForegroundColor DarkGreen; }
 
@@ -53,5 +53,6 @@ if (-not (Test-Path $credentials -PathType Leaf))
 }
 "@ | Out-File $credentials -Encoding utf8;
 	Write-Host "`t* restored the 'credentials.json' file." -ForegroundColor Green;
+    & $credentials;
 }
 else { Write-Host "`t* credentials.json alread exist." -ForegroundColor DarkGreen; }
