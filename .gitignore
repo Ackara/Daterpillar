@@ -270,4 +270,5 @@ paket-files/
 tools/
 
 # Sensitive Files
+credentials.json
 app.config

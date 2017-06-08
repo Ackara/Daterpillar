@@ -26,6 +26,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="credentials.json" />
     <Content Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>

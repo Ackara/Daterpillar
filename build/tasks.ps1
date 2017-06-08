@@ -33,7 +33,7 @@ Task "test" -description "This task runs all tests." -depends @("pester", "vstes
 #----------
 
 Task "init" -description "This task imports all dependencies." -action {
-	foreach ($name in @("vssetup", "Buildbox.SemVer", "Buildbox.Utils"))
+	foreach ($name in @("vssetup", "Buildbox.SemVer", "Buildbox.Utils", "WinSCP"))
 	{
 		$path = "$ProjectRoot\tools\$name\*\*.psd1";
 		$module = Get-Item $path -ErrorAction SilentlyContinue;
@@ -81,7 +81,7 @@ Task "pester" -description "This task runs all specified pester tests." `
 	Assert ($results.FailedCount -eq 0) "'$($results.FailedCount)' pester tests failed.";
 }
 
-Task "vstest" -description "This task runs all visual studio tests." `
+Task "vstest" -alias "mstest" -description "This task runs all visual studio tests." `
 -depends @("init") -action {
 	Write-LineBreak "MSTest";
 	foreach ($csproj in (Get-ChildItem "$ProjectRoot\tests" -Recurse -Filter "*.csproj" | Select-Object -ExpandProperty FullName))
@@ -162,8 +162,8 @@ Task "pack" -description "This task packages the project to be published to all 
 	}
 }
 
-Task "publish" -alias "pub" -description "This task publishes all nuget packages and modules." `
--depends @("init") -action {
+Task "publish" -alias "push" -description "This task publishes all nuget packages and modules." `
+-depends @("pack") -action {
 	Write-LineBreak "NUGET";
 	foreach ($nupkg in (Get-ChildItem $ArtifactsDir -Filter "*.nupkg"))
 	{
@@ -201,9 +201,28 @@ Task "version" -alias "v" -description "This task increments the project's versi
 	Update-VersionNumber "$ProjectRoot\src" -config $ManifestPath -Major:$Major -Minor:$Minor -Patch -CommitMessage $msg -UseCommitMessageAsDescription;
 }
 
-Task "setup" -description "This task restores all missing files." `
+Task "restore" -alias "setup" -description "This task restores all missing files." `
 -depends @() -action { Exec { & "$PSScriptRoot\restore-missingFiles.ps1" $ConnectionStrings; } }
 
+Task "icon" -description "This task pushed the project's logo to a web server." `
+-depends @("init") -action {
+	foreach ($img in (Get-ChildItem "$ProjectRoot\assets" -Recurse -Include @("*.png")))
+	{
+		$credentials = Get-Content "$PSScriptRoot\credentials.json" | Out-String | ConvertFrom-Json;
+		$connStr = $credentials.ftp.Split(';');
+		$host = $connStr[0].Split('=')[1];
+		$user = $connStr[1].Split('=')[1];
+		$password =  ConvertTo-SecureString $connStr[2].Split('=')[1] -AsPlainText -Force;
+		
+		$result = $session = New-WinSCPSession -HostName $host -Credential (New-Object PSCredential($user, $password)) -Protocol Ftp `
+			| Send-WinSCPItem -Path $img.FullName -Destination "/$host/wwwroot/images/$($img.Name)";
+		
+		if ($result.IsSuccess)
+		{ Write-Host "`t* '$($img.Name)' was uploaded to $host successfully." -ForegroundColor Green; }
+		else
+		{ throw "failed to update '$($img.Name)' $host." }
+	}
+}
 
 #region ----- HELPER FUNCTIONS -----
 
