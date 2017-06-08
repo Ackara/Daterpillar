@@ -167,8 +167,7 @@ Task "publish" -alias "push" -description "This task publishes all nuget package
 	Write-LineBreak "NUGET";
 	foreach ($nupkg in (Get-ChildItem $ArtifactsDir -Filter "*.nupkg"))
 	{
-		$key = (& { if ([String]::IsNullOrEmpty($NuGetKey)) { return ""; } else { return "-ApiKey `"$NuGetKey`"" } });
-		Exec { & $nuget push $nupkg.FullName $key -Source "https://api.nuget.org/v3/index.json"; }
+		Exec { & $nuget push $nupkg.FullName $NuGetKey -Source "https://api.nuget.org/v3/index.json"; }
 	}
 
 	if (-not [String]::IsNullOrEmpty($PSGalleryKey) -and ($BranchName -eq "master"))
