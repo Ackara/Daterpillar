@@ -26,6 +26,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\releaseNotes.txt">
+      <Link>releaseNotes.txt</Link>
+    </Content>
     <Content Include="credentials.json" />
     <Content Include="manifest.json" />
   </ItemGroup>

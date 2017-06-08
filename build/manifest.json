@@ -15,11 +15,11 @@
     {
       "major": 4,
       "minor": 6,
-      "patch": 8
+      "patch": 10
     },
     "stage_all_files": false,
-    "commit_changes": false,
-    "tag_commit": false,
+    "commit_changes": true,
+    "tag_commit": true,
     "branch_to_suffix":
     {
       "master": "",
