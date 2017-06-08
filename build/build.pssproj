@@ -33,6 +33,7 @@
       <Link>build.ps1</Link>
     </Compile>
     <Compile Include="packages.config" />
+    <Compile Include="restore-missingFiles.ps1" />
     <Compile Include="tasks.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

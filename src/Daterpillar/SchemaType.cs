@@ -1,4 +1,4 @@
-﻿namespace Acklann.Daterpillar
+﻿namespace Ackara.Daterpillar
 {
 	/// <summary>
 	/// Represents a schema data type.

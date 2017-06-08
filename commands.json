@@ -5,7 +5,7 @@
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version"
+      "arguments": "-NoProfile -ExecutionPolicy Bypass -NonInteractive -File build.ps1 version"
     },
     "version: minor":
     {
@@ -19,12 +19,6 @@
       "workingDirectory": ".",
       "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Major"
     },
-    "add missing files":
-    {
-      "fileName": "powershell.exe",
-      "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 setup"
-    },
     "create packages":
     {
       "fileName": "powershell.exe",
@@ -32,5 +26,4 @@
       "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 pack"
     }
   }
-, "-vs-binding":{"ProjectOpened":["add missing files"]}
 }

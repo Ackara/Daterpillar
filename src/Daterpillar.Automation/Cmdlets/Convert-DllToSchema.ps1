@@ -26,7 +26,7 @@ Param([Parameter(Mandatory)][string]$AssemblyFile)
 
 if (Test-Path $AssemblyFile -PathType Leaf)
 {
-	$moduleName = "Ackara.Daterpillar.Automation";
+	$moduleName = "Acklann.Daterpillar.Automation";
 	$assemblyDir = Split-Path $AssemblyFile -Parent;
 
 	if (-not (Get-Module $moduleName))
@@ -39,7 +39,7 @@ if (Test-Path $AssemblyFile -PathType Leaf)
 	}
 
 	$dll = [System.Reflection.Assembly]::LoadFrom($AssemblyFile);
-	[Ackara.Daterpillar.Schema]$schema = [Ackara.Daterpillar.AssemblyToSchemaConverter]::ToSchema($dll);
+	[Acklann.Daterpillar.Schema]$schema = [Acklann.Daterpillar.AssemblyToSchemaConverter]::ToSchema($dll);
 	$schema.Sort();
 	$schemaFile = [IO.Path]::ChangeExtension($AssemblyFile, "schema.xml");
 	$schema.ToXml() | Out-File $schemaFile -Encoding utf8;

@@ -16,7 +16,7 @@ namespace MSTest.Daterpillar.Tests
             var sample = MockData.GetSchema();
             var sut = new ConvertToScriptCmdlet()
             {
-                InputObject = sample,
+                Schema = sample,
                 Syntax = Syntax.SQLite.ToString()
             };
 

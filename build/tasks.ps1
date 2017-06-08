@@ -16,8 +16,9 @@ Properties {
 	$BranchName = "";
 	$BuildConfiguration = "";
 	$SkipMSBuild = $false;
-    $Major = $false;
-    $Minor = $false;
+	$ConnectionStrings = @{};
+	$Major = $false;
+	$Minor = $false;
 }
 
 Task "default" -description "This task compiles, test and publish the project to nuget.org and powershell gallery." `
@@ -67,11 +68,11 @@ Task "pester" -description "This task runs all specified pester tests." `
 	$results = "";
 	if ([String]::IsNullOrEmpty($TestCase))
 	{
-		$results = Invoke-Pester -Script "$ProjectRoot\tests\Pester*\*test*.ps1" -PassThru;
+		$results = Invoke-Pester -PassThru -Script @{ Path = "$ProjectRoot\tests\Pester*\*test*.ps1"; Arguments = @($BuildConfiguration) };
 	}
 	else
 	{
-		$results = Invoke-Pester -Script "$ProjectRoot\tests\Pester*\$($TestCase)*test*.ps1" -PassThru;
+		$results = Invoke-Pester -PassThru -Script @{ Path = "$ProjectRoot\tests\Pester*\$($TestCase)*test*.ps1"; Arguments = @($BuildConfiguration) }
 	}
 
 	Assert ($results.FailedCount -eq 0) "'$($results.FailedCount)' pester tests failed.";
@@ -99,17 +100,17 @@ Task "pack" -description "This task packages the project to be published to all 
 	$suffix = Get-BranchSuffix $BranchName -config $ManifestPath;
 	$suffix = (& { if ([String]::IsNullOrEmpty($suffix)) { return ""; } else { return "-$suffix"; } })
 	
-	$metadata += "PackageVersion=$version$($suffix);";
 	$metadata += "packageOutputPath=$artifactsDir;";
-	$metadata += "authors=$($Manifest.metadata.author);";
-	$metadata += "copyright=$($Manifest.metadata.copyright);";
-	$metadata += "packageTags=$($Manifest.metadata.tags);";
-	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
-	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
-	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
-	$metadata += "packageRequireLicenseAcceptance=$true;";
+	$metadata += "PackageVersion=$version$($suffix);";
 	$metadata += "packageReleaseNotes=$releaseNotes;";
 	$metadata += "configuration=$BuildConfiguration;";
+	$metadata += "authors=$($Manifest.metadata.author);";
+	$metadata += "packageRequireLicenseAcceptance=$true;";
+	$metadata += "packageTags=$($Manifest.metadata.tags);";
+	$metadata += "copyright=$($Manifest.metadata.copyright);";
+	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
+	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
+	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
 	
 	foreach ($proj in (Get-ChildItem "$ProjectRoot\src" -Recurse -Filter "*.csproj"))
 	{
@@ -137,10 +138,26 @@ Task "pack" -description "This task packages the project to be published to all 
 	}
 	Write-LineBreak;
 
-	$moduleDir = "$artifactsDir\Daterpillar.Automation";
-	New-Item $moduleDir -ItemType Directory | Out-Null;
-	Get-ChildItem "$ProjectRoot\src\Daterpillar.Automation\bin\$BuildConfiguation\*\*" | Copy-Item -Destination "$moduleDir" -Recurse;
-	Get-ChildItem $moduleDir -Exclude @("*.dll", "*.psd1", "x*") | Remove-Item;
+	foreach ($module in (Get-ChildItem "$ProjectRoot\src\*\*" -Filter "*.psd1"))
+	{
+		Update-ModuleManifest -Path $module.FullName `
+		-ModuleVersion $version `
+		-Tags $Manifest.metadata.tags `
+		-Author $Manifest.metadata.author `
+		-ReleaseNotes $releaseNotes.Trim() `
+		-IconUri $Manifest.metadata.iconUrl `
+		-CompanyName $Manifest.metadata.author `
+		-Copyright $Manifest.metadata.copyright `
+		-ProjectUri $Manifest.metadata.projectUrl `
+		-LicenseUri $Manifest.metadata.licenseUrl `
+		-CmdletsToExport "*" -FunctionsToExport "*" `
+		-Description (Get-Content "$($module.DirectoryName)\readme.txt" | Out-String);
+
+		$outDir = "$artifactsDir\$([IO.Path]::GetFileNameWithoutExtension($module.Name))";
+		Get-ChildItem "$($module.DirectoryName)\bin\$BuildConfiguration" -Recurse | Where-Object { $_.Name -notcontains "sqlite.interop.dll" } | Copy-Item -Destination $outDir;
+		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x86" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
+		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x64" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
+	}
 }
 
 Task "publish" -description "This task publishes all nuget packages and modules." `
@@ -152,14 +169,19 @@ Task "publish" -description "This task publishes all nuget packages and modules.
 Task "version" -alias "v" -description "This task increments the project's version numbers." `
 -depends @("init") -action {
 	$msg = Show-Inputbox "enter your release notes." "RELEASE NOTES";
+	$msg = (& { if ([String]::IsNullOrEmpty($msg)) { return ""; } else { return $msg.Trim(); } });
 	$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
-	$header = "version $version`n`r";
-	$header += [String]::Join("", [System.Linq.Enumerable]::Repeat("-", $header.Length - 2));
+	$header = "version $version`n";
+	$header += [String]::Join("", [System.Linq.Enumerable]::Repeat("-", $header.Length - 1));
 	$releaseNotes = Get-Content $ReleaseNotesPath | Out-String;
-    "$header`n`r$msg`n`r`n`r`n`r$releaseNotes" | Out-File $ReleaseNotesPath -Encoding utf8;
+	if (-not [String]::IsNullOrEmpty($msg)) { "$header`n$msg`n`n`n$releaseNotes" | Out-File $ReleaseNotesPath -Encoding utf8; }
 	
 	Update-VersionNumber "$ProjectRoot\src" -config $ManifestPath -Major:$Major -Minor:$Minor -Patch -CommitMessage $msg -UseCommitMessageAsDescription;
 }
+
+Task "setup" -description "This task restores all missing files." `
+-depends @() -action { Exec { & "$PSScriptRoot\restore-missingFiles.ps1" $ConnectionStrings; } }
+
 
 #region ----- HELPER FUNCTIONS -----
 

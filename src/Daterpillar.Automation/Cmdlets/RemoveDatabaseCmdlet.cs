@@ -54,7 +54,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the syntax.
         /// </summary>
         /// <value>The syntax.</value>
-        [Alias("s")]
+        [Alias("s", "ext")]
         [Parameter(Position = 4, Mandatory = true)]
         [Parameter(ParameterSetName = defaultArgs)]
         [Parameter(ParameterSetName = explictArgs)]

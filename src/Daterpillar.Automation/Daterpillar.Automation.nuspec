@@ -22,25 +22,25 @@
     <file src="readme.txt"
           target="" />
 
-    <file src="Cmdlets\Convert-DllToSchema.ps1"
-          target="build" />
-
     <file src="Daterpillar.Automation.targets"
           target="build\$id$.targets" />
 
+    <file src="*.psd1"
+          target="tools\net461" />
+
     <file src="bin\$configuration$\*.deps.json"
-          target="tools" />
+          target="tools\net461" />
 
     <file src="bin\$configuration$\*.dll"
-          target="tools" />
+          target="tools\net461" />
 
     <file src="bin\$configuration$\x86\*"
-          target="tools\x86" />
+          target="tools\net461\x86" />
 
     <file src="bin\$configuration$\x64\*"
-          target="tools\x64" />
+          target="tools\net461\x64" />
 
-    <file src="*.psd1"
-          target="tools" />
+    <file src="Cmdlets\Convert-DllToSchema.ps1"
+          target="tools\net461" />
   </files>
 </package>

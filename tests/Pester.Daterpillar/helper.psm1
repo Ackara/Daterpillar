@@ -1,4 +1,44 @@
-function Get-SolutionDirectory()
+function New-TestEnviroment([string]$buldConfig, [string]$name)
+{
+	$projectRoot = Get-ProjectRoot;
+	#$testDir = "$projectRoot\TestResults\$name-$((Get-Date).ToString('yyMdh_mmss'))";
+	$testDir = "$projectRoot\TestResults\pester-$((Get-Date).ToString('yyMdh_mmss'))";
+	$in = "$testDir\in";
+	$out = "$testDir\out";
+	$samples = Get-Item "$projectRoot\tests\MSTest*\Samples";
+	
+	if (-not (Test-Path $testDir -PathType Container))
+	{
+		foreach ($folder in @($in, $out))
+		{
+			if (-not (Test-Path $folder -PathType Container)) { New-Item $folder -ItemType Directory | Out-Null; }
+		}
+
+		Get-ChildItem "$projectRoot\src\*Automation\bin\$buldConfig" -Recurse | Where-Object { $_.Name -notcontains "sqlite.interop.dll" } | Copy-Item -Destination $in;
+		Get-Item "$projectRoot\src\*Automation\bin\$buldConfig\x86" | Copy-Item -Recurse -Destination $in -ErrorAction SilentlyContinue;
+		Get-Item "$projectRoot\src\*Automation\bin\$buldConfig\x64" | Copy-Item -Recurse -Destination $in -ErrorAction SilentlyContinue;
+	}
+	$module = Get-ChildItem $in -Recurse -Filter "*.psd1" | Select-Object -ExpandProperty FullName -First 1;
+
+	[xml]$appconfig = Get-Item "$projectRoot\tests\MSTest*\app.config" | Get-Content;
+	$mssql = $appconfig.SelectSingleNode(".//configuration/connectionStrings/add[@name='mssql']").Attributes["connectionString"].Value;
+	$mysql = $appconfig.SelectSingleNode(".//configuration/connectionStrings/add[@name='mysql']").Attributes["connectionString"].Value;
+	
+	return New-Object psobject -Property @{
+		name = $name;
+		mssql = $mssql;
+		mysql = $mysql;
+		modulePath = $module;
+		moduleName = [IO.Path]::GetFileNameWithoutExtension($module);
+		samples = $samples.FullName;
+		projectRoot = $projectRoot;
+		directory = $testDir;
+		out = $out;
+		in = $in;
+	};
+}
+
+function Get-ProjectRoot()
 {
 	$path = $PSScriptRoot;
 	for ($i = 0; $i -lt 2; $i++)
@@ -7,54 +47,4 @@ function Get-SolutionDirectory()
 	}
 
 	return $path;
-}
-
-function Get-MSTestSamplesDirectory()
-{
-	$path = Split-Path $PSScriptRoot -Parent;
-	$path = Get-Item "$path\mstest*\Samples" | Select-Object -ExpandProperty FullName;
-	return $path;
-}
-
-function Install-TestEnviroment([string]$testName = "")
-{
-	# Create and assign paths
-	$solutionDir = Get-SolutionDirectory;
-	$testResultsDir = "$solutionDir\TestResults\pester-$testName-$((Get-Date).Ticks)";
-	if (-not (Test-Path $testResultsDir -PathType Container)) { New-Item $testResultsDir -ItemType Directory | Out-Null; }
-
-	# Build project
-	$buildboxModule = Get-ChildItem "$solutionDir\packages\Ackara.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
-	Import-Module $buildboxModule -Force;
-
-	$msbuild = Find-MSBuildPath;
-	$automationProj = Get-ChildItem "$solutionDir\src" -Recurse -Filter "*Automation.csproj" | Select-Object -ExpandProperty FullName -First 1;
-	Write-Host (& $msbuild $automationProj /v:minimal /p:OutDir=$testResultsDir);
-	if (Get-Module Buildbox.Utils) { Remove-Module Buildbox.Utils; }
-	Get-ChildItem "$testResultsDir\Cmdlets" -Recurse -Filter "*.ps*1" | Move-Item -Destination $testResultsDir;
-	
-	return $testResultsDir;
-}
-
-function Install-MSTestProject()
-{
-	# Create and assign paths
-	$solutionDir = Get-SolutionDirectory;
-	$testResultsDir = "$solutionDir\TestResults\pester-$testName-$((Get-Date).Ticks)";
-	if (-not (Test-Path $testResultsDir -PathType Container)) { New-Item $testResultsDir -ItemType Directory | Out-Null; }
-
-	# Build project
-	$buildboxModule = Get-ChildItem "$solutionDir\packages\*.Buildbox.*" -Recurse -Filter "*.Utils.psm1" | Sort-Object $_.Name | Select-Object -ExpandProperty FullName -Last 1;
-	Import-Module $buildboxModule -Force;
-
-	$msbuild = Find-MSBuildPath;
-	$mstesProj = Get-ChildItem "$solutionDir\tests" -Recurse -Filter "*MSTest*.csproj" | Select-Object -ExpandProperty FullName -First 1;
-	Write-Host (& $msbuild $mstesProj /v:minimal /p:OutDir=$testResultsDir);
-	if (Get-Module Buildbox.Utils) { Remove-Module Buildbox.Utils; }
-
-	return $testResultsDir;
-}
-
-function Uninstall-TestEnviroment([string]$sessionDir)
-{
 }

@@ -6,19 +6,19 @@ using System.Management.Automation;
 namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
-    /// A powershell cmdlet that generates a script from a <see cref="Schema"/> instance. This class cannot be inherited.
+    /// A powershell cmdlet that generates a script from a <see cref="Daterpillar.Schema"/> instance. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Management.Automation.Cmdlet" />
     [Cmdlet(VerbsData.ConvertTo, "Script")]
     public sealed class ConvertToScriptCmdlet : Cmdlet
     {
         /// <summary>
-        /// Gets or sets the <see cref="Schema"/> Instance.
+        /// Gets or sets the <see cref="Daterpillar.Schema"/> Instance.
         /// </summary>
         /// <value>The input object.</value>
-        [Alias("src", "schema")]
+        [Alias("src", "in")]
         [Parameter(Position = 0, ValueFromPipeline = true)]
-        public Schema InputObject { get; set; }
+        public Schema Schema { get; set; }
 
         /// <summary>
         /// Gets or sets the script's syntax.
@@ -55,9 +55,9 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            if (InputObject != null)
+            if (Schema != null)
             {
-                ScriptBuilder.Append(InputObject);
+                ScriptBuilder.Append(Schema);
                 WriteObject(ScriptBuilder.GetContent());
             }
         }

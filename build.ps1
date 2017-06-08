@@ -23,7 +23,7 @@ Param(
 	[Alias("psKey")]
 	[string]$PSGalleryKey,
 
-    [switch]$SkipCompilation,
+	[switch]$SkipCompilation,
 	[switch]$Major,
 	[switch]$Minor,
 	[switch]$Help
@@ -41,13 +41,6 @@ if ([string]::IsNullOrEmpty($branchName))
 	}
 }
 Write-Host "current branch: '$BranchName'";
-
-if ($ConnectionStrings.Count -eq 0)
-{
-	$ConnectionStrings.Add("ftp",   "server=localhost;user=your_username;password=your_password;");
-	$ConnectionStrings.Add("mysql", "server=localhost;user=your_username;password=your_password;");
-	$ConnectionStrings.Add("mssql", "server=localhost;user=your_username;password=your_password;");
-}
 
 # Restore packages
 $nuget = "$PSScriptRoot\tools\nuget.exe";
@@ -74,7 +67,7 @@ else
 			"TestCase"=$TestCase;
 			"NuGetKey"=$NuGetKey;
 			"PSGalleryKey"=$PSGalleryKey;
-            "SkipMSBuild"=$SkipCompilation;
+			"SkipMSBuild"=$SkipCompilation;
 			"Nuget"=$nuget;
 			"Major"=$Major.IsPresent;
 			"Minor"=$Minor.IsPresent;
