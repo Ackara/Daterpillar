@@ -44,7 +44,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the database.
         /// </summary>
         /// <value>The database.</value>
-        [Alias("d")]
+        [Alias("d", "name")]
         [Parameter(Position = 3)]
         [Parameter(ParameterSetName = defaultArgs)]
         [Parameter(ParameterSetName = explictArgs)]
@@ -69,6 +69,11 @@ namespace Acklann.Daterpillar.Cmdlets
         [Parameter(ValueFromPipeline = true, ParameterSetName = defaultArgs)]
         public string ConnectionString { get; set; }
 
+        [Alias("r", "del", "dlt", "delete")]
+        [Parameter(ParameterSetName = defaultArgs)]
+        [Parameter(ParameterSetName = explictArgs)]
+        public SwitchParameter DeleteIfExist { get; set; }
+
         /// <summary>
         /// Processes the record.
         /// </summary>
@@ -77,6 +82,11 @@ namespace Acklann.Daterpillar.Cmdlets
             BuildConnectionString(out string connectionString);
             IServerManager server = ServerManagerFactory.CreateInstance(Syntax, connectionString);
             bool databaseWasCreated = server.CreateDatabase(Database);
+            if (DeleteIfExist.IsPresent && databaseWasCreated == false)
+            {
+                server.DropDatabase(Database);
+                databaseWasCreated = server.CreateDatabase(Database);
+            }
             WriteVerbose(databaseWasCreated ? $"Attached the [{Database}] database to the '{GetHost(connectionString)}' server." : $"The [{Database}] database already exist.");
             WriteObject(databaseWasCreated);
         }

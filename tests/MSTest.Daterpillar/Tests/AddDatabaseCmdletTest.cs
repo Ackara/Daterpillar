@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 
@@ -26,7 +27,8 @@ namespace MSTest.Daterpillar.Tests
             // Act
             using (var connection = ConnectionFactory.CreateMySQLConnection())
             {
-                connection.TryExecuteScript($"DROP DATABASE IF EXIST `{databaseName}`;", out string errorMsg);
+                bool commandFailed = !connection.TryExecuteScript($"DROP DATABASE IF EXISTS `{databaseName}`;", out string errorMsg);
+                if (commandFailed) Assert.Fail(errorMsg);
             }
 
             var results = sut.Invoke<bool>().ToArray();
@@ -60,7 +62,8 @@ namespace MSTest.Daterpillar.Tests
             // Act
             using (var connection = ConnectionFactory.CreateMySQLConnection())
             {
-                connection.TryExecuteScript($"DROP DATABASE IF EXIST `{databaseName}`;", out string errorMsg);
+                bool commandFailed = !connection.TryExecuteScript($"DROP DATABASE IF EXISTS `{databaseName}`;", out string errorMsg);
+                if (commandFailed) Assert.Fail(errorMsg);
             }
 
             var results = sut.Invoke<bool>().ToArray();
@@ -96,6 +99,44 @@ namespace MSTest.Daterpillar.Tests
             results.Length.ShouldBe(1);
             dbFileExist.ShouldBeTrue();
             operationCompleted.ShouldBeTrue();
+        }
+
+        [TestMethod]
+        public void Invoke_should_recreate_a_mysql_database_that_already_exist()
+        {
+            // Arrange
+            int totalTables;
+            bool databaseWasCreated;
+            string dbName = "dtpl_dltIfExist";
+            var connection = ConnectionFactory.CreateMySQLConnection(dbName);
+            var sut = new AddDatabaseCmdlet()
+            {
+                Database = dbName,
+                Syntax = "mysql",
+                DeleteIfExist = true,
+                ConnectionString = connection.ConnectionString,
+            };
+
+            using (connection)
+            {
+                connection.UseSchema(FName.cmdlets_source_schemaXML);
+                var results = sut.Invoke<bool>().ToArray();
+                databaseWasCreated = results.First();
+
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "show tables;";
+                    using (var dataset = new DataTable())
+                    {
+                        dataset.Load(cmd.ExecuteReader());
+                        totalTables = dataset.Rows.Count;
+                    }
+                }
+            }
+
+            // Assert
+            totalTables.ShouldBe(0);
+            databaseWasCreated.ShouldBeTrue();
         }
     }
 }

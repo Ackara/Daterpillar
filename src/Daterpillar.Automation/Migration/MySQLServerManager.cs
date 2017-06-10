@@ -29,10 +29,14 @@ namespace Acklann.Daterpillar.Migration
             OpenConnectionIfClosed();
             using (var command = _connection.CreateCommand())
             {
-                command.CommandText = $"CREATE DATABASE IF NOT EXISTS `{databaseName}`;";
-                command.ExecuteNonQuery();
+                command.CommandText = $"CREATE DATABASE `{databaseName}`;";
+                try
+                {
+                    command.ExecuteNonQuery();
+                    return true;
+                }
+                catch (MySqlException ex) when (ex.Number == 1007) { return false; }
             }
-            return true;
         }
 
         /// <summary>
