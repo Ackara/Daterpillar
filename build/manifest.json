@@ -3,7 +3,7 @@
   {
     "author": "Ackara",
     "copyright": "licensed under MIT License",
-    "tags": "orm miroc-orm sql t4 build automation",
+    "tags": "micro-orm build automation tool code generator mysql sqlite",
 
     "projectUrl": "https://github.com/Ackara/Daterpillar",
     "iconUrl": "http://static.gigobyte.com/images/daterpillar.png",

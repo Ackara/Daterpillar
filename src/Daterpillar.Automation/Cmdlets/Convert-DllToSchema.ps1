@@ -17,7 +17,6 @@ None
 
 .EXAMPLE
 Convert-DllToSchema "path_to_dll_file.dll";
-
 This example generates a schema file from from the types defined in the '.dll' file.
 
 #>
@@ -26,15 +25,20 @@ Param([Parameter(Mandatory)][string]$AssemblyFile)
 
 if (Test-Path $AssemblyFile -PathType Leaf)
 {
-	$moduleName = "Acklann.Daterpillar.Automation";
-	$assemblyDir = Split-Path $AssemblyFile -Parent;
+	$moduleName = "Acklann.Daterpillar";
 
 	if (-not (Get-Module $moduleName))
 	{
+
 		if (Test-Path "$PSScriptRoot\$moduleName.dll" -PathType Leaf)
-		{ Import-Module "$PSScriptRoot\$moduleName.dll"; }
+		{ 
+			Import-Module "$PSScriptRoot\$moduleName.dll"; 
+		}
 		else
-		{ Import-Module "$assemblyDir\$moduleName.dll"; }
+		{ 
+			$assemblyDir = Split-Path $AssemblyFile -Parent;
+			Import-Module "$assemblyDir\$moduleName.dll"; 
+		}
 		Write-Verbose "imported $moduleName.dll.";
 	}
 

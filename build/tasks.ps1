@@ -109,7 +109,7 @@ Task "pack" -description "This task packages the project to be published to all 
 	$metadata += "authors=$($Manifest.metadata.author);";
 	$metadata += "packageRequireLicenseAcceptance=$true;";
 	$metadata += "packageTags=$($Manifest.metadata.tags);";
-	$metadata += "copyright=$($Manifest.metadata.copyright);";
+	$metadata += "Copyright=$($Manifest.metadata.copyright);";
 	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
 	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
 	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";

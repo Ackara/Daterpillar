@@ -3,13 +3,14 @@ function New-TestEnviroment([string]$buldConfig, [string]$name)
 	$projectRoot = Get-ProjectRoot;
 	#$testDir = "$projectRoot\TestResults\$name-$((Get-Date).ToString('yyMdh_mmss'))";
 	$testDir = "$projectRoot\TestResults\pester-$((Get-Date).ToString('yyMdh_mmss'))";
-	$in = "$testDir\in";
+	$in = "$testDir\bin";
 	$out = "$testDir\out";
+	$temp = "$testDir\in";
 	$samples = Get-Item "$projectRoot\tests\MSTest*\Samples";
 	
 	if (-not (Test-Path $testDir -PathType Container))
 	{
-		foreach ($folder in @($in, $out))
+		foreach ($folder in @($in, $out, $temp))
 		{
 			if (-not (Test-Path $folder -PathType Container)) { New-Item $folder -ItemType Directory | Out-Null; }
 		}
@@ -33,6 +34,7 @@ function New-TestEnviroment([string]$buldConfig, [string]$name)
 		samples = $samples.FullName;
 		projectRoot = $projectRoot;
 		directory = $testDir;
+		temp = $temp;
 		out = $out;
 		in = $in;
 	};

@@ -10,7 +10,7 @@
 
     <title>$title$</title>
     <tags>$packageTags$</tags>
-    <copyright>$copyright$</copyright>
+    <copyright>licensed under MIT License</copyright>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 
@@ -21,9 +21,6 @@
   <files>
     <file src="readme.txt"
           target="" />
-
-    <file src="Daterpillar.Automation.targets"
-          target="build\$id$.targets" />
 
     <file src="*.psd1"
           target="tools\net461" />

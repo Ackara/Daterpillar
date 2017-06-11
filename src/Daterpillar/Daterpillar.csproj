@@ -22,6 +22,17 @@
       <Pack>true</Pack>
       <PackagePath>.</PackagePath>
     </Content>
+
+    <Content Include="$(MSBuildProjectName).targets">
+      <Pack>true</Pack>
+      <PackagePath>build\$(AssemblyName).targets</PackagePath>
+    </Content>
+
+    <Content Include="..\$(MSBuildProjectName).Automation\Cmdlets\Convert-DllToSchema.ps1">
+      <Pack>true</Pack>
+      <PackagePath>tools\$(TargetFramework)</PackagePath>
+    </Content>
+    
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
