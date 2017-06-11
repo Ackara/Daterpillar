@@ -4,17 +4,21 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <Version>4.7.2</Version>
-    <FileVersion>4.7.2</FileVersion>
-    <AssemblyVersion>4.7.2</AssemblyVersion>
+    <Version>4.7.3</Version>
+    <FileVersion>4.7.3</FileVersion>
+    <AssemblyVersion>4.7.3</AssemblyVersion>
     <Owners>Ackara</Owners>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.4\Ackara.Daterpillar.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +35,10 @@
       <PackagePath>tools</PackagePath>
     </Content>
     <Content Include="$(OutputPath)\$(AssemblyName).dll">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </Content>
+    <Content Include="$(OutputPath)\publish\System.Xml.ReaderWriter.dll">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
