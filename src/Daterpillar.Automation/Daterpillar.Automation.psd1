@@ -12,7 +12,7 @@
 RootModule = 'Acklann.Daterpillar.Automation.dll'
 
 # Version number of this module.
-ModuleVersion = '4.7.1'
+ModuleVersion = '4.7.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -96,7 +96,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'orm','miroc-orm','sql','t4','build','automation'
+        Tags = 'micro-orm','build','automation','tool','code','generator','mysql','sqlite'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/Ackara/Daterpillar/blob/master/LICENSE'
@@ -108,7 +108,12 @@ PrivateData = @{
         IconUri = 'http://static.gigobyte.com/images/daterpillar.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'version 4.6.13
+        ReleaseNotes = 'version 4.7.0
+-------------
+* move daterpillar.automation.targets to the daterpillar project.
+
+
+version 4.6.13
 --------------
 Add features:
 * Add DeleteIfExist switch to Add-Database cmdlet

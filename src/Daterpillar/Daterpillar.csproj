@@ -4,9 +4,9 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <Version>4.7.1</Version>
-    <FileVersion>4.7.1</FileVersion>
-    <AssemblyVersion>4.7.1</AssemblyVersion>
+    <Version>4.7.2</Version>
+    <FileVersion>4.7.2</FileVersion>
+    <AssemblyVersion>4.7.2</AssemblyVersion>
     <Owners>Ackara</Owners>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -28,7 +28,11 @@
     </Content>
     <Content Include="..\$(MSBuildProjectName).Automation\Cmdlets\Convert-DllToSchema.ps1">
       <Pack>true</Pack>
-      <PackagePath>tools\$(TargetFramework)</PackagePath>
+      <PackagePath>tools</PackagePath>
+    </Content>
+    <Content Include="$(OutputPath)\$(AssemblyName).dll">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
     </Content>
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
