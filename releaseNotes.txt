@@ -1,4 +1,9 @@
-﻿version 4.6.13
+﻿version 4.7.0
+-------------
+* move daterpillar.automation.targets to the daterpillar project.
+
+
+version 4.6.13
 --------------
 Add features:
 * Add DeleteIfExist switch to Add-Database cmdlet
@@ -41,6 +46,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
