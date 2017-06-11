@@ -91,6 +91,7 @@ Task "vstest" -alias "mstest" -description "This task runs all visual studio tes
 	Write-LineBreak;
 }
 
+
 Task "pack" -description "This task packages the project to be published to all online repositories." `
 -depends @("init", "compile") -action {
 	$msbuild = Get-MSBuildPath;
@@ -121,12 +122,14 @@ Task "pack" -description "This task packages the project to be published to all 
 		$description = Get-Content "$($proj.DirectoryName)\readme.txt" | Out-String;
 		$properties += "description=$description;";
 		$properties += $metadata.Trim(';');
-		
 		Push-Location $proj.DirectoryName;
+
 		try
 		{
 			if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
 			{
+				Write-LineBreak "DOTNET";
+				Exec { & dotnet publish --configuration $BuildConfiguration; }
 				Write-LineBreak "MSBUILD";
 				Exec { & $msbuild "/t:pack" "/p:$properties" "/verbosity:minimal"; }
 			}
