@@ -1,6 +1,6 @@
-﻿version 4.7.0
+﻿version 4.7.1
 -------------
-* move daterpillar.automation.targets to the daterpillar project.
+* Move daterpillar.automation.targets to the daterpillar project.
 
 
 version 4.6.13
@@ -46,6 +46,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
