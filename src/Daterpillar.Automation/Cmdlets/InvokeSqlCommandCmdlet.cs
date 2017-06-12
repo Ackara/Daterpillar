@@ -11,7 +11,7 @@ namespace Acklann.Daterpillar.Cmdlets
     /// A powershell cmdlet that executes a SQL command. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Management.Automation.Cmdlet" />
-    [Cmdlet(VerbsLifecycle.Invoke, "SQLCommand", DefaultParameterSetName = defaultArgs)]
+    [Cmdlet(VerbsLifecycle.Invoke, "SQLCommand")]
     public sealed class InvokeSqlCommandCmdlet : Cmdlet
     {
         /// <summary>
@@ -20,7 +20,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The host.</value>
         [Alias("h", "server")]
         [Parameter(Position = 1)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Host { get; set; }
 
         /// <summary>
@@ -29,7 +28,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The user.</value>
         [Alias("u", "usr")]
         [Parameter(Position = 2)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string User { get; set; }
 
         /// <summary>
@@ -38,7 +36,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The password.</value>
         [Alias("p", "pwd")]
         [Parameter(Position = 3)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Password { get; set; }
 
         /// <summary>
@@ -47,8 +44,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The database.</value>
         [Alias("d")]
         [Parameter(Position = 4)]
-        [Parameter(ParameterSetName = defaultArgs)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Database { get; set; }
 
         /// <summary>
@@ -57,8 +52,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The syntax.</value>
         [Alias("s", "ext")]
         [Parameter(Position = 5, Mandatory = true)]
-        [Parameter(ParameterSetName = defaultArgs)]
-        [Parameter(ParameterSetName = explictArgs)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 
@@ -67,7 +60,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The connection string.</value>
         [Alias("c", "conn", "connStr")]
-        [Parameter(ParameterSetName = defaultArgs)]
         public string ConnectionString { get; set; }
 
         /// <summary>
@@ -75,8 +67,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The script.</value>
         [Parameter(Position = 6, Mandatory = true, ValueFromPipeline = true)]
-        [Parameter(ParameterSetName = defaultArgs)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Script { get; set; }
 
         /// <summary>
