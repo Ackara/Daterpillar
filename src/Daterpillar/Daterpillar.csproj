@@ -4,9 +4,9 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <Version>4.7.4</Version>
-    <FileVersion>4.7.4</FileVersion>
-    <AssemblyVersion>4.7.4</AssemblyVersion>
+    <Version>4.7.5</Version>
+    <FileVersion>4.7.5</FileVersion>
+    <AssemblyVersion>4.7.5</AssemblyVersion>
     <Owners>Ackara</Owners>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
