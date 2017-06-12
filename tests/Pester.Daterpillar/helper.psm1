@@ -1,11 +1,10 @@
 function New-TestEnviroment([string]$buldConfig, [string]$name)
 {
 	$projectRoot = Get-ProjectRoot;
-	#$testDir = "$projectRoot\TestResults\$name-$((Get-Date).ToString('yyMdh_mmss'))";
 	$testDir = "$projectRoot\TestResults\pester-$((Get-Date).ToString('yyMdh_mmss'))";
-	$in = "$testDir\bin";
+	$in = "$testDir\in";
 	$out = "$testDir\out";
-	$temp = "$testDir\in";
+	$temp = "$testDir\temp";
 	$samples = Get-Item "$projectRoot\tests\MSTest*\Samples";
 	
 	if (-not (Test-Path $testDir -PathType Container))

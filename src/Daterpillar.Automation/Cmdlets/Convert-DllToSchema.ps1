@@ -33,20 +33,22 @@ if (Test-Path $AssemblyFile -PathType Leaf)
 		if (Test-Path "$PSScriptRoot\$moduleName.dll" -PathType Leaf)
 		{ 
 			Import-Module "$PSScriptRoot\$moduleName.dll"; 
+			Write-Verbose "imported '$PSScriptRoot\$moduleName.dll' module."; 
 		}
 		else
 		{ 
 			$assemblyDir = Split-Path $AssemblyFile -Parent;
 			Import-Module "$assemblyDir\$moduleName.dll"; 
+			Write-Verbose "imported '$assemblyDir\$moduleName.dll' module.";
 		}
-		Write-Verbose "imported $moduleName.dll.";
 	}
 
 	$dll = [System.Reflection.Assembly]::LoadFrom($AssemblyFile);
 	[Acklann.Daterpillar.Schema]$schema = [Acklann.Daterpillar.AssemblyToSchemaConverter]::ToSchema($dll);
 	$schema.Sort();
 	$schemaFile = [IO.Path]::ChangeExtension($AssemblyFile, "schema.xml");
-	$schema.ToXml() | Out-File $schemaFile -Encoding utf8;
+	$utf8 = New-Object System.Text.UTF8Encoding $false;
+	[System.IO.File]::WriteAllText($schemaFile, $schema.ToXml(), $utf8);
 
 	Write-Verbose "Schema was created at '$schemaFile'.";
 	return $schemaFile;
