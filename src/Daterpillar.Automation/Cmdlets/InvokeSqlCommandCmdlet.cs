@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The host.</value>
         [Alias("h", "server")]
-        [Parameter(Position = 0)]
+        [Parameter(Position = 1)]
         [Parameter(ParameterSetName = explictArgs)]
         public string Host { get; set; }
 
@@ -28,7 +28,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The user.</value>
         [Alias("u", "usr")]
-        [Parameter(Position = 1)]
+        [Parameter(Position = 2)]
         [Parameter(ParameterSetName = explictArgs)]
         public string User { get; set; }
 
@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The password.</value>
         [Alias("p", "pwd")]
-        [Parameter(Position = 2)]
+        [Parameter(Position = 3)]
         [Parameter(ParameterSetName = explictArgs)]
         public string Password { get; set; }
 
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The database.</value>
         [Alias("d")]
-        [Parameter(Position = 3)]
+        [Parameter(Position = 4)]
         [Parameter(ParameterSetName = defaultArgs)]
         [Parameter(ParameterSetName = explictArgs)]
         public string Database { get; set; }
@@ -56,7 +56,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Alias("s", "ext")]
-        [Parameter(Position = 4, Mandatory = true)]
+        [Parameter(Position = 5, Mandatory = true)]
         [Parameter(ParameterSetName = defaultArgs)]
         [Parameter(ParameterSetName = explictArgs)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
@@ -74,8 +74,9 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the script.
         /// </summary>
         /// <value>The script.</value>
-        [Parameter(Position = 5, Mandatory = true)]
-        [Parameter(ParameterSetName = defaultArgs, ValueFromPipeline = true)]
+        [Parameter(Position = 6, Mandatory = true, ValueFromPipeline = true)]
+        [Parameter(ParameterSetName = defaultArgs)]
+        [Parameter(ParameterSetName = explictArgs)]
         public string Script { get; set; }
 
         /// <summary>
