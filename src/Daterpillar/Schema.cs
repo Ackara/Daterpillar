@@ -145,7 +145,9 @@ namespace Acklann.Daterpillar
         {
             var settings = new XmlWriterSettings()
             {
-                Indent = true
+                Indent = true,
+                OmitXmlDeclaration =false,
+                Encoding = new UTF8Encoding(false)
             };
 
             using (var writer = XmlWriter.Create(outputStream, settings))
@@ -166,7 +168,7 @@ namespace Acklann.Daterpillar
             using (var data = new MemoryStream())
             {
                 Save(data);
-                xml = Encoding.UTF8.GetString(data.ToArray());
+                xml = new UTF8Encoding(false).GetString(data.ToArray());
             }
 
             return xml;

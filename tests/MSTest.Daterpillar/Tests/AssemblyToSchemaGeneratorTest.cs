@@ -25,6 +25,7 @@ namespace MSTest.Daterpillar.Tests
 
             using (var xmlData = new MemoryStream())
             {
+                
                 result.Save(xmlData);
                 xml = Encoding.UTF8.GetString(xmlData.ToArray());
                 xmlIsValid = Helper.ValidateXml(xmlData, out xmlError);
