@@ -42,6 +42,10 @@
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
+    <Content Include="$(OutputPath)\publish\System.Xml.XmlSerializer.dll">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </Content>
     <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>

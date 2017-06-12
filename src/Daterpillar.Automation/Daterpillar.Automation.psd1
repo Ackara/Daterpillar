@@ -108,7 +108,12 @@ PrivateData = @{
         IconUri = 'http://static.gigobyte.com/images/daterpillar.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'version 4.7.1
+        ReleaseNotes = 'version 4.7.2
+-------------
+* Fix msbuild targets reference to System.Xml.XmlReader.dll
+
+
+version 4.7.1
 -------------
 * Move daterpillar.automation.targets to the daterpillar project.
 
