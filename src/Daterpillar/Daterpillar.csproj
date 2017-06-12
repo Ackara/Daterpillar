@@ -34,15 +34,11 @@
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
-    <Content Include="$(OutputPath)\$(AssemblyName).dll">
+    <Content Include="..\$(MSBuildProjectName).Automation\bin\$(Configuration)\$(AssemblyName).dll">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
-    <Content Include="$(OutputPath)\publish\System.Xml.ReaderWriter.dll">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </Content>
-    <Content Include="$(OutputPath)\publish\System.Xml.XmlSerializer.dll">
+    <Content Include="..\$(MSBuildProjectName).Automation\bin\$(Configuration)\System.Xml.*.dll">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>

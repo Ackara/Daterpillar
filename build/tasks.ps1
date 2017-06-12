@@ -128,8 +128,6 @@ Task "pack" -description "This task packages the project to be published to all 
 		{
 			if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
 			{
-				Write-LineBreak "DOTNET";
-				Exec { & dotnet publish --configuration $BuildConfiguration; }
 				Write-LineBreak "MSBUILD";
 				Exec { & $msbuild "/t:pack" "/p:$properties" "/verbosity:minimal"; }
 			}
