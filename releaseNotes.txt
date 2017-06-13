@@ -1,4 +1,9 @@
-﻿version 4.7.9
+﻿version 4.7.10
+--------------
+* Fix MigrationState enum values
+
+
+version 4.7.9
 -------------
 * Remove named parameter sets
 
@@ -66,6 +71,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
