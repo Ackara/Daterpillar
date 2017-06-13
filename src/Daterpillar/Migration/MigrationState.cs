@@ -9,21 +9,21 @@
         /// <summary>
         /// The schemas are identical.
         /// </summary>
-        NoChanges = 0,
+        NoChanges = 1,
 
         /// <summary>
         /// The schemas are not identical.
         /// </summary>
-        PendingChanges = 1,
+        PendingChanges = 2,
 
         /// <summary>
         /// The source is empty.
         /// </summary>
-        SourceIsEmpty = 2,
+        SourceIsEmpty = 4,
 
         /// <summary>
         /// The target is empty.
         /// </summary>
-        TargetIsEmpty = 4
+        TargetIsEmpty = 8
     }
 }
