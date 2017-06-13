@@ -63,6 +63,7 @@ namespace Acklann.Daterpillar.Cmdlets
         public string ConnectionString { get; set; }
 
         [Alias("r", "del", "dlt", "delete")]
+        [Parameter]
         public SwitchParameter DeleteIfExist { get; set; }
 
         /// <summary>

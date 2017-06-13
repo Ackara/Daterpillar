@@ -12,7 +12,7 @@
 RootModule = 'Acklann.Daterpillar.Automation.dll'
 
 # Version number of this module.
-ModuleVersion = '4.7.11'
+ModuleVersion = '4.7.12'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

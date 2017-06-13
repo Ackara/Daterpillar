@@ -25,7 +25,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the target <see cref="Schema"/>.
         /// </summary>
         /// <value>The target.</value>
-        [Alias("tar", "tgt", "trg", "from")]
+        [Alias("dest", "tar", "tgt", "trg", "from")]
         [Parameter(Position = 1, ValueFromPipeline = true)]
         public Schema Target { get; set; }
 
