@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Cmdlets
     /// A powershell cmdlet that removes an existing database from a SQL server.
     /// </summary>
     /// <seealso cref="System.Management.Automation.Cmdlet" />
-    [Cmdlet(VerbsCommon.Remove, "Database", DefaultParameterSetName = defaultArgs)]
+    [Cmdlet(VerbsCommon.Remove, "Database")]
     public class RemoveDatabaseCmdlet : Cmdlet
     {
         /// <summary>
@@ -19,7 +19,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The host.</value>
         [Alias("h", "server")]
         [Parameter(Position = 0)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Host { get; set; }
 
         /// <summary>
@@ -28,7 +27,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The user.</value>
         [Alias("u", "usr")]
         [Parameter(Position = 1)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string User { get; set; }
 
         /// <summary>
@@ -37,7 +35,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The password.</value>
         [Alias("p", "pwd")]
         [Parameter(Position = 2)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Password { get; set; }
 
         /// <summary>
@@ -46,8 +43,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The database.</value>
         [Alias("d")]
         [Parameter(Position = 3)]
-        [Parameter(ParameterSetName = defaultArgs)]
-        [Parameter(ParameterSetName = explictArgs)]
         public string Database { get; set; }
 
         /// <summary>
@@ -56,8 +51,6 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <value>The syntax.</value>
         [Alias("s", "ext")]
         [Parameter(Position = 4, Mandatory = true)]
-        [Parameter(ParameterSetName = defaultArgs)]
-        [Parameter(ParameterSetName = explictArgs)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 
@@ -66,7 +59,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The connection string.</value>
         [Alias("c", "conn", "connStr")]
-        [Parameter(ValueFromPipeline = true, ParameterSetName = defaultArgs)]
+        [Parameter(ValueFromPipeline = true)]
         public string ConnectionString { get; set; }
 
         /// <summary>
