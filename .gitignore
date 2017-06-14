@@ -268,6 +268,7 @@ paket-files/
 
 # Build tools
 tools/
+Help_Backup/
 
 # Sensitive Files
 credentials.json

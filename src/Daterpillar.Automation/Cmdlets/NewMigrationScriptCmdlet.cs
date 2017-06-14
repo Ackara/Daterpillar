@@ -34,7 +34,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Parameter(Position = 3)]
-        [Alias("type", "syn", "ext", "extension")]
+        [Alias("type", "syn", "ext", "extension", "conn")]
         public string Syntax { get; set; } = nameof(Daterpillar.Syntax.MSSQL);
 
         /// <summary>

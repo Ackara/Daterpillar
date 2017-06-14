@@ -37,6 +37,9 @@
     <file src="bin\$configuration$\x64\*"
           target="tools\net461\x64" />
 
+    <file src="bin\$configuration$\en-US\*"
+          target="tools\net461\en-US" />
+
     <file src="Cmdlets\Convert-DllToSchema.ps1"
           target="tools\net461" />
   </files>

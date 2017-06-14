@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Cmdlets
             WriteObject(new PSObject(new
             {
                 State = state,
-                Modifications = modifications
+                Differences = modifications
             }));
         }
     }

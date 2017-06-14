@@ -157,9 +157,9 @@ Task "pack" -description "This task packages the project to be published to all 
 		-Description (Get-Content "$($module.DirectoryName)\readme.txt" | Out-String);
 
 		$outDir = "$ArtifactsDir\$([IO.Path]::GetFileNameWithoutExtension($module.Name))";
-		Get-ChildItem "$($module.DirectoryName)\bin\$BuildConfiguration" -Recurse | Where-Object { $_.Name -notcontains "sqlite.interop.dll" } | Copy-Item -Destination $outDir;
-		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x86" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
-		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration\x64" | Copy-Item -Recurse -Destination $outDir -ErrorAction SilentlyContinue;
+		Get-Item "$($module.DirectoryName)\bin\$BuildConfiguration" | Copy-Item -Recurse -Destination $outDir;
+		Get-ChildItem $outDir -Filter "*.config" | Remove-Item -Force;
+		Get-Item "$outDir\Cmdlets" | Remove-Item -Force -Recurse;
 	}
 }
 

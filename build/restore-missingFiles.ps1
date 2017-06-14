@@ -6,7 +6,7 @@ Param(
 	[Alias('connstr')]
 	[hashtable]$ConnectionStrings,
 
-    [switch]$InteractiveMode
+	[switch]$InteractiveMode
 )
 
 $projectRoot = Split-Path $PSScriptRoot -Parent;
@@ -39,7 +39,7 @@ if (-not (Test-Path $appConfig -PathType Leaf))
 	</configuration>
 "@.Trim() | Out-File $appConfig -Encoding utf8;
 	Write-Host "`t* restored the 'app.config' file." -ForegroundColor Green;
-    if ($InteractiveMode) { & $appConfig; }
+	if ($InteractiveMode) { & $appConfig; }
 }
 else { Write-Host "`t* app.config already exist." -ForegroundColor DarkGreen; }
 
@@ -55,6 +55,6 @@ if (-not (Test-Path $credentials -PathType Leaf))
 }
 "@ | Out-File $credentials -Encoding utf8;
 	Write-Host "`t* restored the 'credentials.json' file." -ForegroundColor Green;
-    if ($InteractiveMode) { & $credentials; }
+	if ($InteractiveMode) { & $credentials; }
 }
 else { Write-Host "`t* credentials.json alread exist." -ForegroundColor DarkGreen; }
