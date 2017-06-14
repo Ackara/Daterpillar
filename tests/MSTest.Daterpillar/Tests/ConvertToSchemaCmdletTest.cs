@@ -52,10 +52,30 @@ namespace MSTest.Daterpillar.Tests
             Schema[] results;
             try { results = sut.Invoke<Schema>().ToArray(); }
             finally { connection.Dispose(); }
-            
+
             // Assert
             results.Length.ShouldBe(1);
             results[0].Tables.Count.ShouldBeGreaterThanOrEqualTo(1);
+        }
+
+        [TestMethod]
+        public void Invoke_should_fetch_a_schema_object_from_a_db_server_when_a_connection_is_passed()
+        {
+            // Arrange
+            var connection = ConnectionFactory.CreateMySQLConnection("dtpl_fetchSchema");
+            var sut = new ConvertToSchemaCmdlet() { InputObject = connection };
+            Schema[] results;
+
+            // Act
+            using (connection)
+            {
+                connection.UseSchema(FName.cmdlets_source_schemaXML);
+                results = sut.Invoke<Schema>().ToArray();
+            }
+
+            // Assert
+            results.Length.ShouldBe(1);
+            results[0].Tables.Count.ShouldBe(3);
         }
     }
 }

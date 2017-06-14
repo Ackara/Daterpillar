@@ -188,7 +188,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Samples.tt</DependentUpon>
     </Compile>
-    <Compile Include="Tests\AddDatabaseCmdletTest.cs" />
+    <Compile Include="Tests\NewDatabaseCmdletTest.cs" />
     <Compile Include="Tests\AssemblyToSchemaGeneratorTest.cs" />
     <Compile Include="Tests\ColumnNameTest.cs" />
     <Compile Include="Tests\ConvertToSchemaCmdletTest.cs" />

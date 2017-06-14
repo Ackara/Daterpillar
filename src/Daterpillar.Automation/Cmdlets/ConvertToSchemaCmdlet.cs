@@ -16,6 +16,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the input object.
         /// </summary>
         /// <value>The input object.</value>
+        [Alias("in", "input")]
         [Parameter(Position = 1, ValueFromPipeline = true)]
         public object InputObject { get; set; }
 

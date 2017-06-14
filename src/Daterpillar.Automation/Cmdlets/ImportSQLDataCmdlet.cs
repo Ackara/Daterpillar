@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the connection to the source database.
         /// </summary>
         /// <value>The source.</value>
-        [Alias("src", "from")]
+        [Alias("left", "src", "from")]
         [Parameter(Position = 1, Mandatory = true)]
         public object Source { get; set; }
 
@@ -26,7 +26,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the connection to the destination.
         /// </summary>
         /// <value>The destination.</value>
-        [Alias("d", "dest", "to", "tgt")]
+        [Alias("right", "d", "dest", "to")]
         [Parameter(Position = 2, Mandatory = true)]
         public object Destination { get; set; }
 
@@ -42,8 +42,8 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the syntax.
         /// </summary>
         /// <value>The syntax.</value>
-        [Alias("s")]
         [Parameter(Position = 4)]
+        [Alias("type", "syn", "ext", "extension")]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 

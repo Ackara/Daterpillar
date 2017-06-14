@@ -16,7 +16,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the <see cref="Daterpillar.Schema"/> Instance.
         /// </summary>
         /// <value>The input object.</value>
-        [Alias("src", "in")]
+        [Alias("in", "input")]
         [Parameter(Position = 1, ValueFromPipeline = true)]
         public Schema Schema { get; set; }
 
@@ -25,15 +25,15 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Parameter(Position = 2)]
-        [Alias("s", "syn", "ext", "extension")]
+        [Alias("type", "syn", "ext", "extension")]
         public string Syntax { get; set; } = nameof(Daterpillar.Syntax.MSSQL);
 
         /// <summary>
         /// Gets or sets the <see cref="IScriptBuilder"/> instance that will be used to generate the script.
         /// </summary>
         /// <value>The <see cref="IScriptBuilder"/> instance.</value>
-        [Parameter(Position = 3)]
         [Alias("builder", "b")]
+        [Parameter(Position = 3)]
         public IScriptBuilder ScriptBuilder { get; set; }
 
         /// <summary>

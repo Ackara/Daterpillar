@@ -41,7 +41,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the database.
         /// </summary>
         /// <value>The database.</value>
-        [Alias("d")]
+        [Alias("d", "name")]
         [Parameter(Position = 4)]
         public string Database { get; set; }
 
@@ -49,7 +49,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the syntax.
         /// </summary>
         /// <value>The syntax.</value>
-        [Alias("s", "ext")]
+        [Alias("type", "syn", "ext", "extension")]
         [Parameter(Position = 5, Mandatory = true)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
@@ -58,7 +58,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
-        [Alias("c", "conn", "connStr")]
+        [Alias("conn", "connStr")]
         [Parameter(ValueFromPipeline = true)]
         public string ConnectionString { get; set; }
 

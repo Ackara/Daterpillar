@@ -27,7 +27,7 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Add-Database.tests.ps1" />
+    <Compile Include="New-Database.tests.ps1" />
     <Compile Include="Convert-DllToSchema.tests.ps1" />
     <Compile Include="ConvertTo-Schema.tests.ps1" />
     <Compile Include="ConvertTo-Script.tests.ps1" />

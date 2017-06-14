@@ -10,8 +10,8 @@ namespace Acklann.Daterpillar.Cmdlets
     /// A powershell cmdlet that attaches a new database to a SQL server.
     /// </summary>
     /// <seealso cref="System.Management.Automation.Cmdlet" />
-    [Cmdlet(VerbsCommon.Add, "Database")]
-    public class AddDatabaseCmdlet : Cmdlet
+    [Cmdlet(VerbsCommon.New, "Database")]
+    public class NewDatabaseCmdlet : Cmdlet
     {
         /// <summary>
         /// Gets or sets the server host.
@@ -49,8 +49,8 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the syntax.
         /// </summary>
         /// <value>The syntax.</value>
-        [Alias("s")]
         [Parameter(Position = 4, Mandatory = true)]
+        [Alias("type", "syn", "ext", "extension")]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 
@@ -58,12 +58,12 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
-        [Alias("c", "connStr")]
+        [Alias("conn", "connStr")]
         [Parameter(ValueFromPipeline = true)]
         public string ConnectionString { get; set; }
 
-        [Alias("r", "del", "dlt", "delete")]
         [Parameter]
+        [Alias("r", "del", "dlt", "delete")]
         public SwitchParameter DeleteIfExist { get; set; }
 
         /// <summary>

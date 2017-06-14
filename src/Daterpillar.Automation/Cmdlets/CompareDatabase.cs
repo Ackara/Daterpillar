@@ -7,11 +7,11 @@ namespace Acklann.Daterpillar.Cmdlets
     [Cmdlet(VerbsData.Compare, "Database")]
     public class CompareDatabase : Cmdlet
     {
-        [Alias("left", "src", "from")]
+        [Alias("left", "src")]
         [Parameter(Mandatory = true, Position = 1)]
         public Schema Source { get; set; }
 
-        [Alias("right", "dest", "to")]
+        [Alias("right", "dest")]
         [Parameter(Mandatory = true, Position = 2)]
         public Schema Target { get; set; }
 

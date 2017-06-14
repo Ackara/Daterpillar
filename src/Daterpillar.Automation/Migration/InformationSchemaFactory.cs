@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Migration
             _infoSchemaTypes = new Dictionary<string, Type>()
             {
                 { nameof(Syntax.MSSQL).ToLower(), typeof(MSSQLInformationSchema) },
-                { nameof(System.Data.SqlClient.SqlConnection).ToLower(), typeof(System.Data.SqlClient.SqlConnection) },
+                { nameof(System.Data.SqlClient.SqlConnection).ToLower(), typeof(MSSQLInformationSchema) },
 
                 { nameof(Syntax.MySQL).ToLower(), typeof(MySQLInformationSchema) },
                 { nameof(MySql.Data.MySqlClient.MySqlConnection).ToLower(), typeof(MySQLInformationSchema) },

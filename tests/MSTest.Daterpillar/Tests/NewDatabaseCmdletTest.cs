@@ -9,7 +9,7 @@ using System.Linq;
 namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
-    public class AddDatabaseCmdletTest
+    public class NewDatabaseCmdletTest
     {
         [TestMethod]
         public void Invoke_should_add_a_database_to_the_specified_server_when_a_connection_string_is_passed()
@@ -17,7 +17,7 @@ namespace MSTest.Daterpillar.Tests
             // Arrange
             var databaseName = "dtpl_cmdlet_add";
             var connectionString = ConnectionFactory.GetMySQLConnectionString();
-            var sut = new AddDatabaseCmdlet()
+            var sut = new NewDatabaseCmdlet()
             {
                 ConnectionString = connectionString,
                 Database = databaseName,
@@ -50,7 +50,7 @@ namespace MSTest.Daterpillar.Tests
             var databaseName = "dtpl_cmdlet_add3";
             var connectionString = ConnectionFactory.GetMySQLConnectionString(databaseName);
             var builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString);
-            var sut = new AddDatabaseCmdlet()
+            var sut = new NewDatabaseCmdlet()
             {
                 Host = builder.Server,
                 User = builder.UserID,
@@ -82,8 +82,8 @@ namespace MSTest.Daterpillar.Tests
         public void Invoke_should_create_a_sqlite_database_when_a_all_args_is_passed()
         {
             // Arrange
-            var databaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(AddDatabaseCmdletTest)}.db3");
-            var sut = new AddDatabaseCmdlet()
+            var databaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(NewDatabaseCmdletTest)}.db3");
+            var sut = new NewDatabaseCmdlet()
             {
                 Host = databaseFilePath,
                 Syntax = "sqlite"
@@ -109,7 +109,7 @@ namespace MSTest.Daterpillar.Tests
             bool databaseWasCreated;
             string dbName = "dtpl_dltIfExist";
             var connection = ConnectionFactory.CreateMySQLConnection(dbName);
-            var sut = new AddDatabaseCmdlet()
+            var sut = new NewDatabaseCmdlet()
             {
                 Database = dbName,
                 Syntax = "mysql",

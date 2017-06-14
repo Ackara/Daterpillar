@@ -75,6 +75,7 @@
       <HintPath>..\..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,12 +87,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cmdlets\AddDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\CompareDatabase.cs" />
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
     <Compile Include="Cmdlets\ConvertToScriptCmdlet.cs" />
     <Compile Include="Cmdlets\ImportSQLDataCmdlet.cs" />
     <Compile Include="Cmdlets\InvokeSqlCommandCmdlet.cs" />
+    <Compile Include="Cmdlets\NewDatabaseCmdlet.cs" />
     <Compile Include="Cmdlets\NewMigrationScriptCmdlet.cs" />
     <Compile Include="Cmdlets\RemoveDatabaseCmdlet.cs" />
     <Compile Include="Migration\ExtensionMethods.cs" />

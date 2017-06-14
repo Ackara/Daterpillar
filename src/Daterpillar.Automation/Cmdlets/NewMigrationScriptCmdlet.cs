@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the source <see cref="Schema"/>.
         /// </summary>
         /// <value>The source.</value>
-        [Alias("to", "src")]
+        [Alias("left", "src", "from")]
         [Parameter(Position = 1)]
         public Schema Source { get; set; }
 
@@ -25,7 +25,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// Gets or sets the target <see cref="Schema"/>.
         /// </summary>
         /// <value>The target.</value>
-        [Alias("dest", "tar", "tgt", "trg", "from")]
+        [Alias("right", "dest", "to")]
         [Parameter(Position = 2, ValueFromPipeline = true)]
         public Schema Target { get; set; }
 
@@ -34,7 +34,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Parameter(Position = 3)]
-        [Alias("s", "syn", "ext", "extension")]
+        [Alias("type", "syn", "ext", "extension")]
         public string Syntax { get; set; } = nameof(Daterpillar.Syntax.MSSQL);
 
         /// <summary>
