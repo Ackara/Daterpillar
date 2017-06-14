@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The source.</value>
         [Alias("src", "from")]
-        [Parameter(Position = 0, Mandatory = true)]
+        [Parameter(Position = 1, Mandatory = true)]
         public object Source { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The destination.</value>
         [Alias("d", "dest", "to", "tgt")]
-        [Parameter(Position = 1, Mandatory = true)]
+        [Parameter(Position = 2, Mandatory = true)]
         public object Destination { get; set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The table.</value>
         [Alias("t", "tbl")]
-        [Parameter(Position = 2, Mandatory = true)]
+        [Parameter(Position = 3, Mandatory = true)]
         public string Table { get; set; }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Alias("s")]
-        [Parameter(Position = 3)]
+        [Parameter(Position = 4)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 

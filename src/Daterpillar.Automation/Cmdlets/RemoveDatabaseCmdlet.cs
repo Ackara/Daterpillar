@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The host.</value>
         [Alias("h", "server")]
-        [Parameter(Position = 0)]
+        [Parameter(Position = 1)]
         public string Host { get; set; }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The user.</value>
         [Alias("u", "usr")]
-        [Parameter(Position = 1)]
+        [Parameter(Position = 2)]
         public string User { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The password.</value>
         [Alias("p", "pwd")]
-        [Parameter(Position = 2)]
+        [Parameter(Position = 3)]
         public string Password { get; set; }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The database.</value>
         [Alias("d")]
-        [Parameter(Position = 3)]
+        [Parameter(Position = 4)]
         public string Database { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         /// <value>The syntax.</value>
         [Alias("s", "ext")]
-        [Parameter(Position = 4, Mandatory = true)]
+        [Parameter(Position = 5, Mandatory = true)]
         [ValidateSet(nameof(Daterpillar.Syntax.MSSQL), nameof(Daterpillar.Syntax.MySQL), nameof(Daterpillar.Syntax.SQLite))]
         public string Syntax { get; set; }
 

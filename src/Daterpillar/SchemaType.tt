@@ -8,7 +8,7 @@
 <#@ import namespace="System.Xml.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-namespace Ackara.Daterpillar
+namespace Acklann.Daterpillar
 {
 	/// <summary>
 	/// Represents a schema data type.
