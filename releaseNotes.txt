@@ -1,4 +1,9 @@
-﻿version 4.7.11
+﻿version 4.7.12
+--------------
+* Add Compare-Database cmdlet
+
+
+version 4.7.11
 --------------
 * re-add the Add-Database cmdlet DeleteIfExist switch that was removed by mistake
 
@@ -76,6 +81,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
