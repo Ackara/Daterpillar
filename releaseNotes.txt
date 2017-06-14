@@ -1,4 +1,9 @@
-﻿version 4.7.12
+﻿version 4.7.13
+--------------
+* Add help doc to cmdlets.
+
+
+version 4.7.12
 --------------
 * Add Compare-Database cmdlet
 
@@ -81,6 +86,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
