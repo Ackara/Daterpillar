@@ -136,7 +136,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="en-US\about_Daterpillar.Automation.Help.txt" />
+    <None Include="en-US\about_Daterpillar.Automation.Help.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.105.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.105.1\build\net46\System.Data.SQLite.Core.targets')" />
