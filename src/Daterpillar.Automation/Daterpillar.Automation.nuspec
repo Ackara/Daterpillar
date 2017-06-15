@@ -22,6 +22,9 @@
     <file src="readme.txt"
           target="" />
 
+    <file src="Daterpillar.Automation.targets"
+          target="build\$id$.targets" />
+
     <file src="*.psd1"
           target="tools\net461" />
 
