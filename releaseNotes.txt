@@ -1,4 +1,9 @@
-﻿version 4.7.13
+﻿version 4.7.14
+--------------
+* Add msbuild targets to automation package
+
+
+version 4.7.13
 --------------
 * Add help doc to cmdlets.
 
@@ -86,6 +91,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
