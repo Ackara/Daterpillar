@@ -4,8 +4,8 @@ using System.Management.Automation;
 
 namespace Acklann.Daterpillar.Cmdlets
 {
-    [Cmdlet(VerbsData.Compare, "Database")]
-    public class CompareDatabase : Cmdlet
+    [Cmdlet(VerbsData.Compare, "Schema")]
+    public class CompareSchema : Cmdlet
     {
         [Alias("left", "src")]
         [Parameter(Mandatory = true, Position = 1)]

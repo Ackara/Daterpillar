@@ -11,7 +11,7 @@
 		<!--TAG: HASCOMMONPARAMETERS-->
 		<!-- Command-->
 		<command:details>
-			<command:name>Compare-Database</command:name>
+			<command:name>Compare-Schema</command:name>
 			<maml:description>
 				<maml:para>This cmdlet compares the structure of two [Acklann.Daterpillar.Schema] objects.</maml:para>
 			</maml:description>
@@ -29,7 +29,7 @@
 			<!-- Parameter Sets-->
 			<command:syntaxItem parametersetname="__AllParameterSets">
 				<!--NAME: __AllParameterSets-->
-				<maml:name>Compare-Database</maml:name>
+				<maml:name>Compare-Schema</maml:name>
 				<command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="left , src">
 					<maml:name>Source</maml:name>
 					<maml:description>
@@ -114,7 +114,7 @@
 				<maml:introduction>
 					<maml:para></maml:para>
 				</maml:introduction>
-				<dev:code>C:\PS&gt; Compare-Database $left $right | Select-Object -ExpandProperty State</dev:code>
+				<dev:code>C:\PS&gt; Compare-Schema $left $right | Select-Object -ExpandProperty State</dev:code>
 				<dev:remarks>
 					<maml:para>This example, compares two [Acklann.Daterpillar.Schema] objects ($left and $right) then selects the returned object's State property, which is an enum of Type [Acklann.Daterpillar.Migration.MigrationState].</maml:para>
 				</dev:remarks>
@@ -124,7 +124,7 @@
 				<maml:introduction>
 					<maml:para></maml:para>
 				</maml:introduction>
-				<dev:code>C:\PS&gt; Compare-Database $left $right | Select-Object -ExpandProperty Differences;</dev:code>
+				<dev:code>C:\PS&gt; Compare-Schema $left $right | Select-Object -ExpandProperty Differences;</dev:code>
 				<dev:remarks>
 					<maml:para>This example, compares two [Acklann.Daterpillar.Schema] objects ($left and $right) then selects the returned object's Differences property, which is a string describing the differences between the two objects.</maml:para>
 				</dev:remarks>
