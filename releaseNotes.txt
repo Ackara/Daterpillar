@@ -1,4 +1,9 @@
-﻿version 4.7.17
+﻿version 4.7.18
+--------------
+* Add RemoveTable method to schema class
+
+
+version 4.7.17
 --------------
 * Fix Import-SQLData cmdlet
 
@@ -101,6 +106,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
