@@ -117,7 +117,7 @@ namespace Acklann.Daterpillar.Cmdlets
             using (data)
             {
                 var script = new StringBuilder();
-                script.Append($"INSERT INTO {data.TableName} (");
+                script.Append($"INSERT INTO {Table} (");
 
                 foreach (DataColumn column in data.Columns)
                 {
@@ -148,7 +148,7 @@ namespace Acklann.Daterpillar.Cmdlets
         {
             var builder = new SqlConnectionStringBuilder(connectionString);
             string databaseName = (string.IsNullOrEmpty(builder.InitialCatalog) ? "master" : builder.InitialCatalog);
-            return $"{builder.DataSource}/{databaseName}";
+            return $"[{builder.DataSource}/{databaseName}]";
         }
 
         #endregion Private Members
