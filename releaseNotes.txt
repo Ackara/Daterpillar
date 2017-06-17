@@ -1,4 +1,9 @@
-﻿version 4.7.15
+﻿version 4.7.17
+--------------
+* Fix Import-SQLData cmdlet
+
+
+version 4.7.15
 --------------
 * Rename compare-database cmlet to compare-schema
 
@@ -96,6 +101,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
