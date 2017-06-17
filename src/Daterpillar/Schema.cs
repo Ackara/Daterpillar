@@ -138,6 +138,16 @@ namespace Acklann.Daterpillar
         }
 
         /// <summary>
+        /// Removes the specified table from this instance.
+        /// </summary>
+        /// <param name="tableName">The name of the table.</param>
+        public void RemoveTable(string tableName)
+        {
+            var target = Tables.FirstOrDefault(x => x.Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase));
+            if (target != null) Tables.Remove(target);
+        }
+
+        /// <summary>
         /// Serialize this instance and writes it to the specified output stream.
         /// </summary>
         /// <param name="outputStream">The output stream.</param>
@@ -146,7 +156,7 @@ namespace Acklann.Daterpillar
             var settings = new XmlWriterSettings()
             {
                 Indent = true,
-                OmitXmlDeclaration =false,
+                OmitXmlDeclaration = false,
                 Encoding = new UTF8Encoding(false)
             };
 

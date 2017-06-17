@@ -1,6 +1,7 @@
 # Daterpillar
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000?style=flat-square)](https://github.com/Ackara/Daterpillar/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/Gigobyte.Daterpillar.Core.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core)
+![Build Status](https://acklann.visualstudio.com/_apis/public/build/definitions/3f4e6949-e21e-4b02-a69d-067a400f0377/18/badge)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000?style=flat-square)](https://github.com/Ackara/Daterpillar/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/Acklann.Daterpillar.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Acklann.Daterpillar)
 
 |            |**master**|**development**|
 |------------|----------|---------------|

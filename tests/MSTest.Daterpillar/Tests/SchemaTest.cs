@@ -21,6 +21,21 @@ namespace MSTest.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
+        public void RemoveTable_should_remove_a_specified_table_from_a_schema_when_a_name_is_passed()
+        {
+            // Arrange
+            var sut = MockData.GetSchema();
+
+            // Act
+            int totalTablesBefore = sut.Tables.Count;
+            sut.RemoveTable("card");
+            int totalTables = sut.Tables.Count;
+
+            // Assert
+            totalTables.ShouldBe((totalTablesBefore - 1));
+        }
+
+        [TestMethod]
         public void Save_should_serialize_a_schema_object_when_invoked()
         {
             // Arrange
