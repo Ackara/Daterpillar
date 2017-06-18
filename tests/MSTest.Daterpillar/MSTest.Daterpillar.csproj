@@ -261,6 +261,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Samples.cs</LastGenOutput>
     </Content>
+    <None Include="Samples\schemaTest\mock_schema2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Samples\XMLFile1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

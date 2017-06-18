@@ -106,12 +106,22 @@ namespace MSTest.Daterpillar.Tests
             // Arrange
             string script, errorMsg;
             bool scriptWasExecutedSuccessfully;
-            var testCases = new TestCase[] { Case0(), Case1(), Case2() };
+            var testCases = new TestCase[]
+            {
+                Case0(),
+                Case1(),
+                Case2(),
+                Case3(),
+                Case4()
+            };
 
             // Act
             foreach (var sample in testCases)
             {
                 System.Diagnostics.Debug.WriteLine($"******************** {sample.Name} ********************");
+                System.Diagnostics.Debug.WriteLine($"input   : [{string.Join(", ", sample.Schema.Tables.Select(x => x.Name))}]");
+                System.Diagnostics.Debug.WriteLine($"expected: [{string.Join(", ", sample.Expected)}]");
+                System.Diagnostics.Debug.WriteLine("----------");
 
                 sample.Schema.Sort();
                 var results = sample.Schema.Tables.Select(x => x.Name).ToArray();
@@ -121,7 +131,7 @@ namespace MSTest.Daterpillar.Tests
                     connection.UseEmptyDatabase();
                     script = new MySQLScriptBuilder().Append(sample.Schema).GetContent();
                     scriptWasExecutedSuccessfully = connection.TryExecuteScript(script, out errorMsg);
-                    //System.Diagnostics.Debug.WriteLine(script);
+                    if (scriptWasExecutedSuccessfully == false) System.Diagnostics.Debug.WriteLine(script);
                 }
 
                 // Assert
@@ -196,6 +206,109 @@ namespace MSTest.Daterpillar.Tests
                     ));
 
             return new TestCase() { Name = nameof(Case2), Schema = schema, Expected = expected };
+        }
+
+        private static TestCase Case3()
+        {
+            var expected = new string[] { "ab", "at", "ct", "i", "mt", "l", "c", "r", "pt", "p", "cn" };
+
+            var schema = new Schema();
+            schema.Add(
+                new Table("ab",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("varchar"))),
+
+                new Table("at",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("varchar"))),
+
+                new Table("c",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("_ab", new DataType("int")),
+                    new Column("_at", new DataType("int")),
+                    new Column("_ct", new DataType("int")),
+                    new Column("_i", new DataType("int")),
+                    new Column("_mt", new DataType("int")),
+                    new Column("_l", new DataType("int")),
+                    new ForeignKey("_ct", "ct", "Id"),
+                    new ForeignKey("_ab", "ab", "Id"),
+                    new ForeignKey("_at", "at", "Id"),
+                    new ForeignKey("_i", "i", "Id"),
+                    new ForeignKey("_mt", "mt", "Id"),
+                    new ForeignKey("_l", "l", "Id")),
+
+                new Table("cn",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int")),
+                    new Column("_r", new DataType("int")),
+                    new Column("_c", new DataType("int")),
+                    new Column("_p", new DataType("int")),
+                    new ForeignKey("_r", "r", "Id"),
+                    new ForeignKey("_c", "c", "Id"),
+                    new ForeignKey("_p", "p", "Id")
+                    ),
+
+                new Table("ct",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))),
+
+                new Table("i",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))),
+
+                new Table("l",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))),
+
+                new Table("mt",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))),
+
+                new Table("p",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int")),
+                    new Column("_pt", new DataType("int")),
+                    new ForeignKey("_pt", "pt", "Id")),
+
+                new Table("pt",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))),
+
+                new Table("r",
+                    new Column("Id", new DataType("int"), autoIncrement: true),
+                    new Column("Name", new DataType("int"))));
+
+            return new TestCase()
+            {
+                Name = nameof(Case3),
+                Schema = schema,
+                Expected = expected
+            };
+        }
+
+        private static TestCase Case4()
+        {
+            var expected = new string[]
+            {
+                "ability",
+                "attribute",
+                "card_type",
+                "icon",
+                "monster_type",
+                "legality",
+                "card",
+                "product_type",
+                "pack",
+                "rarity",
+                "card_number",
+                "link",
+            };
+            return new TestCase()
+            {
+                Expected = expected,
+                Name = nameof(Case4),
+                Schema = MockData.GetSchema(FName.schemaTest_mock_schema2XML)
+            };
         }
 
         private struct TestCase { public string Name; public Schema Schema; public string[] Expected; }

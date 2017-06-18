@@ -16,6 +16,7 @@
 		internal const string schemaTest_fragment2XML = @"schemaTest\fragment2.xml";
 		internal const string schemaTest_fragment3XML = @"schemaTest\fragment3.xml";
 		internal const string schemaTest_mock_schema1XML = @"schemaTest\mock_schema1.xml";
+		internal const string schemaTest_mock_schema2XML = @"schemaTest\mock_schema2.xml";
 		internal const string scriptingTest_partial_schemaXML = @"scriptingTest\partial_schema.xml";
 	}
 

@@ -45,7 +45,6 @@ if (Test-Path $AssemblyFile -PathType Leaf)
 
 	$dll = [System.Reflection.Assembly]::LoadFrom($AssemblyFile);
 	[Acklann.Daterpillar.Schema]$schema = [Acklann.Daterpillar.AssemblyToSchemaConverter]::ToSchema($dll);
-	$schema.Sort();
 	$schemaFile = [IO.Path]::ChangeExtension($AssemblyFile, "schema.xml");
 	$utf8 = New-Object System.Text.UTF8Encoding $false;
 	[System.IO.File]::WriteAllText($schemaFile, $schema.ToXml(), $utf8);

@@ -341,7 +341,7 @@ namespace Acklann.Daterpillar
                         // Also I am updating the parent node rank with the rank of its
                         // then ranked child because the parent rank should always be higher.
                         // The parent node rank will later be updated when it has no more non ranked child.
-                        Rank(nonRankedChild, (node.Rank ?? 0));
+                        Rank(nonRankedChild, rank);
                         rank = node.Rank = nonRankedChild.Rank;
                         System.Diagnostics.Debug.WriteLine($"\t\tupdated {node}");
                     }
@@ -389,7 +389,7 @@ namespace Acklann.Daterpillar
 
             public override string ToString()
             {
-                return $"{Name}: {Rank ?? -1}";
+                return $"{Name}: {(Rank == null ? "null" : Rank.ToString())}";
             }
         }
 

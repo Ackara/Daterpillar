@@ -1,6 +1,5 @@
 ﻿using Acklann.Daterpillar;
 using ApprovalTests;
-using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
@@ -25,7 +24,6 @@ namespace MSTest.Daterpillar.Tests
 
             using (var xmlData = new MemoryStream())
             {
-                
                 result.Save(xmlData);
                 xml = Encoding.UTF8.GetString(xmlData.ToArray());
                 xmlIsValid = Helper.ValidateXml(xmlData, out xmlError);
