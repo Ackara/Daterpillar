@@ -1,4 +1,9 @@
-﻿version 4.7.18
+﻿version 4.7.19
+--------------
+* Fix schema.sort method
+
+
+version 4.7.18
 --------------
 * Add RemoveTable method to schema class
 
@@ -106,6 +111,7 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
+
 
 
 
