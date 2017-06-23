@@ -4,6 +4,6 @@
 	[Name] VARCHAR(256) NOT NULL
 );
 
-ALTER TABLE [archetype] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [archetype] ADD CONSTRAINT [archetype_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [archetype_Name] ON [archetype] ([Name] DESC);
 

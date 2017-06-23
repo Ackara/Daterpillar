@@ -57,13 +57,16 @@ CREATE TABLE IF NOT EXISTS `card`
 	`Card_Icon_Id` TINYINT NOT NULL,
 	`Monster_Type_Id` TINYINT NOT NULL,
 	`Ability_Id` INT NOT NULL,
-	CONSTRAINT `card_Attribute_Id_TO_attribute_Id` FOREIGN KEY (`Attribute_Id`) REFERENCES `attribute`(`Id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `card_Card_Icon_Id_TO_card_icon_Id` FOREIGN KEY (`Card_Icon_Id`) REFERENCES `card_icon`(`Id`) ON UPDATE CASCADE,
-	CONSTRAINT `card_Monster_Type_Id_TO_monster_type_Id` FOREIGN KEY (`Monster_Type_Id`) REFERENCES `monster_type`(`Id`) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT `card_Attribute_Id_TO_attribute_Id` FOREIGN KEY (`Attribute_Id`) REFERENCES `attribute`(`Id`) ON UPDATE CASCADE ON DELETE RESTRICT,
+	CONSTRAINT `card_Card_Icon_Id_TO_card_icon_Id` FOREIGN KEY (`Card_Icon_Id`) REFERENCES `card_icon`(`Id`) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT `card_Monster_Type_Id_TO_monster_type_Id` FOREIGN KEY (`Monster_Type_Id`) REFERENCES `monster_type`(`Id`) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 ALTER TABLE `card` ADD PRIMARY KEY (`Id` ASC);
 CREATE UNIQUE INDEX `card_Name` ON `card` (`Name` ASC);
+CREATE INDEX `card_Attribute_Id` ON `card` (`Attribute_Id` ASC);
+CREATE INDEX `card_Card_Icon_Id` ON `card` (`Card_Icon_Id` ASC);
+CREATE INDEX `card_Monster_Type_Id` ON `card` (`Monster_Type_Id` ASC);
 
 CREATE TABLE IF NOT EXISTS `card_extras`
 (
@@ -72,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `card_extras`
 	`Tips` TEXT,
 	`Trivia` TEXT,
 	`Passcode` INT NOT NULL,
-	CONSTRAINT `card_extras_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`)
+	CONSTRAINT `card_extras_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 ALTER TABLE `card_extras` ADD PRIMARY KEY (`Card_Id` ASC);
@@ -110,11 +113,14 @@ CREATE TABLE IF NOT EXISTS `card_number`
 	`Art_Index` TINYINT NOT NULL,
 	`Card_Id` INT NOT NULL,
 	`Pack_Id` INT NOT NULL,
-	CONSTRAINT `key_with_custom_name` FOREIGN KEY (`Rarity_Id`) REFERENCES `rarity`(`Id`),
-	CONSTRAINT `card_number_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`),
-	CONSTRAINT `card_number_Pack_Id_TO_pack_Id` FOREIGN KEY (`Pack_Id`) REFERENCES `pack`(`Id`)
+	CONSTRAINT `card_number_Rarity_Id_TO_rarity_Id` FOREIGN KEY (`Rarity_Id`) REFERENCES `rarity`(`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `card_number_Card_Id_TO_card_Id` FOREIGN KEY (`Card_Id`) REFERENCES `card`(`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `card_number_Pack_Id_TO_pack_Id` FOREIGN KEY (`Pack_Id`) REFERENCES `pack`(`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+CREATE INDEX `card_number_Rarity_Id` ON `card_number` (`Rarity_Id` ASC);
+CREATE INDEX `card_number_Card_Id` ON `card_number` (`Card_Id` ASC);
+CREATE INDEX `card_number_Pack_Id` ON `card_number` (`Pack_Id` ASC);
 ALTER TABLE `card_number` ADD PRIMARY KEY (`Pack_Acronym` ASC, `Number` ASC, `Rarity_Id` ASC, `Art_Index` ASC);
 
 CREATE TABLE IF NOT EXISTS `effect`

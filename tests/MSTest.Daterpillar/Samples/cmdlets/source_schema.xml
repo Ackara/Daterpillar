@@ -57,8 +57,5 @@
     </column>
   </table>
 
-  <script><![CDATA[
-  INSERT INTO roles (Name) VALUES
-  ('admin'), ('guest');
-  ]]></script>
+  <script><![CDATA[ INSERT INTO roles (Id, Name) VALUES ('1', 'admin'), ('2', 'guest');]]></script>
 </schema>

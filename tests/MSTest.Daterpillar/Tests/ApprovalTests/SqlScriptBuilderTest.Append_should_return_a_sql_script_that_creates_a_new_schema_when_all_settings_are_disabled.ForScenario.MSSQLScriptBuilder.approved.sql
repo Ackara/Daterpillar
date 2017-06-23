@@ -1,10 +1,10 @@
-﻿CREATE TABLE [card_type]
+CREATE TABLE [card_type]
 (
 	[Id] INT NOT NULL,
 	[Name] VARCHAR(32) NOT NULL
 );
 
-ALTER TABLE [card_type] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [card_type] ADD CONSTRAINT [card_type_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [card_type_Name] ON [card_type] ([Name] ASC);
 
 CREATE TABLE [attribute]
@@ -13,7 +13,7 @@ CREATE TABLE [attribute]
 	[Name] VARCHAR(16) NOT NULL
 );
 
-ALTER TABLE [attribute] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [attribute] ADD CONSTRAINT [attribute_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [attribute_Name] ON [attribute] ([Name] ASC);
 
 CREATE TABLE [card_icon]
@@ -22,7 +22,7 @@ CREATE TABLE [card_icon]
 	[Name] VARCHAR(16) NOT NULL
 );
 
-ALTER TABLE [card_icon] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [card_icon] ADD CONSTRAINT [card_icon_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [card_icon_Name] ON [card_icon] ([Name] ASC);
 
 CREATE TABLE [monster_type]
@@ -31,7 +31,7 @@ CREATE TABLE [monster_type]
 	[Name] VARCHAR(32) NOT NULL
 );
 
-ALTER TABLE [monster_type] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [monster_type] ADD CONSTRAINT [monster_type_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [monster_type_Name] ON [monster_type] ([Name] ASC);
 
 CREATE TABLE [ability]
@@ -40,7 +40,7 @@ CREATE TABLE [ability]
 	[Name] VARCHAR(32) NOT NULL
 );
 
-ALTER TABLE [ability] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [ability] ADD CONSTRAINT [ability_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [ability_Name] ON [ability] ([Name] ASC);
 
 CREATE TABLE [card]
@@ -57,13 +57,16 @@ CREATE TABLE [card]
 	[Card_Icon_Id] TINYINT NOT NULL,
 	[Monster_Type_Id] TINYINT NOT NULL,
 	[Ability_Id] INT NOT NULL,
-	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]) ON UPDATE CASCADE,
-	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id]) ON UPDATE CASCADE ON DELETE CASCADE
+	CONSTRAINT [card_Attribute_Id_TO_attribute_Id] FOREIGN KEY ([Attribute_Id]) REFERENCES [attribute]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT [card_Card_Icon_Id_TO_card_icon_Id] FOREIGN KEY ([Card_Icon_Id]) REFERENCES [card_icon]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT [card_Monster_Type_Id_TO_monster_type_Id] FOREIGN KEY ([Monster_Type_Id]) REFERENCES [monster_type]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
-ALTER TABLE [card] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [card] ADD CONSTRAINT [card_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [card_Name] ON [card] ([Name] ASC);
+CREATE INDEX [card_Attribute_Id] ON [card] ([Attribute_Id] ASC);
+CREATE INDEX [card_Card_Icon_Id] ON [card] ([Card_Icon_Id] ASC);
+CREATE INDEX [card_Monster_Type_Id] ON [card] ([Monster_Type_Id] ASC);
 
 CREATE TABLE [card_extras]
 (
@@ -72,10 +75,10 @@ CREATE TABLE [card_extras]
 	[Tips] TEXT,
 	[Trivia] TEXT,
 	[Passcode] INT NOT NULL,
-	CONSTRAINT [card_extras_Card_Id_TO_card_Id] FOREIGN KEY ([Card_Id]) REFERENCES [card]([Id])
+	CONSTRAINT [card_extras_Card_Id_TO_card_Id] FOREIGN KEY ([Card_Id]) REFERENCES [card]([Id]) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-ALTER TABLE [card_extras] ADD PRIMARY KEY ([Card_Id] ASC);
+ALTER TABLE [card_extras] ADD CONSTRAINT [card_extras_Card_Id] PRIMARY KEY ([Card_Id] ASC);
 
 CREATE TABLE [pack]
 (
@@ -88,7 +91,7 @@ CREATE TABLE [pack]
 	[Konami_Id] INT NOT NULL
 );
 
-ALTER TABLE [pack] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [pack] ADD CONSTRAINT [pack_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [pack_Name] ON [pack] ([Name] ASC);
 
 CREATE TABLE [rarity]
@@ -99,7 +102,7 @@ CREATE TABLE [rarity]
 	[Value] INT NOT NULL
 );
 
-ALTER TABLE [rarity] ADD PRIMARY KEY ([Id] ASC);
+ALTER TABLE [rarity] ADD CONSTRAINT [rarity_Id] PRIMARY KEY ([Id] ASC);
 CREATE UNIQUE INDEX [rarity_Name] ON [rarity] ([Name] ASC);
 
 CREATE TABLE [card_number]
@@ -110,12 +113,15 @@ CREATE TABLE [card_number]
 	[Art_Index] TINYINT NOT NULL,
 	[Card_Id] INT NOT NULL,
 	[Pack_Id] INT NOT NULL,
-	CONSTRAINT [key_with_custom_name] FOREIGN KEY ([Rarity_Id]) REFERENCES [rarity]([Id]),
-	CONSTRAINT [card_number_Card_Id_TO_card_Id] FOREIGN KEY ([Card_Id]) REFERENCES [card]([Id]),
-	CONSTRAINT [card_number_Pack_Id_TO_pack_Id] FOREIGN KEY ([Pack_Id]) REFERENCES [pack]([Id])
+	CONSTRAINT [card_number_Rarity_Id_TO_rarity_Id] FOREIGN KEY ([Rarity_Id]) REFERENCES [rarity]([Id]) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT [card_number_Card_Id_TO_card_Id] FOREIGN KEY ([Card_Id]) REFERENCES [card]([Id]) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT [card_number_Pack_Id_TO_pack_Id] FOREIGN KEY ([Pack_Id]) REFERENCES [pack]([Id]) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-ALTER TABLE [card_number] ADD PRIMARY KEY ([Pack_Acronym] ASC, [Number] ASC, [Rarity_Id] ASC, [Art_Index] ASC);
+CREATE INDEX [card_number_Rarity_Id] ON [card_number] ([Rarity_Id] ASC);
+CREATE INDEX [card_number_Card_Id] ON [card_number] ([Card_Id] ASC);
+CREATE INDEX [card_number_Pack_Id] ON [card_number] ([Pack_Id] ASC);
+ALTER TABLE [card_number] ADD CONSTRAINT [card_number_Pack_Acronym_and_Number_and_Rarity_Id_and_Art_Index] PRIMARY KEY ([Pack_Acronym] ASC, [Number] ASC, [Rarity_Id] ASC, [Art_Index] ASC);
 
 CREATE TABLE [effect]
 (

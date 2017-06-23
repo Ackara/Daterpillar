@@ -436,7 +436,7 @@ namespace MSTest.Daterpillar.Tests
         {
             // Arrange
             Schema schema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
-            ForeignKey obsoleteConstraint = schema.Tables.First(x => x.Name == "card_number").ForeignKeys.First(x => x.Name == "key_with_custom_name");
+            ForeignKey obsoleteConstraint = schema.Tables.First(x => x.Name == "card_number").ForeignKeys.First();
 
             // Act
             builder.Remove(obsoleteConstraint);

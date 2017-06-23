@@ -1,1 +1,1 @@
-﻿ALTER TABLE [card_number] DROP CONSTRAINT [key_with_custom_name];
+﻿ALTER TABLE [card_number] DROP CONSTRAINT [card_number_Rarity_Id_TO_rarity_Id];

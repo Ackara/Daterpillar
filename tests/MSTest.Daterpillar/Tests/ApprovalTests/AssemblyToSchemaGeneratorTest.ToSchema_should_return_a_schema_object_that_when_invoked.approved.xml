@@ -1,4 +1,4 @@
-﻿<schema xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
+﻿<schema syntax="Generic" xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
   <table name="color">
     <column name="Id" nullable="false" autoIncrement="false">
       <dataType scale="0" precision="0">int</dataType>

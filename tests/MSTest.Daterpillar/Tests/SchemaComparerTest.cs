@@ -2,12 +2,13 @@
 using Acklann.Daterpillar.Migration;
 using Acklann.Daterpillar.Scripting;
 using ApprovalTests;
-using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace MSTest.Daterpillar.Tests
 {
@@ -16,6 +17,8 @@ namespace MSTest.Daterpillar.Tests
     [DeploymentItem(FName.Samples)]
     public class SchemaComparerTest
     {
+        public TestContext TestContext { get; set; }
+
         [TestMethod]
         public void Compare_should_report_that_the_specified_identical_schemas_are_equal()
         {
@@ -165,6 +168,20 @@ namespace MSTest.Daterpillar.Tests
             changeScriptRanSuccessfully.ShouldBeTrue(errorMsg);
         }
 
+        [TestMethod]
+        [DataSource(SourceName.supportedDatabases)]
+        public void Compare_should_return_no_pending_changes_when_a_schema_on_disk_is_compared_to_itself_but_fetched_from_a_server()
+        {
+            var connectionType = ((Syntax)Enum.Parse(typeof(Syntax), Convert.ToString(TestContext.DataRow[0])));
+            TestContext.WriteLine("context: {0}", connectionType);
+
+            using (var connection = ConnectionFactory.CreateConnection(connectionType, "dtpl_twoWay"))
+            {
+                var factory = new InformationSchemaFactory();
+                RunFileToServerComparisonTest(connection, factory.Create(connection, connectionType));
+            }
+        }
+
         #region Helper Methods
 
         private static IDbConnection GetNewConnection() => ConnectionFactory.CreateMySQLConnection("dtpl_compare");
@@ -177,6 +194,37 @@ namespace MSTest.Daterpillar.Tests
                 IgnoreScripts = true,
                 IgnoreComments = true
             });
+        }
+
+        private void RunFileToServerComparisonTest(IDbConnection connection, IInformationSchema informationSchema, [CallerMemberName]string caller = null)
+        {
+            // Arrange
+            var sut = new SchemaComparer();
+
+            // Act
+            connection.UseSchema(FName.scriptingTest_partial_schemaXML);
+            var remoteSchema = informationSchema.FetchSchema();
+            var localSchema = MockData.GetSchema(FName.scriptingTest_partial_schemaXML);
+
+            var result = sut.Compare(localSchema, remoteSchema, out string differences);
+            if (result.HasFlag(MigrationState.PendingChanges)) ReportDifferences(localSchema, remoteSchema, caller);
+
+            // Assert
+            result.ShouldBe(MigrationState.NoChanges, differences);
+        }
+
+        private void ReportDifferences(Schema source, Schema target, string caller)
+        {
+            string localXml = source.ToXml();
+            string remoteXml = target.ToXml();
+
+            var receivedFile = Path.Combine(Path.GetTempPath(), $"local___{caller}.sql");
+            var approvedFile = Path.Combine(Path.GetTempPath(), $"remote__{caller}.sql");
+            File.WriteAllText(receivedFile, localXml);
+            File.WriteAllText(approvedFile, remoteXml);
+
+            bool schemasAreIdentical = (localXml.Equals(remoteXml, StringComparison.CurrentCultureIgnoreCase));
+            if (schemasAreIdentical == false) (new ApprovalTests.Reporters.DiffReporter()).Report(approvedFile, receivedFile);
         }
 
         #endregion Helper Methods

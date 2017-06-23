@@ -1,4 +1,8 @@
-﻿version 4.7.19
+﻿version 4.7.22
+--------------
+* Fix SQLiteInformationSchema.
+
+version 4.7.19
 --------------
 * Fix schema.sort method
 
@@ -8,24 +12,9 @@ version 4.7.18
 * Add RemoveTable method to schema class
 
 
-version 4.7.17
---------------
-* Fix Import-SQLData cmdlet
-
-
-version 4.7.15
---------------
-* Rename compare-database cmlet to compare-schema
-
-
 version 4.7.14
 --------------
 * Add msbuild targets to automation package
-
-
-version 4.7.13
---------------
-* Add help doc to cmdlets.
 
 
 version 4.7.12
@@ -33,39 +22,9 @@ version 4.7.12
 * Add Compare-Database cmdlet
 
 
-version 4.7.11
---------------
-* re-add the Add-Database cmdlet DeleteIfExist switch that was removed by mistake
-
-
-version 4.7.10
---------------
-* Fix MigrationState enum values
-
-
 version 4.7.9
 -------------
 * Remove named parameter sets
-
-
-version 4.7.7
--------------
-* Fix invoke-sqlcommand paramenter sets
-
-
-version 4.7.5
--------------
-* Fix schema.toxml() encoding to  use utf-8 without bom
-
-
-version 4.7.5
--------------
-* Fix msbuild targets reference to System.Xml.XmlReader.dll
-
-
-version 4.7.1
--------------
-* Move daterpillar.automation.targets to the daterpillar project.
 
 
 version 4.6.13
@@ -111,40 +70,3 @@ version 4.2.0
 version 4.1.0
 -------------
 * Add msbuild targets
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

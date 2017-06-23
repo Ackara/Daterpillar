@@ -248,13 +248,15 @@ public partial class Card
 	/// Gets or Sets the Attribute_Id.
 	/// </summary>
 	[Column("Attribute_Id", "tinyInt")]
-	[ForeignKey("attribute", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
+	[Index(IndexType.Index)]
+	[ForeignKey("attribute", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Restrict)]
 	public virtual int AttributeId { get; set; }
 
 	/// <summary>
 	/// Gets or Sets the Card_Icon_Id.
 	/// </summary>
 	[Column("Card_Icon_Id", "tinyInt")]
+	[Index(IndexType.Index)]
 	[ForeignKey("card_icon", "Id", OnUpdate = ReferentialAction.Cascade)]
 	public virtual int CardIconId { get; set; }
 
@@ -262,7 +264,8 @@ public partial class Card
 	/// Gets or Sets the Monster_Type_Id.
 	/// </summary>
 	[Column("Monster_Type_Id", "tinyInt")]
-	[ForeignKey("monster_type", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Cascade)]
+	[Index(IndexType.Index)]
+	[ForeignKey("monster_type", "Id", OnUpdate = ReferentialAction.Cascade, OnDelete = ReferentialAction.Restrict)]
 	public virtual int MonsterTypeId { get; set; }
 
 	/// <summary>
@@ -491,6 +494,7 @@ public partial class CardNumber
 	/// Gets or Sets the Rarity_Id.
 	/// </summary>
 	[Column("Rarity_Id", "tinyInt")]
+	[Index(IndexType.Index)]
 	[Index(IndexType.PrimaryKey)]
 	[ForeignKey("rarity", "Id")]
 	public virtual int RarityId { get; set; }
@@ -506,6 +510,7 @@ public partial class CardNumber
 	/// Gets or Sets the Card_Id.
 	/// </summary>
 	[Column("Card_Id", "int")]
+	[Index(IndexType.Index)]
 	[ForeignKey("card", "Id")]
 	public virtual int CardId { get; set; }
 
@@ -513,6 +518,7 @@ public partial class CardNumber
 	/// Gets or Sets the Pack_Id.
 	/// </summary>
 	[Column("Pack_Id", "int")]
+	[Index(IndexType.Index)]
 	[ForeignKey("pack", "Id")]
 	public virtual int PackId { get; set; }
 

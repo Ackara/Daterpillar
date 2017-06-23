@@ -255,6 +255,9 @@
            unique="false">
       <columnName order="ASC">Pack_Id</columnName>
     </index>
+    <index type="index">
+      <columnName>Rarity_Id</columnName>
+    </index>
     <index type="primaryKey"
            unique="false">
       <columnName order="ASC">Number</columnName>
