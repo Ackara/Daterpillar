@@ -8,19 +8,19 @@ Daterpillar is a micro-orm and DevOps toolset that helps you manage databases an
 
 ## What can you do?
 
-* [Add/Remove Databases](wiki/)
-* [Generate schemas]()
-* [Generate migration scripts](wiki/)
-* [Generate classes](wiki/)
+* [Add/Remove Databases](https://github.com/Ackara/Daterpillar/wiki/)
+* [Generate schemas](https://github.com/Ackara/Daterpillar/wiki/Generating-Schemas)
+* [Generate migration scripts](https://github.com/Ackara/Daterpillar/wiki/)
+* [Generate classes](https://github.com/Ackara/Daterpillar/wiki/)
 
 ## Getting Started
 The easiest way to get started is by installing the [NuGet](https://www.nuget.org/packages/Gigobyte.Daterpillar.Core) package. 
 
 **.net standard**
-`` Install-Package Acklann.Daterpillar``
+``PM> Install-Package Acklann.Daterpillar``
 
 **.net framework**
-`` Install-Package Acklann.Daterpillar.Automation``
+``PM> Install-Package Acklann.Daterpillar.Automation``
 
 **powershell**
 ``PS> Install-Module -Name Daterpillar.Automation``
