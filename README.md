@@ -9,7 +9,7 @@ Daterpillar is a micro-orm and DevOps toolset that helps you manage databases an
 ## What can you do?
 
 * [Add/Remove Databases](wiki/)
-* [Generate schemas]()
+* [Generate schemas]([[wiki]])
 * [Generate migration scripts](wiki/)
 * [Generate classes](wiki/)
 
