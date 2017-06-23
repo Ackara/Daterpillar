@@ -91,7 +91,6 @@ Task "vstest" -alias "mstest" -description "This task runs all visual studio tes
 	Write-LineBreak;
 }
 
-
 Task "pack" -description "This task packages the project to be published to all online repositories." `
 -depends @("init", "compile") -action {
 	$msbuild = Get-MSBuildPath;
