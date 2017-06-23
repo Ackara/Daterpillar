@@ -6,6 +6,7 @@ namespace Acklann.Daterpillar
     /// <summary>
     /// Represents a <see cref="Table"/> index.
     /// </summary>
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class Index : ICloneable<Index>
     {
         /// <summary>
@@ -55,8 +56,21 @@ namespace Acklann.Daterpillar
         /// Gets or sets the name of the index.
         /// </summary>
         /// <value>The name.</value>
-        [XmlAttribute("name")]
-        public string Name { get; set; }
+        [XmlIgnore]
+        public string Name
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_name))
+                {
+                    string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
+                    string columns = string.Join("_and_", Columns.Select(x => x.Name));
+
+                    return string.Concat(tableName, columns);
+                }
+                else return _name;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the index type.
@@ -89,7 +103,6 @@ namespace Acklann.Daterpillar
             {
                 Columns = this.Columns,
                 IsUnique = this.IsUnique,
-                Name = this.Name,
                 Type = this.Type
             };
         }
@@ -105,5 +118,16 @@ namespace Acklann.Daterpillar
             }
             else return Name;
         }
+
+        internal string ToDebuggerDisplay()
+        {
+            return $"{GetName()} ({string.Join(", ", Columns)})";
+        }
+
+        #region Private Members
+
+        private string _name;
+
+        #endregion Private Members
     }
 }

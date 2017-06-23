@@ -17,6 +17,15 @@ namespace Acklann.Daterpillar.Migration
         }
 
         /// <summary>
+        /// Gets or sets the syntax.
+        /// </summary>
+        /// <value>The syntax.</value>
+        public override Syntax Syntax
+        {
+            get { return Syntax.MySQL; }
+        }
+
+        /// <summary>
         /// Gets the query that find all tables.
         /// </summary>
         /// <param name="schemaName">Name of the schema.</param>
@@ -68,7 +77,7 @@ namespace Acklann.Daterpillar.Migration
         /// <returns>A query.</returns>
         protected override string GetQueryThatFindsAllIndexesInaTable(string schemaName, string tableName)
         {
-            return $"SELECT s.INDEX_NAME AS `Name`, if(tc.CONSTRAINT_TYPE <> 'PRIMARY KEY' OR tc.CONSTRAINT_TYPE IS NULL, 'index', 'primaryKey') AS `Type`, if(tc.CONSTRAINT_TYPE = 'UNIQUE', 1, 0) AS `Unique`, concat(s.`TABLE_NAME`, ':', s.INDEX_NAME) AS `Id` FROM information_schema.STATISTICS s LEFT JOIN information_schema.TABLE_CONSTRAINTS tc ON tc.`CONSTRAINT_NAME` = s.INDEX_NAME AND tc.TABLE_SCHEMA = s.INDEX_SCHEMA AND tc.`TABLE_NAME` = s.`TABLE_NAME` AND tc.CONSTRAINT_TYPE <> 'FOREIGN KEY' WHERE s.INDEX_SCHEMA = '{schemaName}' AND s.`TABLE_NAME` = '{tableName}' GROUP BY s.INDEX_NAME, s.`TABLE_NAME`, tc.`CONSTRAINT_TYPE`;";
+            return $"SELECT if(s.INDEX_NAME='PRIMARY', '{SPECIAL_INDEX_NAME}', s.INDEX_NAME) AS `Name`, if(tc.CONSTRAINT_TYPE <> 'PRIMARY KEY' OR tc.CONSTRAINT_TYPE IS NULL, 'index', 'primaryKey') AS `Type`, if(tc.CONSTRAINT_TYPE = 'UNIQUE', 1, 0) AS `Unique`, concat(s.`TABLE_NAME`, ':', s.INDEX_NAME) AS `Id` FROM information_schema.STATISTICS s LEFT JOIN information_schema.TABLE_CONSTRAINTS tc ON tc.`CONSTRAINT_NAME` = s.INDEX_NAME AND tc.TABLE_SCHEMA = s.INDEX_SCHEMA AND tc.`TABLE_NAME` = s.`TABLE_NAME` AND tc.CONSTRAINT_TYPE <> 'FOREIGN KEY' WHERE s.INDEX_SCHEMA = '{schemaName}' AND s.`TABLE_NAME` = '{tableName}' GROUP BY s.INDEX_NAME, s.`TABLE_NAME`, tc.`CONSTRAINT_TYPE`;";
         }
     }
 }

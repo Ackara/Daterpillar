@@ -21,17 +21,29 @@ namespace Acklann.Daterpillar.Migration
         }
 
         /// <summary>
+        /// Gets or sets the syntax.
+        /// </summary>
+        /// <value>The syntax.</value>
+        public override Syntax Syntax
+        {
+            get { return Syntax.SQLite; }
+        }
+
+        /// <summary>
         /// Loads the columns.
         /// </summary>
         /// <param name="table">The table.</param>
         /// <param name="columnData">The column data.</param>
         internal override void LoadColumns(Table table, DataTable columnData)
         {
+            var pkColumns = new List<Daterpillar.ColumnName>();
+
             foreach (DataRow row in columnData.Rows)
             {
                 string typeName = _dataTypePattern.Match(Convert.ToString(row[ColumnName.Type])).Groups["type"]?.Value;
                 string temp = _dataTypePattern.Match(Convert.ToString(row[ColumnName.Type]))?.Groups["scale"]?.Value;
                 int scale = Convert.ToInt32((string.IsNullOrEmpty(temp) ? "0" : temp));
+                bool isKey = Convert.ToBoolean(row["pk"]);
 
                 temp = _dataTypePattern.Match(Convert.ToString(row[ColumnName.Type]))?.Groups["precision"]?.Value;
                 int precision = Convert.ToInt32((string.IsNullOrEmpty(temp) ? "0" : temp));
@@ -47,6 +59,16 @@ namespace Acklann.Daterpillar.Migration
                     DefaultValue = string.IsNullOrEmpty(defaultValue) ? null : defaultValue
                 };
                 table.Columns.Add(column);
+
+                if (isKey)
+                {
+                    pkColumns.Add(new Daterpillar.ColumnName(column.Name));
+                }
+            }
+
+            if (pkColumns.IsNotEmpty())
+            {
+                table.Indexes.Add(new Index(IndexType.PrimaryKey, pkColumns.ToArray()) { Table = table });
             }
         }
 
@@ -68,6 +90,7 @@ namespace Acklann.Daterpillar.Migration
                     OnDelete = (Convert.ToString(row["on_delete"])).ToReferentialAction(),
                     OnUpdate = (Convert.ToString(row["on_update"])).ToReferentialAction()
                 };
+                table.ForeignKeys.Add(newForeignKey);
             }
         }
 
@@ -84,10 +107,12 @@ namespace Acklann.Daterpillar.Migration
             {
                 bool shouldInsertIndex = true;
 
-                Index newIndex = new Index();
-                newIndex.Name = Convert.ToString(row[ColumnName.Name]);
+                var newIndex = new Index();
                 newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? IndexType.PrimaryKey : IndexType.Index);
                 newIndex.IsUnique = Convert.ToBoolean(row[ColumnName.Unique]);
+
+                if (table.Name == "card_number" && newIndex.Type == IndexType.PrimaryKey) System.Diagnostics.Debugger.Break();
+                //if (table.Name == "pack") System.Diagnostics.Debugger.Break();
 
                 // Find and load the index columns
                 using (var command = Connection.CreateCommand())
@@ -120,8 +145,8 @@ namespace Acklann.Daterpillar.Migration
 
                 if (shouldInsertIndex)
                 {
-                    table.Indexes.Add(newIndex);
                     newIndex.Table = table;
+                    if (table.Indexes.FirstOrDefault(x => x.Name == newIndex.Name) == null) table.Indexes.Add(newIndex);
                 }
             }
         }

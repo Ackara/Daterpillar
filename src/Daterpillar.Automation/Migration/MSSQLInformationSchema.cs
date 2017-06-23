@@ -25,6 +25,15 @@ namespace Acklann.Daterpillar.Migration
         }
 
         /// <summary>
+        /// Gets or sets the syntax.
+        /// </summary>
+        /// <value>The syntax.</value>
+        public override Syntax Syntax
+        {
+            get { return Syntax.MSSQL; }
+        }
+
+        /// <summary>
         /// Gets the query that find all tables.
         /// </summary>
         /// <param name="schemaName">Name of the schema.</param>

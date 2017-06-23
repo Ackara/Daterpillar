@@ -2,7 +2,7 @@
 
 namespace Acklann.Daterpillar.Equality
 {
-    internal class ColumnEqualityComparer : IEqualityComparer<Column>
+    internal class SQLiteColumnEqualityComparer : IEqualityComparer<Column>
     {
         public bool Equals(Column x, Column y)
         {
@@ -13,7 +13,6 @@ namespace Acklann.Daterpillar.Equality
                 return x.Name == y.Name
                 && Equals(x.DataType, y.DataType)
                 && x.IsNullable == y.IsNullable
-                && x.AutoIncrement == y.AutoIncrement
                 && x.OrdinalPosition == y.OrdinalPosition
                 && ((x.Comment == y.Comment) || (string.IsNullOrEmpty(x.Comment) || string.IsNullOrEmpty(y.Comment)));
             }
@@ -21,9 +20,13 @@ namespace Acklann.Daterpillar.Equality
 
         public bool Equals(DataType x, DataType y)
         {
-            return x.Name.Equals(y.Name, System.StringComparison.CurrentCultureIgnoreCase)
-                && (x.Scale == 0 ? y.Scale : x.Scale) == (y.Scale == 0 ? x.Scale : y.Scale)
-                && (x.Precision == 0 ? y.Precision : x.Precision) == (y.Precision == 0 ? x.Precision : y.Precision);
+            DataType left = x, right = y;
+            left.Name = _typeResolver.GetTypeName(x);
+            right.Name = _typeResolver.GetTypeName(y);
+
+            return left.Name.Equals(right.Name, System.StringComparison.CurrentCultureIgnoreCase)
+                && (left.Scale == 0 ? right.Scale : left.Scale) == (right.Scale == 0 ? left.Scale : right.Scale)
+                && (left.Precision == 0 ? right.Precision : left.Precision) == (right.Precision == 0 ? left.Precision : right.Precision);
         }
 
         public int GetHashCode(Column obj)

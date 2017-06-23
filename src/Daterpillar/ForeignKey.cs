@@ -5,6 +5,7 @@ namespace Acklann.Daterpillar
     /// <summary>
     /// Represents a <see cref="Table"/> foreign key.
     /// </summary>
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class ForeignKey : ICloneable<ForeignKey>
     {
         /// <summary>
@@ -41,8 +42,15 @@ namespace Acklann.Daterpillar
         /// Gets or sets the name of the key.
         /// </summary>
         /// <value>The name.</value>
-        [XmlAttribute("name")]
-        public string Name { get; set; }
+        [XmlIgnore]
+        public string Name
+        {
+            get
+            {
+                string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
+                return (string.IsNullOrWhiteSpace(_name) ? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : _name);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the local table name.
@@ -107,7 +115,6 @@ namespace Acklann.Daterpillar
                 ForeignTable = this.ForeignTable,
                 LocalColumn = this.LocalColumn,
                 LocalTable = this.LocalTable,
-                Name = this.Name,
                 OnDelete = this.OnDelete,
                 OnUpdate = this.OnUpdate
             };
@@ -116,7 +123,18 @@ namespace Acklann.Daterpillar
         internal string GetName()
         {
             string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-            return (string.IsNullOrWhiteSpace(Name)? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : Name);
+            return (string.IsNullOrWhiteSpace(Name) ? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : Name);
         }
+
+        internal string ToDebuggerDisplay()
+        {
+            return $"[{LocalColumn}] REF [{ForeignTable}].[{ForeignColumn}]";
+        }
+
+        #region Private Member
+
+        private string _name;
+
+        #endregion Private Member
     }
 }

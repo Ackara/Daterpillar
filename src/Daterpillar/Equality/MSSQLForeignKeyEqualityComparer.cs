@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Acklann.Daterpillar.Equality
+﻿namespace Acklann.Daterpillar.Equality
 {
-    internal class ForeignKeyEqualityComparer : IEqualityComparer<ForeignKey>
+    internal class MSSQLForeignKeyEqualityComparer : System.Collections.Generic.IEqualityComparer<ForeignKey>
     {
         public bool Equals(ForeignKey x, ForeignKey y)
         {
@@ -12,8 +10,8 @@ namespace Acklann.Daterpillar.Equality
                 x.LocalColumn == y.LocalColumn &&
                 x.ForeignTable == y.ForeignTable &&
                 x.ForeignColumn == y.ForeignColumn &&
-                x.OnUpdate == y.OnUpdate &&
-                x.OnDelete == y.OnDelete;
+                (x.OnUpdate == ReferentialAction.Restrict ? ReferentialAction.NoAction : x.OnUpdate) == (y.OnUpdate == ReferentialAction.Restrict ? ReferentialAction.NoAction : y.OnUpdate) &&
+                (x.OnDelete == ReferentialAction.Restrict ? ReferentialAction.NoAction : x.OnDelete) == (y.OnDelete == ReferentialAction.Restrict ? ReferentialAction.NoAction : y.OnDelete);
         }
 
         public int GetHashCode(ForeignKey obj)

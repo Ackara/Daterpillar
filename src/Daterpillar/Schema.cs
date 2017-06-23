@@ -41,6 +41,9 @@ namespace Acklann.Daterpillar
         [XmlAttribute("name")]
         public string Name { get; set; }
 
+        [XmlAttribute("syntax")]
+        public Syntax Syntax { get; set; }
+
         /// <summary>
         /// Gets or sets the tables belonging to this instance.
         /// </summary>
@@ -66,7 +69,7 @@ namespace Acklann.Daterpillar
             {
                 var serializer = new XmlSerializer(typeof(Schema));
                 var schema = (Schema)serializer.Deserialize(inputStream);
-                schema.AssignParentNodes();
+                schema.AssignMissingValues();
 
                 return schema;
             }
@@ -288,7 +291,7 @@ namespace Acklann.Daterpillar
             return clone;
         }
 
-        internal void AssignParentNodes()
+        internal void AssignMissingValues()
         {
             foreach (var table in Tables)
             {

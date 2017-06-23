@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.TypeResolvers;
-using System;
 using System.Linq;
 
 namespace Acklann.Daterpillar.Scripting
@@ -246,20 +245,10 @@ namespace Acklann.Daterpillar.Scripting
 
         private void AppendToTable(ForeignKey foreignKey)
         {
-            string onUpdate = (foreignKey.OnUpdate != ReferentialAction.NoAction ? $" ON UPDATE {foreignKey.OnUpdate.ToText()}" : string.Empty);
-            string onDelete = (foreignKey.OnDelete != ReferentialAction.NoAction ? $" ON DELETE {foreignKey.OnDelete.ToText()}" : string.Empty);
+            string onUpdate = $" ON UPDATE {foreignKey.OnUpdate.ToText()}";
+            string onDelete = $" ON DELETE {foreignKey.OnDelete.ToText()}";
 
             _script.AppendLine($"\tCONSTRAINT `{foreignKey.GetName()}` FOREIGN KEY (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}`(`{foreignKey.ForeignColumn}`){onUpdate}{onDelete},");
-        }
-
-        private void RemoveAllReferencesToColumn(Index index, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void RemoveAllReferencesToColumn(ForeignKey constraint, string table, string name)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion Private Members

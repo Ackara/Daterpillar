@@ -62,15 +62,15 @@ namespace Acklann.Daterpillar.Scripting
 
             foreach (var column in table.Columns) AppendToTable(column);
             foreach (var constraint in table.ForeignKeys) AppendToTable(constraint);
+            foreach (var index in table.Indexes) AppendToTable(index);
 
             _script.Remove((_script.Length - 3), 3);
             _script.AppendLine();
             _script.AppendLine(");");
             _script.AppendLine();
 
-            foreach (var index in table.Indexes) Append(index);
+            foreach (var index in table.Indexes.Where(i => i.Type == IndexType.Index)) Append(index);
 
-            _script.AppendLine();
             return this;
         }
 
@@ -102,7 +102,24 @@ namespace Acklann.Daterpillar.Scripting
             string unique = (index.IsUnique ? " UNIQUE " : " ");
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order.ToText()}")));
 
-            _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.GetName()}] ON [{index.Table.Name}] ({columns});");
+            if (index.Type == IndexType.Index)
+            {
+                _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.GetName()}] ON [{index.Table.Name}] ({columns});");
+            }
+            else
+            {
+                _script.AppendLine("PRAGMA foreign_keys=off;");
+                _script.AppendLine("BEGIN TRANSACTION;");
+                _script.AppendLine($"ALTER TABLE [{table}] RENAME TO [old_{table}];");
+                Append(index.Table);
+
+                _script.AppendLine($"INSERT INTO [{table}] SELECT * FROM [old_{table}];");
+
+                _script.AppendLine($"DROP TABLE [old_{table}];");
+                _script.AppendLine("COMMIT;");
+                _script.AppendLine("PRAGMA foreign_keys=on;");
+            }
+
             return this;
         }
 
@@ -271,7 +288,7 @@ namespace Acklann.Daterpillar.Scripting
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY AUTOINCREMENT" : string.Empty);
             string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT '{column.DefaultValue}'");
 
-            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{defaultValue}{autoIncrement},");
+            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{defaultValue},");
         }
 
         private void AppendToTable(ForeignKey foreignKey)
@@ -280,6 +297,14 @@ namespace Acklann.Daterpillar.Scripting
             string onDelete = (foreignKey.OnDelete == ReferentialAction.NoAction ? string.Empty : $" ON DELETE {foreignKey.OnDelete.ToText()}");
 
             _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName()}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
+        }
+
+        private void AppendToTable(Index index)
+        {
+            if (index.Type == IndexType.PrimaryKey)
+            {
+                _script.AppendLine($"\tPRIMARY KEY ({string.Join(", ", index.Columns.Select(x => $"[{x.Name}]"))}),");
+            }
         }
 
         #endregion Private Members

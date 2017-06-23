@@ -111,7 +111,7 @@ namespace Acklann.Daterpillar.Scripting
 
             if (index.Type == IndexType.PrimaryKey)
             {
-                _script.AppendLine($"ALTER TABLE [{index.Table.Name}] ADD PRIMARY KEY ({columns});");
+                _script.AppendLine($"ALTER TABLE [{index.Table.Name}] ADD CONSTRAINT [{index.GetName()}] PRIMARY KEY ({columns});");
             }
             else
             {
@@ -131,8 +131,10 @@ namespace Acklann.Daterpillar.Scripting
         {
             string table = foreignKey.LocalTable;
             string name = foreignKey.GetName();
+            string onUpdate = ((foreignKey.OnUpdate == ReferentialAction.Restrict) ? $"ON UPDATE {(ReferentialAction.NoAction.ToText())}" : $"ON UPDATE {foreignKey.OnUpdate.ToText()}");
+            string onDelete = ((foreignKey.OnDelete == ReferentialAction.Restrict) ? $"ON DELETE {(ReferentialAction.NoAction.ToText())}" : $"ON DELETE {foreignKey.OnDelete.ToText()}");
 
-            _script.AppendLine($"ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
+            _script.AppendLine($"ALTER TABLE [{table}] WITH CHECK ADD CONSTRAINT [{name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}] ([{foreignKey.ForeignColumn}]) {onUpdate} {onDelete};");
             return this;
         }
 
@@ -249,10 +251,10 @@ namespace Acklann.Daterpillar.Scripting
 
         private void AppendToTable(ForeignKey foreignKey)
         {
-            string onUpdate = (foreignKey.OnUpdate == ReferentialAction.NoAction ? string.Empty : $" ON UPDATE {foreignKey.OnUpdate.ToText()}");
-            string onDelete = (foreignKey.OnDelete == ReferentialAction.NoAction ? string.Empty : $" ON DELETE {foreignKey.OnDelete.ToText()}");
+            string onUpdate = ((foreignKey.OnUpdate == ReferentialAction.Restrict) ? $"ON UPDATE {(ReferentialAction.NoAction.ToText())}" : $"ON UPDATE {foreignKey.OnUpdate.ToText()}");
+            string onDelete = ((foreignKey.OnDelete == ReferentialAction.Restrict) ? $"ON DELETE {(ReferentialAction.NoAction.ToText())}" : $"ON DELETE {foreignKey.OnDelete.ToText()}");
 
-            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName()}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
+            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName()}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]) {onUpdate} {onDelete},");
         }
 
         #endregion Private Members

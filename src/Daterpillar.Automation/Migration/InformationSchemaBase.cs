@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -25,6 +26,12 @@ namespace Acklann.Daterpillar.Migration
         protected readonly IDbConnection Connection;
 
         /// <summary>
+        /// Gets or sets the syntax.
+        /// </summary>
+        /// <value>The syntax.</value>
+        public abstract Syntax Syntax { get; }
+
+        /// <summary>
         /// Creates a <see cref="T:Ackara.Daterpillar.Schema" /> instance using the information found for the specified schema.
         /// </summary>
         /// <returns>A <see cref="T:Ackara.Daterpillar.Schema" /> instance.</returns>
@@ -43,7 +50,11 @@ namespace Acklann.Daterpillar.Migration
             OpenConnectionIfClosed();
 
             name = (string.IsNullOrEmpty(name) ? Connection.Database : name);
-            var schema = new Schema() { Name = name };
+            var schema = new Schema()
+            {
+                Name = name,
+                Syntax = this.Syntax
+            };
             FetchTables(schema);
 
             return schema;
@@ -56,110 +67,6 @@ namespace Acklann.Daterpillar.Migration
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        internal virtual string GetTypeName(string typeName)
-        {
-            typeName = typeName.ToLower();
-            switch (typeName)
-            {
-                case "bit":
-                case "boolean":
-                    return TypeResolvers.TypeResolverBase.BOOL;
-
-                case "integer":
-                    return TypeResolvers.TypeResolverBase.INT;
-
-                case "nvarchar":
-                    return TypeResolvers.TypeResolverBase.VARCHAR;
-
-                default:
-                    return typeName;
-            }
-        }
-
-        internal virtual void LoadColumns(Table table, DataTable columnData)
-        {
-            foreach (DataRow row in columnData.Rows)
-            {
-                var column = new Column();
-                column.Table = table;
-                column.Name = Convert.ToString(row[ColumnName.Name]);
-                column.Comment = Convert.ToString(row[ColumnName.Comment]);
-                column.AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]);
-                column.IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]);
-                column.DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]));
-
-                var columnDefault = row[ColumnName.Default];
-                column.DefaultValue = (columnDefault == DBNull.Value ? null : column.DefaultValue);
-                table.Columns.Add(column);
-            }
-        }
-
-        internal virtual void LoadIndex(Table table, DataTable indexData)
-        {
-            string autoColumn = ((from x in table.Columns where x.AutoIncrement select x.Name).FirstOrDefault());
-
-            foreach (DataRow row in indexData.Rows)
-            {
-                bool shouldAddIndex = true;
-
-                var newIndex = new Index();
-                newIndex.Table = table;
-                newIndex.Name = Convert.ToString(row[ColumnName.Name]);
-                newIndex.Type = (Convert.ToString(row[ColumnName.Type])).ToIndexType();
-                newIndex.IsUnique = Convert.ToBoolean(row[ColumnName.Unique]);
-                shouldAddIndex = !string.IsNullOrEmpty(newIndex.Name);
-
-                // Find and load the index columns
-                using (var command = Connection.CreateCommand())
-                {
-                    command.CommandText = GetQueryThatFindsAllColumnsInaIndex(table.Schema.Name, Convert.ToString(row[ColumnName.Id]));
-                    using (var results = new DataTable())
-                    {
-                        results.Load(command.ExecuteReader());
-                        foreach (DataRow nestedRow in results.Rows)
-                        {
-                            string name = Convert.ToString(nestedRow[ColumnName.Name]);
-
-                            if (name == autoColumn)
-                            {
-                                shouldAddIndex = false;
-                                break;
-                            }
-                            newIndex.Columns = new Daterpillar.ColumnName[]
-                            {
-                                new Daterpillar.ColumnName()
-                                {
-                                    Name = name,
-                                    Order = (Order)Enum.Parse(typeof(Order), Convert.ToString(nestedRow[ColumnName.Order]).ToOrder())
-                                }
-                            };
-                        }
-                    }
-                }
-
-                if (shouldAddIndex) table.Indexes.Add(newIndex);
-            }
-        }
-
-        internal virtual void LoadForeignKey(Table table, DataTable foreignKeyData)
-        {
-            foreach (DataRow row in foreignKeyData.Rows)
-            {
-                var foreignKey = new ForeignKey()
-                {
-                    Table = table,
-                    Name = Convert.ToString(row[ColumnName.Name]),
-                    LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]),
-                    ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]),
-                    ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]),
-                    OnDelete = (Convert.ToString(row[ColumnName.OnDelete])).ToReferentialAction(),
-                    OnUpdate = (Convert.ToString(row[ColumnName.OnUpdate])).ToReferentialAction()
-                };
-
-                table.ForeignKeys.Add(foreignKey);
-            }
         }
 
         /// <summary>
@@ -216,6 +123,117 @@ namespace Acklann.Daterpillar.Migration
 
         #region Private Members
 
+        internal readonly string SPECIAL_INDEX_NAME = "PK_4901asdf56312f75454";
+
+        internal virtual string GetTypeName(string typeName)
+        {
+            typeName = typeName.ToLower();
+            switch (typeName)
+            {
+                case "bit":
+                case "boolean":
+                    return TypeResolvers.TypeResolverBase.BOOL;
+
+                case "integer":
+                    return TypeResolvers.TypeResolverBase.INT;
+
+                case "nvarchar":
+                    return TypeResolvers.TypeResolverBase.VARCHAR;
+
+                default:
+                    return typeName;
+            }
+        }
+
+        internal virtual void LoadColumns(Table table, DataTable columnData)
+        {
+            foreach (DataRow row in columnData.Rows)
+            {
+                var columnDefault = row[ColumnName.Default];
+                var comment = Convert.ToString(row[ColumnName.Comment]);
+
+                var column = new Column()
+                {
+                    Table = table,
+                    Name = Convert.ToString(row[ColumnName.Name]),
+                    AutoIncrement = Convert.ToBoolean(row[ColumnName.Auto]),
+                    IsNullable = Convert.ToBoolean(row[ColumnName.Nullable]),
+                    Comment = (string.IsNullOrEmpty(comment) ? null : comment),
+                    DefaultValue = (columnDefault == DBNull.Value ? null : columnDefault?.ToString()),
+                    DataType = new DataType(GetTypeName(Convert.ToString(row[ColumnName.Type])), Convert.ToInt32(row[ColumnName.Scale]), Convert.ToInt32(row[ColumnName.Precision]))
+                };
+                table.Columns.Add(column);
+            }
+        }
+
+        internal virtual void LoadIndex(Table table, DataTable indexData)
+        {
+            string autoColumn = ((from x in table.Columns where x.AutoIncrement select x.Name).FirstOrDefault());
+
+            foreach (DataRow row in indexData.Rows)
+            {
+                bool shouldAddIndex = true;
+                string name = Convert.ToString(row[ColumnName.Name]);
+
+                var newIndex = new Index()
+                {
+                    Table = table,
+                    IsUnique = Convert.ToBoolean(row[ColumnName.Unique]),
+                    Type = ((Convert.ToString(row[ColumnName.Type])).ToIndexType())
+                };
+                shouldAddIndex = !string.IsNullOrEmpty(newIndex.Name);
+
+                // Find and load the index columns
+                using (var command = Connection.CreateCommand())
+                {
+                    command.CommandText = GetQueryThatFindsAllColumnsInaIndex(table.Schema.Name, Convert.ToString(row[ColumnName.Id]));
+                    using (var results = new DataTable())
+                    {
+                        var columns = new List<Daterpillar.ColumnName>();
+                        results.Load(command.ExecuteReader());
+
+                        foreach (DataRow nestedRow in results.Rows)
+                        {
+                            string columnName = Convert.ToString(nestedRow[ColumnName.Name]);
+
+                            if (columnName == autoColumn)
+                            {
+                                shouldAddIndex = false;
+                                break;
+                            }
+                            columns.Add(new Daterpillar.ColumnName()
+                            {
+                                Name = columnName,
+                                Order = ((Order)Enum.Parse(typeof(Order), Convert.ToString(nestedRow[ColumnName.Order]).ToOrder()))
+                            });
+                        }
+
+                        newIndex.Columns = columns.ToArray();
+                    }
+                }
+
+                if (shouldAddIndex) table.Indexes.Add(newIndex);
+            }
+        }
+
+        internal virtual void LoadForeignKey(Table table, DataTable foreignKeyData)
+        {
+            foreach (DataRow row in foreignKeyData.Rows)
+            {
+                var foreignKey = new ForeignKey()
+                {
+                    Table = table,
+                    LocalColumn = Convert.ToString(row[ColumnName.LocalColumn]),
+                    ForeignTable = Convert.ToString(row[ColumnName.ForeignTable]),
+                    ForeignColumn = Convert.ToString(row[ColumnName.ForeignColumn]),
+                    OnDelete = (Convert.ToString(row[ColumnName.OnDelete])).ToReferentialAction(),
+                    OnUpdate = (Convert.ToString(row[ColumnName.OnUpdate])).ToReferentialAction()
+                };
+
+                table.ForeignKeys.Add(foreignKey);
+            }
+        }
+
         private void OpenConnectionIfClosed()
         {
             if (Connection.State != ConnectionState.Open) Connection.Open();
@@ -231,10 +249,12 @@ namespace Acklann.Daterpillar.Migration
                     results.Load(command.ExecuteReader());
                     foreach (DataRow row in results.Rows)
                     {
+                        string comment = Convert.ToString(row[ColumnName.Comment]);
+
                         var table = new Table()
                         {
                             Name = Convert.ToString(row[ColumnName.Name]),
-                            Comment = Convert.ToString(row[ColumnName.Comment])
+                            Comment = (string.IsNullOrEmpty(comment) ? null : comment)
                         };
 
                         schema.Add(table);
@@ -286,8 +306,6 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
-        #endregion Private Members
-
         internal struct ColumnName
         {
             public const string Id = "Id";
@@ -309,5 +327,7 @@ namespace Acklann.Daterpillar.Migration
             public const string ForeignTable = "Reference_Table";
             public const string ForeignColumn = "Reference_Column";
         }
+
+        #endregion Private Members
     }
 }

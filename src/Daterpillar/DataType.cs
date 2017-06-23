@@ -60,7 +60,9 @@ namespace Acklann.Daterpillar
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         public bool Equals(DataType other)
         {
-            return Name.Equals(other.Name, StringComparison.CurrentCultureIgnoreCase) && Scale == other.Scale && Precision == other.Precision;
+            return Name.Equals(other.Name, StringComparison.CurrentCultureIgnoreCase)
+                && Scale == other.Scale
+                && Precision == other.Precision;
         }
 
         /// <summary>

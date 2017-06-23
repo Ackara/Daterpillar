@@ -5,6 +5,7 @@ namespace Acklann.Daterpillar
     /// <summary>
     /// Represents a <see cref="Table"/> column.
     /// </summary>
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class Column : ICloneable<Column>
     {
         /// <summary>
@@ -102,6 +103,11 @@ namespace Acklann.Daterpillar
                 IsNullable = this.IsNullable,
                 OrdinalPosition = this.OrdinalPosition
             };
+        }
+
+        internal string ToDebuggerDisplay()
+        {
+            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
         }
     }
 }

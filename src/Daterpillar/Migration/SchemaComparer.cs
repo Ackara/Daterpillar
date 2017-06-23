@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Equality;
-using Acklann.Daterpillar.Scripting;
+﻿using Acklann.Daterpillar.Scripting;
 using System;
 using System.Collections.Generic;
 
@@ -13,28 +12,33 @@ namespace Acklann.Daterpillar.Migration
         /// <summary>
         /// Initializes a new instance of the <see cref="SchemaComparer"/> class.
         /// </summary>
-        public SchemaComparer()
+        public SchemaComparer() : this(null, null, null)
         {
         }
 
         /// <summary>
-        /// Compares the specified schemas.
+        /// Initializes a new instance of the <see cref="SchemaComparer"/> class.
+        /// </summary>
+        /// <param name="columnEqualityComparer">The column equality comparer.</param>
+        /// <param name="indexEqualityComparer">The index equality comparer.</param>
+        /// <param name="foreignKeyComparer">The foreign key comparer.</param>
+        public SchemaComparer(IEqualityComparer<Column> columnEqualityComparer, IEqualityComparer<Index> indexEqualityComparer, IEqualityComparer<ForeignKey> foreignKeyComparer)
+        {
+            _indexComparer = indexEqualityComparer;
+            _columnComparer = columnEqualityComparer;
+            _foreignKeyComparer = foreignKeyComparer;
+            _comparerFactory = new Equality.EqualityComparerFactory();
+        }
+
+        /// <summary>
+        /// Compares the specified source.
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="target">The target.</param>
-        /// <param name="builder">The builder.</param>
-        /// <param name="modifications">The modifications.</param>
         /// <returns>MigrationState.</returns>
-        public MigrationState Compare(Schema source, Schema target, IScriptBuilder builder, out string modifications)
+        public MigrationState Compare(Schema source, Schema target)
         {
-            _script = builder;
-            _modifications = new List<string>();
-
-            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
-            ComputeResult(source, target, out MigrationState state);
-            modifications = string.Join(Environment.NewLine, _modifications);
-
-            return state;
+            return Compare(source, target, new NullScriptBuilder(), out string modifications);
         }
 
         /// <summary>
@@ -49,10 +53,51 @@ namespace Acklann.Daterpillar.Migration
             return Compare(source, target, builder, out string modifications);
         }
 
+        /// <summary>
+        /// Compares the specified source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="modifications">The modifications.</param>
+        /// <returns>MigrationState.</returns>
+        public MigrationState Compare(Schema source, Schema target, out string modifications)
+        {
+            return Compare(source, target, new NullScriptBuilder(), out modifications);
+        }
+
+        /// <summary>
+        /// Compares the specified schemas.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="builder">The builder.</param>
+        /// <param name="modifications">The modifications.</param>
+        /// <returns>MigrationState.</returns>
+        public MigrationState Compare(Schema source, Schema target, IScriptBuilder builder, out string modifications)
+        {
+            _script = builder;
+            _modifications = new List<string>();
+            Syntax syntax = (target.Syntax == Syntax.Generic ? source.Syntax : target.Syntax);
+
+            if (_indexComparer == null) _indexComparer = _comparerFactory.CreateIndexComparer($"{syntax}{nameof(Index)}EqualityComparer");
+            if (_columnComparer == null) _columnComparer = _comparerFactory.CreateColumnComparer($"{syntax}{nameof(Column)}EqualityComparer");
+            if (_foreignKeyComparer == null) _foreignKeyComparer = _comparerFactory.CreateForeignKeyComparer($"{syntax}{nameof(ForeignKey)}EqualityComparer");
+
+            FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
+            ComputeResult(source, target, out MigrationState state);
+            modifications = string.Join(Environment.NewLine, _modifications);
+
+            return state;
+        }
+
         #region Private Members
 
         private IScriptBuilder _script;
         private IList<string> _modifications;
+        private IEqualityComparer<Index> _indexComparer;
+        private IEqualityComparer<Column> _columnComparer;
+        private IEqualityComparer<ForeignKey> _foreignKeyComparer;
+        private Equality.EqualityComparerFactory _comparerFactory;
 
         private void FindDiscrepanciesBetween(Table[] left, Table[] right)
         {
@@ -100,8 +145,6 @@ namespace Acklann.Daterpillar.Migration
             EnsureBothArraysAreTheSameSize(ref left, ref right);
             SortTheItemsOfBothArraysByName(ref left, ref right);
 
-            var equalityChecker = new ColumnEqualityComparer();
-
             for (int i = 0; i < left.Length; i++)
             {
                 Column source = left[i];
@@ -127,7 +170,7 @@ namespace Acklann.Daterpillar.Migration
                     _script.Remove(target);
                     _script.Append(source);
                 }
-                else if (!equalityChecker.Equals(source, target))
+                else if (!_columnComparer.Equals(source, target))
                 {
                     // Change the right column to the left
                     _modifications.Add($"Alter: [{target.Table.Name}].[{target.Name}] column.");
@@ -139,9 +182,7 @@ namespace Acklann.Daterpillar.Migration
         private void FindDiscrepanciesBetween(ForeignKey[] left, ForeignKey[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
-            SortTheItemsOfBothArraysByName(ref left, ref right);
-
-            var equalityChecker = new ForeignKeyEqualityComparer();
+            SortTheItemsOfBothArraysByName2(ref left, ref right);
 
             for (int i = 0; i < left.Length; i++)
             {
@@ -151,20 +192,20 @@ namespace Acklann.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the foreign key on the right
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] foreign key.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the foreign key on the right
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] foreign key.");
                     _script.Append(source);
                 }
-                else if (!equalityChecker.Equals(source, target))
+                else if (!_foreignKeyComparer.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] foreign key.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
@@ -174,32 +215,30 @@ namespace Acklann.Daterpillar.Migration
         private void FindDiscrepanciesBetween(Index[] left, Index[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
-            SortTheItemsOfBothArraysByName(ref left, ref right);
-
-            var equalityChecker = new IndexEqualityComparer();
+            SortTheItemsOfBothArraysByName2(ref left, ref right);
 
             for (int i = 0; i < left.Length; i++)
             {
                 Index source = left[i];
                 Index target = right[i];
-
+                
                 if (source == null && target != null)
                 {
                     // Drop the index on the right
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] index.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the index on the right
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] index.");
                     _script.Append(source);
                 }
-                else if (!equalityChecker.Equals(source, target))
+                else if (!_indexComparer.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] index.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
@@ -258,6 +297,16 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
+        private void SortTheItemsOfBothArraysByName2<T>(ref T[] left, ref T[] right)
+        {
+            dynamic l;
+            for (int i = 0; i < left.Length; i++)
+            {
+                l = left[i];
+                SwapMatchingItems2(ref right, (l?.GetName()), i);
+            }
+        }
+
         private void IncreaseLengthOfArray<T>(ref T[] array, int capacity)
         {
             var newArray = new T[capacity];
@@ -276,6 +325,22 @@ namespace Acklann.Daterpillar.Migration
             {
                 r = right[i];
                 if (name == r?.Name)
+                {
+                    temp = right[targetIdx];
+                    right[targetIdx] = right[i];
+                    right[i] = temp;
+                    break;
+                }
+            }
+        }
+
+        private void SwapMatchingItems2<T>(ref T[] right, string name, int targetIdx)
+        {
+            dynamic r; T temp;
+            for (int i = targetIdx; i < right.Length; i++)
+            {
+                r = right[i];
+                if (name == r?.GetName())
                 {
                     temp = right[targetIdx];
                     right[targetIdx] = right[i];
