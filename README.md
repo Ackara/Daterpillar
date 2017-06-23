@@ -1,25 +1,33 @@
-# Daterpillar
-
+# Daterpillar 
 ![Build Status](https://acklann.visualstudio.com/_apis/public/build/definitions/3f4e6949-e21e-4b02-a69d-067a400f0377/18/badge)
+
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000?style=flat-square)](https://github.com/Ackara/Daterpillar/blob/master/LICENSE) [![nuget](https://img.shields.io/nuget/v/Acklann.Daterpillar.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Acklann.Daterpillar)
-
-|            |**master**|**development**|
-|------------|----------|---------------|
-|**build status:**|![master](https://acklann.visualstudio.com/_apis/public/build/definitions/3f4e6949-e21e-4b02-a69d-067a400f0377/9/badge)|![development](https://acklann.visualstudio.com/_apis/public/build/definitions/3f4e6949-e21e-4b02-a69d-067a400f0377/3/badge)|
-
 ----------
 
-Daterpillar allows you to write your database schema in XML then transform that document into MySQL, SQLite or even C# classes.
+Daterpillar is a micro-orm and DevOps toolset that helps you manage schemas and generate scripts. Currently it supports C#, MSSQL, MySQL and SQLite.
 
-## How It Works
-Let say you have the following XML document
+## What can you do?
+### Generate scripts.
+
+Let say you have the following class.
+```c#
+[Table]
+public class Employee
+{
+	[Column(AutoIncrement = true)]
+	pulbic int Id { get; set; }
+	
+	[Column]
+	public string Name { get; set; }
+}
+```
+Granted you have installed the package using [NuGet](https://www.nuget.org/packages/Acklann.Daterpillar), a MSBuild target will be included so when you build your project a ***.schema.xml** file will be generated along side your project's .dll file in the bin directory. The file will look something like the following.
 
 ```xml
-<schema xmlns="http://api.gigobyte.com/schema/v1/xddl.xsd">
+<schema xmlns="http://static.acklann.com/schema/v2/daterpillar.xsd">
   <table name="employee">
 	<column name="Id" autoIncrement="true">
 	  <dataType>int</dataType>
-	  <modifier>PRIMARY KEY</modifier>
 	</column>
 
 	<column name="Name">
@@ -28,6 +36,14 @@ Let say you have the following XML document
   </table>
 </schema>
 ```
+What you can then do with the file is generate a MySQL script using the powershell module that comes with the package. You can also install from the powerhshell gallery. 
+
+``PS> Install-Module -Name Daterpillar.Automation``
+
+Once imported can use the following to generate a MySQL script.
+
+
+
 
 you will get **MySQL** 
 
