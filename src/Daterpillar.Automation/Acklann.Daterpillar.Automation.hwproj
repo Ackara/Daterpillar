@@ -8,5 +8,5 @@
     <File>en-US\about_Daterpillar.Automation.Help.txt</File>
     <File>en-US\Acklann.Daterpillar.Automation.dll-Help.xml</File>
   </Files>
-  <SourceModule name="Acklann.Daterpillar.Automation" path="C:\Users\Ackeem\Projects\Daterpillar\src\Daterpillar.Automation\bin\Debug\Acklann.Daterpillar.Automation.dll" version="4.7.13.0" backup="4.7.13.0" refreshmode="0" deployed="131419547552769924" />
+  <SourceModule name="Acklann.Daterpillar.Automation" path="C:\Users\Ackeem\Projects\Daterpillar\src\Daterpillar.Automation\bin\Debug\Acklann.Daterpillar.Automation.dll" version="4.7.20.0" backup="4.7.13.0" refreshmode="0" deployed="131427116025328405" />
 </HelpProject>
