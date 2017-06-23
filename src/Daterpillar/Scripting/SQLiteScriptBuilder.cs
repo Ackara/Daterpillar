@@ -104,7 +104,7 @@ namespace Acklann.Daterpillar.Scripting
 
             if (index.Type == IndexType.Index)
             {
-                _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.GetName()}] ON [{index.Table.Name}] ({columns});");
+                _script.AppendLine($"CREATE{unique}INDEX IF NOT EXISTS [{index.Name}] ON [{index.Table.Name}] ({columns});");
             }
             else
             {
@@ -137,7 +137,7 @@ namespace Acklann.Daterpillar.Scripting
             var clone = foreignKey.Table.Clone();
             clone.ForeignKeys.Add(foreignKey);
 
-            _script.AppendLine($"/* ADD ([{table}].[{foreignKey.GetName()}]) SCRIPT */");
+            _script.AppendLine($"/* ADD ([{table}].[{foreignKey.Name}]) SCRIPT */");
             _script.AppendLine("PRAGMA foreign_keys = 0;");
             _script.AppendLine($"CREATE TABLE [{tempName}] AS SELECT * FROM [{table}];");
             _script.AppendLine($"DROP TABLE [{table}];");
@@ -209,7 +209,7 @@ namespace Acklann.Daterpillar.Scripting
         public override IScriptBuilder Remove(Index index)
         {
             string table = index.Table.Name;
-            _script.AppendLine($"DROP INDEX IF EXISTS [{index.GetName()}];");
+            _script.AppendLine($"DROP INDEX IF EXISTS [{index.Name}];");
             return this;
         }
 
@@ -223,10 +223,10 @@ namespace Acklann.Daterpillar.Scripting
             string table = foreignKey.LocalTable;
             string tempName = $"{table}_temp_table";
             var clonedTable = foreignKey.Table.Clone();
-            clonedTable.ForeignKeys.RemoveAll(col => col.GetName() == foreignKey.GetName());
+            clonedTable.ForeignKeys.RemoveAll(col => col.Name == foreignKey.Name);
             var columns = string.Join(", ", foreignKey.Table.Columns.Select(x => $"[{x.Name}]"));
 
-            _script.AppendLine($"/* DROP ([{table}].[{foreignKey.GetName()}]) SCRIPT */");
+            _script.AppendLine($"/* DROP ([{table}].[{foreignKey.Name}]) SCRIPT */");
             _script.AppendLine("PRAGMA foreign_keys = 0;");
             _script.AppendLine($"CREATE TABLE [{tempName}] AS SELECT * FROM [{table}];");
             _script.AppendLine($"DROP TABLE [{table}];");
@@ -296,7 +296,7 @@ namespace Acklann.Daterpillar.Scripting
             string onUpdate = (foreignKey.OnUpdate == ReferentialAction.NoAction ? string.Empty : $" ON UPDATE {foreignKey.OnUpdate.ToText()}");
             string onDelete = (foreignKey.OnDelete == ReferentialAction.NoAction ? string.Empty : $" ON DELETE {foreignKey.OnDelete.ToText()}");
 
-            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName()}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
+            _script.AppendLine($"\tCONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]){onUpdate}{onDelete},");
         }
 
         private void AppendToTable(Index index)

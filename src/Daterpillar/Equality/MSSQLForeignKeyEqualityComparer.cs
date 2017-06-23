@@ -16,7 +16,7 @@
 
         public int GetHashCode(ForeignKey obj)
         {
-            return obj.GetName().GetHashCode() ^ obj.LocalTable.GetHashCode() ^ obj.LocalColumn.GetHashCode() ^ obj.ForeignTable.GetHashCode() ^ obj.ForeignColumn.GetHashCode() ^ obj.OnUpdate.GetHashCode() ^ obj.OnDelete.GetHashCode();
+            return obj.Name.GetHashCode() ^ obj.LocalTable.GetHashCode() ^ obj.LocalColumn.GetHashCode() ^ obj.ForeignTable.GetHashCode() ^ obj.ForeignColumn.GetHashCode() ^ obj.OnUpdate.GetHashCode() ^ obj.OnDelete.GetHashCode();
         }
     }
 }

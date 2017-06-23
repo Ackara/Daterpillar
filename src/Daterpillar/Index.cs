@@ -61,14 +61,10 @@ namespace Acklann.Daterpillar
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_name))
-                {
-                    string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
-                    string columns = string.Join("_and_", Columns.Select(x => x.Name));
+                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
+                string columns = string.Join("_and_", Columns.Select(x => x.Name));
 
-                    return string.Concat(tableName, columns);
-                }
-                else return _name;
+                return string.Concat(tableName, columns);
             }
         }
 
@@ -107,27 +103,9 @@ namespace Acklann.Daterpillar
             };
         }
 
-        internal string GetName()
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-            {
-                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
-                string columns = string.Join("_and_", Columns.Select(x => x.Name));
-
-                return string.Concat(tableName, columns);
-            }
-            else return Name;
-        }
-
         internal string ToDebuggerDisplay()
         {
-            return $"{GetName()} ({string.Join(", ", Columns)})";
+            return $"{Name} ({string.Join(", ", Columns)})";
         }
-
-        #region Private Members
-
-        private string _name;
-
-        #endregion Private Members
     }
 }

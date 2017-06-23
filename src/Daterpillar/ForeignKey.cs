@@ -120,12 +120,6 @@ namespace Acklann.Daterpillar
             };
         }
 
-        internal string GetName()
-        {
-            string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-            return (string.IsNullOrWhiteSpace(Name) ? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : Name);
-        }
-
         internal string ToDebuggerDisplay()
         {
             return $"[{LocalColumn}] REF [{ForeignTable}].[{ForeignColumn}]";

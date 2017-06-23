@@ -113,7 +113,7 @@ namespace Acklann.Daterpillar.Scripting
                 default:
                 case IndexType.Index:
                     string unique = (index.IsUnique ? " UNIQUE " : " ");
-                    _script.AppendLine($"CREATE{unique}INDEX `{index.GetName()}` ON `{index.Table.Name}` ({columns});");
+                    _script.AppendLine($"CREATE{unique}INDEX `{index.Name}` ON `{index.Table.Name}` ({columns});");
                     break;
 
                 case IndexType.PrimaryKey:
@@ -131,7 +131,7 @@ namespace Acklann.Daterpillar.Scripting
         /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(ForeignKey foreignKey)
         {
-            string name = foreignKey.GetName();
+            string name = foreignKey.Name;
             _script.AppendLine($"ALTER TABLE `{foreignKey.LocalTable}` ADD FOREIGN KEY `{name}` (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}` (`{foreignKey.ForeignColumn}`) ON UPDATE {foreignKey.OnUpdate.ToText()} ON DELETE {foreignKey.OnDelete.ToText()};");
             return this;
         }
@@ -179,7 +179,7 @@ namespace Acklann.Daterpillar.Scripting
         /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(Index index)
         {
-            _script.AppendLine($"DROP INDEX `{index.GetName()}` ON `{index.Table.Name}`;");
+            _script.AppendLine($"DROP INDEX `{index.Name}` ON `{index.Table.Name}`;");
             return this;
         }
 
@@ -190,7 +190,7 @@ namespace Acklann.Daterpillar.Scripting
         /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(ForeignKey foreignKey)
         {
-            _script.AppendLine($"ALTER TABLE `{foreignKey.Table.Name}` DROP FOREIGN KEY `{foreignKey.GetName()}`;");
+            _script.AppendLine($"ALTER TABLE `{foreignKey.Table.Name}` DROP FOREIGN KEY `{foreignKey.Name}`;");
             return this;
         }
 
@@ -248,7 +248,7 @@ namespace Acklann.Daterpillar.Scripting
             string onUpdate = $" ON UPDATE {foreignKey.OnUpdate.ToText()}";
             string onDelete = $" ON DELETE {foreignKey.OnDelete.ToText()}";
 
-            _script.AppendLine($"\tCONSTRAINT `{foreignKey.GetName()}` FOREIGN KEY (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}`(`{foreignKey.ForeignColumn}`){onUpdate}{onDelete},");
+            _script.AppendLine($"\tCONSTRAINT `{foreignKey.Name}` FOREIGN KEY (`{foreignKey.LocalColumn}`) REFERENCES `{foreignKey.ForeignTable}`(`{foreignKey.ForeignColumn}`){onUpdate}{onDelete},");
         }
 
         #endregion Private Members

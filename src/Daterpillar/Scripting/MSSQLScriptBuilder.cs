@@ -106,12 +106,12 @@ namespace Acklann.Daterpillar.Scripting
         /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Append(Index index)
         {
-            string indexName = index.GetName();
+            string indexName = index.Name;
             string columns = string.Join(", ", index.Columns.Select(x => ($"[{x.Name}] {x.Order.ToText()}")));
 
             if (index.Type == IndexType.PrimaryKey)
             {
-                _script.AppendLine($"ALTER TABLE [{index.Table.Name}] ADD CONSTRAINT [{index.GetName()}] PRIMARY KEY ({columns});");
+                _script.AppendLine($"ALTER TABLE [{index.Table.Name}] ADD CONSTRAINT [{index.Name}] PRIMARY KEY ({columns});");
             }
             else
             {
@@ -130,7 +130,7 @@ namespace Acklann.Daterpillar.Scripting
         public override IScriptBuilder Append(ForeignKey foreignKey)
         {
             string table = foreignKey.LocalTable;
-            string name = foreignKey.GetName();
+            string name = foreignKey.Name;
             string onUpdate = ((foreignKey.OnUpdate == ReferentialAction.Restrict) ? $"ON UPDATE {(ReferentialAction.NoAction.ToText())}" : $"ON UPDATE {foreignKey.OnUpdate.ToText()}");
             string onDelete = ((foreignKey.OnDelete == ReferentialAction.Restrict) ? $"ON DELETE {(ReferentialAction.NoAction.ToText())}" : $"ON DELETE {foreignKey.OnDelete.ToText()}");
 
@@ -185,7 +185,7 @@ namespace Acklann.Daterpillar.Scripting
         public override IScriptBuilder Remove(Index index)
         {
             string table = index.Table.Name;
-            string name = (string.IsNullOrEmpty(index.Name) ? index.GetName() : index.Name);
+            string name = (string.IsNullOrEmpty(index.Name) ? index.Name : index.Name);
             _script.AppendLine($"DROP INDEX [{name}] ON [{table}];");
             return this;
         }
@@ -197,7 +197,7 @@ namespace Acklann.Daterpillar.Scripting
         /// <returns>A reference to this instance after the append operation has completed.</returns>
         public override IScriptBuilder Remove(ForeignKey foreignKey)
         {
-            string name = (string.IsNullOrEmpty(foreignKey.Name) ? foreignKey.GetName() : foreignKey.Name);
+            string name = (string.IsNullOrEmpty(foreignKey.Name) ? foreignKey.Name : foreignKey.Name);
             _script.AppendLine($"ALTER TABLE [{foreignKey.LocalTable}] DROP CONSTRAINT [{name}];");
             return this;
         }
@@ -254,7 +254,7 @@ namespace Acklann.Daterpillar.Scripting
             string onUpdate = ((foreignKey.OnUpdate == ReferentialAction.Restrict) ? $"ON UPDATE {(ReferentialAction.NoAction.ToText())}" : $"ON UPDATE {foreignKey.OnUpdate.ToText()}");
             string onDelete = ((foreignKey.OnDelete == ReferentialAction.Restrict) ? $"ON DELETE {(ReferentialAction.NoAction.ToText())}" : $"ON DELETE {foreignKey.OnDelete.ToText()}");
 
-            _script.AppendLine($"\tCONSTRAINT [{foreignKey.GetName()}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]) {onUpdate} {onDelete},");
+            _script.AppendLine($"\tCONSTRAINT [{foreignKey.Name}] FOREIGN KEY ([{foreignKey.LocalColumn}]) REFERENCES [{foreignKey.ForeignTable}]([{foreignKey.ForeignColumn}]) {onUpdate} {onDelete},");
         }
 
         #endregion Private Members

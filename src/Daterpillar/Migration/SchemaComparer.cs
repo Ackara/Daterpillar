@@ -192,20 +192,20 @@ namespace Acklann.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the foreign key on the right
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the foreign key on the right
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
                     _script.Append(source);
                 }
                 else if (!_foreignKeyComparer.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] foreign key.");
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] foreign key.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] foreign key.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] foreign key.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
@@ -225,20 +225,20 @@ namespace Acklann.Daterpillar.Migration
                 if (source == null && target != null)
                 {
                     // Drop the index on the right
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
                     _script.Remove(target);
                 }
                 else if (source != null && target == null)
                 {
                     // Add the index on the right
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
                     _script.Append(source);
                 }
                 else if (!_indexComparer.Equals(source, target))
                 {
                     // Replace the right with the left
-                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.GetName()}] index.");
-                    _modifications.Add($"Add: [{source.Table.Name}].[{source.GetName()}] index.");
+                    _modifications.Add($"Remove: [{target.Table.Name}].[{target.Name}] index.");
+                    _modifications.Add($"Add: [{source.Table.Name}].[{source.Name}] index.");
                     _script.Remove(target);
                     _script.Append(source);
                 }
@@ -303,7 +303,7 @@ namespace Acklann.Daterpillar.Migration
             for (int i = 0; i < left.Length; i++)
             {
                 l = left[i];
-                SwapMatchingItems2(ref right, (l?.GetName()), i);
+                SwapMatchingItems2(ref right, (l?.Name), i);
             }
         }
 
@@ -340,7 +340,7 @@ namespace Acklann.Daterpillar.Migration
             for (int i = targetIdx; i < right.Length; i++)
             {
                 r = right[i];
-                if (name == r?.GetName())
+                if (name == r?.Name)
                 {
                     temp = right[targetIdx];
                     right[targetIdx] = right[i];

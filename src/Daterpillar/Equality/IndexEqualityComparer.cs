@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Equality
     {
         public bool Equals(Index x, Index y)
         {
-            return x.GetName() == y.GetName()
+            return x.Name == y.Name
                 && x.Type == y.Type
                 && (string.Join(string.Empty, x.Columns)) == (string.Join(string.Empty, y.Columns))
 
@@ -16,7 +16,7 @@ namespace Acklann.Daterpillar.Equality
 
         public int GetHashCode(Index obj)
         {
-            return obj.GetName().GetHashCode() ^ obj.Type.GetHashCode() ^ obj.IsUnique.GetHashCode() ^ (string.Join(string.Empty, obj.Columns)).GetHashCode();
+            return obj.Name.GetHashCode() ^ obj.Type.GetHashCode() ^ obj.IsUnique.GetHashCode() ^ (string.Join(string.Empty, obj.Columns)).GetHashCode();
         }
     }
 }
