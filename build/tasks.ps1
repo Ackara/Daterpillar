@@ -112,7 +112,6 @@ Task "pack" -description "This task packages the project to be published to all 
 	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
 	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
 	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
-	Write-Host "build con: $BuildConfiguration";
 	
 	foreach ($proj in (Get-ChildItem "$ProjectRoot\src" -Recurse -Filter "*.csproj"))
 	{
@@ -125,6 +124,7 @@ Task "pack" -description "This task packages the project to be published to all 
 
 		try
 		{
+			Write-Host "build path: $PWD";
 			if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
 			{
 				Write-LineBreak "MSBUILD";
