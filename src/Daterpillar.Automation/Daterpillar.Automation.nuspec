@@ -1,49 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <package>
   <metadata>
     <id>$id$</id>
     <version>$packageVersion$</version>
-    <description>$description$</description>
     <authors>$authors$</authors>
     <owners>$authors$</owners>
-
     <title>$title$</title>
     <tags>$packageTags$</tags>
     <copyright>licensed under MIT License</copyright>
     <releaseNotes>$PackageReleaseNotes$</releaseNotes>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-
     <iconUrl>$packageIconUrl$</iconUrl>
     <projectUrl>$packageProjectUrl$</projectUrl>
     <licenseUrl>$packageLicenseUrl$</licenseUrl>
+    <description>Daterpillar is a build automation tool and miro-orm.
+</description>
   </metadata>
   <files>
-    <file src="readme.txt"
-          target="" />
-
-    <file src="Daterpillar.Automation.targets"
-          target="build\$id$.targets" />
-
-    <file src="*.psd1"
-          target="tools\net461" />
-
-    <file src="bin\$configuration$\*.deps.json"
-          target="tools\net461" />
-
-    <file src="bin\$configuration$\*.dll"
-          target="tools\net461" />
-
-    <file src="bin\$configuration$\x86\*"
-          target="tools\net461\x86" />
-
-    <file src="bin\$configuration$\x64\*"
-          target="tools\net461\x64" />
-
-    <file src="bin\$configuration$\en-US\*"
-          target="tools\net461\en-US" />
-
-    <file src="Cmdlets\Convert-DllToSchema.ps1"
-          target="tools\net461" />
+    <file src="readme.txt" target="" />
+    <file src="Daterpillar.Automation.targets" target="build\$id$.targets" />
+    <file src="*.psd1" target="tools\net461" />
+    <file src="bin\$configuration$\*.deps.json" target="tools\net461" />
+    <file src="bin\$configuration$\*.dll" target="tools\net461" />
+    <file src="bin\$configuration$\x86\*" target="tools\net461\x86" />
+    <file src="bin\$configuration$\x64\*" target="tools\net461\x64" />
+    <file src="bin\$configuration$\en-US\*" target="tools\net461\en-US" />
+    <file src="Cmdlets\Convert-DllToSchema.ps1" target="tools\net461" />
   </files>
 </package>

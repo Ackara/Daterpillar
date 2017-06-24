@@ -103,7 +103,6 @@ Task "pack" -description "This task packages the project to be published to all 
 	
 	$metadata += "packageOutputPath=$ArtifactsDir;";
 	$metadata += "PackageVersion=$version$($suffix);";
-	$metadata += "packageReleaseNotes=$releaseNotes;";
 	$metadata += "configuration=$BuildConfiguration;";
 	$metadata += "authors=$($Manifest.metadata.author);";
 	$metadata += "packageRequireLicenseAcceptance=$true;";
@@ -112,28 +111,37 @@ Task "pack" -description "This task packages the project to be published to all 
 	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
 	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
 	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
+	$metadata += "packageReleaseNotes=$releaseNotes;";
 	
 	foreach ($proj in (Get-ChildItem "$ProjectRoot\src" -Recurse -Filter "*.csproj"))
 	{
 		$contents = Get-Content $proj.FullName | Out-String;
-		$properties = "title=$([IO.Path]::GetFileNameWithoutExtension($proj.Name));";
+		$title = "title=$([IO.Path]::GetFileNameWithoutExtension($proj.Name));";
 		$description = Get-Content "$($proj.DirectoryName)\readme.txt" | Out-String;
-		$properties += "description=$description;";
-		$properties += $metadata.Trim(';');
+		$properties = ($title + $metadata);
 		Push-Location $proj.DirectoryName;
 
 		try
 		{
-			Write-Host "build path: $PWD";
 			if ([Regex]::IsMatch($contents, '(?i)<TargetFramework>netstandard[0-9.]+</TargetFramework>'))
 			{
+				$description = [Regex]::Replace($description, ';', '%3B');
+				$description = [Regex]::Replace($description, '"', '%22');
+				$description = [Regex]::Replace($description, ',', '%2C');
+				$properties = ($properties + "Description=$description;").Trim(';');
+
 				Write-LineBreak "MSBUILD";
-				Exec { & $msbuild "/t:pack" "/p:$properties" "/verbosity:minimal"; }
+				Exec { & $msbuild /t:pack /verbosity:minimal /p:$properties; }
 			}
 			else
 			{
+				$path = "$($proj.DirectoryName)\$(Split-Path $proj.DirectoryName -Leaf).nuspec";
+				[xml]$nuspec = Get-Content $path;
+				$nuspec.SelectSingleNode('//package/metadata/description').InnerText = [System.Security.SecurityElement]::Escape($description);
+				$nuspec.Save($path);
+
 				Write-LineBreak "NUGET";
-				Exec { & $nuget pack $proj.FullName -OutputDirectory $ArtifactsDir -Properties $properties -IncludeReferencedProjects; }
+				Exec { & $nuget pack $proj.FullName -OutputDirectory $ArtifactsDir -IncludeReferencedProjects -Properties "$properties" }
 			}
 		}
 		finally { Pop-Location; }

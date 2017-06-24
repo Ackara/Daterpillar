@@ -48,7 +48,7 @@ namespace Acklann.Daterpillar
             get
             {
                 string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-                return (string.IsNullOrWhiteSpace(_name) ? $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}" : _name);
+                return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
             }
         }
 
@@ -124,11 +124,5 @@ namespace Acklann.Daterpillar
         {
             return $"[{LocalColumn}] REF [{ForeignTable}].[{ForeignColumn}]";
         }
-
-        #region Private Member
-
-        private string _name;
-
-        #endregion Private Member
     }
 }
