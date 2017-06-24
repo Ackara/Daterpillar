@@ -112,6 +112,7 @@ Task "pack" -description "This task packages the project to be published to all 
 	$metadata += "packageIconUrl=$($Manifest.metadata.iconUrl);";
 	$metadata += "packageProjectUrl=$($Manifest.metadata.projectUrl);";
 	$metadata += "packageLicenseUrl=$($Manifest.metadata.licenseUrl);";
+	Write-Host "build con: $BuildConfiguration";
 	
 	foreach ($proj in (Get-ChildItem "$ProjectRoot\src" -Recurse -Filter "*.csproj"))
 	{
