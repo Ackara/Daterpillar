@@ -42,7 +42,6 @@ namespace Acklann.Daterpillar
                 }
             }
             schema.AssignMissingValues();
-            schema.Sort();
             return schema;
         }
 

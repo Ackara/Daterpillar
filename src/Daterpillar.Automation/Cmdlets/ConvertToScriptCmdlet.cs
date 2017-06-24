@@ -57,6 +57,7 @@ namespace Acklann.Daterpillar.Cmdlets
         {
             if (Schema != null)
             {
+                Schema.Sort();
                 ScriptBuilder.Append(Schema);
                 WriteObject(ScriptBuilder.GetContent());
             }
