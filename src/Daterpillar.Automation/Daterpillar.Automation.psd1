@@ -12,7 +12,7 @@
 RootModule = 'Acklann.Daterpillar.Automation.dll'
 
 # Version number of this module.
-ModuleVersion = '4.7.22'
+ModuleVersion = '4.7.23'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -108,7 +108,11 @@ PrivateData = @{
         IconUri = 'http://static.gigobyte.com/images/daterpillar.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'version 4.7.22
+        ReleaseNotes = 'verion 4.7.23
+-------------
+* Have the ConvertT0-Script auto sort the schema.
+
+version 4.7.22
 --------------
 * Fix SQLiteInformationSchema.
 
@@ -140,46 +144,7 @@ version 4.7.9
 version 4.6.13
 --------------
 Add features:
-* Add DeleteIfExist switch to Add-Database cmdlet
-
-
-version 4.6.1
--------------
-* Rename namespace to Acklann
-
-
-version 4.6.0
--------------
-* Add LINQ capabilities
-
-
-version 4.5.0
--------------
-* Add Import-SQLData cmdlet
-* Add Invoke-SQLCommand cmdlet
-
-
-version 4.4.0
--------------
-* Add Add-Database cmdlet
-* Add Remove-Database cmdlet
-
-
-version 4.3.0
--------------
-* Add ConvertTo-Schema cmdlet
-* Add ConvertTo-Script cmdlet
-* Add New-MigrationScript cmdlet
-
-
-version 4.2.0
--------------
-* add ConvertTo-Script cmdlet
-
-
-version 4.1.0
--------------
-* Add msbuild targets'
+* Add DeleteIfExist switch to Add-Database cmdlet'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
