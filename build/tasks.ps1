@@ -25,8 +25,7 @@ Properties {
 }
 
 Task "default" -description "This task compiles, test and publish the project to nuget.org and powershell gallery." `
--depends @() -precondition {
-}
+-depends @();
 
 Task "test" -description "This task runs all tests." -depends @("pester", "vstest");
 
