@@ -82,7 +82,7 @@
     <column name="Pendulum_Effect" nullable="false" autoIncrement="false">
       <dataType scale="0" precision="0">text</dataType>
     </column>
-    <column name="Level" nullable="false" autoIncrement="false" default="'0'">
+    <column name="Level" nullable="false" autoIncrement="false" default="0">
       <dataType scale="0" precision="0">int</dataType>
     </column>
     <column name="Atk" nullable="false" autoIncrement="false">

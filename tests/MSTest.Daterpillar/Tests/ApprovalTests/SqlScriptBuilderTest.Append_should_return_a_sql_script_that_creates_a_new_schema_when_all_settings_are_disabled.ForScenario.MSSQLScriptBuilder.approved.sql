@@ -49,7 +49,7 @@ CREATE TABLE [card]
 	[Name] VARCHAR(128) NOT NULL,
 	[Text] TEXT NOT NULL,
 	[Pendulum_Effect] TEXT NOT NULL,
-	[Level] TINYINT NOT NULL DEFAULT '0',
+	[Level] TINYINT NOT NULL DEFAULT 0,
 	[Atk] INT NOT NULL,
 	[Def] INT NOT NULL,
 	[Card_Type_Id] INT NOT NULL,

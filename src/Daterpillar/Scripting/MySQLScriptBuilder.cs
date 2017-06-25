@@ -92,7 +92,7 @@ namespace Acklann.Daterpillar.Scripting
             string dataType = TypeResolver.GetTypeName(column.DataType);
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY IDENTITY(1, 1)" : string.Empty);
-            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT '{column.DefaultValue}'");
+            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT {column.DefaultValue}");
             string comment = (string.IsNullOrEmpty(column.Comment) ? string.Empty : $" COMMENT '{column.Comment}'");
 
             _script.AppendLine($"ALTER TABLE `{table}` ADD `{column.Name}` {dataType}{notNull}{defaultValue}{autoIncrement}{comment};");
@@ -238,7 +238,7 @@ namespace Acklann.Daterpillar.Scripting
             string notNull = (column.IsNullable ? string.Empty : " NOT NULL");
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY AUTO_INCREMENT" : string.Empty);
             string comment = (string.IsNullOrEmpty(column.Comment) ? string.Empty : $" COMMENT '{column.Comment}'");
-            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT '{column.DefaultValue}'");
+            string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT {column.DefaultValue}");
 
             _script.AppendLine($"\t`{column.Name}` {dataType}{notNull}{defaultValue}{autoIncrement}{comment},");
         }
