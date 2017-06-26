@@ -154,7 +154,7 @@ CREATE INDEX IF NOT EXISTS [card_number_Pack_Id] ON [card_number] ([Pack_Id] ASC
 -- ----------------------------------------
 CREATE TABLE IF NOT EXISTS [effect]
 (
-	[Id] INTEGER NOT NULL,
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[Name] VARCHAR(32) NOT NULL
 );
 

@@ -36,6 +36,7 @@ namespace Acklann.Daterpillar.Migration
         /// <param name="columnData">The column data.</param>
         internal override void LoadColumns(Table table, DataTable columnData)
         {
+            if (table.Name == "effect") System.Diagnostics.Debugger.Break();
             var pkColumns = new List<Daterpillar.ColumnName>();
 
             foreach (DataRow row in columnData.Rows)
@@ -110,9 +111,6 @@ namespace Acklann.Daterpillar.Migration
                 var newIndex = new Index();
                 newIndex.Type = (Convert.ToString(row["origin"]) == "pk" ? IndexType.PrimaryKey : IndexType.Index);
                 newIndex.IsUnique = Convert.ToBoolean(row[ColumnName.Unique]);
-
-                if (table.Name == "card_number" && newIndex.Type == IndexType.PrimaryKey) System.Diagnostics.Debugger.Break();
-                //if (table.Name == "pack") System.Diagnostics.Debugger.Break();
 
                 // Find and load the index columns
                 using (var command = Connection.CreateCommand())

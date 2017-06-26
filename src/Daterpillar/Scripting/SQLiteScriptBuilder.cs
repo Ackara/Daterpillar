@@ -288,7 +288,7 @@ namespace Acklann.Daterpillar.Scripting
             string autoIncrement = (column.AutoIncrement ? $" PRIMARY KEY AUTOINCREMENT" : string.Empty);
             string defaultValue = (column.DefaultValue == null ? string.Empty : $" DEFAULT {column.DefaultValue}");
 
-            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{defaultValue},");
+            _script.AppendLine($"\t[{column.Name}] {dataType}{notNull}{defaultValue}{autoIncrement},");
         }
 
         private void AppendToTable(ForeignKey foreignKey)

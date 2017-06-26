@@ -83,6 +83,9 @@ namespace Acklann.Daterpillar.Migration
             if (_columnComparer == null) _columnComparer = _comparerFactory.CreateColumnComparer($"{syntax}{nameof(Column)}EqualityComparer");
             if (_foreignKeyComparer == null) _foreignKeyComparer = _comparerFactory.CreateForeignKeyComparer($"{syntax}{nameof(ForeignKey)}EqualityComparer");
 
+            var src = source.Clone();
+            var tgt = target.Clone();
+
             FindDiscrepanciesBetween(source.Tables.ToArray(), target.Tables.ToArray());
             ComputeResult(source, target, out MigrationState state);
             modifications = string.Join(Environment.NewLine, _modifications);
@@ -182,7 +185,7 @@ namespace Acklann.Daterpillar.Migration
         private void FindDiscrepanciesBetween(ForeignKey[] left, ForeignKey[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
-            SortTheItemsOfBothArraysByName2(ref left, ref right);
+            SortTheItemsOfBothArraysByName(ref left, ref right);
 
             for (int i = 0; i < left.Length; i++)
             {
@@ -215,13 +218,23 @@ namespace Acklann.Daterpillar.Migration
         private void FindDiscrepanciesBetween(Index[] left, Index[] right)
         {
             EnsureBothArraysAreTheSameSize(ref left, ref right);
-            SortTheItemsOfBothArraysByName2(ref left, ref right);
+            SortTheItemsOfBothArraysByName(ref left, ref right);
 
             for (int i = 0; i < left.Length; i++)
             {
                 Index source = left[i];
                 Index target = right[i];
-                
+
+                /// TODO: This condition exist because SQLite do not support retrieving auto-incremented indexes from
+                /// the information schema, therefore I am opt-in to not compare SQLite primary keys for now. I need
+                /// to come up with a better solution.
+                if ((source?.Table.Schema.Syntax == Syntax.SQLite || target?.Table.Schema.Syntax == Syntax.SQLite)
+                    &&
+                    (source?.Type == IndexType.PrimaryKey || target?.Type == IndexType.PrimaryKey))
+                {
+                    continue;
+                }
+
                 if (source == null && target != null)
                 {
                     // Drop the index on the right
