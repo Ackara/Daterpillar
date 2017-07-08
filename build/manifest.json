@@ -14,8 +14,8 @@
     "version":
     {
       "major": 4,
-      "minor": 7,
-      "patch": 26
+      "minor": 8,
+      "patch": 0
     },
     "stage_all_files": true,
     "commit_changes": true,

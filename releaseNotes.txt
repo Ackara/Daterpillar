@@ -1,4 +1,8 @@
-﻿verion 4.7.23
+﻿version 4.8.0
+-------------
+* Add ToAssignments method to LinqToSqlConverter class.
+
+verion 4.7.23
 -------------
 * Have the ConvertT0-Script auto sort the schema.
 
