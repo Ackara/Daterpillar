@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Linq
 
         internal static Regex _operatorPattern, _comparisonPattern;
 
-        public static IEnumerable<string> Convert<T>(params Expression<Func<T, object>>[] expressions)
+        public static IEnumerable<string> ToColumnList<T>(params Expression<Func<T, object>>[] expressions)
         {
             Type type = typeof(T);
             string[] names = null;
@@ -54,7 +54,45 @@ namespace Acklann.Daterpillar.Linq
             }
         }
 
-        public static string Convert<T>(Syntax syntax, Expression<Func<T, bool>> expression)
+        public static IEnumerable<string> ToAssignments<T>(object obj, params Expression<Func<T, object>>[] expressions)
+        {
+            Type type = typeof(T);
+            string[] names = null;
+
+            foreach (var exp in expressions)
+            {
+                if (exp.Body is MemberExpression me)
+                {
+                    names = new string[1] { me.Member.Name };
+                }
+                else if (exp.Body is UnaryExpression ue)
+                {
+                    var ume = ue.Operand as MemberExpression;
+                    names = new string[1] { ume?.Member.Name };
+                }
+                else if (exp.Body is NewExpression ne)
+                {
+                    names = ne.Members.Select(x => x.Name).ToArray();
+                }
+
+                foreach (var memberName in names)
+                {
+                    PropertyInfo property = type.GetRuntimeProperties().FirstOrDefault(p => p.Name == memberName);
+                    ColumnAttribute attribute = property?.GetCustomAttribute<ColumnAttribute>();
+                    if (attribute != null)
+                    {
+                        string col = (string.IsNullOrEmpty(attribute.Name) ? memberName : attribute.Name);
+                        yield return $"{col}={property.GetValue(obj).ToSQL()}";
+                    }
+                    else if (string.IsNullOrEmpty(memberName) == false)
+                    {
+                        yield return $"{memberName}={property.GetValue(obj).ToSQL()}";
+                    }
+                }
+            }
+        }
+
+        public static string ToComparisons<T>(Syntax syntax, Expression<Func<T, bool>> expression)
         {
             string left, right;
             string paramName = expression.Parameters[0]?.Name ?? string.Empty;

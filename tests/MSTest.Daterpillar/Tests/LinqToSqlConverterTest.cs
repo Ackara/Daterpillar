@@ -3,6 +3,7 @@ using Acklann.Daterpillar.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Daterpillar.Fake;
 using Shouldly;
+using System;
 
 namespace MSTest.Daterpillar.Tests
 {
@@ -10,14 +11,14 @@ namespace MSTest.Daterpillar.Tests
     public class LinqToSqlConverterTest
     {
         [TestMethod]
-        public void Convert_should_return_a_string_listing_the_column_names_specified_linq_expression()
+        public void ToColumnList_should_return_a_string_listing_the_column_names_specified_linq_expression()
         {
             // Act
-            var result1 = LinqToSqlConverter.Convert<SimpleTable>(x => x.Sex);
-            var result2 = LinqToSqlConverter.Convert<SimpleTable>(x => x.Date);
-            var result3 = LinqToSqlConverter.Convert<SimpleTable>(x => x.Name.Length);
-            var result4 = LinqToSqlConverter.Convert<SimpleTable>(x => x.Id, x => x.Name);
-            var result5 = LinqToSqlConverter.Convert<SimpleTable>(x => new { x.Id, x.Name, x.Date });
+            var result1 = LinqToSqlConverter.ToColumnList<SimpleTable>(x => x.Sex);
+            var result2 = LinqToSqlConverter.ToColumnList<SimpleTable>(x => x.Date);
+            var result3 = LinqToSqlConverter.ToColumnList<SimpleTable>(x => x.Name.Length);
+            var result4 = LinqToSqlConverter.ToColumnList<SimpleTable>(x => x.Id, x => x.Name);
+            var result5 = LinqToSqlConverter.ToColumnList<SimpleTable>(x => new { x.Id, x.Name, x.Date });
 
             // Assert
             result1.ShouldBe(new string[] { nameof(SimpleTable.Sex) });
@@ -28,15 +29,39 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        public void Convert_should_return_a_string_with_the_name_value_pairs_specified_in_linq_expression()
+        public void ToAssignments_should_return_a_string_listing_the_column_names_with_their_valeus_specified_linq_expression()
+        {
+            // Arrange
+            var sample = new SimpleTable()
+            {
+                Sex = "f",
+                Date = default(DateTime),
+                Id = 2,
+                Name = "foobar"
+            };
+
+            // Act
+            var result1 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Sex);
+            var result2 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Date);
+            var result4 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Id, x => x.Name);
+            var result5 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => new { x.Id, x.Name, x.Date });
+
+            // Assert
+            result1.ShouldBe(new string[] { $"{nameof(SimpleTable.Sex)}='{sample.Sex}'" });
+            result2.ShouldBe(new string[] { $"{SimpleTable.CreatedOn}={sample.Date.ToSQL()}" });
+            result4.ShouldBe(new string[] { $"{nameof(SimpleTable.Id)}='{sample.Id}'", $"{nameof(SimpleTable.Name)}='{sample.Name}'" });
+            result5.ShouldBe(new string[] { $"{nameof(SimpleTable.Id)}='{sample.Id}'", $"{nameof(SimpleTable.Name)}='{sample.Name}'", $"{SimpleTable.CreatedOn}={sample.Date.ToSQL()}" });
+        }
+
+        [TestMethod]
+        public void ToComparisons_should_return_a_string_with_the_name_value_pairs_specified_in_linq_expression()
         {
             // Act
-            var result1 = LinqToSqlConverter.Convert<SimpleTable>(Syntax.MySQL, x => x.Amount >= 1.25M);
-            var result2 = LinqToSqlConverter.Convert<SimpleTable>(Syntax.Generic, x => x.Amount < 100 && x.Sex == "m");
-            var result3 = LinqToSqlConverter.Convert<SimpleTable>(Syntax.Generic, x => x.Amount >= 100 && x.Sex == "m" && x.Id != 0);
-            var result4 = LinqToSqlConverter.Convert<SimpleTable>(Syntax.Generic, x => (x.Exist == true && x.Sex == "f" && x.Rate > 3) || x.Id == 124);
-
-            var result5 = LinqToSqlConverter.Convert<SimpleTable>(Syntax.Generic, x => x.Amount > (10 * 2));
+            var result1 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.MySQL, x => x.Amount >= 1.25M);
+            var result2 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount < 100 && x.Sex == "m");
+            var result3 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount >= 100 && x.Sex == "m" && x.Id != 0);
+            var result4 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => (x.Exist == true && x.Sex == "f" && x.Rate > 3) || x.Id == 124);
+            var result5 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount > (10 * 2));
 
             // Assert
             result1.ShouldBe($"`amount` >= '1.25'");

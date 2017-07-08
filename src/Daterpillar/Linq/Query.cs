@@ -204,7 +204,7 @@ namespace Acklann.Daterpillar.Linq
 
         public Query<T> Select(params Expression<Func<T, object>>[] selectors)
         {
-            Select(LinqToSqlConverter.Convert(selectors).ToArray());
+            Select(LinqToSqlConverter.ToColumnList(selectors).ToArray());
             return this;
         }
 
@@ -244,19 +244,19 @@ namespace Acklann.Daterpillar.Linq
 
         public Query<T> Where(Expression<Func<T, bool>> expression)
         {
-            Where(LinqToSqlConverter.Convert(Syntax, expression));
+            Where(LinqToSqlConverter.ToComparisons(Syntax, expression));
             return this;
         }
 
         public Query<T> GroupBy(params Expression<Func<T, object>>[] selectors)
         {
-            GroupBy(LinqToSqlConverter.Convert(selectors).ToArray());
+            GroupBy(LinqToSqlConverter.ToColumnList(selectors).ToArray());
             return this;
         }
 
         public Query<T> OrderBy(params Expression<Func<T, object>>[] selectors)
         {
-            OrderBy(LinqToSqlConverter.Convert(selectors).ToArray());
+            OrderBy(LinqToSqlConverter.ToColumnList(selectors).ToArray());
             return this;
         }
     }
