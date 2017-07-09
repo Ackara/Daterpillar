@@ -54,7 +54,7 @@ namespace Acklann.Daterpillar.Linq
             }
         }
 
-        public static IEnumerable<string> ToAssignments<T>(object obj, params Expression<Func<T, object>>[] expressions)
+        public static IEnumerable<string> ToAssignments<T>(Syntax syntax, object obj, params Expression<Func<T, object>>[] expressions)
         {
             Type type = typeof(T);
             string[] names = null;
@@ -81,12 +81,12 @@ namespace Acklann.Daterpillar.Linq
                     ColumnAttribute attribute = property?.GetCustomAttribute<ColumnAttribute>();
                     if (attribute != null)
                     {
-                        string col = (string.IsNullOrEmpty(attribute.Name) ? memberName : attribute.Name);
+                        string col = (string.IsNullOrEmpty(attribute.Name) ? memberName : attribute.Name).Escape(syntax);
                         yield return $"{col}={property.GetValue(obj).ToSQL()}";
                     }
                     else if (string.IsNullOrEmpty(memberName) == false)
                     {
-                        yield return $"{memberName}={property.GetValue(obj).ToSQL()}";
+                        yield return $"{memberName.Escape(syntax)}={property.GetValue(obj).ToSQL()}";
                     }
                 }
             }
@@ -100,8 +100,33 @@ namespace Acklann.Daterpillar.Linq
             if (expression.Body is BinaryExpression be)
             {
                 string op = ToOperator(be.NodeType);
-                left = Reduce<T>(be.Left, syntax);
-                right = Reduce<T>(be.Right, syntax);
+                left = Reduce<T>(be.Left, syntax, default(T));
+                right = Reduce<T>(be.Right, syntax, default(T));
+
+                return $"{left} {op} {right}";
+            }
+            else return null;
+        }
+
+        public static string ToComparisons<T>(Syntax syntax, T obj, Expression<Func<T, bool>> expression)
+        {
+            string left, right;
+            string paramName = expression.Parameters[0]?.Name ?? string.Empty;
+
+            if (expression.Body is BinaryExpression be)
+            {
+                string op = ToOperator(be.NodeType);
+                left = Reduce<T>(be.Left, syntax, obj);
+                right = Reduce<T>(be.Right, syntax, obj);
+
+                if (left == right)
+                {
+                    Type type = typeof(T);
+                    PropertyInfo prop = type.GetRuntimeProperties().FirstOrDefault(x => x.Name == left);
+                    ColumnAttribute attribute = prop?.GetCustomAttribute<ColumnAttribute>();
+                    left = (attribute?.Name ?? left).Escape(syntax);
+                    right = prop.GetValue(obj).ToSQL();
+                }
 
                 return $"{left} {op} {right}";
             }
@@ -110,12 +135,11 @@ namespace Acklann.Daterpillar.Linq
 
         #region Private Members
 
-        internal static string Reduce<T>(Expression exp, Syntax syntax)
+        internal static string Reduce<T>(Expression exp, Syntax syntax, T obj)
         {
             if (exp is MemberExpression me)
             {
-                string columnName = GetColumnName<T>(me).Escape(syntax);
-                return columnName;
+                return (obj == null ? GetColumnName<T>(me).Escape(syntax) : me.Member.Name);
             }
             else if (exp is ConstantExpression ce)
             {
@@ -127,11 +151,20 @@ namespace Acklann.Daterpillar.Linq
             }
             else if (exp is BinaryExpression be)
             {
-                string left = Reduce<T>(be.Left, syntax);
-                string right = Reduce<T>(be.Right, syntax);
+                string left = Reduce<T>(be.Left, syntax, obj);
+                string right = Reduce<T>(be.Right, syntax, obj);
 
                 string op = ToOperator(be.NodeType);
                 bool canReduceFurther = IsOperator(be.NodeType);
+
+                if (left == right)
+                {
+                    Type type = typeof(T);
+                    PropertyInfo prop = type.GetRuntimeProperties().FirstOrDefault(x => x.Name == left);
+                    ColumnAttribute attribute = prop?.GetCustomAttribute<ColumnAttribute>();
+                    left = (attribute?.Name ?? left).Escape(syntax);
+                    right = prop.GetValue(obj).ToSQL();
+                }
 
                 return (canReduceFurther ? $"({left} {op} {right})" : $"{left} {op} {right}");
             }

@@ -248,6 +248,12 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public Query<T> Where(T obj, Expression<Func<T, bool>> expression)
+        {
+            Where(LinqToSqlConverter.ToComparisons(Syntax, obj, expression));
+            return this;
+        }
+
         public Query<T> GroupBy(params Expression<Func<T, object>>[] selectors)
         {
             GroupBy(LinqToSqlConverter.ToColumnList(selectors).ToArray());

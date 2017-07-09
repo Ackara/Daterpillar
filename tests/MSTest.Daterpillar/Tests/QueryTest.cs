@@ -147,5 +147,20 @@ namespace MSTest.Daterpillar.Tests
 
             Approvals.Verify(query);
         }
+
+        [TestMethod]
+        public void ToString_should_return_a_mysql_query_when_linq_expressions_are_passed()
+        {
+            var sample = new SimpleTable() { Id = 23 };
+
+            var query = new Query<SimpleTable>(Syntax.MySQL)
+                .Select(x => new { x.Id, x.Name, x.Sex })
+                .From()
+                .Where(sample, x => x.Id == sample.Id)
+                .GroupBy(x => x.Sex)
+                .OrderBy(x => x.Amount);
+
+            Approvals.Verify(query);
+        }
     }
 }

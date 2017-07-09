@@ -41,10 +41,10 @@ namespace MSTest.Daterpillar.Tests
             };
 
             // Act
-            var result1 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Sex);
-            var result2 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Date);
-            var result4 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => x.Id, x => x.Name);
-            var result5 = LinqToSqlConverter.ToAssignments<SimpleTable>(sample, x => new { x.Id, x.Name, x.Date });
+            var result1 = LinqToSqlConverter.ToAssignments<SimpleTable>(Syntax.Generic, sample, x => x.Sex);
+            var result2 = LinqToSqlConverter.ToAssignments<SimpleTable>(Syntax.Generic, sample, x => x.Date);
+            var result4 = LinqToSqlConverter.ToAssignments<SimpleTable>(Syntax.Generic, sample, x => x.Id, x => x.Name);
+            var result5 = LinqToSqlConverter.ToAssignments<SimpleTable>(Syntax.Generic, sample, x => new { x.Id, x.Name, x.Date });
 
             // Assert
             result1.ShouldBe(new string[] { $"{nameof(SimpleTable.Sex)}='{sample.Sex}'" });
@@ -56,12 +56,22 @@ namespace MSTest.Daterpillar.Tests
         [TestMethod]
         public void ToComparisons_should_return_a_string_with_the_name_value_pairs_specified_in_linq_expression()
         {
+            var sample = new SimpleTable()
+            {
+                Id = 23,
+                Name = "testing",
+                Date = new DateTime(1993, 01, 12)
+            };
+
             // Act
             var result1 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.MySQL, x => x.Amount >= 1.25M);
             var result2 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount < 100 && x.Sex == "m");
             var result3 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount >= 100 && x.Sex == "m" && x.Id != 0);
             var result4 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => (x.Exist == true && x.Sex == "f" && x.Rate > 3) || x.Id == 124);
             var result5 = LinqToSqlConverter.ToComparisons<SimpleTable>(Syntax.Generic, x => x.Amount > (10 * 2));
+            var result6 = LinqToSqlConverter.ToComparisons(Syntax.Generic, sample, x => x.Id == sample.Id);
+            var result7 = LinqToSqlConverter.ToComparisons(Syntax.Generic, sample, x => x.Date == sample.Date);
+            var result8 = LinqToSqlConverter.ToComparisons(Syntax.Generic, sample, x => x.Date == sample.Date && x.Id == sample.Id);
 
             // Assert
             result1.ShouldBe($"`amount` >= '1.25'");
@@ -69,6 +79,9 @@ namespace MSTest.Daterpillar.Tests
             result3.ShouldBe("(amount >= '100' AND Sex = 'm') AND Id <> '0'");
             result4.ShouldBe("((Exist = '1' AND Sex = 'f') AND Rate > '3') OR Id = '124'");
             result5.ShouldBe("amount > '20'");
+            result6.ShouldBe($"Id = '{sample.Id}'");
+            result7.ShouldBe($"{SimpleTable.CreatedOn} = {sample.Date.ToSQL()}");
+            result8.ShouldBe($"{SimpleTable.CreatedOn} = {sample.Date.ToSQL()} AND Id = '{sample.Id}'");
         }
     }
 }

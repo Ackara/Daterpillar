@@ -1,0 +1,13 @@
+﻿SELECT
+	`Id`,
+	`Name`,
+	`Sex`
+FROM
+	``table_with_no_constraints``
+WHERE
+	`Id` = '23'
+GROUP BY
+	`Sex`
+ORDER BY
+	`amount`
+;
