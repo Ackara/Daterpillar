@@ -3,7 +3,7 @@
 	`Name`,
 	`Sex`
 FROM
-	``table_with_no_constraints``
+	`table_with_no_constraints`
 WHERE
 	`Id` = '23'
 GROUP BY

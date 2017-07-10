@@ -155,7 +155,7 @@ namespace MSTest.Daterpillar.Tests
 
             var query = new Query<SimpleTable>(Syntax.MySQL)
                 .Select(x => new { x.Id, x.Name, x.Sex })
-                .From()
+                .From(typeof(SimpleTable))
                 .Where(sample, x => x.Id == sample.Id)
                 .GroupBy(x => x.Sex)
                 .OrderBy(x => x.Amount);

@@ -236,7 +236,7 @@ namespace Acklann.Daterpillar.Linq
                     TableAttribute attribute = type.GetTypeInfo().GetCustomAttribute<TableAttribute>();
                     if (attribute != null)
                     {
-                        yield return (string.IsNullOrEmpty(attribute.Name) ? type.Name.Escape(Syntax) : attribute.Name.Escape(Syntax));
+                        yield return (string.IsNullOrEmpty(attribute.Name) ? type.Name : attribute.Name);
                     }
                 }
             }
