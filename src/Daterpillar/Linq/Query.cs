@@ -259,5 +259,10 @@ namespace Acklann.Daterpillar.Linq
             OrderBy(LinqToSqlConverter.ToColumnList(selectors).ToArray());
             return this;
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }
