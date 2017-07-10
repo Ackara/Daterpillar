@@ -196,6 +196,12 @@ namespace Acklann.Daterpillar.Linq
         {
         }
 
+        public new Query<T> SelectAll()
+        {
+            base.SelectAll();
+            return this;
+        }
+
         public Query<T> Select(params Expression<Func<T, object>>[] selectors)
         {
             Select(LinqToSqlConverter.ToColumnList(selectors).ToArray());
