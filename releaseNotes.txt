@@ -1,4 +1,8 @@
-﻿version 4.8.0
+﻿version 4.8.4
+-------------
+* Fix Invoke-SqlCommand inability to handle GO statements.
+
+version 4.8.0
 -------------
 * Add ToAssignments method to LinqToSqlConverter class.
 
