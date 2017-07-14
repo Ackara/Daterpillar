@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Migration;
-using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
@@ -76,16 +75,8 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         protected override void BeginProcessing()
         {
-            BuildConnectionString(out string connectionString);
-            IServerManager server = ServerManagerFactory.CreateInstance(Syntax, connectionString);
-            
-            _connection = server.GetConnection();
-            if (_connection.State != ConnectionState.Open)
-            {
-                _connection.Open();
-                var builder = new SqlConnectionStringBuilder(_connection.ConnectionString);
-                WriteVerbose($"connected to '{builder.DataSource}' server.");
-            }
+            string connectionString = BuildConnectionString();
+            _server = ServerManagerFactory.CreateInstance(Syntax, connectionString);
         }
 
         /// <summary>
@@ -93,15 +84,10 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            using (var command = _connection.CreateCommand())
-            {
-                command.CommandText = Script;
-                command.ExecuteNonQuery();
-
-                int limit = (Script.Length > 25 ? 25 : Script.Length);
-                WriteVerbose($"executed command '{Script.Substring(0, limit)} ...' successfully.");
-                WriteObject(true);
-            }
+            int rowsAffected = _server.ExecuteNonQuery(Script);
+            int limit = (Script.Length > 25 ? 25 : Script.Length);
+            WriteVerbose($"executed command '{Script.Substring(0, limit)} ...' successfully.");
+            WriteObject(true);
         }
 
         /// <summary>
@@ -109,13 +95,13 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         protected override void EndProcessing()
         {
-            _connection?.Dispose();
+            _server?.Dispose();
         }
 
         #region Private Members
 
         private const string defaultArgs = "default", explictArgs = "explict";
-        private IDbConnection _connection;
+        private IServerManager _server;
 
         private string GetHost(string connectionString)
         {
@@ -123,8 +109,9 @@ namespace Acklann.Daterpillar.Cmdlets
             return builder.DataSource;
         }
 
-        private void BuildConnectionString(out string connectionString)
+        private string BuildConnectionString()
         {
+            string connectionString = "";
             if (string.IsNullOrEmpty(ConnectionString))
             {
                 string dataSource = Path.IsPathRooted(Host) ? "Data Source" : "server";
@@ -138,6 +125,8 @@ namespace Acklann.Daterpillar.Cmdlets
                 connectionString = builder.ConnectionString;
             }
             else { connectionString = ConnectionString; }
+
+            return connectionString;
         }
 
         #endregion Private Members
