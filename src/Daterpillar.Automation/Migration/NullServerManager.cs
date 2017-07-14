@@ -35,6 +35,11 @@ namespace Acklann.Daterpillar.Migration
             return true;
         }
 
+        public int ExecuteNonQuery(string script)
+        {
+            return 0;
+        }
+
         /// <summary>
         /// Does nothing.
         /// </summary>

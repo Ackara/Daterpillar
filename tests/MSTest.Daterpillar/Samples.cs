@@ -7,6 +7,7 @@
 		internal const string daterpillarXSD = "daterpillar.xsd";
 
 		internal const string dataTypeTableCSV = @"dataTypeTable.csv";
+		internal const string mssqlSQL = @"mssql.sql";
 		internal const string supportedDatabasesCSV = @"supportedDatabases.csv";
 		internal const string text_formatsCSV = @"text_formats.csv";
 		internal const string XMLFile1XML = @"XMLFile1.xml";

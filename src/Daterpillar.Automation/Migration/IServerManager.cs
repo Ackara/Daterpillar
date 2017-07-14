@@ -23,6 +23,13 @@ namespace Acklann.Daterpillar.Migration
         bool DropDatabase(string databaseName);
 
         /// <summary>
+        /// Executes a SQL statement against the underlying connection object.
+        /// </summary>
+        /// <param name="script">The SQL statement.</param>
+        /// <returns>The number of rows affected.</returns>
+        int ExecuteNonQuery(string script);
+
+        /// <summary>
         /// Creates a new <see cref="IDbConnection"/> instance.
         /// </summary>
         /// <returns>A new <see cref="IDbConnection"/> instance.</returns>

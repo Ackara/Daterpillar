@@ -78,6 +78,7 @@ namespace Acklann.Daterpillar.Cmdlets
         {
             BuildConnectionString(out string connectionString);
             IServerManager server = ServerManagerFactory.CreateInstance(Syntax, connectionString);
+            
             _connection = server.GetConnection();
             if (_connection.State != ConnectionState.Open)
             {

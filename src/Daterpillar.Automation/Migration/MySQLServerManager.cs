@@ -57,6 +57,21 @@ namespace Acklann.Daterpillar.Migration
         }
 
         /// <summary>
+        /// Executes a SQL statement against the underlying connection object.
+        /// </summary>
+        /// <param name="script">The SQL statement.</param>
+        /// <returns>The number of rows affected.</returns>
+        public int ExecuteNonQuery(string script)
+        {
+            OpenConnectionIfClosed();
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = script;
+                return command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
         /// Creates a new <see cref="IDbConnection" /> instance.
         /// </summary>
         /// <returns>A new <see cref="IDbConnection" /> instance.</returns>

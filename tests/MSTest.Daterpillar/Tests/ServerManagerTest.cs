@@ -8,6 +8,7 @@ namespace MSTest.Daterpillar.Tests
 {
     [TestClass]
     [DeploymentItem(FName.X86)]
+    [DeploymentItem(FName.Samples)]
     public class ServerManagerTest
     {
         // MSSQL
@@ -75,6 +76,30 @@ namespace MSTest.Daterpillar.Tests
             // Assert
             databaseDoNotExist.ShouldBeTrue();
             operationWasSuccessful.ShouldBeTrue();
+        }
+
+        [TestMethod]
+        public void ExecuteNonQuery_should_successfully_execute_a_mssql_command_when_invoked()
+        {
+            // Arrange
+            int results, totalTables;
+            var script = File.ReadAllText(MockData.GetFilePath(FName.mssqlSQL));
+            var sut = new MSSQLServerManager(ConnectionFactory.GetMSSQLConnectionString("dtpl_tempEmpty"));
+
+            // Act
+            using (sut)
+            {
+                using (var connection = ConnectionFactory.CreateMSSQLConnection("dtpl_tempEmpty"))
+                {
+                    connection.UseEmptyDatabase();
+                    results = sut.ExecuteNonQuery(script);
+
+                    // select TABLE_NAME, TABLE_TYPE from INFORMATION_SCHEMA.TABLES;
+                }
+            }
+
+            // Assert
+            results.ShouldBeGreaterThan(0);
         }
 
         // MySQL

@@ -31,7 +31,7 @@ namespace Acklann.Daterpillar.Migration
         {
             if (_server.Databases[databaseName] == null)
             {
-                new Database(_server, databaseName).Create();
+                new Database(_server, databaseName) { AutoClose = true }.Create();
                 return true;
             }
             else return false;
@@ -54,6 +54,17 @@ namespace Acklann.Daterpillar.Migration
         }
 
         /// <summary>
+        /// Executes a SQL statement against the underlying connection object.
+        /// </summary>
+        /// <param name="script">The SQL statement.</param>
+        /// <returns>The number of rows affected.</returns>
+        public int ExecuteNonQuery(string script)
+        {
+            _server.ConnectionContext.DatabaseName = _connectionString.InitialCatalog;
+            return _server.ConnectionContext.ExecuteNonQuery(script);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="IDbConnection" /> instance.
         /// </summary>
         /// <returns>A new <see cref="IDbConnection" /> instance.</returns>
@@ -67,6 +78,7 @@ namespace Acklann.Daterpillar.Migration
         /// </summary>
         public void Dispose()
         {
+            _server?.ConnectionContext?.Disconnect();
         }
 
         #region Private Members
