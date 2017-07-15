@@ -1,5 +1,7 @@
 ﻿using Microsoft.SqlServer.Management.Smo;
 using System.Data;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Migration
 {
@@ -60,8 +62,22 @@ namespace Acklann.Daterpillar.Migration
         /// <returns>The number of rows affected.</returns>
         public int ExecuteNonQuery(string script)
         {
-            _server.ConnectionContext.DatabaseName = _connectionString.InitialCatalog;
-            return _server.ConnectionContext.ExecuteNonQuery(script);
+            int rowAffected = 0;
+            string[] batches = Regex.Split(script, @"\s+GO\s+", RegexOptions.IgnoreCase);
+            using (var connection = new SqlConnection(_connectionString.ConnectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    foreach (var batch in batches)
+                    {
+                        command.CommandText = batch;
+                        rowAffected += command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            return rowAffected;
         }
 
         /// <summary>

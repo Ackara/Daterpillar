@@ -36,9 +36,6 @@ if (-not (Test-Path $appConfig -PathType Leaf))
 		<connectionStrings>
 			$entries
 		</connectionStrings>
-		<startup useLegacyV2RuntimeActivationPolicy="true">
-			<supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/>
-		</startup>
 	</configuration>
 "@.Trim() | Out-File $appConfig -Encoding utf8;
 	Write-Host "`t* restored the 'app.config' file." -ForegroundColor Green;
