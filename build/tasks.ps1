@@ -197,14 +197,6 @@ Task "publish" -alias "push" -description "This task publishes all nuget package
 
 Task "version" -alias "v" -description "This task increments the project's version numbers." `
 -depends @("init") -action {
-	#$msg = Show-Inputbox "enter your release notes." "RELEASE NOTES";
-	#$msg = (& { if ([String]::IsNullOrEmpty($msg)) { return ""; } else { return $msg.Trim(); } });
-	#$version = (Get-VersionNumber -config $ManifestPath).ToString($true);
-	#$header = "version $version`n";
-	#$header += [String]::Join("", [System.Linq.Enumerable]::Repeat("-", $header.Length - 1));
-	#$releaseNotes = Get-Content $ReleaseNotesPath | Out-String;
-	#if (-not [String]::IsNullOrEmpty($msg)) { "$header`n$msg`n`n`n$releaseNotes" | Out-File $ReleaseNotesPath -Encoding utf8; }
-	
 	Update-VersionNumber "$ProjectRoot\src" -config $ManifestPath -Major:$Major -Minor:$Minor -Patch;
 }
 
