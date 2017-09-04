@@ -9,6 +9,9 @@ using the CLR types defined and decorated with the appropriate [System.Attribute
 .PARAMETER AssemblyFile
 The absolute path to the assembly file.
 
+.PARAMETER OutputPath
+The absolute path to save the generated schema file.
+
 .INPUTS
 [String]
 
@@ -21,7 +24,12 @@ This example generates a schema file from from the types defined in the '.dll' f
 
 #>
 
-Param([Parameter(Mandatory)][string]$AssemblyFile)
+Param(
+	[Parameter(Mandatory)]
+	[string]$AssemblyFile,
+
+	[string]$OutputPath
+)
 
 if (Test-Path $AssemblyFile -PathType Leaf)
 {
@@ -45,11 +53,15 @@ if (Test-Path $AssemblyFile -PathType Leaf)
 
 	$dll = [System.Reflection.Assembly]::LoadFrom($AssemblyFile);
 	[Acklann.Daterpillar.Schema]$schema = [Acklann.Daterpillar.AssemblyToSchemaConverter]::ToSchema($dll);
-	$schemaFile = [IO.Path]::ChangeExtension($AssemblyFile, "schema.xml");
-	$utf8 = New-Object System.Text.UTF8Encoding $false;
-	[System.IO.File]::WriteAllText($schemaFile, $schema.ToXml(), $utf8);
 
-	Write-Verbose "Schema was created at '$schemaFile'.";
-	return $schemaFile;
+	if([String]::IsNullOrEmpty($OutputPath))
+	{
+		$OutputPath = [IO.Path]::ChangeExtension($AssemblyFile, "schema.xml");
+	}
+	$encoding = New-Object System.Text.UTF8Encoding $false;
+	[System.IO.File]::WriteAllText($OutputPath, $schema.ToXml(), $encoding);
+
+	Write-Verbose "Schema was created at '$OutputPath'.";
+	return $OutputPath;
 }
 else { throw "Cannot find the given .dll file at '$AssemblyFile'." }

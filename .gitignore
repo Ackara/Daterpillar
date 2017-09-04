@@ -271,6 +271,7 @@ Help_Backup/
 !**/[Xx]86/SQLite.Interop.dll
 
 # Build tools
+*_old*
 tools/
 
 # Sensitive Files

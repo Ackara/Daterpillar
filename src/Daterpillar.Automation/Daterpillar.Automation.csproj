@@ -99,7 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Build\Class1.cs" />
     <Compile Include="Cmdlets\CompareSchema.cs" />
     <Compile Include="Cmdlets\ConvertToDbConnection.cs" />
     <Compile Include="Cmdlets\ConvertToSchemaCmdlet.cs" />
@@ -139,7 +138,9 @@
     <None Include="Daterpillar.Automation.psd1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Daterpillar.Automation.targets" />
+    <None Include="Daterpillar.Automation.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
