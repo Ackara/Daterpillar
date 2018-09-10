@@ -29,7 +29,15 @@
     <Compile Include="..\build.ps1">
       <Link>build.ps1</Link>
     </Compile>
+    <Compile Include="_.psake.ps1" />
     <Compile Include="tasks.psake.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\commands.json">
+      <Link>commands.json</Link>
+    </Content>
+    <Content Include="manifest.json" />
+    <Content Include="secrets.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

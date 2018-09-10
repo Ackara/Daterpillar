@@ -1,1 +1,0 @@
-﻿ALTER TABLE [card] ADD [Scale] INT NOT NULL;

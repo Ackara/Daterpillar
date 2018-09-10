@@ -1,1 +1,0 @@
-﻿DROP INDEX IF EXISTS [pack_Name];

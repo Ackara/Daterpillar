@@ -1,1 +1,0 @@
-/* SQLite do not support DROP DATABASE */

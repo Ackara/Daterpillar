@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <Version>4.8.8</Version>
@@ -22,27 +22,16 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="readme.txt">
-      <Pack>true</Pack>
-      <PackagePath>.</PackagePath>
-    </Content>
-    <Content Include="$(MSBuildProjectName).targets">
-      <Pack>true</Pack>
-      <PackagePath>build\$(AssemblyName).targets</PackagePath>
-    </Content>
-    <Content Include="..\$(MSBuildProjectName).Automation\Cmdlets\Convert-DllToSchema.ps1">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </Content>
-    <Content Include="..\$(MSBuildProjectName).Automation\bin\$(Configuration)\$(AssemblyName).dll">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </Content>
     <Content Include="..\$(MSBuildProjectName).Automation\bin\$(Configuration)\System.Xml.*.dll">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
-    <None Include="..\daterpillar.xsd" Link="daterpillar.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="daterpillar.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
     <None Update="SchemaType.tt">

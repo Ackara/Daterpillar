@@ -1,6 +1,0 @@
-﻿SELECT
-	Id,
-	Name
-FROM
-	Employee
-;

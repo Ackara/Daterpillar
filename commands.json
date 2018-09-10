@@ -19,17 +19,23 @@
       "workingDirectory": ".",
       "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Major"
     },
-    "create packages":
+    "publish":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 pack"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 push"
     },
-    "upload logos":
+    "configure":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 icon"
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 configure"
+    },
+    "rebuild-db":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 rebuild-db"
     }
   }
 }

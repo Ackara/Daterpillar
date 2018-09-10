@@ -1,0 +1,23 @@
+﻿{
+  "Version":
+  {
+    "Major": 5,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "Name": "",
+  "Description": "",
+  "Author": "Ackeem",
+  "Company": "",
+  "License": "",
+  "Copyright": "",
+  "Icon": "",
+  "Website": "",
+  "RepositoryUrl": "",
+  "ReleaseNotes": "",
+  "BranchSuffixMap":
+  {
+    "master": "",
+    "*": "rc"
+  }
+}

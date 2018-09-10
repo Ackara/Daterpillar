@@ -1,2 +1,0 @@
-﻿IF DB_ID('dtpl_deleteMe') IS NOT NULL ALTER DATABASE [dtpl_deleteMe] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-IF DB_ID('dtpl_deleteMe') IS NOT NULL DROP DATABASE [dtpl_deleteMe];
