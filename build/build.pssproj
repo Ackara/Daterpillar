@@ -26,19 +26,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\releaseNotes.txt">
-      <Link>releaseNotes.txt</Link>
-    </Content>
-    <Content Include="credentials.json" />
-    <Content Include="manifest.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\build.ps1">
       <Link>build.ps1</Link>
     </Compile>
-    <Compile Include="packages.config" />
     <Compile Include="restore-missingFiles.ps1" />
-    <Compile Include="tasks.ps1" />
+    <Compile Include="tasks.psake.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

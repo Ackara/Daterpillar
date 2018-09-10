@@ -23,8 +23,3 @@
 
 	public struct SourceName
 	{
-		public const string dataTypeTable = "dataTypeTable";
-		public const string supportedDatabases = "supportedDatabases";
-		public const string text_formats = "text_formats";
-	}
-}
