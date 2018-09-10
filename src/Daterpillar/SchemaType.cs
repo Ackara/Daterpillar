@@ -1,43 +1,42 @@
-﻿namespace Acklann.Daterpillar
+﻿
+namespace Acklann.Daterpillar
 {
 	/// <summary>
 	/// Represents a schema data type.
 	/// </summary>
 	public enum SchemaType
 	{
-		/// <summary>none</summary>
-		NONE,
-		/// <summary>bool</summary>
+		/// <summary>A bool data-type.</summary>
 		BOOL,
-		/// <summary>blob</summary>
+		/// <summary>A blob data-type.</summary>
 		BLOB,
-		/// <summary>char</summary>
+		/// <summary>A char data-type.</summary>
 		CHAR,
-		/// <summary>text</summary>
+		/// <summary>A text data-type.</summary>
 		TEXT,
-		/// <summary>varchar</summary>
+		/// <summary>A varchar data-type.</summary>
 		VARCHAR,
-		/// <summary>int</summary>
+		/// <summary>A int data-type.</summary>
 		INT,
-		/// <summary>bigInt</summary>
+		/// <summary>A bigInt data-type.</summary>
 		BIGINT,
-		/// <summary>mediumInt</summary>
+		/// <summary>A mediumInt data-type.</summary>
 		MEDIUMINT,
-		/// <summary>smallInt</summary>
+		/// <summary>A smallInt data-type.</summary>
 		SMALLINT,
-		/// <summary>tinyInt</summary>
+		/// <summary>A tinyInt data-type.</summary>
 		TINYINT,
-		/// <summary>float</summary>
+		/// <summary>A float data-type.</summary>
 		FLOAT,
-		/// <summary>double</summary>
+		/// <summary>A double data-type.</summary>
 		DOUBLE,
-		/// <summary>decimal</summary>
+		/// <summary>A decimal data-type.</summary>
 		DECIMAL,
-		/// <summary>date</summary>
+		/// <summary>A date data-type.</summary>
 		DATE,
-		/// <summary>time</summary>
+		/// <summary>A time data-type.</summary>
 		TIME,
-		/// <summary>dateTime</summary>
+		/// <summary>A dateTime data-type.</summary>
 		DATETIME,
 	}
 }

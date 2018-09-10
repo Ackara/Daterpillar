@@ -13,24 +13,6 @@
     <DocumentationFile>bin\Release\netstandard1.4\Ackara.Daterpillar.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\$(MSBuildProjectName).Automation\bin\$(Configuration)\System.Xml.*.dll">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="daterpillar.xsd" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +20,17 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SchemaType.cs</LastGenOutput>
     </None>
+    <None Update="Syntax.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Syntax.cs</LastGenOutput>
+    </None>
     <None Update="TypeResolvers\TypeResolverBase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeResolverBase.cs</LastGenOutput>
+    </None>
+    <None Update="Xmlns.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Xmlns.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -52,10 +42,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>SchemaType.tt</DependentUpon>
     </Compile>
+    <Compile Update="Syntax.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Syntax.tt</DependentUpon>
+    </Compile>
     <Compile Update="TypeResolvers\TypeResolverBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>TypeResolverBase.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Xmlns.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Xmlns.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

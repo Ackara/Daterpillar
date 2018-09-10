@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.TypeResolvers
 {
 	/// <summary>
-	/// Defines a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to another language's type name.
+	/// Defines a method that maps a https://raw.githubusercontent.com/ackara/daterpillar/master/src/daterpillar/daterpillar.xsd TypeName to another language's type name.
 	/// </summary>
 	/// <seealso cref="ITypeResolver" />
 	public abstract class TypeResolverBase : ITypeResolver

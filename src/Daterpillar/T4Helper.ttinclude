@@ -1,0 +1,49 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.IO" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ assembly name="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml.XPath" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ output extension=".cs" #>
+<#+
+
+public string GetXsdPath() => Directory.EnumerateFiles(Host.ResolveAssemblyReference("$(ProjectDir)"), "*.xsd").First();
+
+public string GetXmlNamespace()
+{
+	Match match = Regex.Match(File.ReadAllText(GetXsdPath()), "(?i)targetNamespace=\"(?<xmlns>.+)\"");
+	return  match.Groups["xmlns"].Value;
+}
+
+public IEnumerable<string> GetXsdEnumerations(string enumName)
+{
+	var xsdDoc = XDocument.Load(GetXsdPath());
+	string xmlns = "http://www.w3.org/2001/XMLSchema";
+	XElement typeNameElement = (
+		from x in xsdDoc.Descendants(XName.Get("simpleType", xmlns))
+		where x.Attribute("name") != null && x.Attribute("name").Value == enumName
+		select x).FirstOrDefault();
+
+	return	from x in typeNameElement.Descendants(XName.Get("enumeration", xmlns))
+			select x.Attribute("value").Value;
+}
+
+public string GetMSBuildProperty(string xpath)
+{
+	XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
+	var nsManager = new XmlNamespaceManager(new NameTable());
+	nsManager.AddNamespace("ms", ns.NamespaceName);
+	var doc = XDocument.Load(Directory.EnumerateFiles(Host.ResolveAssemblyReference("$(ProjectDir)"), "*.csproj").First());
+
+	return  doc.XPathSelectElement(xpath, nsManager)?.Value;
+}
+
+#>

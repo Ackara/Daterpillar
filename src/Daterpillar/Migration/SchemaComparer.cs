@@ -302,22 +302,22 @@ namespace Acklann.Daterpillar.Migration
 
         private void SortTheItemsOfBothArraysByName<T>(ref T[] left, ref T[] right)
         {
-            dynamic l;
-            for (int i = 0; i < left.Length; i++)
-            {
-                l = left[i];
-                SwapMatchingItems(ref right, (l?.Name), i);
-            }
+            //dynamic l;
+            //for (int i = 0; i < left.Length; i++)
+            //{
+            //    l = left[i];
+            //    SwapMatchingItems(ref right, (l?.Name), i);
+            //}
         }
 
         private void SortTheItemsOfBothArraysByName2<T>(ref T[] left, ref T[] right)
         {
-            dynamic l;
-            for (int i = 0; i < left.Length; i++)
-            {
-                l = left[i];
-                SwapMatchingItems2(ref right, (l?.Name), i);
-            }
+            //dynamic l;
+            //for (int i = 0; i < left.Length; i++)
+            //{
+            //    l = left[i];
+            //    SwapMatchingItems2(ref right, (l?.Name), i);
+            //}
         }
 
         private void IncreaseLengthOfArray<T>(ref T[] array, int capacity)
@@ -333,34 +333,34 @@ namespace Acklann.Daterpillar.Migration
 
         private void SwapMatchingItems<T>(ref T[] right, string name, int targetIdx)
         {
-            dynamic r; T temp;
-            for (int i = targetIdx; i < right.Length; i++)
-            {
-                r = right[i];
-                if (name == r?.Name)
-                {
-                    temp = right[targetIdx];
-                    right[targetIdx] = right[i];
-                    right[i] = temp;
-                    break;
-                }
-            }
+            //dynamic r; T temp;
+            //for (int i = targetIdx; i < right.Length; i++)
+            //{
+            //    r = right[i];
+            //    if (name == r?.Name)
+            //    {
+            //        temp = right[targetIdx];
+            //        right[targetIdx] = right[i];
+            //        right[i] = temp;
+            //        break;
+            //    }
+            //}
         }
 
         private void SwapMatchingItems2<T>(ref T[] right, string name, int targetIdx)
         {
-            dynamic r; T temp;
-            for (int i = targetIdx; i < right.Length; i++)
-            {
-                r = right[i];
-                if (name == r?.Name)
-                {
-                    temp = right[targetIdx];
-                    right[targetIdx] = right[i];
-                    right[i] = temp;
-                    break;
-                }
-            }
+            //dynamic r; T temp;
+            //for (int i = targetIdx; i < right.Length; i++)
+            //{
+            //    r = right[i];
+            //    if (name == r?.Name)
+            //    {
+            //        temp = right[targetIdx];
+            //        right[targetIdx] = right[i];
+            //        right[i] = temp;
+            //        break;
+            //    }
+            //}
         }
 
         #endregion Private Members

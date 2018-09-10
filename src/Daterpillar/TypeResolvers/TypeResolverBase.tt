@@ -1,23 +1,14 @@
-﻿<#@ template hostspecific="true" language="C#" #>
-<#@ assembly name="System.Core" #>
-<#@ assembly name="System.Xml" #>
-<#@ assembly name="System.Xml.Linq" #>
-<#@ import namespace="System.IO" #>
-<#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Xml" #>
-<#@ import namespace="System.Xml.Linq" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".cs" #>
+﻿<#@ include file="../T4Helper.ttinclude" #>
 <#  
 	string className = Path.GetFileNameWithoutExtension(Host.TemplateFile); 
 	string dictionaryName = "TypeMap"; 
 #>
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.TypeResolvers
+namespace <#= GetMSBuildProperty("//RootNamespace") #>.TypeResolvers
 {
 	/// <summary>
-	/// Defines a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to another language's type name.
+	/// Defines a method that maps a <#= GetXmlNamespace() #> TypeName to another language's type name.
 	/// </summary>
 	/// <seealso cref="ITypeResolver" />
 	public abstract class <#= className #> : ITypeResolver
@@ -26,7 +17,7 @@ namespace Acklann.Daterpillar.TypeResolvers
 
 <#
 	PushIndent("\t\t");
-	foreach (var typeName in GetXsdTypeNames())
+	foreach (var typeName in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"/// <summary>{typeName}.</summary>");
 		WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
@@ -45,7 +36,7 @@ namespace Acklann.Daterpillar.TypeResolvers
 			{
 <#
 	PushIndent("\t\t\t\t");
-	foreach (var value in GetXsdTypeNames())
+	foreach (var value in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToLower()}\" }},");
 	}
@@ -68,23 +59,3 @@ namespace Acklann.Daterpillar.TypeResolvers
 		protected IDictionary<string, string> <#= dictionaryName #> { get; set; }
 	}
 }
-<#+ 
-
-public IEnumerable<string> GetXsdTypeNames()
-{
-	string schemaPath = Path.Combine(Host.ResolveAssemblyReference("$(SolutionDir)"), "src", "daterpillar.xsd");
-	
-	var xsdDoc = XDocument.Load(schemaPath);
-	string xmlns = "http://www.w3.org/2001/XMLSchema";
-	XElement typeNameElement = (
-		from x in xsdDoc.Descendants(XName.Get("simpleType", xmlns))
-		where x.Attribute("name") != null && x.Attribute("name").Value == "TypeName"
-		select x).FirstOrDefault();
-
-	var enumValues = from x in typeNameElement.Descendants(XName.Get("enumeration", xmlns))
-					 select x.Attribute("value").Value;
-
-	return enumValues;
-}
-
-#>

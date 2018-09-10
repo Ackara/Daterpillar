@@ -12,8 +12,8 @@ namespace Acklann.Daterpillar
     /// An in-memory representation of a database schema.
     /// </summary>
     [XmlRoot("schema", Namespace = XMLNS)]
-    [System.Diagnostics.DebuggerDisplay("{AsDebuggerDisplay()}")]
-    public class Schema : ICloneable<Schema>
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
+    public partial class Schema : ICloneable<Schema>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
@@ -28,11 +28,6 @@ namespace Acklann.Daterpillar
             Tables = new List<Table>();
             Scripts = new List<Script>();
         }
-
-        /// <summary>
-        /// The xml namespace.
-        /// </summary>
-        public const string XMLNS = "http://static.acklann.com/schema/v2/daterpillar.xsd";
 
         /// <summary>
         /// Gets or sets the name of the schema.
@@ -318,10 +313,10 @@ namespace Acklann.Daterpillar
 
         private readonly XmlSerializerNamespaces _namespace;
 
-        private string AsDebuggerDisplay()
+        private string ToDebuggerDisplay()
         {
-            string name = (string.IsNullOrEmpty(Name) ? "[n/a]" : Name);
-            return $"{name}  Tables: {Tables.Count} Scripts: {Scripts.Count}";
+            string name = (string.IsNullOrEmpty(Name) ? string.Empty : $"{Name} | ");
+            return $"{name}Tables: {Tables.Count} Scripts: {Scripts.Count}";
         }
 
         private int Rank(Node node, int? rank = 0)
