@@ -15,7 +15,7 @@ namespace MSTest.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [DataSource(dataTypeTable)]
+        //[DataSource(dataTypeTable)]
         public void GetTypeName_should_return_valid_csharp_type_when_invoked()
         {
             // Arrange
@@ -31,7 +31,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(dataTypeTable)]
+        //[DataSource(dataTypeTable)]
         public void GetTypeName_should_return_valid_mysql_type_when_invoked()
         {
             // Arrange
@@ -47,7 +47,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(dataTypeTable)]
+        //[DataSource(dataTypeTable)]
         public void GetTypeName_should_return_valid_mssql_type_when_invoked()
         {
             // Arrange
@@ -63,7 +63,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(dataTypeTable)]
+        //[DataSource(dataTypeTable)]
         public void GetTypeName_should_return_valid_sqlite_type_when_invoked()
         {
             // Arrange

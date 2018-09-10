@@ -12,7 +12,7 @@ namespace MSTest.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [DataSource(SourceName.text_formats)]
+        //[DataSource(SourceName.text_formats)]
         public void ToPascalCase_should_return_a_pascal_case_string_when_invoked()
         {
             // Arrange
@@ -27,7 +27,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.text_formats)]
+        //[DataSource(SourceName.text_formats)]
         public void ToCamelCase_should_return_a_camel_case_string_when_invoked()
         {
             // Arrange

@@ -66,7 +66,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_creates_a_new_schema_when_all_settings_are_enabled()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -83,7 +83,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_creates_a_new_schema_when_all_settings_are_disabled()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -100,7 +100,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_creates_a_new_table_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -117,7 +117,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_add_a_column_to_an_existing_table_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -134,7 +134,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_add_a_foreign_key_to_an_existing_table_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -151,7 +151,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Append_should_return_a_sql_script_that_add_an_index_to_an_existing_table_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -168,7 +168,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Remove_should_return_a_sql_script_that_deletes_a_database_when_invoked()
         {
             // Arrange
@@ -204,7 +204,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Remove_should_return_a_sql_script_that_deletes_an_existing_table_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -221,7 +221,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Remove_should_return_a_sql_script_that_deletes_an_existing_column_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -238,7 +238,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Remove_should_return_a_sql_script_that_deletes_an_existing_index_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -255,7 +255,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Remove_should_return_a_sql_script_that_deletes_an_existing_foreignKey_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);
@@ -272,7 +272,7 @@ namespace MSTest.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataSource(SourceName.supportedDatabases)]
+        //[DataSource(SourceName.supportedDatabases)]
         public void Update_should_return_a_sql_script_that_alters_an_existing_column_when_invoked()
         {
             string dbType = Convert.ToString(TestContext.DataRow[0]);

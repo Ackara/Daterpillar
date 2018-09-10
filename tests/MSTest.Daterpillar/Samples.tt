@@ -24,7 +24,7 @@ namespace MSTest.Daterpillar
 
 	public struct SourceName
 	{
-<# AddDataSourcesToAppConfig(); #>
+<# //AddDataSourcesToAppConfig(); #>
 	}
 }
 <#+
