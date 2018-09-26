@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Configuration;
 
 namespace MSTest.Daterpillar.Fake
 {
@@ -18,11 +19,11 @@ namespace MSTest.Daterpillar.Fake
         public int StandaloneIdx { get; set; }
 
         [Column]
-        [Index(IndexType.Index, GroupName = "A")]
+        [Index(IndexType.Index, Name = "A")]
         public int Idx1 { get; set; }
 
         [Column]
-        [Index(IndexType.Index, GroupName = "A")]
+        [Index(IndexType.Index, Name = "A")]
         public int Idx2 { get; set; }
 
         [Column]

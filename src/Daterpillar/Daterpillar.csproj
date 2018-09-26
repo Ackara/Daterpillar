@@ -16,19 +16,19 @@
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="SchemaType.tt">
+    <None Update="Configuration\SchemaType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SchemaType.cs</LastGenOutput>
     </None>
-    <None Update="Syntax.tt">
+    <None Update="Configuration\Syntax.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Syntax.cs</LastGenOutput>
     </None>
-    <None Update="TypeResolvers\TypeResolverBase.tt">
+    <None Update="Compilation\Resolvers\TypeResolverBase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeResolverBase.cs</LastGenOutput>
     </None>
-    <None Update="Xmlns.tt">
+    <None Update="Configuration\Xmlns.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Xmlns.cs</LastGenOutput>
     </None>
@@ -37,22 +37,22 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="SchemaType.cs">
+    <Compile Update="Configuration\SchemaType.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>SchemaType.tt</DependentUpon>
     </Compile>
-    <Compile Update="Syntax.cs">
+    <Compile Update="Configuration\Syntax.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Syntax.tt</DependentUpon>
     </Compile>
-    <Compile Update="TypeResolvers\TypeResolverBase.cs">
+    <Compile Update="Compilation\Resolvers\TypeResolverBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>TypeResolverBase.tt</DependentUpon>
     </Compile>
-    <Compile Update="Xmlns.cs">
+    <Compile Update="Configuration\Xmlns.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Xmlns.tt</DependentUpon>

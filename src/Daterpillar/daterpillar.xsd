@@ -1,12 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="https://raw.githubusercontent.com/ackara/daterpillar/master/src/daterpillar/daterpillar.xsd"
-           xmlns="https://raw.githubusercontent.com/ackara/daterpillar/master/src/daterpillar/daterpillar.xsd"
+<xs:schema targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
+           xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
            id="daterpillar">
   <xs:element name="schema">
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="comments"
+                    type="xs:string"
+                    minOccurs="0" />
+
         <xs:element name="table"
                     type="Table"
                     minOccurs="0"
@@ -21,10 +25,6 @@
       <xs:attribute name="name"
                     type="xs:string"
                     use="optional" />
-
-      <xs:attribute name="description"
-                    type="xs:string"
-                    use="optional" />
     </xs:complexType>
   </xs:element>
 
@@ -32,7 +32,7 @@
 
   <xs:complexType name="Table">
     <xs:sequence>
-      <xs:element name="comment"
+      <xs:element name="comments"
                   type="xs:string"
                   minOccurs="0" />
 
@@ -58,14 +58,14 @@
   </xs:complexType>
 
   <xs:complexType name="Column">
-    <xs:sequence>
-      <xs:element name="comment"
+    <xs:all>
+      <xs:element name="comments"
                   type="xs:string"
                   minOccurs="0" />
 
       <xs:element name="dataType"
                   type="DataType" />
-    </xs:sequence>
+    </xs:all>
 
     <xs:attribute name="name"
                   type="xs:string"
@@ -73,17 +73,14 @@
 
     <xs:attribute name="nullable"
                   type="xs:boolean"
-                  use="optional"
                   default="0" />
 
     <xs:attribute name="default"
-                  type="xs:string"
-                  use="optional" />
+                  type="xs:string" />
 
     <xs:attribute name="autoIncrement"
                   type="xs:boolean"
-                  default="0"
-                  use="optional" />
+                  default="0" />
   </xs:complexType>
 
   <xs:complexType name="Index">
@@ -98,30 +95,19 @@
                   use="optional" />
 
     <xs:attribute name="unique"
-                  type="xs:boolean"
-                  default="0" />
+                  type="xs:boolean" />
 
     <xs:attribute name="type">
       <xs:simpleType>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="index" />
-          <xs:enumeration value="primaryKey" />
+          <xs:enumeration value="Index" />
+          <xs:enumeration value="PrimaryKey" />
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="ForeignKey">
-    <xs:all>
-      <xs:element name="onUpdate"
-                  type="ForeignKeyRule"
-                  minOccurs="0" />
-
-      <xs:element name="onDelete"
-                  type="ForeignKeyRule"
-                  minOccurs="0" />
-    </xs:all>
-
     <xs:attribute name="name"
                   type="xs:string"
                   use="optional" />
@@ -140,19 +126,18 @@
 
     <xs:attribute name="onUpdate"
                   type="ForeignKeyRule"
-                  default="Cascade" />
+                  default="cascade" />
 
     <xs:attribute name="onDelete"
                   type="ForeignKeyRule"
-                  default="Restrict" />
+                  default="restrict" />
   </xs:complexType>
 
   <xs:complexType name="IndexColumn">
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="order"
-                      type="SortOrder"
-                      use="optional" />
+                      type="SortOrder" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
@@ -173,6 +158,10 @@
 
   <xs:complexType name="Script">
     <xs:sequence>
+      <xs:element name="comments"
+                  type="xs:string"
+                  minOccurs="0" />
+
       <xs:element name="code"
                   minOccurs="1"
                   maxOccurs="unbounded">
@@ -191,10 +180,10 @@
 
   <xs:simpleType name="Syntax">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Generic" />
-      <xs:enumeration value="MSSQL" />
-      <xs:enumeration value="MySQL" />
-      <xs:enumeration value="SQLite" />
+      <xs:enumeration value="generic" />
+      <xs:enumeration value="mssql" />
+      <xs:enumeration value="mysql" />
+      <xs:enumeration value="sqlite" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -225,18 +214,18 @@
 
   <xs:simpleType name="SortOrder">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="ASC" />
-      <xs:enumeration value="DESC" />
+      <xs:enumeration value="asc" />
+      <xs:enumeration value="desc" />
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="ForeignKeyRule">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="NoAction" />
-      <xs:enumeration value="Cascade" />
-      <xs:enumeration value="Restrict" />
-      <xs:enumeration value="SetNull" />
-      <xs:enumeration value="SetDefault" />
+      <xs:enumeration value="noAction" />
+      <xs:enumeration value="cascade" />
+      <xs:enumeration value="restrict" />
+      <xs:enumeration value="setNull" />
+      <xs:enumeration value="setDefault" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

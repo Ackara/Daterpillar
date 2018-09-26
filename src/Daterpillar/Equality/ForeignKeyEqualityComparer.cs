@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Acklann.Daterpillar.Configuration;
+using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.Equality
 {

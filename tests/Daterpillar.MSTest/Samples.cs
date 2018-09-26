@@ -4,14 +4,11 @@ using System.Linq;
 
 namespace Acklann.Daterpillar
 {
-	public static partial class SampleFile
+	internal static partial class TestData
 	{
 		public const string FOLDER_NAME = "Samples";
 
-		public static string DirectoryName
-        {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME); }
-        }
+		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 
 		public static FileInfo GetFile(string fileName)
         {
@@ -23,15 +20,11 @@ namespace Acklann.Daterpillar
                 .First(x => x.Name.Equals(fileName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public static string GetContents(this string filePath)
-		{
-			return File.ReadAllText(filePath);
-		}
+		public static FileInfo GetSakilaXML() => GetFile(@"Schemas\sakila.xml");
 
-		public static string GetContents(this FileInfo file)
+		public class File
 		{
-			return File.ReadAllText(file.FullName);
+			public const string SakilaXML = @"Schemas\sakila.xml";
 		}
-
-			}
+	}	
 }

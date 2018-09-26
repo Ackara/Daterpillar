@@ -1,0 +1,21 @@
+﻿<#@ include file="../T4Helper.ttinclude" #>
+namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Configuration
+{
+	/// <summary>
+	/// Represents a SQL syntax.
+	/// </summary>
+	public enum Syntax
+	{
+<#
+	PushIndent("\t\t");
+	foreach(var item in GetXsdEnumerations("Syntax"))
+	{
+		WriteLine($"/// <summary>{item} syntax.</summary>");
+		WriteLine($"{item},");
+	}
+	PopIndent();
+#>
+		/// <summary>C# syntax.</summary>
+		CSharp
+	}
+}

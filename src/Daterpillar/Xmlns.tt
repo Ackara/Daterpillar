@@ -1,8 +1,0 @@
-﻿<#@ include file="T4Helper.ttinclude" #>
-namespace <#= GetMSBuildProperty("//RootNamespace") #>
-{
-	public partial class Schema
-	{
-		public const string XMLNS = "<#= GetXmlNamespace() #>";
-	}
-}

@@ -1,4 +1,6 @@
-﻿namespace Acklann.Daterpillar.Equality
+﻿using Acklann.Daterpillar.Configuration;
+
+namespace Acklann.Daterpillar.Equality
 {
     internal class MSSQLForeignKeyEqualityComparer : System.Collections.Generic.IEqualityComparer<ForeignKey>
     {

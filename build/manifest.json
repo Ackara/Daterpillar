@@ -1,20 +1,21 @@
 ﻿{
   "Version":
   {
-    "Major": 5,
+    "Major": 7,
     "Minor": 0,
     "Patch": 0
   },
-  "Name": "",
-  "Description": "",
-  "Author": "Ackeem",
-  "Company": "",
-  "License": "",
-  "Copyright": "",
-  "Icon": "",
-  "Website": "",
-  "RepositoryUrl": "",
+  "Name": "Daterpillar",
+  "Author": "Ackara",
+  "Company": "Ackara",
+  "Copyright": "MIT License",
+  "Website": "https://github.com/Ackara/Daterpillar",
+  "RepositoryUrl": "https://github.com/Ackara/Daterpillar.git",
+  "License": "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
+  "Icon": "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
   "ReleaseNotes": "",
+  "Description": null,
+  "Id": null,
   "BranchSuffixMap":
   {
     "master": "",

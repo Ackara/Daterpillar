@@ -41,7 +41,9 @@ namespace Acklann.Daterpillar
         public ColumnAttribute(string name, string typeName, int scale = 0, int precision = 0)
         {
             Name = name;
-            DataType = new DataType(typeName, scale, precision);
+            Scale = scale;
+            TypeName = typeName;
+            Precision = precision;
         }
 
         /// <summary>
@@ -50,9 +52,28 @@ namespace Acklann.Daterpillar
         public readonly string Name;
 
         /// <summary>
-        /// The data type.
+        /// Gets or sets the name of the type.
         /// </summary>
-        public readonly DataType DataType;
+        /// <value>
+        /// The name of the type.
+        /// </value>
+        public readonly string TypeName;
+
+        /// <summary>
+        /// Gets or sets the scale.
+        /// </summary>
+        /// <value>
+        /// The scale.
+        /// </value>
+        public readonly int Scale;
+
+        /// <summary>
+        /// Gets or sets the precision.
+        /// </summary>
+        /// <value>
+        /// The precision.
+        /// </value>
+        public readonly int Precision;
 
         /// <summary>
         /// Indicates whether the column is auto incremented.

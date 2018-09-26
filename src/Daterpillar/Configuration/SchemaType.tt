@@ -1,0 +1,19 @@
+﻿<#@ include file="../T4Helper.ttinclude" #>
+namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Configuration
+{
+	/// <summary>
+	/// Represents a schema data type.
+	/// </summary>
+	public enum SchemaType
+	{
+<#
+	PushIndent("\t\t");
+	foreach(var item in GetXsdEnumerations("TypeName"))
+	{
+		WriteLine($"/// <summary>A {item} data-type.</summary>");
+		WriteLine($"{item.ToUpper()},");
+	}
+	PopIndent();
+#>
+	}
+}

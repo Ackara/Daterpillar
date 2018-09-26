@@ -36,14 +36,4 @@ public IEnumerable<string> GetXsdEnumerations(string enumName)
 			select x.Attribute("value").Value;
 }
 
-public string GetMSBuildProperty(string xpath)
-{
-	XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
-	var nsManager = new XmlNamespaceManager(new NameTable());
-	nsManager.AddNamespace("ms", ns.NamespaceName);
-	var doc = XDocument.Load(Directory.EnumerateFiles(Host.ResolveAssemblyReference("$(ProjectDir)"), "*.csproj").First());
-
-	return  doc.XPathSelectElement(xpath, nsManager)?.Value;
-}
-
 #>

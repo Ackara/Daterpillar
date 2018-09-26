@@ -1,11 +1,12 @@
 <#@ template debug="false" hostspecific="true" language="C#" #>
-<#@ assembly name="System.Core" #>
 <#@ assembly name="System.IO" #>
 <#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Core" #>
 <#@ assembly name="System.Xml.Linq" #>
-<#@ import namespace="System.Linq" #>
+<#@ import namespace="System" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Xml.Linq" #>
 <#@ import namespace="System.Xml.XPath" #>
 <#@ import namespace="System.Globalization" #>
@@ -15,16 +16,13 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace <#= GetMSBuildProperty("//RootNamespace") #>
+namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 {
-	public static partial class SampleFile
+	internal static partial class TestData
 	{
 		public const string FOLDER_NAME = "<#= FolderName #>";
 
-		public static string DirectoryName
-        {
-            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME); }
-        }
+		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 
 		public static FileInfo GetFile(string fileName)
         {
@@ -36,51 +34,44 @@ namespace <#= GetMSBuildProperty("//RootNamespace") #>
                 .First(x => x.Name.Equals(fileName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public static string GetContents(this string filePath)
-		{
-			return File.ReadAllText(filePath);
-		}
-
-		public static string GetContents(this FileInfo file)
-		{
-			return File.ReadAllText(file.FullName);
-		}
-
-		<# GenerateMethods(); #>
+<#
+	PushIndent("\t\t");
+	foreach ((string relativeDir, string memberName, FileInfo file) in GetFileList())
+	{
+		string methodName = string.Concat(memberName, file.Extension.TrimStart('.').ToUpper());
+		WriteLine($"public static FileInfo Get{methodName}() => GetFile(@\"{Path.Combine(relativeDir, file.Name)}\");");
 	}
+	PopIndent();
+#>
+
+		public class File
+		{
+<#
+	PushIndent("\t\t\t");
+	foreach ((string relativeDir, string memberName, FileInfo file) in GetFileList())
+	{
+		WriteLine($"public const string {memberName}{file.Extension.TrimStart('.').ToUpper()} = @\"{Path.Combine(relativeDir, file.Name)}\";");
+	}
+	PopIndent();
+#>
+		}
+	}	
 }
 <#+
 string FolderName = "Samples";
 
-void GenerateMethods()
+IEnumerable<(string, string, FileInfo)> GetFileList()
 {
-	var directory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), FolderName);
+	var directory = Path.Combine(Host.ResolveAssemblyReference("$(ProjectDir)"), FolderName);
 
 	if (Directory.Exists(directory))
 	{
-		PushIndent("\t\t");
 		foreach (var file in new DirectoryInfo(directory).GetFiles("*", SearchOption.AllDirectories))
 		{
 			string relativeDir = file.DirectoryName.Replace(directory, "").Trim('\\', ' ', '/');
 			string fileNameWithoutExtension = CultureInfo.CurrentCulture.TextInfo.ToTitleCase( Path.GetFileNameWithoutExtension(file.Name));
-			string extension = Path.GetExtension(file.Name).ToUpper().Trim('.');
-			string path = Path.Combine(relativeDir, file.Name);
-
-			WriteLine($"public static FileInfo Get{fileNameWithoutExtension}() => GetFile(@\"{path}\");");
-			WriteLine("");
+			yield return (relativeDir, fileNameWithoutExtension, file);
 		}
-		PopIndent();
 	}
 }
-
-string GetMSBuildProperty(string xpath)
-{
-	XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
-	var nsManager = new XmlNamespaceManager(new NameTable());
-	nsManager.AddNamespace("ms", ns.NamespaceName);
-	var doc = XDocument.Load(Directory.GetFiles(Path.GetDirectoryName(Host.TemplateFile), "*.csproj", SearchOption.TopDirectoryOnly)[0]);
-
-	return  doc.XPathSelectElement(xpath, nsManager)?.Value;
-}
-
 #>

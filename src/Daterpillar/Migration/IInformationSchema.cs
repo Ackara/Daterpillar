@@ -1,4 +1,6 @@
-﻿namespace Acklann.Daterpillar.Migration
+﻿using Acklann.Daterpillar.Configuration;
+
+namespace Acklann.Daterpillar.Migration
 {
     /// <summary>
     /// Defines methods to create a <see cref="Schema"/> instance using a SQL server "information schema" table.

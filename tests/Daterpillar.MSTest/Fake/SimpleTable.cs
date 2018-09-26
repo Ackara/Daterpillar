@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Configuration;
 using System;
 
 namespace MSTest.Daterpillar.Fake

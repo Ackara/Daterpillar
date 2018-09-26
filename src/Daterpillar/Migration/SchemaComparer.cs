@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Scripting;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Compilation;
 using System;
 using System.Collections.Generic;
 
