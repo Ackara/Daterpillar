@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+  <table name="country">
+    <column name="country_id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="country">
+      <dataType scale="50">varchar</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+  </table>
+
+  <table name="city">
+    <column name="city_id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="city">
+      <dataType scale="50">varchar</dataType>
+    </column>
+
+    <column name="country_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey name="fk_city_country" foreignTable="country" foreignColumn="country_id" localColumn="country_id" />
+  </table>
+
+  <table name="address">
+    <column name="address_id" autoIncrement="true">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="address">
+      <dataType scale="50">varchar</dataType>
+    </column>
+
+    <column name="address2" nullable="true">
+      <dataType scale="50">varchar</dataType>
+    </column>
+
+    <column name="district">
+      <dataType scale="20">varchar</dataType>
+    </column>
+
+    <column name="city_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="postal_code" nullable="true">
+      <dataType scale="10">varchar</dataType>
+    </column>
+
+    <column name="phone">
+      <dataType scale="20">varchar</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey name="fk_address_city" foreignTable="city" foreignColumn="city_id" localColumn="city_id" />
+  </table>
+
+  <table name="customer">
+    <column name="customer_id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="store_id">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="first_name">
+      <dataType scale="45">varchar</dataType>
+    </column>
+
+    <column name="last_name">
+      <dataType scale="45">varchar</dataType>
+    </column>
+
+    <column name="email">
+      <dataType>varchar</dataType>
+    </column>
+
+    <column name="address_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="active">
+      <dataType>bool</dataType>
+    </column>
+
+    <column name="created_date">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey foreignTable="address" foreignColumn="address_id" localColumn="address_id" />
+  </table>
+</schema>

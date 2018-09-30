@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <GenerateDaterpillarSchemaOnBuild Condition="$(GenerateDaterpillarSchemaOnBuild)==''">true</GenerateDaterpillarSchemaOnBuild>
+  </PropertyGroup>
+
+  <Target Name="GenerateDaterpillarSchemaAfterBuild"
+          AfterTargets="CoreCompile"
+          Condition="$(GenerateDaterpillarSchemaOnBuild)=='true'">
+    <Message Text="OnBuild: $(GenerateDaterpillarSchemaOnBuild)" />
+    <CallTarget Targets="GenerateDaterpillarSchema" />
+  </Target>
+
+  <Target Name="GenerateDaterpillarSchema">
+    <Message Text="running schema generator" />
+  </Target>
+</Project>

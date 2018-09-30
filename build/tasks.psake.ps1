@@ -1,4 +1,5 @@
-﻿
+﻿#
+
 Properties {
 }
 
@@ -12,7 +13,13 @@ Task "Initialize-Project" -alias "configure" -description "" `
 
 }
 
-Task "Generate-Packages" -alias "pack" -description "This task packages the project to be published to all online repositories." `
+Task "Generate-Packages" -alias "pack" -description "This task packages the project to be published to all on-line repositories." `
 -depends @("restore") -action {
-	
+	if (Test-Path $ArtifactsDir) { Remove-Item $ArtifactsDir -Recurse -Force; }
+	New-Item $ArtifactsDir -ItemType Directory | Out-Null;
+
+	# Creating nuget package.
+	$proj = Join-Path $RootDir "src\$SolutionName\*.csproj" | Get-Item;
+	Write-Host "dotnet: publish '$($proj.Basename)'";
+
 }

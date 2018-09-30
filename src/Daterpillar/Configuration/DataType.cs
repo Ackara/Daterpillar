@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Configuration
     /// <summary>
     /// Represents a SQL data type.
     /// </summary>
-    public struct DataType : IEquatable<DataType>
+    public partial struct DataType : IEquatable<DataType>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DataType"/> struct.
@@ -19,6 +19,19 @@ namespace Acklann.Daterpillar.Configuration
             Name = name;
             Scale = scale;
             Precision = precision;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataType"/> struct.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="scale">The scale.</param>
+        /// <param name="precision">The precision.</param>
+        public DataType(SchemaType name, int scale = 0, int precision = 0)
+        {
+            Name = ToString(name);
+            Precision = precision;
+            Scale = scale;
         }
 
         /// <summary>

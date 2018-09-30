@@ -36,4 +36,9 @@ public IEnumerable<string> GetXsdEnumerations(string enumName)
 			select x.Attribute("value").Value;
 }
 
+public string ToTitleCase(string text)
+{
+	return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
+}
+
 #>

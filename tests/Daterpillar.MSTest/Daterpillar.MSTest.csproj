@@ -8,8 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acklann.Diffa" Version="0.1.1" />
-    <PackageReference Include="FakeItEasy" Version="4.8.1" />
+    <Compile Remove="Tests\approved-results\**" />
+    <EmbeddedResource Remove="Tests\approved-results\**" />
+    <None Remove="Tests\approved-results\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Acklann.Diffa" Version="0.1.3" />
+    <PackageReference Include="Acklann.Mockaroo.NET" Version="2.0.8-rc" />
+    <PackageReference Include="FakeItEasy" Version="4.9.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
@@ -17,7 +24,7 @@
     <PackageReference Include="MySql.Data" Version="8.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Shouldly" Version="3.0.1" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.1" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,9 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Samples.tt">
+    <None Update="test-data\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Samples.cs</LastGenOutput>
+      <LastGenOutput>TestData.cs</LastGenOutput>
+    </None>
+
+    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="test-data\daterpillar.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -36,11 +50,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Samples.cs">
+    <Compile Update="TestData.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Samples.tt</DependentUpon>
+      <DependentUpon>TestData.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Fakes\" />
   </ItemGroup>
 
 </Project>

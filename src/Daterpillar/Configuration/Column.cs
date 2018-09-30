@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
 {
@@ -6,7 +7,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> column.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class Column : ICloneable<Column>
+    public class Column : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Column"/> class.
@@ -49,7 +50,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [XmlElement("comment")]
+        [XmlElement("description")]
         public string Comment { get; set; }
 
         /// <summary>
@@ -87,6 +88,13 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
+        private string ToDebuggerDisplay()
+        {
+            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
+        }
+
+        #region ICloneable
+
         /// <summary>
         /// Creates a new <see cref="Column"/> object that is a copy of the current instance.
         /// </summary>
@@ -105,9 +113,14 @@ namespace Acklann.Daterpillar.Configuration
             };
         }
 
-        internal string ToDebuggerDisplay()
-        {
-            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
-        }
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        object ICloneable.Clone() => Clone();
+
+        #endregion ICloneable
     }
 }

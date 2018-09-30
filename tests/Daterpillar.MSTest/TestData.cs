@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar
 {
 	internal static partial class TestData
 	{
-		public const string FOLDER_NAME = "Samples";
+		public const string FOLDER_NAME = "test-data";
 
 		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 
@@ -20,11 +20,13 @@ namespace Acklann.Daterpillar
                 .First(x => x.Name.Equals(fileName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-		public static FileInfo GetSakilaXML() => GetFile(@"Schemas\sakila.xml");
+		public static FileInfo GetBad_SchemaXML() => GetFile(@"bad_schema.xml");
+		public static FileInfo GetSakilaXML() => GetFile(@"sakila.xml");
 
 		public class File
 		{
-			public const string SakilaXML = @"Schemas\sakila.xml";
+			public const string Bad_SchemaXML = @"bad_schema.xml";
+			public const string SakilaXML = @"sakila.xml";
 		}
 	}	
 }

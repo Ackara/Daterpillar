@@ -7,7 +7,7 @@
   <xs:element name="schema">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="comments"
+        <xs:element name="description"
                     type="xs:string"
                     minOccurs="0" />
 
@@ -23,8 +23,10 @@
       </xs:sequence>
 
       <xs:attribute name="name"
-                    type="xs:string"
-                    use="optional" />
+                    type="xs:string" />
+
+      <xs:attribute name="syntax"
+                    type="Syntax" />
     </xs:complexType>
   </xs:element>
 
@@ -32,7 +34,7 @@
 
   <xs:complexType name="Table">
     <xs:sequence>
-      <xs:element name="comments"
+      <xs:element name="description"
                   type="xs:string"
                   minOccurs="0" />
 
@@ -59,7 +61,7 @@
 
   <xs:complexType name="Column">
     <xs:all>
-      <xs:element name="comments"
+      <xs:element name="description"
                   type="xs:string"
                   minOccurs="0" />
 
@@ -158,7 +160,7 @@
 
   <xs:complexType name="Script">
     <xs:sequence>
-      <xs:element name="comments"
+      <xs:element name="description"
                   type="xs:string"
                   minOccurs="0" />
 
@@ -180,10 +182,10 @@
 
   <xs:simpleType name="Syntax">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="generic" />
-      <xs:enumeration value="mssql" />
-      <xs:enumeration value="mysql" />
-      <xs:enumeration value="sqlite" />
+      <xs:enumeration value="Generic" />
+      <xs:enumeration value="MSSQL" />
+      <xs:enumeration value="MySQL" />
+      <xs:enumeration value="SQLite" />
     </xs:restriction>
   </xs:simpleType>
 

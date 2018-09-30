@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -13,18 +15,25 @@ namespace Acklann.Daterpillar.Configuration
     /// </summary>
     [XmlRoot("schema", Namespace = XMLNS)]
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public partial class Schema : ICloneable<Schema>
+    public partial class Schema : ICloneable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
-        public Schema()
-        {
-            _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[]
-            {
-                new XmlQualifiedName(string.Empty, XMLNS)
-            });
+        public Schema() : this(string.Empty, Syntax.Generic)
+        { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Schema"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="syntax">The syntax.</param>
+        public Schema(string name, Syntax syntax)
+        {
+            Name = name;
+            Syntax = syntax;
+
+            _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, XMLNS) });
             Tables = new List<Table>();
             Scripts = new List<Script>();
         }
@@ -35,6 +44,13 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>The name.</value>
         [XmlAttribute("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the schema description.
+        /// </summary>
+        /// <value> The comments.</value>
+        [XmlElement("description")]
+        public string Description { get; set; }
 
         [XmlAttribute("syntax")]
         public Syntax Syntax { get; set; }
@@ -56,100 +72,97 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// Deserialize the <see cref="Schema"/> document contained by specified.
         /// </summary>
-        /// <param name="inputStream">The input stream.</param>
-        /// <returns>Schema.</returns>
-        public static Schema Load(Stream inputStream)
+        /// <param name="stream">The input stream.</param>
+        /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
+        public static bool TryLoad(Stream stream, out Schema schema, ValidationEventHandler handler = null)
         {
-            using (inputStream)
-            {
-                var serializer = new XmlSerializer(typeof(Schema));
-                var schema = (Schema)serializer.Deserialize(inputStream);
-                schema.AssignMissingValues();
+            schema = null;
 
-                return schema;
+            try
+            {
+                using (stream)
+                {
+                    string name = $"{nameof(Daterpillar)}.xsd".ToLowerInvariant();
+                    string xsdFile = Path.Combine(AppContext.BaseDirectory, name);
+                    if (File.Exists(xsdFile) == false)
+                    {
+                        using (Stream data = Assembly.GetAssembly(typeof(Schema)).GetManifestResourceStream($"{nameof(Acklann)}.{nameof(Daterpillar)}.{name}"))
+                        using (var file = new FileStream(xsdFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+                        {
+                            data.CopyTo(file);
+                            file.Flush();
+                        }
+                    }
+
+                    var doc = XDocument.Load(stream);
+                    var sets = new XmlSchemaSet();
+                    sets.Add(XMLNS, xsdFile);
+                    bool isWellFormed = true;
+                    doc.Validate(sets, (handler ?? delegate (object o, ValidationEventArgs e)
+                    {
+                        if (e.Severity == XmlSeverityType.Error) isWellFormed = false;
+                    }));
+
+                    stream.Seek(0, SeekOrigin.Begin);
+                    var serializer = new XmlSerializer(typeof(Schema));
+                    schema = (Schema)serializer.Deserialize(stream);
+                    schema.LinkChildNodes();
+
+                    return isWellFormed;
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Deserialize the <see cref="Schema"/> document contained by specified.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="schema">The schema.</param>
+        /// <param name="handler">The handler.</param>
+        /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public static bool TryLoad(string filePath, out Schema schema, ValidationEventHandler handler = null)
+        {
+            if (File.Exists(filePath) == false) throw new FileNotFoundException($"Could not find file at '{filePath}'.", filePath);
+
+            using (Stream stream = File.OpenRead(filePath))
+            {
+                return TryLoad(stream, out schema, handler);
             }
         }
 
         /// <summary>
-        /// Gets all foreign keys within the schema.
+        /// Adds the specified <see cref="Table"/> objects as children of this <see cref="Schema"/>.
         /// </summary>
-        /// <returns>IEnumerable&lt;ForeignKey&gt;.</returns>
-        public IEnumerable<ForeignKey> GetForeignKeys()
+        /// <param name="tables">The SQL objects.</param>
+        public void Add(params Table[] tables)
         {
-            foreach (var table in Tables)
+            foreach (Table item in tables)
             {
-                foreach (var constraint in table.ForeignKeys)
-                {
-                    yield return constraint;
-                }
+                item.Schema = this;
+                Tables.Add(item);
             }
         }
 
         /// <summary>
-        /// Gets all columns within the schema.
+        /// Adds the specified <see cref="Script"/>  objects as children of this <see cref="Schema"/>.
         /// </summary>
-        /// <returns>IEnumerable&lt;Column&gt;.</returns>
-        public IEnumerable<Column> GetColumns()
+        /// <param name="scripts">The scripts.</param>
+        public void Add(params Script[] scripts)
         {
-            foreach (var table in Tables)
+            foreach (Script item in scripts)
             {
-                foreach (var column in table.Columns)
-                {
-                    yield return column;
-                }
+                Scripts.Add(item);
             }
-        }
-
-        /// <summary>
-        /// Gets all indexes within the schema.
-        /// </summary>
-        /// <returns>IEnumerable&lt;Index&gt;.</returns>
-        public IEnumerable<Index> GetIndexes()
-        {
-            foreach (var table in Tables)
-            {
-                foreach (var index in table.Indexes)
-                {
-                    yield return index;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds the specified SQL objects as children of this <see cref="Schema"/>.
-        /// </summary>
-        /// <param name="sqlObjects">The SQL objects.</param>
-        public void Add(params object[] sqlObjects)
-        {
-            foreach (var item in sqlObjects)
-            {
-                if (item is Table table)
-                {
-                    table.Schema = this;
-                    Tables.Add(table);
-                }
-                else if (item is Script script)
-                {
-                    Scripts.Add(script);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the specified table from this instance.
-        /// </summary>
-        /// <param name="tableName">The name of the table.</param>
-        public void RemoveTable(string tableName)
-        {
-            var target = Tables.FirstOrDefault(x => x.Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase));
-            if (target != null) Tables.Remove(target);
         }
 
         /// <summary>
         /// Serialize this instance and writes it to the specified output stream.
         /// </summary>
-        /// <param name="outputStream">The output stream.</param>
-        public void Save(Stream outputStream)
+        /// <param name="stream">The output stream.</param>
+        public void Save(Stream stream)
         {
             var settings = new XmlWriterSettings()
             {
@@ -158,110 +171,58 @@ namespace Acklann.Daterpillar.Configuration
                 Encoding = new UTF8Encoding(false)
             };
 
-            using (var writer = XmlWriter.Create(outputStream, settings))
+            using (var writer = XmlWriter.Create(stream, settings))
             {
                 var serializer = new XmlSerializer(typeof(Schema));
                 serializer.Serialize(writer, this, _namespace);
-                outputStream.Seek(0, SeekOrigin.Begin);
             }
         }
 
         /// <summary>
-        /// Returns a xml representation of the current object.
+        /// Serialize this instance and writes it to the specified output stream.
         /// </summary>
-        /// <returns>A xml representation of the current object.</returns>
-        public string ToXml()
+        /// <param name="filePath">The output file path.</param>
+        public void Save(string filePath)
         {
-            string xml;
-            using (var data = new MemoryStream())
+            using (Stream outStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                Save(data);
-                xml = new UTF8Encoding(false).GetString(data.ToArray());
-            }
-
-            return xml;
-        }
-
-        /// <summary>
-        /// Concatenate the SQL objects of the specified schemas with this instance.
-        /// </summary>
-        /// <param name="otherSchemas">The schemas to join.</param>
-        public void Merge(params Schema[] otherSchemas)
-        {
-            foreach (var item in otherSchemas)
-            {
-                foreach (var t in item.Tables)
-                {
-                    if (ContainsTable(t.Name)) { Tables.RemoveAll(x => x.Name.Equals(t.Name, StringComparison.CurrentCultureIgnoreCase)); }
-                    Tables.Add(t);
-                }
-
-                foreach (var s in item.Scripts)
-                {
-                    if (ContainsScript(s.Name)) { Scripts.RemoveAll(x => x.Name.Equals(s.Name, StringComparison.CurrentCultureIgnoreCase)); }
-                    Scripts.Add(s);
-                }
+                Save(outStream);
             }
         }
 
         /// <summary>
-        /// Determines whether the current object has a <see cref="Table"/> with the specified name.
+        /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        /// <param name="tableName">The name of the table.</param>
-        /// <returns><c>true</c> if the specified table exist; otherwise, <c>false</c>.</returns>
-        public bool ContainsTable(string tableName)
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
         {
-            foreach (var table in Tables)
+            var settings = new XmlWriterSettings()
             {
-                if (table.Name.Equals(tableName, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
+                Indent = true,
+                OmitXmlDeclaration = true,
+                Encoding = new UTF8Encoding()
+            };
 
-            return false;
+            using (var stream = new MemoryStream())
+            using (var writer = XmlWriter.Create(stream, settings))
+            {
+                var serializer = new XmlSerializer(typeof(Schema));
+                serializer.Serialize(writer, this, _namespace);
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
         }
+
+        #region ICloneable
 
         /// <summary>
-        /// Determines whether the current object has a <see cref="Script"/> with the specified name
+        /// Creates a new object that is a copy of the current instance.
         /// </summary>
-        /// <param name="name">The name of the script.</param>
-        /// <returns><c>true</c> if the specified script exist; otherwise, <c>false</c>.</returns>
-        public bool ContainsScript(string name)
-        {
-            foreach (var script in Scripts)
-            {
-                if (script.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Rearrange this instance <see cref="Table"/> objects so referenced tables (aka foreign keys) precede their dependants.
-        /// </summary>
-        public void Sort()
-        {
-            if (Tables.IsNotEmpty())
-            {
-                var nodes = new List<Node>();
-                foreach (var table in Tables) nodes.Add(new Node(table));
-                foreach (var parent in nodes) parent.AddChildren(nodes);
-
-                int latestRanking = 0;
-                foreach (var n in nodes)
-                {
-                    latestRanking = Rank(n, latestRanking);
-                }
-
-                Tables.Clear();
-                nodes.Sort(new RankComparer());
-                foreach (var item in nodes) Tables.Add(item.Data);
-            }
-        }
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        object ICloneable.Clone() => Clone();
 
         /// <summary>
         /// Creates a new <see cref="Schema"/> object that is a copy of the current instance.
@@ -269,14 +230,11 @@ namespace Acklann.Daterpillar.Configuration
         /// <returns>A new <see cref="Schema"/> object that is a copy of this instance.</returns>
         public Schema Clone()
         {
-            var clone = new Schema()
-            {
-                Name = this.Name
-            };
+            var clone = new Schema() { Name = Name };
 
-            foreach (var table in Tables)
+            foreach (Table table in Tables)
             {
-                var copy = table.Clone();
+                Table copy = table.Clone();
                 copy.Schema = clone;
                 clone.Tables.Add(copy);
             }
@@ -286,119 +244,39 @@ namespace Acklann.Daterpillar.Configuration
             return clone;
         }
 
-        internal void AssignMissingValues()
+        #endregion ICloneable
+
+        #region Private Members
+
+        private readonly XmlSerializerNamespaces _namespace;
+
+        private void LinkChildNodes()
         {
-            foreach (var table in Tables)
+            foreach (Table table in Tables)
             {
                 if (table.Schema == null) table.Schema = this;
 
-                foreach (var column in table.Columns)
+                foreach (Column column in table.Columns)
                 {
                     if (column.Table == null) column.Table = table;
                 }
 
-                foreach (var index in table.Indexes)
+                foreach (Index index in table.Indexes)
                 {
                     if (index.Table == null) index.Table = table;
                 }
 
-                foreach (var constraint in table.ForeignKeys)
+                foreach (ForeignKey constraint in table.ForeignKeys)
                 {
                     if (constraint.Table == null) constraint.Table = table;
                 }
             }
         }
 
-        #region Private Members
-
-        private readonly XmlSerializerNamespaces _namespace;
-
         private string ToDebuggerDisplay()
         {
             string name = (string.IsNullOrEmpty(Name) ? string.Empty : $"{Name} | ");
             return $"{name}Tables: {Tables.Count} Scripts: {Scripts.Count}";
-        }
-
-        private int Rank(Node node, int? rank = 0)
-        {
-            Node nonRankedChild;
-            if (node.Rank == null)
-                do
-                {
-                    nonRankedChild = node.GetNonRankedChild();
-                    if (nonRankedChild == null)
-                    {
-                        // Here I am ranking the node only when all of it's children
-                        // has been ranked.
-                        node.Rank = rank = (rank + 1);
-                        System.Diagnostics.Debug.WriteLine(node);
-                    }
-                    else
-                    {
-                        // Here I am ranking the child node that has not yet been ranked.
-                        // Also I am updating the parent node rank with the rank of its
-                        // then ranked child because the parent rank should always be higher.
-                        // The parent node rank will later be updated when it has no more non ranked child.
-                        Rank(nonRankedChild, rank);
-                        rank = node.Rank = nonRankedChild.Rank;
-                        System.Diagnostics.Debug.WriteLine($"\t\tupdated {node}");
-                    }
-                }
-                while (nonRankedChild != null);
-
-            return rank ?? 0;
-        }
-
-        private class Node
-        {
-            public Node(Table table)
-            {
-                Data = table;
-                Children = new List<Node>();
-            }
-
-            public int? Rank;
-            public Table Data;
-            public IList<Node> Children;
-
-            public string Name
-            {
-                get { return Data.Name; }
-            }
-
-            public void AddChildren(List<Node> nodes)
-            {
-                foreach (var fKey in Data.ForeignKeys)
-                {
-                    var child = nodes.FirstOrDefault(x => x.Name == fKey.ForeignTable);
-                    if (child != null) Children.Add(child);
-                }
-            }
-
-            public Node GetNonRankedChild()
-            {
-                foreach (var item in Children)
-                {
-                    if (item.Rank == null) return item;
-                }
-
-                return null;
-            }
-
-            public override string ToString()
-            {
-                return $"{Name}: {(Rank == null ? "null" : Rank.ToString())}";
-            }
-        }
-
-        private class RankComparer : IComparer<Node>
-        {
-            public int Compare(Node x, Node y)
-            {
-                if (x.Rank > y.Rank) return 1;
-                else if (x.Rank < y.Rank) return -1;
-                else return 0;
-            }
         }
 
         #endregion Private Members

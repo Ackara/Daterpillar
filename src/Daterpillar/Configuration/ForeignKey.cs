@@ -11,7 +11,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
         /// </summary>
-        public ForeignKey() : this(string.Empty, string.Empty, string.Empty, ReferentialAction.NoAction, ReferentialAction.NoAction)
+        public ForeignKey() : this(string.Empty, string.Empty, string.Empty, ReferentialAction.Cascade, ReferentialAction.Restrict)
         {
         }
 

@@ -4,18 +4,28 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <Version>4.8.8</Version>
-    <FileVersion>4.8.8</FileVersion>
     <AssemblyVersion>4.8.8</AssemblyVersion>
+    <FileVersion>4.8.8</FileVersion>
+    <Version>4.8.8</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Owners>Ackara</Owners>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\Ackara.Daterpillar.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
+
   <ItemGroup>
+    <None Update="Configuration\DataTypeFactory.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DataTypeFactory.cs</LastGenOutput>
+    </None>
     <None Update="Configuration\SchemaType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SchemaType.cs</LastGenOutput>
@@ -33,10 +43,13 @@
       <LastGenOutput>Xmlns.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Update="Configuration\DataTypeFactory.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataTypeFactory.tt</DependentUpon>
+    </Compile>
     <Compile Update="Configuration\SchemaType.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -57,5 +70,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Xmlns.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

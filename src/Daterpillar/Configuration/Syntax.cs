@@ -6,14 +6,14 @@ namespace Acklann.Daterpillar.Configuration
 	/// </summary>
 	public enum Syntax
 	{
-		/// <summary>generic syntax.</summary>
-		generic,
-		/// <summary>mssql syntax.</summary>
-		mssql,
-		/// <summary>mysql syntax.</summary>
-		mysql,
-		/// <summary>sqlite syntax.</summary>
-		sqlite,
+		/// <summary>Generic syntax.</summary>
+		Generic,
+		/// <summary>MSSQL syntax.</summary>
+		MSSQL,
+		/// <summary>MySQL syntax.</summary>
+		MySQL,
+		/// <summary>SQLite syntax.</summary>
+		SQLite,
 		/// <summary>C# syntax.</summary>
 		CSharp
 	}

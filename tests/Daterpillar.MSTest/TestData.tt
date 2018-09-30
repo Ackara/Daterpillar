@@ -58,7 +58,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 	}	
 }
 <#+
-string FolderName = "Samples";
+string FolderName = "test-data";
 
 IEnumerable<(string, string, FileInfo)> GetFileList()
 {

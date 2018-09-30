@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -7,7 +8,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class Table : ICloneable<Table>
+    public sealed class Table : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -21,7 +22,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public Table(string name, params object[] sqlObjects)
+        public Table(string name, params ISQLObject[] sqlObjects)
         {
             Name = name;
             Columns = new List<Column>();
@@ -65,7 +66,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [XmlElement("comment")]
+        [XmlElement("description")]
         public string Comment { get; set; }
 
         /// <summary>
@@ -88,6 +89,8 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>The table indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
+
+        #region ICloneable
 
         /// <summary>
         /// Creates a new <see cref="Table"/> object that is a copy of the current instance.
@@ -124,5 +127,15 @@ namespace Acklann.Daterpillar.Configuration
 
             return clone;
         }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        object ICloneable.Clone() => Clone();
+
+        #endregion ICloneable
     }
 }
