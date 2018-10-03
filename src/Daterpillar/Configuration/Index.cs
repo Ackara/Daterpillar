@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
@@ -81,7 +82,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets a value indicating whether the index is unique.
         /// </summary>
         /// <value><c>true</c> if the index is unique; otherwise, <c>false</c>.</value>
-        [XmlAttribute("unique")]
+        [XmlAttribute("unique"), DefaultValue(false)]
         public bool IsUnique { get; set; }
 
         /// <summary>

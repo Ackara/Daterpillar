@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -65,14 +66,14 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets a value indicating whether this instance is nullable.
         /// </summary>
         /// <value><c>true</c> if this instance is nullable; otherwise, <c>false</c>.</value>
-        [XmlAttribute("nullable")]
+        [XmlAttribute("nullable"), DefaultValue(false)]
         public bool IsNullable { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether column is auto incremented.
         /// </summary>
         /// <value><c>true</c> if [automatic incremented]; otherwise, <c>false</c>.</value>
-        [XmlAttribute("autoIncrement")]
+        [XmlAttribute("autoIncrement"), DefaultValue(false)]
         public bool AutoIncrement { get; set; }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the ordinal position of the column.
         /// </summary>
         /// <value>The ordinal position.</value>
-        [XmlIgnore]
+        [XmlIgnore, IgnoreDataMember]
         public int OrdinalPosition { get; set; }
 
         // ==================== INTERNAL MEMBERS ==================== //

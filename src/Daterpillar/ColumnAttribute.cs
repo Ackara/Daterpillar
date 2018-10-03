@@ -42,6 +42,7 @@ namespace Acklann.Daterpillar
         {
             Name = name;
             Scale = scale;
+            DefaultValue = null;
             Precision = precision;
         }
 
@@ -74,7 +75,7 @@ namespace Acklann.Daterpillar
         /// <summary>
         /// The default value.
         /// </summary>
-        public string DefaultValue { get; set; }
+        public object DefaultValue { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the type.

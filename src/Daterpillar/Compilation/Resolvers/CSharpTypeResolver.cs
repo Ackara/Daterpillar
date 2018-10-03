@@ -70,13 +70,13 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
                         return new DataType(DOUBLE);
 
                     case nameof(Decimal):
-                        return new DataType(DECIMAL, 10, 2);
+                        return new DataType(DECIMAL, 8, 2);
 
                     case nameof(Char):
-                        return new DataType(CHAR);
+                        return new DataType(CHAR, 1);
 
                     case nameof(String):
-                        return new DataType(VARCHAR, 64);
+                        return new DataType(VARCHAR);
 
                     case nameof(TimeSpan):
                     case nameof(DateTime):

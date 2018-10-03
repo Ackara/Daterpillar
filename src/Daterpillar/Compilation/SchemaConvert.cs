@@ -2,6 +2,7 @@
 using Acklann.Daterpillar.Configuration;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,7 @@ namespace Acklann.Daterpillar.Compilation
 
             var schema = new Schema();
             string documentation = Path.ChangeExtension(assembly.Location, ".xml");
+
             foreach (Type type in tables)
                 try
                 {
@@ -36,20 +38,22 @@ namespace Acklann.Daterpillar.Compilation
                 }
                 catch (FileNotFoundException) { }
 
+            if (assembly.GetCustomAttribute(typeof(IncludeAttribute)) is IncludeAttribute attr)
+                schema.Include = attr.Path;
+
             return schema;
         }
 
         public static Table ToTable(Type type, string documentionPath = null)
         {
-            var table = new Table();
-            table.Name = type.GetCustomAttribute<TableAttribute>().Name;
-            if (string.IsNullOrEmpty(table.Name))
-            {
-                int genericTypeDelimeter = type.Name.IndexOf('`');
-                table.Name = (genericTypeDelimeter > 0 ? type.Name.Substring(genericTypeDelimeter) : type.Name);
-            }
+            IEnumerable<MemberInfo> members = (from m in type.GetMembers()
+                                               where
+                                                (m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field)
+                                                &&
+                                                m.IsDefined(typeof(SqlIgnoreAttribute)) == false
+                                               select m).ToArray();
 
-            IEnumerable<MemberInfo> members = type.GetMembers().Where(m => m.IsDefined(typeof(ColumnAttribute)));
+            var table = new Table(GetName(type));
             foreach (MemberInfo member in members)
             {
                 ExtractColumnInfo(table, member, documentionPath);
@@ -66,59 +70,61 @@ namespace Acklann.Daterpillar.Compilation
         {
             var column = new Column();
             table.Columns.Add(column);
-            ColumnAttribute columnAttr = member.GetCustomAttribute<ColumnAttribute>();
-            column.Name = (string.IsNullOrEmpty(columnAttr.Name) ? member.Name : columnAttr.Name);
-            column.AutoIncrement = columnAttr.AutoIncrement;
-            column.DefaultValue = columnAttr.DefaultValue;
-            column.IsNullable = columnAttr.Nullable;
+
+            var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+            var defaultAttr = member.GetCustomAttribute(typeof(DefaultValueAttribute)) as DefaultValueAttribute;
+
+            column.DefaultValue = Convert.ToString(columnAttr?.DefaultValue ?? defaultAttr?.Value);
+            if (string.IsNullOrEmpty(column.DefaultValue)) column.DefaultValue = null;
+            column.AutoIncrement = (columnAttr?.AutoIncrement ?? false);
+            column.IsNullable = (columnAttr?.Nullable ?? false);
+            column.Name = GetName(member);
             column.Table = table;
 
-            string typeName = columnAttr.TypeName;
-            if (string.IsNullOrEmpty(typeName))
+            var dataType = new DataType(columnAttr?.TypeName);
+            if (string.IsNullOrEmpty(dataType.Name))
             {
                 if (member is PropertyInfo prop)
                 {
-                    typeName = CSharpTypeResolver.GetDataType(prop.PropertyType).Name;
+                    dataType = CSharpTypeResolver.GetDataType(prop.PropertyType);
                     if (Nullable.GetUnderlyingType(prop.PropertyType) != null) column.IsNullable = true;
                 }
                 else if (member is FieldInfo field)
                 {
-                    typeName = CSharpTypeResolver.GetDataType(field.FieldType).Name;
+                    dataType = CSharpTypeResolver.GetDataType(field.FieldType);
                     if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
                 }
             }
 
             DataTypeAttribute typeAttr = member.GetCustomAttribute(typeof(DataTypeAttribute)) as DataTypeAttribute;
-            column.DataType = (typeAttr == null ? new DataType(typeName, columnAttr.Scale, columnAttr.Precision) : typeAttr.ToDataType());
+            column.DataType = (typeAttr == null ? dataType : typeAttr.ToDataType());
 
             ExtractForiegnKeyInfo(table, member, column.Name);
         }
 
         private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
         {
-            if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fk)
+            if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
             {
-                string foreignTable = fk.ForeignTable, foreignColumn = fk.ForeignColumn;
+                string foreignTable = fkAttr.ForeignTable, foreignColumn = fkAttr.ForeignColumn;
 
-                var fTableType = Type.GetType(fk.ForeignTable);
+                var fTableType = Type.GetType(fkAttr.ForeignTable);
                 if (fTableType != null)
                 {
                     TableAttribute ta = fTableType.GetCustomAttribute<TableAttribute>();
-                    foreignTable = (string.IsNullOrEmpty(ta.Name) ? fTableType.Name : ta.Name);
+                    foreignTable = GetName(fTableType);
 
-                    MemberInfo fColumn = fTableType.GetMember(fk.ForeignColumn).FirstOrDefault(x => x.IsDefined(typeof(ColumnAttribute)));
-                    if (fColumn?.GetCustomAttribute(typeof(ColumnAttribute)) is ColumnAttribute ca)
-                    {
-                        foreignColumn = (string.IsNullOrEmpty(ca.Name) ? fColumn.Name : ca.Name);
-                    }
+                    MemberInfo fColumn = fTableType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
+                    if (fColumn != null)
+                        foreignColumn = GetName(fColumn);
                 }
 
                 table.ForeignKeys.Add(new ForeignKey()
                 {
                     Table = table,
-                    OnDelete = fk.OnDelete,
-                    OnUpdate = fk.OnUpdate,
                     LocalColumn = columnName,
+                    OnDelete = fkAttr.OnDelete,
+                    OnUpdate = fkAttr.OnUpdate,
                     ForeignTable = foreignTable,
                     ForeignColumn = foreignColumn
                 });
@@ -129,23 +135,22 @@ namespace Acklann.Daterpillar.Compilation
         {
             var indecies = new List<(string, IndexAttribute)>();
             foreach (MemberInfo member in members)
-                if (member.GetCustomAttribute(typeof(ColumnAttribute)) is ColumnAttribute col)
-                {
-                    string columnName = (string.IsNullOrEmpty(col.Name) ? member.Name : col.Name);
+            {
+                string columnName = GetName(member);
 
-                    if (member.GetCustomAttribute(typeof(IndexAttribute)) is IndexAttribute idx)
-                    {
-                        indecies.Add((columnName, idx));
-                    }
-                    else if (member.GetCustomAttribute(typeof(KeyAttribute)) is KeyAttribute key)
-                    {
-                        indecies.Add((columnName, new IndexAttribute(nameof(IndexType.PrimaryKey), IndexType.PrimaryKey) { Order = key.Order }));
-                    }
-                    else if (member.IsDefined(typeof(ForeignKeyAttribute)))
-                    {
-                        indecies.Add((columnName, new IndexAttribute(IndexType.Index)));
-                    }
+                if (member.GetCustomAttribute(typeof(IndexAttribute)) is IndexAttribute idx)
+                {
+                    indecies.Add((columnName, idx));
                 }
+                else if (member.GetCustomAttribute(typeof(KeyAttribute)) is KeyAttribute key)
+                {
+                    indecies.Add((columnName, new IndexAttribute(nameof(IndexType.PrimaryKey), IndexType.PrimaryKey) { Order = key.Order }));
+                }
+                else if (member.IsDefined(typeof(ForeignKeyAttribute)))
+                {
+                    indecies.Add((columnName, new IndexAttribute(IndexType.Index)));
+                }
+            }
 
             foreach (var index in indecies.GroupBy(a => a.Item2.Name))
             {
@@ -164,6 +169,30 @@ namespace Acklann.Daterpillar.Compilation
                 table.Indecies.Add(idx);
                 idx.Table = table;
             }
+        }
+
+        private static string GetName(MemberInfo member)
+        {
+            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
+        }
+
+        private static string GetName(Type type)
+        {
+            var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
+            var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
+
+            if (string.IsNullOrEmpty(name))
+            {
+                int genericTypeDelimeter = type.Name.IndexOf('`');
+                name = (genericTypeDelimeter > 0 ? type.Name.Substring(genericTypeDelimeter) : type.Name);
+            }
+
+            return name;
         }
     }
 }

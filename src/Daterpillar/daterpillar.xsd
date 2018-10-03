@@ -25,9 +25,6 @@
       <xs:attribute name="name"
                     type="xs:string" />
 
-      <xs:attribute name="syntax"
-                    type="Syntax" />
-
       <xs:attribute name="include"
                     type="xs:string" />
     </xs:complexType>
@@ -158,6 +155,10 @@
   <xs:complexType name="Script">
     <xs:simpleContent>
       <xs:extension base="xs:string">
+        <xs:attribute name="name"
+                      type="xs:string"
+                      use="optional" />
+
         <xs:attribute name="syntax"
                       type="Syntax"
                       use="optional" />

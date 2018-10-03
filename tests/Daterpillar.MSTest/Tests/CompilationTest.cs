@@ -3,7 +3,6 @@ using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
-using System.Text;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -30,7 +29,7 @@ namespace Acklann.Daterpillar.Tests
         public void Should_merge_referenced_schema_when_applied()
         {
             // Arrange
-            var error = new StringBuilder();
+            var totalTablesBeforeMerge = 0;
             var inputFile = TestData.GetSakilaInventoryXML().FullName;
 
             var city = new Table("city",
@@ -48,6 +47,8 @@ namespace Acklann.Daterpillar.Tests
             // Act
             if (Schema.TryLoad(inputFile, out Schema schema, out string errorMsg))
             {
+                totalTablesBeforeMerge = schema.Tables.Count;
+
                 schema.Merge();
                 schema.Merge(revisions);
             }
@@ -56,6 +57,7 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             schema.ShouldNotBeNull();
             schema.Include.ShouldBeNull();
+            totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
 
             result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();
             result.Columns.Find(x => x.Name == city.Columns[1].Name).DataType.ShouldBe(new DataType(SchemaType.SMALLINT));

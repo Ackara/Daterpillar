@@ -34,7 +34,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the name of the script.
         /// </summary>
         /// <value>The name.</value>
-        [XmlAttribute("name")]
+        [XmlAttribute(name)]
         public string Name { get; set; }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>
         /// The syntax.
         /// </value>
-        [XmlAttribute("syntax")]
+        [XmlAttribute(syntax)]
         public Syntax Syntax { get; set; }
 
         /// <summary>
@@ -72,23 +72,32 @@ namespace Acklann.Daterpillar.Configuration
         public void ReadXml(XmlReader reader)
         {
             Syntax = Syntax.Generic;
-            if (Enum.TryParse(reader.GetAttribute("syntax"), out Syntax s))
+            if (Enum.TryParse(reader.GetAttribute(syntax), out Syntax s))
             {
                 Syntax = s;
             }
 
+            Name = reader.GetAttribute(name);
             if (reader.Read()) Content = reader.Value;
         }
 
         public void WriteXml(XmlWriter writer)
         {
             if (Syntax != Syntax.Generic)
-            {
-                writer.WriteAttributeString("syntax", Syntax.ToString());
-            }
+                writer.WriteAttributeString(syntax, Syntax.ToString());
+
+            if (string.IsNullOrEmpty(Name) == false)
+                writer.WriteAttributeString(name, Name);
+
             writer.WriteCData(Content);
         }
 
         #endregion IXmlSerializable
+
+        #region Private Members
+
+        private const string name = "name", syntax = "snytax";
+
+        #endregion Private Members
     }
 }

@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
-        public Schema() : this(string.Empty, Syntax.Generic)
+        public Schema() : this(null, Syntax.Generic)
         { }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("documentation")]
         public string Description { get; set; }
 
-        [XmlAttribute("syntax")]
-        public Syntax Syntax { get; set; }
+        [XmlIgnore]
+        public Syntax Syntax { get; set; }/* TODO: remember delete this*/
 
         /// <summary>
         /// Gets or sets the path of another schema to merge with this instance.
@@ -246,30 +246,6 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
-        public override string ToString()
-        {
-            var settings = new XmlWriterSettings()
-            {
-                Indent = true,
-                OmitXmlDeclaration = true,
-                Encoding = new UTF8Encoding()
-            };
-
-            using (var stream = new MemoryStream())
-            using (var writer = XmlWriter.Create(stream, settings))
-            {
-                var serializer = new XmlSerializer(typeof(Schema));
-                serializer.Serialize(writer, this, _namespace);
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }
-        }
-
-        /// <summary>
         /// Overwrites this instance tables and scripts only with the specified <see cref="Schema" />'s objects that match.
         /// </summary>
         /// <exception cref="ArgumentNullException">Occurs when this instance <see cref="Path"/> is null or empty.</exception>
@@ -346,6 +322,30 @@ namespace Acklann.Daterpillar.Configuration
                 {
                     if (Glob.IsMatch(schema.Path, Include)) Include = null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            var settings = new XmlWriterSettings()
+            {
+                Indent = true,
+                OmitXmlDeclaration = true,
+                Encoding = new UTF8Encoding()
+            };
+
+            using (var stream = new MemoryStream())
+            using (var writer = XmlWriter.Create(stream, settings))
+            {
+                var serializer = new XmlSerializer(typeof(Schema));
+                serializer.Serialize(writer, this, _namespace);
+                return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
 

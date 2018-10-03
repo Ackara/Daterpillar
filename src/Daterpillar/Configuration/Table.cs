@@ -121,8 +121,6 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        // ==================== INTERNAL MEMBERS ==================== //
-
         #region ICloneable
 
         /// <summary>

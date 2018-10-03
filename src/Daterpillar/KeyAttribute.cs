@@ -12,6 +12,12 @@ namespace Acklann.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyAttribute"/> class.
         /// </summary>
+        public KeyAttribute() : this(Order.ASC)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyAttribute"/> class.
+        /// </summary>
         /// <param name="order">The sorting order.</param>
         public KeyAttribute(Order order)
         {

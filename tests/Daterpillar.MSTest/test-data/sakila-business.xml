@@ -87,4 +87,72 @@
       <columnName>address_id</columnName>
     </index>
   </table>
+
+  <table name="payment">
+    <column name="payment_id" autoIncrement="true">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="customer_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="staff_id">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="rental_id" nullable="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="amount">
+      <dataType scale="5" precision="2">decimal</dataType>
+    </column>
+
+    <column name="payment_date">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <column name="last_update" nullable="true"
+>
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey localColumn="rental_id" foreignTable="rental" foreignColumn="rental_id" />
+    <foreignKey localColumn="staff_id" foreignTable="staff_id" foreignColumn="staff_id" />
+    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" />
+  </table>
+
+  <table name="rental">
+    <column name="rental_id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="rental_date">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <column name="inventory_id">
+      <dataType>mediumInt</dataType>
+    </column>
+
+    <column name="customer_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="return_date" nullable="true">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <column name="staff_id">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="last_udpate">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" />
+    <foreignKey localColumn="staff_id" foreignTable="staff" foreignColumn="staff_id" />
+  </table>
 </schema>

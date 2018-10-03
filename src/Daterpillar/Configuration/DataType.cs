@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -45,14 +47,14 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the scale.
         /// </summary>
         /// <value>The scale.</value>
-        [XmlAttribute("scale")]
+        [XmlAttribute("scale"), DefaultValue(0)]
         public int Scale { get; set; }
 
         /// <summary>
         /// Gets or sets the precision.
         /// </summary>
         /// <value>The precision.</value>
-        [XmlAttribute("precision")]
+        [XmlAttribute("precision"), DefaultValue(0)]
         public int Precision { get; set; }
 
         /// <summary>
