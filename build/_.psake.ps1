@@ -63,12 +63,6 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 -depends @("restore") -action {
     $manifest = Get-NcrementManifest $ManifestJson;
 
-    $releaseNotes = Join-Path $RootDir "releaseNotes.txt";
-    if (Test-Path $releaseNotes)
-    {
-        $manifest.ReleaseNotes = Get-Content $releaseNotes | Out-String;
-    }
-
     $oldVersion = $manifest | Convert-NcrementVersionNumberToString;
 	$result = $manifest | Step-NcrementVersionNumber $Branch -Break:$Major -Feature:$Minor -Patch | Update-NcrementProjectFile "$RootDir/src" -Commit:$Commit;
     $newVersion = $manifest | Convert-NcrementVersionNumberToString;
@@ -205,7 +199,7 @@ Task "Publish-Database" -alias "push-db" -description "This task publishes the a
 	}
 	Assert(-not [string]::IsNullOrEmpty($credentials.database)) "Unable to update database because no connection info was provided for the '$Branch' branch. Verify the secrets.json file.";
 	$db = [ConnectionInfo]::new($credentials, $credentials.database);
-	
+
     Write-Header "flyway: migrate ($($db.ToFlywayUrl()))";
 	[string]$flyway = Get-Flyway;
 	Exec { &$flyway migrate $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword() $([ConnectionInfo]::($MigrationDirectory)); }
@@ -287,7 +281,7 @@ function Get-Flyway([string]$version="5.1.4")
     [string]$url = "http://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{1}/flyway-commandline-{1}-{0}-x64.zip";
     switch ([Environment]::OSVersion.Platform)
     {
-        default 
+        default
         {
             $flyway = "$flyway.cmd";
             $url = [string]::Format($url, "windows", $version);

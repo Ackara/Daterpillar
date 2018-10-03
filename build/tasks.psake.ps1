@@ -18,8 +18,25 @@ Task "Generate-Packages" -alias "pack" -description "This task packages the proj
 	if (Test-Path $ArtifactsDir) { Remove-Item $ArtifactsDir -Recurse -Force; }
 	New-Item $ArtifactsDir -ItemType Directory | Out-Null;
 
-	# Creating nuget package.
-	$proj = Join-Path $RootDir "src\$SolutionName\*.csproj" | Get-Item;
-	Write-Host "dotnet: publish '$($proj.Basename)'";
+	# Creating powershell package.
+	$proj = Join-Path $RootDir "src\*.CLI\*.*proj" | Get-Item;
+	Write-Header "dotnet: publish '$($proj.Basename)' (FDD)";
+	Exec { &dotnet publish $proj.FullName --configuration $Configuration; }
+	
+	$psd1 = Get-ChildItem (Join-Path $RootDir "src\*.CLI\bin\$Configuration\*\NShellit") -Filter "*.psd1" -Recurse `
+			| Select-Object -First 1;
+	Copy-Item $psd1.DirectoryName -Destination $ArtifactsDir -Recurse -Force;
+	
+	# Creating the nuget package.
+	$proj = Join-Path $RootDir "src\$SolutionName\*.*proj" | Get-Item;
+	Write-Header "dotnet: pack '$($proj.Basename)' (FDD)";
+	Exec { &dotnet pack $proj.FullName --configuration $Configuration --output $ArtifactsDir ; }
 
+	# Creating test MSBuild target
+	[string]$nupkg = Join-Path $ArtifactsDir "*.nupkg" | Get-Item;
+	[string]$zip = [System.IO.Path]::ChangeExtension($nupkg, ".zip");
+	Copy-Item $nupkg -Destination $zip -Force;
+	
+	Expand-Archive $zip -DestinationPath (Join-Path $ArtifactsDir "msbuild");
+	Remove-Item $zip -Force -Recurse;
 }
