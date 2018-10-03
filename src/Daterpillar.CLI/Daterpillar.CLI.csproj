@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <AssemblyName>Acklann.Daterpillar.CLI</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>Daterpillar</Title>
+    <Product>Daterpillar</Product>
+    <PackageVersion>7.0.25</PackageVersion>
+    <AssemblyVersion>7.0.25</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Ackara</Authors>
+    <Company>Ackara</Company>
+    <PackageTags>orm</PackageTags>
+    <Copyright>MIT License</Copyright>
+    <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
+    <Description>A mico orm</Description>
+    <PackageReleaseNotes>
+      version 4.8.4
+      -------------
+      * Fix Invoke-SqlCommand inability to handle GO statements.
+
+      version 4.8.0
+      -------------
+      * Add ToAssignments method to LinqToSqlConverter class.
+
+      verion 4.7.23
+      -------------
+      * Have the ConvertT0-Script auto sort the schema.
+
+      version 4.7.22
+      --------------
+      * Fix SQLiteInformationSchema.
+
+      version 4.7.19
+      --------------
+      * Fix schema.sort method
+
+      version 4.7.18
+      --------------
+      * Add RemoveTable method to schema class
+
+      version 4.7.14
+      --------------
+      * Add msbuild targets to automation package
+
+      version 4.7.12
+      --------------
+      * Add Compare-Database cmdlet
+
+      version 4.7.9
+      -------------
+      * Remove named parameter sets
+
+      version 4.6.13
+      --------------
+      Add features:
+      * Add DeleteIfExist switch to Add-Database cmdlet
+    </PackageReleaseNotes>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
+    <PackageReference Include="Acklann.NShellit" Version="0.0.15-rc" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Daterpillar\Daterpillar.csproj" />
+  </ItemGroup>
+</Project>

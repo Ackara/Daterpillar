@@ -7,7 +7,7 @@
   <xs:element name="schema">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="description"
+        <xs:element name="documentation"
                     type="xs:string"
                     minOccurs="0" />
 
@@ -27,14 +27,20 @@
 
       <xs:attribute name="syntax"
                     type="Syntax" />
+
+      <xs:attribute name="include"
+                    type="xs:string" />
     </xs:complexType>
   </xs:element>
+
+  <xs:element name="documenation"
+              type="xs:string" />
 
   <!-- TYPES -->
 
   <xs:complexType name="Table">
     <xs:sequence>
-      <xs:element name="description"
+      <xs:element name="documentation"
                   type="xs:string"
                   minOccurs="0" />
 
@@ -61,12 +67,13 @@
 
   <xs:complexType name="Column">
     <xs:all>
-      <xs:element name="description"
+      <xs:element name="documentation"
                   type="xs:string"
                   minOccurs="0" />
 
       <xs:element name="dataType"
-                  type="DataType" />
+                  type="DataType"
+                  minOccurs="1" />
     </xs:all>
 
     <xs:attribute name="name"
@@ -99,21 +106,11 @@
     <xs:attribute name="unique"
                   type="xs:boolean" />
 
-    <xs:attribute name="type">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="Index" />
-          <xs:enumeration value="PrimaryKey" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="type"
+                  type="IndexType" />
   </xs:complexType>
 
   <xs:complexType name="ForeignKey">
-    <xs:attribute name="name"
-                  type="xs:string"
-                  use="optional" />
-
     <xs:attribute name="localColumn"
                   type="xs:string"
                   use="required" />
@@ -159,23 +156,13 @@
   </xs:complexType>
 
   <xs:complexType name="Script">
-    <xs:sequence>
-      <xs:element name="description"
-                  type="xs:string"
-                  minOccurs="0" />
-
-      <xs:element name="code"
-                  minOccurs="1"
-                  maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="syntax" type="Syntax" />
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="syntax"
+                      type="Syntax"
+                      use="optional" />
+      </xs:extension>
+    </xs:simpleContent>
   </xs:complexType>
 
   <!-- ENUMS -->
@@ -223,11 +210,23 @@
 
   <xs:simpleType name="ForeignKeyRule">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="noAction" />
+      <xs:enumeration value="no-action">
+        <xs:annotation>
+          <xs:documentation>This means something</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
       <xs:enumeration value="cascade" />
       <xs:enumeration value="restrict" />
-      <xs:enumeration value="setNull" />
-      <xs:enumeration value="setDefault" />
+      <xs:enumeration value="set-null" />
+      <xs:enumeration value="set-default" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IndexType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="index" />
+      <xs:enumeration value="primary-key" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

@@ -7,10 +7,20 @@
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDaterpillarSchemaOnBuild>false</GenerateDaterpillarSchemaOnBuild>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Tests\approved-results\**" />
     <EmbeddedResource Remove="Tests\approved-results\**" />
     <None Remove="Tests\approved-results\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="test-data\daterpillar.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Daterpillar.CLI\Daterpillar.CLI.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 
@@ -38,10 +49,6 @@
     <None Update="TestData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TestData.cs</LastGenOutput>
-    </None>
-
-    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="test-data\daterpillar.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -57,8 +64,5 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Fakes\" />
-  </ItemGroup>
-
+  <Import Project="..\..\artifacts\msbuild\build\*\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\netstandard2.0\Acklann.Daterpillar.targets')" />
 </Project>

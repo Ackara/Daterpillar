@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -36,7 +37,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent table.
         /// </summary>
-        [XmlIgnore]
+        [XmlIgnore, IgnoreDataMember]
         public Table Table;
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [XmlElement("description")]
+        [XmlElement("documentation")]
         public string Comment { get; set; }
 
         /// <summary>

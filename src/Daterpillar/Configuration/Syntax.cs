@@ -1,20 +1,21 @@
 ﻿
+
 namespace Acklann.Daterpillar.Configuration
 {
 	/// <summary>
-	/// Represents a SQL syntax.
+	/// A kind of SQL syntax.
 	/// </summary>
 	public enum Syntax
 	{
-		/// <summary>Generic syntax.</summary>
+		/// <summary></summary>
 		Generic,
-		/// <summary>MSSQL syntax.</summary>
+		/// <summary></summary>
 		MSSQL,
-		/// <summary>MySQL syntax.</summary>
+		/// <summary></summary>
 		MySQL,
-		/// <summary>SQLite syntax.</summary>
+		/// <summary></summary>
 		SQLite,
-		/// <summary>C# syntax.</summary>
+		/// <summary></summary>
 		CSharp
 	}
 }

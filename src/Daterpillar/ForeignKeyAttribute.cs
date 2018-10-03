@@ -12,13 +12,24 @@ namespace Acklann.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKeyAttribute"/> class.
         /// </summary>
+        /// <param name="foreignType">The foreign table.</param>
+        /// <param name="memberName">Name of the member column.</param>
+        public ForeignKeyAttribute(Type foreignType, string memberName, ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict) : this(foreignType.AssemblyQualifiedName, memberName, onUpdate, onDelete)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForeignKeyAttribute" /> class.
+        /// </summary>
         /// <param name="foreignTable">The foreign table.</param>
         /// <param name="foreignColumn">The foreign column.</param>
-        ///
-        public ForeignKeyAttribute(string foreignTable, string foreignColumn)
+        /// <param name="onUpdate">The on update.</param>
+        /// <param name="onDelete">The on delete.</param>
+        public ForeignKeyAttribute(string foreignTable, string foreignColumn, ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict)
         {
             ForeignColumn = foreignColumn;
             ForeignTable = foreignTable;
+            OnUpdate = onUpdate;
+            OnDelete = onDelete;
         }
 
         /// <summary>
@@ -34,11 +45,11 @@ namespace Acklann.Daterpillar
         /// <summary>
         /// The on update action.
         /// </summary>
-        public ReferentialAction OnUpdate;
+        public readonly ReferentialAction OnUpdate;
 
         /// <summary>
         /// The on delete action.
         /// </summary>
-        public ReferentialAction OnDelete;
+        public readonly ReferentialAction OnDelete;
     }
 }

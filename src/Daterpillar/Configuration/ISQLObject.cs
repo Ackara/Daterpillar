@@ -3,7 +3,7 @@
 namespace Acklann.Daterpillar.Configuration
 {
     /// <summary>
-    /// Defines the minimal properties of the SQL Object.
+    /// Represents a SQL object (<see cref="Table"/>, <see cref="ForeignKey"/> and <see cref="Index"/>).
     /// </summary>
     /// <seealso cref="System.ICloneable" />
     public interface ISQLObject : ICloneable
@@ -15,13 +15,5 @@ namespace Acklann.Daterpillar.Configuration
         /// The name.
         /// </value>
         string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the parent object.
-        /// </summary>
-        /// <value>
-        /// The parent.
-        /// </value>
-        //ISQLObject Parent { get; set; }
     }
 }

@@ -1,18 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="$(OutputPath)==''">
+    <TargetOutDir>bin\$(Configuration)\$(TargetFramework)</TargetOutDir>
+  </PropertyGroup>
+
   <PropertyGroup>
     <GenerateDaterpillarSchemaOnBuild Condition="$(GenerateDaterpillarSchemaOnBuild)==''">true</GenerateDaterpillarSchemaOnBuild>
+    <TargetOutDir Condition="$(TargetOutDir)==''">$(OutputPath)</TargetOutDir>
+    <DaterpillarTargetAssembly>$([System.IO.Path]::GetFullPath('$(TargetOutDir)\$(AssemblyName).dll'))</DaterpillarTargetAssembly>
+    <DaterpillarAssembly>
+      $([System.IO.Path]::Combine(
+        $([System.IO.Path]::GetDirectoryName(
+          $([System.IO.Path]::GetDirectoryName(
+            '$(MSBuildThisFileDirectory.Trim('\').Trim('/'))'
+          ))
+        )),
+        'tools', 'netstandard2.0', 'Acklann.Daterpillar.CLI.dll'
+      ))
+    </DaterpillarAssembly>
   </PropertyGroup>
 
   <Target Name="GenerateDaterpillarSchemaAfterBuild"
-          AfterTargets="CoreCompile"
+          AfterTargets="CoreCompile;Build"
           Condition="$(GenerateDaterpillarSchemaOnBuild)=='true'">
-    <Message Text="OnBuild: $(GenerateDaterpillarSchemaOnBuild)" />
     <CallTarget Targets="GenerateDaterpillarSchema" />
   </Target>
 
   <Target Name="GenerateDaterpillarSchema">
-    <Message Text="running schema generator" />
+    <Message Text="Skipped schema generation because '$(DaterpillarTargetAssembly)' was not found."
+         Condition="!Exists('$(DaterpillarTargetAssembly)')"	/>
+
+    <Message Text="Skipped schema generation because '$(DaterpillarAssembly)' was not found."
+         Condition="!Exists('$(DaterpillarAssembly)')"	/>
+
+    <Exec Command="dotnet &quot;$(DaterpillarAssembly.Trim())&quot; build &quot;$(DaterpillarTargetAssembly.Trim())&quot;"
+        Condition="Exists('$(DaterpillarAssembly)') AND Exists('$(DaterpillarTargetAssembly)')"	/>
   </Target>
 </Project>

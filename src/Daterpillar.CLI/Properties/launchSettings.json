@@ -1,0 +1,10 @@
+{
+  "profiles":
+  {
+    "Daterpillar.CLI":
+    {
+      "commandName": "Project",
+      "commandLineArgs": "build C:/Users/Ackeem/Projects/Ackara/Daterpillar/tests/Daterpillar.MSTest/bin/Debug/netcoreapp2.1/Acklann.Daterpillar.MSTest.dll"
+    }
+  }
+}

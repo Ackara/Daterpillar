@@ -12,6 +12,7 @@ namespace Acklann.Daterpillar.Configuration
 			switch (type)
 			{
 				default:
+					return null;
 				case SchemaType.BOOL:
 					return "bool";
 				case SchemaType.BLOB:

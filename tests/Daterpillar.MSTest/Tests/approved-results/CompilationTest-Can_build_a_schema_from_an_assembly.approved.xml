@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema name="" syntax="Generic" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+  <table name="Address">
+    <column name="address_id" nullable="false" autoIncrement="true">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="address" nullable="false" autoIncrement="false">
+      <dataType scale="50" precision="0">varchar</dataType>
+    </column>
+    <column name="address2" nullable="true" autoIncrement="false">
+      <dataType scale="50" precision="0">varchar</dataType>
+    </column>
+    <column name="district" nullable="false" autoIncrement="false">
+      <dataType scale="20" precision="0">varchar</dataType>
+    </column>
+    <column name="city_id" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="postal_code" nullable="false" autoIncrement="false" default="00818">
+      <dataType scale="10" precision="0">varchar</dataType>
+    </column>
+    <column name="phone" nullable="false" autoIncrement="false">
+      <dataType scale="20" precision="0">varchar</dataType>
+    </column>
+    <column name="last_update" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+    <foreignKey localColumn="city_id" foreignTable="city" foreignColumn="city_id" onUpdate="cascade" onDelete="restrict" />
+    <index type="index" unique="false">
+      <columnName order="asc">city_id</columnName>
+    </index>
+  </table>
+  <table name="city">
+    <column name="city_id" nullable="false" autoIncrement="true">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="city" nullable="false" autoIncrement="false">
+      <dataType scale="50" precision="0">varchar</dataType>
+    </column>
+    <column name="country_id" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="last_update" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+    <foreignKey localColumn="country_id" foreignTable="country" foreignColumn="country_id" onUpdate="cascade" onDelete="restrict" />
+    <index type="index" unique="false">
+      <columnName order="asc">country_id</columnName>
+    </index>
+  </table>
+  <table name="country">
+    <column name="country_id" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">smallInt</dataType>
+    </column>
+    <column name="country" nullable="false" autoIncrement="false">
+      <dataType scale="50" precision="0">varchar</dataType>
+    </column>
+    <column name="last_update" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+  </table>
+  <table name="customer">
+    <column name="customer_id" nullable="false" autoIncrement="true">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="store_id" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">tinyInt</dataType>
+    </column>
+    <column name="first_name" nullable="false" autoIncrement="false">
+      <dataType scale="45" precision="0">varchar</dataType>
+    </column>
+    <column name="last_name" nullable="false" autoIncrement="false">
+      <dataType scale="45" precision="0">varchar</dataType>
+    </column>
+    <column name="email" nullable="true" autoIncrement="false">
+      <dataType scale="50" precision="0">varchar</dataType>
+    </column>
+    <column name="address_id" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="active" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">bool</dataType>
+    </column>
+    <column name="create_date" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+    <column name="last_update" nullable="true" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+    <foreignKey localColumn="address_id" foreignTable="Address" foreignColumn="address_id" onUpdate="cascade" onDelete="restrict" />
+    <index type="index" unique="false">
+      <columnName order="asc">address_id</columnName>
+    </index>
+  </table>
+</schema>

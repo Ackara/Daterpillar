@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
 {
@@ -23,7 +24,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="foreignColumn">The foreign column name.</param>
         /// <param name="onUpdate">The on update referential action.</param>
         /// <param name="onDelete">The on delete referential action.</param>
-        public ForeignKey(string localColumn, string foreignTable, string foreignColumn, ReferentialAction onUpdate = ReferentialAction.NoAction, ReferentialAction onDelete = ReferentialAction.NoAction)
+        public ForeignKey(string localColumn, string foreignTable, string foreignColumn, ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict)
         {
             LocalColumn = localColumn;
             ForeignTable = foreignTable;
@@ -35,7 +36,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent table.
         /// </summary>
-        [XmlIgnore]
+        [XmlIgnore, IgnoreDataMember]
         public Table Table;
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Acklann.Daterpillar.Configuration
             get
             {
                 string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-                return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
+                return $"fk_{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
             }
         }
 

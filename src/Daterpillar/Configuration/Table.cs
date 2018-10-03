@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -8,7 +9,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class Table : ISQLObject
+    public sealed class Table : ICloneable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -22,7 +23,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public Table(string name, params ISQLObject[] sqlObjects)
+        public Table(string name, params object[] sqlObjects)
         {
             Name = name;
             Columns = new List<Column>();
@@ -52,7 +53,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent schema.
         /// </summary>
-        [XmlIgnore]
+        [XmlIgnore, IgnoreDataMember]
         public Schema Schema;
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        [XmlElement("description")]
+        [XmlElement("documentation")]
         public string Comment { get; set; }
 
         /// <summary>
@@ -89,6 +90,16 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>The table indexes.</value>
         [XmlElement("index")]
         public List<Index> Indexes { get; set; }
+
+        public void Merge(Table table)
+        {
+            foreach (Column col in Columns)
+            {
+
+            }
+        }
+
+        // ==================== INTERNAL MEMBERS ==================== //
 
         #region ICloneable
 

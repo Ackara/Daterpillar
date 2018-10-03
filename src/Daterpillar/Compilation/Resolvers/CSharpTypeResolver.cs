@@ -15,22 +15,22 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// </summary>
         public CSharpTypeResolver() : base()
         {
-            TypeMap[BOOL.ToLower()] = "bool";
-            TypeMap[BLOB.ToLower()] = "string";
-            TypeMap[CHAR.ToLower()] = "string";
-            TypeMap[TEXT.ToLower()] = "string";
-            TypeMap[VARCHAR.ToLower()] = "string";
-            TypeMap[INT.ToLower()] = "int";
-            TypeMap[BIGINT.ToLower()] = "long";
-            TypeMap[MEDIUMINT.ToLower()] = "int";
-            TypeMap[SMALLINT.ToLower()] = "int";
-            TypeMap[TINYINT.ToLower()] = "int";
-            TypeMap[FLOAT.ToLower()] = "float";
-            TypeMap[DOUBLE.ToLower()] = "double";
-            TypeMap[DECIMAL.ToLower()] = "decimal";
-            TypeMap[DATE.ToLower()] = "DateTime";
-            TypeMap[TIME.ToLower()] = "DateTime";
-            TypeMap[DATETIME.ToLower()] = "DateTime";
+            TypeMap[BOOL.ToLowerInvariant()] = "bool";
+            TypeMap[BLOB.ToLowerInvariant()] = "string";
+            TypeMap[CHAR.ToLowerInvariant()] = "string";
+            TypeMap[TEXT.ToLowerInvariant()] = "string";
+            TypeMap[VARCHAR.ToLowerInvariant()] = "string";
+            TypeMap[INT.ToLowerInvariant()] = "int";
+            TypeMap[BIGINT.ToLowerInvariant()] = "long";
+            TypeMap[MEDIUMINT.ToLowerInvariant()] = "int";
+            TypeMap[SMALLINT.ToLowerInvariant()] = "int";
+            TypeMap[TINYINT.ToLowerInvariant()] = "int";
+            TypeMap[FLOAT.ToLowerInvariant()] = "float";
+            TypeMap[DOUBLE.ToLowerInvariant()] = "double";
+            TypeMap[DECIMAL.ToLowerInvariant()] = "decimal";
+            TypeMap[DATE.ToLowerInvariant()] = "DateTime";
+            TypeMap[TIME.ToLowerInvariant()] = "DateTime";
+            TypeMap[DATETIME.ToLowerInvariant()] = "DateTime";
         }
 
         /// <summary>
@@ -43,7 +43,9 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         public static DataType GetDataType(Type clrType)
         {
             if (clrType == null) throw new NullReferenceException($"The {nameof(clrType)} parameter is null. You cannot pass a null arg to this method.");
-            else if (clrType.GetTypeInfo().IsEnum) return new DataType(INT);
+            if (clrType.IsGenericType && Nullable.GetUnderlyingType(clrType) != null) clrType = clrType.GetGenericArguments()[0];
+
+            if (clrType.GetTypeInfo().IsEnum) return new DataType(INT);
             else switch (clrType.Name)
                 {
                     case nameof(Boolean):
@@ -92,7 +94,7 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// <returns>The type name.</returns>
         public override string GetTypeName(DataType dataType)
         {
-            return TypeMap[dataType.Name.ToLower()];
+            return TypeMap[dataType.Name.ToLowerInvariant()];
         }
     }
 }

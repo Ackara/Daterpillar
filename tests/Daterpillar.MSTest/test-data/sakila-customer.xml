@@ -32,7 +32,7 @@
       <dataType>dateTime</dataType>
     </column>
 
-    <foreignKey name="fk_city_country" foreignTable="country" foreignColumn="country_id" localColumn="country_id" />
+    <foreignKey foreignTable="country" foreignColumn="country_id" localColumn="country_id" />
   </table>
 
   <table name="address">
@@ -68,7 +68,7 @@
       <dataType>dateTime</dataType>
     </column>
 
-    <foreignKey name="fk_address_city" foreignTable="city" foreignColumn="city_id" localColumn="city_id" />
+    <foreignKey foreignTable="city" foreignColumn="city_id" localColumn="city_id" />
   </table>
 
   <table name="customer">
@@ -110,4 +110,11 @@
 
     <foreignKey foreignTable="address" foreignColumn="address_id" localColumn="address_id" />
   </table>
+
+  <script>
+    <![CDATA[
+      INSERT INTO country (country)
+      VALUES ('USA', 'Mexico', 'Canada', 'United Kindom');
+    ]]>
+  </script>
 </schema>

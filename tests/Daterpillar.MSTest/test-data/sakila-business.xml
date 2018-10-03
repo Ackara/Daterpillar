@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
+        include="sakila-customer.xml">
+  <table name="store">
+    <column name="store_id" autoIncrement="true">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="manager_staff_id">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="address_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey localColumn="address_id" foreignTable="address" foreignColumn="address_id" />
+
+    <foreignKey localColumn="manager_staff_id" foreignTable="staff" foreignColumn="staff_id" />
+
+    <index>
+      <columnName>address_id</columnName>
+    </index>
+
+    <index>
+      <columnName>manager_staff_id</columnName>
+    </index>
+  </table>
+
+  <table name="staff">
+    <column name="staff_id" autoIncrement="true">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="first_name">
+      <dataType scale="45">varchar</dataType>
+    </column>
+
+    <column name="last_name">
+      <dataType scale="45">varchar</dataType>
+    </column>
+
+    <column name="address_id">
+      <dataType>smallInt</dataType>
+    </column>
+
+    <column name="picture" nullable="true">
+      <dataType>blob</dataType>
+    </column>
+
+    <column name="email" nullable="true">
+      <dataType scale="45">varchar</dataType>
+    </column>
+
+    <column name="store_id">
+      <dataType>tinyInt</dataType>
+    </column>
+
+    <column name="active">
+      <dataType>bool</dataType>
+    </column>
+
+    <column name="username">
+      <dataType scale="16">varchar</dataType>
+    </column>
+
+    <column name="password" nullable="true">
+      <dataType scale="40">varchar</dataType>
+    </column>
+
+    <column name="last_update">
+      <dataType>dateTime</dataType>
+    </column>
+
+    <foreignKey localColumn="store_id" foreignTable="store" foreignColumn="store_id" />
+
+    <index>
+      <columnName>store_id</columnName>
+    </index>
+
+    <index>
+      <columnName>address_id</columnName>
+    </index>
+  </table>
+</schema>

@@ -110,11 +110,11 @@ namespace Acklann.Daterpillar
             switch (order)
             {
                 default:
-                case Order.Ascending:
+                case Order.ASC:
                     output = "ASC";
                     break;
 
-                case Order.Descending:
+                case Order.DESC:
                     output = "DESC";
                     break;
             }

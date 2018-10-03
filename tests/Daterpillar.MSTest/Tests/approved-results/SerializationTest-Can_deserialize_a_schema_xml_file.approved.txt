@@ -1,0 +1,67 @@
+<schema name="" syntax="Generic" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+  <table name="song">
+    <column name="Id" nullable="false" autoIncrement="true">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="Name" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">varchar</dataType>
+    </column>
+    <column name="Length" nullable="false" autoIncrement="false">
+      <documentation>Get or set the song's length in seconds.</documentation>
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="Genre" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">varchar</dataType>
+    </column>
+    <column name="Disc" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="Track" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">smallInt</dataType>
+    </column>
+    <column name="Artist" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">varchar</dataType>
+    </column>
+    <column name="Album" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">varchar</dataType>
+    </column>
+  </table>
+  <table name="album">
+    <column name="Name" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">varchar</dataType>
+    </column>
+    <column name="Year" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="ArtistId" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="SongId" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <foreignKey localColumn="SongId" foreignTable="song" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
+    <index type="primary-key" unique="false">
+      <columnName order="asc">SongId</columnName>
+      <columnName order="asc">ArtistId</columnName>
+    </index>
+  </table>
+  <table name="artist">
+    <column name="Name" nullable="false" autoIncrement="false">
+      <dataType scale="32" precision="0">varchar</dataType>
+    </column>
+    <column name="Bio" nullable="false" autoIncrement="false" default="">
+      <dataType scale="0" precision="0">text</dataType>
+    </column>
+    <column name="Id" nullable="false" autoIncrement="true">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <column name="DOB" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">dateTime</dataType>
+    </column>
+  </table>
+  <script><![CDATA[
+      INSERT INTO artist (Name)
+      VALUES ('Drake'), ('Skepta'), ('Big-Sean');
+      ]]></script>
+</schema>

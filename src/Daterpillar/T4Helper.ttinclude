@@ -23,7 +23,7 @@ public string GetXmlNamespace()
 	return  match.Groups["xmlns"].Value;
 }
 
-public IEnumerable<string> GetXsdEnumerations(string enumName)
+public IEnumerable<(string, string)> GetXsdEnumerations(string enumName)
 {
 	var xsdDoc = XDocument.Load(GetXsdPath());
 	string xmlns = "http://www.w3.org/2001/XMLSchema";
@@ -33,12 +33,22 @@ public IEnumerable<string> GetXsdEnumerations(string enumName)
 		select x).FirstOrDefault();
 
 	return	from x in typeNameElement.Descendants(XName.Get("enumeration", xmlns))
-			select x.Attribute("value").Value;
+			let doc = x.Descendants(XName.Get("documentation", xmlns)).FirstOrDefault()
+			select (x.Attribute("value").Value, doc?.Value);
 }
 
 public string ToTitleCase(string text)
 {
-	return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
+	return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.Replace('-', ' ').Replace('_', ' ')).Replace(" ", "");
 }
+
+public string GetRootNamespace()
+{
+	return  Host.ResolveAssemblyReference("$(RootNamespace)");
+}
+
+public string RootNamespace => Host.ResolveAssemblyReference("$(RootNamespace)");
+
+public string ClassName => Path.GetFileNameWithoutExtension(Host.TemplateFile);
 
 #>

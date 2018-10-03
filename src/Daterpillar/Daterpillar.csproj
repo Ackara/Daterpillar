@@ -2,31 +2,96 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Acklann.Daterpillar</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <AssemblyVersion>4.8.8</AssemblyVersion>
-    <FileVersion>4.8.8</FileVersion>
-    <Version>4.8.8</Version>
+    <AssemblyName>Acklann.Daterpillar</AssemblyName>
+    <PackageTags>orm</PackageTags>
   </PropertyGroup>
-
   <PropertyGroup>
-    <Owners>Ackara</Owners>
+    <PackageVersion>7.0.25</PackageVersion>
+    <AssemblyVersion>7.0.25</AssemblyVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <Title>Daterpillar</Title>
+    <Authors>Ackara</Authors>
+    <Company>Ackara</Company>
+    <Owners>Ackara</Owners>
+    <Copyright>MIT License</Copyright>
+    <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
+    <Description>A mico orm</Description>
+    <PackageReleaseNotes>
+      version 4.8.4
+      -------------
+      * Fix Invoke-SqlCommand inability to handle GO statements.
 
+      version 4.8.0
+      -------------
+      * Add ToAssignments method to LinqToSqlConverter class.
+
+      verion 4.7.23
+      -------------
+      * Have the ConvertT0-Script auto sort the schema.
+
+      version 4.7.22
+      --------------
+      * Fix SQLiteInformationSchema.
+
+      version 4.7.19
+      --------------
+      * Fix schema.sort method
+
+      version 4.7.18
+      --------------
+      * Add RemoveTable method to schema class
+
+      version 4.7.14
+      --------------
+      * Add msbuild targets to automation package
+
+      version 4.7.12
+      --------------
+      * Add Compare-Database cmdlet
+
+      version 4.7.9
+      -------------
+      * Remove named parameter sets
+
+      version 4.6.13
+      --------------
+      Add features:
+      * Add DeleteIfExist switch to Add-Database cmdlet
+    </PackageReleaseNotes>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Configuration\DataTypeFactory.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataTypeFactory.cs</LastGenOutput>
     </None>
-    <None Update="Configuration\SchemaType.tt">
+    <None Update="IndexType.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IndexType.cs</LastGenOutput>
+    </None>
+    <None Update="Order.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Order.cs</LastGenOutput>
+    </None>
+    <None Update="ReferentialAction.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ReferentialAction.cs</LastGenOutput>
+    </None>
+    <None Update="SchemaType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SchemaType.cs</LastGenOutput>
     </None>
@@ -43,14 +108,28 @@
       <LastGenOutput>Xmlns.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Configuration\DataTypeFactory.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DataTypeFactory.tt</DependentUpon>
     </Compile>
-    <Compile Update="Configuration\SchemaType.cs">
+    <Compile Update="IndexType.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IndexType.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Order.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Order.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ReferentialAction.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReferentialAction.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaType.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>SchemaType.tt</DependentUpon>
@@ -71,8 +150,20 @@
       <DependentUpon>Xmlns.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="msbuild.targets">
+      <PackagePath>build\$(TargetFramework)\$(AssemblyName).targets</PackagePath>
+    </Content>
+
+    <Content Include="..\$(MSBuildProjectName).CLI\bin\$(Configuration)\netcoreapp2.1\publish\*">
+      <PackagePath>tools\$(TargetFramework)</PackagePath>
+    </Content>
+
+    <Content Include="readme.*">
+      <PackagePath></PackagePath>
+    </Content>
   </ItemGroup>
 </Project>

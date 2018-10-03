@@ -18,7 +18,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 
 <#
 	PushIndent("\t\t");
-	foreach (var typeName in GetXsdEnumerations("TypeName"))
+	foreach ((string typeName, string doc) in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"/// <summary>{typeName}.</summary>");
 		WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
@@ -37,7 +37,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 			{
 <#
 	PushIndent("\t\t\t\t");
-	foreach (var value in GetXsdEnumerations("TypeName"))
+	foreach ((string value, string doc) in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToLower()}\" }},");
 	}

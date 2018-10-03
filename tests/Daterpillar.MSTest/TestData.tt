@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 {
-	internal static partial class TestData
+	internal static partial class <#= Path.GetFileNameWithoutExtension(Host.TemplateFile) #>
 	{
 		public const string FOLDER_NAME = "<#= FolderName #>";
 
@@ -69,9 +69,15 @@ IEnumerable<(string, string, FileInfo)> GetFileList()
 		foreach (var file in new DirectoryInfo(directory).GetFiles("*", SearchOption.AllDirectories))
 		{
 			string relativeDir = file.DirectoryName.Replace(directory, "").Trim('\\', ' ', '/');
-			string fileNameWithoutExtension = CultureInfo.CurrentCulture.TextInfo.ToTitleCase( Path.GetFileNameWithoutExtension(file.Name));
-			yield return (relativeDir, fileNameWithoutExtension, file);
+			string member = Path.GetFileNameWithoutExtension(file.Name).Replace('-', ' ');
+			member = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(member).Replace(" ", "");
+
+			yield return (relativeDir, member, file);
 		}
+	}
+	else
+	{
+		Warning($"Could not find folder at '{directory}'.");
 	}
 }
 #>

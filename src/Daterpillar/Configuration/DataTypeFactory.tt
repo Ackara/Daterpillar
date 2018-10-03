@@ -12,9 +12,10 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Configuration
 			switch (type)
 			{
 				default:
+					return null;
 <#
 	PushIndent("\t\t\t\t");
-	foreach(var item in GetXsdEnumerations("TypeName"))
+	foreach((string item, string doc) in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"case SchemaType.{item.ToUpper()}:");
 		WriteLine($"\treturn \"{item}\";");

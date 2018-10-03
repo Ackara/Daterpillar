@@ -13,7 +13,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="order">The order.</param>
-        public ColumnName(string name, Order order = Order.Ascending)
+        public ColumnName(string name, Order order = Order.ASC)
         {
             Name = name;
             Order = order;

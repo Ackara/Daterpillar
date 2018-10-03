@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -49,7 +50,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent table.
         /// </summary>
-        [XmlIgnore]
+        [XmlIgnore, IgnoreDataMember]
         public Table Table;
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace Acklann.Daterpillar.Configuration
                 string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
                 string columns = string.Join("_and_", Columns.Select(x => x.Name));
 
-                return string.Concat(tableName, columns);
+                return string.Concat("idx_", tableName, columns);
             }
         }
 
@@ -103,7 +104,7 @@ namespace Acklann.Daterpillar.Configuration
             };
         }
 
-        internal string ToDebuggerDisplay()
+        private string ToDebuggerDisplay()
         {
             return $"{Name} ({string.Join(", ", Columns)})";
         }

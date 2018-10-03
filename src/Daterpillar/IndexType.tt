@@ -1,0 +1,30 @@
+﻿<#@ include file="T4Helper.ttinclude" #>
+using System.Xml.Serialization;
+
+namespace <#= GetRootNamespace() #>
+{
+    /// <summary>
+    /// A kind of index.
+    /// </summary>
+    public enum IndexType
+    {
+<#
+    PushIndent("\t\t");
+    foreach ((string value, string doc) in GetXsdEnumerations("IndexType"))
+    {
+		if (string.IsNullOrEmpty(doc) == false)
+		{
+			WriteLine("/// <summary>");
+			WriteLine($"/// {doc}");
+			WriteLine("/// </summary>");
+		}
+
+        WriteLine($"[XmlEnum(\"{value}\")]");
+        WriteLine($"{ToTitleCase(value)},");
+        
+        WriteLine("");
+    }
+    PopIndent();
+#>
+    }
+}

@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Configuration;
-using System;
+﻿using System;
 
 namespace Acklann.Daterpillar
 {
@@ -7,7 +6,7 @@ namespace Acklann.Daterpillar
     /// Indicates that a public field or property represents a SQL index. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="Attribute" />
-    [AttributeUsage((AttributeTargets.Property), AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
     public sealed class IndexAttribute : Attribute
     {
         /// <summary>
@@ -43,11 +42,22 @@ namespace Acklann.Daterpillar
         /// Indexes with the same group name will be treated as a composite index.
         /// Use the it to compose multiple columns under on index.
         /// </summary>
-        public string Name;
+        public readonly string Name;
 
         /// <summary>
         /// Indicates whether the index is unique.
         /// </summary>
-        public bool Unique;
+        /// <value>
+        ///   <c>true</c> if unique; otherwise, <c>false</c>.
+        /// </value>
+        public bool Unique { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sorting order.
+        /// </summary>
+        /// <value>
+        /// The sorting order.
+        /// </value>
+        public Order Order { get; set; }
     }
 }
