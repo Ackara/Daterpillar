@@ -89,9 +89,15 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
-        private string ToDebuggerDisplay()
+        // ==================== INTERNAL MEMBERS ==================== //
+
+        internal void Overwrite(Column right)
         {
-            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
+            Comment = right.Comment;
+            DataType = right.DataType;
+            IsNullable = right.IsNullable;
+            DefaultValue = right.DefaultValue;
+            AutoIncrement = right.AutoIncrement;
         }
 
         #region ICloneable
@@ -123,5 +129,14 @@ namespace Acklann.Daterpillar.Configuration
         object ICloneable.Clone() => Clone();
 
         #endregion ICloneable
+
+        #region Private Members
+
+        private string ToDebuggerDisplay()
+        {
+            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
+        }
+
+        #endregion Private Members
     }
 }

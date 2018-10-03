@@ -76,7 +76,7 @@
   </table>
   <table name="city">
     <column name="city_id" nullable="false" autoIncrement="true">
-      <dataType scale="0" precision="0">int</dataType>
+      <dataType scale="0" precision="0">smallInt</dataType>
     </column>
     <column name="city" nullable="false" autoIncrement="false">
       <dataType scale="50" precision="0">varchar</dataType>
@@ -87,7 +87,17 @@
     <column name="last_update" nullable="false" autoIncrement="false">
       <dataType scale="0" precision="0">dateTime</dataType>
     </column>
-    <foreignKey localColumn="country_id" foreignTable="country" foreignColumn="country_id" onUpdate="cascade" onDelete="restrict" />
+    <column name="Population" nullable="false" autoIncrement="false">
+      <dataType scale="0" precision="0">int</dataType>
+    </column>
+    <foreignKey localColumn="country_id" foreignTable="country" foreignColumn="country_id" onUpdate="cascade" onDelete="cascade" />
+    <foreignKey localColumn="placeholder" foreignTable="fake" foreignColumn="Id" onUpdate="cascade" onDelete="cascade" />
+    <index type="index" unique="false">
+      <columnName order="asc">Population</columnName>
+    </index>
+    <index type="index" unique="false">
+      <columnName order="desc">country_id</columnName>
+    </index>
   </table>
   <table name="address">
     <column name="address_id" nullable="false" autoIncrement="true">

@@ -8,7 +8,8 @@ namespace Acklann.Daterpillar.Configuration
     /// <summary>
     /// A in-memory representation of a SQL script.
     /// </summary>
-    public partial class Script : IXmlSerializable
+    [Serializable]
+    public class Script : IXmlSerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Script"/> class.
@@ -52,6 +53,17 @@ namespace Acklann.Daterpillar.Configuration
 
         [XmlText]
         public string Content { get; set; }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return Content;
+        }
 
         #region IXmlSerializable
 

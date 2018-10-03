@@ -326,7 +326,7 @@ namespace Acklann.Daterpillar.Compilation
                 _content.AppendLine($"\t[{nameof(Column)}(\"{column.Name}\"{dataType}{nullable}{autoIncrement}{defaultValue})]");
 
                 // Index
-                var indexes = from i in column.Table.Indexes
+                var indexes = from i in column.Table.Indecies
                               where i.Columns.Count(x => x.Name == column.Name) > 0
                               select i;
 

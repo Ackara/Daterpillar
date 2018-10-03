@@ -161,7 +161,7 @@ namespace Acklann.Daterpillar.Compilation
                     names.Add(new ColumnName(columnName, attr.Order));
                 }
                 idx.Columns = names.ToArray();
-                table.Indexes.Add(idx);
+                table.Indecies.Add(idx);
                 idx.Table = table;
             }
         }

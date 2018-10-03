@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -104,9 +105,42 @@ namespace Acklann.Daterpillar.Configuration
             };
         }
 
+        // ==================== INTERNAL MEMBERS ==================== //
+
+        internal void Overwrite(Index right)
+        {
+            Type = right.Type;
+
+            foreach (ColumnName r in right.Columns)
+            {
+                ColumnName? left = Find(r);
+            }
+        }
+
+        #region Private Members
+
+        private ColumnName? Find(ColumnName right)
+        {
+            ColumnName left;
+            for (int i = 0; i < Columns.Length; i++)
+            {
+                left = Columns[i];
+
+                if (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    left.Order = right.Order;
+                    return left;
+                }
+            }
+
+            return null;
+        }
+
         private string ToDebuggerDisplay()
         {
             return $"{Name} ({string.Join(", ", Columns)})";
         }
+
+        #endregion Private Members
     }
 }

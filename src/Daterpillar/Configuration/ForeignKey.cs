@@ -121,7 +121,15 @@ namespace Acklann.Daterpillar.Configuration
             };
         }
 
-        internal string ToDebuggerDisplay()
+        // ==================== INTERNAL MEMBERS ==================== //
+
+        internal void Overwrite(ForeignKey right)
+        {
+            OnUpdate = right.OnUpdate;
+            OnDelete = right.OnDelete;
+        }
+
+        private string ToDebuggerDisplay()
         {
             return $"[{LocalColumn}] REF [{ForeignTable}].[{ForeignColumn}]";
         }

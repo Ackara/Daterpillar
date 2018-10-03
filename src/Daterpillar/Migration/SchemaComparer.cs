@@ -139,7 +139,7 @@ namespace Acklann.Daterpillar.Migration
                 {
                     FindDiscrepanciesBetween(left[i].Columns.ToArray(), target.Columns.ToArray());
                     FindDiscrepanciesBetween(left[i].ForeignKeys.ToArray(), target.ForeignKeys.ToArray());
-                    FindDiscrepanciesBetween(left[i].Indexes.ToArray(), target.Indexes.ToArray());
+                    FindDiscrepanciesBetween(left[i].Indecies.ToArray(), target.Indecies.ToArray());
                 }
             }
         }

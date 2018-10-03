@@ -27,7 +27,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             Name = name;
             Columns = new List<Column>();
-            Indexes = new List<Index>();
+            Indecies = new List<Index>();
             ForeignKeys = new List<ForeignKey>();
 
             foreach (var item in sqlObjects)
@@ -40,7 +40,7 @@ namespace Acklann.Daterpillar.Configuration
                 else if (item is Index index)
                 {
                     index.Table = this;
-                    Indexes.Add(index);
+                    Indecies.Add(index);
                 }
                 else if (item is ForeignKey fKey)
                 {
@@ -89,13 +89,35 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The table indexes.</value>
         [XmlElement("index")]
-        public List<Index> Indexes { get; set; }
+        public List<Index> Indecies { get; set; }
 
         public void Merge(Table table)
         {
-            foreach (Column col in Columns)
+            foreach (Column right in table.Columns)
             {
+                Column left = Columns.Find(l => l.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
+                if (left == null)
+                    Columns.Add(right);
+                else
+                    left.Overwrite(right);
+            }
 
+            foreach (ForeignKey right in table.ForeignKeys)
+            {
+                ForeignKey left = ForeignKeys.Find(l => l.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
+                if (left == null)
+                    ForeignKeys.Add(right);
+                else
+                    left.Overwrite(right);
+            }
+
+            foreach (Index right in table.Indecies)
+            {
+                Index left = Indecies.Find(l => l.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
+                if (left == null)
+                    Indecies.Add(right);
+                else
+                    left.Overwrite(right);
             }
         }
 
@@ -122,11 +144,11 @@ namespace Acklann.Daterpillar.Configuration
                 clone.Columns.Add(copy);
             }
 
-            foreach (var idx in Indexes)
+            foreach (var idx in Indecies)
             {
                 var copy = idx.Clone();
                 copy.Table = clone;
-                clone.Indexes.Add(copy);
+                clone.Indecies.Add(copy);
             }
 
             foreach (var fKey in ForeignKeys)
@@ -148,5 +170,14 @@ namespace Acklann.Daterpillar.Configuration
         object ICloneable.Clone() => Clone();
 
         #endregion ICloneable
+
+        #region Private Members
+
+        private Column Find(Column right)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion Private Members
     }
 }

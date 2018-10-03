@@ -35,7 +35,7 @@ namespace Acklann.Daterpillar.Tests
 
             var city = new Table("city",
                 new Column("Population", new DataType(SchemaType.INT)), /* add */
-                new Column("city_id", new DataType(SchemaType.SMALLINT)), /* update */
+                new Column("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
 
                 new ForeignKey("placeholder", "fake", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* add */
                 new ForeignKey("country_id", "country", "country_id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* update */
@@ -63,8 +63,8 @@ namespace Acklann.Daterpillar.Tests
             result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[0].Name).ShouldNotBeNull();
             result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[1].Name).OnDelete.ShouldBe(ReferentialAction.Cascade);
 
-            result.Indexes.Find(x => x.Name == city.Indexes[0].Name).ShouldNotBeNull();
-            result.Indexes.Find(x => x.Name == city.Indexes[1].Name).Columns[0].Order.ShouldBe(Order.DESC);
+            result.Indecies.Find(x => x.Name == city.Indecies[0].Name).ShouldNotBeNull();
+            result.Indecies.Find(x => x.Name == city.Indecies[1].Name).Columns[0].Order.ShouldBe(Order.DESC);
 
             Diff.Approve(schema, ".xml");
         }

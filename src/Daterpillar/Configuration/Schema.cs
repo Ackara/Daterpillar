@@ -434,7 +434,7 @@ namespace Acklann.Daterpillar.Configuration
                     if (column.Table == null) column.Table = table;
                 }
 
-                foreach (Index index in table.Indexes)
+                foreach (Index index in table.Indecies)
                 {
                     if (index.Table == null) index.Table = table;
                 }
