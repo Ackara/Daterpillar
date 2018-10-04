@@ -70,6 +70,7 @@
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
     <PackageReference Include="Acklann.NShellit" Version="0.0.15-rc" />
+    <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
   </ItemGroup>
   
   <ItemGroup>

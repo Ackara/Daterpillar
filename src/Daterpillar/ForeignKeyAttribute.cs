@@ -14,7 +14,7 @@ namespace Acklann.Daterpillar
         /// </summary>
         /// <param name="foreignType">The foreign table.</param>
         /// <param name="memberName">Name of the member column.</param>
-        public ForeignKeyAttribute(Type foreignType, string memberName, ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict) : this(foreignType.AssemblyQualifiedName, memberName, onUpdate, onDelete)
+        public ForeignKeyAttribute(Type foreignType, string memberName = "Id", ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict) : this(foreignType.AssemblyQualifiedName, memberName, onUpdate, onDelete)
         { }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Acklann.Daterpillar
         /// <param name="foreignColumn">The foreign column.</param>
         /// <param name="onUpdate">The on update.</param>
         /// <param name="onDelete">The on delete.</param>
-        public ForeignKeyAttribute(string foreignTable, string foreignColumn, ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict)
+        public ForeignKeyAttribute(string foreignTable, string foreignColumn = "Id", ReferentialAction onUpdate = ReferentialAction.Cascade, ReferentialAction onDelete = ReferentialAction.Restrict)
         {
             ForeignColumn = foreignColumn;
             ForeignTable = foreignTable;

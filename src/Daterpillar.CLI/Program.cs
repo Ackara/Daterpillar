@@ -18,11 +18,12 @@ namespace Acklann.Daterpillar
             var parser = new Parser();
             int exitCode = parser.Map<ICommand, int>(args, commandList,
                 (cmd) => cmd.Execute(),
-                (err) => ExitCode.ParsingError);
+                (err) => 403);
 #if DEBUG
-            Console.WriteLine($"exit-code: {exitCode}");
-            Console.WriteLine("press any key to exit...");
-            Console.ReadKey();
+            Console.WriteLine();
+            Console.WriteLine($"EXIT: {exitCode}");
+            //Console.WriteLine("press any key to exit...");
+            //Console.ReadKey();
 #endif
             return exitCode;
         }

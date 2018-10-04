@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar
     /// Indicates that a enum field represents a table record/row. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage(AttributeTargets.Enum, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public sealed class EnumValueAttribute : Attribute
     {
         /// <summary>

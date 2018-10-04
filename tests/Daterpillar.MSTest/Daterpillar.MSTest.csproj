@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <None Update="test-data\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

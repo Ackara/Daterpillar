@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Acklann.Daterpillar.Compilation
 {
@@ -15,8 +16,7 @@ namespace Acklann.Daterpillar.Compilation
         {
             if (File.Exists(assemblyPath) == false) throw new FileNotFoundException($"Could not file assembly file at '{assemblyPath}'.", assemblyPath);
 
-            Assembly assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-            return ToSchema(assembly);
+            return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath));
         }
 
         public static Schema ToSchema(Assembly assembly)
@@ -31,12 +31,19 @@ namespace Acklann.Daterpillar.Compilation
             string documentation = Path.ChangeExtension(assembly.Location, ".xml");
 
             foreach (Type type in tables)
+            {
                 try
                 {
                     if (type.IsDefined(typeof(TableAttribute)))
-                        schema.Add(ToTable(type, documentation));
+                    {
+                        if (type.IsEnum)
+                            ExtractEmunInfo(schema, type, documentation);
+                        else
+                            schema.Add(ToTable(type, documentation));
+                    }
                 }
-                catch (FileNotFoundException) { }
+                catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine("Could not find a .dll."); }
+            }
 
             if (assembly.GetCustomAttribute(typeof(IncludeAttribute)) is IncludeAttribute attr)
                 schema.Include = attr.Path;
@@ -63,8 +70,39 @@ namespace Acklann.Daterpillar.Compilation
             return table;
         }
 
-        // Helper Methods
-        // ============================================================
+        // ==================== HELPER ==================== //
+
+        private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
+        {
+            var table = new Table(GetName(type),
+                new Column("Id", new DataType(SchemaType.INT)),
+                new Column("Name", new DataType(SchemaType.VARCHAR)),
+
+                new Index(IndexType.PrimaryKey, new ColumnName("Id")),
+                new Index(IndexType.Index, true, new ColumnName("Name"))
+                );
+            schema.Add(table);
+
+            var script = new Script() { Name = $"{table.Name} seed-data" };
+            var values = new StringBuilder();
+            values.AppendLine($"INSERT INTO {table.Name} (Id, Name) VALUES ");
+            foreach (var member in type.GetMembers().Where(m => m.MemberType == MemberTypes.Field))
+            {
+                try
+                {
+                    object val = Enum.Parse(type, member.Name);
+                    if (val != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine((int)val);
+                        System.Diagnostics.Debug.WriteLine(GetEnumName(member));
+                        values.AppendLine($"('{(int)val}', '{GetEnumName(member)}'),");
+                    }
+                }
+                catch (ArgumentException) { }
+            }
+            script.Content = string.Concat(values.ToString().Trim().TrimEnd(' ', ','), ';');
+            schema.Add(script);
+        }
 
         private static void ExtractColumnInfo(Table table, MemberInfo member, string documentionPath)
         {
@@ -111,7 +149,6 @@ namespace Acklann.Daterpillar.Compilation
                 var fTableType = Type.GetType(fkAttr.ForeignTable);
                 if (fTableType != null)
                 {
-                    TableAttribute ta = fTableType.GetCustomAttribute<TableAttribute>();
                     foreignTable = GetName(fTableType);
 
                     MemberInfo fColumn = fTableType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
@@ -126,7 +163,7 @@ namespace Acklann.Daterpillar.Compilation
                     OnDelete = fkAttr.OnDelete,
                     OnUpdate = fkAttr.OnUpdate,
                     ForeignTable = foreignTable,
-                    ForeignColumn = foreignColumn
+                    ForeignColumn = (foreignColumn)
                 });
             }
         }
@@ -193,6 +230,14 @@ namespace Acklann.Daterpillar.Compilation
             }
 
             return name;
+        }
+
+        private static string GetEnumName(MemberInfo member)
+        {
+            var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
+            var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
         }
     }
 }

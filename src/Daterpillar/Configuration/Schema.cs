@@ -67,6 +67,11 @@ namespace Acklann.Daterpillar.Configuration
         [XmlAttribute("include")]
         public string Include { get; set; }
 
+        public bool IsEmpty
+        {
+            get => ((Tables?.Count ?? 0) == 0 && (Scripts?.Count ?? 0) == 0);
+        }
+
         /// <summary>
         /// Gets or sets the tables belonging to this instance.
         /// </summary>
@@ -126,13 +131,18 @@ namespace Acklann.Daterpillar.Configuration
 
         public static bool TryLoad(string filePath, out Schema schema, out string errorMsg)
         {
-            if (File.Exists(filePath) == false) throw new FileNotFoundException($"Could not find file at '{filePath}'.", filePath);
+            if (File.Exists(filePath) == false)
+            {
+                errorMsg = $"Could not find file at '{filePath}'.";
+                schema = null;
+                return false;
+            }
 
             errorMsg = null;
             var err = new StringBuilder();
             void handler(object s, ValidationEventArgs e)
             {
-                err.AppendLine($"[{e.Severity}] {e.Message}");
+                err.Append($"[{e.Severity}] {e.Message}\r\n");
             }
 
             bool isWellFormed = TryLoad(filePath, out schema, handler);
@@ -150,7 +160,11 @@ namespace Acklann.Daterpillar.Configuration
         /// <exception cref="FileNotFoundException"></exception>
         public static bool TryLoad(string filePath, out Schema schema, ValidationEventHandler handler = null)
         {
-            if (File.Exists(filePath) == false) throw new FileNotFoundException($"Could not find file at '{filePath}'.", filePath);
+            if (File.Exists(filePath) == false)
+            {
+                schema = null;
+                return false;
+            }
 
             using (Stream stream = File.OpenRead(filePath))
             {

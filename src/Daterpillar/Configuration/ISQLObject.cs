@@ -8,12 +8,6 @@ namespace Acklann.Daterpillar.Configuration
     /// <seealso cref="System.ICloneable" />
     public interface ISQLObject : ICloneable
     {
-        /// <summary>
-        /// Gets or sets the object's name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        string Name { get; set; }
+        string GetName();
     }
 }

@@ -70,5 +70,42 @@ namespace Acklann.Daterpillar.Tests
 
             Diff.Approve(schema, ".xml");
         }
+
+        [TestMethod]
+        public void Can_generate_a_migration_script()
+        {
+            // Arrange
+            var migrationsDir = Path.Combine(Path.GetTempPath(), "dtp-migrations");
+            var snapshotFile = Path.Combine(migrationsDir, "snapshot.schema.xml");
+
+            if (Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema, out string errorMsg) == false)
+                throw new System.Xml.Schema.XmlSchemaValidationException(errorMsg);
+
+            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
+                throw new System.Xml.Schema.XmlSchemaValidationException(errorMsg);
+
+            var sut = new Commands.MigrateCommand(snapshotFile, schema.Path, "1.1", migrationsDir, Syntax.Generic, "V{0}__Update_{1:m.s}.sql");
+
+            // Act
+
+            /* Case 1: No migrations. */
+            if (Directory.Exists(migrationsDir)) Directory.Delete(migrationsDir, recursive: true);
+            if (File.Exists(snapshotFile)) File.Delete(snapshotFile);
+            var exitCode1 = sut.Execute();
+
+            /* Case 2: Migrations already exists. */
+            revisions.Save(schema.Path);
+            var exitCode2 = sut.Execute();
+
+            // Assert
+            exitCode1.ShouldBe(0);
+            exitCode2.ShouldBe(0);
+
+            int idx = 0;
+            foreach (var file in Directory.EnumerateFiles(migrationsDir))
+            {
+                Diff.ApproveFile(file, idx++);
+            }
+        }
     }
 }

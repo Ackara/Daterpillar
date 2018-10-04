@@ -21,7 +21,8 @@ namespace Acklann.Daterpillar
         }
 
 		public static FileInfo GetBad_SchemaXML() => GetFile(@"bad_schema.xml");
-		public static FileInfo GetMusicSeedXML() => GetFile(@"music-seed.xml");
+		public static FileInfo GetMusicDataXML() => GetFile(@"music-data.xml");
+		public static FileInfo GetMusicRevisionsXML() => GetFile(@"music-revisions.xml");
 		public static FileInfo GetMusicXML() => GetFile(@"music.xml");
 		public static FileInfo GetSakilaBusinessXML() => GetFile(@"sakila-business.xml");
 		public static FileInfo GetSakilaCustomerXML() => GetFile(@"sakila-customer.xml");
@@ -31,7 +32,8 @@ namespace Acklann.Daterpillar
 		public class File
 		{
 			public const string Bad_SchemaXML = @"bad_schema.xml";
-			public const string MusicSeedXML = @"music-seed.xml";
+			public const string MusicDataXML = @"music-data.xml";
+			public const string MusicRevisionsXML = @"music-revisions.xml";
 			public const string MusicXML = @"music.xml";
 			public const string SakilaBusinessXML = @"sakila-business.xml";
 			public const string SakilaCustomerXML = @"sakila-customer.xml";

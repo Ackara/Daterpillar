@@ -20,14 +20,14 @@ namespace Acklann.Daterpillar.Fakes
         [Column("Album")]
         public string Album { get; set; }
 
-        [DisplayName("Track")]
-        [DefaultValue(1)]
+        [DisplayName("Track"), DefaultValue(1)]
         public int TrackNo { get; set; }
 
         [Column("Disc", DefaultValue = 1)]
         public int DiscNo { get; set; }
 
         [Column("Genre")]
+        [ForeignKey(typeof(Genre))]
         public Genre Genre { get; set; }
     }
 }

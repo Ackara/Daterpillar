@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<schema include="music-seed.xml" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema include="music-data.xml" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
   <table name="Album">
     <column name="Name">
       <dataType>varchar</dataType>
@@ -37,6 +37,20 @@
       <columnName order="asc">Name</columnName>
     </index>
   </table>
+  <table name="genre">
+    <column name="Id">
+      <dataType>int</dataType>
+    </column>
+    <column name="Name">
+      <dataType>varchar</dataType>
+    </column>
+    <index type="primary-key">
+      <columnName order="asc">Id</columnName>
+    </index>
+    <index type="index" unique="true">
+      <columnName order="asc">Name</columnName>
+    </index>
+  </table>
   <table name="song">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
@@ -62,5 +76,14 @@
     <column name="Genre">
       <dataType>int</dataType>
     </column>
+    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
+    <index type="index">
+      <columnName order="asc">Genre</columnName>
+    </index>
   </table>
+  <script name="genre seed-data"><![CDATA[INSERT INTO genre (Id, Name) VALUES 
+('0', 'Hip Hop'),
+('1', 'Pop'),
+('2', 'Country'),
+('3', 'Rock n' Roll');]]></script>
 </schema>
