@@ -60,7 +60,7 @@ namespace Acklann.Daterpillar.Compilation
                                                 m.IsDefined(typeof(SqlIgnoreAttribute)) == false
                                                select m).ToArray();
 
-            var table = new Table(GetName(type));
+            var table = new Table(GetName(type)) { Id = GetId(type) };
             foreach (MemberInfo member in members)
             {
                 ExtractColumnInfo(table, member, documentionPath);
@@ -71,6 +71,48 @@ namespace Acklann.Daterpillar.Compilation
         }
 
         // ==================== HELPER ==================== //
+
+        internal static string GetName(MemberInfo member)
+        {
+            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
+        }
+
+        internal static string GetName(Type type)
+        {
+            var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
+            var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
+
+            if (string.IsNullOrEmpty(name))
+            {
+                int genericTypeDelimeter = type.Name.IndexOf('`');
+                name = (genericTypeDelimeter > 0 ? type.Name.Substring(genericTypeDelimeter) : type.Name);
+            }
+
+            return name;
+        }
+
+        internal static string GetEnumName(MemberInfo member)
+        {
+            var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
+            var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
+        }
+
+        internal static int GetId(MemberInfo member)
+        {
+            if (member.GetCustomAttribute(typeof(SUIDAttribute)) is SUIDAttribute attr)
+            {
+                return attr.Id;
+            }
+
+            return 0;
+        }
 
         private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
         {
@@ -117,6 +159,7 @@ namespace Acklann.Daterpillar.Compilation
             column.AutoIncrement = (columnAttr?.AutoIncrement ?? false);
             column.IsNullable = (columnAttr?.Nullable ?? false);
             column.Name = GetName(member);
+            column.Id = GetId(member);
             column.Table = table;
 
             var dataType = new DataType(columnAttr?.TypeName);
@@ -206,38 +249,6 @@ namespace Acklann.Daterpillar.Compilation
                 table.Indecies.Add(idx);
                 idx.Table = table;
             }
-        }
-
-        private static string GetName(MemberInfo member)
-        {
-            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
-            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
-        }
-
-        private static string GetName(Type type)
-        {
-            var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
-            var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                int genericTypeDelimeter = type.Name.IndexOf('`');
-                name = (genericTypeDelimeter > 0 ? type.Name.Substring(genericTypeDelimeter) : type.Name);
-            }
-
-            return name;
-        }
-
-        private static string GetEnumName(MemberInfo member)
-        {
-            var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
-            var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
         }
     }
 }

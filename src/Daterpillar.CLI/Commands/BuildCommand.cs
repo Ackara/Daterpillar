@@ -1,7 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.GlobN;
 using Acklann.NShellit.Attributes;
-using System;
 using System.IO;
 using System.Linq;
 
@@ -24,10 +23,7 @@ namespace Acklann.Daterpillar.Commands
         public int Execute()
         {
             if (File.Exists(TargetAssembly) == false)
-            {
-                Console.Error.WriteLine(new FileNotFoundException($"Could not find assembly file at '{TargetAssembly}'.", TargetAssembly));
-                return ExitCode.NotFound;
-            }
+                return Log.CouldNotFound(TargetAssembly, "assembly");
 
             Schema schema = Compilation.SchemaConvert.ToSchema(TargetAssembly);
             schema.Save(Path.ChangeExtension(TargetAssembly, ".schema.xml"));

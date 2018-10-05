@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
-  <table name="song">
+  <table suid="100" name="song">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
     </column>
@@ -16,7 +16,7 @@
     </column>
 
     <column name="Genre">
-      <dataType>varchar</dataType>
+      <dataType>int</dataType>
     </column>
 
     <column name="Disc">
@@ -34,6 +34,16 @@
     <column name="Album">
       <dataType>varchar</dataType>
     </column>
+
+    <foreignKey localColumn="Genre" foreignTable="genre" />
+
+    <index>
+      <columnName>Name</columnName>
+    </index>
+
+    <index>
+      <columnName>Genre</columnName>
+    </index>
   </table>
 
   <table name="album">
@@ -97,12 +107,7 @@
   <script name="seed">
     <![CDATA[
     INSERT INTO genre (Id, Name)
-    VALUES
-    ('1', 'Hip Hop'),
-    ('2', 'Rock'),
-    ('3', 'Pop'),
-    ('4', 'R&B')
-    ;
+    VALUES ('1', 'Hip Hop'), ('2', 'Rock'), ('3', 'Pop'), ('4', 'R&B');
     ]]>
   </script>
 </schema>

@@ -30,15 +30,14 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="documenation"
-              type="xs:string" />
+  <xs:element name="documentation"
+                  type="xs:string" />
 
   <!-- TYPES -->
 
   <xs:complexType name="Table">
     <xs:sequence>
-      <xs:element name="documentation"
-                  type="xs:string"
+      <xs:element ref="documentation"
                   minOccurs="0" />
 
       <xs:element name="column"
@@ -60,22 +59,20 @@
     <xs:attribute name="name"
                   type="xs:string"
                   use="required" />
+
+    <xs:attribute name="suid"
+                  type="xs:int" />
   </xs:complexType>
 
   <xs:complexType name="Column">
     <xs:all>
-      <xs:element name="documentation"
-                  type="xs:string"
+      <xs:element ref="documentation"
                   minOccurs="0" />
 
       <xs:element name="dataType"
                   type="DataType"
                   minOccurs="1" />
     </xs:all>
-
-    <xs:attribute name="name"
-                  type="xs:string"
-                  use="required" />
 
     <xs:attribute name="nullable"
                   type="xs:boolean"
@@ -87,6 +84,8 @@
     <xs:attribute name="autoIncrement"
                   type="xs:boolean"
                   default="0" />
+
+    <xs:attributeGroup ref="Identifiable" />
   </xs:complexType>
 
   <xs:complexType name="Index">
@@ -118,7 +117,7 @@
 
     <xs:attribute name="foreignColumn"
                   type="xs:string"
-                  use="required" />
+                  default="Id" />
 
     <xs:attribute name="onUpdate"
                   type="ForeignKeyRule"
@@ -230,4 +229,15 @@
       <xs:enumeration value="primary-key" />
     </xs:restriction>
   </xs:simpleType>
+
+  <!-- GROUPS -->
+
+  <xs:attributeGroup name="Identifiable">
+    <xs:attribute name="suid"
+                  type="xs:int" />
+
+    <xs:attribute name="name"
+                  type="xs:string"
+                  use="required" />
+  </xs:attributeGroup>
 </xs:schema>

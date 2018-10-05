@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Samples
 {
     [Table("artist")]
     public class Artist

@@ -51,11 +51,11 @@
       <columnName order="asc">Name</columnName>
     </index>
   </table>
-  <table name="song">
+  <table suid="100" name="song">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
     </column>
-    <column name="Title">
+    <column suid="201" name="Title">
       <dataType>varchar</dataType>
     </column>
     <column name="Length">
@@ -67,7 +67,7 @@
     <column name="Album">
       <dataType>varchar</dataType>
     </column>
-    <column name="Track" default="1">
+    <column suid="205" name="Track" default="1">
       <dataType>int</dataType>
     </column>
     <column name="Disc" default="1">

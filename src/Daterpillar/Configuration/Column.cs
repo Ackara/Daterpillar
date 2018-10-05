@@ -41,6 +41,9 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore, IgnoreDataMember]
         public Table Table;
 
+        [XmlAttribute("suid"), DefaultValue(0)]
+        public int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the column name.
         /// </summary>
@@ -90,16 +93,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore, IgnoreDataMember]
         public int OrdinalPosition { get; set; }
 
-        // ==================== INTERNAL MEMBERS ==================== //
-
-        internal void Overwrite(Column right)
-        {
-            Comment = right.Comment;
-            DataType = right.DataType;
-            IsNullable = right.IsNullable;
-            DefaultValue = right.DefaultValue;
-            AutoIncrement = right.AutoIncrement;
-        }
+        string ISQLObject.GetName() => Name;
 
         #region ICloneable
 
@@ -130,6 +124,15 @@ namespace Acklann.Daterpillar.Configuration
         object ICloneable.Clone() => Clone();
 
         #endregion ICloneable
+
+        internal void Overwrite(Column right)
+        {
+            Comment = right.Comment;
+            DataType = right.DataType;
+            IsNullable = right.IsNullable;
+            DefaultValue = right.DefaultValue;
+            AutoIncrement = right.AutoIncrement;
+        }
 
         #region Private Members
 

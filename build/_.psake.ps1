@@ -28,8 +28,6 @@ Properties {
 	$Branch = "";
 }
 
-Task "Default" -depends @("restore", "compile", "test", "pack");
-
 #region ----- COMPILATION -----
 
 Task "Import-Dependencies" -alias "restore" -description "This task imports all build dependencies." -action {
@@ -49,13 +47,6 @@ Task "Import-Dependencies" -alias "restore" -description "This task imports all 
     if (-not (Test-Path $ManifestJson))
     {
         New-NcrementManifest $ManifestJson -Author $([System.Environment]::UserName) | Save-NcrementManifest $ManifestJson;
-    }
-
-    # Create the 'secrets.json' file
-    if (-not (Test-Path $SecretsJson))
-    {
-        $credentials = '{ "jdbcurl": "jdbc:mysql://{0}/{1}", "userStore": "server=;user=;password=;database=;", "database": "server=;user=;password=;database=;" }';
-        [string]::Format('{{ "nugetKey": null, "psGalleryKey": null, "local": {0}, "preview": {0} }}', $credentials) | Out-File $SecretsJson -Encoding utf8;
     }
 }
 
@@ -139,24 +130,6 @@ Task "Run-Benchmarks" -alias "benchmark" -description "This task runs all projec
 		finally { Pop-Location; }
 	}
     else { Write-Host " no benchmarks found." -ForegroundColor Yellow; }
-}
-
-#endregion
-
-#region ----- DB Migration -----
-
-Task "Rebuild-FlywayLocalDb" -alias "rebuild-db" -description "This task rebuilds the local database using flyway." `
--depends @("restore") -action{
-	[string]$flyway = Get-Flyway;
-	$credential = Get-Secret "local";
-	Assert (-not [string]::IsNullOrEmpty($credential.database)) "A connection string for your local database was not provided.";
-
-	$db = [ConnectionInfo]::new($credential, $credential.database);
-	Write-Header "flyway: clean ($($db.ToFlywayUrl()))";
-	Exec { &$flyway clean $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword(); }
-	Write-Header "flyway: migrate ($($db.ToFlywayUrl()))";
-	Exec { &$flyway migrate $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword() $([ConnectionInfo]::ConvertToFlywayLocation($MigrationDirectory)); }
-	Exec { &$flyway info $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword() $([ConnectionInfo]::ConvertToFlywayLocation($MigrationDirectory)); }
 }
 
 #endregion

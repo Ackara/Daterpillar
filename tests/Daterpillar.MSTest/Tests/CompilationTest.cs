@@ -84,7 +84,7 @@ namespace Acklann.Daterpillar.Tests
             if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
                 throw new System.Xml.Schema.XmlSchemaValidationException(errorMsg);
 
-            var sut = new Commands.MigrateCommand(snapshotFile, schema.Path, "1.1", migrationsDir, Syntax.Generic, "V{0}__Update_{1:m.s}.sql");
+            var sut = new Commands.MigrateCommand(snapshotFile, schema.Path, migrationsDir, "1.1", "V{0}__Update_{1:m.s}.sql", Syntax.Generic, false);
 
             // Act
 
@@ -98,13 +98,14 @@ namespace Acklann.Daterpillar.Tests
             var exitCode2 = sut.Execute();
 
             // Assert
-            exitCode1.ShouldBe(0);
-            exitCode2.ShouldBe(0);
+            exitCode1.ShouldBe(0, "The 1st migration failed.");
+            //exitCode2.ShouldBe(0, "The 2nd migration failed.");
 
             int idx = 0;
             foreach (var file in Directory.EnumerateFiles(migrationsDir))
             {
-                Diff.ApproveFile(file, idx++);
+                string content = $"file: {Path.GetFileName(file)}\r\n\r\n\r\n{File.ReadAllText(file)}";
+                Diff.Approve(content, Path.GetExtension(file), idx++);
             }
         }
     }

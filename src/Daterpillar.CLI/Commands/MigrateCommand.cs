@@ -11,11 +11,12 @@ namespace Acklann.Daterpillar.Commands
     public class MigrateCommand : ICommand
     {
         [UseConstructor]
-        public MigrateCommand(string oldSchema, string newSchema, string version, string migrationsDirectory, Syntax syntax = Syntax.Generic, string fileNameFormat = "V{0}__Update.sql")
+        public MigrateCommand(string oldSchema, string newSchema, string migrationsDirectory, string version, string fileNameFormat = "V{0}__Update.sql", Syntax syntax = Syntax.Generic, bool omitDropStatements = false)
         {
             Syntax = syntax;
             Version = version;
             FileNameFormat = fileNameFormat;
+            OmitDropStatements = omitDropStatements;
             OldSchema = oldSchema.ResolvePath(Directory.GetCurrentDirectory()).FirstOrDefault() ?? oldSchema;
             NewSchema = newSchema.ResolvePath(Directory.GetCurrentDirectory()).FirstOrDefault() ?? newSchema;
             MigrationsDirectory = (string.IsNullOrEmpty(migrationsDirectory) ? Path.GetDirectoryName(oldSchema) : migrationsDirectory);
@@ -37,6 +38,9 @@ namespace Acklann.Daterpillar.Commands
         [Parameter('s', "syntax")]
         public Syntax Syntax { get; }
 
+        [Parameter('d', "no-drops")]
+        public bool OmitDropStatements { get; }
+
         [Parameter('f', "format")]
         public string FileNameFormat { get; }
 
@@ -44,7 +48,7 @@ namespace Acklann.Daterpillar.Commands
         {
             if (File.Exists(NewSchema) == false) return Log.CouldNotFound(NewSchema, "schema");
 
-            // Step 1: Merge (if any) referenced schema files into the new-schema.
+            // Step 1: Merge (if any) referenced schema files into a new-schema.
             if (Schema.TryLoad(NewSchema, out Schema right, out string errorMsg))
                 right.Merge();
             else
@@ -72,7 +76,7 @@ namespace Acklann.Daterpillar.Commands
                 using (var file = new FileStream(outFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     var migrator = new Compilation.SqlMigrator();
-                    migrator.GenerateMigrationScript(file, left, right, Syntax);
+                    migrator.GenerateMigrationScript(file, left, right, Syntax, OmitDropStatements);
                     file.Flush();
                 }
             }

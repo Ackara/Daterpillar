@@ -1,16 +1,47 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.Compilation
 {
-    public class Discrepancy<TSqlObject> where TSqlObject : ISQLObject
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
+    public class Discrepancy
     {
-        public Discrepancy(TSqlObject value)
+        public Discrepancy(ISQLObject oldValue, ISQLObject newValue) : this(SqlAction.None, oldValue, newValue)
         {
-            Value = value;
+            if (oldValue == null && newValue == null)
+                Action = SqlAction.None;
+            else if (oldValue == null)
+                Action = SqlAction.Create;
+            else if (newValue == null)
+                Action = SqlAction.Drop;
+            else
+                Action = SqlAction.Alter;
         }
 
-        public TSqlObject Value;
+        public Discrepancy(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
+        {
+            Action = action;
+            OldValue = oldValue;
+            NewValue = newValue;
+            Children = new List<Discrepancy>();
+        }
+
+        public readonly ISQLObject OldValue;
+
+        public readonly ISQLObject NewValue;
 
         public SqlAction Action { get; set; }
+
+        public ISQLObject Value
+        {
+            get { return (NewValue != null ? NewValue : OldValue); }
+        }
+
+        public List<Discrepancy> Children { get; set; }
+
+        private string ToDebuggerDisplay()
+        {
+            return $"{Action} | {NewValue.GetName()}[{Children.Count}]";
+        }
     }
 }

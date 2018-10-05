@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Samples
 {
+    [SUID(100)]
     [Table, DisplayName("song")]
     public class Song
     {
         [Column("Id", AutoIncrement = true)]
         public int Id { get; set; }
 
-        [Column("Title")]
+        [SUID(201), Column("Title")]
         public string Title { get; set; }
 
         [Column("Length")]
@@ -20,7 +21,7 @@ namespace Acklann.Daterpillar.Fakes
         [Column("Album")]
         public string Album { get; set; }
 
-        [DisplayName("Track"), DefaultValue(1)]
+        [SUID(205), DisplayName("Track"), DefaultValue(1)]
         public int TrackNo { get; set; }
 
         [Column("Disc", DefaultValue = 1)]

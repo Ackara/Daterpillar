@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -9,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class Table : ICloneable
+    public sealed class Table : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -56,6 +57,9 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore, IgnoreDataMember]
         public Schema Schema;
 
+        [XmlAttribute("suid"), DefaultValue(0)]
+        public int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the table.
         /// </summary>
@@ -91,6 +95,12 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("index")]
         public List<Index> Indecies { get; set; }
 
+        [IgnoreDataMember, XmlIgnore]
+        internal int Weight
+        {
+            get { return ForeignKeys?.Count ?? 0; }
+        }
+
         public void Merge(Table table)
         {
             foreach (Column right in table.Columns)
@@ -120,6 +130,8 @@ namespace Acklann.Daterpillar.Configuration
                     left.Overwrite(right);
             }
         }
+
+        string ISQLObject.GetName() => Name;
 
         #region ICloneable
 

@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
         /// </summary>
-        public ForeignKey() : this(string.Empty, string.Empty, string.Empty, ReferentialAction.Cascade, ReferentialAction.Restrict)
+        public ForeignKey() : this(null, null, "Id", ReferentialAction.Cascade, ReferentialAction.Restrict)
         {
         }
 
@@ -131,7 +131,7 @@ namespace Acklann.Daterpillar.Configuration
 
         private string ToDebuggerDisplay()
         {
-            return $"[{LocalColumn}] REF [{ForeignTable}].[{ForeignColumn}]";
+            return $"[{LocalColumn}] POINTS-TO [{ForeignTable}].[{ForeignColumn}]";
         }
     }
 }

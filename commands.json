@@ -37,5 +37,12 @@
       "workingDirectory": ".",
       "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 rebuild-db"
     }
+  },
+  "-vs-binding":
+  {
+    "ProjectOpened":
+    [
+      "configure"
+    ]
   }
 }
