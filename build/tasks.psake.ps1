@@ -11,42 +11,38 @@ Task "Publish" -alias "push" -description "This task compiles, test and publish 
 
 # ==========
 
-Task "Initialize-Project" -alias "configure" -description "" `
+Task "Initialize-Project" -alias "configure" -description "This task initialize the project." `
 -depends @("restore") -action {
-	# Create the 'secrets.json' file
+	# Create the 'secrets.json' file.
     if (-not (Test-Path $SecretsJson))
     {
-		$writer = [System.Text.StringBuilder]::new();
 		$content = @"
 {
 	"nugetKey": null,
 	"psGalleryKey": null,
-	"connections":
-	[
+	"connection":
+	{
+		"MySQL":
 		{
-			"name": "SQLite",
-			"jdbcurl": "jdbc:sqlite:{0}",
-			"database": "Data Source=;"
+			"connectionString": "server=localhost;user=;password=;database=daterpillar;"
 		},
 
+		"MSSQL":
 		{
-			"name": "MySQL",
-			"jdbcurl": "jdbc:mysql://{0}/{1}",
-			"database": "server=;user=;password=;database=;"
-		},
-
-		{
-			"name": "MSSQL",
-			"jdbcurl": "jdbc:sqlserver:////{0};databaseName={1}",
-			"database": "server=;user=;password=;database=;"
+			"connectionString": "server=localhost;user=;password=;database=daterpillar;"
 		}
-	]
+	}
 }
 "@;
 		$content | Out-File $SecretsJson -Encoding utf8;
     }
 
-	return;
+	# Create test project connection strings.
+	[string]$projectDir = Join-Path $RootDir "tests\*.MSTest\" | Resolve-Path;
+	$credentials = Get-Content $SecretsJson | ConvertFrom-Json | Select-Object -ExpandProperty "connection";
+	$configFile = Join-Path $projectDir "connections.json";
+	$credentials | ConvertTo-Json | Out-File $configFile -Encoding utf8;
+	Write-Host "  *  Updated $(Split-Path $configFile -Leaf)";
 
 	# Restore packages.
     [string]$sln = Resolve-Path "$RootDir/*.sln";
@@ -81,21 +77,3 @@ Task "Generate-Packages" -alias "pack" -description "This task packages the proj
 	Expand-Archive $zip -DestinationPath (Join-Path $ArtifactsDir "msbuild");
 	Remove-Item $zip -Force -Recurse;
 }
-
-#region ----- DB Migration -----
-
-Task "Rebuild-FlywayLocalDb" -alias "rebuild-db" -description "This task rebuilds the local database using flyway." `
--depends @("restore") -action{
-	[string]$flyway = Get-Flyway;
-	$credential = Get-Secret "local";
-	Assert (-not [string]::IsNullOrEmpty($credential.database)) "A connection string for your local database was not provided.";
-
-	$db = [ConnectionInfo]::new($credential, $credential.database);
-	Write-Header "flyway: clean ($($db.ToFlywayUrl()))";
-	Exec { &$flyway clean $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword(); }
-	Write-Header "flyway: migrate ($($db.ToFlywayUrl()))";
-	Exec { &$flyway migrate $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword() $([ConnectionInfo]::ConvertToFlywayLocation($MigrationDirectory)); }
-	Exec { &$flyway info $db.ToFlywayUrl() $db.ToFlyUser() $db.ToFlyPassword() $([ConnectionInfo]::ConvertToFlywayLocation($MigrationDirectory)); }
-}
-
-#endregion

@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> index.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class Index : ICloneable<Index>
+    public class Index : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Index"/> class.
@@ -92,6 +92,10 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("columnName")]
         public ColumnName[] Columns { get; set; }
 
+        string ISQLObject.GetName() => Name;
+
+        #region ICloneable
+
         /// <summary>
         /// Creates a new <see cref="Index"/> object that is a copy of the current instance.
         /// </summary>
@@ -105,6 +109,16 @@ namespace Acklann.Daterpillar.Configuration
                 Type = this.Type
             };
         }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        object ICloneable.Clone() => Clone();
+
+        #endregion ICloneable
 
         // ==================== INTERNAL MEMBERS ==================== //
 

@@ -7,7 +7,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> foreign key.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class ForeignKey : ICloneable<ForeignKey>
+    public class ForeignKey : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
@@ -104,6 +104,10 @@ namespace Acklann.Daterpillar.Configuration
         [XmlAttribute("onDelete")]
         public ReferentialAction OnDelete { get; set; }
 
+        string ISQLObject.GetName() => Name;
+
+        #region ICloneable
+
         /// <summary>
         /// Creates a new <see cref="ForeignKey"/> object that is a copy of the current instance.
         /// </summary>
@@ -120,6 +124,16 @@ namespace Acklann.Daterpillar.Configuration
                 OnUpdate = this.OnUpdate
             };
         }
+
+        /// <summary>
+        /// Creates a new <see cref="ForeignKey"/> that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        object System.ICloneable.Clone() => Clone();
+
+        #endregion ICloneable
 
         // ==================== INTERNAL MEMBERS ==================== //
 

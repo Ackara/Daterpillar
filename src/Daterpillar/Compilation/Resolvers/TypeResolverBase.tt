@@ -21,7 +21,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 	foreach ((string typeName, string doc) in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"/// <summary>{typeName}.</summary>");
-		WriteLine($"public const string {typeName.ToUpper()} = \"{typeName}\";");
+		WriteLine($"internal const string {typeName.ToUpper()} = \"{typeName.ToLower()}\";");
 	}
 	ClearIndent();
 #>
@@ -39,7 +39,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 	PushIndent("\t\t\t\t");
 	foreach ((string value, string doc) in GetXsdEnumerations("TypeName"))
 	{
-		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToLower()}\" }},");
+		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToUpper()}\" }},");
 	}
 	
 	ClearIndent();
@@ -48,11 +48,40 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 		}
 
 		/// <summary>
+        /// Escapes the specified object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>The escaped name.</returns>
+		public virtual string Escape(string objectName) => objectName;
+
+		/// <summary>
 		/// Maps the specified <see cref="DataType"/>.
 		/// </summary>
 		/// <param name="dataType">Type of the data.</param>
 		/// <returns>The type name.</returns>
 		public abstract string GetTypeName(DataType dataType);
+
+		public virtual string GetActionName(ReferentialAction action)
+        {
+			switch (action)
+            {
+				default:
+				case ReferentialAction.Cascade:
+					return "CASCADE";
+
+                case ReferentialAction.NoAction:
+                    return "NO ACTION";
+                
+                case ReferentialAction.Restrict:
+                    return "RESTRICT";
+
+                case ReferentialAction.SetNull:
+                    return "SET NULL";
+
+                case ReferentialAction.SetDefault:
+                    return "SET DEFAULT";
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the type-to-type map.

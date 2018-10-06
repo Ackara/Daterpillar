@@ -13,37 +13,39 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 		#region Keys
 
 		/// <summary>bool.</summary>
-		public const string BOOL = "bool";
+		internal const string BOOL = "bool";
 		/// <summary>blob.</summary>
-		public const string BLOB = "blob";
+		internal const string BLOB = "blob";
 		/// <summary>char.</summary>
-		public const string CHAR = "char";
+		internal const string CHAR = "char";
 		/// <summary>text.</summary>
-		public const string TEXT = "text";
+		internal const string TEXT = "text";
 		/// <summary>varchar.</summary>
-		public const string VARCHAR = "varchar";
+		internal const string VARCHAR = "varchar";
 		/// <summary>int.</summary>
-		public const string INT = "int";
+		internal const string INT = "int";
 		/// <summary>bigInt.</summary>
-		public const string BIGINT = "bigInt";
+		internal const string BIGINT = "bigint";
 		/// <summary>mediumInt.</summary>
-		public const string MEDIUMINT = "mediumInt";
+		internal const string MEDIUMINT = "mediumint";
 		/// <summary>smallInt.</summary>
-		public const string SMALLINT = "smallInt";
+		internal const string SMALLINT = "smallint";
 		/// <summary>tinyInt.</summary>
-		public const string TINYINT = "tinyInt";
+		internal const string TINYINT = "tinyint";
 		/// <summary>float.</summary>
-		public const string FLOAT = "float";
+		internal const string FLOAT = "float";
 		/// <summary>double.</summary>
-		public const string DOUBLE = "double";
+		internal const string DOUBLE = "double";
 		/// <summary>decimal.</summary>
-		public const string DECIMAL = "decimal";
+		internal const string DECIMAL = "decimal";
 		/// <summary>date.</summary>
-		public const string DATE = "date";
+		internal const string DATE = "date";
 		/// <summary>time.</summary>
-		public const string TIME = "time";
+		internal const string TIME = "time";
 		/// <summary>dateTime.</summary>
-		public const string DATETIME = "dateTime";
+		internal const string DATETIME = "datetime";
+		/// <summary>timeStamp.</summary>
+		internal const string TIMESTAMP = "timestamp";
 
 		#endregion Keys
 
@@ -54,24 +56,32 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 		{
 			TypeMap = new Dictionary<string, string>
 			{
-				{ "bool", "bool" },
-				{ "blob", "blob" },
-				{ "char", "char" },
-				{ "text", "text" },
-				{ "varchar", "varchar" },
-				{ "int", "int" },
-				{ "bigint", "bigint" },
-				{ "mediumint", "mediumint" },
-				{ "smallint", "smallint" },
-				{ "tinyint", "tinyint" },
-				{ "float", "float" },
-				{ "double", "double" },
-				{ "decimal", "decimal" },
-				{ "date", "date" },
-				{ "time", "time" },
-				{ "datetime", "datetime" },
+				{ "bool", "BOOL" },
+				{ "blob", "BLOB" },
+				{ "char", "CHAR" },
+				{ "text", "TEXT" },
+				{ "varchar", "VARCHAR" },
+				{ "int", "INT" },
+				{ "bigint", "BIGINT" },
+				{ "mediumint", "MEDIUMINT" },
+				{ "smallint", "SMALLINT" },
+				{ "tinyint", "TINYINT" },
+				{ "float", "FLOAT" },
+				{ "double", "DOUBLE" },
+				{ "decimal", "DECIMAL" },
+				{ "date", "DATE" },
+				{ "time", "TIME" },
+				{ "datetime", "DATETIME" },
+				{ "timestamp", "TIMESTAMP" },
 			};
 		}
+
+		/// <summary>
+        /// Escapes the specified object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>The escaped name.</returns>
+		public virtual string Escape(string objectName) => objectName;
 
 		/// <summary>
 		/// Maps the specified <see cref="DataType"/>.
@@ -79,6 +89,28 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 		/// <param name="dataType">Type of the data.</param>
 		/// <returns>The type name.</returns>
 		public abstract string GetTypeName(DataType dataType);
+
+		public virtual string GetActionName(ReferentialAction action)
+        {
+			switch (action)
+            {
+				default:
+				case ReferentialAction.Cascade:
+					return "CASCADE";
+
+                case ReferentialAction.NoAction:
+                    return "NO ACTION";
+                
+                case ReferentialAction.Restrict:
+                    return "RESTRICT";
+
+                case ReferentialAction.SetNull:
+                    return "SET NULL";
+
+                case ReferentialAction.SetDefault:
+                    return "SET DEFAULT";
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the type-to-type map.

@@ -54,5 +54,8 @@ namespace Acklann.Daterpillar
 		/// <summary>
 		/// </summary>
 		DATETIME,
+		/// <summary>
+		/// </summary>
+		TIMESTAMP,
 	}
 }

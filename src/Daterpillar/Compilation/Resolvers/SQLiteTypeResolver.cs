@@ -13,11 +13,17 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// </summary>
         public SQLiteTypeResolver() : base()
         {
-            TypeMap[BOOL.ToLower()] = "boolean";
-            TypeMap[INT.ToLower()] = "integer";
-            TypeMap[MEDIUMINT.ToLower()] = "integer";
-            TypeMap[SMALLINT.ToLower()] = "integer";
-            TypeMap[TINYINT.ToLower()] = "integer";
+            TypeMap[BOOL] = "BOOLEAN";
+            TypeMap[INT] = "INTEGER";
+            TypeMap[MEDIUMINT] = "INTEGER";
+            TypeMap[SMALLINT] = "INTEGER";
+            TypeMap[TINYINT] = "INTEGER";
+            TypeMap[TIMESTAMP] = "TEXT";
+        }
+
+        public override string Escape(string objectName)
+        {
+            return $"[{objectName}]";
         }
 
         /// <summary>
@@ -28,20 +34,20 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         public override string GetTypeName(DataType dataType)
         {
             string name = "";
-            string type = dataType.Name.ToLower();
+            string type = dataType.Name.ToLowerInvariant();
 
             switch (type)
             {
                 case CHAR:
                 case VARCHAR:
-                    int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
+                    int size = dataType.Scale == 0 ? 255 : dataType.Scale;
                     name = $"{type}({size})";
                     break;
 
                 case DECIMAL:
                     name = $"{type}({dataType.Scale}, {dataType.Precision})";
                     break;
-
+                    
                 default:
                     name = TypeMap[type];
                     break;

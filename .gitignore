@@ -274,6 +274,7 @@ Help_Backup/
 tools/
 
 # Sensitive Files
-credentials.json
+connections.*
+credentials.*
 app.config
 secrets.*

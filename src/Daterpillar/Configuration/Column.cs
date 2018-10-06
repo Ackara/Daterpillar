@@ -26,6 +26,17 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
         /// <param name="nullable">if set to <c>true</c> [nullable].</param>
         /// <param name="defaultValue">The default value.</param>
+        public Column(string name, SchemaType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null) : this(name, new DataType(dataType), autoIncrement, nullable, defaultValue)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
+        /// <param name="nullable">if set to <c>true</c> [nullable].</param>
+        /// <param name="defaultValue">The default value.</param>
         public Column(string name, DataType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null)
         {
             Name = name;

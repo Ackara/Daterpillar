@@ -10,6 +10,14 @@ namespace Acklann.Daterpillar
 
 		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 
+		public static string CreateDirectory(string filePath)
+		{
+			string dir = Path.GetDirectoryName(filePath);
+			if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+			return dir;
+		}
+
 		public static FileInfo GetFile(string fileName)
         {
             fileName = Path.GetFileName(fileName);

@@ -45,6 +45,8 @@ namespace Acklann.Daterpillar.Configuration
 					return "time";
 				case SchemaType.DATETIME:
 					return "dateTime";
+				case SchemaType.TIMESTAMP:
+					return "timeStamp";
 			}
 		}
 	}

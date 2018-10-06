@@ -24,7 +24,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public Table(string name, params object[] sqlObjects)
+        public Table(string name, params ISQLObject[] sqlObjects)
         {
             Name = name;
             Columns = new List<Column>();
