@@ -33,21 +33,28 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// <returns>The SQLite type name.</returns>
         public override string GetTypeName(DataType dataType)
         {
+            int s, p;
             string name = "";
-            string type = dataType.Name.ToLowerInvariant();
+            string type = dataType.Name;
 
             switch (type)
             {
                 case CHAR:
+                    s = (dataType.Scale == 0 ? 1 : dataType.Scale);
+                    name = $"{type}({s})";
+                    break;
+
                 case VARCHAR:
-                    int size = dataType.Scale == 0 ? 255 : dataType.Scale;
-                    name = $"{type}({size})";
+                    s = dataType.Scale == 0 ? 255 : dataType.Scale;
+                    name = $"{type}({s})";
                     break;
 
                 case DECIMAL:
-                    name = $"{type}({dataType.Scale}, {dataType.Precision})";
+                    s = (dataType.Scale == 0 ? 8 : dataType.Scale);
+                    p = (dataType.Precision == 0 ? 2 : dataType.Precision);
+                    name = $"{type}({s},{p})";
                     break;
-                    
+
                 default:
                     name = TypeMap[type];
                     break;

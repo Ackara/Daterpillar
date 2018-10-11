@@ -15,19 +15,10 @@ namespace Acklann.Daterpillar
         /// <param name="type">The type.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public DataTypeAttribute(SchemaType type, int scale = 0, int precision = 0) : this(Configuration.DataType.ToString(type), scale, precision)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataTypeAttribute"/> class.
-        /// </summary>
-        /// <param name="typeName">Name of the type.</param>
-        /// <param name="scale">The scale.</param>
-        /// <param name="precision">The precision.</param>
-        public DataTypeAttribute(string typeName, int scale = 0, int precision = 0)
+        public DataTypeAttribute(SchemaType type, int scale = 0, int precision = 0)
         {
             Precision = precision;
-            TypeName = typeName;
+            TypeName = Configuration.DataType.ToString(type);
             Scale = scale;
         }
 

@@ -16,11 +16,11 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="name">The name.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public DataType(string name, int scale = 0, int precision = 0)
+        public DataType(SchemaType name, int scale = 0, int precision = 0)
         {
-            Name = name;
-            Scale = scale;
+            Name = ToString(name);
             Precision = precision;
+            Scale = scale;
         }
 
         /// <summary>
@@ -29,11 +29,11 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="name">The name.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public DataType(SchemaType name, int scale = 0, int precision = 0)
+        internal DataType(string name, int scale = 0, int precision = 0)
         {
-            Name = ToString(name);
-            Precision = precision;
+            Name = name;
             Scale = scale;
+            Precision = precision;
         }
 
         /// <summary>

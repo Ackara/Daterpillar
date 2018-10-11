@@ -202,6 +202,24 @@ namespace Acklann.Daterpillar.Configuration
             return isWellFormed;
         }
 
+        public IEnumerable<Index> GetIndices()
+        {
+            foreach (Table table in Tables)
+                foreach (Index index in table.Indecies)
+                {
+                    yield return index;
+                }
+        }
+
+        public IEnumerable<ForeignKey> GetForeignKeys()
+        {
+            foreach (Table table in Tables)
+                foreach (var fk in table.ForeignKeys)
+                {
+                    yield return fk;
+                }
+        }
+
         /// <summary>
         /// Adds the specified <see cref="Table"/> objects as children of this <see cref="Schema"/>.
         /// </summary>

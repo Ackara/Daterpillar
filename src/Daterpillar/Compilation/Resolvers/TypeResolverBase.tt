@@ -21,7 +21,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 	foreach ((string typeName, string doc) in GetXsdEnumerations("TypeName"))
 	{
 		WriteLine($"/// <summary>{typeName}.</summary>");
-		WriteLine($"internal const string {typeName.ToUpper()} = \"{typeName.ToLower()}\";");
+		WriteLine($"internal const string {typeName.ToUpper()} = \"{typeName}\";");
 	}
 	ClearIndent();
 #>

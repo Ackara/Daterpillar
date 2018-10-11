@@ -10,7 +10,15 @@ namespace Acklann.Daterpillar.Compilation
     {
         public Discrepancy[] GenerateMigrationScript(Stream stream, Schema from, Schema to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
         {
+            /// Step 1: 
+            /// Mark all the tables that need to be created, altered or dropped.
+            /// 
+            /// Step 2: Sort the tables by action then dependency.
+            /// 
+            /// Step 3: Write the SQL statements that will edit the schema to the stream.
+            
             // ownsStream: If true, the output stream is closed by the writer when done; otherwise false. The default value is true.
+
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (from == null) throw new ArgumentNullException(nameof(from));
             if (to == null) throw new ArgumentNullException(nameof(to));
@@ -23,15 +31,14 @@ namespace Acklann.Daterpillar.Compilation
                 Table[] left = from.Clone().Tables.ToArray();// old
                 Table[] right = to.Clone().Tables.ToArray();// new
 
-                /// Step 1: Mark all the tables that need to be created, altered or dropped.
-                /// Remove the tables from the left, add and alter tables from the right.
+                // Step 1
                 CaptureTablesThatNeedToBeACreatedOrAltered(left, right);   // !The tables from the right
                 CaptureTablesThatNeedToBeDropped(left, right);             // !The tables from the left
 
-                /// Step 2: Sort the tables by action then dependency.
+                // Step 2
                 Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
 
-                /// Step 3: Write the SQL statements that will edit the schema to the stream.
+                // Step 3
                 foreach (Discrepancy change in sortedTables)
                     WriteChanges(writer, change, shouldOmitDropStatements);
 

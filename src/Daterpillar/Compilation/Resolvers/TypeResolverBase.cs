@@ -25,13 +25,13 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 		/// <summary>int.</summary>
 		internal const string INT = "int";
 		/// <summary>bigInt.</summary>
-		internal const string BIGINT = "bigint";
+		internal const string BIGINT = "bigInt";
 		/// <summary>mediumInt.</summary>
-		internal const string MEDIUMINT = "mediumint";
+		internal const string MEDIUMINT = "mediumInt";
 		/// <summary>smallInt.</summary>
-		internal const string SMALLINT = "smallint";
+		internal const string SMALLINT = "smallInt";
 		/// <summary>tinyInt.</summary>
-		internal const string TINYINT = "tinyint";
+		internal const string TINYINT = "tinyInt";
 		/// <summary>float.</summary>
 		internal const string FLOAT = "float";
 		/// <summary>double.</summary>
@@ -43,9 +43,9 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 		/// <summary>time.</summary>
 		internal const string TIME = "time";
 		/// <summary>dateTime.</summary>
-		internal const string DATETIME = "datetime";
+		internal const string DATETIME = "dateTime";
 		/// <summary>timeStamp.</summary>
-		internal const string TIMESTAMP = "timestamp";
+		internal const string TIMESTAMP = "timeStamp";
 
 		#endregion Keys
 

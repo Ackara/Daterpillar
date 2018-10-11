@@ -1,6 +1,7 @@
 ﻿using Acklann.Daterpillar.Compilation.Resolvers;
 using Acklann.Daterpillar.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -32,7 +33,12 @@ namespace Acklann.Daterpillar.Compilation
             CreateForeignKeyFormatString = "ALTER TABLE {0} ADD FOREIGN KEY ({1}) REFERENCES {2}({3})  ON UPDATE {4} ON DELETE {5}",
 
             CreateIndexFormatString = "CREATE{0}INDEX {1} ON {2} ({3})",
-            PrimaryKeyFormatString = "PRIMARY KEY ({0})"
+            DropIndexFormatString = "DROP INDEX {0}",
+            PrimaryKeyFormatString = "PRIMARY KEY ({0})",
+
+            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5} {6}",
+            RenameTableFormatString = "ALTER TABLE {0} RENAME TO {1}",
+            RenameColumnFormatString = "ALTER TABLE {0} RENAME COLUMN {1} TO {2}"
             ;
 
         protected readonly TextWriter Writer;
@@ -40,6 +46,21 @@ namespace Acklann.Daterpillar.Compilation
         protected readonly ITypeResolver Resolver;
 
         protected abstract Syntax Syntax { get; }
+
+        public void Write(object value)
+        {
+            Writer.Write(value);
+        }
+
+        public void WriteLine(object value)
+        {
+            Writer.WriteLine(value);
+        }
+
+        public void Flush()
+        {
+            Writer.Flush();
+        }
 
         // ==================== CREATE ==================== //
 
@@ -75,7 +96,7 @@ namespace Acklann.Daterpillar.Compilation
                     (column.IsNullable ? string.Empty : NotNull),
                     (column.AutoIncrement ? AutoIncrement : string.Empty),
                     (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, column.DefaultValue)),
-                    column.Comment
+                    $"'{column.Comment}'"
                     ).TrimEnd());
 
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
@@ -117,24 +138,28 @@ namespace Acklann.Daterpillar.Compilation
                     Resolver.GetActionName(fk.OnDelete)
                     );
 
-                if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
+                if (notLastColumn()) Writer.WriteLine(",");
             }
 
             Writer.WriteLine();
             Writer.WriteLine($");");
             Writer.WriteLine();
+
+            //--- Index ---//
+            foreach (Index index in table.Indecies.Where(x => x.Type == IndexType.Index))
+                Create(index);
         }
 
         public virtual void Create(Column column)
         {
             Writer.Write(string.Format(CreateColumnFormatString,
-                Resolver.Escape(column.Table.Name),
-                Resolver.Escape(column.Name),
-                Resolver.GetTypeName(column.DataType),
-                (column.IsNullable ? string.Empty : NotNull),
-                (column.AutoIncrement ? AutoIncrement : string.Empty),
-                string.Format(DefaultFormatString, column.DefaultValue),
-                column.Comment
+                    Resolver.Escape(column.Table.Name),
+                    Resolver.Escape(column.Name),
+                    Resolver.GetTypeName(column.DataType),
+                    (column.IsNullable ? string.Empty : NotNull),
+                    (column.AutoIncrement ? AutoIncrement : string.Empty),
+                    string.Format(DefaultFormatString, column.DefaultValue),
+                    column.Comment
                 ).TrimEnd());
             Writer.WriteLine(";");
             Writer.WriteLine();
@@ -184,7 +209,8 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Drop(Table table)
         {
-            throw new System.NotImplementedException();
+            Writer.WriteLine("DROP TABLE {0};", Resolver.Escape(table.Name));
+            Writer.WriteLine();
         }
 
         public virtual void Drop(Column column)
@@ -199,14 +225,159 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Drop(Index index)
         {
-            throw new System.NotImplementedException();
+            Writer.Write(DropIndexFormatString, Resolver.Escape(index.Name));
+            Writer.WriteLine(';');
+            Writer.WriteLine();
         }
 
         // ==================== ALTER ==================== //
 
-        public virtual void Alter(Table oldTable, Table newTable)
+        public virtual void Alter(Table newTable)
         {
-            throw new System.NotImplementedException();
+        }
+
+        public virtual void Alter(Column column)
+        {
+            Writer.Write(string.Format(AlterColumnFormatString,
+                    Resolver.Escape(column.Table.Name),
+                    Resolver.Escape(column.Name),
+                    Resolver.GetTypeName(column.DataType),
+                    (column.IsNullable ? string.Empty : NotNull),
+                    (column.AutoIncrement ? AutoIncrement : string.Empty),
+                    string.Format(DefaultFormatString, column.DefaultValue),
+                    column.Comment
+                ).TrimEnd());
+            Writer.WriteLine(';');
+            Writer.WriteLine();
+        }
+
+        public void Rename(Table oldTable, Table newTable)
+        {
+            Rename(oldTable.Name, newTable.Name);
+        }
+
+        public virtual void Rename(string oldTableName, string newTableName)
+        {
+            Writer.Write(RenameTableFormatString, Resolver.Escape(oldTableName), Resolver.Escape(newTableName));
+            Writer.WriteLine(';');
+            Writer.WriteLine();
+        }
+
+        public virtual void Rename(Column oldColumn, string newColumnName)
+        {
+            Writer.Write(RenameColumnFormatString,
+                    Resolver.Escape(Resolver.Escape(oldColumn.Table.Name)),
+                    Resolver.Escape(Resolver.Escape(oldColumn.Name)),
+                    Resolver.Escape(newColumnName)
+                );
+            Writer.WriteLine(';');
+            Writer.WriteLine();
+        }
+
+        protected internal IEnumerable<Table> RemoveConstraints(Column column)
+        {
+            bool wasModified;
+            string oldName = column.Name;
+            string tableName = column.Table.Name;
+            Schema schema = column.Table.Schema.Clone();
+
+            foreach (Table table in schema.Tables)
+            {
+                wasModified = false;
+
+                if (string.Equals(table.Name, tableName, StringComparison.OrdinalIgnoreCase))
+                {
+                    table.Columns.Remove(
+                        table.Columns.Find(x => x.Name == oldName)
+                        );
+                    wasModified = true;
+                }
+
+                var foreignKeys = new List<ForeignKey>(table.ForeignKeys);
+                foreach (ForeignKey fk in foreignKeys)
+                {
+                    if (fk.LocalTable == tableName && fk.LocalColumn == oldName)
+                    {
+                        table.ForeignKeys.Remove(fk);
+                        wasModified = true;
+                    }
+                    else if (fk.ForeignTable == tableName && fk.ForeignColumn == oldName)
+                    {
+                        table.ForeignKeys.Remove(fk);
+                        wasModified = true;
+                    }
+                }
+
+                var indecies = new List<Index>(table.Indecies);
+                foreach (Index index in indecies)
+                {
+                    for (int i = 0; i < index.Columns.Length; i++)
+                    {
+                        if (index.Columns[i].Name == oldName)
+                        {
+                            if (index.Columns.Length == 1)
+                            {
+                                table.Indecies.Remove(index);
+                            }
+                            else
+                            {
+                                index.Columns = index.Columns.Where(x => x.Name != oldName).ToArray();
+                            }
+
+                            wasModified = true;
+                        }
+                    }
+                }
+
+                if (wasModified) yield return table;
+            }
+        }
+
+        protected internal IEnumerable<Table> RenameConstraints(Column column, string newName)
+        {
+            bool wasModified;
+            string oldName = column.Name;
+            string tableName = column.Table.Name;
+            Schema schema = column.Table.Schema.Clone();
+
+            foreach (Table table in schema.Tables)
+            {
+                wasModified = false;
+
+                if (string.Equals(table.Name, tableName, StringComparison.OrdinalIgnoreCase))
+                {
+                    table.Columns.Find(x => x.Name == oldName).Name = newName;
+                    wasModified = true;
+                }
+
+                foreach (ForeignKey fk in table.ForeignKeys)
+                {
+                    if (fk.LocalTable == tableName && fk.LocalColumn == oldName)
+                    {
+                        fk.LocalColumn = newName;
+                        wasModified = true;
+                    }
+                    else if (fk.ForeignTable == tableName && fk.ForeignColumn == oldName)
+                    {
+                        fk.ForeignColumn = newName;
+                        wasModified = true;
+                    }
+                }
+
+                foreach (Index index in table.Indecies)
+                {
+                    for (int i = 0; i < index.Columns.Length; i++)
+                    {
+                        if (index.Columns[i].Name == oldName)
+                        {
+                            index.Columns[i].Name = newName;
+                            wasModified = true;
+                        }
+                    }
+                }
+
+                if (wasModified) yield return table;
+            }
         }
 
         #region IDisposable

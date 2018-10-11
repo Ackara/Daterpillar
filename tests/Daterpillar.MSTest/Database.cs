@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Acklann.Daterpillar
 {
-    public sealed class Database : IDisposable
+    internal sealed class Database : IDisposable
     {
         public Database(Syntax syntax)
         {
@@ -50,7 +50,6 @@ namespace Acklann.Daterpillar
 ********** !!! TEST FAILED !!! **********
 {ex.ToString()}
 *****************************************
-
 
 ".TrimStart();
             }
@@ -113,7 +112,7 @@ CREATE TABLE [service] (
     Zombie_fk INTEGER NOT NULL,
     FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
 );
-CREATE INDEX zombie_idx ON [service] (Subscribers);
+CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
 ";
                     command.ExecuteNonQuery();
                 }
@@ -151,7 +150,7 @@ CREATE TABLE [dbo].[service] (
     FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
 );
 
-CREATE INDEX zombie_idx ON [service] (Subscribers);
+CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
 ";
                     command.ExecuteNonQuery();
                 }
@@ -183,10 +182,33 @@ CREATE INDEX zombie_idx ON [service] (Subscribers);
 
         #endregion Private Members
 
-        public struct SqlObject
+        public class Sample
         {
-            public const string
-                Zombie = "zombie", AlterThisColumn = "Subscribers";
+            public static Schema CreateInstance()
+            {
+                var schema = new Schema();
+                schema.Add(
+                    new Table("zombie"),
+
+                    new Table("placeholder",
+                        new Column("Id", SchemaType.INT, autoIncrement: true),
+                        new Column("Name", SchemaType.VARCHAR, nullable: true)
+                    ),
+
+                    new Table("service",
+                        new Column("Id", SchemaType.INT, autoIncrement: true),
+                        new Column("Name", SchemaType.VARCHAR),
+                        new Column("Subscribers", SchemaType.INT),
+                        new Column("Zombie", SchemaType.VARCHAR),
+                        new Column("Zombie_fk", SchemaType.INT),
+
+                        new ForeignKey("Zombie_fk", "placeholder", "Id"),
+                        new Index(IndexType.Index, new ColumnName("Subscribers"))
+                    )
+                    );
+
+                return schema;
+            }
         }
     }
 }

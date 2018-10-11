@@ -15,27 +15,36 @@ CREATE TABLE [song] (
 	FOREIGN KEY ([GenreId]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE [album] (
-	[SongId] INTEGER NOT NULL,
-	[ArtistId] INTEGER NOT NULL,
-	[Name] VARCHAR(255) NOT NULL,
-	[Year] INTEGER NOT NULL
-);
+CREATE INDEX [song_GenreId_index] ON [song] ([GenreId] ASC);
 
-INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');
-
--- If you are reading this, I don't discriminate.
-
-ALTER TABLE [song] ADD COLUMN [ReleaseDate] TEXT NOT NULL  DEFAULT '';
-
-PRAGMA foreign_keys=off;
-BEGIN TRANSACTION;
-ALTER TABLE [album] RENAME TO [_album_old];
 CREATE TABLE [album] (
 	[SongId] INTEGER NOT NULL,
 	[ArtistId] INTEGER NOT NULL,
 	[Name] VARCHAR(255) NOT NULL,
 	[Year] INTEGER NOT NULL,
+	[Price] DECIMAL(8,2) NOT NULL
+);
+
+-- If you are reading this, I don't discriminate.
+
+INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');
+
+INSERT INTO song (Name, GenreId, Track) VALUES ('Survival', '1', '1');
+
+INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorpion', '2018', '14.99');
+
+ALTER TABLE [song] ADD COLUMN [ReleaseDate] TEXT NOT NULL  DEFAULT '';
+
+PRAGMA foreign_keys=off;
+BEGIN TRANSACTION;
+CREATE TABLE [_album_old] AS SELECT * FROM [album];
+DROP TABLE [album];
+CREATE TABLE [album] (
+	[SongId] INTEGER NOT NULL,
+	[ArtistId] INTEGER NOT NULL,
+	[Name] VARCHAR(255) NOT NULL,
+	[Year] INTEGER NOT NULL,
+	[Price] DECIMAL(8,2) NOT NULL,
 	FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
@@ -44,16 +53,18 @@ DROP TABLE [_album_old];
 COMMIT;
 PRAGMA foreign_keys=on;
 
-CREATE INDEX [idx_song_Name] ON [song] ([Name] DESC);
+CREATE INDEX [song_Name_index] ON [song] ([Name] DESC);
 
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
-ALTER TABLE [album] RENAME TO [_album_old];
+CREATE TABLE [_album_old] AS SELECT * FROM [album];
+DROP TABLE [album];
 CREATE TABLE [album] (
 	[SongId] INTEGER NOT NULL,
 	[ArtistId] INTEGER NOT NULL,
 	[Name] VARCHAR(255) NOT NULL,
 	[Year] INTEGER NOT NULL,
+	[Price] DECIMAL(8,2) NOT NULL,
 	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
 	FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );

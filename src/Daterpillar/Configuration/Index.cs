@@ -67,7 +67,7 @@ namespace Acklann.Daterpillar.Configuration
                 string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
                 string columns = string.Join("_and_", Columns.Select(x => x.Name));
 
-                return string.Concat("idx_", tableName, columns);
+                return string.Concat(tableName, columns, "_index");
             }
         }
 

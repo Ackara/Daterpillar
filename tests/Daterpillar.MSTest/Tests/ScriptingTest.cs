@@ -1,4 +1,6 @@
-﻿using Acklann.Daterpillar.Compilation;
+﻿#define TESTING_ONE_AT_A_TIME
+
+using Acklann.Daterpillar.Compilation;
 using Acklann.Daterpillar.Configuration;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,8 +14,12 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class ScriptingTest
     {
-        //[ClassInitialize]
+#if !TESTING_ONE_AT_A_TIME
+
+        [ClassInitialize]
         public static void Setup(TestContext context) => Database.Refresh();
+
+#endif
 
         [DataTestMethod]
         [DataRow(Syntax.SQLite)]
@@ -21,8 +27,6 @@ namespace Acklann.Daterpillar.Tests
         {
             #region Arrange
 
-            string sql = null;
-            bool generatedSqlIsExecutable = false;
             var scriptFile = Path.Combine(Path.GetTempPath(), $"dtp-create.{syntax}".ToLowerInvariant());
             var schema = new Schema();
 
@@ -48,16 +52,14 @@ namespace Acklann.Daterpillar.Tests
                 new Column("SongId", SchemaType.INT),
                 new Column("ArtistId", SchemaType.INT),
                 new Column("Name", SchemaType.VARCHAR),
-                new Column("Year", SchemaType.SMALLINT)
+                new Column("Year", SchemaType.SMALLINT),
+                new Column("Price", SchemaType.DECIMAL)
                 )
             { Schema = schema };
 
-            var seed = new Script()
-            {
-                Syntax = syntax,
-                Content = "INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');",
-            };
-
+            var genreSeed = new Script("INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');", syntax);
+            var songSeed = new Script("INSERT INTO song (Name, GenreId, Track) VALUES ('Survival', '1', '1');", syntax);
+            var albumSeed = new Script("INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorpion', '2018', '14.99');");
             var generic = new Script("-- If you are reading this, I don't discriminate.", Syntax.Generic);
             var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
 
@@ -72,7 +74,7 @@ namespace Acklann.Daterpillar.Tests
             #endregion Arrange
 
             // Act
-            Database.Refresh(syntax);
+            RefreshDatabase(syntax);
             TestData.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
@@ -82,7 +84,7 @@ namespace Acklann.Daterpillar.Tests
                 System.Diagnostics.Debug.WriteLine($"using {writer.GetType().Name}");
 
                 schema.Add(genre, song, album);
-                schema.Add(seed, virus, generic);
+                schema.Add(virus, generic, genreSeed, songSeed, albumSeed);
                 writer.Create(schema);
 
                 writer.Create(releaseDate);
@@ -95,16 +97,10 @@ namespace Acklann.Daterpillar.Tests
                 song.Indecies.Add(name_idx);
 
                 writer.Create(pKey);
-                file.Flush();
+                writer.Flush();
             }
 
-            using (var db = new Database(syntax))
-            {
-                sql = File.ReadAllText(scriptFile);
-                generatedSqlIsExecutable = db.TryExecute(sql, out string error);
-                var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
-                sql = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, sql, nl);
-            }
+            TestScript(scriptFile, syntax, out string sql, out bool generatedSqlIsExecutable);
 
             // Assert
             Diff.Approve(sql, ".sql", syntax);
@@ -115,19 +111,96 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_drop_sql_objects(Syntax syntax)
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            var factory = new SqlWriterFactory();
+            var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-drop.sql");
+
+            var schema = Database.Sample.CreateInstance();
+            var service = schema.Tables[2];
+
+            // Act
+            RefreshDatabase(syntax);
+            TestData.CreateDirectory(scriptFile);
+            if (File.Exists(scriptFile)) File.Delete(scriptFile);
+
+            using (var file = File.OpenWrite(scriptFile))
+            using (var writer = factory.CreateInstance(syntax, file))
+            {
+                writer.Drop(schema.Tables[0]);
+
+                writer.Drop(service.ForeignKeys[0]);
+                service.ForeignKeys.RemoveAt(0);
+
+                writer.Drop(service.Columns[3]);
+                service.Columns.RemoveAt(3);
+
+                writer.Drop(service.Indecies[0]);
+            }
+
+            TestScript(scriptFile, syntax, out string sql, out bool sqlIsExecutable);
+
+            // Assert
+            Diff.Approve(sql, ".sql", syntax);
+            sqlIsExecutable.ShouldBeTrue();
         }
 
         [DataTestMethod]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_alter_sql_objects(Syntax syntax)
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-alter.sql");
+            var schema = Database.Sample.CreateInstance();
+            var factory = new SqlWriterFactory();
+
+            var service = schema.Tables[2];
+
+            // Act
+            RefreshDatabase(syntax);
+            TestData.CreateDirectory(scriptFile);
+            if (File.Exists(scriptFile)) File.Delete(scriptFile);
+
+            using (var file = File.OpenWrite(scriptFile))
+            using (var writer = factory.CreateInstance(syntax, file))
+            {
+                writer.Rename("placeholder", "publisher");
+                writer.Rename(service.Columns[4], "ActiveUsers");
+                service.ForeignKeys[0].LocalColumn = "ActiveUsers";
+                service.Columns[4].Name = "ActiveUsers";
+
+                var replacement = service.Columns[2];
+                replacement.IsNullable = false;
+                replacement.DefaultValue = "0";
+                replacement.Comment = "Get or set the number of customers.";
+                writer.Alter(replacement);
+                
+                service.Comment = "Represents a streaming service.";
+                writer.Alter(service);
+            }
+
+            TestScript(scriptFile, syntax, out string sql, out bool generatedSqlIsExecutable);
+
+            // Assert
+            Diff.Approve(sql, ".sql", syntax);
+            generatedSqlIsExecutable.ShouldBeTrue();
         }
 
-        private static bool IsWellFormed(string file, Syntax syntax)
+        private static void TestScript(string scriptFile, Syntax syntax, out string sql, out bool generatedSqlIsExecutable)
         {
-            return false;
+            using (var db = new Database(syntax))
+            {
+                sql = File.ReadAllText(scriptFile);
+                generatedSqlIsExecutable = db.TryExecute(sql, out string error);
+                var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
+                sql = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, sql, nl);
+            }
+        }
+
+        private static void RefreshDatabase(Syntax syntax)
+        {
+#if TESTING_ONE_AT_A_TIME
+            Database.Refresh(syntax);
+#endif
         }
     }
 }
