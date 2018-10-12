@@ -21,6 +21,7 @@ namespace Acklann.Daterpillar.Compilation
         public Discrepancy(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
         {
             Action = action;
+            WasHandled = false;
             OldValue = oldValue;
             NewValue = newValue;
             Children = new List<Discrepancy>();
@@ -39,9 +40,11 @@ namespace Acklann.Daterpillar.Compilation
 
         public List<Discrepancy> Children { get; set; }
 
+        internal bool WasHandled { get; set; }
+
         private string ToDebuggerDisplay()
         {
-            return $"{Action} | {NewValue.GetName()}[{Children.Count}]";
+            return $"{Action} | {NewValue?.GetName()}[{Children?.Count}]";
         }
     }
 }

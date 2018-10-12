@@ -77,8 +77,6 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Create(Table table)
         {
             int i, n;
-            bool notLastColumn() => i < (n - 1);
-
             Writer.Write(string.Format(CreateTableFormatString, Resolver.Escape(table.Name)));
             Writer.WriteLine(" (");
 
@@ -102,7 +100,7 @@ namespace Acklann.Daterpillar.Compilation
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
             }
 
-            //--- Primary Keys ---//
+            //--- Primary Key ---//
 
             Index pk;
             n = table.Indecies.Count;
@@ -116,12 +114,12 @@ namespace Acklann.Daterpillar.Compilation
                     Writer.Write(string.Format(PrimaryKeyFormatString,
                         string.Join(", ", pk.Columns.Select(x => $"{Resolver.Escape(x.Name)} {x.Order}"))
                         ));
-
-                    if (notLastColumn()) Writer.WriteLine(",");
+                    break;
                 }
             }
 
             //--- Foreign Keys ---//
+
             ForeignKey fk;
             n = table.ForeignKeys.Count;
             for (i = 0; i < n; i++)
@@ -137,8 +135,6 @@ namespace Acklann.Daterpillar.Compilation
                     Resolver.GetActionName(fk.OnUpdate),
                     Resolver.GetActionName(fk.OnDelete)
                     );
-
-                if (notLastColumn()) Writer.WriteLine(",");
             }
 
             Writer.WriteLine();

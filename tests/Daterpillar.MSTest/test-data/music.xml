@@ -77,7 +77,7 @@
       <dataType scale="32">varchar</dataType>
     </column>
 
-    <column name="Bio" default="">
+    <column name="Bio" default="&apos;&apos;">
       <dataType>text</dataType>
     </column>
 

@@ -57,7 +57,7 @@
     <column name="Name">
       <dataType scale="32">varchar</dataType>
     </column>
-    <column name="Bio" default="">
+    <column name="Bio" default="''">
       <dataType>text</dataType>
     </column>
     <column name="Id" autoIncrement="true">

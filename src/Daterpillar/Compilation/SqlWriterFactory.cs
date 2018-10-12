@@ -39,7 +39,7 @@ namespace Acklann.Daterpillar.Compilation
                 return (SqlWriter)Activator.CreateInstance(_returnTypes[syntax.ToString()], writer);
             }
 
-            throw new ArgumentOutOfRangeException(nameof(syntax), $"{nameof(Daterpillar)} do not support {syntax} at this time. Visit 'https://github.com/Ackara/Daterpillar' to request support.");
+            throw new ArgumentOutOfRangeException(nameof(syntax), $"{nameof(Daterpillar)} do not support '{syntax}' at this time. Visit 'https://github.com/Ackara/Daterpillar' to request support.");
         }
 
         public IEnumerable<Type> GetWriterTypes()

@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar
             return 404;
         }
 
-        public static int NotWellFormed(string path, string errorMsg)
+        public static int NotWellFormedError(string path, string errorMsg)
         {
             PrintError(string.Format("The following file contain error(s) '{0}'.", path));
             foreach (string line in errorMsg.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))

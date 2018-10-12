@@ -1,6 +1,4 @@
-﻿#define TESTING_ONE_AT_A_TIME
-
-using Acklann.Daterpillar.Compilation;
+﻿using Acklann.Daterpillar.Compilation;
 using Acklann.Daterpillar.Configuration;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,13 +12,6 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class ScriptingTest
     {
-#if !TESTING_ONE_AT_A_TIME
-
-        [ClassInitialize]
-        public static void Setup(TestContext context) => Database.Refresh();
-
-#endif
-
         [DataTestMethod]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_create_sql_objects(Syntax syntax)
@@ -74,7 +65,6 @@ namespace Acklann.Daterpillar.Tests
             #endregion Arrange
 
             // Act
-            RefreshDatabase(syntax);
             TestData.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
@@ -119,7 +109,6 @@ namespace Acklann.Daterpillar.Tests
             var service = schema.Tables[2];
 
             // Act
-            RefreshDatabase(syntax);
             TestData.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
@@ -156,7 +145,6 @@ namespace Acklann.Daterpillar.Tests
             var service = schema.Tables[2];
 
             // Act
-            RefreshDatabase(syntax);
             TestData.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
@@ -173,7 +161,7 @@ namespace Acklann.Daterpillar.Tests
                 replacement.DefaultValue = "0";
                 replacement.Comment = "Get or set the number of customers.";
                 writer.Alter(replacement);
-                
+
                 service.Comment = "Represents a streaming service.";
                 writer.Alter(service);
             }
@@ -187,20 +175,15 @@ namespace Acklann.Daterpillar.Tests
 
         private static void TestScript(string scriptFile, Syntax syntax, out string sql, out bool generatedSqlIsExecutable)
         {
-            using (var db = new Database(syntax))
+            using (var db = new Database(syntax, "dtp-scriptingTest"))
             {
+                db.Refresh();
+
                 sql = File.ReadAllText(scriptFile);
                 generatedSqlIsExecutable = db.TryExecute(sql, out string error);
                 var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
                 sql = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, sql, nl);
             }
-        }
-
-        private static void RefreshDatabase(Syntax syntax)
-        {
-#if TESTING_ONE_AT_A_TIME
-            Database.Refresh(syntax);
-#endif
         }
     }
 }

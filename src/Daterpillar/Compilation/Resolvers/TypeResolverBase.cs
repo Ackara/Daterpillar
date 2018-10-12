@@ -62,17 +62,17 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 				{ "text", "TEXT" },
 				{ "varchar", "VARCHAR" },
 				{ "int", "INT" },
-				{ "bigint", "BIGINT" },
-				{ "mediumint", "MEDIUMINT" },
-				{ "smallint", "SMALLINT" },
-				{ "tinyint", "TINYINT" },
+				{ "bigInt", "BIGINT" },
+				{ "mediumInt", "MEDIUMINT" },
+				{ "smallInt", "SMALLINT" },
+				{ "tinyInt", "TINYINT" },
 				{ "float", "FLOAT" },
 				{ "double", "DOUBLE" },
 				{ "decimal", "DECIMAL" },
 				{ "date", "DATE" },
 				{ "time", "TIME" },
-				{ "datetime", "DATETIME" },
-				{ "timestamp", "TIMESTAMP" },
+				{ "dateTime", "DATETIME" },
+				{ "timeStamp", "TIMESTAMP" },
 			};
 		}
 

@@ -2,18 +2,20 @@
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
-    public class CompilationTest
+    public class MigrationTest
     {
         [TestMethod]
         public void Can_build_a_schema_from_an_assembly()
         {
             // Arrange
-            var assemblyFile = typeof(CompilationTest).Assembly.Location;
+            var assemblyFile = typeof(MigrationTest).Assembly.Location;
             var sut = new Commands.BuildCommand(assemblyFile);
 
             // Act
@@ -71,42 +73,75 @@ namespace Acklann.Daterpillar.Tests
             Diff.Approve(schema, ".xml");
         }
 
-        [TestMethod]
-        public void Can_generate_a_migration_script()
+        [DataTestMethod]
+        [DataRow(Syntax.SQLite)]
+        public void Can_generate_a_migration_script(Syntax syntax)
         {
             // Arrange
-            var migrationsDir = Path.Combine(Path.GetTempPath(), "dtp-migrations");
-            var snapshotFile = Path.Combine(migrationsDir, "snapshot.schema.xml");
+            var results = new Tuple<bool, string>[2];
+            var baseDir = Path.Combine(Path.GetTempPath(), "dtp");
+            var migrationsDir = Path.Combine(baseDir, "migrations");
+            var snapshotFile = Path.Combine(baseDir, "snapshot.schema.xml");
+            var activeFile = Path.Combine(baseDir, "active.schema.xml");
 
-            if (Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema, out string errorMsg) == false)
-                throw new System.Xml.Schema.XmlSchemaValidationException(errorMsg);
-
-            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
-                throw new System.Xml.Schema.XmlSchemaValidationException(errorMsg);
-
-            var sut = new Commands.MigrateCommand(snapshotFile, schema.Path, migrationsDir, "1.1", "V{0}__Update_{1:m.s}.sql", Syntax.Generic, false);
+            var sut = new Commands.MigrateCommand(snapshotFile, activeFile, migrationsDir, "1.1",
+                fileNameFormat: "V{0}__Update.{2}.sql",
+                syntax: syntax,
+                omitDropStatements: false
+                );
 
             // Act
-
             /* Case 1: No migrations. */
-            if (Directory.Exists(migrationsDir)) Directory.Delete(migrationsDir, recursive: true);
-            if (File.Exists(snapshotFile)) File.Delete(snapshotFile);
+            if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);
+            Directory.CreateDirectory(baseDir);
+            TestData.GetMusicXML().CopyTo(activeFile);
+            if (Schema.TryLoad(activeFile, out Schema schema, out string errorMsg) == false)
+                Assert.Fail(errorMsg);
+
             var exitCode1 = sut.Execute();
+            var outFile = Directory.EnumerateFiles(migrationsDir).First();
+            File.Copy(outFile, Path.Combine(migrationsDir, $"V1.0__init.{syntax}.sql"));
 
             /* Case 2: Migrations already exists. */
+            schema.Merge();
+            schema.Save(snapshotFile);
+
+            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
+                Assert.Fail(errorMsg);
+
             revisions.Save(schema.Path);
             var exitCode2 = sut.Execute();
 
-            // Assert
-            exitCode1.ShouldBe(0, "The 1st migration failed.");
-            //exitCode2.ShouldBe(0, "The 2nd migration failed.");
+            /* Case 3: Clean*/
 
-            int idx = 0;
+            /* === Results === */
+
+            int index = 0;
             foreach (var file in Directory.EnumerateFiles(migrationsDir))
             {
-                string content = $"file: {Path.GetFileName(file)}\r\n\r\n\r\n{File.ReadAllText(file)}";
-                Diff.Approve(content, Path.GetExtension(file), idx++);
+                using (var db = new Database(syntax))
+                {
+                    db.Refresh();
+
+                    var script = File.ReadAllText(file);
+                    var passed = db.TryExecute(script, out errorMsg);
+
+                    if (!passed) script = (errorMsg + script);
+                    script = $"file: {Path.GetFileName(file)}\r\n\r\n\r\n{script}";
+                    results[index++] = Tuple.Create(passed, script);
+                }
             }
+
+            // Assert
+            index = 0;
+            foreach ((bool executionWasSuccessful, string script) in results)
+            {
+                Diff.Approve(script, ".sql", syntax, ++index);
+                executionWasSuccessful.ShouldBeTrue();
+            }
+
+            exitCode1.ShouldBe(0, "The 1st migration failed.");
+            exitCode2.ShouldBe(0, "The 2nd migration failed.");
         }
     }
 }

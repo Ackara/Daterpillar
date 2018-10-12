@@ -39,7 +39,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>.Compilation.R
 	PushIndent("\t\t\t\t");
 	foreach ((string value, string doc) in GetXsdEnumerations("TypeName"))
 	{
-		WriteLine($"{{ \"{value.ToLower()}\", \"{value.ToUpper()}\" }},");
+		WriteLine($"{{ \"{value}\", \"{value.ToUpper()}\" }},");
 	}
 	
 	ClearIndent();
