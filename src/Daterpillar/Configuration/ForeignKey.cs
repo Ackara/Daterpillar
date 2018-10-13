@@ -49,7 +49,7 @@ namespace Acklann.Daterpillar.Configuration
             get
             {
                 string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-                return $"fk_{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}";
+                return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}__fk";
             }
         }
 

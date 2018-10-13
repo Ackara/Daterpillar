@@ -21,7 +21,6 @@ namespace Acklann.Daterpillar.Compilation
         public Discrepancy(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
         {
             Action = action;
-            WasHandled = false;
             OldValue = oldValue;
             NewValue = newValue;
             Children = new List<Discrepancy>();
@@ -35,16 +34,52 @@ namespace Acklann.Daterpillar.Compilation
 
         public ISQLObject Value
         {
-            get { return (NewValue != null ? NewValue : OldValue); }
+            get
+            {
+                if (OldValue == null && NewValue == null)
+                    return null;
+                else if (NewValue == null || Action == SqlAction.Drop)
+                    return OldValue;
+                else
+                    return NewValue;
+            }
         }
 
         public List<Discrepancy> Children { get; set; }
 
-        internal bool WasHandled { get; set; }
+        public void Add(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
+        {
+            Children.Add(new Discrepancy(action, oldValue, newValue));
+        }
+
+        internal int GetWeight()
+        {
+            if (Action == SqlAction.Create && Value is Column)
+                return 0;
+            else if (Action == SqlAction.Drop && (Value is ForeignKey || Value is Index))
+                return 1;
+            else
+                return 2;
+        }
+
+        internal void Sort()
+        {
+            Children.Sort(compare);
+
+            int compare(Discrepancy x, Discrepancy y)
+            {
+                if (x.GetWeight() > y.GetWeight())
+                    return 1;
+                else if (x.GetWeight() < y.GetWeight())
+                    return -1;
+                else
+                    return 0;
+            }
+        }
 
         private string ToDebuggerDisplay()
         {
-            return $"{Action} | {NewValue?.GetName()}[{Children?.Count}]";
+            return $"{Action} {Value.GetType().Name} | {Value.GetName()}[{Children?.Count}]";
         }
     }
 }

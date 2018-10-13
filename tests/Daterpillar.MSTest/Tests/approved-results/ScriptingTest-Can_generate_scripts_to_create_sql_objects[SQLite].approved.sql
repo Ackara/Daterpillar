@@ -15,7 +15,7 @@ CREATE TABLE [song] (
 	FOREIGN KEY ([GenreId]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE INDEX [song_GenreId_index] ON [song] ([GenreId] ASC);
+CREATE INDEX [song__GenreId_index] ON [song] ([GenreId] ASC);
 
 CREATE TABLE [album] (
 	[SongId] INTEGER NOT NULL,
@@ -35,6 +35,8 @@ INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorp
 
 ALTER TABLE [song] ADD COLUMN [ReleaseDate] TEXT NOT NULL  DEFAULT '';
 
+-- CREATE: album_SongId_TO_song_Id__fk
+
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_album_old] AS SELECT * FROM [album];
@@ -53,7 +55,11 @@ DROP TABLE [_album_old];
 COMMIT;
 PRAGMA foreign_keys=on;
 
-CREATE INDEX [song_Name_index] ON [song] ([Name] DESC);
+-- END CREATE
+
+CREATE INDEX [song__Name_index] ON [song] ([Name] DESC);
+
+-- CREATE: album Primary-Key
 
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
@@ -73,4 +79,6 @@ INSERT INTO [album] SELECT * FROM [_album_old];
 DROP TABLE [_album_old];
 COMMIT;
 PRAGMA foreign_keys=on;
+
+-- END CREATE
 

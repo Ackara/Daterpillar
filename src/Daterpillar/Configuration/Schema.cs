@@ -286,8 +286,8 @@ namespace Acklann.Daterpillar.Configuration
             if (string.IsNullOrEmpty(Include) == false)
             {
                 if (string.IsNullOrEmpty(Path)) throw new ArgumentNullException(nameof(Path));
-                string[] extensionFiles = Include.ResolvePath(System.IO.Path.GetDirectoryName(Path)).ToArray();
-                Merge(extensionFiles);
+                string[] includedFiles = Include.ResolvePath(System.IO.Path.GetDirectoryName(Path)).ToArray();
+                Merge(includedFiles);
             }
         }
 
@@ -299,6 +299,8 @@ namespace Acklann.Daterpillar.Configuration
         /// <exception cref="XmlSchemaValidationException">Occurs when one of the files is not well-formed.</exception>
         public void Merge(params string[] schemas)
         {
+            if (schemas.Length == 0) return;
+
             var list = new Stack<Schema>();
             var error = new StringBuilder();
             void handler(object s, ValidationEventArgs e)

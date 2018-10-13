@@ -95,12 +95,6 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("index")]
         public List<Index> Indecies { get; set; }
 
-        [IgnoreDataMember, XmlIgnore]
-        internal int Weight
-        {
-            get { return ForeignKeys?.Count ?? 0; }
-        }
-
         public void Merge(Table table)
         {
             foreach (Column right in table.Columns)
@@ -143,6 +137,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             var clone = new Table()
             {
+                Id = Id,
                 Name = this.Name,
                 Comment = this.Comment,
             };
@@ -181,13 +176,29 @@ namespace Acklann.Daterpillar.Configuration
 
         #endregion ICloneable
 
-        #region Private Members
+        #region Internal Members
 
-        private Column Find(Column right)
+        internal void RemoveColumn(string name)
         {
-            throw new System.NotImplementedException();
+            Columns.Remove(
+                Columns.Find(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase))
+                );
         }
 
-        #endregion Private Members
+        internal void RemoveForeignKey(string name)
+        {
+            ForeignKeys.Remove(
+                ForeignKeys.Find(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase))
+                );
+        }
+
+        internal void RemoveIndex(string name)
+        {
+            Indecies.Remove(
+                Indecies.Find(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase))
+                );
+        }
+
+        #endregion Internal Members
     }
 }

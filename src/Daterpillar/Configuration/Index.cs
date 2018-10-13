@@ -64,7 +64,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             get
             {
-                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}_");
+                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}__");
                 string columns = string.Join("_and_", Columns.Select(x => x.Name));
 
                 return string.Concat(tableName, columns, "_index");

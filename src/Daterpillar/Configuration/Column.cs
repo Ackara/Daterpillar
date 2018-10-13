@@ -116,6 +116,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             return new Column()
             {
+                Id = this.Id,
                 Name = this.Name,
                 AutoIncrement = this.AutoIncrement,
                 Comment = this.Comment,

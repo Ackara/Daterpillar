@@ -16,6 +16,8 @@ namespace Acklann.Daterpillar.Compilation
         {
             AutoIncrement = "PRIMARY KEY AUTOINCREMENT";
             ColumnFormatString = "{0} {1} {2} {3} {4}";
+            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}";
+            //AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5}";
         }
 
         protected override Syntax Syntax => Syntax.SQLite;
@@ -28,6 +30,8 @@ namespace Acklann.Daterpillar.Compilation
 
             string name = foreignKey.Table.Name;
 
+            Writer.WriteLine($"-- CREATE: {foreignKey.Name}");
+            Writer.WriteLine();
             Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -44,6 +48,8 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
+            Writer.WriteLine("-- END CREATE");
+            Writer.WriteLine();
         }
 
         public override void Create(Index index)
@@ -53,6 +59,8 @@ namespace Acklann.Daterpillar.Compilation
             {
                 string name = index.Table.Name;
 
+                Writer.WriteLine($"-- CREATE: {index.Table.Name} Primary-Key");
+                Writer.WriteLine();
                 Writer.WriteLine("PRAGMA foreign_keys=off;");
                 Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -69,6 +77,8 @@ namespace Acklann.Daterpillar.Compilation
                 Writer.WriteLine("COMMIT;");
                 Writer.WriteLine("PRAGMA foreign_keys=on;");
                 Writer.WriteLine();
+                Writer.WriteLine("-- END CREATE");
+                Writer.WriteLine();
             }
         }
 
@@ -82,6 +92,9 @@ namespace Acklann.Daterpillar.Compilation
                 );
             string name = replacement.Name;
             string columns = string.Join(", ", replacement.Columns.Select(x => Resolver.Escape(x.Name)));
+
+            Writer.WriteLine($"-- DROP: {column.Table.Name}.{column.Name}");
+            Writer.WriteLine();
 
             Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
@@ -97,6 +110,8 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
+            Writer.WriteLine("-- END DROP");
+            Writer.WriteLine();
         }
 
         public override void Drop(ForeignKey foreignKey)
@@ -104,6 +119,9 @@ namespace Acklann.Daterpillar.Compilation
             string name = foreignKey.Table.Name;
             Table replacement = foreignKey.Table.Clone();
             replacement.ForeignKeys.Remove(replacement.ForeignKeys.Find(x => x.Name == foreignKey.Name));
+
+            Writer.WriteLine($"-- DROP: {foreignKey.Name}");
+            Writer.WriteLine();
 
             Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
@@ -119,17 +137,21 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
+            Writer.WriteLine("-- END DROP");
+            Writer.WriteLine();
         }
 
         // ==================== ALTER ==================== //
 
         public override void Alter(Column column)
         {
-            string name = column.Table.Name;
+            Writer.WriteLine($"-- MODIFY: {column.Table.Name}.{column.Name}");
+            Writer.WriteLine();
 
             Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
+            string name = column.Table.Name;
             Writer.WriteLine("CREATE TABLE [_{0}_old] AS SELECT * FROM [{0}];", name);
             Writer.WriteLine("DROP TABLE [{0}];", name);
 
@@ -141,15 +163,23 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
+            Writer.WriteLine("-- END MODIFY");
+            Writer.WriteLine();
         }
 
         public override void Rename(Column oldColumn, string newColumnName)
         {
+            Writer.WriteLine($"-- RENAME: {oldColumn.Table.Name}.{oldColumn.Name} to {newColumnName}");
+            Writer.WriteLine();
+
             var comparer = new Equality.TableNameComparer();
             foreach (Table modifiedTable in RenameConstraints(oldColumn, newColumnName).Distinct(comparer))
             {
                 rename(modifiedTable);
             }
+
+            Writer.WriteLine("-- END RENAME");
+            Writer.WriteLine();
 
             void rename(Table replacement)
             {

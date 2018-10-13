@@ -3,6 +3,8 @@ SYNTAX: SQLite
 
 ALTER TABLE [placeholder] RENAME TO [publisher];
 
+-- RENAME: service.Zombie_fk to ActiveUsers
+
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
@@ -16,12 +18,16 @@ CREATE TABLE [service] (
 	FOREIGN KEY ([ActiveUsers]) REFERENCES [placeholder]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE INDEX [service_Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 PRAGMA foreign_keys=on;
+
+-- END RENAME
+
+-- MODIFY: service.Subscribers
 
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
@@ -36,10 +42,12 @@ CREATE TABLE [service] (
 	FOREIGN KEY ([ActiveUsers]) REFERENCES [placeholder]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE INDEX [service_Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 PRAGMA foreign_keys=on;
+
+-- END MODIFY
 

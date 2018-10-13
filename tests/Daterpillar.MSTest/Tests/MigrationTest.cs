@@ -91,7 +91,7 @@ namespace Acklann.Daterpillar.Tests
                 );
 
             // Act
-            /* Case 1: No migrations. */
+            // Case 1: First migration; left (snapshot) is empty.
             if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);
             Directory.CreateDirectory(baseDir);
             TestData.GetMusicXML().CopyTo(activeFile);
@@ -102,27 +102,26 @@ namespace Acklann.Daterpillar.Tests
             var outFile = Directory.EnumerateFiles(migrationsDir).First();
             File.Copy(outFile, Path.Combine(migrationsDir, $"V1.0__init.{syntax}.sql"));
 
-            /* Case 2: Migrations already exists. */
+            // Case 2: No migrations/changes.
             schema.Merge();
             schema.Save(snapshotFile);
+            var exitCode2 = sut.Execute();
 
+            // Case 3: Migrations exists.
             if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
-            revisions.Save(schema.Path);
-            var exitCode2 = sut.Execute();
+            revisions.Save(activeFile);
+            var exitCode3 = sut.Execute();
 
-            /* Case 3: Clean*/
-
-            /* === Results === */
+            // === Results === //
 
             int index = 0;
-            foreach (var file in Directory.EnumerateFiles(migrationsDir))
+            using (var db = new Database(syntax, "dtp-migrate-test"))
             {
-                using (var db = new Database(syntax))
+                db.Refresh();
+                foreach (var file in Directory.EnumerateFiles(migrationsDir))
                 {
-                    db.Refresh();
-
                     var script = File.ReadAllText(file);
                     var passed = db.TryExecute(script, out errorMsg);
 
@@ -136,12 +135,14 @@ namespace Acklann.Daterpillar.Tests
             index = 0;
             foreach ((bool executionWasSuccessful, string script) in results)
             {
+                script.ShouldNotBeNullOrEmpty($"Script {index + 1} is empty.");
                 Diff.Approve(script, ".sql", syntax, ++index);
                 executionWasSuccessful.ShouldBeTrue();
             }
 
             exitCode1.ShouldBe(0, "The 1st migration failed.");
             exitCode2.ShouldBe(0, "The 2nd migration failed.");
+            exitCode3.ShouldBe(0, "The 3rd migration failed.");
         }
     }
 }

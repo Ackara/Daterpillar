@@ -12,19 +12,12 @@ namespace Acklann.Daterpillar.Equality
             else
             {
                 return x.Name == y.Name
-                && Equals(x.DataType, y.DataType)
+                && x.DataType == y.DataType
                 && x.IsNullable == y.IsNullable
                 && x.AutoIncrement == y.AutoIncrement
-                && x.OrdinalPosition == y.OrdinalPosition
+                && x.DefaultValue == y.DefaultValue
                 && ((x.Comment == y.Comment) || (string.IsNullOrEmpty(x.Comment) || string.IsNullOrEmpty(y.Comment)));
             }
-        }
-
-        public bool Equals(DataType x, DataType y)
-        {
-            return x.Name.Equals(y.Name, System.StringComparison.CurrentCultureIgnoreCase)
-                && (x.Scale == 0 ? y.Scale : x.Scale) == (y.Scale == 0 ? x.Scale : y.Scale)
-                && (x.Precision == 0 ? y.Precision : x.Precision) == (y.Precision == 0 ? x.Precision : y.Precision);
         }
 
         public int GetHashCode(Column obj)

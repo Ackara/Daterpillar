@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Equality;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,83 +14,156 @@ namespace Acklann.Daterpillar.Compilation
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
             using (SqlWriter writer = _factory.CreateInstance(syntax, file))
             {
-                var result = GenerateMigrationScript(writer, from, to, syntax, shouldOmitDropStatements);
-                writer.Flush();
-                return result;
+                Discrepancy[] changes = GenerateMigrationScript(writer, from, to, syntax, shouldOmitDropStatements);
+                if (changes.Length > 0) writer.Flush();
+                return changes;
             }
         }
 
         public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
         {
-            /// Step 1:
-            ///     Mark all the tables that need to be created, altered or dropped.
-            /// Step 2:
-            ///     Sort the tables by action then dependency.
-            /// Step 3:
-            ///     Write the SQL statements that will edit the schema to the stream.
+            /// TASKS:
+            /// (1) Mark all the tables that need to be created, altered or dropped.
+            /// (2) Sort the tables by action then dependency.
+            /// (3) Write the SQL statements that will edit the schema to the stream.
 
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (from == null) throw new ArgumentNullException(nameof(from));
             if (to == null) throw new ArgumentNullException(nameof(to));
 
-            try
-            {
-                _discrepancies.Clear();
-                Table[] left = from.Clone().Tables.ToArray();   // old
-                Table[] right = to.Clone().Tables.ToArray();    // new
+            /// 1: Analyze
+            _discrepancies.Clear();
+            var left = new LinkedList<Table>(from.Clone().Tables);   // old
+            var right = new LinkedList<Table>(to.Clone().Tables);    // new
+            CaptureTablesThatWereModified(left, right);
 
-                // Step 1 (Analyze)
-                CaptureTablesThatNeedToBeACreatedOrAltered(left, right);   // !The tables from the right
-                CaptureTablesThatNeedToBeDropped(left, right);             // !The tables from the left
+            /// 2: Sort
+            Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
 
-                // Step 2 (Sort)
-                Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
+            /// 3: Write
+            foreach (Discrepancy change in sortedTables)
+                WriteChanges(writer, change, !shouldOmitDropStatements);
 
-                // Step 3 (Write)
-                foreach (Discrepancy change in sortedTables)
-                    WriteChanges(writer, change, shouldOmitDropStatements);
-
-                return sortedTables;
-            }
-            finally
-            {
-                _discrepancies.Clear();
-            }
+            return sortedTables;
         }
 
         // ==================== INTERNAL METHODS ==================== //
 
-        private void CaptureTablesThatNeedToBeACreatedOrAltered(Table[] left, Table[] right)
+        private void CaptureTablesThatWereModified(LinkedList<Table> left, LinkedList<Table> right)
         {
-            foreach (Table newTable in right)
+            /// TASKS:
+            /// (1) Drop all tables on the left that don't exist on the right.
+            /// (2) Alter all tables that exist on both sides.
+            /// (3) Create all the tables that exist on the right but not on the left
+
+            bool noMatchFound;
+            LinkedListNode<Table> newTable, oldTable = left.First;
+
+            /// 1: Drop old-tables
+            while (oldTable != null)
             {
-                foreach (Table oldTable in left)
+                noMatchFound = true;
+                newTable = right.First;
+
+                while (newTable != null)
                 {
-                    if (IsMatch(oldTable, newTable))
+                    if (IsMatch(oldTable.Value, newTable.Value))
                     {
-                        FindAllTableAlterations(oldTable, newTable, new Discrepancy(SqlAction.Alter, oldTable, newTable));
+                        /// 2: Alter existing tables
+                        noMatchFound = false;
+                        FindAllTableAlterations(oldTable.Value, newTable.Value, new Discrepancy(SqlAction.Alter, oldTable.Value, newTable.Value));
+                        right.Remove(newTable);
                         break;
                     }
+
+                    newTable = newTable.Next;
                 }
-                _discrepancies.Add(new Discrepancy(SqlAction.Create, null, newTable));
+
+                if (noMatchFound) _discrepancies.Add(new Discrepancy(SqlAction.Drop, oldTable.Value, null));
+                oldTable = oldTable.Next;
             }
+
+            /// 3: Create new-tables
+            foreach (Table table in right)
+                _discrepancies.Add(new Discrepancy(SqlAction.Create, null, table));
         }
 
         private void FindAllTableAlterations(Table left, Table right, Discrepancy discrepancy)
         {
-        }
+            /// TASKS:
+            /// (1) Drop all objects on the left that don't exist on the right.
+            /// (2) Create all the objects that exist on the right but not on the left
+            /// (3) Alter all objects that exist on both sides.
 
-        private void CaptureTablesThatNeedToBeDropped(Table[] left, Table[] right)
-        {
-            /// Dropping the old tables; the ones on the left.
+            bool noMatchFound;
+            LinkedList<ISQLObject> oldItems, newItems;
+            LinkedListNode<ISQLObject> oldI = null, newI = null;
 
-            foreach (Table oldTable in left)
+            // *** COLUMNS *** //
+
+            oldItems = new LinkedList<ISQLObject>(left.Columns);
+            newItems = new LinkedList<ISQLObject>(right.Columns);
+            caputure(_columnComparer, () =>
             {
-                foreach (Table newTable in right)
+                discrepancy.Add(SqlAction.Alter, oldI.Value, newI.Value);
+            });
+
+            // *** FOREIGN KEY *** //
+
+            oldItems = new LinkedList<ISQLObject>(left.ForeignKeys);
+            newItems = new LinkedList<ISQLObject>(right.ForeignKeys);
+            caputure(_foreignKeyComparer, contraintHandler);
+
+            // *** INDEX *** //
+
+            oldItems = new LinkedList<ISQLObject>(left.Indecies);
+            newItems = new LinkedList<ISQLObject>(right.Indecies);
+            caputure(_indexComparer, contraintHandler);
+
+            // *** //
+
+            if (discrepancy.Children.Count > 0)
+                _discrepancies.Add(discrepancy);
+
+            void caputure<T>(IEqualityComparer<T> comparer, Action action)
+            {
+                /// 1: Drop old objects
+                oldI = oldItems.First;
+                while (oldI != null)
                 {
-                    if (oldTable.Name.Equals(newTable.Name, StringComparison.OrdinalIgnoreCase)) break;
+                    noMatchFound = true;
+                    newI = newItems.First;
+
+                    while (newI != null)
+                    {
+                        if (IsMatch(oldI.Value, newI.Value))
+                        {
+                            noMatchFound = false;
+                            /// 3: Alter objects
+                            if (comparer.Equals((T)oldI.Value, (T)newI.Value) == false)
+                                action?.Invoke();
+
+                            newItems.Remove(newI);
+                            break;
+                        }
+
+                        newI = newI.Next;
+                    }
+
+                    /// 1: Drop old objects
+                    if (noMatchFound) discrepancy.Add(SqlAction.Drop, oldI.Value, right);
+                    oldI = oldI.Next;
                 }
-                _discrepancies.Add(new Discrepancy(SqlAction.Drop, oldTable, null));
+
+                /// 2: Create new objects
+                foreach (ISQLObject item in newItems)
+                    discrepancy.Add(SqlAction.Create, left, item);
+            }
+
+            void contraintHandler()
+            {
+                discrepancy.Add(SqlAction.Drop, oldI.Value, right);
+                discrepancy.Add(SqlAction.Create, left, newI.Value);
             }
         }
 
@@ -117,6 +191,7 @@ namespace Acklann.Daterpillar.Compilation
                             goto retry;
                         }
 
+                        current.Sort();
                         yield return current;
                         _discrepancies[dependencyIndex] = null;
                     }
@@ -139,66 +214,147 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, bool omitDropStatements)
+        private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, bool shouldIncludeDropStatements)
         {
-            if (discrepancy.WasHandled) return;
-
+            string separator = string.Concat(Enumerable.Repeat('-', 50));
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    writer.Create((Table)discrepancy.Value);
+                    header($"Creating the {discrepancy.NewValue.GetName()} table.");
+                    writer.Create((Table)discrepancy.NewValue);
                     break;
-
+                    
                 case SqlAction.Drop:
-                    if (omitDropStatements == false)
-                        writer.Drop((Table)discrepancy.Value);
+                    if (shouldIncludeDropStatements)
+                    {
+                        
+                        writer.Drop((Table)discrepancy.OldValue);
+                    }
                     break;
 
                 case SqlAction.Alter:
-                    // Dig deeper
+                    Table oldTable = (Table)discrepancy.OldValue;
+                    Table newTable = (Table)discrepancy.NewValue;
+                    header($"Modifying the {oldTable.Name} table.");
 
+                    if (string.Equals(oldTable.Name, newTable.Name, StringComparison.OrdinalIgnoreCase) == false)
+                    {
+                        writer.Rename(oldTable, newTable);
+                        RenameForeignKeys(oldTable, newTable.Name);
+                        oldTable.Name = newTable.Name;
+                    }
+
+                    if (string.Equals(oldTable.Comment, newTable.Comment) == false)
+                        writer.Alter(newTable);
+
+                    foreach (Discrepancy item in discrepancy.Children)
+                        drillDown(item);
                     break;
+            }
+
+            void drillDown(Discrepancy child)
+            {
+                switch (child.Value)
+                {
+                    // CREATE
+
+                    case Column newColumn when child.Action == SqlAction.Create:
+                        writer.Create(newColumn);
+                        (child.OldValue as Table).Columns.Add(newColumn);
+                        break;
+
+                    case ForeignKey newFk when child.Action == SqlAction.Create:
+                        writer.Create(newFk);
+                        (child.OldValue as Table).ForeignKeys.Add(newFk);
+                        break;
+
+                    case Index newIndex when child.Action == SqlAction.Create:
+                        writer.Create(newIndex);
+                        (child.OldValue as Table).Indecies.Add(newIndex);
+                        break;
+
+                    // DROP
+
+                    case Column oldColumn when child.Action == SqlAction.Drop:
+                        writer.Drop(oldColumn);
+                        (child.NewValue as Table).RemoveColumn(oldColumn.Name);
+                        break;
+
+                    case ForeignKey oldFk when child.Action == SqlAction.Drop:
+                        writer.Drop(oldFk);
+                        (child.NewValue as Table).RemoveForeignKey(oldFk.Name);
+                        break;
+
+                    case Index oldIndex when child.Action == SqlAction.Drop:
+                        writer.Drop(oldIndex);
+                        (child.NewValue as Table).RemoveIndex(oldIndex.Name);
+                        break;
+
+                    // ALTER
+
+                    case Column newColumn when child.Action == SqlAction.Alter:
+                        Column oldC = (Column)child.OldValue;
+                        if (string.Equals(oldC.Name, newColumn.Name) == false)
+                        {
+                            writer.Rename(oldC, newColumn.Name);
+                            oldC.Name = newColumn.Name;
+                        }
+
+                        if (_columnComparer.Equals(oldC, newColumn) == false)
+                            writer.Alter(newColumn);
+                        break;
+                }
+            }
+
+            void header(string text)
+            {
+                writer.WriteLine($"-- {text}");
+                writer.WriteLine(separator);
+                writer.WriteLine("");
             }
         }
 
         private bool IsMatch(Table left, Table right)
         {
-            if (left.Id == right.Id)
+            if ((left.Id == right.Id) && (left.Id != 0 && right.Id != 0))
                 return true;
             else
                 return (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private bool IsMatch(Column left, Column right)
+        private bool IsMatch(ISQLObject left, ISQLObject right)
         {
-            if (left.Id == right.Id)
-                return true;
-            else
-                return (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private IEnumerable<Discrepancy> FindDependencies(Table subject, SqlAction action)
-        {
-            Table table;
-            foreach (ForeignKey fk in subject.ForeignKeys)
+            if (left is Column oldC)
             {
-                foreach (Discrepancy prospect in _discrepancies.Where(x => x.Action == action))
-                {
-                    table = (Table)prospect.Value;
+                Column newC = (Column)right;
+                if (oldC.Id == newC.Id && oldC.Id != 0 && newC.Id != 0) return true;
+            }
 
-                    if (string.Equals(fk.ForeignTable, table.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        //FindDependencies(table, action);
-                        yield return prospect;
-                    }
+            return string.Equals(left.GetName(), right.GetName(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void RenameForeignKeys(Table oldTable, string newName)
+        {
+            foreach (var item in oldTable.Schema.GetForeignKeys())
+            {
+                if (string.Equals(oldTable.Name, item.ForeignTable, StringComparison.OrdinalIgnoreCase))
+                {
+                    item.ForeignTable = newName;
                 }
             }
         }
 
+        private void WriteHeader(string text)
+        {
+        }
+
         #region Private Members
 
-        private readonly IList<Discrepancy> _discrepancies = new List<Discrepancy>();
         private readonly SqlWriterFactory _factory = new SqlWriterFactory();
+        private readonly IList<Discrepancy> _discrepancies = new List<Discrepancy>();
+        private readonly IndexEqualityComparer _indexComparer = new IndexEqualityComparer();
+        private readonly ColumnEqualityComparer _columnComparer = new ColumnEqualityComparer();
+        private readonly ForeignKeyEqualityComparer _foreignKeyComparer = new ForeignKeyEqualityComparer();
 
         #endregion Private Members
     }

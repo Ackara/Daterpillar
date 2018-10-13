@@ -3,6 +3,8 @@ SYNTAX: SQLite
 
 DROP TABLE [zombie];
 
+-- DROP: service_Zombie_fk_TO_placeholder_Id__fk
+
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
@@ -15,12 +17,16 @@ CREATE TABLE [service] (
 	[Zombie_fk] INTEGER NOT NULL
 );
 
-CREATE INDEX [service_Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 PRAGMA foreign_keys=on;
+
+-- END DROP
+
+-- DROP: service.Zombie
 
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
@@ -33,12 +39,14 @@ CREATE TABLE [service] (
 	[Zombie_fk] INTEGER NOT NULL
 );
 
-CREATE INDEX [service_Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_new];
 DROP TABLE [_service_new];
 COMMIT;
 PRAGMA foreign_keys=on;
 
-DROP INDEX [service_Subscribers_index];
+-- END DROP
+
+DROP INDEX [service__Subscribers_index];
 

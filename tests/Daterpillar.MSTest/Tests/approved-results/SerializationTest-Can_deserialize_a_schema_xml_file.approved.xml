@@ -6,7 +6,7 @@
     <column name="Name">
       <dataType>varchar</dataType>
     </column>
-    <column name="Length">
+    <column suid="201" name="Length">
       <documentation>Get or set the song's length in seconds.</documentation>
       <dataType>int</dataType>
     </column>
