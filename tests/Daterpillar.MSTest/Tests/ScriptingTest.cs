@@ -13,6 +13,7 @@ namespace Acklann.Daterpillar.Tests
     public class ScriptingTest
     {
         [DataTestMethod]
+        [DataRow(Syntax.TSQL)]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_create_sql_objects(Syntax syntax)
         {
@@ -55,7 +56,7 @@ namespace Acklann.Daterpillar.Tests
             var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
 
             var name_idx = new Index(IndexType.Index, new ColumnName("Name", Order.DESC)) { Table = song };
-            var releaseDate = new Column("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "''") { Table = song };
+            var releaseDate = new Column("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "$(now)") { Table = song };
 
             var song_fk = new ForeignKey("SongId", "song", "Id") { Table = album };
             var pKey = new Index(IndexType.PrimaryKey, new ColumnName("SongId"), new ColumnName("ArtistId")) { Table = album };
@@ -98,6 +99,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod]
+        [DataRow(Syntax.TSQL)]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_drop_sql_objects(Syntax syntax)
         {
@@ -134,7 +136,8 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod]
-        [DataRow(Syntax.SQLite)]
+        [DataRow(Syntax.TSQL)]
+        //[DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_alter_sql_objects(Syntax syntax)
         {
             // Arrange

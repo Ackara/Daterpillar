@@ -170,7 +170,7 @@
   <xs:simpleType name="Syntax">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Generic" />
-      <xs:enumeration value="MSSQL" />
+      <xs:enumeration value="TSQL" />
       <xs:enumeration value="MySQL" />
       <xs:enumeration value="SQLite" />
     </xs:restriction>

@@ -3,26 +3,29 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
 {
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     internal sealed class Database : IDisposable
     {
         public Database(Syntax syntax, string name = nameof(Daterpillar))
         {
             _syntax = syntax;
+            _databaseName = name;
             var config = JObject.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "connections.json")));
-            string connectionStr = config.SelectToken($"{syntax}.connectionString")?.Value<string>();
+            string connectionString = config.SelectToken($"{syntax}.connectionString")?.Value<string>();
             System.Data.Common.DbConnectionStringBuilder builder;
             switch (syntax)
             {
-                case Syntax.MSSQL:
-                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionStr) { InitialCatalog = "master" };
+                case Syntax.TSQL:
+                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master", ConnectTimeout = 10 };
                     _connection = new System.Data.SqlClient.SqlConnection(builder.ToString());
                     break;
 
                 case Syntax.MySQL:
-                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionStr) { Database = name };
+                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = name };
                     _connection = new MySql.Data.MySqlClient.MySqlConnection(builder.ToString());
                     break;
 
@@ -40,12 +43,14 @@ namespace Acklann.Daterpillar
             try
             {
                 Open();
+                foreach (string batch in new Regex(@"(?i)\r?\nGO\r?\n").Split(sql))
+                    if (string.IsNullOrEmpty(batch) == false)
+                        using (IDbCommand command = _connection.CreateCommand())
+                        {
+                            command.CommandText = batch;
+                            command.ExecuteNonQuery();
+                        }
 
-                using (IDbCommand command = _connection.CreateCommand())
-                {
-                    command.CommandText = sql;
-                    command.ExecuteNonQuery();
-                }
                 return true;
             }
             catch (Exception ex)
@@ -68,8 +73,8 @@ namespace Acklann.Daterpillar
                 default:
                     throw new ArgumentException($"No database reset method for {_syntax} was found; you need to create one.");
 
-                case Syntax.MSSQL:
-                    MssqlRefresh();
+                case Syntax.TSQL:
+                    TSqlRefresh();
                     break;
 
                 case Syntax.MySQL:
@@ -84,37 +89,42 @@ namespace Acklann.Daterpillar
 
         // ==================== INTERNAL MEMBERS ==================== //
 
-        internal void MssqlRefresh()
+        internal void TSqlRefresh()
         {
             Open();
             using (IDbCommand command = _connection.CreateCommand())
             {
+                command.CommandText = $"DROP DATABASE IF EXISTS [{_databaseName}];";
+                command.ExecuteNonQuery();
+                command.CommandText = $"CREATE DATABASE [{_databaseName}];";
+                command.ExecuteNonQuery();
+            }
+
+            _connection.ChangeDatabase(_databaseName);
+            using (IDbCommand command = _connection.CreateCommand())
+            {
                 command.CommandText = @"
-DROP TABLE IF EXISTS [dbo].[service];
-DROP TABLE IF EXISTS [dbo].[zombie];
-DROP TABLE IF EXISTS [dbo].[placeholder];
+                CREATE TABLE [dbo].[zombie] (
+                    Id INTEGER NOT NULL PRIMARY KEY IDENTITY(1,1),
+                    Name VARCHAR(255)
+                );
 
-CREATE TABLE [dbo].[zombie] (
-    Id INTEGER NOT NULL PRIMARY KEY IDENTITY(1,1),
-    Name VARCHAR(255)
-);
+                CREATE TABLE [dbo].[placeholder] (
+                    Id INT NOT NULL PRIMARY KEY,
+                    Name VARCHAR(255)
+                );
 
-CREATE TABLE [dbo].[placeholder] (
-    Id INT NOT NULL PRIMARY KEY,
-    Name VARCHAR(255)
-);
+                CREATE TABLE [dbo].[service] (
+                    Id INTEGER NOT NULL PRIMARY KEY,
+                    Name VARCHAR(255) NOT NULL,
+                    Subscribers INT,
+                    Zombie VARCHAR(255),
+                    Zombie_fk INTEGER NOT NULL,
+                    CONSTRAINT [service_Zombie_fk_TO_placeholder_Id__fk] FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
+                );
 
-CREATE TABLE [dbo].[service] (
-    Id INTEGER NOT NULL PRIMARY KEY,
-    Name VARCHAR(255) NOT NULL,
-    Subscribers INT,
-    Zombie VARCHAR(255),
-    Zombie_fk INTEGER NOT NULL,
-    FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
-);
-
-CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
-";
+                CREATE INDEX [service__Subscribers_index] ON [service] (Subscribers);
+                ";
                 command.ExecuteNonQuery();
             }
         }
@@ -170,6 +180,7 @@ CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
         #region Private Members
 
         private readonly Syntax _syntax;
+        private readonly string _databaseName;
         private readonly IDbConnection _connection;
 
         private string _dbFile;
@@ -178,6 +189,8 @@ CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
         {
             if (_connection.State != ConnectionState.Open) _connection.Open();
         }
+
+        private string ToDebuggerDisplay() => _connection?.ConnectionString;
 
         #endregion Private Members
 

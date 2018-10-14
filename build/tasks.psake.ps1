@@ -24,12 +24,12 @@ Task "Initialize-Project" -alias "configure" -description "This task initialize 
 	{
 		"MySQL":
 		{
-			"connectionString": "server=localhost;user=;password=;database=daterpillar;"
+			"connectionString": "server=localhost;user=;password=;"
 		},
 
-		"MSSQL":
+		"TSQL":
 		{
-			"connectionString": "server=localhost;user=;password=;database=daterpillar;"
+			"connectionString": "server=localhost;user=;password=;"
 		}
 	}
 }

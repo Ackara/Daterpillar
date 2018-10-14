@@ -95,6 +95,7 @@ namespace Acklann.Daterpillar.Tests
             if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);
             Directory.CreateDirectory(baseDir);
             TestData.GetMusicXML().CopyTo(activeFile);
+            TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
             if (Schema.TryLoad(activeFile, out Schema schema, out string errorMsg) == false)
                 Assert.Fail(errorMsg);
 
@@ -133,6 +134,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             index = 0;
+
             foreach ((bool executionWasSuccessful, string script) in results)
             {
                 script.ShouldNotBeNullOrEmpty($"Script {index + 1} is empty.");

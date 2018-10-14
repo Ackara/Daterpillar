@@ -37,7 +37,6 @@ ALTER TABLE [song] ADD COLUMN [ReleaseDate] TEXT NOT NULL  DEFAULT '';
 
 -- CREATE: album_SongId_TO_song_Id__fk
 
-PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_album_old] AS SELECT * FROM [album];
 DROP TABLE [album];
@@ -53,7 +52,6 @@ CREATE TABLE [album] (
 INSERT INTO [album] SELECT * FROM [_album_old];
 DROP TABLE [_album_old];
 COMMIT;
-PRAGMA foreign_keys=on;
 
 -- END CREATE
 

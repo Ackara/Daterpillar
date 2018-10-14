@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
+        include="music-data.xml">
   <table suid="100" name="song">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
@@ -19,7 +20,7 @@
       <dataType>int</dataType>
     </column>
 
-    <column name="Disc">
+    <column name="Disc" default="1">
       <dataType>int</dataType>
     </column>
 
@@ -104,10 +105,12 @@
     </index>
   </table>
 
-  <script name="seed">
+  <script name="seed-1">
     <![CDATA[
-    INSERT INTO genre (Id, Name)
-    VALUES ('1', 'Hip Hop'), ('2', 'Rock'), ('3', 'Pop'), ('4', 'R&B');
-    ]]>
+-- Seed-Data
+-- -----------------------------------------------
+INSERT INTO genre (Id, Name)
+VALUES ('1', 'Hip Hop'), ('2', 'Rock'), ('3', 'Pop'), ('4', 'R&B');
+]]>
   </script>
 </schema>

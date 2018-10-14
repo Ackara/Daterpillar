@@ -5,7 +5,6 @@ ALTER TABLE [placeholder] RENAME TO [publisher];
 
 -- RENAME: service.Zombie_fk to ActiveUsers
 
-PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
 DROP TABLE [service];
@@ -23,13 +22,11 @@ CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
-PRAGMA foreign_keys=on;
 
 -- END RENAME
 
 -- MODIFY: service.Subscribers
 
-PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
 DROP TABLE [service];
@@ -47,7 +44,6 @@ CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
-PRAGMA foreign_keys=on;
 
 -- END MODIFY
 

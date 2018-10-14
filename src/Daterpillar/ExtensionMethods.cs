@@ -97,7 +97,7 @@ namespace Acklann.Daterpillar
                 case Syntax.MySQL:
                     return $"`{name}`";
 
-                case Syntax.MSSQL:
+                case Syntax.TSQL:
                 case Syntax.SQLite:
                     return $"[{name}]";
             }

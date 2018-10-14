@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
 		/// <summary></summary>
 		Generic,
 		/// <summary></summary>
-		MSSQL,
+		TSQL,
 		/// <summary></summary>
 		MySQL,
 		/// <summary></summary>

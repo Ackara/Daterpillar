@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Compilation.Resolvers
 {
@@ -24,6 +25,11 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         public override string Escape(string objectName)
         {
             return $"[{objectName}]";
+        }
+
+        public override string ExpandVariables(string name)
+        {
+            return Regex.Replace(name, Placeholder.NOW, "''");
         }
 
         /// <summary>

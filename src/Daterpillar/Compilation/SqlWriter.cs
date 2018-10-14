@@ -26,17 +26,19 @@ namespace Acklann.Daterpillar.Compilation
 
             CreateTableFormatString = "CREATE TABLE {0}",
 
-            ColumnFormatString = "{0} {1} {2} {3} {4} {5}",
-            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5} {6}",
+            ColumnFormatString = "{0} {1} {2} {3} {4}",
+            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}",
+            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5}",
+            DropColumnFormatString = "ALTER TABLE {0} DROP COLUMN {1}",
 
-            ForeignKeyFormatString = "FOREIGN KEY ({0}) REFERENCES {1}({2}) ON UPDATE {3} ON DELETE {4}",
+            ForeignKeyFormatString = "CONSTRAINT {0} FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}",
             CreateForeignKeyFormatString = "ALTER TABLE {0} ADD FOREIGN KEY ({1}) REFERENCES {2}({3})  ON UPDATE {4} ON DELETE {5}",
+            DropForeignKeyFormatString = "ALTER TABLE {0} DROP CONSTRAINT {1}",
 
             CreateIndexFormatString = "CREATE{0}INDEX {1} ON {2} ({3})",
             DropIndexFormatString = "DROP INDEX {0}",
             PrimaryKeyFormatString = "PRIMARY KEY ({0})",
 
-            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5} {6}",
             RenameTableFormatString = "ALTER TABLE {0} RENAME TO {1}",
             RenameColumnFormatString = "ALTER TABLE {0} RENAME COLUMN {1} TO {2}"
             ;
@@ -89,12 +91,12 @@ namespace Acklann.Daterpillar.Compilation
 
                 Writer.Write(IndentChars);
                 Writer.Write(string.Format(ColumnFormatString,
-                    Resolver.Escape(column.Name),
-                    Resolver.GetTypeName(column.DataType),
-                    (column.IsNullable ? string.Empty : NotNull),
-                    (column.AutoIncrement ? AutoIncrement : string.Empty),
-                    (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, column.DefaultValue)),
-                    $"'{column.Comment}'"
+                    /* 0 */Resolver.Escape(column.Name),
+                    /* 1 */Resolver.GetTypeName(column.DataType),
+                    /* 2 */(column.IsNullable ? string.Empty : NotNull),
+                    /* 3 */(column.AutoIncrement ? AutoIncrement : string.Empty),
+                    /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))),
+                    /* 5 */$"'{column.Comment}'"
                     ).TrimEnd());
 
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
@@ -129,6 +131,7 @@ namespace Acklann.Daterpillar.Compilation
                 Writer.WriteLine(',');
                 Writer.Write(IndentChars);
                 Writer.Write(ForeignKeyFormatString,
+                    Resolver.Escape(fk.Name),
                     Resolver.Escape(fk.LocalColumn),
                     Resolver.Escape(fk.ForeignTable),
                     Resolver.Escape(fk.ForeignColumn),
@@ -154,7 +157,7 @@ namespace Acklann.Daterpillar.Compilation
                     Resolver.GetTypeName(column.DataType),
                     (column.IsNullable ? string.Empty : NotNull),
                     (column.AutoIncrement ? AutoIncrement : string.Empty),
-                    string.Format(DefaultFormatString, column.DefaultValue),
+                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)),
                     column.Comment
                 ).TrimEnd());
             Writer.WriteLine(";");
@@ -164,6 +167,7 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Create(ForeignKey foreignKey)
         {
             Writer.Write(CreateForeignKeyFormatString,
+                Resolver.Escape(foreignKey.Name),
                 Resolver.Escape(foreignKey.Table.Name),
                 Resolver.Escape(foreignKey.LocalColumn),
                 Resolver.Escape(foreignKey.ForeignTable),
@@ -211,17 +215,30 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Drop(Column column)
         {
-            throw new System.NotImplementedException();
+            Writer.Write(DropColumnFormatString,
+                Resolver.Escape(column.Table.Name),
+                Resolver.Escape(column.Name)
+                );
+            Writer.WriteLine(';');
+            Writer.WriteLine();
         }
 
         public virtual void Drop(ForeignKey foreignKey)
         {
-            throw new System.NotImplementedException();
+            Writer.Write(DropForeignKeyFormatString,
+                Resolver.Escape(foreignKey.Table.Name),
+                Resolver.Escape(foreignKey.Name)
+                );
+            Writer.WriteLine(';');
+            Writer.WriteLine();
         }
 
         public virtual void Drop(Index index)
         {
-            Writer.Write(DropIndexFormatString, Resolver.Escape(index.Name));
+            Writer.Write(DropIndexFormatString, 
+                Resolver.Escape(index.Name),
+                Resolver.Escape(index.Table.Name)
+                );
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
@@ -240,7 +257,7 @@ namespace Acklann.Daterpillar.Compilation
                     Resolver.GetTypeName(column.DataType),
                     (column.IsNullable ? string.Empty : NotNull),
                     (column.AutoIncrement ? AutoIncrement : string.Empty),
-                    string.Format(DefaultFormatString, column.DefaultValue),
+                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)),
                     column.Comment
                 ).TrimEnd());
             Writer.WriteLine(';');
@@ -254,7 +271,10 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Rename(string oldTableName, string newTableName)
         {
-            Writer.Write(RenameTableFormatString, Resolver.Escape(oldTableName), Resolver.Escape(newTableName));
+            Writer.Write(RenameTableFormatString, 
+                Resolver.Escape(oldTableName), 
+                Resolver.Escape(newTableName)
+                );
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
@@ -262,8 +282,8 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Rename(Column oldColumn, string newColumnName)
         {
             Writer.Write(RenameColumnFormatString,
-                    Resolver.Escape(Resolver.Escape(oldColumn.Table.Name)),
-                    Resolver.Escape(Resolver.Escape(oldColumn.Name)),
+                    Resolver.Escape(oldColumn.Table.Name),
+                    Resolver.Escape(oldColumn.Name),
                     Resolver.Escape(newColumnName)
                 );
             Writer.WriteLine(';');

@@ -17,7 +17,6 @@ namespace Acklann.Daterpillar.Compilation
             AutoIncrement = "PRIMARY KEY AUTOINCREMENT";
             ColumnFormatString = "{0} {1} {2} {3} {4}";
             CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}";
-            //AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5}";
         }
 
         protected override Syntax Syntax => Syntax.SQLite;
@@ -32,7 +31,7 @@ namespace Acklann.Daterpillar.Compilation
 
             Writer.WriteLine($"-- CREATE: {foreignKey.Name}");
             Writer.WriteLine();
-            Writer.WriteLine("PRAGMA foreign_keys=off;");
+            //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
             Writer.WriteLine("CREATE TABLE [_{0}_old] AS SELECT * FROM [{0}];", name);
@@ -46,7 +45,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("DROP TABLE [_{0}_old];", name);
 
             Writer.WriteLine("COMMIT;");
-            Writer.WriteLine("PRAGMA foreign_keys=on;");
+            //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
             Writer.WriteLine("-- END CREATE");
             Writer.WriteLine();
@@ -96,7 +95,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine($"-- DROP: {column.Table.Name}.{column.Name}");
             Writer.WriteLine();
 
-            Writer.WriteLine("PRAGMA foreign_keys=off;");
+            //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
             Writer.WriteLine("CREATE TABLE [_{0}_new] AS SELECT {1} FROM [{0}];", name, columns);
@@ -108,7 +107,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("DROP TABLE [_{0}_new];", name);
 
             Writer.WriteLine("COMMIT;");
-            Writer.WriteLine("PRAGMA foreign_keys=on;");
+            //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
             Writer.WriteLine("-- END DROP");
             Writer.WriteLine();
@@ -123,7 +122,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine($"-- DROP: {foreignKey.Name}");
             Writer.WriteLine();
 
-            Writer.WriteLine("PRAGMA foreign_keys=off;");
+            //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
             Writer.WriteLine("CREATE TABLE [_{0}_old] AS SELECT * FROM [{0}];", name);
@@ -135,7 +134,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("DROP TABLE [_{0}_old];", name);
 
             Writer.WriteLine("COMMIT;");
-            Writer.WriteLine("PRAGMA foreign_keys=on;");
+            //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
             Writer.WriteLine("-- END DROP");
             Writer.WriteLine();
@@ -148,7 +147,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine($"-- MODIFY: {column.Table.Name}.{column.Name}");
             Writer.WriteLine();
 
-            Writer.WriteLine("PRAGMA foreign_keys=off;");
+            //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
             string name = column.Table.Name;
@@ -161,7 +160,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("DROP TABLE [_{0}_old];", name);
 
             Writer.WriteLine("COMMIT;");
-            Writer.WriteLine("PRAGMA foreign_keys=on;");
+            //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
             Writer.WriteLine("-- END MODIFY");
             Writer.WriteLine();
@@ -183,7 +182,7 @@ namespace Acklann.Daterpillar.Compilation
 
             void rename(Table replacement)
             {
-                Writer.WriteLine("PRAGMA foreign_keys=off;");
+                //Writer.WriteLine("PRAGMA foreign_keys=off;");
                 Writer.WriteLine("BEGIN TRANSACTION;");
 
                 string tableName = replacement.Name;
@@ -196,7 +195,7 @@ namespace Acklann.Daterpillar.Compilation
                 Writer.WriteLine("DROP TABLE [_{0}_old];", tableName);
 
                 Writer.WriteLine("COMMIT;");
-                Writer.WriteLine("PRAGMA foreign_keys=on;");
+                //Writer.WriteLine("PRAGMA foreign_keys=on;");
                 Writer.WriteLine();
             }
         }

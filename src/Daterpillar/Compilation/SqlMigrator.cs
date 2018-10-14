@@ -44,6 +44,16 @@ namespace Acklann.Daterpillar.Compilation
             foreach (Discrepancy change in sortedTables)
                 WriteChanges(writer, change, !shouldOmitDropStatements);
 
+            bool noMatchFound = true;
+            foreach (Script newScript in to.Scripts)
+            {
+                foreach (Script oldScript in from.Scripts)
+                    if (string.Equals(oldScript.Name, newScript.Name, StringComparison.OrdinalIgnoreCase) && oldScript.Syntax == newScript.Syntax)
+                        noMatchFound = false;
+
+                if (noMatchFound) writer.Create(newScript);
+            }
+
             return sortedTables;
         }
 
@@ -223,11 +233,10 @@ namespace Acklann.Daterpillar.Compilation
                     header($"Creating the {discrepancy.NewValue.GetName()} table.");
                     writer.Create((Table)discrepancy.NewValue);
                     break;
-                    
+
                 case SqlAction.Drop:
                     if (shouldIncludeDropStatements)
                     {
-                        
                         writer.Drop((Table)discrepancy.OldValue);
                     }
                     break;
@@ -309,7 +318,7 @@ namespace Acklann.Daterpillar.Compilation
             void header(string text)
             {
                 writer.WriteLine($"-- {text}");
-                writer.WriteLine(separator);
+                writer.WriteLine($"-- {separator}");
                 writer.WriteLine("");
             }
         }
@@ -342,10 +351,6 @@ namespace Acklann.Daterpillar.Compilation
                     item.ForeignTable = newName;
                 }
             }
-        }
-
-        private void WriteHeader(string text)
-        {
         }
 
         #region Private Members

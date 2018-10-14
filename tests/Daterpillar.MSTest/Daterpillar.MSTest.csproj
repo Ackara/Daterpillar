@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acklann.Diffa" Version="0.1.3" />
+    <PackageReference Include="Acklann.Diffa" Version="0.1.4" />
     <PackageReference Include="Acklann.Mockaroo.NET" Version="2.0.8-rc" />
     <PackageReference Include="FakeItEasy" Version="4.9.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0" />

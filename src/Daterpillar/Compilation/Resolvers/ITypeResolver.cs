@@ -13,6 +13,8 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// <returns>The type name.</returns>
         string GetTypeName(DataType dataType);
 
+        string ExpandVariables(string name);
+
         string GetActionName(ReferentialAction action);
     }
 }

@@ -35,7 +35,7 @@
       <dataType>varchar</dataType>
     </column>
 
-    <column name="Disc">
+    <column name="Disc" default="1">
       <dataType>int</dataType>
     </column>
 
@@ -97,15 +97,18 @@
       <dataType>varchar</dataType>
     </column>
 
-    <column name="TotalArtist" default="1">
+    <column name="TotalArtist" default="0">
       <dataType>tinyInt</dataType>
     </column>
   </table>
 
-  <script name="seed">
+  <script name="seed-3">
     <![CDATA[
-    INSERT INTO genre (Id, Name)
-    VALUES ('1', 'Hip Hop'), ('2', 'Rock'), ('3', 'Pop'), ('4', 'R&B');
+-- Seed-Data
+-- -----------------------------------------------
+INSERT INTO label (Id, Name)
+VALUES ('0', 'Independent'), ('1', 'YMCMB'), ('2', 'OVO'), ('3', 'UMG'), ('4', 'Atlantic Records');
+;
     ]]>
   </script>
 </schema>

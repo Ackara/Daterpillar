@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Compilation.Resolvers
 {
@@ -14,9 +15,20 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// </summary>
         public MSSQLResolver()
         {
-            TypeMap[BOOL.ToLower()] = "bit";
-            TypeMap[BLOB.ToLower()] = "varbinary";
-            TypeMap[MEDIUMINT.ToLower()] = "int";
+            TypeMap[BOOL] = "BIT";
+            TypeMap[BLOB] = "VARBINARY";
+            TypeMap[MEDIUMINT] = "INT";
+            TypeMap[TIMESTAMP] = "DATETIME";
+        }
+
+        public override string Escape(string objectName)
+        {
+            return $"[{objectName}]";
+        }
+
+        public override string ExpandVariables(string name)
+        {
+            return Regex.Replace(name, Placeholder.NOW, "GETDATE()");
         }
 
         /// <summary>
@@ -27,8 +39,8 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         /// <exception cref="System.ArgumentException">dataType</exception>
         public override string GetTypeName(DataType dataType)
         {
-            string name = "";
-            string type = dataType.Name.ToLower();
+            int scale, precision;
+            string type = dataType.Name, name = "";
 
             switch (type)
             {
@@ -40,7 +52,9 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
                     break;
 
                 case DECIMAL:
-                    name = $"{TypeMap[type]}({dataType.Scale}, {dataType.Precision})";
+                    scale = (dataType.Scale == 0 ? 8 : dataType.Scale);
+                    precision = (dataType.Precision == 0 ? 2 : dataType.Precision);
+                    name = $"{TypeMap[type]}({scale}, {precision})";
                     break;
 
                 default:
@@ -50,6 +64,18 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
             }
 
             return name.ToUpper();
+        }
+
+        public override string GetActionName(ReferentialAction action)
+        {
+            switch (action)
+            {
+                default:
+                    return base.GetActionName(action);
+
+                case ReferentialAction.Restrict:
+                    return "NO ACTION";
+            }
         }
     }
 }
