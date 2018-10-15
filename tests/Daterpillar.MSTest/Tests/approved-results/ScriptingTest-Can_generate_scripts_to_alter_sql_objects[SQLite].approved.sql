@@ -3,7 +3,7 @@ SYNTAX: SQLite
 
 ALTER TABLE [placeholder] RENAME TO [publisher];
 
--- RENAME: service.Zombie_fk to ActiveUsers
+-- Renaming [service].[Zombie_fk] to ActiveUsers
 
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
@@ -23,9 +23,9 @@ INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 
--- END RENAME
+-- End --
 
--- MODIFY: service.Subscribers
+-- Modifying [service].[Subscribers]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
@@ -45,5 +45,5 @@ INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 
--- END MODIFY
+-- End --
 

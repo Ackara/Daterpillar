@@ -26,19 +26,23 @@ namespace Acklann.Daterpillar.Compilation
 
             CreateTableFormatString = "CREATE TABLE {0}",
 
+            // *** Column *** //
             ColumnFormatString = "{0} {1} {2} {3} {4}",
             CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}",
             AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5}",
             DropColumnFormatString = "ALTER TABLE {0} DROP COLUMN {1}",
 
+            // *** Foreign Key *** //
             ForeignKeyFormatString = "CONSTRAINT {0} FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}",
-            CreateForeignKeyFormatString = "ALTER TABLE {0} ADD FOREIGN KEY ({1}) REFERENCES {2}({3})  ON UPDATE {4} ON DELETE {5}",
+            CreateForeignKeyFormatString = "ALTER TABLE {1} ADD CONSTRAINT {0} FOREIGN KEY ({2}) REFERENCES {3}({4})  ON UPDATE {5} ON DELETE {6}",
             DropForeignKeyFormatString = "ALTER TABLE {0} DROP CONSTRAINT {1}",
 
+            // *** Index *** //
             CreateIndexFormatString = "CREATE{0}INDEX {1} ON {2} ({3})",
             DropIndexFormatString = "DROP INDEX {0}",
             PrimaryKeyFormatString = "PRIMARY KEY ({0})",
 
+            // *** Rename *** //
             RenameTableFormatString = "ALTER TABLE {0} RENAME TO {1}",
             RenameColumnFormatString = "ALTER TABLE {0} RENAME COLUMN {1} TO {2}"
             ;
@@ -167,13 +171,13 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Create(ForeignKey foreignKey)
         {
             Writer.Write(CreateForeignKeyFormatString,
-                Resolver.Escape(foreignKey.Name),
-                Resolver.Escape(foreignKey.Table.Name),
-                Resolver.Escape(foreignKey.LocalColumn),
-                Resolver.Escape(foreignKey.ForeignTable),
-                Resolver.Escape(foreignKey.ForeignColumn),
-                Resolver.GetActionName(foreignKey.OnUpdate),
-                Resolver.GetActionName(foreignKey.OnDelete)
+                /* 0 */Resolver.Escape(foreignKey.Name),
+                /* 1 */Resolver.Escape(foreignKey.Table.Name),
+                /* 2 */Resolver.Escape(foreignKey.LocalColumn),
+                /* 3 */Resolver.Escape(foreignKey.ForeignTable),
+                /* 4 */Resolver.Escape(foreignKey.ForeignColumn),
+                /* 5 */Resolver.GetActionName(foreignKey.OnUpdate),
+                /* 6 */Resolver.GetActionName(foreignKey.OnDelete)
                 );
             Writer.WriteLine(";");
             Writer.WriteLine();
@@ -200,12 +204,12 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
-        // ==================== DROP ==================== //
-
         public virtual void Drop(Schema schema)
         {
             throw new System.NotImplementedException();
         }
+
+        // ==================== DROP ==================== //
 
         public virtual void Drop(Table table)
         {
@@ -235,7 +239,7 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Drop(Index index)
         {
-            Writer.Write(DropIndexFormatString, 
+            Writer.Write(DropIndexFormatString,
                 Resolver.Escape(index.Name),
                 Resolver.Escape(index.Table.Name)
                 );
@@ -243,11 +247,11 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
-        // ==================== ALTER ==================== //
-
         public virtual void Alter(Table newTable)
         {
         }
+
+        // ==================== ALTER ==================== //
 
         public virtual void Alter(Column column)
         {
@@ -271,8 +275,8 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Rename(string oldTableName, string newTableName)
         {
-            Writer.Write(RenameTableFormatString, 
-                Resolver.Escape(oldTableName), 
+            Writer.Write(RenameTableFormatString,
+                Resolver.Escape(oldTableName),
                 Resolver.Escape(newTableName)
                 );
             Writer.WriteLine(';');
@@ -287,6 +291,36 @@ namespace Acklann.Daterpillar.Compilation
                     Resolver.Escape(newColumnName)
                 );
             Writer.WriteLine(';');
+            Writer.WriteLine();
+        }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Writer?.Dispose();
+            }
+        }
+
+        #endregion IDisposable
+
+        internal void Header(string text)
+        {
+            Writer.WriteLine($"-- {text}");
+            Writer.WriteLine();
+        }
+
+        internal void End()
+        {
+            Writer.WriteLine("-- End --");
             Writer.WriteLine();
         }
 
@@ -395,23 +429,5 @@ namespace Acklann.Daterpillar.Compilation
                 if (wasModified) yield return table;
             }
         }
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Writer?.Dispose();
-            }
-        }
-
-        #endregion IDisposable
     }
 }

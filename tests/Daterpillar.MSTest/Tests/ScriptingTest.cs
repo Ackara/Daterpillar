@@ -14,7 +14,7 @@ namespace Acklann.Daterpillar.Tests
     {
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.SQLite)]
+        //[DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_create_sql_objects(Syntax syntax)
         {
             #region Arrange
@@ -137,7 +137,7 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
-        //[DataRow(Syntax.SQLite)]
+        [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_alter_sql_objects(Syntax syntax)
         {
             // Arrange

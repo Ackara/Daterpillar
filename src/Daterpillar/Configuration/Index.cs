@@ -64,11 +64,10 @@ namespace Acklann.Daterpillar.Configuration
         {
             get
             {
-                string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}__");
-                string columns = string.Join("_and_", Columns.Select(x => x.Name));
-
-                return string.Concat(tableName, columns, "_index");
+                if (string.IsNullOrEmpty(_name)) SetName();
+                return _name;
             }
+            set { _name = value; }
         }
 
         /// <summary>
@@ -106,6 +105,7 @@ namespace Acklann.Daterpillar.Configuration
             {
                 Columns = this.Columns,
                 IsUnique = this.IsUnique,
+                _name = this._name,
                 Type = this.Type
             };
         }
@@ -120,7 +120,9 @@ namespace Acklann.Daterpillar.Configuration
 
         #endregion ICloneable
 
-        // ==================== INTERNAL MEMBERS ==================== //
+        #region Private Members
+
+        private string _name;
 
         internal void Overwrite(Index right)
         {
@@ -132,7 +134,13 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        #region Private Members
+        internal void SetName()
+        {
+            string tableName = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"{Table.Name}__");
+            string columns = string.Join("_and_", Columns.Select(x => x.Name));
+
+            _name = string.Concat(tableName, columns, "_index");
+        }
 
         private ColumnName? Find(ColumnName right)
         {

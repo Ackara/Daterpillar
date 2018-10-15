@@ -1,10 +1,10 @@
-file: V1.0__init.SQLite.sql
+file: V1.0__init.TSQL.sql
 
 
 -- Creating the genre table
 
 CREATE TABLE [genre] (
-	[Id] INTEGER NOT NULL,
+	[Id] INT NOT NULL,
 	[Name] VARCHAR(255) NOT NULL,
 	PRIMARY KEY ([Id] ASC)
 );
@@ -16,15 +16,15 @@ CREATE UNIQUE INDEX [genre__Name_index] ON [genre] ([Name] ASC);
 -- Creating the song table
 
 CREATE TABLE [song] (
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Name] VARCHAR(255) NOT NULL,
-	[Length] INTEGER NOT NULL,
-	[Genre] INTEGER NOT NULL,
-	[Disc] INTEGER NOT NULL  DEFAULT 1,
-	[Track] INTEGER NOT NULL,
+	[Length] INT NOT NULL,
+	[Genre] INT NOT NULL,
+	[Disc] INT NOT NULL  DEFAULT 1,
+	[Track] SMALLINT NOT NULL,
 	[Artist] VARCHAR(255) NOT NULL,
 	[Album] VARCHAR(255) NOT NULL,
-	FOREIGN KEY ([Genre]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
+	CONSTRAINT [song_Genre_TO_genre_Id__fk] FOREIGN KEY ([Genre]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE INDEX [song__Name_index] ON [song] ([Name] ASC);
@@ -38,7 +38,7 @@ CREATE INDEX [song__Genre_index] ON [song] ([Genre] ASC);
 CREATE TABLE [artist] (
 	[Name] VARCHAR(32) NOT NULL,
 	[Bio] TEXT NOT NULL  DEFAULT '',
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[DOB] DATETIME NOT NULL
 );
 
@@ -48,12 +48,12 @@ CREATE TABLE [artist] (
 
 CREATE TABLE [album] (
 	[Name] VARCHAR(255) NOT NULL,
-	[Year] INTEGER NOT NULL,
-	[ArtistId] INTEGER NOT NULL,
-	[SongId] INTEGER NOT NULL,
+	[Year] INT NOT NULL,
+	[ArtistId] INT NOT NULL,
+	[SongId] INT NOT NULL,
 	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
-	FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
+	CONSTRAINT [album_SongId_TO_song_Id__fk] FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT [album_ArtistId_TO_artist_Id__fk] FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 -- End --

@@ -6,14 +6,14 @@
 -- Seed-Data
 -- -----------------------------------------------
 
-INSERT INTO song (Id, Name, Artist, Album, Genre, Track, Length)
+INSERT INTO song (Name, Artist, Album, Genre, Track, Length)
 VALUES
-(101, 'Survival', 'Drake', 'Scorpion', '1', '1', '136')
+('Survival', 'Drake', 'Scorpion', '1', '1', '136')
 ;
 
-INSERT INTO artist (Id, Name, Bio, DOB)
+INSERT INTO artist (Name, Bio, DOB)
 VALUES
-('1', 'Drake', 'Canadian-black-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
+('Drake', 'Canadian-black-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
 ;
     ]]>
   </script>

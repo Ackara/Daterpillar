@@ -106,8 +106,8 @@
     <![CDATA[
 -- Seed-Data
 -- -----------------------------------------------
-INSERT INTO label (Id, Name)
-VALUES ('0', 'Independent'), ('1', 'YMCMB'), ('2', 'OVO'), ('3', 'UMG'), ('4', 'Atlantic Records');
+INSERT INTO label (Name)
+VALUES ('Independent'), ('YMCMB'), ('OVO'), ('UMG'), ('Atlantic Records');
 ;
     ]]>
   </script>

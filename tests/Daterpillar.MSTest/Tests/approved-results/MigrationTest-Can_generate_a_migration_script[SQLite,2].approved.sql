@@ -17,7 +17,7 @@ ALTER TABLE [song] RENAME TO [track];
 
 ALTER TABLE [track] ADD COLUMN [Synced] BOOLEAN NOT NULL  DEFAULT 0;
 
--- DROP: track_Genre_TO_genre_Id__fk
+-- Removing [track_Genre_TO_genre_Id__fk]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_track_old] AS SELECT * FROM [track];
@@ -42,13 +42,13 @@ INSERT INTO [track] SELECT * FROM [_track_old];
 DROP TABLE [_track_old];
 COMMIT;
 
--- END DROP
+-- End --
 
 DROP INDEX [track__Name_index];
 
 DROP INDEX [track__Genre_index];
 
--- RENAME: track.Length to Duration
+-- Renaming [track].[Length] to Duration
 
 BEGIN TRANSACTION;
 CREATE TABLE [_track_old] AS SELECT * FROM [track];
@@ -74,9 +74,9 @@ INSERT INTO [track] SELECT * FROM [_track_old];
 DROP TABLE [_track_old];
 COMMIT;
 
--- END RENAME
+-- End --
 
--- MODIFY: track.Duration
+-- Modifying [track].[Duration]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_track_old] AS SELECT * FROM [track];
@@ -97,14 +97,14 @@ INSERT INTO [track] SELECT * FROM [_track_old];
 DROP TABLE [_track_old];
 COMMIT;
 
--- END MODIFY
+-- End --
 
 CREATE INDEX [track__Name_index] ON [track] ([Name] ASC);
 
 -- Modifying the album table.
 -- --------------------------------------------------
 
--- DROP: album_SongId_TO_track_Id__fk
+-- Removing [album_SongId_TO_track_Id__fk]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_album_old] AS SELECT * FROM [album];
@@ -122,9 +122,9 @@ INSERT INTO [album] SELECT * FROM [_album_old];
 DROP TABLE [_album_old];
 COMMIT;
 
--- END DROP
+-- End --
 
--- CREATE: album_SongId_TO_track_Id__fk
+-- Creating album_SongId_TO_track_Id__fk
 
 BEGIN TRANSACTION;
 CREATE TABLE [_album_old] AS SELECT * FROM [album];
@@ -143,7 +143,7 @@ INSERT INTO [album] SELECT * FROM [_album_old];
 DROP TABLE [_album_old];
 COMMIT;
 
--- END CREATE
+-- End --
 
 DROP TABLE [genre];
 

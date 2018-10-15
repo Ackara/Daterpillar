@@ -20,7 +20,10 @@ namespace Acklann.Daterpillar
             switch (syntax)
             {
                 case Syntax.TSQL:
-                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master", ConnectTimeout = 10 };
+                    //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    //    connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master", ConnectTimeout = 5 };
                     _connection = new System.Data.SqlClient.SqlConnection(builder.ToString());
                     break;
 
@@ -117,7 +120,7 @@ namespace Acklann.Daterpillar
                 CREATE TABLE [dbo].[service] (
                     Id INTEGER NOT NULL PRIMARY KEY,
                     Name VARCHAR(255) NOT NULL,
-                    Subscribers INT,
+                    Subscribers INT NOT NULL,
                     Zombie VARCHAR(255),
                     Zombie_fk INTEGER NOT NULL,
                     CONSTRAINT [service_Zombie_fk_TO_placeholder_Id__fk] FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)

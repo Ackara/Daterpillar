@@ -3,7 +3,7 @@ SYNTAX: SQLite
 
 DROP TABLE [zombie];
 
--- DROP: service_Zombie_fk_TO_placeholder_Id__fk
+-- Removing [service_Zombie_fk_TO_placeholder_Id__fk]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_service_old] AS SELECT * FROM [service];
@@ -22,9 +22,9 @@ INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
 COMMIT;
 
--- END DROP
+-- End --
 
--- DROP: service.Zombie
+-- Removing [service].[Zombie]
 
 BEGIN TRANSACTION;
 CREATE TABLE [_service_new] AS SELECT [Id], [Name], [Subscribers], [Zombie_fk] FROM [service];
@@ -42,7 +42,7 @@ INSERT INTO [service] SELECT * FROM [_service_new];
 DROP TABLE [_service_new];
 COMMIT;
 
--- END DROP
+-- End --
 
 DROP INDEX [service__Subscribers_index];
 

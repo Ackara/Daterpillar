@@ -230,8 +230,9 @@ namespace Acklann.Daterpillar.Compilation
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    header($"Creating the {discrepancy.NewValue.GetName()} table.");
+                    writer.Header($"Creating the {discrepancy.NewValue.GetName()} table");
                     writer.Create((Table)discrepancy.NewValue);
+                    writer.End();
                     break;
 
                 case SqlAction.Drop:
@@ -244,10 +245,11 @@ namespace Acklann.Daterpillar.Compilation
                 case SqlAction.Alter:
                     Table oldTable = (Table)discrepancy.OldValue;
                     Table newTable = (Table)discrepancy.NewValue;
-                    header($"Modifying the {oldTable.Name} table.");
+                    writer.Header($"Modifying the {oldTable.Name} table");
 
                     if (string.Equals(oldTable.Name, newTable.Name, StringComparison.OrdinalIgnoreCase) == false)
                     {
+                        System.Diagnostics.Debug.WriteLine($"renaming {oldTable.Name} to {newTable.Name}");
                         writer.Rename(oldTable, newTable);
                         RenameForeignKeys(oldTable, newTable.Name);
                         oldTable.Name = newTable.Name;
@@ -258,6 +260,8 @@ namespace Acklann.Daterpillar.Compilation
 
                     foreach (Discrepancy item in discrepancy.Children)
                         drillDown(item);
+
+                    writer.End();
                     break;
             }
 
@@ -314,13 +318,6 @@ namespace Acklann.Daterpillar.Compilation
                         break;
                 }
             }
-
-            void header(string text)
-            {
-                writer.WriteLine($"-- {text}");
-                writer.WriteLine($"-- {separator}");
-                writer.WriteLine("");
-            }
         }
 
         private bool IsMatch(Table left, Table right)
@@ -344,11 +341,11 @@ namespace Acklann.Daterpillar.Compilation
 
         private void RenameForeignKeys(Table oldTable, string newName)
         {
-            foreach (var item in oldTable.Schema.GetForeignKeys())
+            foreach (ForeignKey fk in oldTable.Schema.GetForeignKeys())
             {
-                if (string.Equals(oldTable.Name, item.ForeignTable, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(oldTable.Name, fk.ForeignTable, StringComparison.OrdinalIgnoreCase))
                 {
-                    item.ForeignTable = newName;
+                    fk.ForeignTable = newName;
                 }
             }
         }

@@ -48,7 +48,7 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
                 case BLOB:
                 case VARCHAR:
                     int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
-                    name = $"{TypeMap[type]}({(size == 0 ? "MAX" : size.ToString())})";
+                    name = $"{TypeMap[type]}({(size == 0 ? "255" : size.ToString())})";
                     break;
 
                 case DECIMAL:

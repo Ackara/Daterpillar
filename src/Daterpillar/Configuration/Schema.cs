@@ -471,11 +471,13 @@ namespace Acklann.Daterpillar.Configuration
                 foreach (Index index in table.Indecies)
                 {
                     if (index.Table == null) index.Table = table;
+                    index.SetName();
                 }
 
                 foreach (ForeignKey constraint in table.ForeignKeys)
                 {
                     if (constraint.Table == null) constraint.Table = table;
+                    constraint.SetName();
                 }
             }
         }

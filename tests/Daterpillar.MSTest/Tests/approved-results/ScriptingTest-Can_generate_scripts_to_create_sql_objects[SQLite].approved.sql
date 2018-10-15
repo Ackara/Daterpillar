@@ -35,7 +35,7 @@ INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorp
 
 ALTER TABLE [song] ADD COLUMN [ReleaseDate] TEXT NOT NULL  DEFAULT '';
 
--- CREATE: album_SongId_TO_song_Id__fk
+-- Creating album_SongId_TO_song_Id__fk
 
 BEGIN TRANSACTION;
 CREATE TABLE [_album_old] AS SELECT * FROM [album];
@@ -53,11 +53,11 @@ INSERT INTO [album] SELECT * FROM [_album_old];
 DROP TABLE [_album_old];
 COMMIT;
 
--- END CREATE
+-- End --
 
 CREATE INDEX [song__Name_index] ON [song] ([Name] DESC);
 
--- CREATE: album Primary-Key
+-- Creating album Primary-Key
 
 PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
@@ -78,5 +78,5 @@ DROP TABLE [_album_old];
 COMMIT;
 PRAGMA foreign_keys=on;
 
--- END CREATE
+-- End --
 

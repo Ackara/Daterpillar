@@ -41,11 +41,13 @@ namespace Acklann.Daterpillar.Configuration
                 else if (item is Index index)
                 {
                     index.Table = this;
+                    index.SetName();
                     Indecies.Add(index);
                 }
                 else if (item is ForeignKey fKey)
                 {
                     fKey.Table = this;
+                    fKey.SetName();
                     ForeignKeys.Add(fKey);
                 }
             }

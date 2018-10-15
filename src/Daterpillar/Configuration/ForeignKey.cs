@@ -48,9 +48,10 @@ namespace Acklann.Daterpillar.Configuration
         {
             get
             {
-                string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
-                return $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}__fk";
+                if (string.IsNullOrEmpty(_name)) SetName();
+                return _name;
             }
+            set { _name = value; }
         }
 
         /// <summary>
@@ -121,7 +122,8 @@ namespace Acklann.Daterpillar.Configuration
                 LocalColumn = this.LocalColumn,
                 LocalTable = this.LocalTable,
                 OnDelete = this.OnDelete,
-                OnUpdate = this.OnUpdate
+                OnUpdate = this.OnUpdate,
+                _name = this._name
             };
         }
 
@@ -135,7 +137,15 @@ namespace Acklann.Daterpillar.Configuration
 
         #endregion ICloneable
 
-        // ==================== INTERNAL MEMBERS ==================== //
+        #region Private Members
+
+        private string _name;
+
+        internal void SetName()
+        {
+            string table = string.IsNullOrEmpty(LocalTable) ? string.Empty : $"{LocalTable}_";
+            _name = $"{table}{LocalColumn}_TO_{ForeignTable}_{ForeignColumn}__fk";
+        }
 
         internal void Overwrite(ForeignKey right)
         {
@@ -147,5 +157,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             return $"[{LocalColumn}] POINTS-TO [{ForeignTable}].[{ForeignColumn}]";
         }
+
+        #endregion Private Members
     }
 }

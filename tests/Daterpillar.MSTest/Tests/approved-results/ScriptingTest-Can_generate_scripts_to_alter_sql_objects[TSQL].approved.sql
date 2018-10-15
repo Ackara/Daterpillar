@@ -7,5 +7,11 @@ GO
 EXEC sp_RENAME 'service.Zombie_fk', 'ActiveUsers', 'COLUMN'
 GO
 
-ALTER TABLE [service] ALTER COLUMN [Subscribers] INT;
+-- Modifying [service].[Subscribers]
+
+ALTER TABLE [service] ALTER COLUMN [Subscribers] INT NOT NULL;
+
 ALTER TABLE [service] ADD DEFAULT 0 FOR [Subscribers];
+
+-- End --
+

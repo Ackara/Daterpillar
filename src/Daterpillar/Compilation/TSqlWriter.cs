@@ -20,7 +20,7 @@ namespace Acklann.Daterpillar.Compilation
             RenameTableFormatString = "EXEC sp_RENAME '{0}', '{1}'";
             RenameColumnFormatString = "EXEC sp_RENAME '{0}.{1}', '{2}', 'COLUMN'";
             CreateColumnFormatString = "ALTER TABLE {0} ADD {1} {2} {3} {4} {5}";
-            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3}";
+            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4}";
         }
 
         protected override Syntax Syntax => Syntax.TSQL;
@@ -44,15 +44,17 @@ namespace Acklann.Daterpillar.Compilation
                 );
             Writer.WriteLine("GO");
             Writer.WriteLine();
-
-            //ALTER TABLE Employee ADD DEFAULT 'SANDNES' FOR CityBorn
         }
 
         public override void Alter(Column column)
         {
-            Writer.WriteLine($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};");
-            //Writer.WriteLine("GO");
+            Writer.WriteLine($"-- Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
+            Writer.WriteLine();
             base.Alter(column);
+            Writer.WriteLine($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};");
+            Writer.WriteLine();
+            Writer.WriteLine("-- End --");
+            Writer.WriteLine();
         }
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE [song] (
 	[GenreId] INT NOT NULL,
 	[Track] TINYINT NOT NULL  DEFAULT 1,
 	[Lyrics] VARCHAR(MAX),
-	FOREIGN KEY ([GenreId]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
+	CONSTRAINT [song_GenreId_TO_genre_Id__fk] FOREIGN KEY ([GenreId]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE INDEX [song__GenreId_index] ON [song] ([GenreId] ASC);
@@ -35,7 +35,7 @@ INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorp
 
 ALTER TABLE [song] ADD [ReleaseDate] DATETIME NOT NULL  DEFAULT GETDATE();
 
-ALTER TABLE [album] ADD FOREIGN KEY ([SongId]) REFERENCES [song]([Id])  ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE [album] ADD CONSTRAINT [album_SongId_TO_song_Id__fk] FOREIGN KEY ([SongId]) REFERENCES [song]([Id])  ON UPDATE CASCADE ON DELETE NO ACTION;
 
 CREATE INDEX [song__Name_index] ON [song] ([Name] DESC);
 
