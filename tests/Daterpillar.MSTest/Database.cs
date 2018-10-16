@@ -20,15 +20,15 @@ namespace Acklann.Daterpillar
             switch (syntax)
             {
                 case Syntax.TSQL:
-                    //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                    //    connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                        connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
                     builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master", ConnectTimeout = 5 };
                     _connection = new System.Data.SqlClient.SqlConnection(builder.ToString());
                     break;
 
                 case Syntax.MySQL:
-                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = name };
+                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = "sys", ConnectionTimeout = 5 };
                     _connection = new MySql.Data.MySqlClient.MySqlConnection(builder.ToString());
                     break;
 
@@ -106,7 +106,7 @@ namespace Acklann.Daterpillar
             _connection.ChangeDatabase(_databaseName);
             using (IDbCommand command = _connection.CreateCommand())
             {
-                command.CommandText = @"
+                command.CommandText = $@"
                 CREATE TABLE [dbo].[zombie] (
                     Id INTEGER NOT NULL PRIMARY KEY IDENTITY(1,1),
                     Name VARCHAR(255)
@@ -123,10 +123,50 @@ namespace Acklann.Daterpillar
                     Subscribers INT NOT NULL,
                     Zombie VARCHAR(255),
                     Zombie_fk INTEGER NOT NULL,
-                    CONSTRAINT [service_Zombie_fk_TO_placeholder_Id__fk] FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
+                    CONSTRAINT [{ObjectName.ServiceFK}] FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
                 );
 
                 CREATE INDEX [service__Subscribers_index] ON [service] (Subscribers);
+                ";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        internal void MySqlRefresh()
+        {
+            Open();
+            using (IDbCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = $"DROP DATABASE IF EXISTS `{_databaseName}`;";
+                command.ExecuteNonQuery();
+                command.CommandText = $"CREATE DATABASE `{_databaseName}`;";
+                command.ExecuteNonQuery();
+            }
+
+            _connection.ChangeDatabase(_databaseName);
+            using (IDbCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = $@"
+                CREATE TABLE `zombie` (
+                    Id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                    Name VARCHAR(255)
+                );
+
+                CREATE TABLE `placeholder` (
+                    Id INT NOT NULL PRIMARY KEY,
+                    Name VARCHAR(255)
+                );
+
+                CREATE TABLE `service` (
+                    Id INTEGER NOT NULL PRIMARY KEY,
+                    Name VARCHAR(255) NOT NULL,
+                    Subscribers INT NOT NULL,
+                    Zombie VARCHAR(255),
+                    Zombie_fk INTEGER NOT NULL,
+                    CONSTRAINT `{ObjectName.ServiceFK}` FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
+                );
+
+                CREATE INDEX `service__Subscribers_index` ON `service` (Subscribers);
                 ";
                 command.ExecuteNonQuery();
             }
@@ -166,11 +206,6 @@ CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
             }
         }
 
-        internal void MySqlRefresh()
-        {
-            throw new System.NotImplementedException();
-        }
-
         #region IDisposable
 
         public void Dispose()
@@ -196,6 +231,13 @@ CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
         private string ToDebuggerDisplay() => _connection?.ConnectionString;
 
         #endregion Private Members
+
+        public struct ObjectName
+        {
+            public const string
+                ServiceFK = "service_Zombie_fk_TO_placeholder_Id__fk"
+                ;
+        }
 
         public class Sample
         {

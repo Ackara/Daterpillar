@@ -54,12 +54,16 @@ namespace Acklann.Daterpillar.Compilation
 
         internal int GetWeight()
         {
-            if (Action == SqlAction.Create && Value is Column)
-                return 0;
-            else if (Action == SqlAction.Drop && (Value is ForeignKey || Value is Index))
-                return 1;
-            else
-                return 2;
+            int weight = 0;
+
+            if (Action == SqlAction.Create) weight += 1;
+            else if (Action == SqlAction.Drop) weight += 2;
+
+            if (Value is Index) weight += 2;
+            else if (Value is ForeignKey) weight += 1;
+            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is Column) weight = 5;
+
+            return weight;
         }
 
         internal void Sort()
@@ -69,9 +73,9 @@ namespace Acklann.Daterpillar.Compilation
             int compare(Discrepancy x, Discrepancy y)
             {
                 if (x.GetWeight() > y.GetWeight())
-                    return 1;
-                else if (x.GetWeight() < y.GetWeight())
                     return -1;
+                else if (x.GetWeight() < y.GetWeight())
+                    return 1;
                 else
                     return 0;
             }

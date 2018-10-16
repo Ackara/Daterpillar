@@ -180,35 +180,33 @@ namespace Acklann.Daterpillar.Compilation
         private IEnumerable<Discrepancy> GetTablesSortedByDependency()
         {
             Discrepancy current;
-            int dependencyIndex;
+            int dependencyIndex, previousDependencyIndex = -1;
 
-            foreach (SqlAction action in Enum.GetValues(typeof(SqlAction)))
+            for (int i = 0; i < _discrepancies.Count; i++)
             {
-                if (action == SqlAction.None) continue;
-                else
-                    for (int i = 0; i < _discrepancies.Count; i++)
-                    {
-                        dependencyIndex = i;
-                        current = _discrepancies[i];
+                dependencyIndex = i;
+                previousDependencyIndex = -1;
+                current = _discrepancies[i];
 
-                    retry:
-                        if (current?.Action != action) continue;
+            retry:
+                if (current == null) continue;
 
-                        if (hasDependency(current))
-                        {
-                            i--;
-                            current = _discrepancies[dependencyIndex];
-                            goto retry;
-                        }
+                if (hasDependency(current))
+                {
+                    current = _discrepancies[dependencyIndex];
+                    goto retry;
+                }
 
-                        current.Sort();
-                        yield return current;
-                        _discrepancies[dependencyIndex] = null;
-                    }
+                current.Sort();
+                yield return current;
+                _discrepancies[dependencyIndex] = null;
+                if (dependencyIndex != i) i--; // Repositions the index to the parent, due to it having dependency.
             }
 
             bool hasDependency(Discrepancy item)
             {
+                if (_discrepancies.Count <= 1) return false;
+
                 IEnumerable<string> foreignKeys = from f in ((item.Value as Table).ForeignKeys)
                                                   select f.ForeignTable;
 
@@ -216,6 +214,9 @@ namespace Acklann.Daterpillar.Compilation
                     for (int i = 0; i < _discrepancies.Count; i++)
                         if (_discrepancies[i] != null && _discrepancies[i].Value.GetName().Equals(fk, StringComparison.OrdinalIgnoreCase))
                         {
+                            if (i == previousDependencyIndex) return false; // Guards against circular references
+
+                            previousDependencyIndex = dependencyIndex;
                             dependencyIndex = i;
                             return true;
                         }
@@ -230,9 +231,10 @@ namespace Acklann.Daterpillar.Compilation
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    writer.Header($"Creating the {discrepancy.NewValue.GetName()} table");
+                    bool hasIndices = ((Table)discrepancy.NewValue).Indecies.Count > 0;
+                    writer.WriteHeaderIf($"Creating the {discrepancy.NewValue.GetName()} table", hasIndices);
                     writer.Create((Table)discrepancy.NewValue);
-                    writer.End();
+                    writer.WriteEndIf(hasIndices);
                     break;
 
                 case SqlAction.Drop:
@@ -245,13 +247,13 @@ namespace Acklann.Daterpillar.Compilation
                 case SqlAction.Alter:
                     Table oldTable = (Table)discrepancy.OldValue;
                     Table newTable = (Table)discrepancy.NewValue;
-                    writer.Header($"Modifying the {oldTable.Name} table");
+                    int nChanges = discrepancy.Children.Count;
+                    writer.WriteHeaderIf($"Modifying the {oldTable.Name} table", (nChanges > 1));
 
                     if (string.Equals(oldTable.Name, newTable.Name, StringComparison.OrdinalIgnoreCase) == false)
                     {
-                        System.Diagnostics.Debug.WriteLine($"renaming {oldTable.Name} to {newTable.Name}");
                         writer.Rename(oldTable, newTable);
-                        RenameForeignKeys(oldTable, newTable.Name);
+                        RenameForeignKeysReferencedTable(oldTable, newTable.Name);
                         oldTable.Name = newTable.Name;
                     }
 
@@ -261,7 +263,7 @@ namespace Acklann.Daterpillar.Compilation
                     foreach (Discrepancy item in discrepancy.Children)
                         drillDown(item);
 
-                    writer.End();
+                    writer.WriteEndIf(nChanges > 1);
                     break;
             }
 
@@ -339,7 +341,7 @@ namespace Acklann.Daterpillar.Compilation
             return string.Equals(left.GetName(), right.GetName(), StringComparison.OrdinalIgnoreCase);
         }
 
-        private void RenameForeignKeys(Table oldTable, string newName)
+        private void RenameForeignKeysReferencedTable(Table oldTable, string newName)
         {
             foreach (ForeignKey fk in oldTable.Schema.GetForeignKeys())
             {

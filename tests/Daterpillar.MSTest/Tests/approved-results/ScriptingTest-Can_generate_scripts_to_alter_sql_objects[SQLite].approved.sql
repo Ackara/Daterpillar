@@ -15,9 +15,10 @@ CREATE TABLE [service] (
 	[Zombie] VARCHAR(255) NOT NULL,
 	[ActiveUsers] INTEGER NOT NULL,
 	FOREIGN KEY ([ActiveUsers]) REFERENCES [placeholder]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
-);
+)
+;
 
-CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX IF NOT EXISTS [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
@@ -33,13 +34,14 @@ DROP TABLE [service];
 CREATE TABLE [service] (
 	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[Name] VARCHAR(255) NOT NULL,
-	[Subscribers] INTEGER NOT NULL  DEFAULT 0,
+	[Subscribers] INTEGER NOT NULL DEFAULT 0,
 	[Zombie] VARCHAR(255) NOT NULL,
 	[ActiveUsers] INTEGER NOT NULL,
 	FOREIGN KEY ([ActiveUsers]) REFERENCES [placeholder]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
-);
+)
+;
 
-CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX IF NOT EXISTS [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];

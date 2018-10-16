@@ -14,9 +14,10 @@ CREATE TABLE [service] (
 	[Subscribers] INTEGER NOT NULL,
 	[Zombie] VARCHAR(255) NOT NULL,
 	[Zombie_fk] INTEGER NOT NULL
-);
+)
+;
 
-CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX IF NOT EXISTS [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_old];
 DROP TABLE [_service_old];
@@ -34,9 +35,10 @@ CREATE TABLE [service] (
 	[Name] VARCHAR(255) NOT NULL,
 	[Subscribers] INTEGER NOT NULL,
 	[Zombie_fk] INTEGER NOT NULL
-);
+)
+;
 
-CREATE INDEX [service__Subscribers_index] ON [service] ([Subscribers] ASC);
+CREATE INDEX IF NOT EXISTS [service__Subscribers_index] ON [service] ([Subscribers] ASC);
 
 INSERT INTO [service] SELECT * FROM [_service_new];
 DROP TABLE [_service_new];

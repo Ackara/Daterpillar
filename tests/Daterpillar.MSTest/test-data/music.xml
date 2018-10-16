@@ -47,38 +47,12 @@
     </index>
   </table>
 
-  <table name="album">
-    <column name="Name">
-      <dataType>varchar</dataType>
-    </column>
-
-    <column name="Year">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="ArtistId">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="SongId">
-      <dataType>int</dataType>
-    </column>
-
-    <foreignKey localColumn="SongId" foreignTable="song" foreignColumn="Id" />
-    <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" />
-
-    <index type="primary-key">
-      <columnName>SongId</columnName>
-      <columnName>ArtistId</columnName>
-    </index>
-  </table>
-
   <table name="artist">
     <column name="Name">
       <dataType scale="32">varchar</dataType>
     </column>
 
-    <column name="Bio" default="&apos;&apos;">
+    <column name="Bio">
       <dataType>text</dataType>
     </column>
 

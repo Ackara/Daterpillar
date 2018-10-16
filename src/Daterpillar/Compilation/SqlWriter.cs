@@ -15,8 +15,6 @@ namespace Acklann.Daterpillar.Compilation
             Resolver = resolver;
         }
 
-        public bool OmitHeaders = false;
-
         public string IndentChars = "\t";
 
         protected internal string
@@ -24,23 +22,24 @@ namespace Acklann.Daterpillar.Compilation
             DefaultFormatString = "DEFAULT {0}",
             AutoIncrement = "PRIMARY KEY AUTOINCREMENT",
 
+            TableCommentFormatString = string.Empty,
             CreateTableFormatString = "CREATE TABLE {0}",
 
             // *** Column *** //
-            ColumnFormatString = "{0} {1} {2} {3} {4}",
-            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}",
-            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1} {2} {3} {4} {5}",
+            ColumnFormatString = "{0}{1}{2}{3}{4}",
             DropColumnFormatString = "ALTER TABLE {0} DROP COLUMN {1}",
+            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1}{2}{3}{4}{5}",
+            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1}{2}{3}{4}{5}",
 
             // *** Foreign Key *** //
+            DropForeignKeyFormatString = "ALTER TABLE {0} DROP CONSTRAINT {1}",
             ForeignKeyFormatString = "CONSTRAINT {0} FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}",
             CreateForeignKeyFormatString = "ALTER TABLE {1} ADD CONSTRAINT {0} FOREIGN KEY ({2}) REFERENCES {3}({4})  ON UPDATE {5} ON DELETE {6}",
-            DropForeignKeyFormatString = "ALTER TABLE {0} DROP CONSTRAINT {1}",
 
             // *** Index *** //
-            CreateIndexFormatString = "CREATE{0}INDEX {1} ON {2} ({3})",
             DropIndexFormatString = "DROP INDEX {0}",
             PrimaryKeyFormatString = "PRIMARY KEY ({0})",
+            CreateIndexFormatString = "CREATE{0}INDEX {1} ON {2} ({3})",
 
             // *** Rename *** //
             RenameTableFormatString = "ALTER TABLE {0} RENAME TO {1}",
@@ -83,7 +82,7 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Create(Table table)
         {
             int i, n;
-            Writer.Write(string.Format(CreateTableFormatString, Resolver.Escape(table.Name)));
+            Writer.Write(CreateTableFormatString, Resolver.Escape(table.Name), table.Comment);
             Writer.WriteLine(" (");
 
             //--- Columns ---//
@@ -94,14 +93,14 @@ namespace Acklann.Daterpillar.Compilation
                 column = table.Columns[i];
 
                 Writer.Write(IndentChars);
-                Writer.Write(string.Format(ColumnFormatString,
+                Writer.Write(ColumnFormatString,
                     /* 0 */Resolver.Escape(column.Name),
-                    /* 1 */Resolver.GetTypeName(column.DataType),
-                    /* 2 */(column.IsNullable ? string.Empty : NotNull),
-                    /* 3 */(column.AutoIncrement ? AutoIncrement : string.Empty),
-                    /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))),
-                    /* 5 */$"'{column.Comment}'"
-                    ).TrimEnd());
+                    /* 1 */Resolver.GetTypeName(column.DataType).WithSpace(),
+                    /* 2 */(column.IsNullable ? string.Empty : NotNull).WithSpace(),
+                    /* 3 */(column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
+                    /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
+                    /* 5 */column.Comment.Escape()
+                    );
 
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
             }
@@ -145,7 +144,9 @@ namespace Acklann.Daterpillar.Compilation
             }
 
             Writer.WriteLine();
-            Writer.WriteLine($");");
+            Writer.WriteLine(')');
+            Writer.Write(TableCommentFormatString, table.Comment);
+            Writer.WriteLine(';');
             Writer.WriteLine();
 
             //--- Index ---//
@@ -155,15 +156,15 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Create(Column column)
         {
-            Writer.Write(string.Format(CreateColumnFormatString,
+            Writer.Write(CreateColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
-                    Resolver.GetTypeName(column.DataType),
-                    (column.IsNullable ? string.Empty : NotNull),
-                    (column.AutoIncrement ? AutoIncrement : string.Empty),
-                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)),
-                    column.Comment
-                ).TrimEnd());
+                    Resolver.GetTypeName(column.DataType).WithSpace(),
+                    (column.IsNullable ? string.Empty : NotNull).WithSpace(),
+                    (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
+                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)).WithSpace(),
+                    column.Comment.Escape()
+                );
             Writer.WriteLine(";");
             Writer.WriteLine();
         }
@@ -204,12 +205,12 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
+        // ==================== DROP ==================== //
+
         public virtual void Drop(Schema schema)
         {
             throw new System.NotImplementedException();
         }
-
-        // ==================== DROP ==================== //
 
         public virtual void Drop(Table table)
         {
@@ -247,23 +248,23 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
+        // ==================== ALTER ==================== //
+
         public virtual void Alter(Table newTable)
         {
         }
 
-        // ==================== ALTER ==================== //
-
         public virtual void Alter(Column column)
         {
-            Writer.Write(string.Format(AlterColumnFormatString,
+            Writer.Write(AlterColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
-                    Resolver.GetTypeName(column.DataType),
-                    (column.IsNullable ? string.Empty : NotNull),
-                    (column.AutoIncrement ? AutoIncrement : string.Empty),
-                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)),
-                    column.Comment
-                ).TrimEnd());
+                    Resolver.GetTypeName(column.DataType).WithSpace(),
+                    (column.IsNullable ? string.Empty : NotNull).WithSpace(),
+                    (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
+                    (string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
+                    column.Comment.Escape()
+                );
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
@@ -312,16 +313,29 @@ namespace Acklann.Daterpillar.Compilation
 
         #endregion IDisposable
 
-        internal void Header(string text)
+        #region Private Members
+
+        private int _indentation = 0;
+
+        internal void WriteHeaderIf(string text, bool condition = true)
         {
-            Writer.WriteLine($"-- {text}");
-            Writer.WriteLine();
+            if (condition)
+            {
+                Writer.WriteLine($"-- {GetTab(_indentation)}{text}");
+                Writer.WriteLine();
+                _indentation++;
+            }
         }
 
-        internal void End()
+        internal void WriteEndIf(bool condition = true)
         {
-            Writer.WriteLine("-- End --");
-            Writer.WriteLine();
+            if (condition)
+            {
+                string t = GetTab(_indentation - 1);
+                Writer.WriteLine($"-- {t}End{t} --");
+                Writer.WriteLine();
+                _indentation--;
+            }
         }
 
         protected internal IEnumerable<Table> RemoveConstraints(Column column)
@@ -429,5 +443,9 @@ namespace Acklann.Daterpillar.Compilation
                 if (wasModified) yield return table;
             }
         }
+
+        private string GetTab(int n) => string.Concat(Enumerable.Repeat("     ", n));
+
+        #endregion Private Members
     }
 }

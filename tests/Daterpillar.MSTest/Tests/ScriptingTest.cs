@@ -14,7 +14,8 @@ namespace Acklann.Daterpillar.Tests
     {
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
-        //[DataRow(Syntax.SQLite)]
+        [DataRow(Syntax.MySQL)]
+        [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_create_sql_objects(Syntax syntax)
         {
             #region Arrange
@@ -26,12 +27,12 @@ namespace Acklann.Daterpillar.Tests
                 new Column("Id", new DataType(SchemaType.INT), true),
                 new Column("Name", new DataType(SchemaType.VARCHAR))
                 )
-            { Schema = schema };
+            { Schema = schema, Comment = "Represents a music genre." };
 
             var song = new Table("song",
-                new Column("Id", SchemaType.INT, true),
+                new Column("Id", SchemaType.INT, true) { Comment = "The unique identifier." },
                 new Column("Name", new DataType(SchemaType.VARCHAR, 15)),
-                new Column("GenreId", SchemaType.MEDIUMINT),
+                new Column("GenreId", SchemaType.INT),
                 new Column("Track", SchemaType.TINYINT, defaultValue: "1"),
                 new Column("Lyrics", new DataType(SchemaType.VARCHAR), nullable: true),
 
@@ -55,7 +56,7 @@ namespace Acklann.Daterpillar.Tests
             var generic = new Script("-- If you are reading this, I don't discriminate.", Syntax.Generic);
             var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
 
-            var name_idx = new Index(IndexType.Index, new ColumnName("Name", Order.DESC)) { Table = song };
+            var name_idx = new Index(IndexType.Index, true, new ColumnName("Name", Order.DESC)) { Table = song };
             var releaseDate = new Column("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "$(now)") { Table = song };
 
             var song_fk = new ForeignKey("SongId", "song", "Id") { Table = album };
@@ -100,6 +101,7 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
+        [DataRow(Syntax.MySQL)]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_drop_sql_objects(Syntax syntax)
         {
@@ -137,6 +139,7 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
+        [DataRow(Syntax.MySQL)]
         [DataRow(Syntax.SQLite)]
         public void Can_generate_scripts_to_alter_sql_objects(Syntax syntax)
         {

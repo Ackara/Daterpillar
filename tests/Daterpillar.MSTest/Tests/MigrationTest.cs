@@ -75,7 +75,8 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         //[DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.SQLite)]
+        [DataRow(Syntax.MySQL)]
+        //[DataRow(Syntax.SQLite)]
         public void Can_generate_a_migration_script(Syntax syntax)
         {
             // Arrange
@@ -135,7 +136,6 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             index = 0;
-
             foreach ((bool executionWasSuccessful, string script) in results)
             {
                 script.ShouldNotBeNullOrEmpty($"Script {index + 1} is empty.");

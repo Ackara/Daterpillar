@@ -7,7 +7,8 @@ CREATE TABLE [genre] (
 	[Id] INT NOT NULL,
 	[Name] VARCHAR(255) NOT NULL,
 	PRIMARY KEY ([Id] ASC)
-);
+)
+;
 
 CREATE UNIQUE INDEX [genre__Name_index] ON [genre] ([Name] ASC);
 
@@ -20,12 +21,13 @@ CREATE TABLE [song] (
 	[Name] VARCHAR(255) NOT NULL,
 	[Length] INT NOT NULL,
 	[Genre] INT NOT NULL,
-	[Disc] INT NOT NULL  DEFAULT 1,
+	[Disc] INT NOT NULL DEFAULT 1,
 	[Track] SMALLINT NOT NULL,
 	[Artist] VARCHAR(255) NOT NULL,
 	[Album] VARCHAR(255) NOT NULL,
 	CONSTRAINT [song_Genre_TO_genre_Id__fk] FOREIGN KEY ([Genre]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
-);
+)
+;
 
 CREATE INDEX [song__Name_index] ON [song] ([Name] ASC);
 
@@ -33,16 +35,13 @@ CREATE INDEX [song__Genre_index] ON [song] ([Genre] ASC);
 
 -- End --
 
--- Creating the artist table
-
 CREATE TABLE [artist] (
 	[Name] VARCHAR(32) NOT NULL,
-	[Bio] TEXT NOT NULL  DEFAULT '',
+	[Bio] TEXT NOT NULL DEFAULT '',
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[DOB] DATETIME NOT NULL
-);
-
--- End --
+)
+;
 
 -- Creating the album table
 
@@ -54,7 +53,8 @@ CREATE TABLE [album] (
 	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
 	CONSTRAINT [album_SongId_TO_song_Id__fk] FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION,
 	CONSTRAINT [album_ArtistId_TO_artist_Id__fk] FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE NO ACTION
-);
+)
+;
 
 -- End --
 

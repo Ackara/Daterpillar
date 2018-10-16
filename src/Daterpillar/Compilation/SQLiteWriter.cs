@@ -14,9 +14,10 @@ namespace Acklann.Daterpillar.Compilation
 
         public SQLiteWriter(TextWriter writer) : base(writer, new Resolvers.SQLiteTypeResolver())
         {
+            ColumnFormatString = "{0}{1}{2}{3}{4}";
             AutoIncrement = "PRIMARY KEY AUTOINCREMENT";
-            ColumnFormatString = "{0} {1} {2} {3} {4}";
-            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1} {2} {3} {4} {5}";
+            CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1}{2}{3}{4}{5}";
+            CreateIndexFormatString = "CREATE{0}INDEX IF NOT EXISTS {1} ON {2} ({3})";
             ForeignKeyFormatString = "FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}";
         }
 
@@ -24,40 +25,14 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== CREATE ==================== //
 
-        public override void Create(ForeignKey foreignKey)
-        {
-            /// NOTE: SQLite do not support direct alterations to a table so it will have to be recreated.
-
-            string name = foreignKey.Table.Name;
-
-            Header($"Creating {foreignKey.Name}");
-            //Writer.WriteLine("PRAGMA foreign_keys=off;");
-            Writer.WriteLine("BEGIN TRANSACTION;");
-
-            Writer.WriteLine("CREATE TABLE [_{0}_old] AS SELECT * FROM [{0}];", name);
-            Writer.WriteLine("DROP TABLE [{0}];", name);
-
-            Table clone = foreignKey.Table.Clone();
-            clone.ForeignKeys.Add(foreignKey);
-            Create(clone);
-
-            Writer.WriteLine("INSERT INTO [{0}] SELECT * FROM [_{0}_old];", name);
-            Writer.WriteLine("DROP TABLE [_{0}_old];", name);
-
-            Writer.WriteLine("COMMIT;");
-            //Writer.WriteLine("PRAGMA foreign_keys=on;");
-            Writer.WriteLine();
-            End();
-        }
-
         public override void Create(Index index)
         {
             if (index.Type == IndexType.Index) base.Create(index);
-            else
+            else /* IF Primary-Key */
             {
                 string name = index.Table.Name;
 
-                Header($"Creating {index.Table.Name} Primary-Key");
+                WriteHeaderIf($"Creating {index.Table.Name} Primary-Key");
                 Writer.WriteLine("PRAGMA foreign_keys=off;");
                 Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -74,8 +49,34 @@ namespace Acklann.Daterpillar.Compilation
                 Writer.WriteLine("COMMIT;");
                 Writer.WriteLine("PRAGMA foreign_keys=on;");
                 Writer.WriteLine();
-                End();
+                WriteEndIf();
             }
+        }
+
+        public override void Create(ForeignKey foreignKey)
+        {
+            /// NOTE: SQLite do not support direct alterations to a table so it will have to be recreated.
+
+            string name = foreignKey.Table.Name;
+
+            WriteHeaderIf($"Creating {foreignKey.Name}");
+            //Writer.WriteLine("PRAGMA foreign_keys=off;");
+            Writer.WriteLine("BEGIN TRANSACTION;");
+
+            Writer.WriteLine("CREATE TABLE [_{0}_old] AS SELECT * FROM [{0}];", name);
+            Writer.WriteLine("DROP TABLE [{0}];", name);
+
+            Table clone = foreignKey.Table.Clone();
+            clone.ForeignKeys.Add(foreignKey);
+            Create(clone);
+
+            Writer.WriteLine("INSERT INTO [{0}] SELECT * FROM [_{0}_old];", name);
+            Writer.WriteLine("DROP TABLE [_{0}_old];", name);
+
+            Writer.WriteLine("COMMIT;");
+            //Writer.WriteLine("PRAGMA foreign_keys=on;");
+            Writer.WriteLine();
+            WriteEndIf();
         }
 
         // ==================== DROP ==================== //
@@ -89,7 +90,7 @@ namespace Acklann.Daterpillar.Compilation
             string name = replacement.Name;
             string columns = string.Join(", ", replacement.Columns.Select(x => Resolver.Escape(x.Name)));
 
-            Header($"Removing {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
+            WriteHeaderIf($"Removing {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
             //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -104,7 +105,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
-            End();
+            WriteEndIf();
         }
 
         public override void Drop(ForeignKey foreignKey)
@@ -113,7 +114,7 @@ namespace Acklann.Daterpillar.Compilation
             Table replacement = foreignKey.Table.Clone();
             replacement.ForeignKeys.Remove(replacement.ForeignKeys.Find(x => x.Name == foreignKey.Name));
 
-            Header($"Removing {Resolver.Escape(foreignKey.Name)}");
+            WriteHeaderIf($"Removing {Resolver.Escape(foreignKey.Name)}");
             //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -128,14 +129,14 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
-            End();
+            WriteEndIf();
         }
 
         // ==================== ALTER ==================== //
 
         public override void Alter(Column column)
         {
-            Header($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
+            WriteHeaderIf($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
             //Writer.WriteLine("PRAGMA foreign_keys=off;");
             Writer.WriteLine("BEGIN TRANSACTION;");
 
@@ -151,18 +152,18 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine("COMMIT;");
             //Writer.WriteLine("PRAGMA foreign_keys=on;");
             Writer.WriteLine();
-            End();
+            WriteEndIf();
         }
 
         public override void Rename(Column oldColumn, string newColumnName)
         {
-            Header($"Renaming {Resolver.Escape(oldColumn.Table.Name)}.{Resolver.Escape(oldColumn.Name)} to {newColumnName}");
+            WriteHeaderIf($"Renaming {Resolver.Escape(oldColumn.Table.Name)}.{Resolver.Escape(oldColumn.Name)} to {newColumnName}");
             var comparer = new Equality.TableNameComparer();
             foreach (Table modifiedTable in RenameConstraints(oldColumn, newColumnName).Distinct(comparer))
             {
                 rename(modifiedTable);
             }
-            End();
+            WriteEndIf();
 
             void rename(Table replacement)
             {

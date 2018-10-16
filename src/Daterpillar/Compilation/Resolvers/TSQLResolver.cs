@@ -8,12 +8,12 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
     /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MSSQL data type.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
-    public class MSSQLResolver : TypeResolverBase
+    public class TSQLResolver : TypeResolverBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MSSQLResolver"/> class.
+        /// Initializes a new instance of the <see cref="TSQLResolver"/> class.
         /// </summary>
-        public MSSQLResolver()
+        public TSQLResolver()
         {
             TypeMap[BOOL] = "BIT";
             TypeMap[BLOB] = "VARBINARY";
@@ -40,15 +40,22 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
         public override string GetTypeName(DataType dataType)
         {
             int scale, precision;
-            string type = dataType.Name, name = "";
+            string type = dataType.Name, name = "", temp;
 
             switch (type)
             {
                 case CHAR:
+                    scale = (dataType.Scale == 0 ? 1 : dataType.Scale);
+                    name = $"{TypeMap[type]}({scale})";
+                    break;
+
                 case BLOB:
                 case VARCHAR:
-                    int size = dataType.Scale == 0 ? dataType.Precision : dataType.Scale;
-                    name = $"{TypeMap[type]}({(size == 0 ? "255" : size.ToString())})";
+                    if (dataType.Scale == 0) temp = "255";
+                    else if (dataType.Scale == int.MaxValue) temp = "MAX";
+                    else temp = dataType.Scale.ToString();
+
+                    name = $"{TypeMap[type]}({temp})";
                     break;
 
                 case DECIMAL:
