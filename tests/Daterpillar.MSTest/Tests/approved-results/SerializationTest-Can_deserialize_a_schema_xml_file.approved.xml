@@ -33,31 +33,11 @@
       <columnName order="asc">Genre</columnName>
     </index>
   </table>
-  <table name="album">
-    <column name="Name">
-      <dataType>varchar</dataType>
-    </column>
-    <column name="Year">
-      <dataType>int</dataType>
-    </column>
-    <column name="ArtistId">
-      <dataType>int</dataType>
-    </column>
-    <column name="SongId">
-      <dataType>int</dataType>
-    </column>
-    <foreignKey localColumn="SongId" foreignTable="song" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <index type="primary-key">
-      <columnName order="asc">SongId</columnName>
-      <columnName order="asc">ArtistId</columnName>
-    </index>
-  </table>
   <table name="artist">
     <column name="Name">
       <dataType scale="32">varchar</dataType>
     </column>
-    <column name="Bio" default="''">
+    <column name="Bio">
       <dataType>text</dataType>
     </column>
     <column name="Id" autoIncrement="true">
@@ -87,4 +67,5 @@
 INSERT INTO genre (Id, Name)
 VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
 ]]></script>
+  <script name="message"><![CDATA[-- If you're reading this it means multiple scrips can be used.]]></script>
 </schema>

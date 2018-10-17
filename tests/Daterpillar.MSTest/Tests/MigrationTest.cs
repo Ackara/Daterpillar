@@ -75,8 +75,8 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         //[DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.MySQL)]
-        //[DataRow(Syntax.SQLite)]
+        //[DataRow(Syntax.MySQL)]
+        [DataRow(Syntax.SQLite)]
         public void Can_generate_a_migration_script(Syntax syntax)
         {
             // Arrange

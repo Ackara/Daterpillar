@@ -1,9 +1,11 @@
 ﻿using Acklann.Daterpillar.Compilation.Resolvers;
 using Acklann.Daterpillar.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Compilation
 {
@@ -11,16 +13,19 @@ namespace Acklann.Daterpillar.Compilation
     {
         protected SqlWriter(TextWriter writer, ITypeResolver resolver)
         {
-            Writer = writer;
-            Resolver = resolver;
+            Writer = writer ?? throw new ArgumentNullException(nameof(writer));
+            Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
+
+            Variables = new Dictionary<object, string>();
         }
 
         public string IndentChars = "\t";
 
         protected internal string
             NotNull = "NOT NULL",
+            PrimaryKey = "PRIMARY KEY",
+            AutoIncrement = "AUTOINCREMENT",
             DefaultFormatString = "DEFAULT {0}",
-            AutoIncrement = "PRIMARY KEY AUTOINCREMENT",
 
             TableCommentFormatString = string.Empty,
             CreateTableFormatString = "CREATE TABLE {0}",
@@ -47,8 +52,9 @@ namespace Acklann.Daterpillar.Compilation
             ;
 
         protected readonly TextWriter Writer;
-
         protected readonly ITypeResolver Resolver;
+
+        public IDictionary Variables { get; }
 
         protected abstract Syntax Syntax { get; }
 
@@ -75,14 +81,13 @@ namespace Acklann.Daterpillar.Compilation
                 Create(table);
 
             foreach (Script script in schema.Scripts)
-                if (script.Syntax == Syntax.Generic || script.Syntax == Syntax)
-                    Create(script);
+                Create(script);
         }
 
         public virtual void Create(Table table)
         {
             int i, n;
-            Writer.Write(CreateTableFormatString, Resolver.Escape(table.Name), table.Comment);
+            Writer.Write(Expand(CreateTableFormatString, Resolver.Escape(table.Name), table.Comment));
             Writer.WriteLine(" (");
 
             //--- Columns ---//
@@ -93,14 +98,14 @@ namespace Acklann.Daterpillar.Compilation
                 column = table.Columns[i];
 
                 Writer.Write(IndentChars);
-                Writer.Write(ColumnFormatString,
+                Writer.Write(Expand(ColumnFormatString,
                     /* 0 */Resolver.Escape(column.Name),
                     /* 1 */Resolver.GetTypeName(column.DataType).WithSpace(),
                     /* 2 */(column.IsNullable ? string.Empty : NotNull).WithSpace(),
-                    /* 3 */(column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
+                    /* 3 */(column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
                     /* 5 */column.Comment.Escape()
-                    );
+                    ));
 
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
             }
@@ -116,9 +121,9 @@ namespace Acklann.Daterpillar.Compilation
                 {
                     Writer.WriteLine(',');
                     Writer.Write(IndentChars);
-                    Writer.Write(string.Format(PrimaryKeyFormatString,
-                        string.Join(", ", pk.Columns.Select(x => $"{Resolver.Escape(x.Name)} {x.Order}"))
-                        ));
+                    Writer.Write(PrimaryKeyFormatString,
+                        string.Join(", ", pk.Columns.Select(x => $"{Resolver.Escape(Expand(x.Name))} {x.Order}"))
+                        );
                     break;
                 }
             }
@@ -133,19 +138,19 @@ namespace Acklann.Daterpillar.Compilation
 
                 Writer.WriteLine(',');
                 Writer.Write(IndentChars);
-                Writer.Write(ForeignKeyFormatString,
+                Writer.Write(Expand(ForeignKeyFormatString,
                     Resolver.Escape(fk.Name),
                     Resolver.Escape(fk.LocalColumn),
                     Resolver.Escape(fk.ForeignTable),
                     Resolver.Escape(fk.ForeignColumn),
                     Resolver.GetActionName(fk.OnUpdate),
                     Resolver.GetActionName(fk.OnDelete)
-                    );
+                    ));
             }
 
             Writer.WriteLine();
             Writer.WriteLine(')');
-            Writer.Write(TableCommentFormatString, table.Comment);
+            Writer.Write(Expand(TableCommentFormatString, table.Comment));
             Writer.WriteLine(';');
             Writer.WriteLine();
 
@@ -156,22 +161,22 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Create(Column column)
         {
-            Writer.Write(CreateColumnFormatString,
+            Writer.Write(Expand(CreateColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
                     Resolver.GetTypeName(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
-                    (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
+                    (column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)).WithSpace(),
                     column.Comment.Escape()
-                );
+                ));
             Writer.WriteLine(";");
             Writer.WriteLine();
         }
 
         public virtual void Create(ForeignKey foreignKey)
         {
-            Writer.Write(CreateForeignKeyFormatString,
+            Writer.Write(Expand(CreateForeignKeyFormatString,
                 /* 0 */Resolver.Escape(foreignKey.Name),
                 /* 1 */Resolver.Escape(foreignKey.Table.Name),
                 /* 2 */Resolver.Escape(foreignKey.LocalColumn),
@@ -179,7 +184,7 @@ namespace Acklann.Daterpillar.Compilation
                 /* 4 */Resolver.Escape(foreignKey.ForeignColumn),
                 /* 5 */Resolver.GetActionName(foreignKey.OnUpdate),
                 /* 6 */Resolver.GetActionName(foreignKey.OnDelete)
-                );
+                ));
             Writer.WriteLine(";");
             Writer.WriteLine();
         }
@@ -189,28 +194,26 @@ namespace Acklann.Daterpillar.Compilation
             var cNames = from c in index.Columns
                          select $"{Resolver.Escape(c.Name)} {c.Order}";
 
-            Writer.Write(CreateIndexFormatString,
+            Writer.Write(Expand(CreateIndexFormatString,
                 (index.IsUnique ? " UNIQUE " : " "),
                 Resolver.Escape(index.Name),
                 Resolver.Escape(index.Table.Name),
                 string.Join(", ", cNames)
-                );
+                ));
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
 
         public virtual void Create(Script script)
         {
-            Writer.WriteLine(script.Content);
-            Writer.WriteLine();
+            if (script.Syntax == Syntax || script.Syntax == Syntax.Generic)
+            {
+                Writer.WriteLine(Expand(script.Content));
+                Writer.WriteLine();
+            }
         }
 
         // ==================== DROP ==================== //
-
-        public virtual void Drop(Schema schema)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public virtual void Drop(Table table)
         {
@@ -256,15 +259,15 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Alter(Column column)
         {
-            Writer.Write(AlterColumnFormatString,
+            Writer.Write(Expand(AlterColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
                     Resolver.GetTypeName(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
-                    (string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
+                    (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
                     column.Comment.Escape()
-                );
+                ));
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
@@ -276,23 +279,35 @@ namespace Acklann.Daterpillar.Compilation
 
         public virtual void Rename(string oldTableName, string newTableName)
         {
-            Writer.Write(RenameTableFormatString,
+            Writer.Write(Expand(RenameTableFormatString,
                 Resolver.Escape(oldTableName),
                 Resolver.Escape(newTableName)
-                );
+                ));
             Writer.WriteLine(';');
             Writer.WriteLine();
         }
 
         public virtual void Rename(Column oldColumn, string newColumnName)
         {
-            Writer.Write(RenameColumnFormatString,
+            Writer.Write(Expand(RenameColumnFormatString,
                     Resolver.Escape(oldColumn.Table.Name),
                     Resolver.Escape(oldColumn.Name),
                     Resolver.Escape(newColumnName)
-                );
+                ));
             Writer.WriteLine(';');
             Writer.WriteLine();
+        }
+
+        // ==================== PROTECTED ==================== //
+
+        protected string Expand(string format, params object[] args)
+        {
+            if (string.IsNullOrEmpty(format)) return string.Empty;
+
+            foreach (DictionaryEntry entry in Variables)
+                format = Regex.Replace(string.Format(format, args), $@"(?i)\$\({entry.Key}\)", entry.Value.ToString());
+
+            return Environment.ExpandEnvironmentVariables(format);
         }
 
         #region IDisposable
@@ -442,6 +457,11 @@ namespace Acklann.Daterpillar.Compilation
 
                 if (wasModified) yield return table;
             }
+        }
+
+        private string GetAutoIncrementValue(Column column)
+        {
+            return (string.Equals(column.Name, "id", StringComparison.OrdinalIgnoreCase) ? $"{PrimaryKey} {AutoIncrement}" : AutoIncrement);
         }
 
         private string GetTab(int n) => string.Concat(Enumerable.Repeat("     ", n));

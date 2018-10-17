@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar.Compilation
         public SQLiteWriter(TextWriter writer) : base(writer, new Resolvers.SQLiteTypeResolver())
         {
             ColumnFormatString = "{0}{1}{2}{3}{4}";
-            AutoIncrement = "PRIMARY KEY AUTOINCREMENT";
+            AutoIncrement = "AUTOINCREMENT";
             CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1}{2}{3}{4}{5}";
             CreateIndexFormatString = "CREATE{0}INDEX IF NOT EXISTS {1} ON {2} ({3})";
             ForeignKeyFormatString = "FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}";

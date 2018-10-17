@@ -19,7 +19,7 @@
       <dataType>int</dataType>
     </column>
 
-    <foreignKey localColumn="SongId" foreignTable="song" foreignColumn="Id" />
+    <foreignKey localColumn="SongId" foreignTable="$(100)" foreignColumn="Id" />
     <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" />
 
     <index type="primary-key">
@@ -28,8 +28,8 @@
     </index>
   </table>
 
-  <table suid="100" name="song">
-    <column name="Id" autoIncrement="true">
+  <table suid="100" name="track">
+    <column name="Id">
       <dataType>int</dataType>
     </column>
 
@@ -37,12 +37,8 @@
       <dataType>varchar</dataType>
     </column>
 
-    <column suid="201" name="Length">
+    <column suid="201" name="Duration">
       <documentation>Get or set the song's length in seconds.</documentation>
-      <dataType>int</dataType>
-    </column>
-
-    <column name="Genre">
       <dataType>int</dataType>
     </column>
 
@@ -66,15 +62,10 @@
       <dataType>int</dataType>
     </column>
 
-    <foreignKey localColumn="Genre" foreignTable="genre" />
     <foreignKey localColumn="PublisherId" foreignTable="publisher" />
 
     <index>
       <columnName>Name</columnName>
-    </index>
-
-    <index>
-      <columnName>Genre</columnName>
     </index>
 
     <index>
@@ -87,8 +78,8 @@
       <dataType scale="32">varchar</dataType>
     </column>
 
-    <column name="Bio">
-      <dataType>text</dataType>
+    <column name="Bio" nullable="true" default="''">
+      <dataType scale="512">varchar</dataType>
     </column>
 
     <column name="Id" autoIncrement="true">
@@ -98,27 +89,13 @@
     <column name="DOB">
       <dataType>dateTime</dataType>
     </column>
-  </table>
-
-  <table name="genre">
-    <column name="Id">
-      <dataType>int</dataType>
-    </column>
-
-    <column name="Name">
-      <dataType>varchar</dataType>
-    </column>
-
-    <index unique="true">
-      <columnName>Name</columnName>
-    </index>
 
     <index type="primary-key">
       <columnName>Id</columnName>
     </index>
   </table>
 
-  <table name="publisher">
+  <table name="publisher" suid="116">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
     </column>
@@ -132,6 +109,41 @@
     </column>
   </table>
 
+  <script name="help">
+    <![CDATA[
+    -- CHECKS:
+    -- * Create [Ablum] table.
+    -- * Create [song].[PublisherId] column, index and foreign-key.
+    -- * Drop [Genre] table.
+    -- * Drop [song].[Genre] column, index and foreign-key.
+    -- * Rename [song] to track.
+    -- * Rename [song].[Length] column.
+    -- * Alter [artist].[Bio] column.
+    -- * Syntax specific script was added.
+    -- * Toggle [artist] and [song] auto-increment.
+    ]]>
+  </script>
+
+  <script beforeTable="116">
+    <![CDATA[-- Before table works.]]>
+  </script>
+
+  <script name="fix-1" afterTable="116">
+    <![CDATA[INSERT INTO $(116) (Name) VALUES ('OVO'), ('UMG');]]>
+  </script>
+
+  <script name="target" syntax="MySQL">
+    <![CDATA[-- If you're reading this, the syntax is MySQL.]]>
+  </script>
+
+  <script name="target" syntax="TSQL">
+    <![CDATA[-- If you're reading this, the syntax is TSQL.]]>
+  </script>
+
+  <script name="target" syntax="SQLite">
+    <![CDATA[-- If you're reading this, the syntax is SQLite.]]>
+  </script>
+
   <script name="seed-1">
     <![CDATA[
 -- Seed-Data
@@ -139,12 +151,5 @@
 INSERT INTO genre (Id, Name)
 VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
 ]]>
-  </script>
-
-  <script name="help">
-    <![CDATA[
-    -- CHECKS:
-    -- (1) Create [Ablum] was created.
-    ]]>
   </script>
 </schema>

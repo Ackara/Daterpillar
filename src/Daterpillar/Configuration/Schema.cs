@@ -408,7 +408,8 @@ namespace Acklann.Daterpillar.Configuration
                 clone.Tables.Add(copy);
             }
 
-            foreach (var script in Scripts) clone.Merge(script);
+            foreach (Script script in Scripts)
+                clone.Scripts.Add(script.Clone());
 
             return clone;
         }
@@ -441,20 +442,6 @@ namespace Acklann.Daterpillar.Configuration
                 }
 
             return null;
-        }
-
-        internal void Merge(Script right)
-        {
-            foreach (Script left in Scripts)
-            {
-                if (left?.Name?.Equals(right.Name, StringComparison.OrdinalIgnoreCase) ?? false)
-                {
-                    return;
-                }
-            }
-
-            if (string.IsNullOrEmpty(right.Content) == false)
-                Scripts.Add(right);
         }
 
         private void LinkChildNodes()

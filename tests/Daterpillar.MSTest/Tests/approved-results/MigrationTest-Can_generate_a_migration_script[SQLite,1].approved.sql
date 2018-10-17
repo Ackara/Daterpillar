@@ -37,26 +37,12 @@ CREATE INDEX IF NOT EXISTS [song__Genre_index] ON [song] ([Genre] ASC);
 
 CREATE TABLE [artist] (
 	[Name] VARCHAR(32) NOT NULL,
-	[Bio] TEXT NOT NULL DEFAULT '',
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	[DOB] DATETIME NOT NULL
+	[Bio] TEXT NOT NULL,
+	[Id] INTEGER NOT NULL,
+	[DOB] DATETIME NOT NULL,
+	PRIMARY KEY ([Id] ASC)
 )
 ;
-
--- Creating the album table
-
-CREATE TABLE [album] (
-	[Name] VARCHAR(255) NOT NULL,
-	[Year] INTEGER NOT NULL,
-	[ArtistId] INTEGER NOT NULL,
-	[SongId] INTEGER NOT NULL,
-	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
-	FOREIGN KEY ([SongId]) REFERENCES [song]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
-)
-;
-
--- End --
 
 
 -- Seed-Data
@@ -64,6 +50,8 @@ CREATE TABLE [album] (
 INSERT INTO genre (Id, Name)
 VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
 
+
+-- If you're reading this it means multiple scrips can be used.
 
 
 -- Seed-Data
@@ -74,9 +62,9 @@ VALUES
 ('Survival', 'Drake', 'Scorpion', '1', '1', '136')
 ;
 
-INSERT INTO artist (Name, Bio, DOB)
+INSERT INTO artist (Id, Name, Bio, DOB)
 VALUES
-('Drake', 'Canadian-black-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
+(6, 'Drake', 'Canadian-black-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
 ;
     
 

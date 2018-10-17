@@ -56,13 +56,17 @@
       <dataType>text</dataType>
     </column>
 
-    <column name="Id" autoIncrement="true">
+    <column name="Id">
       <dataType>int</dataType>
     </column>
 
     <column name="DOB">
       <dataType>dateTime</dataType>
     </column>
+
+    <index type="primary-key">
+      <columnName>Id</columnName>
+    </index>
   </table>
 
   <table name="genre">
@@ -90,5 +94,9 @@
 INSERT INTO genre (Id, Name)
 VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
 ]]>
+  </script>
+
+  <script name="message">
+    <![CDATA[-- If you're reading this it means multiple scrips can be used.]]>
   </script>
 </schema>

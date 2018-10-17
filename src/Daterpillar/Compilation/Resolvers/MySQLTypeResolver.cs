@@ -17,7 +17,8 @@ namespace Acklann.Daterpillar.Compilation.Resolvers
 
         public override string ExpandVariables(string name)
         {
-            return Regex.Replace(name, Placeholder.NOW, "CURRENT_TIMESTAMP");
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            else return Regex.Replace(name, Placeholder.NOW, "CURRENT_TIMESTAMP");
         }
 
         /// <summary>

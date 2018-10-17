@@ -56,12 +56,14 @@ namespace Acklann.Daterpillar.Compilation
         {
             int weight = 0;
 
+            
+
             if (Action == SqlAction.Create) weight += 1;
             else if (Action == SqlAction.Drop) weight += 2;
 
-            if (Value is Index) weight += 2;
-            else if (Value is ForeignKey) weight += 1;
-            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is Column) weight = 5;
+            if (Value is Index) weight += 1;
+            else if (Value is ForeignKey) weight += 2;
+            else if ((Action == SqlAction.Create || /* RENAME */(Action == SqlAction.Alter && string.Equals(OldValue?.GetName(), NewValue?.GetName()) == false)) && Value is Column) weight += 4;
 
             return weight;
         }

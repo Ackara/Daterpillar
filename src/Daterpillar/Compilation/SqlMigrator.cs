@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Equality;
+using Acklann.Daterpillar.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,7 @@ namespace Acklann.Daterpillar.Compilation
             /// (1) Mark all the tables that need to be created, altered or dropped.
             /// (2) Sort the tables by action then dependency.
             /// (3) Write the SQL statements that will edit the schema to the stream.
+            /// (3.1) Ensure the scripts are inserted at the right location.
 
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (from == null) throw new ArgumentNullException(nameof(from));
@@ -33,26 +35,22 @@ namespace Acklann.Daterpillar.Compilation
 
             /// 1: Analyze
             _discrepancies.Clear();
-            var left = new LinkedList<Table>(from.Clone().Tables);   // old
-            var right = new LinkedList<Table>(to.Clone().Tables);    // new
-            CaptureTablesThatWereModified(left, right);
+            Schema left = from.Clone();   // old
+            Schema right = to.Clone();    // new
+            var scripts = new LinkedList<Script>(CaputureNewScripts(left.Scripts, right.Scripts));
+            CaptureTablesThatWereModified(new LinkedList<Table>(left.Tables), new LinkedList<Table>(right.Tables));
 
             /// 2: Sort
             Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
 
             /// 3: Write
+            AppendVaribales(writer, right);
+
             foreach (Discrepancy change in sortedTables)
-                WriteChanges(writer, change, !shouldOmitDropStatements);
+                WriteChanges(writer, change, scripts, !shouldOmitDropStatements);
 
-            bool noMatchFound = true;
-            foreach (Script newScript in to.Scripts)
-            {
-                foreach (Script oldScript in from.Scripts)
-                    if (string.Equals(oldScript.Name, newScript.Name, StringComparison.OrdinalIgnoreCase) && oldScript.Syntax == newScript.Syntax)
-                        noMatchFound = false;
-
-                if (noMatchFound) writer.Create(newScript);
-            }
+            foreach (Script script in scripts)
+                writer.Create(script);
 
             return sortedTables;
         }
@@ -177,6 +175,22 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
+        private IEnumerable<Script> CaputureNewScripts(IEnumerable<Script> left, IEnumerable<Script> right)
+        {
+            bool noMatchFound;
+            foreach (Script newScript in right)
+            {
+                noMatchFound = true;
+                foreach (Script oldScript in left)
+                {
+                    if (oldScript.Syntax == newScript.Syntax && string.Equals(newScript.Name, oldScript.Name, StringComparison.OrdinalIgnoreCase))
+                        noMatchFound = false;
+                }
+
+                if (noMatchFound) yield return newScript;
+            }
+        }
+
         private IEnumerable<Discrepancy> GetTablesSortedByDependency()
         {
             Discrepancy current;
@@ -225,23 +239,27 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, bool shouldIncludeDropStatements)
+        private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, LinkedList<Script> scripts, bool shouldIncludeDropStatements)
         {
-            string separator = string.Concat(Enumerable.Repeat('-', 50));
+            Script[] associatedScripts = FindAssociatedScripts(scripts, discrepancy, Syntax.CSharp).ToArray();
+            int children = associatedScripts.Length;
+
+            // BEFORE
+            foreach (Script script in associatedScripts)
+                if (script.Before != 0)
+                    writer.Create(script);
+
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    bool hasIndices = ((Table)discrepancy.NewValue).Indecies.Count > 0;
-                    writer.WriteHeaderIf($"Creating the {discrepancy.NewValue.GetName()} table", hasIndices);
+                    children += ((Table)discrepancy.NewValue).Indecies.Count(x=> x.Type == IndexType.Index);
+                    writer.WriteHeaderIf($"Creating the {discrepancy.NewValue.GetName()} table", (children > 0));
                     writer.Create((Table)discrepancy.NewValue);
-                    writer.WriteEndIf(hasIndices);
                     break;
 
                 case SqlAction.Drop:
                     if (shouldIncludeDropStatements)
-                    {
                         writer.Drop((Table)discrepancy.OldValue);
-                    }
                     break;
 
                 case SqlAction.Alter:
@@ -266,6 +284,13 @@ namespace Acklann.Daterpillar.Compilation
                     writer.WriteEndIf(nChanges > 1);
                     break;
             }
+
+            // AFTER
+            foreach (Script script in associatedScripts)
+                if (script.After != 0)
+                    writer.Create(script);
+
+            writer.WriteEndIf(children > 0);
 
             void drillDown(Discrepancy child)
             {
@@ -316,8 +341,64 @@ namespace Acklann.Daterpillar.Compilation
                         }
 
                         if (_columnComparer.Equals(oldC, newColumn) == false)
+                        {
                             writer.Alter(newColumn);
+                            oldC.Overwrite(newColumn);
+                        }
                         break;
+                }
+            }
+        }
+
+        private void AppendVaribales(SqlWriter writer, Schema schema)
+        {
+            foreach (Table table in schema.Tables)
+            {
+                if (table.Id == 0) continue;
+
+                if (writer.Variables.Contains(table.Id))
+                    throw new System.Data.DuplicateNameException(Error.DuplicateSUID(table.Name, table.Id));
+                else
+                    writer.Variables.Add(table.Id, table.Name);
+
+                foreach (Column column in table.Columns)
+                {
+                    if (column.Id == 0) continue;
+
+                    if (writer.Variables.Contains(column.Id))
+                        throw new System.Data.DuplicateNameException(Error.DuplicateSUID($"'{table.Name}'.'{column.Name}'", column.Id, "column"));
+                    else
+                        writer.Variables.Add(column.Id, column.Name);
+                }
+            }
+
+            if (string.IsNullOrEmpty(schema.Name) == false) writer.Variables.Add("schema", schema.Name);
+        }
+
+        private IEnumerable<Script> FindAssociatedScripts(LinkedList<Script> propspects, Discrepancy discrepancy, Syntax syntax)
+        {
+            int suid = (discrepancy.Value as Table).Id;
+            if (suid == 0) yield break;
+
+            Script script;
+            bool matchFound;
+            LinkedListNode<Script> current = propspects.First, prev;
+
+            while (current != null)
+            {
+                script = current.Value;
+
+                matchFound =
+                    (script.Before == suid || script.After == suid)
+                    &&
+                    (script.Syntax == Syntax.Generic || script.Syntax == syntax);
+
+                prev = current;
+                current = current.Next;
+                if (matchFound)
+                {
+                    propspects.Remove(prev);
+                    yield return script;
                 }
             }
         }

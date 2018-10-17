@@ -1,12 +1,20 @@
 file: V1.1__Update.sqlite.sql
 
 
-CREATE TABLE [label] (
+-- Before table works.
+
+-- Creating the publisher table
+
+CREATE TABLE [publisher] (
 	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[Name] VARCHAR(255) NOT NULL,
-	[TotalArtist] INTEGER NOT NULL DEFAULT 0
+	[logo] BLOB
 )
 ;
+
+INSERT INTO publisher (Name) VALUES ('OVO'), ('UMG');
+
+-- End --
 
 -- Modifying the song table
 

@@ -161,6 +161,14 @@
         <xs:attribute name="syntax"
                       type="Syntax"
                       use="optional" />
+
+        <xs:attribute name="beforeTable"
+                      type="SUID"
+                      use="optional" />
+
+        <xs:attribute name="afterTable"
+                      type="SUID"
+                      use="optional" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
@@ -231,11 +239,16 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="SUID">
+    <xs:restriction base="xs:int">
+      <xs:minExclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
   <!-- GROUPS -->
 
   <xs:attributeGroup name="Identifiable">
     <xs:attribute name="suid"
-                  type="xs:int" />
+                  type="SUID" />
 
     <xs:attribute name="name"
                   type="xs:string"

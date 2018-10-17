@@ -15,11 +15,11 @@ namespace Acklann.Daterpillar.Compilation
 
         public TSqlWriter(TextWriter writer, ITypeResolver resolver) : base(writer, resolver)
         {
-            AutoIncrement = "PRIMARY KEY IDENTITY(1,1)";
+            AutoIncrement = "IDENTITY(1,1)";
             DropIndexFormatString = "DROP INDEX {1}.{0}";
             RenameTableFormatString = "EXEC sp_RENAME '{0}', '{1}'";
             CreateColumnFormatString = "ALTER TABLE {0} ADD {1}{2}{3}{4}{5}";
-            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1}{2}{3}{4}";
+            AlterColumnFormatString = "ALTER TABLE {0} ALTER COLUMN {1}{2}{3}";
             RenameColumnFormatString = "EXEC sp_RENAME '{0}.{1}', '{2}', 'COLUMN'";
         }
 
@@ -27,31 +27,34 @@ namespace Acklann.Daterpillar.Compilation
 
         public override void Rename(string oldTableName, string newTableName)
         {
-            Writer.WriteLine(RenameTableFormatString,
+            Writer.WriteLine(Expand(RenameTableFormatString,
                 oldTableName,
                 newTableName
-                );
+                ));
             Writer.WriteLine("GO");
             Writer.WriteLine();
         }
 
         public override void Rename(Column oldColumn, string newColumnName)
         {
-            Writer.WriteLine(RenameColumnFormatString,
+            Writer.WriteLine(Expand(RenameColumnFormatString,
                     oldColumn.Table.Name,
                     oldColumn.Name,
                     newColumnName
-                );
+                ));
             Writer.WriteLine("GO");
             Writer.WriteLine();
         }
 
         public override void Alter(Column column)
         {
-            WriteHeaderIf($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}");
+            WriteHeaderIf(Expand($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}"));
             base.Alter(column);
-            Writer.WriteLine($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};");
-            Writer.WriteLine();
+            if (column.DefaultValue != null)
+            {
+                Writer.WriteLine(Expand($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};"));
+                Writer.WriteLine();
+            }
             WriteEndIf();
         }
     }
