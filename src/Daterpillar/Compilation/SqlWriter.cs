@@ -56,7 +56,7 @@ namespace Acklann.Daterpillar.Compilation
 
         public IDictionary Variables { get; }
 
-        protected abstract Syntax Syntax { get; }
+        public abstract Syntax Syntax { get; }
 
         public void Write(object value)
         {
@@ -87,15 +87,18 @@ namespace Acklann.Daterpillar.Compilation
         public virtual void Create(Table table)
         {
             int i, n;
+            bool notUsingAutoKey = true;
             Writer.Write(Expand(CreateTableFormatString, Resolver.Escape(table.Name), table.Comment));
             Writer.WriteLine(" (");
 
             //--- Columns ---//
+
             Column column;
             n = table.Columns.Count;
             for (i = 0; i < n; i++)
             {
                 column = table.Columns[i];
+                if (column.AutoIncrement && string.Equals(column.Name, "Id", StringComparison.OrdinalIgnoreCase)) notUsingAutoKey = false;
 
                 Writer.Write(IndentChars);
                 Writer.Write(Expand(ColumnFormatString,
@@ -112,19 +115,22 @@ namespace Acklann.Daterpillar.Compilation
 
             //--- Primary Key ---//
 
-            Index pk;
-            n = table.Indecies.Count;
-            for (i = 0; i < n; i++)
+            if (notUsingAutoKey)
             {
-                pk = table.Indecies[i];
-                if (pk.Type == IndexType.PrimaryKey)
+                Index pk;
+                n = table.Indecies.Count;
+                for (i = 0; i < n; i++)
                 {
-                    Writer.WriteLine(',');
-                    Writer.Write(IndentChars);
-                    Writer.Write(PrimaryKeyFormatString,
-                        string.Join(", ", pk.Columns.Select(x => $"{Resolver.Escape(Expand(x.Name))} {x.Order}"))
-                        );
-                    break;
+                    pk = table.Indecies[i];
+                    if (pk.Type == IndexType.PrimaryKey)
+                    {
+                        Writer.WriteLine(',');
+                        Writer.Write(IndentChars);
+                        Writer.Write(PrimaryKeyFormatString,
+                            string.Join(", ", pk.Columns.Select(x => $"{Resolver.Escape(Expand(x.Name))} {x.Order}"))
+                            );
+                        break;
+                    }
                 }
             }
 
@@ -155,6 +161,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
 
             //--- Index ---//
+
             foreach (Index index in table.Indecies.Where(x => x.Type == IndexType.Index))
                 Create(index);
         }
@@ -253,7 +260,7 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== ALTER ==================== //
 
-        public virtual void Alter(Table newTable)
+        public virtual void Alter(Table oldTable, Table newTable)
         {
         }
 
@@ -304,8 +311,9 @@ namespace Acklann.Daterpillar.Compilation
         {
             if (string.IsNullOrEmpty(format)) return string.Empty;
 
+            format = string.Format(format, args);
             foreach (DictionaryEntry entry in Variables)
-                format = Regex.Replace(string.Format(format, args), $@"(?i)\$\({entry.Key}\)", entry.Value.ToString());
+                format = Regex.Replace(format, $@"(?i)\$\({entry.Key}\)", entry.Value.ToString());
 
             return Environment.ExpandEnvironmentVariables(format);
         }

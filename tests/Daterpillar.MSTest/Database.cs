@@ -126,7 +126,7 @@ namespace Acklann.Daterpillar
                     CONSTRAINT [{ObjectName.ServiceFK}] FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
                 );
 
-                CREATE INDEX [service__Subscribers_index] ON [service] (Subscribers);
+                CREATE INDEX [{ObjectName.SubscribersIndex}] ON [service] (Subscribers);
                 ";
                 command.ExecuteNonQuery();
             }
@@ -166,7 +166,7 @@ namespace Acklann.Daterpillar
                     CONSTRAINT `{ObjectName.ServiceFK}` FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
                 );
 
-                CREATE INDEX `service__Subscribers_index` ON `service` (Subscribers);
+                CREATE INDEX `{ObjectName.SubscribersIndex}` ON `service` (Subscribers);
                 ";
                 command.ExecuteNonQuery();
             }
@@ -200,7 +200,7 @@ CREATE TABLE [service] (
     Zombie_fk INTEGER NOT NULL,
     FOREIGN KEY (Zombie_fk) REFERENCES placeholder(Id)
 );
-CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
+CREATE INDEX {ObjectName.SubscribersIndex} ON [service] (Subscribers);
 ";
                 command.ExecuteNonQuery();
             }
@@ -235,7 +235,8 @@ CREATE INDEX service_Subscribers_index ON [service] (Subscribers);
         public struct ObjectName
         {
             public const string
-                ServiceFK = "service_Zombie_fk_TO_placeholder_Id__fk"
+                ServiceFK = "service_Zombie_fk_TO_placeholder_Id__fk",
+                SubscribersIndex = "service__Subscribers_index"
                 ;
         }
 

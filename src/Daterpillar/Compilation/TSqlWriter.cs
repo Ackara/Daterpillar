@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Compilation
             RenameColumnFormatString = "EXEC sp_RENAME '{0}.{1}', '{2}', 'COLUMN'";
         }
 
-        protected override Syntax Syntax => Syntax.TSQL;
+        public override Syntax Syntax => Syntax.TSQL;
 
         public override void Rename(string oldTableName, string newTableName)
         {

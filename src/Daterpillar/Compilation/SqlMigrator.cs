@@ -159,7 +159,7 @@ namespace Acklann.Daterpillar.Compilation
                     }
 
                     /// 1: Drop old objects
-                    if (noMatchFound) discrepancy.Add(SqlAction.Drop, oldI.Value, right);
+                    if (noMatchFound) discrepancy.Add(SqlAction.Drop, oldI.Value, left);
                     oldI = oldI.Next;
                 }
 
@@ -252,7 +252,7 @@ namespace Acklann.Daterpillar.Compilation
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    children += ((Table)discrepancy.NewValue).Indecies.Count(x=> x.Type == IndexType.Index);
+                    children += ((Table)discrepancy.NewValue).Indecies.Count(x => x.Type == IndexType.Index);
                     writer.WriteHeaderIf($"Creating the {discrepancy.NewValue.GetName()} table", (children > 0));
                     writer.Create((Table)discrepancy.NewValue);
                     break;
@@ -266,21 +266,25 @@ namespace Acklann.Daterpillar.Compilation
                     Table oldTable = (Table)discrepancy.OldValue;
                     Table newTable = (Table)discrepancy.NewValue;
                     int nChanges = discrepancy.Children.Count;
-                    writer.WriteHeaderIf($"Modifying the {oldTable.Name} table", (nChanges > 1));
 
                     if (string.Equals(oldTable.Name, newTable.Name, StringComparison.OrdinalIgnoreCase) == false)
                     {
                         writer.Rename(oldTable, newTable);
-                        RenameForeignKeysReferencedTable(oldTable, newTable.Name);
+                        RenameForeignKeysReferencedTable(oldTable.Schema, newTable.Name);
                         oldTable.Name = newTable.Name;
                     }
 
-                    if (string.Equals(oldTable.Comment, newTable.Comment) == false)
-                        writer.Alter(newTable);
+                    /// NOTE: Because SQLite do not support native functions for modifying constraints.
+                    /// I have to reconstruct the entire table.
+                    if ((writer.Syntax == Syntax.SQLite && discrepancy.Children.IsNotEmpty()) || string.Equals(oldTable.Comment, newTable.Comment) == false)
+                    {
+                        writer.Alter(oldTable, newTable);
+                        break;
+                    }
 
-                    foreach (Discrepancy item in discrepancy.Children)
-                        drillDown(item);
-
+                    writer.WriteHeaderIf($"Modifying the {oldTable.Name} table", (nChanges > 1));
+                    foreach (Discrepancy child in discrepancy.Children)
+                        drillDown(child);
                     writer.WriteEndIf(nChanges > 1);
                     break;
             }
@@ -296,6 +300,11 @@ namespace Acklann.Daterpillar.Compilation
             {
                 switch (child.Value)
                 {
+                    /// HACK #004
+                    /// Because SQLite do not have native functions to modify constraints I have to make sure
+                    /// the constraint's table points to the old-table. Why? Because I will have to rebuild the
+                    /// table
+
                     // CREATE
 
                     case Column newColumn when child.Action == SqlAction.Create:
@@ -422,11 +431,11 @@ namespace Acklann.Daterpillar.Compilation
             return string.Equals(left.GetName(), right.GetName(), StringComparison.OrdinalIgnoreCase);
         }
 
-        private void RenameForeignKeysReferencedTable(Table oldTable, string newName)
+        private void RenameForeignKeysReferencedTable(Schema oldSchema, string newName)
         {
-            foreach (ForeignKey fk in oldTable.Schema.GetForeignKeys())
+            foreach (ForeignKey fk in oldSchema.GetForeignKeys())
             {
-                if (string.Equals(oldTable.Name, fk.ForeignTable, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(oldSchema.Name, fk.ForeignTable, StringComparison.OrdinalIgnoreCase))
                 {
                     fk.ForeignTable = newName;
                 }

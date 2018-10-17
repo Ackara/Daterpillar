@@ -16,131 +16,61 @@ INSERT INTO publisher (Name) VALUES ('OVO'), ('UMG');
 
 -- End --
 
--- Modifying the song table
-
 ALTER TABLE [song] RENAME TO [track];
 
-ALTER TABLE [track] ADD COLUMN [Synced] BOOLEAN NOT NULL DEFAULT 0;
+-- Modifying the [track] table.
 
---      Removing [song_Genre_TO_genre_Id__fk]
-
+PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
 CREATE TABLE [_track_old] AS SELECT * FROM [track];
 DROP TABLE [track];
 CREATE TABLE [track] (
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	[Name] VARCHAR(255) NOT NULL,
-	[Length] INTEGER NOT NULL,
-	[Genre] INTEGER NOT NULL,
-	[Disc] INTEGER NOT NULL DEFAULT 1,
-	[Track] INTEGER NOT NULL,
-	[Artist] VARCHAR(255) NOT NULL,
-	[Album] VARCHAR(255) NOT NULL,
-	[Synced] BOOLEAN NOT NULL DEFAULT 0
-)
-;
-
-CREATE INDEX IF NOT EXISTS [song__Name_index] ON [track] ([Name] ASC);
-
-CREATE INDEX IF NOT EXISTS [song__Genre_index] ON [track] ([Genre] ASC);
-
-INSERT INTO [track] SELECT * FROM [_track_old];
-DROP TABLE [_track_old];
-COMMIT;
-
---      End      --
-
-DROP INDEX [song__Name_index];
-
-DROP INDEX [song__Genre_index];
-
---      Renaming [track].[Length] to Duration
-
-BEGIN TRANSACTION;
-CREATE TABLE [_track_old] AS SELECT * FROM [track];
-DROP TABLE [track];
-CREATE TABLE [track] (
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[Id] INTEGER NOT NULL,
 	[Name] VARCHAR(255) NOT NULL,
 	[Duration] INTEGER NOT NULL,
-	[Genre] INTEGER NOT NULL,
 	[Disc] INTEGER NOT NULL DEFAULT 1,
 	[Track] INTEGER NOT NULL,
 	[Artist] VARCHAR(255) NOT NULL,
 	[Album] VARCHAR(255) NOT NULL,
-	[Synced] BOOLEAN NOT NULL DEFAULT 0,
-	FOREIGN KEY ([Genre]) REFERENCES [genre]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
-)
-;
-
-CREATE INDEX IF NOT EXISTS [song__Name_index] ON [track] ([Name] ASC);
-
-CREATE INDEX IF NOT EXISTS [song__Genre_index] ON [track] ([Genre] ASC);
-
-INSERT INTO [track] SELECT * FROM [_track_old];
-DROP TABLE [_track_old];
-COMMIT;
-
---      End      --
-
---      Modifying [track].[Duration]
-
-BEGIN TRANSACTION;
-CREATE TABLE [_track_old] AS SELECT * FROM [track];
-DROP TABLE [track];
-CREATE TABLE [track] (
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	[Name] VARCHAR(255) NOT NULL,
-	[Duration] INTEGER NOT NULL DEFAULT 0,
-	[Genre] INTEGER NOT NULL,
-	[Track] INTEGER NOT NULL,
-	[Synced] BOOLEAN NOT NULL DEFAULT 0,
-	[Artist] VARCHAR(255) NOT NULL,
-	[Album] VARCHAR(255) NOT NULL,
-	[Disc] INTEGER NOT NULL DEFAULT 1
+	[PublisherId] INTEGER NOT NULL DEFAULT 1,
+	FOREIGN KEY ([PublisherId]) REFERENCES [publisher]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 )
 ;
 
 CREATE INDEX IF NOT EXISTS [track__Name_index] ON [track] ([Name] ASC);
 
-INSERT INTO [track] SELECT * FROM [_track_old];
+CREATE INDEX IF NOT EXISTS [track__PublisherId_index] ON [track] ([PublisherId] ASC);
+
+INSERT INTO [track] ([Id], [Name], [Duration], [Disc], [Track], [Artist], [Album]) SELECT [Id], [Name], [Length], [Disc], [Track], [Artist], [Album] FROM [_track_old];
 DROP TABLE [_track_old];
 COMMIT;
-
---      End      --
-
-CREATE INDEX IF NOT EXISTS [track__Name_index] ON [track] ([Name] ASC);
+PRAGMA foreign_keys=on;
 
 -- End --
 
--- Modifying the album table
+-- Modifying the [artist] table.
 
---      Removing [album_SongId_TO_song_Id__fk]
-
+PRAGMA foreign_keys=off;
 BEGIN TRANSACTION;
-CREATE TABLE [_album_old] AS SELECT * FROM [album];
-DROP TABLE [album];
-CREATE TABLE [album] (
-	[Name] VARCHAR(255) NOT NULL,
-	[Year] INTEGER NOT NULL,
-	[ArtistId] INTEGER NOT NULL,
-	[SongId] INTEGER NOT NULL,
-	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
-	FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
+CREATE TABLE [_artist_old] AS SELECT * FROM [artist];
+DROP TABLE [artist];
+CREATE TABLE [artist] (
+	[Name] VARCHAR(32) NOT NULL,
+	[Bio] VARCHAR(512) DEFAULT '',
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[DOB] DATETIME NOT NULL
 )
 ;
 
-INSERT INTO [album] SELECT * FROM [_album_old];
-DROP TABLE [_album_old];
+INSERT INTO [artist] ([Name], [Bio], [Id], [DOB]) SELECT [Name], [Bio], [Id], [DOB] FROM [_artist_old];
+DROP TABLE [_artist_old];
 COMMIT;
+PRAGMA foreign_keys=on;
 
---      End      --
+-- End --
 
---      Creating album_SongId_TO_track_Id__fk
+DROP TABLE [genre];
 
-BEGIN TRANSACTION;
-CREATE TABLE [_album_old] AS SELECT * FROM [album];
-DROP TABLE [album];
 CREATE TABLE [album] (
 	[Name] VARCHAR(255) NOT NULL,
 	[Year] INTEGER NOT NULL,
@@ -148,26 +78,22 @@ CREATE TABLE [album] (
 	[SongId] INTEGER NOT NULL,
 	PRIMARY KEY ([SongId] ASC, [ArtistId] ASC),
 	FOREIGN KEY ([SongId]) REFERENCES [track]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY ([SongId]) REFERENCES [track]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
+	FOREIGN KEY ([ArtistId]) REFERENCES [artist]([Id]) ON UPDATE CASCADE ON DELETE RESTRICT
 )
 ;
 
-INSERT INTO [album] SELECT * FROM [_album_old];
-DROP TABLE [_album_old];
-COMMIT;
 
---      End      --
-
--- End --
-
-DROP TABLE [genre];
-
-
--- Seed-Data
--- -----------------------------------------------
-INSERT INTO label (Name)
-VALUES ('Independent'), ('YMCMB'), ('OVO'), ('UMG'), ('Atlantic Records');
-;
+    -- CHECKS:
+    -- * Create [Ablum] table.
+    -- * Create [song].[PublisherId] column, index and foreign-key.
+    -- * Drop [Genre] table.
+    -- * Drop [song].[Genre] column, index and foreign-key.
+    -- * Rename [song] to track.
+    -- * Rename [song].[Length] column.
+    -- * Alter [artist].[Bio] column.
+    -- * Syntax specific script was added.
+    -- * Toggle [artist] and [song] auto-increment.
     
+
+-- If you're reading this, the syntax is SQLite.
 

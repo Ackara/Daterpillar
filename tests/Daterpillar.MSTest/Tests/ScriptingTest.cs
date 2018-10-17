@@ -73,8 +73,6 @@ namespace Acklann.Daterpillar.Tests
             using (var file = File.OpenWrite(scriptFile))
             using (var writer = factory.CreateInstance(syntax, file))
             {
-                System.Diagnostics.Debug.WriteLine($"using {writer.GetType().Name}");
-
                 schema.Add(genre, song, album);
                 schema.Add(virus, generic, genreSeed, songSeed, albumSeed);
                 writer.Create(schema);
@@ -149,6 +147,7 @@ namespace Acklann.Daterpillar.Tests
             var factory = new SqlWriterFactory();
 
             var service = schema.Tables[2];
+            var oldTable = service.Clone();
 
             // Act
             TestData.CreateDirectory(scriptFile);
@@ -169,7 +168,7 @@ namespace Acklann.Daterpillar.Tests
                 writer.Alter(replacement);
 
                 service.Comment = "Represents a streaming service.";
-                writer.Alter(service);
+                writer.Alter(oldTable, service);
             }
 
             TestScript(scriptFile, syntax, out string sql, out bool generatedSqlIsExecutable);

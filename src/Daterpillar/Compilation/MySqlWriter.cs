@@ -15,17 +15,17 @@ namespace Acklann.Daterpillar.Compilation
 
         public MySqlWriter(TextWriter writer, ITypeResolver resolver) : base(writer, resolver)
         {
-            TableCommentFormatString = "COMMENT '{0}'";
             AutoIncrement = "AUTO_INCREMENT";
+            TableCommentFormatString = "COMMENT '{0}'";
             DropIndexFormatString = "DROP INDEX {0} ON {1}";
-            DropForeignKeyFormatString = "ALTER TABLE {0} DROP FOREIGN KEY {1}";
             ColumnFormatString = "{0}{1}{2}{3}{4} COMMENT '{5}'";
+            DropForeignKeyFormatString = "ALTER TABLE {0} DROP FOREIGN KEY {1}";
             CreateColumnFormatString = "ALTER TABLE {0} ADD COLUMN {1}{2}{3}{4}{5} COMMENT '{6}'";
             AlterColumnFormatString = "ALTER TABLE {0} CHANGE COLUMN {1} {1}{2}{3}{4}{5} COMMENT '{6}'";
             RenameColumnFormatString = "ALTER TABLE {0} CHANGE COLUMN {1} {2}{3}{4}{5}{6} COMMENT '{7}'";
         }
 
-        protected override Syntax Syntax => Syntax.MySQL;
+        public override Syntax Syntax => Syntax.MySQL;
 
         public override void Rename(Column oldColumn, string newColumnName)
         {
