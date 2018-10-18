@@ -16,9 +16,9 @@ INSERT INTO publisher (Name) VALUES ('OVO'), ('UMG');
 
 -- End --
 
--- Modifying the song table
-
 ALTER TABLE `song` RENAME TO `track`;
+
+-- Modifying the track table
 
 ALTER TABLE `track` ADD COLUMN `PublisherId` INT NOT NULL DEFAULT 1 COMMENT '';
 

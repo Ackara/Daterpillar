@@ -55,14 +55,14 @@ BEGIN TRANSACTION;
 CREATE TABLE [_artist_old] AS SELECT * FROM [artist];
 DROP TABLE [artist];
 CREATE TABLE [artist] (
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[Name] VARCHAR(32) NOT NULL,
 	[Bio] VARCHAR(512) DEFAULT '',
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[DOB] DATETIME NOT NULL
 )
 ;
 
-INSERT INTO [artist] ([Name], [Bio], [Id], [DOB]) SELECT [Name], [Bio], [Id], [DOB] FROM [_artist_old];
+INSERT INTO [artist] ([Id], [Name], [Bio], [DOB]) SELECT [Id], [Name], [Bio], [DOB] FROM [_artist_old];
 DROP TABLE [_artist_old];
 COMMIT;
 PRAGMA foreign_keys=on;

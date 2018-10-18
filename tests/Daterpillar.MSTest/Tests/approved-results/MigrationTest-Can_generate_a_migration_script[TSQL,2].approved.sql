@@ -23,11 +23,7 @@ GO
 
 ALTER TABLE [track] ADD [PublisherId] INT NOT NULL DEFAULT 1;
 
---      Modifying [track].[Id]
-
 ALTER TABLE [track] ALTER COLUMN [Id] INT NOT NULL;
-
---      End      --
 
 EXEC sp_RENAME 'track.Length', 'Duration', 'COLUMN'
 GO
@@ -59,7 +55,6 @@ ALTER TABLE [artist] ADD DEFAULT '' FOR [Bio];
 --      End      --
 
 ALTER TABLE [artist] ALTER COLUMN [Id] INT NOT NULL;
-
 
 -- End --
 

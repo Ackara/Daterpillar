@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Commands
         public int Execute()
         {
             if (File.Exists(TargetAssembly) == false)
-                return Log.CouldNotFound(TargetAssembly, "assembly");
+                return Log.CouldNotFind(TargetAssembly, "assembly");
 
             Schema schema = Compilation.SchemaConvert.ToSchema(TargetAssembly);
             schema.Save(Path.ChangeExtension(TargetAssembly, ".schema.xml"));

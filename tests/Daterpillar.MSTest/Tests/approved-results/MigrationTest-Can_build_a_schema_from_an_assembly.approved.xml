@@ -14,7 +14,7 @@
       <dataType>int</dataType>
     </column>
     <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="SongId" foreignTable="song" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="SongId" foreignTable="$(100)" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
     <index type="primary-key">
       <columnName order="asc">ArtistId</columnName>
       <columnName order="asc">SongId</columnName>

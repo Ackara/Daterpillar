@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Diffa;
+using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
@@ -75,8 +76,8 @@ namespace Acklann.Daterpillar.Tests
 
         [DataTestMethod]
         [DataRow(Syntax.TSQL)]
-        //[DataRow(Syntax.MySQL)]
-        //[DataRow(Syntax.SQLite)]
+        [DataRow(Syntax.MySQL)]
+        [DataRow(Syntax.SQLite)]
         public void Can_generate_a_migration_script(Syntax syntax)
         {
             // Arrange
@@ -87,17 +88,19 @@ namespace Acklann.Daterpillar.Tests
             var activeFile = Path.Combine(baseDir, "active.schema.xml");
 
             var sut = new Commands.MigrateCommand(snapshotFile, activeFile, migrationsDir, "1.1",
-                fileNameFormat: "V{0}__Update.{2}.sql",
                 syntax: syntax,
+                fileNameFormat: "V{0}__Update.{2}.sql",
                 omitDropStatements: false
                 );
 
-            // Act
-            // Case 1: First migration; left (snapshot) is empty.
             if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);
             Directory.CreateDirectory(baseDir);
+
+            // Act
+            // Case 1: First migration; left (snapshot) is empty.
             TestData.GetMusicXML().CopyTo(activeFile);
             TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
+
             if (Schema.TryLoad(activeFile, out Schema schema, out string errorMsg) == false)
                 Assert.Fail(errorMsg);
 
@@ -146,6 +149,47 @@ namespace Acklann.Daterpillar.Tests
             exitCode1.ShouldBe(0, "The 1st migration failed.");
             exitCode2.ShouldBe(0, "The 2nd migration failed.");
             exitCode3.ShouldBe(0, "The 3rd migration failed.");
+        }
+
+        //[DataTestMethod]
+        [DataRow(Syntax.SQLite, null, null, null)]
+        [Use(typeof(FileReporter), doNotPauseIfTestFails: true)]
+        public void Can_generate_a_migration_script_from(Syntax syntax, string activeFile, string snapshotFile, string connectionStirng)
+        {
+            // Arrange
+            var baseDir = Path.Combine(Path.GetTempPath(), "dtp-debug-env");
+            var migrationDir = Path.Combine(baseDir, "migrations");
+            var oldSchema = Path.Combine(baseDir, "old.schema.xml");
+            var newSchema = Path.Combine(baseDir, "new.schema.xml");
+
+            var sut = new Commands.MigrateCommand(
+                oldSchema,
+                newSchema,
+                migrationDir,
+                "1.1",
+                syntax);
+
+            // Act
+            if (Directory.Exists(baseDir)) Directory.Delete(baseDir, true);
+            Directory.CreateDirectory(baseDir);
+
+            if (File.Exists(snapshotFile))
+                File.Copy(snapshotFile, oldSchema, true);
+
+            if (File.Exists(activeFile))
+                File.Copy(activeFile, newSchema, true);
+            else
+                File.WriteAllText(newSchema, (new Schema().ToString()));
+
+            var exitCode = sut.Execute();
+
+            using (var db = new Database(syntax, connectionStirng))
+            {
+                bool pass = db.TryExecute("", out string errorMsg);
+            }
+
+            // Assert
+            exitCode.ShouldBe(0);
         }
     }
 }

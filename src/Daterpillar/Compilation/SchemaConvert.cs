@@ -61,7 +61,7 @@ namespace Acklann.Daterpillar.Compilation
                                                 m.IsDefined(typeof(SqlIgnoreAttribute)) == false
                                                select m).ToArray();
 
-            var table = new Table(GetName(type)) { Id = GetId(type) };
+            var table = new Table(type.GetName()) { Id = type.GetId() };
             foreach (MemberInfo member in members)
             {
                 ExtractColumnInfo(table, member, documentionPath);
@@ -73,71 +73,29 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== HELPER ==================== //
 
-        internal static int GetId(MemberInfo member)
-        {
-            if (member.GetCustomAttribute(typeof(SUIDAttribute)) is SUIDAttribute attr)
-            {
-                return attr.Id;
-            }
-
-            return 0;
-        }
-
-        internal static string GetName(Type type)
-        {
-            var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
-            var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
-            if (string.IsNullOrEmpty(name))
-            {
-                int genericTypeDelimeter = type.Name.IndexOf('`');
-                name = (genericTypeDelimeter > 0 ? type.Name.Substring(genericTypeDelimeter) : type.Name);
-            }
-
-            return name;
-        }
-
-        internal static string GetName(MemberInfo member)
-        {
-            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
-            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
-        }
-
-        internal static string GetEnumName(MemberInfo member)
-        {
-            var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
-            var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
-            return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
-        }
-
         private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
         {
-            var table = new Table(GetName(type),
+            var table = new Table(type.GetName(),
                 new Column("Id", new DataType(SchemaType.INT)),
                 new Column("Name", new DataType(SchemaType.VARCHAR)),
 
                 new Index(IndexType.PrimaryKey, new ColumnName("Id")),
                 new Index(IndexType.Index, true, new ColumnName("Name"))
-                );
+                )
+            { Id = type.GetId() };
             schema.Add(table);
 
             var script = new Script() { Name = $"{table.Name} seed-data" };
             var values = new StringBuilder();
-            values.AppendLine($"INSERT INTO {table.Name} (Id, Name) VALUES ");
-            foreach (var member in type.GetMembers().Where(m => m.MemberType == MemberTypes.Field))
+            values.AppendLine($"INSERT INTO {table.GetIdOrName()} (Id, Name) VALUES ");
+            foreach (MemberInfo member in type.GetMembers().Where(m => m.MemberType == MemberTypes.Field))
             {
                 try
                 {
                     object val = Enum.Parse(type, member.Name);
                     if (val != null)
                     {
-                        System.Diagnostics.Debug.WriteLine((int)val);
-                        System.Diagnostics.Debug.WriteLine(GetEnumName(member));
-                        values.AppendLine($"('{(int)val}', '{GetEnumName(member)}'),");
+                        values.AppendLine($"('{(int)val}', '{member.GetEnumName()}'),");
                     }
                 }
                 catch (ArgumentException) { }
@@ -158,8 +116,8 @@ namespace Acklann.Daterpillar.Compilation
             if (string.IsNullOrEmpty(column.DefaultValue)) column.DefaultValue = null;
             column.AutoIncrement = (columnAttr?.AutoIncrement ?? false);
             column.IsNullable = (columnAttr?.Nullable ?? false);
-            column.Name = GetName(member);
-            column.Id = GetId(member);
+            column.Name = member.GetName();
+            column.Id = member.GetId();
             column.Table = table;
 
             var dataType = new DataType(columnAttr?.TypeName);
@@ -180,7 +138,7 @@ namespace Acklann.Daterpillar.Compilation
             DataTypeAttribute typeAttr = member.GetCustomAttribute(typeof(DataTypeAttribute)) as DataTypeAttribute;
             column.DataType = (typeAttr == null ? dataType : typeAttr.ToDataType());
 
-            ExtractForiegnKeyInfo(table, member, column.Name);
+            ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
 
         private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
@@ -193,12 +151,12 @@ namespace Acklann.Daterpillar.Compilation
                 var referencedType = Type.GetType(fkAttr.ForeignTable);
                 if (referencedType != null)
                 {
-                    foreignTable = GetName(referencedType);
+                    foreignTable = referencedType.GetIdOrName();
 
                     MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
                     if (referencedField != null)
                     {
-                        foreignColumn = GetName(referencedField);
+                        foreignColumn = referencedField.GetIdOrName();
                     }
                 }
 
@@ -219,7 +177,7 @@ namespace Acklann.Daterpillar.Compilation
             var indecies = new List<(string, IndexAttribute)>();
             foreach (MemberInfo member in members)
             {
-                string columnName = GetName(member);
+                string columnName = member.GetIdOrName();
 
                 if (member.GetCustomAttribute(typeof(IndexAttribute)) is IndexAttribute idx)
                 {

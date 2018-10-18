@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar.Commands
     public class MigrateCommand : ICommand
     {
         [UseConstructor]
-        public MigrateCommand(string oldSchema, string newSchema, string migrationsDirectory, string version, string fileNameFormat = "V{0}__Update.sql", Syntax syntax = Syntax.Generic, bool omitDropStatements = false)
+        public MigrateCommand(string oldSchema, string newSchema, string migrationsDirectory, string version, Syntax syntax = Syntax.Generic, string fileNameFormat = "V{0}__Update.sql", bool omitDropStatements = false)
         {
             Syntax = syntax;
             Version = version.Trim();
@@ -47,7 +47,7 @@ namespace Acklann.Daterpillar.Commands
 
         public int Execute()
         {
-            if (File.Exists(NewSchema) == false) return Log.CouldNotFound(NewSchema, "schema");
+            if (File.Exists(NewSchema) == false) return Log.CouldNotFind(NewSchema, "schema");
 
             // Step 1: Merge (if any) referenced schema files into a new-schema.
             if (Schema.TryLoad(NewSchema, out Schema right, out string errorMsg))
@@ -57,26 +57,28 @@ namespace Acklann.Daterpillar.Commands
 
             if (right.IsEmpty)
             {
+
                 Log.PrintError($"The schema is empty at '{NewSchema}'.", ConsoleColor.Yellow);
                 return 204;
             }
 
-            // Step 2: Generate SQL migration script using the old and new schema.
-            string dir = Path.GetDirectoryName(OldSchema);
-            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-            if (File.Exists(OldSchema) == false) File.WriteAllText(OldSchema, new Schema().ToString());
+            // Step 2: Generate SQL migration script using the delta between the old and new schema.
+            string dir;
+            if (File.Exists(OldSchema) == false)
+            {
+                dir = Path.GetDirectoryName(OldSchema);
+                if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                File.WriteAllText(OldSchema, new Schema().ToString());
+            }
 
             if (Schema.TryLoad(OldSchema, out Schema left, out errorMsg) == false)
                 return Log.NotWellFormedError(OldSchema, errorMsg);
-            else
-            {
-                string outFile = Path.Combine(MigrationsDirectory, string.Format(FileNameFormat, Version, DateTime.Now, Syntax.ToString().ToLowerInvariant()).Trim());
-                dir = Path.GetDirectoryName(outFile);
-                if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                var migrator = new SqlMigrator();
-                migrator.GenerateMigrationScript(outFile, left, right, Syntax, OmitDropStatements);
-            }
+            string scriptFile = Path.Combine(MigrationsDirectory, string.Format(FileNameFormat, Version, DateTime.Now, Syntax.ToString().ToLowerInvariant()).Trim());
+            dir = Path.GetDirectoryName(scriptFile);
+            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+            (new SqlMigrator()).GenerateMigrationScript(scriptFile, left, right, Syntax, OmitDropStatements);
 
             return 0;
         }

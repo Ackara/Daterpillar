@@ -4,7 +4,7 @@ namespace Acklann.Daterpillar
 {
     internal static class Log
     {
-        public static int CouldNotFound(string file, string context = "")
+        public static int CouldNotFind(string file, string context = "")
         {
             string msg = string.Format("[ERROR] Could not find{1}file at '{0}'.", file, $" {context} ");
 

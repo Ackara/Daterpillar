@@ -10,30 +10,30 @@ namespace Acklann.Daterpillar
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     internal sealed class Database : IDisposable
     {
-        public Database(Syntax syntax, string name = nameof(Daterpillar))
+        public Database(Syntax syntax, string name = null, string connectionString = null)
         {
             _syntax = syntax;
-            _databaseName = name;
+            _databaseName = name?? nameof(Daterpillar);
             var config = JObject.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "connections.json")));
-            string connectionString = config.SelectToken($"{syntax}.connectionString")?.Value<string>();
+            string connStr = connectionString ?? config.SelectToken($"{syntax}.connectionString")?.Value<string>();
             System.Data.Common.DbConnectionStringBuilder builder;
             switch (syntax)
             {
                 case Syntax.TSQL:
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                        connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                        connStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master", ConnectTimeout = 5 };
+                    builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connStr) { InitialCatalog = "master", ConnectTimeout = 5 };
                     _connection = new System.Data.SqlClient.SqlConnection(builder.ToString());
                     break;
 
                 case Syntax.MySQL:
-                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = "sys", ConnectionTimeout = 5 };
+                    builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connStr) { Database = "sys", ConnectionTimeout = 5 };
                     _connection = new MySql.Data.MySqlClient.MySqlConnection(builder.ToString());
                     break;
 
                 case Syntax.SQLite:
-                    _dbFile = Path.Combine(Path.GetTempPath(), $"{name}.sqlite.db");
+                    _dbFile = Path.Combine(Path.GetTempPath(), $"{_databaseName}.sqlite.db");
                     builder = new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = _dbFile };
                     _connection = new System.Data.SQLite.SQLiteConnection(builder.ToString());
                     break;
