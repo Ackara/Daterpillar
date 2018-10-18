@@ -69,7 +69,7 @@ namespace Acklann.Daterpillar.Compilation
             {
                 foreach (Column newColumn in newTable.Columns)
                     foreach (Column oldColumn in oldTable.Columns)
-                        if ((oldColumn.Id == newColumn.Id && newColumn.Id != 0) || string.Equals(oldColumn.Name, newColumn.Name, System.StringComparison.OrdinalIgnoreCase))
+                        if (oldColumn.IsIdentical(newColumn))
                         {
                             yield return Resolver.Escape(oldColumn.Name);
                             break;
@@ -80,7 +80,7 @@ namespace Acklann.Daterpillar.Compilation
             {
                 foreach (Column newColumn in newTable.Columns)
                     foreach (Column oldColumn in oldTable.Columns)
-                        if ((oldColumn.Id == newColumn.Id && newColumn.Id != 0) || string.Equals(oldColumn.Name, newColumn.Name, System.StringComparison.OrdinalIgnoreCase))
+                        if (oldColumn.IsIdentical(newColumn))
                         {
                             yield return Resolver.Escape(newColumn.Name);
                             break;

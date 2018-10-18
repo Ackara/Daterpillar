@@ -15,13 +15,13 @@ namespace Acklann.Daterpillar.Compilation
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
             using (SqlWriter writer = _factory.CreateInstance(syntax, file))
             {
-                Discrepancy[] changes = GenerateMigrationScript(writer, from, to, syntax, shouldOmitDropStatements);
+                Discrepancy[] changes = GenerateMigrationScript(writer, from, to, shouldOmitDropStatements);
                 if (changes.Length > 0) writer.Flush();
                 return changes;
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, bool shouldOmitDropStatements = false)
         {
             /// TASKS:
             /// (1) Mark all the tables that need to be created, altered or dropped.
@@ -75,7 +75,7 @@ namespace Acklann.Daterpillar.Compilation
 
                 while (newTable != null)
                 {
-                    if (IsMatch(oldTable.Value, newTable.Value))
+                    if (oldTable.Value.IsIdentical(newTable.Value))
                     {
                         /// 2: Alter existing tables
                         noMatchFound = false;
@@ -144,7 +144,7 @@ namespace Acklann.Daterpillar.Compilation
 
                     while (newI != null)
                     {
-                        if (IsMatch(oldI.Value, newI.Value))
+                        if (oldI.Value.IsIdentical(newI.Value))
                         {
                             noMatchFound = false;
                             /// 3: Alter objects
@@ -241,7 +241,7 @@ namespace Acklann.Daterpillar.Compilation
 
         private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, LinkedList<Script> scripts, bool shouldIncludeDropStatements)
         {
-            Script[] associatedScripts = FindAssociatedScripts(scripts, discrepancy, Syntax.CSharp).ToArray();
+            Script[] associatedScripts = FindAssociatedScripts(scripts, discrepancy, writer.Syntax).ToArray();
             int children = associatedScripts.Length;
 
             // BEFORE
@@ -300,11 +300,6 @@ namespace Acklann.Daterpillar.Compilation
             {
                 switch (child.Value)
                 {
-                    /// HACK #004
-                    /// Because SQLite do not have native functions to modify constraints I have to make sure
-                    /// the constraint's table points to the old-table. Why? Because I will have to rebuild the
-                    /// table
-
                     // CREATE
 
                     case Column newColumn when child.Action == SqlAction.Create:
@@ -343,7 +338,7 @@ namespace Acklann.Daterpillar.Compilation
 
                     case Column newColumn when child.Action == SqlAction.Alter:
                         Column oldC = (Column)child.OldValue;
-                        if (string.Equals(oldC.Name, newColumn.Name) == false)
+                        if (string.Equals(oldC.Name, newColumn.Name, StringComparison.OrdinalIgnoreCase) == false)
                         {
                             writer.Rename(oldC, newColumn.Name);
                             oldC.Name = newColumn.Name;
@@ -410,25 +405,6 @@ namespace Acklann.Daterpillar.Compilation
                     yield return script;
                 }
             }
-        }
-
-        private bool IsMatch(Table left, Table right)
-        {
-            if ((left.Id == right.Id) && (left.Id != 0 && right.Id != 0))
-                return true;
-            else
-                return (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private bool IsMatch(ISQLObject left, ISQLObject right)
-        {
-            if (left is Column oldC)
-            {
-                Column newC = (Column)right;
-                if (oldC.Id == newC.Id && oldC.Id != 0 && newC.Id != 0) return true;
-            }
-
-            return string.Equals(left.GetName(), right.GetName(), StringComparison.OrdinalIgnoreCase);
         }
 
         private void RenameForeignKeysReferencedTable(Schema oldSchema, string newName)

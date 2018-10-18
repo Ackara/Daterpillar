@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Compilation.Resolvers;
 using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace Acklann.Daterpillar.Compilation
     {
         public static Schema ToSchema(string assemblyPath)
         {
-            if (File.Exists(assemblyPath) == false) throw new FileNotFoundException($"Could not file assembly file at '{assemblyPath}'.", assemblyPath);
+            if (File.Exists(assemblyPath) == false) throw new FileNotFoundException(Error.FileNotFound(assemblyPath, "assembly"), assemblyPath);
 
             return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath));
         }
@@ -72,12 +73,14 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== HELPER ==================== //
 
-        internal static string GetName(MemberInfo member)
+        internal static int GetId(MemberInfo member)
         {
-            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
-            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+            if (member.GetCustomAttribute(typeof(SUIDAttribute)) is SUIDAttribute attr)
+            {
+                return attr.Id;
+            }
 
-            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
+            return 0;
         }
 
         internal static string GetName(Type type)
@@ -86,7 +89,6 @@ namespace Acklann.Daterpillar.Compilation
             var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
 
             string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
-
             if (string.IsNullOrEmpty(name))
             {
                 int genericTypeDelimeter = type.Name.IndexOf('`');
@@ -96,22 +98,20 @@ namespace Acklann.Daterpillar.Compilation
             return name;
         }
 
+        internal static string GetName(MemberInfo member)
+        {
+            var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+            var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+
+            return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
+        }
+
         internal static string GetEnumName(MemberInfo member)
         {
             var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
             var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
 
             return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
-        }
-
-        internal static int GetId(MemberInfo member)
-        {
-            if (member.GetCustomAttribute(typeof(SUIDAttribute)) is SUIDAttribute attr)
-            {
-                return attr.Id;
-            }
-
-            return 0;
         }
 
         private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
@@ -187,16 +187,19 @@ namespace Acklann.Daterpillar.Compilation
         {
             if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
             {
-                string foreignTable = fkAttr.ForeignTable, foreignColumn = fkAttr.ForeignColumn;
+                string foreignTable = fkAttr.ForeignTable;
+                string foreignColumn = fkAttr.ForeignColumn;
 
-                var fTableType = Type.GetType(fkAttr.ForeignTable);
-                if (fTableType != null)
+                var referencedType = Type.GetType(fkAttr.ForeignTable);
+                if (referencedType != null)
                 {
-                    foreignTable = GetName(fTableType);
+                    foreignTable = GetName(referencedType);
 
-                    MemberInfo fColumn = fTableType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
-                    if (fColumn != null)
-                        foreignColumn = GetName(fColumn);
+                    MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
+                    if (referencedField != null)
+                    {
+                        foreignColumn = GetName(referencedField);
+                    }
                 }
 
                 table.ForeignKeys.Add(new ForeignKey()
@@ -206,7 +209,7 @@ namespace Acklann.Daterpillar.Compilation
                     OnDelete = fkAttr.OnDelete,
                     OnUpdate = fkAttr.OnUpdate,
                     ForeignTable = foreignTable,
-                    ForeignColumn = (foreignColumn)
+                    ForeignColumn = foreignColumn
                 });
             }
         }

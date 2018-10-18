@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar
     /// Indicates that a public field or property represents a SQL table column. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage((AttributeTargets.Property), AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
     public sealed class ColumnAttribute : Attribute
     {
         /// <summary>

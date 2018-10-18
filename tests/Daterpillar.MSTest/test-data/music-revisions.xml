@@ -74,16 +74,16 @@
   </table>
 
   <table name="artist">
+    <column name="Id" autoIncrement="true">
+      <dataType>int</dataType>
+    </column>
+
     <column name="Name">
       <dataType scale="32">varchar</dataType>
     </column>
 
     <column name="Bio" nullable="true" default="''">
       <dataType scale="512">varchar</dataType>
-    </column>
-
-    <column name="Id" autoIncrement="true">
-      <dataType>int</dataType>
     </column>
 
     <column name="DOB">

@@ -16,10 +16,10 @@ INSERT INTO publisher (Name) VALUES ('OVO'), ('UMG');
 
 -- End --
 
--- Modifying the song table
-
 EXEC sp_RENAME 'song', 'track'
 GO
+
+-- Modifying the track table
 
 ALTER TABLE [track] ADD [PublisherId] INT NOT NULL DEFAULT 1;
 
@@ -58,11 +58,8 @@ ALTER TABLE [artist] ADD DEFAULT '' FOR [Bio];
 
 --      End      --
 
---      Modifying [artist].[Id]
-
 ALTER TABLE [artist] ALTER COLUMN [Id] INT NOT NULL;
 
---      End      --
 
 -- End --
 

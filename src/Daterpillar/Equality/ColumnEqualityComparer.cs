@@ -14,8 +14,8 @@ namespace Acklann.Daterpillar.Equality
                 return x.Name == y.Name
                 && x.DataType == y.DataType
                 && x.IsNullable == y.IsNullable
-                && x.AutoIncrement == y.AutoIncrement
                 && x.DefaultValue == y.DefaultValue
+                && x.AutoIncrement == y.AutoIncrement
                 && ((x.Comment == y.Comment) || (string.IsNullOrEmpty(x.Comment) || string.IsNullOrEmpty(y.Comment)));
             }
         }

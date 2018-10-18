@@ -48,14 +48,14 @@ namespace Acklann.Daterpillar.Compilation
 
         public override void Alter(Column column)
         {
-            WriteHeaderIf(Expand($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}"));
+            WriteHeaderIf(Expand($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}"), column.DefaultValue != null);
             base.Alter(column);
             if (column.DefaultValue != null)
             {
                 Writer.WriteLine(Expand($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};"));
                 Writer.WriteLine();
             }
-            WriteEndIf();
+            WriteEndIf(column.DefaultValue != null);
         }
     }
 }

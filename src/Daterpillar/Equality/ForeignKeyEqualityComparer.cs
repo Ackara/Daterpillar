@@ -9,10 +9,6 @@ namespace Acklann.Daterpillar.Equality
         {
             return
                 string.Equals(x.Name, y.Name, System.StringComparison.OrdinalIgnoreCase) &&
-                //x.LocalTable == y.LocalTable &&
-                //x.LocalColumn == y.LocalColumn &&
-                //x.ForeignTable == y.ForeignTable &&
-                //x.ForeignColumn == y.ForeignColumn &&
                 x.OnUpdate == y.OnUpdate &&
                 x.OnDelete == y.OnDelete;
         }
