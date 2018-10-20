@@ -4,7 +4,7 @@ Properties {
 	$MigrationDirectory = "";
 }
 
-Task "Default" -depends @("restore", "compile", "test", "pack");
+Task "Default" -depends @("restore", "build", "test", "pack");
 
 Task "Publish" -alias "push" -description "This task compiles, test and publish the project to nuget.org and powershell gallery." `
 -depends @("version", "build", "test", "pack", "push-nuget", "push-ps");

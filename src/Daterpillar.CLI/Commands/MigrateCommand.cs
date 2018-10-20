@@ -57,7 +57,6 @@ namespace Acklann.Daterpillar.Commands
 
             if (right.IsEmpty)
             {
-
                 Log.PrintError($"The schema is empty at '{NewSchema}'.", ConsoleColor.Yellow);
                 return 204;
             }

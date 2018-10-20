@@ -77,7 +77,7 @@ Task "Run-Tests" -alias "test" -description "This task invoke all tests within t
 	{
         # Running all MSTest assemblies.
         Push-Location $RootDir;
-		foreach ($testFile in (Get-ChildItem "$RootDir/tests/*/bin/$Configuration" -Recurse -Filter "*Test*.dll"))
+		foreach ($testFile in (Get-ChildItem "$RootDir/tests/*/bin/$Configuration" -Recurse -Filter "*$SolutionName*Test*.dll"))
 		{
 			Write-Header "dotnet: vstest '$($testFile.BaseName)'";
 			Exec { &dotnet vstest $testFile.FullName; }
