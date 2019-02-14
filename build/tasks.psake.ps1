@@ -36,8 +36,8 @@ Task "Configure-Environment" -alias "configure" -description "This task generate
 	# Generating a secrets file template to store sensitive information.
 	if (-not (Test-Path $SecretsFilePath))
 	{
-		$content = '{ "nugetKey": null }';
-		$content | ConvertTo-Json | Out-File $SecretsFilePath -Encoding utf8;
+		$content = "{ 'nugetKey': null, 'mysql': 'server=;user=;password=;', 'tsql': 'server=;user=;password=;' }";
+		$content | ConvertFrom-Json | ConvertTo-Json | Out-File $SecretsFilePath -Encoding utf8;
 	}
 	Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
 }
