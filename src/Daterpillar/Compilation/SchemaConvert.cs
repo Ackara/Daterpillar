@@ -13,19 +13,12 @@ namespace Acklann.Daterpillar.Compilation
 {
     public static class SchemaConvert
     {
-        public static Schema ToSchema(string assemblyPath)
-        {
-            if (File.Exists(assemblyPath) == false) throw new FileNotFoundException(Error.FileNotFound(assemblyPath, "assembly"), assemblyPath);
-
-            return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath));
-        }
-
         public static Schema ToSchema(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
             IEnumerable<Type> tables = (from t in assembly.ExportedTypes
-                                        where t.IsInterface == false && t.IsAbstract == false
+                                        where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
                                         select t);
 
             var schema = new Schema();
@@ -35,24 +28,30 @@ namespace Acklann.Daterpillar.Compilation
             {
                 try
                 {
-                    if (type.IsDefined(typeof(TableAttribute)))
-                    {
-                        if (type.IsEnum)
-                            ExtractEmunInfo(schema, type, documentation);
-                        else
-                            schema.Add(ToTable(type, documentation));
-                    }
+                    if (type.IsEnum)
+                        ExtractEmunInfo(schema, type, documentation);
+                    else
+                        schema.Add(ToTable(type, documentation));
                 }
-                catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine("Could not find a .dll."); }
+                catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine($"Could not find {type.FullName} in the loaded assembly."); }
             }
 
-            if (assembly.GetCustomAttribute(typeof(IncludeAttribute)) is IncludeAttribute attr)
-                schema.Include = attr.Path;
+            foreach (IncludeAttribute attribute in assembly.GetCustomAttributes(typeof(IncludeAttribute)))
+                schema.Import = attribute.FilePath;
 
             return schema;
         }
 
-        public static Table ToTable(Type type, string documentionPath = null)
+        public static Schema ToSchema(string assemblyFilePath)
+        {
+            if (File.Exists(assemblyFilePath) == false) throw new FileNotFoundException(string.Format(Error.CouldNotFind, "assembly file", assemblyFilePath));
+
+            return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFilePath));
+        }
+
+        // ==================== HELPER ==================== //
+
+        private static Table ToTable(Type type, string documentionPath = null)
         {
             IEnumerable<MemberInfo> members = (from m in type.GetMembers()
                                                where
@@ -70,8 +69,6 @@ namespace Acklann.Daterpillar.Compilation
 
             return table;
         }
-
-        // ==================== HELPER ==================== //
 
         private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
         {

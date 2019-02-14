@@ -1,5 +1,4 @@
-﻿
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar
 {
@@ -8,11 +7,10 @@ namespace Acklann.Daterpillar
     /// </summary>
     public enum IndexType
     {
-		[XmlEnum("index")]
-		Index,
+        [XmlEnum("index")]
+        Index,
 
-		[XmlEnum("primary-key")]
-		PrimaryKey,
-
+        [XmlEnum("primary-key")]
+        PrimaryKey,
     }
 }

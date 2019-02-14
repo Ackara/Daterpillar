@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar
             _syntax = syntax;
             _databaseName = name?? nameof(Daterpillar);
             var config = JObject.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "connections.json")));
-            string connStr = connectionString ?? config.SelectToken($"{syntax}.connectionString")?.Value<string>();
+            string connStr = connectionString ?? config.SelectToken((syntax).ToString().ToLowerInvariant())?.Value<string>();
             System.Data.Common.DbConnectionStringBuilder builder;
             switch (syntax)
             {

@@ -11,9 +11,9 @@ namespace Acklann.Daterpillar
         /// <param name="relativePath">The relative path.</param>
         public IncludeAttribute(string relativePath)
         {
-            Path = relativePath;
+            FilePath = relativePath;
         }
 
-        public readonly string Path;
+        public readonly string FilePath;
     }
 }

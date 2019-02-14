@@ -14,32 +14,35 @@ using System.Xml.Serialization;
 namespace Acklann.Daterpillar.Configuration
 {
     /// <summary>
-    /// An in-memory representation of a database schema.
+    /// A database schema.
     /// </summary>
     [XmlRoot("schema", Namespace = XMLNS)]
-    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public partial class Schema : ICloneable
+    [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay()}")]
+    public class Schema : ICloneable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
-        public Schema() : this(null, Syntax.Generic)
+        public Schema() : this(null)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="syntax">The syntax.</param>
-        public Schema(string name, Syntax syntax)
+        ///
+        public Schema(string name)
         {
-            Name = name;
-            Syntax = syntax;
-
             _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, XMLNS) });
-            Tables = new List<Table>();
             Scripts = new List<Script>();
+            Tables = new List<Table>();
+            Name = name;
         }
+
+        /// <summary>
+        /// The xml namespace.
+        /// </summary>
+        public const string XMLNS = "https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd";
 
         /// <summary>
         /// Gets or sets the name of the schema.
@@ -55,9 +58,6 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("documentation")]
         public string Description { get; set; }
 
-        [XmlIgnore]
-        public Syntax Syntax { get; set; }/* TODO: remember delete this*/
-
         /// <summary>
         /// Gets or sets the path of another schema to merge with this instance.
         /// </summary>
@@ -65,9 +65,9 @@ namespace Acklann.Daterpillar.Configuration
         /// The include.
         /// </value>
         [XmlAttribute("include")]
-        public string Include { get; set; }
+        public string Import { get; set; }
 
-        public bool IsEmpty
+        public bool HasChildren
         {
             get => ((Tables?.Count ?? 0) == 0 && (Scripts?.Count ?? 0) == 0);
         }
@@ -98,10 +98,7 @@ namespace Acklann.Daterpillar.Configuration
         public static bool Validate(Stream stream, ValidationEventHandler handler = null, string xsdFile = null)
         {
             string xsdName = $"{nameof(Daterpillar)}.xsd".ToLowerInvariant();
-            if (string.IsNullOrEmpty(xsdFile))
-            {
-                xsdFile = System.IO.Path.Combine(AppContext.BaseDirectory, xsdName);
-            }
+            if (string.IsNullOrEmpty(xsdFile)) xsdFile = System.IO.Path.Combine(AppContext.BaseDirectory, xsdName);
 
             if (File.Exists(xsdFile) == false)
             {
@@ -127,6 +124,16 @@ namespace Acklann.Daterpillar.Configuration
 
             stream.Seek(0, SeekOrigin.Begin);
             return isWellFormed;
+        }
+
+        public static Schema Load(string filePath)
+        {
+            if (File.Exists(filePath) == false) throw new FileNotFoundException($"Could not find file at '{filePath}'", filePath);
+            using (var stream = File.OpenRead(filePath))
+            {
+                var serializer = new XmlSerializer(typeof(Schema));
+                return (Schema)serializer.Deserialize(stream);
+            }
         }
 
         public static bool TryLoad(string filePath, out Schema schema, out string errorMsg)
@@ -283,11 +290,10 @@ namespace Acklann.Daterpillar.Configuration
         /// <exception cref="ArgumentNullException">Occurs when this instance <see cref="Path"/> is null or empty.</exception>
         public void Merge()
         {
-            if (string.IsNullOrEmpty(Include) == false)
+            if (string.IsNullOrEmpty(Import) == false)
             {
                 if (string.IsNullOrEmpty(Path)) throw new ArgumentNullException(nameof(Path));
-                string[] includedFiles = Include.ResolvePath(System.IO.Path.GetDirectoryName(Path)).ToArray();
-                Merge(includedFiles);
+                Merge(((Glob)Import).ResolvePath(System.IO.Path.GetDirectoryName(Path)).ToArray());
             }
         }
 
@@ -352,9 +358,9 @@ namespace Acklann.Daterpillar.Configuration
                         match.Content = script.Content;
                 }
 
-                if (string.IsNullOrEmpty(Include) == false && string.IsNullOrEmpty(schema.Path) == false)
+                if (string.IsNullOrEmpty(Import) == false && string.IsNullOrEmpty(schema.Path) == false)
                 {
-                    if (Glob.IsMatch(schema.Path, Include)) Include = null;
+                    if (Glob.IsMatch(schema.Path, Import)) Import = null;
                 }
             }
         }
@@ -469,7 +475,7 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        private string ToDebuggerDisplay()
+        private string GetDebuggerDisplay()
         {
             string name = (string.IsNullOrEmpty(Name) ? System.IO.Path.GetFileName(Path) : Name) ?? "N/A";
             return $"{name} | Tables: {Tables.Count} Scripts: {Scripts.Count}";

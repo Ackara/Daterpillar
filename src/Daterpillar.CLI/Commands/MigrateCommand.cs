@@ -55,7 +55,7 @@ namespace Acklann.Daterpillar.Commands
             else
                 return Log.NotWellFormedError(NewSchema, errorMsg);
 
-            if (right.IsEmpty)
+            if (right.HasChildren)
             {
                 Log.PrintError($"The schema is empty at '{NewSchema}'.", ConsoleColor.Yellow);
                 return 204;

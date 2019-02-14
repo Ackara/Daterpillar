@@ -25,12 +25,12 @@
     <column name="Album">
       <dataType>varchar</dataType>
     </column>
-    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <index type="index">
-      <columnName order="asc">Name</columnName>
+    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" />
+    <index>
+      <columnName>Name</columnName>
     </index>
-    <index type="index">
-      <columnName order="asc">Genre</columnName>
+    <index>
+      <columnName>Genre</columnName>
     </index>
   </table>
   <table name="artist">
@@ -47,7 +47,7 @@
       <dataType>dateTime</dataType>
     </column>
     <index type="primary-key">
-      <columnName order="asc">Id</columnName>
+      <columnName>Id</columnName>
     </index>
   </table>
   <table name="genre">
@@ -57,18 +57,18 @@
     <column name="Name">
       <dataType>varchar</dataType>
     </column>
-    <index type="index" unique="true">
-      <columnName order="asc">Name</columnName>
+    <index unique="true">
+      <columnName>Name</columnName>
     </index>
     <index type="primary-key">
-      <columnName order="asc">Id</columnName>
+      <columnName>Id</columnName>
     </index>
   </table>
-  <script name="seed-1"><![CDATA[
+  <script name="seed-1">
 -- Seed-Data
 -- -----------------------------------------------
 INSERT INTO genre (Id, Name)
-VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
-]]></script>
-  <script name="message"><![CDATA[-- If you're reading this it means multiple scrips can be used.]]></script>
+VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&amp;B');
+</script>
+  <script name="message">-- If you're reading this it means multiple scrips can be used.</script>
 </schema>

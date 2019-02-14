@@ -74,7 +74,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the index type.
         /// </summary>
         /// <value>The type.</value>
-        [XmlAttribute("type")]
+        [XmlAttribute("type"), DefaultValue(IndexType.Index)]
         public IndexType Type { get; set; }
 
         /// <summary>

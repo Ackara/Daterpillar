@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Compilation;
+using Acklann.Daterpillar.Configuration;
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,12 +21,10 @@ namespace Acklann.Daterpillar.Tests
             var sut = new Commands.BuildCommand(assemblyFile);
 
             // Act
-            var resultFile = Path.ChangeExtension(assemblyFile, ".schema.xml");
-            var exitCode = sut.Execute();
+            var schema = SchemaConvert.ToSchema(assemblyFile);
 
             // Assert
-            exitCode.ShouldBe(0);
-            Diff.ApproveFile(resultFile);
+            Diff.Approve(schema, ".xml");
         }
 
         [TestMethod]
@@ -48,7 +47,7 @@ namespace Acklann.Daterpillar.Tests
             var revisions = new Schema() { Tables = new System.Collections.Generic.List<Table> { city } };
 
             // Act
-            if (Schema.TryLoad(inputFile, out Schema schema, out string errorMsg))
+            if (Schema.TryLoad(inputFile, out Schema schema))
             {
                 totalTablesBeforeMerge = schema.Tables.Count;
 
@@ -59,7 +58,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Include.ShouldBeNull();
+            schema.Import.ShouldBeNull();
             totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
 
             result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();

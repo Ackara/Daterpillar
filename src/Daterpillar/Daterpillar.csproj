@@ -79,14 +79,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataTypeFactory.cs</LastGenOutput>
     </None>
-    <None Update="IndexType.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IndexType.cs</LastGenOutput>
-    </None>
-    <None Update="Order.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Order.cs</LastGenOutput>
-    </None>
     <None Update="ReferentialAction.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ReferentialAction.cs</LastGenOutput>
@@ -103,26 +95,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeResolverBase.cs</LastGenOutput>
     </None>
-    <None Update="Configuration\Xmlns.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Xmlns.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Configuration\DataTypeFactory.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DataTypeFactory.tt</DependentUpon>
-    </Compile>
-    <Compile Update="IndexType.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IndexType.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Order.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Order.tt</DependentUpon>
     </Compile>
     <Compile Update="ReferentialAction.cs">
       <DesignTime>True</DesignTime>
@@ -144,16 +122,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TypeResolverBase.tt</DependentUpon>
     </Compile>
-    <Compile Update="Configuration\Xmlns.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Xmlns.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Label="Nuget">
     <Content Include="msbuild.targets">
       <PackagePath>build\$(TargetFramework)\$(AssemblyName).targets</PackagePath>
     </Content>

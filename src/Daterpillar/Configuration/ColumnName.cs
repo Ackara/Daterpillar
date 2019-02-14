@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -31,6 +32,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The order.</value>
         [XmlAttribute("order")]
+        [DefaultValue(Order.ASC)]
         public Order Order { get; set; }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -9,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// A in-memory representation of a SQL script.
     /// </summary>
     [Serializable]
-    public class Script : IXmlSerializable, ISQLObject
+    public class Script : ISQLObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Script"/> class.
@@ -43,20 +44,19 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>
         /// The syntax.
         /// </value>
-        [XmlAttribute(syntax)]
+        [XmlAttribute(syntax), DefaultValue(Syntax.Generic)]
         public Syntax Syntax { get; set; }
 
-        [XmlAttribute(before)]
+        [XmlAttribute(before), DefaultValue(0)]
         public int Before { get; set; }
 
-        [XmlAttribute(after)]
+        [XmlAttribute(after), DefaultValue(0)]
         public int After { get; set; }
 
         /// <summary>
         /// Gets or sets the content.
         /// </summary>
         /// <value>The content.</value>
-
         [XmlText]
         public string Content { get; set; }
 
@@ -72,51 +72,6 @@ namespace Acklann.Daterpillar.Configuration
         {
             return Content;
         }
-
-        #region IXmlSerializable
-
-        public XmlSchema GetSchema() => null;
-
-        public void ReadXml(XmlReader reader)
-        {
-            if (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "script")
-            {
-                Syntax = Syntax.Generic;
-                if (Enum.TryParse(reader[syntax], out Syntax s))
-                    Syntax = s;
-
-                if (int.TryParse(reader[before], out int id))
-                    Before = id;
-
-                if (int.TryParse(reader[after], out id))
-                    After = id;
-
-                Name = reader[name];
-                if (reader.Read()) Content = reader.Value;
-
-                reader.Read();
-            }
-            reader.Read();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            if (Syntax != Syntax.Generic)
-                writer.WriteAttributeString(syntax, Syntax.ToString());
-
-            if (Before != 0)
-                writer.WriteAttributeString(before, Before.ToString());
-
-            if (After != 0)
-                writer.WriteAttributeString(after, After.ToString());
-
-            if (string.IsNullOrEmpty(Name) == false)
-                writer.WriteAttributeString(name, Name);
-
-            writer.WriteCData(Content);
-        }
-
-        #endregion IXmlSerializable
 
         #region ICloneable
 

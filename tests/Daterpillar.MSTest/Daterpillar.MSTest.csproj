@@ -90,5 +90,16 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup Label="External">
+    <ConnectionStrings Include="../../secrets.json" />
+  </ItemGroup>
+
+  <Target Name="ImportConnectionStrings" BeforeTargets="CoreCompile">
+    <Copy Condition="Exists('@(ConnectionStrings)')"
+          SourceFiles="@(ConnectionStrings)"
+          DestinationFiles="connections.json"
+          SkipUnchangedFiles="true" />
+  </Target>
+
   <Import Project="..\..\artifacts\msbuild\build\*\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\netstandard2.0\Acklann.Daterpillar.targets')" />
 </Project>

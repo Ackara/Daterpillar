@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -96,6 +97,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The on update.</value>
         [XmlAttribute("onUpdate")]
+        [DefaultValue(ReferentialAction.Cascade)]
         public ReferentialAction OnUpdate { get; set; }
 
         /// <summary>
@@ -103,6 +105,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The on delete.</value>
         [XmlAttribute("onDelete")]
+        [DefaultValue(ReferentialAction.Restrict)]
         public ReferentialAction OnDelete { get; set; }
 
         string ISQLObject.GetName() => Name;

@@ -1,257 +1,103 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
-           xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           elementFormDefault="qualified"
-           id="daterpillar">
-  <xs:element name="schema">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="documentation"
-                    type="xs:string"
-                    minOccurs="0" />
-
-        <xs:element name="table"
-                    type="Table"
-                    minOccurs="0"
-                    maxOccurs="unbounded" />
-
-        <xs:element name="script"
-                    type="Script"
-                    minOccurs="0"
-                    maxOccurs="unbounded" />
-      </xs:sequence>
-
-      <xs:attribute name="name"
-                    type="xs:string" />
-
-      <xs:attribute name="include"
-                    type="xs:string" />
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="documentation"
-                  type="xs:string" />
-
-  <!-- TYPES -->
-
+<xs:schema xmlns:tns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" elementFormDefault="qualified" targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="schema" nillable="true" type="tns:Schema" />
+  <xs:complexType name="Schema">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="table" type="tns:Table" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="script" type="tns:Script" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="include" type="xs:string" />
+  </xs:complexType>
   <xs:complexType name="Table">
     <xs:sequence>
-      <xs:element ref="documentation"
-                  minOccurs="0" />
-
-      <xs:element name="column"
-                  type="Column"
-                  minOccurs="0"
-                  maxOccurs="unbounded" />
-
-      <xs:element name="foreignKey"
-                  type="ForeignKey"
-                  minOccurs="0"
-                  maxOccurs="unbounded" />
-
-      <xs:element name="index"
-                  type="Index"
-                  minOccurs="0"
-                  maxOccurs="unbounded" />
+      <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="column" type="tns:Column" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="foreignKey" type="tns:ForeignKey" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="index" type="tns:Index" />
     </xs:sequence>
-
-    <xs:attribute name="name"
-                  type="xs:string"
-                  use="required" />
-
-    <xs:attribute name="suid"
-                  type="xs:int" />
+    <xs:attribute default="0" name="suid" type="xs:int" />
+    <xs:attribute name="name" type="xs:string" />
   </xs:complexType>
-
   <xs:complexType name="Column">
-    <xs:all>
-      <xs:element ref="documentation"
-                  minOccurs="0" />
-
-      <xs:element name="dataType"
-                  type="DataType"
-                  minOccurs="1" />
-    </xs:all>
-
-    <xs:attribute name="nullable"
-                  type="xs:boolean"
-                  default="0" />
-
-    <xs:attribute name="default"
-                  type="xs:string" />
-
-    <xs:attribute name="autoIncrement"
-                  type="xs:boolean"
-                  default="0" />
-
-    <xs:attributeGroup ref="Identifiable" />
-  </xs:complexType>
-
-  <xs:complexType name="Index">
     <xs:sequence>
-      <xs:element name="columnName"
-                  type="IndexColumn"
-                  maxOccurs="unbounded" />
+      <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="dataType" type="tns:DataType" />
     </xs:sequence>
-
-    <xs:attribute name="name"
-                  type="xs:string"
-                  use="optional" />
-
-    <xs:attribute name="unique"
-                  type="xs:boolean" />
-
-    <xs:attribute name="type"
-                  type="IndexType" />
+    <xs:attribute default="0" name="suid" type="xs:int" />
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute default="false" name="nullable" type="xs:boolean" />
+    <xs:attribute default="false" name="autoIncrement" type="xs:boolean" />
+    <xs:attribute name="default" type="xs:string" />
   </xs:complexType>
-
-  <xs:complexType name="ForeignKey">
-    <xs:attribute name="localColumn"
-                  type="xs:string"
-                  use="required" />
-
-    <xs:attribute name="foreignTable"
-                  type="xs:string"
-                  use="required" />
-
-    <xs:attribute name="foreignColumn"
-                  type="xs:string"
-                  default="Id" />
-
-    <xs:attribute name="onUpdate"
-                  type="ForeignKeyRule"
-                  default="cascade" />
-
-    <xs:attribute name="onDelete"
-                  type="ForeignKeyRule"
-                  default="restrict" />
-  </xs:complexType>
-
-  <xs:complexType name="IndexColumn">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="order"
-                      type="SortOrder" />
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-
   <xs:complexType name="DataType">
     <xs:simpleContent>
-      <xs:extension base="TypeName">
-        <xs:attribute name="scale"
-                      type="xs:int"
-                      use="optional" />
-
-        <xs:attribute name="precision"
-                      type="xs:int"
-                      use="optional" />
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-
-  <xs:complexType name="Script">
-    <xs:simpleContent>
       <xs:extension base="xs:string">
-        <xs:attribute name="name"
-                      type="xs:string"
-                      use="optional" />
-
-        <xs:attribute name="syntax"
-                      type="Syntax"
-                      use="optional" />
-
-        <xs:attribute name="beforeTable"
-                      type="SUID"
-                      use="optional" />
-
-        <xs:attribute name="afterTable"
-                      type="SUID"
-                      use="optional" />
+        <xs:attribute default="0" name="scale" type="xs:int" />
+        <xs:attribute default="0" name="precision" type="xs:int" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
-
-  <!-- ENUMS -->
-
-  <xs:simpleType name="Syntax">
+  <xs:complexType name="ForeignKey">
+    <xs:attribute name="localColumn" type="xs:string" />
+    <xs:attribute name="foreignTable" type="xs:string" />
+    <xs:attribute name="foreignColumn" type="xs:string" />
+    <xs:attribute default="cascade" name="onUpdate" type="tns:ReferentialAction" />
+    <xs:attribute default="restrict" name="onDelete" type="tns:ReferentialAction" />
+  </xs:complexType>
+  <xs:simpleType name="ReferentialAction">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Generic" />
-      <xs:enumeration value="TSQL" />
-      <xs:enumeration value="MySQL" />
-      <xs:enumeration value="SQLite" />
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="TypeName">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="bool" />
-
-      <xs:enumeration value="blob" />
-      <xs:enumeration value="char" />
-      <xs:enumeration value="text" />
-      <xs:enumeration value="varchar" />
-
-      <xs:enumeration value="int" />
-      <xs:enumeration value="bigInt" />
-      <xs:enumeration value="mediumInt" />
-      <xs:enumeration value="smallInt" />
-      <xs:enumeration value="tinyInt" />
-
-      <xs:enumeration value="float" />
-      <xs:enumeration value="double" />
-      <xs:enumeration value="decimal" />
-
-      <xs:enumeration value="date" />
-      <xs:enumeration value="time" />
-      <xs:enumeration value="dateTime" />
-      <xs:enumeration value="timeStamp" />
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="SortOrder">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="asc" />
-      <xs:enumeration value="desc" />
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="ForeignKeyRule">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="no-action">
-        <xs:annotation>
-          <xs:documentation>This means something</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-
+      <xs:enumeration value="no-action" />
       <xs:enumeration value="cascade" />
       <xs:enumeration value="restrict" />
       <xs:enumeration value="set-null" />
       <xs:enumeration value="set-default" />
     </xs:restriction>
   </xs:simpleType>
-
+  <xs:complexType name="Index">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="columnName" type="tns:ColumnName" />
+    </xs:sequence>
+    <xs:attribute default="index" name="type" type="tns:IndexType" />
+    <xs:attribute default="false" name="unique" type="xs:boolean" />
+  </xs:complexType>
+  <xs:complexType name="ColumnName">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute default="asc" name="order" type="tns:Order" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="Order">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="asc" />
+      <xs:enumeration value="desc" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="IndexType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="index" />
       <xs:enumeration value="primary-key" />
     </xs:restriction>
   </xs:simpleType>
-
-  <xs:simpleType name="SUID">
-    <xs:restriction base="xs:int">
-      <xs:minExclusive value="0" />
+  <xs:complexType name="Script">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute default="Generic" name="syntax" type="tns:Syntax" />
+        <xs:attribute default="0" name="beforeTable" type="xs:int" />
+        <xs:attribute default="0" name="afterTable" type="xs:int" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="Syntax">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Generic" />
+      <xs:enumeration value="TSQL" />
+      <xs:enumeration value="MySQL" />
+      <xs:enumeration value="SQLite" />
+      <xs:enumeration value="CSharp" />
     </xs:restriction>
   </xs:simpleType>
-  <!-- GROUPS -->
-
-  <xs:attributeGroup name="Identifiable">
-    <xs:attribute name="suid"
-                  type="SUID" />
-
-    <xs:attribute name="name"
-                  type="xs:string"
-                  use="required" />
-  </xs:attributeGroup>
 </xs:schema>

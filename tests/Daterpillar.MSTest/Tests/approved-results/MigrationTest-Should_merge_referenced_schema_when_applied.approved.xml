@@ -12,13 +12,13 @@
     <column name="last_update">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="address_id" foreignTable="address" foreignColumn="address_id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="manager_staff_id" foreignTable="staff" foreignColumn="staff_id" onUpdate="cascade" onDelete="restrict" />
-    <index type="index">
-      <columnName order="asc">address_id</columnName>
+    <foreignKey localColumn="address_id" foreignTable="address" foreignColumn="address_id" />
+    <foreignKey localColumn="manager_staff_id" foreignTable="staff" foreignColumn="staff_id" />
+    <index>
+      <columnName>address_id</columnName>
     </index>
-    <index type="index">
-      <columnName order="asc">manager_staff_id</columnName>
+    <index>
+      <columnName>manager_staff_id</columnName>
     </index>
   </table>
   <table name="staff">
@@ -55,12 +55,12 @@
     <column name="last_update">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="store_id" foreignTable="store" foreignColumn="store_id" onUpdate="cascade" onDelete="restrict" />
-    <index type="index">
-      <columnName order="asc">store_id</columnName>
+    <foreignKey localColumn="store_id" foreignTable="store" foreignColumn="store_id" />
+    <index>
+      <columnName>store_id</columnName>
     </index>
-    <index type="index">
-      <columnName order="asc">address_id</columnName>
+    <index>
+      <columnName>address_id</columnName>
     </index>
   </table>
   <table name="payment">
@@ -85,9 +85,9 @@
     <column name="last_update" nullable="true">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="rental_id" foreignTable="rental" foreignColumn="rental_id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="staff_id" foreignTable="staff_id" foreignColumn="staff_id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="rental_id" foreignTable="rental" foreignColumn="rental_id" />
+    <foreignKey localColumn="staff_id" foreignTable="staff_id" foreignColumn="staff_id" />
+    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" />
   </table>
   <table name="rental">
     <column name="rental_id" autoIncrement="true">
@@ -111,8 +111,8 @@
     <column name="last_udpate">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="staff_id" foreignTable="staff" foreignColumn="staff_id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="customer_id" foreignTable="customer" foreignColumn="customer_id" />
+    <foreignKey localColumn="staff_id" foreignTable="staff" foreignColumn="staff_id" />
   </table>
   <table name="country">
     <column name="country_id" autoIncrement="true">
@@ -141,12 +141,12 @@
     <column name="Population">
       <dataType>int</dataType>
     </column>
-    <foreignKey localColumn="country_id" foreignTable="country" foreignColumn="country_id" onUpdate="cascade" onDelete="cascade" />
-    <foreignKey localColumn="placeholder" foreignTable="fake" foreignColumn="Id" onUpdate="cascade" onDelete="cascade" />
-    <index type="index">
-      <columnName order="asc">Population</columnName>
+    <foreignKey localColumn="country_id" foreignTable="country" foreignColumn="country_id" onDelete="cascade" />
+    <foreignKey localColumn="placeholder" foreignTable="fake" foreignColumn="Id" onDelete="cascade" />
+    <index>
+      <columnName>Population</columnName>
     </index>
-    <index type="index">
+    <index>
       <columnName order="desc">country_id</columnName>
     </index>
   </table>
@@ -175,7 +175,7 @@
     <column name="last_update">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="city_id" foreignTable="city" foreignColumn="city_id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="city_id" foreignTable="city" foreignColumn="city_id" />
   </table>
   <table name="customer">
     <column name="customer_id" autoIncrement="true">
@@ -205,10 +205,10 @@
     <column name="last_update">
       <dataType>dateTime</dataType>
     </column>
-    <foreignKey localColumn="address_id" foreignTable="address" foreignColumn="address_id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="address_id" foreignTable="address" foreignColumn="address_id" />
   </table>
-  <script><![CDATA[
+  <script>
       INSERT INTO country (country)
       VALUES ('USA', 'Mexico', 'Canada', 'United Kindom');
-    ]]></script>
+    </script>
 </schema>

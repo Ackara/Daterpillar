@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <schema include="music-data.xml" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
   <table name="Album">
     <column name="Name">
@@ -13,11 +12,11 @@
     <column name="Year">
       <dataType>int</dataType>
     </column>
-    <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <foreignKey localColumn="SongId" foreignTable="$(100)" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
+    <foreignKey localColumn="ArtistId" foreignTable="artist" foreignColumn="Id" />
+    <foreignKey localColumn="SongId" foreignTable="$(100)" foreignColumn="Id" />
     <index type="primary-key">
-      <columnName order="asc">ArtistId</columnName>
-      <columnName order="asc">SongId</columnName>
+      <columnName>ArtistId</columnName>
+      <columnName>SongId</columnName>
     </index>
   </table>
   <table name="artist">
@@ -33,8 +32,8 @@
     <column name="DOB">
       <dataType>dateTime</dataType>
     </column>
-    <index type="index">
-      <columnName order="asc">Name</columnName>
+    <index>
+      <columnName>Name</columnName>
     </index>
   </table>
   <table name="genre">
@@ -45,10 +44,10 @@
       <dataType>varchar</dataType>
     </column>
     <index type="primary-key">
-      <columnName order="asc">Id</columnName>
+      <columnName>Id</columnName>
     </index>
-    <index type="index" unique="true">
-      <columnName order="asc">Name</columnName>
+    <index unique="true">
+      <columnName>Name</columnName>
     </index>
   </table>
   <table suid="100" name="song">
@@ -76,14 +75,14 @@
     <column name="Genre">
       <dataType>int</dataType>
     </column>
-    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" onUpdate="cascade" onDelete="restrict" />
-    <index type="index">
-      <columnName order="asc">Genre</columnName>
+    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" />
+    <index>
+      <columnName>Genre</columnName>
     </index>
   </table>
-  <script name="genre seed-data"><![CDATA[INSERT INTO genre (Id, Name) VALUES 
+  <script name="genre seed-data">INSERT INTO genre (Id, Name) VALUES 
 ('0', 'Hip Hop'),
 ('1', 'Pop'),
 ('2', 'Country'),
-('3', 'Rock n' Roll');]]></script>
+('3', 'Rock n' Roll');</script>
 </schema>
