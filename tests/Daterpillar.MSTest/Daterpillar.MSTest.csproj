@@ -41,10 +41,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Daterpillar.CLI\Daterpillar.CLI.csproj" />
+    <ProjectReference Include="..\..\src\Daterpillar.MSBuild\Daterpillar.MSBuild.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Startup.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Startup.cs</LastGenOutput>
+    </None>
     <None Update="test-data\bad_schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -83,6 +88,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Startup.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Startup.tt</DependentUpon>
+    </Compile>
     <Compile Update="TestData.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -95,10 +105,7 @@
   </ItemGroup>
 
   <Target Name="ImportConnectionStrings" BeforeTargets="CoreCompile">
-    <Copy Condition="Exists('@(ConnectionStrings)')"
-          SourceFiles="@(ConnectionStrings)"
-          DestinationFiles="connections.json"
-          SkipUnchangedFiles="true" />
+    <Copy Condition="Exists('@(ConnectionStrings)')" SourceFiles="@(ConnectionStrings)" DestinationFiles="connections.json" SkipUnchangedFiles="true" />
   </Target>
 
   <Import Project="..\..\artifacts\msbuild\build\*\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\netstandard2.0\Acklann.Daterpillar.targets')" />

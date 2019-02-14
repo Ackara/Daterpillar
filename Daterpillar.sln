@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Daterpillar.MSTest", "tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Daterpillar.CLI", "src\Daterpillar.CLI\Daterpillar.CLI.csproj", "{37836C39-D036-4896-BA96-A3610C31C4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.MSBuild", "src\Daterpillar.MSBuild\Daterpillar.MSBuild.csproj", "{507E1AB9-102C-41E4-9B5E-EC773D1BCB4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Daterpillar.MSBuild", "src\Daterpillar.MSBuild\Daterpillar.MSBuild.csproj", "{507E1AB9-102C-41E4-9B5E-EC773D1BCB4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

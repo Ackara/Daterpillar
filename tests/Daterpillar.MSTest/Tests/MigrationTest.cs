@@ -1,7 +1,6 @@
 ﻿using Acklann.Daterpillar.Compilation;
 using Acklann.Daterpillar.Configuration;
 using Acklann.Diffa;
-using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
@@ -148,47 +147,6 @@ namespace Acklann.Daterpillar.Tests
             exitCode1.ShouldBe(0, "The 1st migration failed.");
             exitCode2.ShouldBe(0, "The 2nd migration failed.");
             exitCode3.ShouldBe(0, "The 3rd migration failed.");
-        }
-
-        //[DataTestMethod]
-        [DataRow(Syntax.SQLite, null, null, null)]
-        [Reporter(typeof(FileReporter), interrupt: false)]
-        public void Can_generate_a_migration_script_from(Syntax syntax, string activeFile, string snapshotFile, string connectionStirng)
-        {
-            // Arrange
-            var baseDir = Path.Combine(Path.GetTempPath(), "dtp-debug-env");
-            var migrationDir = Path.Combine(baseDir, "migrations");
-            var oldSchema = Path.Combine(baseDir, "old.schema.xml");
-            var newSchema = Path.Combine(baseDir, "new.schema.xml");
-
-            var sut = new Commands.MigrateCommand(
-                oldSchema,
-                newSchema,
-                migrationDir,
-                "1.1",
-                syntax);
-
-            // Act
-            if (Directory.Exists(baseDir)) Directory.Delete(baseDir, true);
-            Directory.CreateDirectory(baseDir);
-
-            if (File.Exists(snapshotFile))
-                File.Copy(snapshotFile, oldSchema, true);
-
-            if (File.Exists(activeFile))
-                File.Copy(activeFile, newSchema, true);
-            else
-                File.WriteAllText(newSchema, (new Schema().ToString()));
-
-            var exitCode = sut.Execute();
-
-            using (var db = new Database(syntax, connectionStirng))
-            {
-                bool pass = db.TryExecute("", out string errorMsg);
-            }
-
-            // Assert
-            exitCode.ShouldBe(0);
         }
     }
 }
