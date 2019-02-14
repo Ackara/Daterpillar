@@ -28,7 +28,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Use(typeof(FileReporter))]
+        [Reporter(typeof(FileReporter))]
         public void Can_serialize_a_schema_object()
         {
             // Arrange

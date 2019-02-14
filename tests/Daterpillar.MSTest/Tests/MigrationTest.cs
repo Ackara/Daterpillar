@@ -153,7 +153,7 @@ namespace Acklann.Daterpillar.Tests
 
         //[DataTestMethod]
         [DataRow(Syntax.SQLite, null, null, null)]
-        [Use(typeof(FileReporter), doNotPauseIfTestFails: true)]
+        [Reporter(typeof(FileReporter), interrupt: false)]
         public void Can_generate_a_migration_script_from(Syntax syntax, string activeFile, string snapshotFile, string connectionStirng)
         {
             // Arrange

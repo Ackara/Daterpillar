@@ -2,6 +2,6 @@
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
 
-[assembly: Use(typeof(DiffReporter))]
-[assembly: SaveFilesAt("approved-results")]
+[assembly: Reporter(typeof(DiffReporter))]
+[assembly: ApprovedFolder("approved-results")]
 [assembly: Include(TestData.File.MusicDataXML)]
