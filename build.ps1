@@ -11,39 +11,20 @@ Param(
 	[Alias('t')]
 	[string[]]$Tasks = @("default"),
 
-    [Alias('s', "keys")]
-	[hashtable]$Secrets = @{},
+    [Alias('no-commit')]
+    [switch]$SkipCommit,
 
-	[Alias('c')]
-	[ValidateSet("Debug", "Release")]
-	[string]$Configuration = "Release",
-
-    [Alias('p')]
-    [string]$Platform = "AnyCPU",
-
-	[Alias("sc", "no-build")]
-	[switch]$SkipCompilation,
-
-    [Alias('h', '?')]
+	[Alias('h', '?')]
     [switch]$Help,
 
-    [Alias('no-commit')]
-    [switch]$NoCommit,
-	
-	[string]$TaskFile = "$PSScriptRoot/build/_.psake.ps1",
-    [switch]$DeleteExistingFiles,
-	[switch]$NonInteractive,
 	[switch]$Debug,
 	[switch]$Major,
 	[switch]$Minor
 )
 
+# Initializing required variables.
+$Configuration = "Release";
 if ($Debug) { $Configuration = "Debug"; }
-
-# Resolve temporary directory.
-$tempDir = New-TemporaryFile | Select-Object -ExpandProperty FullName;
-Remove-Item $tempDir;
-$tempDir = Split-Path $tempDir -Parent;
 
 # Getting the current branch of source control.
 $branchName = $env:BUILD_SOURCEBRANCHNAME;
@@ -54,41 +35,32 @@ if ([string]::IsNullOrEmpty($branchName))
 }
 
 # Installing then invoking the Psake tasks.
-$toolsDir = "$PSScriptRoot/tools";
-$psakeModule = Join-Path $toolsDir "psake/*/*.psd1";
+$toolsFolder = Join-Path $PSScriptRoot "tools";
+$psakeModule = Join-Path $toolsFolder "psake/*/*.psd1";
 if (-not (Test-Path $psakeModule))
 { 
-	if (-not (Test-Path $toolsDir)) { New-Item $toolsDir -ItemType Directory | Out-Null; }
-	Save-Module "psake" -Path $toolsDir; 
+	if (-not (Test-Path $toolsFolder)) { New-Item $toolsFolder -ItemType Directory | Out-Null; }
+	Save-Module "psake" -Path $toolsFolder; 
 }
 Import-Module $psakeModule -Force;
 
-if ($Help) 
-{
-    Invoke-Psake -buildFile $TaskFile -docs;
-}
+$taskFile = Join-Path $PSScriptRoot "build/tasks.psake.ps1";
+if ($Help) { Invoke-Psake -buildFile $taskFile -docs; }
 else
 {
 	Write-Host -ForegroundColor DarkGray "User:          $([Environment]::UserName)@$([Environment]::MachineName)";
 	Write-Host -ForegroundColor DarkGray "Platform:      $([Environment]::OSVersion.Platform)";
 	Write-Host -ForegroundColor DarkGray "Branch:        $branchName";
     Write-Host -ForegroundColor DarkGray "Configuration: $Configuration";
+    Write-Host "";
 	Invoke-psake $taskFile -nologo -taskList $Tasks -properties @{
-        "TempDir"=$tempDir;		
-        "Secrets"=$Secrets;
-		"Branch"=$branchName;
-        "Platform"=$Platform;
-        "ToolsDir"=$toolsDir;
-        "RootDir"=$PSScriptRoot;
 		"Major"=$Major.IsPresent;
 		"Minor"=$Minor.IsPresent;
-		"Debug"=$Debug.IsPresent;
+        "ToolsFolder"=$toolsFolder;
+		"CurrentBranch"=$branchName;
 		"Configuration"=$Configuration;
-        "Commit"=(-not $NoCommit.IsPresent);
-		"NonInteractive"=$NonInteractive.IsPresent;
-		"SkipCompilation"=$SkipCompilation.IsPresent;
-        "SolutionName"=(Split-Path $PSScriptRoot -Leaf);
-        "DeleteExistingFiles"=$DeleteExistingFiles.IsPresent;
+        "SolutionFolder"=$PSScriptRoot;
+        "ShouldCommitChanges"=(-not $SkipCommit.IsPresent);
 	}
 	if (-not $psake.build_success) { exit 1; }
 }

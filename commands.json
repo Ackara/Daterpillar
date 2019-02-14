@@ -1,48 +1,35 @@
 {
   "commands":
   {
-    "version: patch":
+    "version: major":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-NoProfile -ExecutionPolicy Bypass -NonInteractive -File build.ps1 version"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 version -Major"
     },
     "version: minor":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Minor"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 version -Minor"
     },
-    "version: major":
+    "version: patch":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 version -Major"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 version"
     },
     "publish":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 push"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 push"
     },
-    "configure":
+	"configure":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 configure"
-    },
-    "rebuild-db":
-    {
-      "fileName": "powershell.exe",
-      "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build.ps1 rebuild-db"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 configure"
     }
-  },
-  "-vs-binding":
-  {
-    "ProjectOpened":
-    [
-      "configure"
-    ]
   }
 }
