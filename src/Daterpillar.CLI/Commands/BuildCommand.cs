@@ -25,7 +25,7 @@ namespace Acklann.Daterpillar.Commands
             if (File.Exists(TargetAssembly) == false)
                 throw new FileNotFoundException(Error.FileNotFound(TargetAssembly, "assembly"), TargetAssembly);
             
-            Schema schema = Compilation.SchemaConvert.ToSchema(TargetAssembly);
+            SchemaDeclaration schema = Conversion.AssemblyConverter.ToSchema(TargetAssembly);
             schema.Save(Path.ChangeExtension(TargetAssembly, ".schema.xml"));
             return 0;
         }

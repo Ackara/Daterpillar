@@ -50,7 +50,7 @@ namespace Acklann.Daterpillar.Commands
             if (File.Exists(NewSchema) == false) return Log.CouldNotFind(NewSchema, "schema");
 
             // Step 1: Merge (if any) referenced schema files into a new-schema.
-            if (Schema.TryLoad(NewSchema, out Schema right, out string errorMsg))
+            if (SchemaDeclaration.TryLoad(NewSchema, out SchemaDeclaration right, out string errorMsg))
                 right.Merge();
             else
                 return Log.NotWellFormedError(NewSchema, errorMsg);
@@ -67,10 +67,10 @@ namespace Acklann.Daterpillar.Commands
             {
                 dir = Path.GetDirectoryName(OldSchema);
                 if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-                File.WriteAllText(OldSchema, new Schema().ToString());
+                File.WriteAllText(OldSchema, new SchemaDeclaration().ToString());
             }
 
-            if (Schema.TryLoad(OldSchema, out Schema left, out errorMsg) == false)
+            if (SchemaDeclaration.TryLoad(OldSchema, out SchemaDeclaration left, out errorMsg) == false)
                 return Log.NotWellFormedError(OldSchema, errorMsg);
 
             string scriptFile = Path.Combine(MigrationsDirectory, string.Format(FileNameFormat, Version, DateTime.Now, Syntax.ToString().ToLowerInvariant()).Trim());
