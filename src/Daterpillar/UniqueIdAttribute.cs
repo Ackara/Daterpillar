@@ -3,13 +3,13 @@
 namespace Acklann.Daterpillar
 {
     [AttributeUsage((AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
-    public class SUIDAttribute : Attribute
+    public class UniqueIdAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SUIDAttribute"/> class.
+        /// Initializes a new instance of the <see cref="UniqueIdAttribute"/> class.
         /// </summary>
         /// <param name="id">The unique identifier.</param>
-        public SUIDAttribute(int id)
+        public UniqueIdAttribute(int id)
         {
             Id = id;
         }

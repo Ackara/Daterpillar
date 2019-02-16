@@ -1,6 +1,3 @@
-file: V1.0__init.MySQL.sql
-
-
 -- Creating the genre table
 
 CREATE TABLE `genre` (
@@ -52,19 +49,4 @@ VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
 
 
 -- If you're reading this it means multiple scrips can be used.
-
-
--- Seed-Data
--- -----------------------------------------------
-
-INSERT INTO song (Name, Artist, Album, Genre, Track, Length)
-VALUES
-('Survival', 'Drake', 'Scorpion', '1', '1', '136')
-;
-
-INSERT INTO artist (Id, Name, Bio, DOB)
-VALUES
-(6, 'Drake', 'canadian-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
-;
-    
 

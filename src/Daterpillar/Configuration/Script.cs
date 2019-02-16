@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// A in-memory representation of a SQL script.
     /// </summary>
     [Serializable]
-    public class Script : ISQLObject
+    public class Script : ISqlStatement
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Script"/> class.

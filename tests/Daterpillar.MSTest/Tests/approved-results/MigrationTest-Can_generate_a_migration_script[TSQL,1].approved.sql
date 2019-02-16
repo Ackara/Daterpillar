@@ -64,7 +64,7 @@ VALUES
 
 INSERT INTO artist (Id, Name, Bio, DOB)
 VALUES
-(6, 'Drake', 'Canadian-black-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
+(6, 'Drake', 'canadian-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
 ;
     
 

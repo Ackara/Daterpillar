@@ -1,5 +1,7 @@
 ﻿using Acklann.Daterpillar.Compilation;
+using Acklann.Daterpillar.Configuration;
 using Microsoft.Build.Framework;
+using System;
 using System.IO;
 
 namespace Acklann.Daterpillar
@@ -7,36 +9,61 @@ namespace Acklann.Daterpillar
     public class GenerateMigrationScriptTask : ITask
     {
         [Required]
-        public string AssemblyFile { get; set; }
+        public string OldSchemaFilePath { get; set; }
 
         [Required]
-        public string MigrationDirectory { get; set; }
+        public string NewSchemaFilePath { get; set; }
+
+        [Required]
+        public string MigrationsDirectory { get; set; }
+
+        [Required]
+        public string FileName { get; set; }
+
+        [Required]
+        public string Language { get; set; }
 
         public bool Execute()
         {
-            if (File.Exists(AssemblyFile) == false)
+            bool successful = false;
+
+            if (File.Exists(OldSchemaFilePath) == false)
             {
-                BuildEngine.WriteError($"Could not find assembly at '{AssemblyFile}'.");
-                return false;
+                Helper.CreateDirectory(OldSchemaFilePath);
+                new SchemaDeclaration().Save(OldSchemaFilePath);
             }
 
-            var schema = SchemaConvert.ToSchema(AssemblyFile);
-            string outFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
-            Helper.CreateDirectory(outFile);
+            if (SchemaDeclaration.TryLoad(OldSchemaFilePath, out SchemaDeclaration oldSchema, out string errorMsg) == false)
+                BuildEngine.Error($"{nameof(Daterpillar)} | {errorMsg}");
 
-            using (var stream = new FileStream(outFile, FileMode.Create, FileAccess.Write, FileShare.Read))
-            {
-                schema.Save(stream);
-            }
+            if (SchemaDeclaration.TryLoad(NewSchemaFilePath, out SchemaDeclaration newSchema, out errorMsg) == false)
+                BuildEngine.Error($"{nameof(Daterpillar)} | {errorMsg}");
 
-            return true;
+            if (oldSchema != null && newSchema != null)
+                if (Conversion.EnumConverter.TryConvertToLanguage(Language, out Syntax lang))
+                {
+                    string scriptFilePath = Path.ChangeExtension(Path.Combine(MigrationsDirectory, FileName), $"{lang.ToString().ToLowerInvariant()}.sql");
+                    var factory = new SqlWriterFactory();
+                    var migrator = new SqlMigrator();
+
+                    Helper.CreateDirectory(scriptFilePath);
+                    using (var stream = new FileStream(scriptFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        migrator.GenerateMigrationScript(factory.CreateInstance(lang, writer), oldSchema, newSchema);
+                        BuildEngine.Info(MessageImportance.High, $"{nameof(Daterpillar)} => created '{scriptFilePath}'");
+                        successful = true;
+                    }
+                }
+                else BuildEngine.Error($"{nameof(Daterpillar)} | The 'Language' parameter must be one of the following values ({string.Join(", ", Enum.GetNames(typeof(Syntax)))})");
+
+            return successful;
         }
 
         #region ITask
 
-        public ITaskHost HostObject { get; set; }
-
         public IBuildEngine BuildEngine { get; set; }
+        public ITaskHost HostObject { get; set; }
 
         #endregion ITask
     }

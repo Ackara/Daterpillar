@@ -1,6 +1,8 @@
-﻿using Acklann.Daterpillar.Compilation;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Conversion;
 using Acklann.Diffa;
+using FakeItEasy;
+using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
@@ -17,13 +19,35 @@ namespace Acklann.Daterpillar.Tests
         {
             // Arrange
             var assemblyFile = typeof(MigrationTest).Assembly.Location;
-            var sut = new Commands.BuildCommand(assemblyFile);
 
             // Act
-            var schema = SchemaConvert.ToSchema(assemblyFile);
+            var schema = AssemblyConverter.ToSchema(assemblyFile);
 
             // Assert
+            schema.Version.ShouldNotBeNullOrEmpty();
             Diff.Approve(schema, ".xml");
+        }
+
+        [TestMethod]
+        public void Can_build_a_schema_from_an_assembly_with_msbuild()
+        {
+            // Arrange
+            var assemblyFile = typeof(MigrationTest).Assembly.Location;
+            var resultFile = Path.ChangeExtension(assemblyFile, ".schema.xml");
+
+            var sut = new ExportSchemaTask()
+            {
+                AssemblyFile = assemblyFile,
+                HostObject = A.Fake<ITaskHost>(),
+                BuildEngine = A.Fake<IBuildEngine>()
+            };
+
+            // Act
+            var successful = sut.Execute();
+
+            // Assert
+            successful.ShouldBeTrue();
+            Diff.ApproveFile(resultFile);
         }
 
         [TestMethod]
@@ -33,9 +57,9 @@ namespace Acklann.Daterpillar.Tests
             var totalTablesBeforeMerge = 0;
             var inputFile = TestData.GetSakilaInventoryXML().FullName;
 
-            var city = new Table("city",
-                new Column("Population", new DataType(SchemaType.INT)), /* add */
-                new Column("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
+            var city = new TableDeclaration("city",
+                new ColumnDeclaration("Population", new DataType(SchemaType.INT)), /* add */
+                new ColumnDeclaration("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
 
                 new ForeignKey("placeholder", "fake", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* add */
                 new ForeignKey("country_id", "country", "country_id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* update */
@@ -43,10 +67,10 @@ namespace Acklann.Daterpillar.Tests
                 new Index(IndexType.Index, new ColumnName("Population")), /* add */
                 new Index(IndexType.Index, new ColumnName("country_id", Order.DESC)) /* update */
                 );
-            var revisions = new Schema() { Tables = new System.Collections.Generic.List<Table> { city } };
+            var revisions = new SchemaDeclaration() { Tables = new System.Collections.Generic.List<TableDeclaration> { city } };
 
             // Act
-            if (Schema.TryLoad(inputFile, out Schema schema))
+            if (SchemaDeclaration.TryLoad(inputFile, out SchemaDeclaration schema))
             {
                 totalTablesBeforeMerge = schema.Tables.Count;
 
@@ -99,7 +123,7 @@ namespace Acklann.Daterpillar.Tests
             TestData.GetMusicXML().CopyTo(activeFile);
             TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
 
-            if (Schema.TryLoad(activeFile, out Schema schema, out string errorMsg) == false)
+            if (SchemaDeclaration.TryLoad(activeFile, out SchemaDeclaration schema, out string errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             var exitCode1 = sut.Execute();
@@ -112,7 +136,7 @@ namespace Acklann.Daterpillar.Tests
             var exitCode2 = sut.Execute();
 
             // Case 3: Migrations exists.
-            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
+            if (SchemaDeclaration.TryLoad(TestData.GetMusicRevisionsXML().FullName, out SchemaDeclaration revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             revisions.Save(activeFile);

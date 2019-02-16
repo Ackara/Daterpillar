@@ -1,6 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Equality;
-using Acklann.Daterpillar.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,7 @@ namespace Acklann.Daterpillar.Compilation
 {
     public class SqlMigrator
     {
-        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(string scriptFile, SchemaDeclaration from, SchemaDeclaration to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
         {
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
             using (SqlWriter writer = _factory.CreateInstance(syntax, file))
@@ -21,7 +20,7 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, bool shouldOmitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, SchemaDeclaration from, SchemaDeclaration to, bool shouldOmitDropStatements = false)
         {
             /// TASKS:
             /// (1) Mark all the tables that need to be created, altered or dropped.
@@ -35,10 +34,10 @@ namespace Acklann.Daterpillar.Compilation
 
             /// 1: Analyze
             _discrepancies.Clear();
-            Schema left = from.Clone();   // old
-            Schema right = to.Clone();    // new
+            SchemaDeclaration left = from.Clone();   // old
+            SchemaDeclaration right = to.Clone();    // new
             var scripts = new LinkedList<Script>(CaputureNewScripts(left.Scripts, right.Scripts));
-            CaptureTablesThatWereModified(new LinkedList<Table>(left.Tables), new LinkedList<Table>(right.Tables));
+            CaptureTablesThatWereModified(new LinkedList<TableDeclaration>(left.Tables), new LinkedList<TableDeclaration>(right.Tables));
 
             /// 2: Sort
             Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
@@ -57,7 +56,7 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== INTERNAL METHODS ==================== //
 
-        private void CaptureTablesThatWereModified(LinkedList<Table> left, LinkedList<Table> right)
+        private void CaptureTablesThatWereModified(LinkedList<TableDeclaration> left, LinkedList<TableDeclaration> right)
         {
             /// TASKS:
             /// (1) Drop all tables on the left that don't exist on the right.
@@ -65,7 +64,7 @@ namespace Acklann.Daterpillar.Compilation
             /// (3) Create all the tables that exist on the right but not on the left
 
             bool noMatchFound;
-            LinkedListNode<Table> newTable, oldTable = left.First;
+            LinkedListNode<TableDeclaration> newTable, oldTable = left.First;
 
             /// 1: Drop old-tables
             while (oldTable != null)
@@ -92,11 +91,11 @@ namespace Acklann.Daterpillar.Compilation
             }
 
             /// 3: Create new-tables
-            foreach (Table table in right)
+            foreach (TableDeclaration table in right)
                 _discrepancies.Add(new Discrepancy(SqlAction.Create, null, table));
         }
 
-        private void FindAllTableAlterations(Table left, Table right, Discrepancy discrepancy)
+        private void FindAllTableAlterations(TableDeclaration left, TableDeclaration right, Discrepancy discrepancy)
         {
             /// TASKS:
             /// (1) Drop all objects on the left that don't exist on the right.
@@ -104,13 +103,13 @@ namespace Acklann.Daterpillar.Compilation
             /// (3) Alter all objects that exist on both sides.
 
             bool noMatchFound;
-            LinkedList<ISQLObject> oldItems, newItems;
-            LinkedListNode<ISQLObject> oldI = null, newI = null;
+            LinkedList<ISqlStatement> oldItems, newItems;
+            LinkedListNode<ISqlStatement> oldI = null, newI = null;
 
             // *** COLUMNS *** //
 
-            oldItems = new LinkedList<ISQLObject>(left.Columns);
-            newItems = new LinkedList<ISQLObject>(right.Columns);
+            oldItems = new LinkedList<ISqlStatement>(left.Columns);
+            newItems = new LinkedList<ISqlStatement>(right.Columns);
             caputure(_columnComparer, () =>
             {
                 discrepancy.Add(SqlAction.Alter, oldI.Value, newI.Value);
@@ -118,14 +117,14 @@ namespace Acklann.Daterpillar.Compilation
 
             // *** FOREIGN KEY *** //
 
-            oldItems = new LinkedList<ISQLObject>(left.ForeignKeys);
-            newItems = new LinkedList<ISQLObject>(right.ForeignKeys);
+            oldItems = new LinkedList<ISqlStatement>(left.ForeignKeys);
+            newItems = new LinkedList<ISqlStatement>(right.ForeignKeys);
             caputure(_foreignKeyComparer, contraintHandler);
 
             // *** INDEX *** //
 
-            oldItems = new LinkedList<ISQLObject>(left.Indecies);
-            newItems = new LinkedList<ISQLObject>(right.Indecies);
+            oldItems = new LinkedList<ISqlStatement>(left.Indecies);
+            newItems = new LinkedList<ISqlStatement>(right.Indecies);
             caputure(_indexComparer, contraintHandler);
 
             // *** //
@@ -164,7 +163,7 @@ namespace Acklann.Daterpillar.Compilation
                 }
 
                 /// 2: Create new objects
-                foreach (ISQLObject item in newItems)
+                foreach (ISqlStatement item in newItems)
                     discrepancy.Add(SqlAction.Create, left, item);
             }
 
@@ -221,7 +220,7 @@ namespace Acklann.Daterpillar.Compilation
             {
                 if (_discrepancies.Count <= 1) return false;
 
-                IEnumerable<string> foreignKeys = from f in ((item.Value as Table).ForeignKeys)
+                IEnumerable<string> foreignKeys = from f in ((item.Value as TableDeclaration).ForeignKeys)
                                                   select f.ForeignTable;
 
                 foreach (string fk in foreignKeys)
@@ -252,19 +251,19 @@ namespace Acklann.Daterpillar.Compilation
             switch (discrepancy.Action)
             {
                 case SqlAction.Create:
-                    children += ((Table)discrepancy.NewValue).Indecies.Count(x => x.Type == IndexType.Index);
+                    children += ((TableDeclaration)discrepancy.NewValue).Indecies.Count(x => x.Type == IndexType.Index);
                     writer.WriteHeaderIf($"Creating the {discrepancy.NewValue.GetName()} table", (children > 0));
-                    writer.Create((Table)discrepancy.NewValue);
+                    writer.Create((TableDeclaration)discrepancy.NewValue);
                     break;
 
                 case SqlAction.Drop:
                     if (shouldIncludeDropStatements)
-                        writer.Drop((Table)discrepancy.OldValue);
+                        writer.Drop((TableDeclaration)discrepancy.OldValue);
                     break;
 
                 case SqlAction.Alter:
-                    Table oldTable = (Table)discrepancy.OldValue;
-                    Table newTable = (Table)discrepancy.NewValue;
+                    TableDeclaration oldTable = (TableDeclaration)discrepancy.OldValue;
+                    TableDeclaration newTable = (TableDeclaration)discrepancy.NewValue;
                     int nChanges = discrepancy.Children.Count;
 
                     if (string.Equals(oldTable.Name, newTable.Name, StringComparison.OrdinalIgnoreCase) == false)
@@ -302,42 +301,42 @@ namespace Acklann.Daterpillar.Compilation
                 {
                     // CREATE
 
-                    case Column newColumn when child.Action == SqlAction.Create:
+                    case ColumnDeclaration newColumn when child.Action == SqlAction.Create:
                         writer.Create(newColumn);
-                        (child.OldValue as Table).Columns.Add(newColumn);
+                        (child.OldValue as TableDeclaration).Columns.Add(newColumn);
                         break;
 
                     case ForeignKey newFk when child.Action == SqlAction.Create:
                         writer.Create(newFk);
-                        (child.OldValue as Table).ForeignKeys.Add(newFk);
+                        (child.OldValue as TableDeclaration).ForeignKeys.Add(newFk);
                         break;
 
                     case Index newIndex when child.Action == SqlAction.Create:
                         writer.Create(newIndex);
-                        (child.OldValue as Table).Indecies.Add(newIndex);
+                        (child.OldValue as TableDeclaration).Indecies.Add(newIndex);
                         break;
 
                     // DROP
 
-                    case Column oldColumn when child.Action == SqlAction.Drop:
+                    case ColumnDeclaration oldColumn when child.Action == SqlAction.Drop:
                         writer.Drop(oldColumn);
-                        (child.NewValue as Table).RemoveColumn(oldColumn.Name);
+                        (child.NewValue as TableDeclaration).RemoveColumn(oldColumn.Name);
                         break;
 
                     case ForeignKey oldFk when child.Action == SqlAction.Drop:
                         writer.Drop(oldFk);
-                        (child.NewValue as Table).RemoveForeignKey(oldFk.Name);
+                        (child.NewValue as TableDeclaration).RemoveForeignKey(oldFk.Name);
                         break;
 
                     case Index oldIndex when child.Action == SqlAction.Drop:
                         writer.Drop(oldIndex);
-                        (child.NewValue as Table).RemoveIndex(oldIndex.Name);
+                        (child.NewValue as TableDeclaration).RemoveIndex(oldIndex.Name);
                         break;
 
                     // ALTER
 
-                    case Column newColumn when child.Action == SqlAction.Alter:
-                        Column oldC = (Column)child.OldValue;
+                    case ColumnDeclaration newColumn when child.Action == SqlAction.Alter:
+                        ColumnDeclaration oldC = (ColumnDeclaration)child.OldValue;
                         if (string.Equals(oldC.Name, newColumn.Name, StringComparison.OrdinalIgnoreCase) == false)
                         {
                             writer.Rename(oldC, newColumn.Name);
@@ -354,23 +353,24 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private void AppendVaribales(SqlWriter writer, Schema schema)
+        private void AppendVaribales(SqlWriter writer, SchemaDeclaration schema)
         {
-            foreach (Table table in schema.Tables)
+            string errorMsg = "Your {0} {2} SUID ({1}) is not unique.";
+            foreach (TableDeclaration table in schema.Tables)
             {
                 if (table.Id == 0) continue;
 
                 if (writer.Variables.Contains(table.Id))
-                    throw new System.Data.DuplicateNameException(Error.DuplicateSUID(table.Name, table.Id));
+                    throw new System.Data.DuplicateNameException(string.Format(errorMsg, table.Name, table.Id, "table"));
                 else
                     writer.Variables.Add(table.Id, table.Name);
 
-                foreach (Column column in table.Columns)
+                foreach (ColumnDeclaration column in table.Columns)
                 {
                     if (column.Id == 0) continue;
 
                     if (writer.Variables.Contains(column.Id))
-                        throw new System.Data.DuplicateNameException(Error.DuplicateSUID($"'{table.Name}'.'{column.Name}'", column.Id, "column"));
+                        throw new System.Data.DuplicateNameException(string.Format(errorMsg, $"'{table.Name}'.'{column.Name}'", column.Id, "column"));
                     else
                         writer.Variables.Add(column.Id, column.Name);
                 }
@@ -381,7 +381,7 @@ namespace Acklann.Daterpillar.Compilation
 
         private IEnumerable<Script> FindAssociatedScripts(LinkedList<Script> propspects, Discrepancy discrepancy, Syntax syntax)
         {
-            int suid = (discrepancy.Value as Table).Id;
+            int suid = (discrepancy.Value as TableDeclaration).Id;
             if (suid == 0) yield break;
 
             Script script;
@@ -407,7 +407,7 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private void RenameForeignKeysReferencedTable(Schema oldSchema, string newName)
+        private void RenameForeignKeysReferencedTable(SchemaDeclaration oldSchema, string newName)
         {
             foreach (ForeignKey fk in oldSchema.GetForeignKeys())
             {

@@ -1,6 +1,6 @@
-﻿using Acklann.Daterpillar.Compilation.Resolvers;
+﻿using Acklann.Daterpillar.Compilation;
+using Acklann.Daterpillar.Compilation.Resolvers;
 using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,11 +9,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Conversion
 {
-    public static class SchemaConvert
+    public static class AssemblyConverter
     {
-        public static Schema ToSchema(Assembly assembly)
+        public static SchemaDeclaration ToSchema(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
@@ -21,17 +21,19 @@ namespace Acklann.Daterpillar.Compilation
                                         where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
                                         select t);
 
-            var schema = new Schema();
-            string documentation = Path.ChangeExtension(assembly.Location, ".xml");
+            var v = assembly.GetName().Version;
+            var schema = new SchemaDeclaration();
+            schema.Version = $"{v.Major}.{v.Minor}.{v.Build}";
+            string assemblyDocumentationFilePath = Path.ChangeExtension(assembly.Location, ".xml");
 
             foreach (Type type in tables)
             {
                 try
                 {
                     if (type.IsEnum)
-                        ExtractEmunInfo(schema, type, documentation);
+                        ExtractEmunInfo(schema, type, assemblyDocumentationFilePath);
                     else
-                        schema.Add(ToTable(type, documentation));
+                        schema.Add(ToTable(type, assemblyDocumentationFilePath));
                 }
                 catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine($"Could not find {type.FullName} in the loaded assembly."); }
             }
@@ -42,16 +44,16 @@ namespace Acklann.Daterpillar.Compilation
             return schema;
         }
 
-        public static Schema ToSchema(string assemblyFilePath)
+        public static SchemaDeclaration ToSchema(string assemblyFilePath)
         {
-            if (File.Exists(assemblyFilePath) == false) throw new FileNotFoundException(string.Format(Error.CouldNotFind, "assembly file", assemblyFilePath));
+            if (File.Exists(assemblyFilePath) == false) throw new FileNotFoundException($"Could not find assembly at '{assemblyFilePath}'.", assemblyFilePath);
 
             return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFilePath));
         }
 
-        // ==================== HELPER ==================== //
+        // ==================== HELPERS (To Schema) ==================== //
 
-        private static Table ToTable(Type type, string documentionPath = null)
+        private static TableDeclaration ToTable(Type type, string documentionPath)
         {
             IEnumerable<MemberInfo> members = (from m in type.GetMembers()
                                                where
@@ -60,7 +62,7 @@ namespace Acklann.Daterpillar.Compilation
                                                 m.IsDefined(typeof(SqlIgnoreAttribute)) == false
                                                select m).ToArray();
 
-            var table = new Table(type.GetName()) { Id = type.GetId() };
+            var table = new TableDeclaration(type.GetName()) { Id = type.GetId() };
             foreach (MemberInfo member in members)
             {
                 ExtractColumnInfo(table, member, documentionPath);
@@ -70,11 +72,11 @@ namespace Acklann.Daterpillar.Compilation
             return table;
         }
 
-        private static void ExtractEmunInfo(Schema schema, Type type, string documentation)
+        private static void ExtractEmunInfo(SchemaDeclaration schema, Type type, string documentation)
         {
-            var table = new Table(type.GetName(),
-                new Column("Id", new DataType(SchemaType.INT)),
-                new Column("Name", new DataType(SchemaType.VARCHAR)),
+            var table = new TableDeclaration(type.GetName(),
+                new ColumnDeclaration("Id", new DataType(SchemaType.INT)),
+                new ColumnDeclaration("Name", new DataType(SchemaType.VARCHAR)),
 
                 new Index(IndexType.PrimaryKey, new ColumnName("Id")),
                 new Index(IndexType.Index, true, new ColumnName("Name"))
@@ -101,10 +103,10 @@ namespace Acklann.Daterpillar.Compilation
             schema.Add(script);
         }
 
-        private static void ExtractColumnInfo(Table table, MemberInfo member, string documentionPath)
+        private static void ExtractColumnInfo(TableDeclaration table, MemberInfo member, string documentionPath)
         {
-            var column = new Column();
-            table.Columns.Add(column);
+            var column = new ColumnDeclaration();
+            table.Add(column);
 
             var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
             var defaultAttr = member.GetCustomAttribute(typeof(DefaultValueAttribute)) as DefaultValueAttribute;
@@ -115,7 +117,6 @@ namespace Acklann.Daterpillar.Compilation
             column.IsNullable = (columnAttr?.Nullable ?? false);
             column.Name = member.GetName();
             column.Id = member.GetId();
-            column.Table = table;
 
             var dataType = new DataType(columnAttr?.TypeName);
             if (string.IsNullOrEmpty(dataType.Name))
@@ -138,7 +139,7 @@ namespace Acklann.Daterpillar.Compilation
             ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
 
-        private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
+        private static void ExtractForiegnKeyInfo(TableDeclaration table, MemberInfo member, string columnName)
         {
             if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
             {
@@ -169,7 +170,7 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private static void ExtractIndexInfo(Table table, IEnumerable<MemberInfo> members)
+        private static void ExtractIndexInfo(TableDeclaration table, IEnumerable<MemberInfo> members)
         {
             var indecies = new List<(string, IndexAttribute)>();
             foreach (MemberInfo member in members)

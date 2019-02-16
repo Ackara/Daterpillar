@@ -242,23 +242,23 @@ CREATE INDEX {ObjectName.SubscribersIndex} ON [service] (Subscribers);
 
         public class Sample
         {
-            public static Schema CreateInstance()
+            public static SchemaDeclaration CreateInstance()
             {
-                var schema = new Schema();
+                var schema = new SchemaDeclaration();
                 schema.Add(
-                    new Table("zombie"),
+                    new TableDeclaration("zombie"),
 
-                    new Table("placeholder",
-                        new Column("Id", SchemaType.INT, autoIncrement: true),
-                        new Column("Name", SchemaType.VARCHAR, nullable: true)
+                    new TableDeclaration("placeholder",
+                        new ColumnDeclaration("Id", SchemaType.INT, autoIncrement: true),
+                        new ColumnDeclaration("Name", SchemaType.VARCHAR, nullable: true)
                     ),
 
-                    new Table("service",
-                        new Column("Id", SchemaType.INT, autoIncrement: true),
-                        new Column("Name", SchemaType.VARCHAR),
-                        new Column("Subscribers", SchemaType.INT),
-                        new Column("Zombie", SchemaType.VARCHAR),
-                        new Column("Zombie_fk", SchemaType.INT),
+                    new TableDeclaration("service",
+                        new ColumnDeclaration("Id", SchemaType.INT, autoIncrement: true),
+                        new ColumnDeclaration("Name", SchemaType.VARCHAR),
+                        new ColumnDeclaration("Subscribers", SchemaType.INT),
+                        new ColumnDeclaration("Zombie", SchemaType.VARCHAR),
+                        new ColumnDeclaration("Zombie_fk", SchemaType.INT),
 
                         new ForeignKey("Zombie_fk", "placeholder", "Id"),
                         new Index(IndexType.Index, new ColumnName("Subscribers"))

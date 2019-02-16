@@ -1,5 +1,4 @@
-﻿
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar
 {
@@ -8,23 +7,22 @@ namespace Acklann.Daterpillar
     /// </summary>
     public enum ReferentialAction
     {
-		/// <summary>
-		/// This means something
-		/// </summary>
-		[XmlEnum("no-action")]
-		NoAction,
+        /// <summary>
+        /// This means something
+        /// </summary>
+        [XmlEnum("no-action")]
+        NoAction,
 
-		[XmlEnum("cascade")]
-		Cascade,
+        [XmlEnum("cascade")]
+        Cascade,
 
-		[XmlEnum("restrict")]
-		Restrict,
+        [XmlEnum("restrict")]
+        Restrict,
 
-		[XmlEnum("set-null")]
-		SetNull,
+        [XmlEnum("set-null")]
+        SetNull,
 
-		[XmlEnum("set-default")]
-		SetDefault,
-
+        [XmlEnum("set-default")]
+        SetDefault,
     }
 }

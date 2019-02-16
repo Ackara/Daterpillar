@@ -75,16 +75,16 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== CREATE ==================== //
 
-        public virtual void Create(Schema schema)
+        public virtual void Create(SchemaDeclaration schema)
         {
-            foreach (Table table in schema.Tables)
+            foreach (TableDeclaration table in schema.Tables)
                 Create(table);
 
             foreach (Script script in schema.Scripts)
                 Create(script);
         }
 
-        public virtual void Create(Table table)
+        public virtual void Create(TableDeclaration table)
         {
             int i, n;
             bool notUsingAutoKey = true;
@@ -93,7 +93,7 @@ namespace Acklann.Daterpillar.Compilation
 
             //--- Columns ---//
 
-            Column column;
+            ColumnDeclaration column;
             n = table.Columns.Count;
             for (i = 0; i < n; i++)
             {
@@ -166,7 +166,7 @@ namespace Acklann.Daterpillar.Compilation
                 Create(index);
         }
 
-        public virtual void Create(Column column)
+        public virtual void Create(ColumnDeclaration column)
         {
             Writer.Write(Expand(CreateColumnFormatString,
                     Resolver.Escape(column.Table.Name),
@@ -222,13 +222,13 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== DROP ==================== //
 
-        public virtual void Drop(Table table)
+        public virtual void Drop(TableDeclaration table)
         {
             Writer.WriteLine("DROP TABLE {0};", Resolver.Escape(table.Name));
             Writer.WriteLine();
         }
 
-        public virtual void Drop(Column column)
+        public virtual void Drop(ColumnDeclaration column)
         {
             Writer.Write(DropColumnFormatString,
                 Resolver.Escape(column.Table.Name),
@@ -260,11 +260,11 @@ namespace Acklann.Daterpillar.Compilation
 
         // ==================== ALTER ==================== //
 
-        public virtual void Alter(Table oldTable, Table newTable)
+        public virtual void Alter(TableDeclaration oldTable, TableDeclaration newTable)
         {
         }
 
-        public virtual void Alter(Column column)
+        public virtual void Alter(ColumnDeclaration column)
         {
             Writer.Write(Expand(AlterColumnFormatString,
                     Resolver.Escape(column.Table.Name),
@@ -279,7 +279,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
-        public void Rename(Table oldTable, Table newTable)
+        public void Rename(TableDeclaration oldTable, TableDeclaration newTable)
         {
             Rename(oldTable.Name, newTable.Name);
         }
@@ -294,7 +294,7 @@ namespace Acklann.Daterpillar.Compilation
             Writer.WriteLine();
         }
 
-        public virtual void Rename(Column oldColumn, string newColumnName)
+        public virtual void Rename(ColumnDeclaration oldColumn, string newColumnName)
         {
             Writer.Write(Expand(RenameColumnFormatString,
                     Resolver.Escape(oldColumn.Table.Name),
@@ -361,7 +361,7 @@ namespace Acklann.Daterpillar.Compilation
             }
         }
 
-        private string GetAutoIncrementValue(Column column)
+        private string GetAutoIncrementValue(ColumnDeclaration column)
         {
             return (string.Equals(column.Name, "id", StringComparison.OrdinalIgnoreCase) ? $"{PrimaryKey} {AutoIncrement}" : AutoIncrement);
         }

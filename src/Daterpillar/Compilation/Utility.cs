@@ -11,7 +11,7 @@ namespace Acklann.Daterpillar.Compilation
 
         internal static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
 
-        internal static bool IsIdentical(this Table left, Table right)
+        internal static bool IsIdentical(this TableDeclaration left, TableDeclaration right)
         {
             return
                 (left.Id == right?.Id && left.Id != 0 && right?.Id != 0)
@@ -20,7 +20,7 @@ namespace Acklann.Daterpillar.Compilation
                 ;
         }
 
-        internal static bool IsIdentical(this Column left, Column right)
+        internal static bool IsIdentical(this ColumnDeclaration left, ColumnDeclaration right)
         {
             return
                 (left.Id == right?.Id && left.Id != 0 && right?.Id != 0)
@@ -29,19 +29,19 @@ namespace Acklann.Daterpillar.Compilation
                 ;
         }
 
-        internal static bool IsIdentical(this ISQLObject left, ISQLObject right)
+        internal static bool IsIdentical(this ISqlStatement left, ISqlStatement right)
         {
-            if (left is Table)
-                return IsIdentical((Table)left, (Table)right);
-            else if (left is Column)
-                return IsIdentical((Column)left, (Column)right);
+            if (left is TableDeclaration)
+                return IsIdentical((TableDeclaration)left, (TableDeclaration)right);
+            else if (left is ColumnDeclaration)
+                return IsIdentical((ColumnDeclaration)left, (ColumnDeclaration)right);
             else
                 return string.Equals(left.GetName(), right.GetName(), System.StringComparison.OrdinalIgnoreCase);
         }
 
         internal static int GetId(this MemberInfo member)
         {
-            return (!(member.GetCustomAttribute(typeof(SUIDAttribute)) is SUIDAttribute attr) ? 0 : attr.Id);
+            return (!(member.GetCustomAttribute(typeof(UniqueIdAttribute)) is UniqueIdAttribute attr) ? 0 : attr.Id);
         }
 
         internal static string GetName(this Type type)
@@ -67,19 +67,19 @@ namespace Acklann.Daterpillar.Compilation
             return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
         }
 
-        internal static string GetIdOrName(this Table table)
+        internal static string GetIdOrName(this TableDeclaration table)
         {
             return (table.Id > 0 ? $"$({table.Id})" : table.Name);
         }
 
-        internal static string GetIdOrName(this Column column)
+        internal static string GetIdOrName(this ColumnDeclaration column)
         {
             return (column.Id > 0 ? $"$({column.Id})" : column.Name);
         }
 
         internal static string GetIdOrName(this MemberInfo member)
         {
-            var suidAttr = member.GetCustomAttribute(typeof(SUIDAttribute)) as SUIDAttribute;
+            var suidAttr = member.GetCustomAttribute(typeof(UniqueIdAttribute)) as UniqueIdAttribute;
 
             if (suidAttr?.Id > 0) return $"$({suidAttr.Id})";
             else return GetName(member);

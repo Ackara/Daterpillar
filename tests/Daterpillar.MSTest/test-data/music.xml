@@ -36,7 +36,7 @@
       <dataType>varchar</dataType>
     </column>
 
-    <foreignKey localColumn="Genre" foreignTable="genre" />
+    <foreignKey localColumn="Genre" foreignTable="genre"  />
 
     <index>
       <columnName>Name</columnName>

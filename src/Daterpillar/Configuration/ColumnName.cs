@@ -74,7 +74,19 @@ namespace Acklann.Daterpillar.Configuration
             return $"{Name} {Order}";
         }
 
-        #region Operator Overrides
+        #region Operators
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="ColumnName"/>.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static implicit operator ColumnName(string name)
+        {
+            return new ColumnName(name);
+        }
 
         /// <summary>
         /// Implements the == operator.
@@ -92,6 +104,6 @@ namespace Acklann.Daterpillar.Configuration
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(ColumnName left, ColumnName right) => !left.Equals(right);
 
-        #endregion Operator Overrides
+        #endregion Operators
     }
 }

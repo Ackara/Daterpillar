@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -8,36 +9,36 @@ namespace Acklann.Daterpillar.Configuration
     /// <summary>
     /// Represents a <see cref="Table"/> column.
     /// </summary>
-    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class Column : ISQLObject
+    [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
+    public class ColumnDeclaration : ISqlStatement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
         /// </summary>
-        public Column() : this(null, new DataType())
+        public ColumnDeclaration() : this(null, new DataType())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
         /// <param name="nullable">if set to <c>true</c> [nullable].</param>
         /// <param name="defaultValue">The default value.</param>
-        public Column(string name, SchemaType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null) : this(name, new DataType(dataType), autoIncrement, nullable, defaultValue)
+        public ColumnDeclaration(string name, SchemaType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null) : this(name, new DataType(dataType), autoIncrement, nullable, defaultValue)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
         /// <param name="nullable">if set to <c>true</c> [nullable].</param>
         /// <param name="defaultValue">The default value.</param>
-        public Column(string name, DataType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null)
+        public ColumnDeclaration(string name, DataType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null)
         {
             Name = name;
             DataType = dataType;
@@ -50,7 +51,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore, IgnoreDataMember]
-        public Table Table;
+        public TableDeclaration Table;
 
         [XmlAttribute("suid"), DefaultValue(0)]
         public int Id { get; set; }
@@ -104,17 +105,26 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore, IgnoreDataMember]
         public int OrdinalPosition { get; set; }
 
-        string ISQLObject.GetName() => Name;
+        string ISqlStatement.GetName() => Name;
+
+        internal void Overwrite(ColumnDeclaration right)
+        {
+            Comment = right.Comment;
+            DataType = right.DataType;
+            IsNullable = right.IsNullable;
+            DefaultValue = right.DefaultValue;
+            AutoIncrement = right.AutoIncrement;
+        }
 
         #region ICloneable
 
         /// <summary>
-        /// Creates a new <see cref="Column"/> object that is a copy of the current instance.
+        /// Creates a new <see cref="ColumnDeclaration"/> object that is a copy of the current instance.
         /// </summary>
-        /// <returns>A new <see cref="Column"/> object that is a copy of this instance.</returns>
-        public Column Clone()
+        /// <returns>A new <see cref="ColumnDeclaration"/> object that is a copy of this instance.</returns>
+        public ColumnDeclaration Clone()
         {
-            return new Column()
+            return new ColumnDeclaration()
             {
                 Id = this.Id,
                 Name = this.Name,
@@ -137,20 +147,11 @@ namespace Acklann.Daterpillar.Configuration
 
         #endregion ICloneable
 
-        internal void Overwrite(Column right)
-        {
-            Comment = right.Comment;
-            DataType = right.DataType;
-            IsNullable = right.IsNullable;
-            DefaultValue = right.DefaultValue;
-            AutoIncrement = right.AutoIncrement;
-        }
-
         #region Private Members
 
-        private string ToDebuggerDisplay()
+        private string GetDebuggerDisplay()
         {
-            return $"{Name} {DataType}{(AutoIncrement ? " autoincrement" : string.Empty)}";
+            return $"{Name}: {DataType}";
         }
 
         #endregion Private Members

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.Equality
 {
-    internal class ColumnEqualityComparer : IEqualityComparer<Column>
+    internal class ColumnEqualityComparer : IEqualityComparer<ColumnDeclaration>
     {
-        public bool Equals(Column x, Column y)
+        public bool Equals(ColumnDeclaration x, ColumnDeclaration y)
         {
             if (x == null && y == null) return true;
             else if (x == null || y == null) return false;
@@ -20,7 +20,7 @@ namespace Acklann.Daterpillar.Equality
             }
         }
 
-        public int GetHashCode(Column obj)
+        public int GetHashCode(ColumnDeclaration obj)
         {
             return obj.Name.GetHashCode() ^ obj.DataType.GetHashCode() ^ obj.IsNullable.GetHashCode() ^ obj.AutoIncrement.GetHashCode() ^ obj.OrdinalPosition.GetHashCode() ^ obj.Comment.GetHashCode();
         }

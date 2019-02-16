@@ -21,32 +21,32 @@ namespace Acklann.Daterpillar.Tests
             #region Arrange
 
             var scriptFile = Path.Combine(Path.GetTempPath(), $"dtp-create.{syntax}".ToLowerInvariant());
-            var schema = new Schema();
+            var schema = new SchemaDeclaration();
 
-            var genre = new Table("genre",
-                new Column("Id", new DataType(SchemaType.INT), true),
-                new Column("Name", new DataType(SchemaType.VARCHAR))
+            var genre = new TableDeclaration("genre",
+                new ColumnDeclaration("Id", new DataType(SchemaType.INT), true),
+                new ColumnDeclaration("Name", new DataType(SchemaType.VARCHAR))
                 )
             { Schema = schema, Comment = "Represents a music genre." };
 
-            var song = new Table("song",
-                new Column("Id", SchemaType.INT, true) { Comment = "The unique identifier." },
-                new Column("Name", new DataType(SchemaType.VARCHAR, 15)),
-                new Column("GenreId", SchemaType.INT),
-                new Column("Track", SchemaType.TINYINT, defaultValue: "1"),
-                new Column("Lyrics", new DataType(SchemaType.VARCHAR), nullable: true),
+            var song = new TableDeclaration("song",
+                new ColumnDeclaration("Id", SchemaType.INT, true) { Comment = "The unique identifier." },
+                new ColumnDeclaration("Name", new DataType(SchemaType.VARCHAR, 15)),
+                new ColumnDeclaration("GenreId", SchemaType.INT),
+                new ColumnDeclaration("Track", SchemaType.TINYINT, defaultValue: "1"),
+                new ColumnDeclaration("Lyrics", new DataType(SchemaType.VARCHAR), nullable: true),
 
                 new ForeignKey("GenreId", "genre", "Id"),
                 new Index(IndexType.Index, new ColumnName("GenreId"))
                 )
             { Schema = schema };
 
-            var album = new Table("album",
-                new Column("SongId", SchemaType.INT),
-                new Column("ArtistId", SchemaType.INT),
-                new Column("Name", SchemaType.VARCHAR),
-                new Column("Year", SchemaType.SMALLINT),
-                new Column("Price", SchemaType.DECIMAL)
+            var album = new TableDeclaration("album",
+                new ColumnDeclaration("SongId", SchemaType.INT),
+                new ColumnDeclaration("ArtistId", SchemaType.INT),
+                new ColumnDeclaration("Name", SchemaType.VARCHAR),
+                new ColumnDeclaration("Year", SchemaType.SMALLINT),
+                new ColumnDeclaration("Price", SchemaType.DECIMAL)
                 )
             { Schema = schema };
 
@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Tests
             var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
 
             var name_idx = new Index(IndexType.Index, true, new ColumnName("Name", Order.DESC)) { Table = song };
-            var releaseDate = new Column("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "$(now)") { Table = song };
+            var releaseDate = new ColumnDeclaration("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "$(now)") { Table = song };
 
             var song_fk = new ForeignKey("SongId", "song", "Id") { Table = album };
             var pKey = new Index(IndexType.PrimaryKey, new ColumnName("SongId"), new ColumnName("ArtistId")) { Table = album };

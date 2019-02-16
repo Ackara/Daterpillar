@@ -7,8 +7,8 @@ namespace Acklann.Daterpillar.Configuration
     /// <summary>
     /// Represents a <see cref="Table"/> foreign key.
     /// </summary>
-    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class ForeignKey : ISQLObject
+    [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay(), nq}")]
+    public class ForeignKey : ISqlStatement
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore, IgnoreDataMember]
-        public Table Table;
+        public TableDeclaration Table;
 
         /// <summary>
         /// Gets or sets the name of the key.
@@ -65,7 +65,7 @@ namespace Acklann.Daterpillar.Configuration
             get { return (Table == null) ? string.Empty : Table.Name; }
             set
             {
-                if (Table == null) Table = new Table();
+                if (Table == null) Table = new TableDeclaration();
                 Table.Name = value;
             }
         }
@@ -108,7 +108,7 @@ namespace Acklann.Daterpillar.Configuration
         [DefaultValue(ReferentialAction.Restrict)]
         public ReferentialAction OnDelete { get; set; }
 
-        string ISQLObject.GetName() => Name;
+        string ISqlStatement.GetName() => Name;
 
         #region ICloneable
 

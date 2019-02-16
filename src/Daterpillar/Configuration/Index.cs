@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> index.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class Index : ISQLObject
+    public class Index : ISqlStatement
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Index"/> class.
@@ -53,7 +53,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore, IgnoreDataMember]
-        public Table Table;
+        public TableDeclaration Table;
 
         /// <summary>
         /// Gets or sets the name of the index.
@@ -91,7 +91,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("columnName")]
         public ColumnName[] Columns { get; set; }
 
-        string ISQLObject.GetName() => Name;
+        string ISqlStatement.GetName() => Name;
 
         #region ICloneable
 

@@ -12,17 +12,22 @@ namespace Acklann.Daterpillar
             return filePath;
         }
 
-        public static void WriteError(this IBuildEngine BuildEngine, string message)
+        public static void Error(this IBuildEngine BuildEngine, string message)
         {
-            BuildEngine.LogErrorEvent(new BuildErrorEventArgs(null, null, null, 0, 0, 0, 0, message, null, nameof(GenerateMigrationScriptTask)));
+            BuildEngine.LogErrorEvent(new BuildErrorEventArgs(null, null, null, 0, 0, 0, 0, $"{nameof(Daterpillar)} | {message}", null, nameof(ExportSchemaTask)));
         }
 
-        public static void Write(this IBuildEngine BuildEngine, MessageImportance level, string message)
+        public static void Warn(this IBuildEngine engine, string message, string sender = nameof(ExportSchemaTask))
+        {
+            engine.LogWarningEvent(new BuildWarningEventArgs(null, null, null, 0, 0, 0, 0, $"{nameof(Daterpillar)} | {message}", null, sender));
+        }
+
+        public static void Info(this IBuildEngine BuildEngine, MessageImportance level, string message)
         {
             BuildEngine.LogMessageEvent(new BuildMessageEventArgs(
-                message,
+                $"{nameof(Daterpillar)} | {message}",
                 string.Empty,
-                nameof(GenerateMigrationScriptTask),
+                nameof(ExportSchemaTask),
                 level));
         }
     }

@@ -98,7 +98,7 @@ namespace Acklann.Daterpillar.Configuration
             return $"{Name}({Scale}, {Precision})";
         }
 
-        #region Operator Overrides
+        #region Operators
 
         /// <summary>
         /// Implements the == operator.
@@ -116,6 +116,6 @@ namespace Acklann.Daterpillar.Configuration
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(DataType left, DataType right) => !left.Equals(right);
 
-        #endregion Operator Overrides
+        #endregion Operators
     }
 }

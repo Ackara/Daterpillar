@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Compilation
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class Discrepancy
     {
-        public Discrepancy(ISQLObject oldValue, ISQLObject newValue) : this(SqlAction.None, oldValue, newValue)
+        public Discrepancy(ISqlStatement oldValue, ISqlStatement newValue) : this(SqlAction.None, oldValue, newValue)
         {
             if (oldValue == null && newValue == null)
                 Action = SqlAction.None;
@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Compilation
                 Action = SqlAction.Alter;
         }
 
-        public Discrepancy(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
+        public Discrepancy(SqlAction action, ISqlStatement oldValue, ISqlStatement newValue)
         {
             Action = action;
             OldValue = oldValue;
@@ -26,13 +26,13 @@ namespace Acklann.Daterpillar.Compilation
             Children = new List<Discrepancy>();
         }
 
-        public readonly ISQLObject OldValue;
+        public readonly ISqlStatement OldValue;
 
-        public readonly ISQLObject NewValue;
+        public readonly ISqlStatement NewValue;
 
         public SqlAction Action { get; set; }
 
-        public ISQLObject Value
+        public ISqlStatement Value
         {
             get
             {
@@ -47,7 +47,7 @@ namespace Acklann.Daterpillar.Compilation
 
         public List<Discrepancy> Children { get; set; }
 
-        public void Add(SqlAction action, ISQLObject oldValue, ISQLObject newValue)
+        public void Add(SqlAction action, ISqlStatement oldValue, ISqlStatement newValue)
         {
             Children.Add(new Discrepancy(action, oldValue, newValue));
         }
@@ -61,7 +61,7 @@ namespace Acklann.Daterpillar.Compilation
 
             if (Value is Index) weight += 1;
             else if (Value is ForeignKey) weight += 2;
-            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is Column) weight += 4;
+            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is ColumnDeclaration) weight += 4;
 
             return weight;
         }

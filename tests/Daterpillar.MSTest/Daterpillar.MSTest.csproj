@@ -40,8 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Daterpillar.CLI\Daterpillar.CLI.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar.MSBuild\Daterpillar.MSBuild.csproj" />
+    <ProjectReference Include="..\..\src\Daterpillar.Powershell\Daterpillar.Powershell.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 

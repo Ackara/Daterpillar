@@ -79,14 +79,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataTypeFactory.cs</LastGenOutput>
     </None>
-    <None Update="ReferentialAction.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ReferentialAction.cs</LastGenOutput>
-    </None>
-    <None Update="SchemaType.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SchemaType.cs</LastGenOutput>
-    </None>
     <None Update="Configuration\Syntax.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Syntax.cs</LastGenOutput>
@@ -101,16 +93,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DataTypeFactory.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ReferentialAction.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ReferentialAction.tt</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaType.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SchemaType.tt</DependentUpon>
     </Compile>
     <Compile Update="Configuration\Syntax.cs">
       <DesignTime>True</DesignTime>
