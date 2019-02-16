@@ -43,15 +43,36 @@ Task "Configure-Environment" -alias "configure" -description "This task generate
 }
 
 Task "Package-Solution" -alias "pack" -description "This task generates all deployment packages." `
--depends @("restore", "xsd") -action {
+-depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
 
 	$version = ConvertTo-NcrementVersionNumber $ManifestFilePath $CurrentBranch;
 	#Join-Path $SolutionFolder "src/*/*" | Get-ChildItem -Filter "*CLI.*proj" | Invoke-NShellit $ArtifactsFolder $Configuration;
-	Join-Path $SolutionFolder "src/*/*" | Get-ChildItem -File -Filter "$(Split-Path $SolutionFolder -Leaf).csproj" | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
+	#Join-Path $SolutionFolder "src/*/*" | Get-ChildItem -File -Filter "$(Split-Path $SolutionFolder -Leaf).csproj" | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
 	#Get-ChildItem $ArtifactsFolder -Recurse -File -Filter "*.nupkg" | Expand-NugetPackage (Join-Path $ArtifactsFolder "msbuild");
-	#Join-Path $SolutionFolder "src/*.VSIX/bin/$Configuration/*.vsix" | Copy-Item -Destination $ArtifactsFolder;
+
+	# Building the powersehll manifest.
+	$moduleFolder = Join-Path $ArtifactsFolder (Split-Path $SolutionFolder -Leaf);
+	if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
+	[string]$projectFolder = Join-Path $SolutionFolder "src\*.Powershell" | Resolve-Path;
+	Join-Path $projectFolder "bin/$Configuration/*/*" | Get-ChildItem | Where-Object { $_.Name.EndsWith(".dll") -or $_.Name.EndsWith(".xml") } | Copy-Item -Destination $moduleFolder -Force;
+
+	$psd1 = Get-ChildItem $projectFolder -Filter "*.psd1" | Select-Object -First 1;
+	$dll = Join-Path $moduleFolder "*.Powershell.dll" | Get-Item;
+	Update-ModuleManifest $psd1.FullName `
+	-RootModule $dll.Name `
+	-ModuleVersion $version.Version;
+
+	Copy-Item $psd1.FullName -Destination $moduleFolder -Force;
+	Write-Host "  * created powershell module.";
+}
+
+Task "Test-PowershellModule" -alias "test-ps"`
+-depends @() -action {
+	$psd1 = Get-ChildItem $ArtifactsFolder -Recurse -Filter "*.psd1" | Select-Object -First 1;
+	Import-Module $psd1.FullName -Force;
+	help New-MigrationScript -ShowWindow;
 }
 
 Task "Generate-XmlSchemaFromDll" -alias "xsd" -description "This task generates a '.xsd' file from the project's '.dll' file." `
@@ -93,7 +114,7 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 
 Task "Build-Solution" -alias "build" -description "This task compiles projects in the solution." `
 -action {
-	Get-Item "$SolutionFolder/*.sln" | Invoke-MSBuild15 $ToolsFolder $Configuration;
+	Get-Item "$SolutionFolder/*.sln" | Invoke-MSBuild $Configuration;
 }
 
 Task "Run-Tests" -alias "test" -description "This task invoke all tests within the 'tests' folder." `
