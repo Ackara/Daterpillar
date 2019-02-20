@@ -3,7 +3,7 @@ $context = New-TestEnvironment;
 Import-Module $context.ModulePath -Force;
 
 Describe "help" {
-	It "should have full-detailed help" {
+	It "[PS] Should have full-detailed help" {
 		$menu = help New-MigrationScript | Out-String;
 		$menu | Write-Host;
 		$menu | Should Not BeNullOrEmpty;
@@ -11,7 +11,7 @@ Describe "help" {
 }
 
 Describe "New-MigrationScript" {
-	It "can generate migration script via powershell" {
+	It "[PS] Can generate migration script" {
 		$outFolder = New-TestFolder $context "new-script";
 
 		$newSchema = Join-Path $outFolder "lastest.schema.xml";
@@ -21,5 +21,25 @@ Describe "New-MigrationScript" {
 		$resultFile = New-MigrationScript $oldSchema $newSchema $outFolder "mysql";
 		$resultFile.FullName | Should Exist;
 		$resultFile.Length | Should BeGreaterThan 100;
+	}
+}
+
+Describe "Export-Schema" {
+	$outFolder = New-TestFolder $context "export-schema";
+
+	It "[PS] Can generate a '.schema.xml' file from an assembly." {
+		try
+		{
+			Push-Location $PSScriptRoot;
+			[string]$projectFolder = "../*.Sample/" | Resolve-Path;
+			[string]$targetPath = Join-Path $projectFolder "bin/*/*/*.Sample.dll" | Resolve-Path | Select-Object -First 1;
+			$expectedFile = [IO.Path]::ChangeExtension($targetPath, ".schema.xml");
+			Pop-Location;
+
+			Split-Path $targetPath -Parent | Push-Location;
+			$targetPath | Export-Schema $projectFolder;
+		}
+		finally { Pop-Location; }
+		$expectedFile | Should Exist;
 	}
 }

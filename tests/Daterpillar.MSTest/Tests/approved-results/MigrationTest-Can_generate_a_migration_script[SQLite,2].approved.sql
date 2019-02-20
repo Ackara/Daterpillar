@@ -1,4 +1,4 @@
-file: V1.1__Update.sqlite.sql
+file: V1.1__alter_schema.sql
 
 
 -- Before table works.

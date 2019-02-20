@@ -4,15 +4,13 @@
 
 	try
 	{
+		$moduleFolder = Join-Path ([System.IO.Path]::GetTempPath()) "daterpillar-pester";
+		if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
+
 		Push-Location $PSScriptRoot;
-		$binFolder = "../../src/*.Powershell/bin/*/*/*.Powershell.dll" | Resolve-Path | Select-Object -First 1 | Split-Path -Parent;
-		if ($binFolder)
-		{
-			$moduleFolder = Join-Path ([System.IO.Path]::GetTempPath()) "daterpillar-pester";
-			if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
-			Get-ChildItem $binFolder -File | Copy-Item -Destination $moduleFolder -Force;
-			$modulePath = Get-ChildItem $moduleFolder -Filter "*.psd1" | Select-Object -ExpandProperty FullName -First 1;
-		}
+		[string]$projectFile = "../../src/*.Powershell/*.*proj" | Resolve-Path;
+		&dotnet publish $projectFile --configuration "Debug" --output $moduleFolder | Out-Null;
+		$modulePath = Get-ChildItem $moduleFolder -Filter "*.psd1" | Select-Object -ExpandProperty FullName -First 1;
 
 		$sampleFolder = Join-Path $moduleFolder "sample-data";
 		if (-not (Test-Path $sampleFolder)) { New-Item $sampleFolder -ItemType Directory | Out-Null; }

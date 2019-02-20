@@ -95,7 +95,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>
         /// The path.
         /// </value>
-        [XmlIgnore, IgnoreDataMember]
+        [XmlIgnore]
         public string Path { get; set; }
 
         public static SchemaDeclaration Load(string filePath)

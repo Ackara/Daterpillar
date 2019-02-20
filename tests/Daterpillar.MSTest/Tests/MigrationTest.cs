@@ -1,13 +1,11 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Compilation;
+using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Conversion;
 using Acklann.Diffa;
-using FakeItEasy;
-using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -26,28 +24,6 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             schema.Version.ShouldNotBeNullOrEmpty();
             Diff.Approve(schema, ".xml");
-        }
-
-        [TestMethod]
-        public void Can_build_a_schema_from_an_assembly_with_msbuild()
-        {
-            // Arrange
-            var assemblyFile = typeof(MigrationTest).Assembly.Location;
-            var resultFile = Path.ChangeExtension(assemblyFile, ".schema.xml");
-
-            var sut = new ExportSchemaTask()
-            {
-                AssemblyFile = assemblyFile,
-                HostObject = A.Fake<ITaskHost>(),
-                BuildEngine = A.Fake<IBuildEngine>()
-            };
-
-            // Act
-            var successful = sut.Execute();
-
-            // Assert
-            successful.ShouldBeTrue();
-            Diff.ApproveFile(resultFile);
         }
 
         [TestMethod]
@@ -108,12 +84,10 @@ namespace Acklann.Daterpillar.Tests
             var migrationsDir = Path.Combine(baseDir, "migrations");
             var snapshotFile = Path.Combine(baseDir, "snapshot.schema.xml");
             var activeFile = Path.Combine(baseDir, "active.schema.xml");
+            var outFile = Path.Combine(migrationsDir, "V1.1__alter_schema.sql");
 
-            var sut = new Commands.MigrateCommand(snapshotFile, activeFile, migrationsDir, "1.1",
-                syntax: syntax,
-                fileNameFormat: "V{0}__Update.{2}.sql",
-                omitDropStatements: false
-                );
+            var sut = new SqlMigrator();
+            var factory = new SqlWriterFactory();
 
             if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);
             Directory.CreateDirectory(baseDir);
@@ -123,24 +97,27 @@ namespace Acklann.Daterpillar.Tests
             TestData.GetMusicXML().CopyTo(activeFile);
             TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
 
-            if (SchemaDeclaration.TryLoad(activeFile, out SchemaDeclaration schema, out string errorMsg) == false)
+            var oldSchema = new SchemaDeclaration();
+            if (SchemaDeclaration.TryLoad(activeFile, out SchemaDeclaration newSchema, out string errorMsg) == false)
                 Assert.Fail(errorMsg);
 
-            var exitCode1 = sut.Execute();
-            var outFile = Directory.EnumerateFiles(migrationsDir).First();
+            newSchema.Merge();
+            var case1 = sut.GenerateMigrationScript(outFile, oldSchema, newSchema, syntax).Length;
+
             File.Copy(outFile, Path.Combine(migrationsDir, $"V1.0__init.{syntax}.sql"));
 
             // Case 2: No migrations/changes.
-            schema.Merge();
-            schema.Save(snapshotFile);
-            var exitCode2 = sut.Execute();
+            newSchema.Merge();
+            newSchema.Save(snapshotFile);
+            oldSchema = SchemaDeclaration.Load(snapshotFile);
+            var case2 = sut.GenerateMigrationScript(outFile, oldSchema, newSchema, syntax).Length;
 
             // Case 3: Migrations exists.
             if (SchemaDeclaration.TryLoad(TestData.GetMusicRevisionsXML().FullName, out SchemaDeclaration revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             revisions.Save(activeFile);
-            var exitCode3 = sut.Execute();
+            var case3 = sut.GenerateMigrationScript(outFile, oldSchema, revisions, syntax).Length;
 
             // === Results === //
 
@@ -168,9 +145,9 @@ namespace Acklann.Daterpillar.Tests
                 executionWasSuccessful.ShouldBeTrue();
             }
 
-            exitCode1.ShouldBe(0, "The 1st migration failed.");
-            exitCode2.ShouldBe(0, "The 2nd migration failed.");
-            exitCode3.ShouldBe(0, "The 3rd migration failed.");
+            case1.ShouldBeGreaterThan(0, "The 1st migration failed.");
+            case2.ShouldBe(0, "The 2nd migration failed.");
+            case3.ShouldBeGreaterThan(0, "The 3rd migration failed.");
         }
     }
 }

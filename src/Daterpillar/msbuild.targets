@@ -1,40 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="$(OutputPath)==''">
-    <TargetOutDir>bin\$(Configuration)\$(TargetFramework)</TargetOutDir>
-  </PropertyGroup>
-
   <PropertyGroup>
-    <GenerateDaterpillarSchemaOnBuild Condition="$(GenerateDaterpillarSchemaOnBuild)==''">true</GenerateDaterpillarSchemaOnBuild>
-    <TargetOutDir Condition="$(TargetOutDir)==''">$(OutputPath)</TargetOutDir>
-    <DaterpillarTargetAssembly>$([System.IO.Path]::GetFullPath('$(TargetOutDir)\$(AssemblyName).dll'))</DaterpillarTargetAssembly>
-    <DaterpillarAssembly>
-      $([System.IO.Path]::Combine(
-        $([System.IO.Path]::GetDirectoryName(
-          $([System.IO.Path]::GetDirectoryName(
-            '$(MSBuildThisFileDirectory.Trim('\').Trim('/'))'
-          ))
-        )),
-        'tools', 'netstandard2.0', 'Acklann.Daterpillar.CLI.dll'
-      ))
-    </DaterpillarAssembly>
+    <ExportDaterpillarSchemaAfterBuild Condition="$(ExportDaterpillarSchemaAfterBuild)==''">false</ExportDaterpillarSchemaAfterBuild>
+    <GenerateMigrationScriptAfterBuild Condition="$(GenerateMigrationScriptAfterBuild)==''">false</GenerateMigrationScriptAfterBuild>
+
+    <DaterpillarMigrationsDirectory Condition="$(DaterpillarMigrationsDirectory)==''">migrations</DaterpillarMigrationsDirectory>
+    <DaterpillarSnapshotFilePath Condition="$(DaterpillarSnapshotFilePath)==''"> $([System.IO.Path]::Combine($(DaterpillarMigrationsDirectory), 'snapshot.schema.xml'))</DaterpillarSnapshotFilePath>
+    <DaterpillarLanguage Condition="$(DaterpillarLanguage)==''">MySQL</DaterpillarLanguage>
+
+    <DaterpillarExportScript>$(MSBuildThisFileDirectory)..\tools\$(TargetFramework)\Export-DaterpillarSchema.ps1</DaterpillarExportScript>
   </PropertyGroup>
 
   <Target Name="GenerateDaterpillarSchemaAfterBuild"
-          AfterTargets="CoreCompile;Build"
-          Condition="$(GenerateDaterpillarSchemaOnBuild)=='true'">
-    <CallTarget Targets="GenerateDaterpillarSchema" />
+          BeforeTargets="PostBuildEvent"
+          Condition="$(ExportDaterpillarSchemaAfterBuild)=='true'">
+    <CallTarget Targets="ExportDaterpillarSchema" />
   </Target>
 
-  <Target Name="GenerateDaterpillarSchema">
-    <Message Text="Skipped schema generation because '$(DaterpillarTargetAssembly)' was not found."
-         Condition="!Exists('$(DaterpillarTargetAssembly)')"	/>
+  <Target Name="ExportDaterpillarSchema">
+    <Error Condition="$(TargetFramework.Contains('netcoreapp'))"
+           Text="The '$(TargetFramework)' framework is not compatible with this package as of yet; consider using 'netstandard' instead. " />
 
-    <Message Text="Skipped schema generation because '$(DaterpillarAssembly)' was not found."
-         Condition="!Exists('$(DaterpillarAssembly)')"	/>
+    <Message Condition="Exists('$(DaterpillarExportScript)')"
+             Text="new: $(DaterpillarExportScript)" />
 
-    <Exec Command="dotnet &quot;$(DaterpillarAssembly.Trim())&quot; build &quot;$(DaterpillarTargetAssembly.Trim())&quot;"
-        Condition="Exists('$(DaterpillarAssembly)') AND Exists('$(DaterpillarTargetAssembly)')"	/>
+    <Exec Condition="Exists('$(DaterpillarExportScript)')"
+          Command="powershell -File $(DaterpillarExportScript) $(TargetPath) $(MSBuildProjectDirectory)" />
+
+    <Message Text="$(MSBuildProjectName) -> $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml'))" Importance="high" />
   </Target>
+
+  <Target Name="GenerateMigrationScript"></Target>
 </Project>

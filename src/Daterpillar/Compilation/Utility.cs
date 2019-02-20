@@ -1,6 +1,7 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Compilation
@@ -18,6 +19,14 @@ namespace Acklann.Daterpillar.Compilation
                 ||
                 string.Equals(left?.Name, right?.Name, System.StringComparison.OrdinalIgnoreCase)
                 ;
+        }
+
+        internal static void CreateDirectory(string scriptFile)
+        {
+            if (string.IsNullOrEmpty(scriptFile)) throw new ArgumentNullException(nameof(scriptFile));
+
+            string folder = Path.GetDirectoryName(scriptFile);
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
 
         internal static bool IsIdentical(this ColumnDeclaration left, ColumnDeclaration right)

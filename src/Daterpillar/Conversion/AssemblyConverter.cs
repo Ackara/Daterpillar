@@ -22,8 +22,7 @@ namespace Acklann.Daterpillar.Conversion
                                         select t);
 
             var v = assembly.GetName().Version;
-            var schema = new SchemaDeclaration();
-            schema.Version = $"{v.Major}.{v.Minor}.{v.Build}";
+            var schema = new SchemaDeclaration { Version = $"{v.Major}.{v.Minor}.{v.Build}" };
             string assemblyDocumentationFilePath = Path.ChangeExtension(assembly.Location, ".xml");
 
             foreach (Type type in tables)
@@ -47,8 +46,7 @@ namespace Acklann.Daterpillar.Conversion
         public static SchemaDeclaration ToSchema(string assemblyFilePath)
         {
             if (File.Exists(assemblyFilePath) == false) throw new FileNotFoundException($"Could not find assembly at '{assemblyFilePath}'.", assemblyFilePath);
-
-            return ToSchema(System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFilePath));
+            return ToSchema(Assembly.Load(File.ReadAllBytes(assemblyFilePath)));
         }
 
         // ==================== HELPERS (To Schema) ==================== //

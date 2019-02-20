@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent schema.
         /// </summary>
-        [XmlIgnore, IgnoreDataMember]
+        [XmlIgnore]
         public SchemaDeclaration Schema;
 
         [XmlAttribute("suid"), DefaultValue(0)]

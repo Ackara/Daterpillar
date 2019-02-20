@@ -50,7 +50,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent table.
         /// </summary>
-        [XmlIgnore, IgnoreDataMember]
+        [XmlIgnore]
         public TableDeclaration Table;
 
         [XmlAttribute("suid"), DefaultValue(0)]
@@ -102,7 +102,7 @@ namespace Acklann.Daterpillar.Configuration
         /// Gets or sets the ordinal position of the column.
         /// </summary>
         /// <value>The ordinal position.</value>
-        [XmlIgnore, IgnoreDataMember]
+        [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
         string ISqlStatement.GetName() => Name;

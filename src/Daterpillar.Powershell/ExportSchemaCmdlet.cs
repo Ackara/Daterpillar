@@ -1,27 +1,31 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Conversion;
 using Acklann.GlobN;
-using Microsoft.Build.Framework;
 using System.IO;
+using System.Management.Automation;
 using System.Xml.Schema;
 
 namespace Acklann.Daterpillar
 {
-    public class ExportSchemaTask : ITask
+    [Cmdlet(VerbsData.Export, "Schema", ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true)]
+    public class ExportSchemaCmdlet : Cmdlet
     {
-        [Required]
-        public string AssemblyFile { get; set; }
-
-        [Required]
+        [Parameter(Position = 1)]
         public string ProjectDirectory { get; set; }
 
-        public bool Execute()
+        [ValidateNotNullOrEmpty]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 2)]
+        public string AssemblyFile { get; set; }
+
+        protected override void ProcessRecord()
         {
             if (File.Exists(AssemblyFile))
             {
                 SchemaDeclaration schema = AssemblyConverter.ToSchema(AssemblyFile);
-                string outFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
-                Helper.CreateDirectory(outFile);
+                string outputFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
+                Helper.CreateDirectory(outputFile);
+
+                if (string.IsNullOrEmpty(ProjectDirectory)) { ProjectDirectory = Directory.GetCurrentDirectory(); }
 
                 if (string.IsNullOrEmpty(schema.Import) == false)
                 {
@@ -37,11 +41,10 @@ namespace Acklann.Daterpillar
                                     switch (e.Severity)
                                     {
                                         case XmlSeverityType.Error:
-                                            BuildEngine.Error($"[{e.Severity}] {e.Message} at '{filePath}'");
-                                            break;
+                                            throw new System.Xml.XmlException($"[{e.Severity}] {e.Message} at '{filePath}'");
 
                                         case XmlSeverityType.Warning:
-                                            BuildEngine.Warn($"[{e.Severity}] {e.Message} at '{filePath}'");
+                                            WriteWarning($"[{e.Severity}] {e.Message} at '{filePath}'");
                                             break;
                                     }
                                 };
@@ -53,28 +56,18 @@ namespace Acklann.Daterpillar
                                 }
                             }
 
-                        if (didNotFindDependency) BuildEngine.Warn($"Could not find '{schema.Import}'.");
+                        if (didNotFindDependency) WriteWarning($"Could not find '{schema.Import}'.");
                     }
                 }
 
-                using (var stream = new FileStream(outFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+                using (var stream = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     schema.WriteTo(stream);
-                    BuildEngine.Info(MessageImportance.High, $"Created '{outFile}'.");
                 }
-
-                return true;
+                WriteVerbose($"Created '{outputFile}'.");
+                WriteObject(new FileInfo(outputFile));
             }
-            else BuildEngine.Warn($"Could not find assembly file at '{AssemblyFile}'.");
-            return false;
+            else throw new FileNotFoundException($"Could not find assembly file at '{AssemblyFile}'.");
         }
-
-        #region ITask
-
-        public ITaskHost HostObject { get; set; }
-
-        public IBuildEngine BuildEngine { get; set; }
-
-        #endregion ITask
     }
 }

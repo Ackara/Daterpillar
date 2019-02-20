@@ -11,6 +11,7 @@ namespace Acklann.Daterpillar.Compilation
     {
         public Discrepancy[] GenerateMigrationScript(string scriptFile, SchemaDeclaration from, SchemaDeclaration to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
         {
+            Utility.CreateDirectory(scriptFile);
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
             using (SqlWriter writer = _factory.CreateInstance(syntax, file))
             {

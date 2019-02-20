@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The parent table.
         /// </summary>
-        [XmlIgnore, IgnoreDataMember]
+        [XmlIgnore]
         public TableDeclaration Table;
 
         /// <summary>
