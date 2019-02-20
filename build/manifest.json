@@ -2,7 +2,7 @@
   "BranchSuffixMap":
   {
     "master": "",
-    "*": "preview"
+    "*": "beta"
   },
   "Version":
   {

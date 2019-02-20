@@ -46,40 +46,35 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 -depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
-
 	$version = ConvertTo-NcrementVersionNumber $ManifestFilePath $CurrentBranch;
-	#Join-Path $SolutionFolder "src/*/*" | Get-ChildItem -Filter "*CLI.*proj" | Invoke-NShellit $ArtifactsFolder $Configuration;
-	#Join-Path $SolutionFolder "src/*/*" | Get-ChildItem -File -Filter "$(Split-Path $SolutionFolder -Leaf).csproj" | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
-	#Get-ChildItem $ArtifactsFolder -Recurse -File -Filter "*.nupkg" | Expand-NugetPackage (Join-Path $ArtifactsFolder "msbuild");
 
 	# Building the powersehll manifest.
 	$moduleFolder = Join-Path $ArtifactsFolder (Split-Path $SolutionFolder -Leaf);
 	if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
-	[string]$projectFolder = Join-Path $SolutionFolder "src\*.Powershell" | Resolve-Path;
-	Join-Path $projectFolder "bin/$Configuration/*/*" | Get-ChildItem | Where-Object { $_.Name.EndsWith(".dll") -or $_.Name.EndsWith(".xml") } | Copy-Item -Destination $moduleFolder -Force;
+	$projectFile = Join-Path $SolutionFolder "src/*.Powershell/*.*proj" | Get-Item;
 
-	$psd1 = Get-ChildItem $projectFolder -Filter "*.psd1" | Select-Object -First 1;
+	Write-Header "dotnet: publish '$($projectFile.BaseName)'";
+	Exec { &dotnet publish $projectFile.FullName --configuration $Configuration --output $moduleFolder; }
+	Write-Header;
+
 	$dll = Join-Path $moduleFolder "*.Powershell.dll" | Get-Item;
+	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
 	Update-ModuleManifest $psd1.FullName `
 	-RootModule $dll.Name `
 	-ModuleVersion $version.Version;
-
 	Copy-Item $psd1.FullName -Destination $moduleFolder -Force;
-	Write-Host "  * created powershell module.";
-}
 
-Task "Test-PowershellModule" -alias "test-ps"`
--depends @() -action {
-	$psd1 = Get-ChildItem $ArtifactsFolder -Recurse -Filter "*.psd1" | Select-Object -First 1;
-	Import-Module $psd1.FullName -Force;
-	help New-MigrationScript -ShowWindow;
+	# Building the nuget package.
+	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
+	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
+	Get-ChildItem $ArtifactsFolder -Recurse -File -Filter "*.nupkg" | Expand-NugetPackage (Join-Path $ArtifactsFolder "msbuild");
 }
 
 Task "Generate-XmlSchemaFromDll" -alias "xsd" -description "This task generates a '.xsd' file from the project's '.dll' file." `
 -precondition { return Test-XsdExe; } `
 -action {
 	Join-Path $SolutionFolder "src/*/$(Split-Path $SolutionFolder -Leaf).csproj" | Get-ChildItem `
-		| Export-XmlSchemaFromDll $Configuration -FullyQualifiedTypeName "Acklann.Daterpillar.Configuration.Schema" -Force;
+		| Export-XmlSchemaFromDll $Configuration -FullyQualifiedTypeName "Acklann.Daterpillar.Configuration.SchemaDeclaration" -Force;
 }
 
 #region ----- COMPILATION ----------------------------------------------

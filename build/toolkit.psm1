@@ -148,6 +148,24 @@ function Export-XmlSchemaFromDll
 	}
 }
 
+function Get-MSBuildElement
+{
+	Param(
+		[Parameter(Mandatory)]
+		[ValidateScript({Test-Path $_})]
+		[string]$ProjectFile,
+
+		[Parameter(Mandatory)]
+		[string]$XPath
+	)
+
+	[xml]$proj = Get-Content $ProjectFile;
+	$ns = [System.Xml.XmlNamespaceManager]::new($proj.NameTable);
+	$ns.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+	return $proj.SelectSingleNode($XPath, $ns);
+}
+
 function Get-Secret
 {
 	Param(
@@ -410,8 +428,8 @@ function Invoke-NugetPack
 	{
 		try
 		{
-			Write-Header "dotnet: pack '$($ProjectFile.BaseName)'";
-			Invoke-Tool { &dotnet pack $ProjectFile.FullName --output $ArtifactsFolder --configuration $Configuration /p:PackageVersion=$Version; }
+			Write-Header "dotnet: pack '$($ProjectFile.BaseName)' $Version";
+			Invoke-Tool { &dotnet pack $ProjectFile.FullName --output $ArtifactsFolder --configuration $Configuration $framework /p:PackageVersion=$Version; }
 		}
 		finally { Pop-Location; }
 	}
