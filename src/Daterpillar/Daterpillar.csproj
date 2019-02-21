@@ -70,8 +70,6 @@
 
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
-    <PackageReference Include="SharpCompress" Version="0.22.0" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
