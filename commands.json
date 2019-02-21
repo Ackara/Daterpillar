@@ -25,11 +25,23 @@
       "workingDirectory": ".",
       "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 push"
     },
-	"configure":
+    "configure":
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
       "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 configure"
+    },
+    "pack":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 pack"
+    },
+    "xsd":
+    {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 xsd"
     }
   }
 }

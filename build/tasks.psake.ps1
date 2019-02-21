@@ -23,7 +23,7 @@ Properties {
 Task "Default" -depends @("configure", "build", "test", "pack");
 
 Task "Deploy" -alias "publish" -description "This task compiles, test then publish all packages to their respective destination." `
--depends @("clean", "version", "build", "test", "pack", "push-nuget", "push-vsix", "push-ps", "tag");
+-depends @("clean", "version", "build", "xsd", "test", "pack", "push-nuget", "push-vsix", "push-ps", "tag");
 
 # ======================================================================
 
