@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Acklann.Daterpillar.Sample</AssemblyName>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
   </PropertyGroup>
 
-  <Import Project="..\..\artifacts\msbuild\build\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\Acklann.Daterpillar.targets')" />
+  <Import Project="..\..\artifacts\msbuild\build\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\$(RootNamespace).targets')" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
+  </ItemGroup>
 </Project>

@@ -10,20 +10,6 @@ Describe "help" {
 	}
 }
 
-Describe "New-MigrationScript" {
-	It "[PS] Can generate migration script" {
-		$outFolder = New-TestFolder $context "new-script";
-
-		$newSchema = Join-Path $outFolder "lastest.schema.xml";
-		$oldSchema = Join-Path $outFolder "snapshot.schema.xml";
-		Get-SampleFile $context "music.xml" | Copy-Item -Destination $newSchema;
-
-		$resultFile = New-MigrationScript $oldSchema $newSchema $outFolder "mysql";
-		$resultFile.FullName | Should Exist;
-		$resultFile.Length | Should BeGreaterThan 100;
-	}
-}
-
 Describe "Export-Schema" {
 	$outFolder = New-TestFolder $context "export-schema";
 
@@ -37,9 +23,30 @@ Describe "Export-Schema" {
 			Pop-Location;
 
 			Split-Path $targetPath -Parent | Push-Location;
-			$targetPath | Export-Schema $projectFolder;
+			$targetPath | Export-Schema $projectFolder | Should Exist;
 		}
 		finally { Pop-Location; }
-		$expectedFile | Should Exist;
+	}
+}
+
+Describe "New-MigrationScript" {
+	It "[PS] Can generate migration script" {
+		$outFolder = New-TestFolder $context "new-script";
+
+		$newSchema = Join-Path $outFolder "lastest.schema.xml";
+		$oldSchema = Join-Path $outFolder "snapshot.schema.xml";
+		Get-SampleFile $context "music.xml" | Copy-Item -Destination $newSchema;
+
+		$resultFile = New-MigrationScript $oldSchema $newSchema $outFolder "mysql";
+		$resultFile.Script | Should Exist;
+		$resultFile.Script.Length | Should BeGreaterThan 100;
+	}
+}
+
+Describe "Sync-Schema" {
+	$db = Join-Path $PSScriptRoot "sample.db";
+	
+	It "[PS] Can apply migration scripts to database." {
+
 	}
 }

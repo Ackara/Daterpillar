@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar.Compilation
         internal static bool IsIdentical(this TableDeclaration left, TableDeclaration right)
         {
             return
-                (left.Id == right?.Id && left.Id != 0 && right?.Id != 0)
+                (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
                 ||
                 string.Equals(left?.Name, right?.Name, System.StringComparison.OrdinalIgnoreCase)
                 ;
@@ -32,7 +32,7 @@ namespace Acklann.Daterpillar.Compilation
         internal static bool IsIdentical(this ColumnDeclaration left, ColumnDeclaration right)
         {
             return
-                (left.Id == right?.Id && left.Id != 0 && right?.Id != 0)
+                (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
                 ||
                 string.Equals(left.Name, right?.Name, System.StringComparison.OrdinalIgnoreCase)
                 ;
@@ -48,9 +48,9 @@ namespace Acklann.Daterpillar.Compilation
                 return string.Equals(left.GetName(), right.GetName(), System.StringComparison.OrdinalIgnoreCase);
         }
 
-        internal static int GetId(this MemberInfo member)
+        internal static string GetId(this MemberInfo member)
         {
-            return (!(member.GetCustomAttribute(typeof(UniqueIdAttribute)) is UniqueIdAttribute attr) ? 0 : attr.Id);
+            return (!(member.GetCustomAttribute(typeof(StaticIdAttribute)) is StaticIdAttribute attr) ? null : attr.Id);
         }
 
         internal static string GetName(this Type type)
@@ -78,19 +78,19 @@ namespace Acklann.Daterpillar.Compilation
 
         internal static string GetIdOrName(this TableDeclaration table)
         {
-            return (table.Id > 0 ? $"$({table.Id})" : table.Name);
+            return (!string.IsNullOrEmpty(table?.Id) ? $"$({table.Id})" : table.Name);
         }
 
         internal static string GetIdOrName(this ColumnDeclaration column)
         {
-            return (column.Id > 0 ? $"$({column.Id})" : column.Name);
+            return (!string.IsNullOrEmpty(column.Id) ? $"$({column.Id})" : column.Name);
         }
 
         internal static string GetIdOrName(this MemberInfo member)
         {
-            var suidAttr = member.GetCustomAttribute(typeof(UniqueIdAttribute)) as UniqueIdAttribute;
+            var suidAttr = member.GetCustomAttribute(typeof(StaticIdAttribute)) as StaticIdAttribute;
 
-            if (suidAttr?.Id > 0) return $"$({suidAttr.Id})";
+            if (!string.IsNullOrEmpty(suidAttr?.Id)) return $"$({suidAttr.Id})";
             else return GetName(member);
         }
 

@@ -70,6 +70,7 @@
 
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
+    <PackageReference Include="SharpCompress" Version="0.22.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
@@ -115,6 +116,11 @@
   </ItemGroup>
 
   <ItemGroup Label="Nuget">
+    <Content Include="..\..\readme.md">
+      <PackagePath>readme.md</PackagePath>
+      <Visible>false</Visible>
+    </Content>
+    
     <Content Include="msbuild.targets">
       <PackagePath>build\$(AssemblyName).targets</PackagePath>
     </Content>
@@ -124,14 +130,14 @@
       <Visible>false</Visible>
     </Content>
 
-    <Content Include="..\$(MSBuildProjectName).Powershell\*.ps1">
+    <Content Include="..\$(MSBuildProjectName).Powershell\MSBuild\*.ps1">
       <PackagePath>tools\$(TargetFramework)</PackagePath>
       <Visible>false</Visible>
     </Content>
 
-    <Content Include="..\..\readme.md">
-      <PackagePath>readme.md</PackagePath>
-      <Visible>false</Visible>
+    <Content Include="*.xsd">
+      <PackagePath>tools\$(TargetFramework)</PackagePath>
     </Content>
+    
   </ItemGroup>
 </Project>

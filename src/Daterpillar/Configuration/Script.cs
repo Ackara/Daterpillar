@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -47,11 +46,11 @@ namespace Acklann.Daterpillar.Configuration
         [XmlAttribute(syntax), DefaultValue(Syntax.Generic)]
         public Syntax Syntax { get; set; }
 
-        [XmlAttribute(before), DefaultValue(0)]
-        public int Before { get; set; }
+        [XmlAttribute(before)]
+        public string Before { get; set; }
 
-        [XmlAttribute(after), DefaultValue(0)]
-        public int After { get; set; }
+        [XmlAttribute(after)]
+        public string After { get; set; }
 
         /// <summary>
         /// Gets or sets the content.

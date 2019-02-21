@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Daterpillar.Powershell\Daterpillar.Powershell.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 
@@ -49,6 +50,9 @@
       <LastGenOutput>Startup.cs</LastGenOutput>
     </None>
     <None Update="test-data\bad_schema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test-data\init.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="test-data\music-data.xml">
@@ -105,6 +109,4 @@
   <Target Name="ImportConnectionStrings" BeforeTargets="CoreCompile">
     <Copy Condition="Exists('@(ConnectionStrings)')" SourceFiles="@(ConnectionStrings)" DestinationFiles="connections.json" SkipUnchangedFiles="true" />
   </Target>
-
-  <Import Project="..\..\artifacts\msbuild\build\*.targets" Condition="Exists('..\..\artifacts\msbuild\build\Acklann.Daterpillar.targets')" />
 </Project>

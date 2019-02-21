@@ -1,0 +1,4 @@
+﻿CREATE TABLE category (
+	Id INT NOT NULL,
+	Name VARCHAR(64) NOT NULL
+);

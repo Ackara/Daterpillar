@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" elementFormDefault="qualified" targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="schema" nillable="true" type="tns:Schema" />
-  <xs:complexType name="Schema">
+  <xs:element name="schema" nillable="true" type="tns:SchemaDeclaration" />
+  <xs:complexType name="SchemaDeclaration">
     <xs:annotation>
       <xs:documentation>A database schema.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="table" type="tns:Table">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="table" type="tns:TableDeclaration">
         <xs:annotation>
           <xs:documentation>Gets or sets the tables belonging to this instance.</xs:documentation>
         </xs:annotation>
@@ -23,15 +23,16 @@
         <xs:documentation>Gets or sets the name of the schema.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="version" type="xs:string" />
     <xs:attribute name="include" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="Table">
+  <xs:complexType name="TableDeclaration">
     <xs:annotation>
-      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.Table.Schema table.</xs:documentation>
+      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.TableDeclaration.Schema table.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="column" type="tns:Column">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="column" type="tns:ColumnDeclaration">
         <xs:annotation>
           <xs:documentation>Gets or sets the table columns.</xs:documentation>
         </xs:annotation>
@@ -50,9 +51,9 @@
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  <xs:complexType name="Column">
+  <xs:complexType name="ColumnDeclaration">
     <xs:annotation>
-      <xs:documentation>Indicates that a public field or property represents a SQL table column. This class cannot be inherited.</xs:documentation>
+      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.ColumnDeclaration.Table column.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />

@@ -412,9 +412,7 @@ namespace Acklann.Daterpillar.Configuration
                     {
                         case "table":
                             table = new TableDeclaration(reader.GetAttribute("name"));
-
-                            int.TryParse(reader.GetAttribute("suid"), out id);
-                            table.Id = id;
+                            table.Id = reader.GetAttribute("suid");
 
                             Add(table);
                             break;
@@ -433,9 +431,9 @@ namespace Acklann.Daterpillar.Configuration
                             {
                                 Name = reader.GetAttribute("name"),
                                 DefaultValue = reader.GetAttribute("default"),
+                                Id = reader.GetAttribute("suid"),
                                 IsNullable = nullable,
-                                AutoIncrement = auto,
-                                Id = id
+                                AutoIncrement = auto
                             };
                             table.Add(column);
                             break;
@@ -464,7 +462,7 @@ namespace Acklann.Daterpillar.Configuration
             foreach (var table in Tables)
             {
                 writer.WriteStartElement("table");
-                if (table.Id > 0)
+                if (!string.IsNullOrEmpty(table.Id))
                     writer.WriteAttributeString("id", table.Id.ToString());
 
                 if (!string.IsNullOrEmpty(table.Name))
@@ -475,7 +473,7 @@ namespace Acklann.Daterpillar.Configuration
                     // <column id="ff333" name="user" nullable="false" auto-increment="true">
                     writer.WriteStartElement("column");
 
-                    if (column.Id > 0)
+                    if (!string.IsNullOrEmpty(column.Id))
                         writer.WriteAttributeString("suid", column.Id.ToString());
 
                     if (!string.IsNullOrEmpty(column.Name))

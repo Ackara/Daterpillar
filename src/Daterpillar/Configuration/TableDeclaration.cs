@@ -60,8 +60,8 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public SchemaDeclaration Schema;
 
-        [XmlAttribute("suid"), DefaultValue(0)]
-        public int Id { get; set; }
+        [XmlAttribute("suid")]
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the table.

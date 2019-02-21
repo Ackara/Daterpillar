@@ -9,7 +9,8 @@
 
 		Push-Location $PSScriptRoot;
 		[string]$projectFile = "../../src/*.Powershell/*.*proj" | Resolve-Path;
-		&dotnet publish $projectFile --configuration "Debug" --output $moduleFolder | Out-Null;
+		&dotnet publish $projectFile --configuration "Release" --output $moduleFolder;
+		Join-Path (Split-Path $projectFile -Parent) "bin/Release/*/*.dll-Help.xml" | Get-Item | Copy-Item -Destination $moduleFolder -Force;
 		$modulePath = Get-ChildItem $moduleFolder -Filter "*.psd1" | Select-Object -ExpandProperty FullName -First 1;
 
 		$sampleFolder = Join-Path $moduleFolder "sample-data";

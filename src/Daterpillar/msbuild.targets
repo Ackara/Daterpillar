@@ -2,34 +2,50 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ExportDaterpillarSchemaAfterBuild Condition="$(ExportDaterpillarSchemaAfterBuild)==''">false</ExportDaterpillarSchemaAfterBuild>
-    <GenerateMigrationScriptAfterBuild Condition="$(GenerateMigrationScriptAfterBuild)==''">false</GenerateMigrationScriptAfterBuild>
+    <ShouldExportDaterpillarSchemaAfterBuild Condition="$(ShouldExportDaterpillarSchemaAfterBuild)==''">true</ShouldExportDaterpillarSchemaAfterBuild>
+    <ShouldGenerateDaterpillarMigrationScriptAfterBuild Condition="$(ShouldGenerateDaterpillarMigrationScriptAfterBuild)==''">false</ShouldGenerateDaterpillarMigrationScriptAfterBuild>
+    <ShouldOmitDropStatementsFromDaterpillarScripts Condition="$(ShouldOmitDropStatementsFromDaterpillarScripts)==''">false</ShouldOmitDropStatementsFromDaterpillarScripts>
 
+    <DaterpillarSqlLanguage Condition="$(DaterpillarLanguage)==''">SQLite</DaterpillarSqlLanguage>
     <DaterpillarMigrationsDirectory Condition="$(DaterpillarMigrationsDirectory)==''">migrations</DaterpillarMigrationsDirectory>
-    <DaterpillarSnapshotFilePath Condition="$(DaterpillarSnapshotFilePath)==''"> $([System.IO.Path]::Combine($(DaterpillarMigrationsDirectory), 'snapshot.schema.xml'))</DaterpillarSnapshotFilePath>
-    <DaterpillarLanguage Condition="$(DaterpillarLanguage)==''">MySQL</DaterpillarLanguage>
+    <DaterpillarSnapshotFilePath Condition="$(DaterpillarSnapshotFilePath)==''">$([System.IO.Path]::Combine($(DaterpillarMigrationsDirectory), 'snapshot.schema.xml'))</DaterpillarSnapshotFilePath>
 
-    <DaterpillarExportScript>$(MSBuildThisFileDirectory)..\tools\$(TargetFramework)\Export-DaterpillarSchema.ps1</DaterpillarExportScript>
+    <DaterpillarTargetFramework>netstandard2.0</DaterpillarTargetFramework>
+    <DaterpillarExportScript>$(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\export.ps1</DaterpillarExportScript>
+    <DaterpillarGenerateScript>$(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\generate.ps1</DaterpillarGenerateScript>
   </PropertyGroup>
 
-  <Target Name="GenerateDaterpillarSchemaAfterBuild"
-          BeforeTargets="PostBuildEvent"
-          Condition="$(ExportDaterpillarSchemaAfterBuild)=='true'">
+  <!-- Export Schema -->
+  <Target Name="ExportDaterpillarSchemaAfterBuild"
+          AfterTargets="PostBuildEvent"
+          Condition="$(ShouldExportDaterpillarSchemaAfterBuild)=='true'">
     <CallTarget Targets="ExportDaterpillarSchema" />
   </Target>
 
   <Target Name="ExportDaterpillarSchema">
-    <Error Condition="$(TargetFramework.Contains('netcoreapp'))"
-           Text="The '$(TargetFramework)' framework is not compatible with this package as of yet; consider using 'netstandard' instead. " />
+    <Message Condition="!$(TargetFramework.Contains('netcoreapp'))"
+             Text="Skipped because the '$(TargetFramework)' framework is not compatible with this target as of yet; consider using 'netstandard' instead. " />
 
-    <Message Condition="Exists('$(DaterpillarExportScript)')"
-             Text="new: $(DaterpillarExportScript)" />
-
-    <Exec Condition="Exists('$(DaterpillarExportScript)')"
-          Command="powershell -File $(DaterpillarExportScript) $(TargetPath) $(MSBuildProjectDirectory)" />
-
-    <Message Text="$(MSBuildProjectName) -> $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml'))" Importance="high" />
+    <Exec Condition="Exists('$(DaterpillarExportScript)') AND Exists('$(TargetPath)') AND !$(TargetFramework.Contains('netcoreapp'))"
+          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarExportScript) $(TargetPath) $(MSBuildProjectDirectory)" />
   </Target>
 
-  <Target Name="GenerateMigrationScript"></Target>
+  <!-- Generate new script -->
+  <Target Name="GenerateDaterpillarMigrationScriptAfterBuild"
+          AfterTargets="PostBuildEvent"
+          DependsOnTargets="ExportDaterpillarSchema"
+          Condition="$(ShouldGenerateDaterpillarMigrationScriptAfterBuild)=='true'">
+    <CallTarget Targets="GenerateDaterpillarMigrationScript" />
+  </Target>
+
+  <Target Name="GenerateDaterpillarMigrationScript">
+    <CallTarget Condition="!Exists('$([System.IO.Path]::ChangeExtension($(TargetPath), .schema.xml))')"
+                Targets="ExportDaterpillarSchema" />
+
+    <Error Condition="!Exists('$([System.IO.Path]::ChangeExtension($(TargetPath), .schema.xml))')"
+           Text="Could not find the assembly-schema at '$([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml'))'" />
+
+    <Exec Condition="Exists('$(DaterpillarGenerateScript)')"
+          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarGenerateScript) $([System.IO.Path]::GetFullPath($(DaterpillarSnapshotFilePath))) $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml')) $([System.IO.Path]::GetFullPath($(DaterpillarMigrationsDirectory))) $(DaterpillarSqlLanguage) $(ShouldOmitDropStatementsFromDaterpillarScripts)" />
+  </Target>
 </Project>

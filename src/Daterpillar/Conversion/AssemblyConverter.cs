@@ -30,9 +30,9 @@ namespace Acklann.Daterpillar.Conversion
                 try
                 {
                     if (type.IsEnum)
-                        ExtractEmunInfo(schema, type, assemblyDocumentationFilePath);
+                        ExtractEmunInfo(schema, type);
                     else
-                        schema.Add(ToTable(type, assemblyDocumentationFilePath));
+                        schema.Add(ToTable(type));
                 }
                 catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine($"Could not find {type.FullName} in the loaded assembly."); }
             }
@@ -49,9 +49,7 @@ namespace Acklann.Daterpillar.Conversion
             return ToSchema(Assembly.Load(File.ReadAllBytes(assemblyFilePath)));
         }
 
-        // ==================== HELPERS (To Schema) ==================== //
-
-        private static TableDeclaration ToTable(Type type, string documentionPath)
+        public static TableDeclaration ToTable(Type type)
         {
             IEnumerable<MemberInfo> members = (from m in type.GetMembers()
                                                where
@@ -63,14 +61,16 @@ namespace Acklann.Daterpillar.Conversion
             var table = new TableDeclaration(type.GetName()) { Id = type.GetId() };
             foreach (MemberInfo member in members)
             {
-                ExtractColumnInfo(table, member, documentionPath);
+                ExtractColumnInfo(table, member);
             }
             ExtractIndexInfo(table, members);
 
             return table;
         }
 
-        private static void ExtractEmunInfo(SchemaDeclaration schema, Type type, string documentation)
+        // ==================== HELPERS (To Schema) ==================== //
+
+        private static void ExtractEmunInfo(SchemaDeclaration schema, Type type)
         {
             var table = new TableDeclaration(type.GetName(),
                 new ColumnDeclaration("Id", new DataType(SchemaType.INT)),
@@ -101,7 +101,7 @@ namespace Acklann.Daterpillar.Conversion
             schema.Add(script);
         }
 
-        private static void ExtractColumnInfo(TableDeclaration table, MemberInfo member, string documentionPath)
+        private static void ExtractColumnInfo(TableDeclaration table, MemberInfo member)
         {
             var column = new ColumnDeclaration();
             table.Add(column);

@@ -29,6 +29,7 @@ namespace Acklann.Daterpillar
         }
 
 		public static FileInfo GetBad_SchemaXML() => GetFile(@"bad_schema.xml");
+		public static FileInfo GetInitSQL() => GetFile(@"init.sql");
 		public static FileInfo GetMusicDataXML() => GetFile(@"music-data.xml");
 		public static FileInfo GetMusicRevisionsXML() => GetFile(@"music-revisions.xml");
 		public static FileInfo GetMusicXML() => GetFile(@"music.xml");
@@ -40,6 +41,7 @@ namespace Acklann.Daterpillar
 		public class File
 		{
 			public const string Bad_SchemaXML = @"bad_schema.xml";
+			public const string InitSQL = @"init.sql";
 			public const string MusicDataXML = @"music-data.xml";
 			public const string MusicRevisionsXML = @"music-revisions.xml";
 			public const string MusicXML = @"music.xml";

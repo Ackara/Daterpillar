@@ -6,30 +6,32 @@ using System.Management.Automation;
 namespace Acklann.Daterpillar
 {
     /// <summary>
-    /// This acutlly worked foo bar.
+    /// <para type="synopsis">Generates a new migration script from two '.schema.xml' files.</para>
     /// </summary>
-    /// <seealso cref="System.Management.Automation.Cmdlet" />
     [OutputType(typeof(FileInfo))]
     [Cmdlet(VerbsCommon.New, "MigrationScript", ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
-    public class NewMigrationCmdlet : Cmdlet
+    public class NewMigrationScriptCmdlet : Cmdlet
     {
-        [Alias("o", "from", "old")]
+        /// <summary>
+        /// <para type="description">The absolute-path of old/current '.schema.xml' file.</para>
+        /// </summary>
+        [Alias("o", "old")]
         [ValidateNotNullOrEmpty]
-        [Parameter(Mandatory = true, Position = 1)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 1)]
         public string OldSchemaFilePath { get; set; }
 
+        [Alias("n", "new")]
         [ValidateNotNullOrEmpty]
-        [Alias("n", "to", "new")]
         [Parameter(Mandatory = true, Position = 2)]
         public string NewSchemaFilePath { get; set; }
 
+        [Alias("d", "dest")]
         [ValidateNotNullOrEmpty]
-        [Alias("d", "path", "dest")]
         [Parameter(Mandatory = true, Position = 3)]
         public string Destination { get; set; }
 
+        [Alias("l", "lang")]
         [ValidateNotNullOrEmpty]
-        [Alias("l", "lang", "syntax")]
         [Parameter(Mandatory = true, Position = 4)]
         public Syntax Language { get; set; }
 
@@ -38,19 +40,19 @@ namespace Acklann.Daterpillar
 
         protected override void ProcessRecord()
         {
-            string error, outputFile = Destination;
             SchemaDeclaration oldSchema = null, newSchema = null;
+            string error, outputFile = Destination, description = "update_schema";
 
             if (!File.Exists(OldSchemaFilePath))
                 oldSchema = new SchemaDeclaration();
             else if (!SchemaDeclaration.TryLoad(OldSchemaFilePath, out oldSchema, out error))
-                throw new System.ArgumentException(error);
+                throw new System.ArgumentException($"{error} at '{OldSchemaFilePath}'.");
 
             if (!SchemaDeclaration.TryLoad(NewSchemaFilePath, out newSchema, out error))
-                throw new System.ArgumentException(error);
+                throw new System.ArgumentException($"{error} at '{NewSchemaFilePath}'.");
 
             if (!Path.HasExtension(outputFile))
-                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__alter_schema.{Language.ToString().ToLowerInvariant()}.sql");
+                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{description}.{Language.ToString().ToLowerInvariant()}.sql");
 
             if (ShouldProcess(outputFile))
             {
@@ -65,7 +67,12 @@ namespace Acklann.Daterpillar
                     foreach (var item in changes)
                         WriteVerbose($"[{item.Action}] {item.Value.GetName()}");
 
-                    WriteObject(new FileInfo(outputFile));
+                    WriteObject(new
+                    {
+                        Script = new FileInfo(outputFile),
+                        OldSchema = new FileInfo(OldSchemaFilePath),
+                        NewSchema = new FileInfo(NewSchemaFilePath)
+                    });
                 }
             }
         }

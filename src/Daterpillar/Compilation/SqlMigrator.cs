@@ -246,7 +246,7 @@ namespace Acklann.Daterpillar.Compilation
 
             // BEFORE
             foreach (Script script in associatedScripts)
-                if (script.Before != 0)
+                if (!string.IsNullOrEmpty(script?.Before))
                     writer.Create(script);
 
             switch (discrepancy.Action)
@@ -291,7 +291,7 @@ namespace Acklann.Daterpillar.Compilation
 
             // AFTER
             foreach (Script script in associatedScripts)
-                if (script.After != 0)
+                if (!string.IsNullOrEmpty(script.After))
                     writer.Create(script);
 
             writer.WriteEndIf(children > 0);
@@ -359,7 +359,7 @@ namespace Acklann.Daterpillar.Compilation
             string errorMsg = "Your {0} {2} SUID ({1}) is not unique.";
             foreach (TableDeclaration table in schema.Tables)
             {
-                if (table.Id == 0) continue;
+                if (string.IsNullOrEmpty(table.Id)) continue;
 
                 if (writer.Variables.Contains(table.Id))
                     throw new System.Data.DuplicateNameException(string.Format(errorMsg, table.Name, table.Id, "table"));
@@ -368,7 +368,7 @@ namespace Acklann.Daterpillar.Compilation
 
                 foreach (ColumnDeclaration column in table.Columns)
                 {
-                    if (column.Id == 0) continue;
+                    if (string.IsNullOrEmpty(column.Id)) continue;
 
                     if (writer.Variables.Contains(column.Id))
                         throw new System.Data.DuplicateNameException(string.Format(errorMsg, $"'{table.Name}'.'{column.Name}'", column.Id, "column"));
@@ -382,8 +382,8 @@ namespace Acklann.Daterpillar.Compilation
 
         private IEnumerable<Script> FindAssociatedScripts(LinkedList<Script> propspects, Discrepancy discrepancy, Syntax syntax)
         {
-            int suid = (discrepancy.Value as TableDeclaration).Id;
-            if (suid == 0) yield break;
+            string suid = (discrepancy.Value as TableDeclaration).Id;
+            if (string.IsNullOrEmpty(suid)) yield break;
 
             Script script;
             bool matchFound;

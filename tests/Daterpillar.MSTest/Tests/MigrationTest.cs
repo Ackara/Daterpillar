@@ -149,5 +149,44 @@ namespace Acklann.Daterpillar.Tests
             case2.ShouldBe(0, "The 2nd migration failed.");
             case3.ShouldBeGreaterThan(0, "The 3rd migration failed.");
         }
+
+        //[TestMethod]
+        public void Can_execute_migration_script_with_flyway()
+        {
+            // Arrange
+            var baseDirectory = Path.Combine(Path.GetTempPath(), "dtp-exe-migrations");
+            var database = new FileInfo(Path.Combine(baseDirectory, "dtp-test.db"));
+            var migrationsFolder = Path.Combine(baseDirectory, "migrations");
+            var connectionString = $"database={database.FullName};";
+
+            // Act
+            if (Directory.Exists(baseDirectory)) Directory.Delete(baseDirectory, recursive: true);
+            Directory.CreateDirectory(migrationsFolder);
+            TestData.GetInitSQL().CopyTo(Path.Combine(migrationsFolder, "init.sql"));
+            database.Create().Dispose();
+
+            var sizeBeforeMigrate = database.Length;
+            Flyway.Migrate(Syntax.SQLite, connectionString, migrationsFolder);
+
+            // Assert
+            database.Length.ShouldBeGreaterThan(sizeBeforeMigrate);
+        }
+
+        [TestMethod]
+        public void Should_download_flyway_when_not_installed()
+        {
+            // Arrange
+            string version = "5.2.4";
+            string baseDirectory = Path.Combine(Path.GetTempPath(), "dtp-flyway");
+            string expectedPath = Path.Combine(baseDirectory, "flyway", version, "flyway");
+
+            // Act
+            //if (File.Exists(expectedPath)) Directory.Delete(baseDirectory, recursive: true);
+            var flywayPath = Flyway.Install(version, baseDirectory);
+
+            // Assert
+            flywayPath.ShouldContain(expectedPath, Case.Insensitive);
+            File.Exists(expectedPath).ShouldBeTrue($"{expectedPath} was not downloaded.");
+        }
     }
 }

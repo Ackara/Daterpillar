@@ -2,14 +2,14 @@
 
 namespace Acklann.Daterpillar.Samples
 {
-    [UniqueId(100)]
+    [StaticId(100)]
     [Table, DisplayName("song")]
     public class Song
     {
         [Column("Id", AutoIncrement = true)]
         public int Id { get; set; }
 
-        [UniqueId(201), Column("Title")]
+        [StaticId(201), Column("Title")]
         public string Title { get; set; }
 
         [Column("Length")]
@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Samples
         [Column("Album")]
         public string Album { get; set; }
 
-        [UniqueId(205), DisplayName("Track"), DefaultValue(1)]
+        [StaticId(205), DisplayName("Track"), DefaultValue(1)]
         public int TrackNo { get; set; }
 
         [Column("Disc", DefaultValue = 1)]
