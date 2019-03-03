@@ -46,7 +46,7 @@ Describe "New-MigrationScript" {
 Describe "Sync-Schema" {
 	$db = Join-Path $PSScriptRoot "sample.db";
 	
-	It "[PS] Can apply migration scripts to database." {
+	#It "[PS] Can apply migration scripts to database." {
 
-	}
+	#}
 }
