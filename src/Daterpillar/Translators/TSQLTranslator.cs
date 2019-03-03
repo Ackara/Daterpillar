@@ -2,18 +2,18 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Compilation.Resolvers
+namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
     /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MSSQL data type.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
-    public class TSQLResolver : TypeResolverBase
+    public class TSQLTranslator : TranslatorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TSQLResolver"/> class.
+        /// Initializes a new instance of the <see cref="TSQLTranslator"/> class.
         /// </summary>
-        public TSQLResolver()
+        public TSQLTranslator()
         {
             TypeMap[BOOL] = "BIT";
             TypeMap[BLOB] = "VARBINARY";

@@ -85,10 +85,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Syntax.cs</LastGenOutput>
     </None>
-    <None Update="Compilation\Resolvers\TypeResolverBase.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TypeResolverBase.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -102,10 +98,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Syntax.tt</DependentUpon>
     </Compile>
-    <Compile Update="Compilation\Resolvers\TypeResolverBase.cs">
+    <Compile Update="Translators\TranslatorBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>TypeResolverBase.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

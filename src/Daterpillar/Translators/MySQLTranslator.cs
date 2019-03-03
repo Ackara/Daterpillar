@@ -1,15 +1,15 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Compilation.Resolvers
+namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
     /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MySQL data type.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
-    public class MySQLTypeResolver : TypeResolverBase
+    public class MySQLTranslator : TranslatorBase
     {
-        public MySQLTypeResolver()
+        public MySQLTranslator()
         {
         }
 

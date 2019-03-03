@@ -1,18 +1,18 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Compilation.Resolvers
+namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
     /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a SQLite data type.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
-    public class SQLiteTypeResolver : TypeResolverBase
+    public class SQLiteTranslator : TranslatorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SQLiteTypeResolver"/> class.
+        /// Initializes a new instance of the <see cref="SQLiteTranslator"/> class.
         /// </summary>
-        public SQLiteTypeResolver() : base()
+        public SQLiteTranslator() : base()
         {
             TypeMap[BOOL] = "BOOLEAN";
             TypeMap[INT] = "INTEGER";

@@ -1,19 +1,19 @@
-﻿using Acklann.Daterpillar.Compilation.Resolvers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System.IO;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     [System.ComponentModel.Category(nameof(Syntax.TSQL))]
     public class TSqlWriter : SqlWriter
     {
-        public TSqlWriter(Stream stream) : this(new StreamWriter(stream), new TSQLResolver())
+        public TSqlWriter(Stream stream) : this(new StreamWriter(stream), new TSQLTranslator())
         { }
 
-        public TSqlWriter(TextWriter writer) : this(writer, new TSQLResolver())
+        public TSqlWriter(TextWriter writer) : this(writer, new TSQLTranslator())
         { }
 
-        public TSqlWriter(TextWriter writer, ITypeResolver resolver) : base(writer, resolver)
+        public TSqlWriter(TextWriter writer, ITranslator resolver) : base(writer, resolver)
         {
             AutoIncrement = "IDENTITY(1,1)";
             DropIndexFormatString = "DROP INDEX {1}.{0}";

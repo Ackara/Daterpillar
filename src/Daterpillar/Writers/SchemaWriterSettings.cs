@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     public class SchemaWriterSettings
     {

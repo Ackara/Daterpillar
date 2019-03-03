@@ -1,6 +1,6 @@
-﻿using Acklann.Daterpillar.Compilation;
-using Acklann.Daterpillar.Compilation.Resolvers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Writers;
+using Acklann.Daterpillar.Translators;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Acklann.Daterpillar.Conversion
+namespace Acklann.Daterpillar.Migration
 {
     public static class AssemblyConverter
     {
@@ -121,12 +121,12 @@ namespace Acklann.Daterpillar.Conversion
             {
                 if (member is PropertyInfo prop)
                 {
-                    dataType = CSharpTypeResolver.GetDataType(prop.PropertyType);
+                    dataType = CSharpTranslator.GetDataType(prop.PropertyType);
                     if (Nullable.GetUnderlyingType(prop.PropertyType) != null) column.IsNullable = true;
                 }
                 else if (member is FieldInfo field)
                 {
-                    dataType = CSharpTypeResolver.GetDataType(field.FieldType);
+                    dataType = CSharpTranslator.GetDataType(field.FieldType);
                     if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
                 }
             }

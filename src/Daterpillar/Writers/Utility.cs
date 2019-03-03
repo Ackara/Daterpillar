@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     internal static class Utility
     {

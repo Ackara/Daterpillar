@@ -1,5 +1,5 @@
-﻿using Acklann.Daterpillar.Compilation.Resolvers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     public abstract class SqlWriter : IDisposable
     {
-        protected SqlWriter(TextWriter writer, ITypeResolver resolver)
+        protected SqlWriter(TextWriter writer, ITranslator resolver)
         {
             Writer = writer ?? throw new ArgumentNullException(nameof(writer));
             Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
@@ -52,7 +52,7 @@ namespace Acklann.Daterpillar.Compilation
             ;
 
         protected readonly TextWriter Writer;
-        protected readonly ITypeResolver Resolver;
+        protected readonly ITranslator Resolver;
 
         public IDictionary Variables { get; }
 

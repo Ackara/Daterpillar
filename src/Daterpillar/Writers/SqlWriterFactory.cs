@@ -1,11 +1,12 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     public class SqlWriterFactory
     {

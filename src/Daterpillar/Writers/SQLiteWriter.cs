@@ -1,8 +1,9 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     /* Documentation: https://www.sqlite.org/lang.html */
 
@@ -12,7 +13,7 @@ namespace Acklann.Daterpillar.Compilation
         public SQLiteWriter(Stream stream) : this(new StreamWriter(stream, System.Text.Encoding.UTF8))
         { }
 
-        public SQLiteWriter(TextWriter writer) : base(writer, new Resolvers.SQLiteTypeResolver())
+        public SQLiteWriter(TextWriter writer) : base(writer, new SQLiteTranslator())
         {
             AutoIncrement = "AUTOINCREMENT";
             ColumnFormatString = "{0}{1}{2}{3}{4}";

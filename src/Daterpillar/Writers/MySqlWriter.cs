@@ -1,19 +1,19 @@
-﻿using Acklann.Daterpillar.Compilation.Resolvers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System.IO;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Writers
 {
     [System.ComponentModel.Category(nameof(Syntax.MySQL))]
     public class MySqlWriter : SqlWriter
     {
-        public MySqlWriter(Stream stream) : this(new StreamWriter(stream), new MySQLTypeResolver())
+        public MySqlWriter(Stream stream) : this(new StreamWriter(stream), new MySQLTranslator())
         { }
 
-        public MySqlWriter(TextWriter writer) : this(writer, new MySQLTypeResolver())
+        public MySqlWriter(TextWriter writer) : this(writer, new MySQLTranslator())
         { }
 
-        public MySqlWriter(TextWriter writer, ITypeResolver resolver) : base(writer, resolver)
+        public MySqlWriter(TextWriter writer, ITranslator resolver) : base(writer, resolver)
         {
             AutoIncrement = "AUTO_INCREMENT";
             TableCommentFormatString = "COMMENT '{0}'";

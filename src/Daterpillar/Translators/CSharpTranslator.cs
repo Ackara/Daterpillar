@@ -2,18 +2,18 @@
 using System;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Compilation.Resolvers
+namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
     /// Provide methods that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to a clr type name.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
-    public class CSharpTypeResolver : TypeResolverBase
+    public class CSharpTranslator : TranslatorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CSharpTypeResolver"/> class.
+        /// Initializes a new instance of the <see cref="CSharpTranslator"/> class.
         /// </summary>
-        public CSharpTypeResolver() : base()
+        public CSharpTranslator() : base()
         {
             TypeMap[BOOL.ToLowerInvariant()] = "bool";
             TypeMap[BLOB.ToLowerInvariant()] = "string";

@@ -1,13 +1,14 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Writers;
+using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Equality;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Acklann.Daterpillar.Compilation
+namespace Acklann.Daterpillar.Migration
 {
-    public class SqlMigrator
+    public class Migrator
     {
         public Discrepancy[] GenerateMigrationScript(string scriptFile, SchemaDeclaration from, SchemaDeclaration to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
         {

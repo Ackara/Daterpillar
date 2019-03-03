@@ -1,8 +1,8 @@
 ﻿using Acklann.Daterpillar.Configuration;
 
-namespace Acklann.Daterpillar.Compilation.Resolvers
+namespace Acklann.Daterpillar.Translators
 {
-    public interface ITypeResolver
+    public interface ITranslator
     {
         string Escape(string objectName);
 

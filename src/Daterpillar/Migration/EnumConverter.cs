@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System;
 
-namespace Acklann.Daterpillar.Conversion
+namespace Acklann.Daterpillar.Migration
 {
     public static class EnumConverter
     {

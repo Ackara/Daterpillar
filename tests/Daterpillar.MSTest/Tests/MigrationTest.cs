@@ -1,6 +1,6 @@
-﻿using Acklann.Daterpillar.Compilation;
+﻿using Acklann.Daterpillar.Writers;
 using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Conversion;
+using Acklann.Daterpillar.Migration;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -86,7 +86,7 @@ namespace Acklann.Daterpillar.Tests
             var activeFile = Path.Combine(baseDir, "active.schema.xml");
             var outFile = Path.Combine(migrationsDir, "V1.1__alter_schema.sql");
 
-            var sut = new SqlMigrator();
+            var sut = new Migrator();
             var factory = new SqlWriterFactory();
 
             if (Directory.Exists(baseDir)) Directory.Delete(baseDir, recursive: true);

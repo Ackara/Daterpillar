@@ -1,5 +1,6 @@
-﻿using Acklann.Daterpillar.Compilation;
+﻿using Acklann.Daterpillar.Writers;
 using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Migration;
 using System.IO;
 using System.Management.Automation;
 
@@ -61,7 +62,7 @@ namespace Acklann.Daterpillar
                 using (var writer = new StreamWriter(stream))
                 {
                     var factory = new SqlWriterFactory();
-                    var migrator = new SqlMigrator();
+                    var migrator = new Migrator();
                     var changes = migrator.GenerateMigrationScript(factory.CreateInstance(Language, writer), oldSchema, newSchema, OmitDropStatements.IsPresent);
 
                     foreach (var item in changes)

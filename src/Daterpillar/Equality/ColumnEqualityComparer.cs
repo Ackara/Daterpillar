@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Translators;
 using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.Equality
@@ -27,7 +28,7 @@ namespace Acklann.Daterpillar.Equality
 
         #region Private Members
 
-        private Compilation.Resolvers.SQLiteTypeResolver _typeResolver = new Compilation.Resolvers.SQLiteTypeResolver();
+        private SQLiteTranslator _typeResolver = new SQLiteTranslator();
 
         #endregion Private Members
     }
