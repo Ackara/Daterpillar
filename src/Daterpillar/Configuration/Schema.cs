@@ -18,24 +18,24 @@ namespace Acklann.Daterpillar.Configuration
     /// </summary>
     [XmlRoot("schema", Namespace = XMLNS)]
     [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay()}")]
-    public class SchemaDeclaration : ICloneable
+    public class Schema : ICloneable
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
-        public SchemaDeclaration() : this(null)
+        public Schema() : this(null)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         ///
-        public SchemaDeclaration(string name)
+        public Schema(string name)
         {
             _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, XMLNS) });
             Scripts = new List<Script>();
-            Tables = new List<TableDeclaration>();
+            Tables = new List<Table>();
             Name = name;
         }
 
@@ -80,7 +80,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The tables.</value>
         [XmlElement("table")]
-        public List<TableDeclaration> Tables { get; set; }
+        public List<Table> Tables { get; set; }
 
         /// <summary>
         /// Gets or sets the scripts.
@@ -98,17 +98,17 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public string Path { get; set; }
 
-        public static SchemaDeclaration Load(string filePath)
+        public static Schema Load(string filePath)
         {
             if (File.Exists(filePath) == false) throw new FileNotFoundException($"Could not find file at '{filePath}'", filePath);
             using (var stream = File.OpenRead(filePath))
             {
-                var serializer = new XmlSerializer(typeof(SchemaDeclaration));
-                return (SchemaDeclaration)serializer.Deserialize(stream);
+                var serializer = new XmlSerializer(typeof(Schema));
+                return (Schema)serializer.Deserialize(stream);
             }
         }
 
-        public static bool TryLoad(string filePath, out SchemaDeclaration schema, out string errorMsg)
+        public static bool TryLoad(string filePath, out Schema schema, out string errorMsg)
         {
             if (File.Exists(filePath) == false)
             {
@@ -130,13 +130,13 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Deserialize the <see cref="SchemaDeclaration" /> document contained by specified.
+        /// Deserialize the <see cref="Schema" /> document contained by specified.
         /// </summary>
         /// <param name="stream">The input stream.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="handler">The handler.</param>
         /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
-        public static bool TryLoad(Stream stream, out SchemaDeclaration schema, ValidationEventHandler handler = null)
+        public static bool TryLoad(Stream stream, out Schema schema, ValidationEventHandler handler = null)
         {
             schema = null;
             bool isWellFormed;
@@ -147,8 +147,8 @@ namespace Acklann.Daterpillar.Configuration
 
                 if (isWellFormed)
                 {
-                    var serializer = new XmlSerializer(typeof(SchemaDeclaration));
-                    schema = (SchemaDeclaration)serializer.Deserialize(stream);
+                    var serializer = new XmlSerializer(typeof(Schema));
+                    schema = (Schema)serializer.Deserialize(stream);
                     schema.LinkChildNodes();
                 }
             }
@@ -156,14 +156,14 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Deserialize the <see cref="SchemaDeclaration"/> document contained by specified.
+        /// Deserialize the <see cref="Schema"/> document contained by specified.
         /// </summary>
         /// <param name="filePath">The file path.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="handler">The handler.</param>
         /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public static bool TryLoad(string filePath, out SchemaDeclaration schema, ValidationEventHandler handler = null)
+        public static bool TryLoad(string filePath, out Schema schema, ValidationEventHandler handler = null)
         {
             if (File.Exists(filePath) == false)
             {
@@ -191,7 +191,7 @@ namespace Acklann.Daterpillar.Configuration
             if (File.Exists(xsdFile) == false)
             {
                 xsdFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), xsdName);
-                using (Stream data = Assembly.GetAssembly(typeof(SchemaDeclaration)).GetManifestResourceStream($"{nameof(Acklann)}.{nameof(Daterpillar)}.{xsdName}"))
+                using (Stream data = Assembly.GetAssembly(typeof(Schema)).GetManifestResourceStream($"{nameof(Acklann)}.{nameof(Daterpillar)}.{xsdName}"))
                 using (var file = new FileStream(xsdFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     data.CopyTo(file);
@@ -217,7 +217,7 @@ namespace Acklann.Daterpillar.Configuration
 
         public IEnumerable<ForeignKey> GetForeignKeys()
         {
-            foreach (TableDeclaration table in Tables)
+            foreach (Table table in Tables)
                 foreach (var fk in table.ForeignKeys)
                 {
                     yield return fk;
@@ -225,12 +225,12 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Adds the specified <see cref="TableDeclaration"/> objects as children of this <see cref="SchemaDeclaration"/>.
+        /// Adds the specified <see cref="Table"/> objects as children of this <see cref="Schema"/>.
         /// </summary>
         /// <param name="tables">The SQL objects.</param>
-        public void Add(params TableDeclaration[] tables)
+        public void Add(params Table[] tables)
         {
-            foreach (TableDeclaration item in tables)
+            foreach (Table item in tables)
             {
                 item.Schema = this;
                 Tables.Add(item);
@@ -238,7 +238,7 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Adds the specified <see cref="Script"/>  objects as children of this <see cref="SchemaDeclaration"/>.
+        /// Adds the specified <see cref="Script"/>  objects as children of this <see cref="Schema"/>.
         /// </summary>
         /// <param name="scripts">The scripts.</param>
         public void Add(params Script[] scripts)
@@ -264,7 +264,7 @@ namespace Acklann.Daterpillar.Configuration
 
             using (var writer = XmlWriter.Create(stream, settings))
             {
-                var serializer = new XmlSerializer(typeof(SchemaDeclaration));
+                var serializer = new XmlSerializer(typeof(Schema));
                 serializer.Serialize(writer, this, _namespace);
             }
         }
@@ -286,7 +286,7 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Overwrites this instance tables and scripts only with the specified <see cref="SchemaDeclaration" />'s objects that match.
+        /// Overwrites this instance tables and scripts only with the specified <see cref="Schema" />'s objects that match.
         /// </summary>
         /// <exception cref="ArgumentNullException">Occurs when this instance <see cref="Path"/> is null or empty.</exception>
         public void Merge()
@@ -299,7 +299,7 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Overwrites this instance tables and scripts only with the specified <see cref="SchemaDeclaration" />'s objects that match.
+        /// Overwrites this instance tables and scripts only with the specified <see cref="Schema" />'s objects that match.
         /// </summary>
         /// <param name="schemas">The schemas to merge.</param>
         /// <exception cref="FileNotFoundException">Occurs when on of the files is not found.</exception>
@@ -308,7 +308,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             if (schemas.Length == 0) return;
 
-            var list = new Stack<SchemaDeclaration>();
+            var list = new Stack<Schema>();
             var error = new StringBuilder();
             void handler(object s, ValidationEventArgs e)
             {
@@ -322,7 +322,7 @@ namespace Acklann.Daterpillar.Configuration
             foreach (string file in schemas)
             {
                 if (File.Exists(file) == false) throw new FileNotFoundException($"Could not find schema file at '{file}'.", file);
-                if (TryLoad(file, out SchemaDeclaration schema, handler))
+                if (TryLoad(file, out Schema schema, handler))
                 {
                     list.Push(schema);
                 }
@@ -333,17 +333,17 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
-        /// Overwrites this instance tables and scripts only with the specified <see cref="SchemaDeclaration"/>'s objects that match.
+        /// Overwrites this instance tables and scripts only with the specified <see cref="Schema"/>'s objects that match.
         /// </summary>
         /// <param name="schemas">The schemas to merge.</param>
-        public void Merge(params SchemaDeclaration[] schemas)
+        public void Merge(params Schema[] schemas)
         {
-            foreach (SchemaDeclaration schema in schemas)
+            foreach (Schema schema in schemas)
             {
                 schema.Merge();
-                foreach (TableDeclaration table in schema.Tables)
+                foreach (Table table in schema.Tables)
                 {
-                    TableDeclaration match = FindMatch(table);
+                    Table match = FindMatch(table);
                     if (match == null)
                         Tables.Add(table);
                     else
@@ -384,7 +384,7 @@ namespace Acklann.Daterpillar.Configuration
             using (var stream = new MemoryStream())
             using (var writer = XmlWriter.Create(stream, settings))
             {
-                var serializer = new XmlSerializer(typeof(SchemaDeclaration));
+                var serializer = new XmlSerializer(typeof(Schema));
                 serializer.Serialize(writer, this, _namespace);
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
@@ -401,8 +401,8 @@ namespace Acklann.Daterpillar.Configuration
         {
             Import = reader.GetAttribute("include");
 
-            TableDeclaration table = null;
-            ColumnDeclaration column = null;
+            Table table = null;
+            Column column = null;
             bool nullable = false, auto = false;
             int id = 0;
 
@@ -411,7 +411,7 @@ namespace Acklann.Daterpillar.Configuration
                     switch (reader.LocalName)
                     {
                         case "table":
-                            table = new TableDeclaration(reader.GetAttribute("name"));
+                            table = new Table(reader.GetAttribute("name"));
                             table.Id = reader.GetAttribute("suid");
 
                             Add(table);
@@ -427,7 +427,7 @@ namespace Acklann.Daterpillar.Configuration
                             if (reader.MoveToAttribute("autoIncrement"))
                                 bool.TryParse(reader.GetAttribute("autoIncrement"), out auto);
 
-                            column = new ColumnDeclaration
+                            column = new Column
                             {
                                 Name = reader.GetAttribute("name"),
                                 DefaultValue = reader.GetAttribute("default"),
@@ -531,16 +531,16 @@ namespace Acklann.Daterpillar.Configuration
         object ICloneable.Clone() => Clone();
 
         /// <summary>
-        /// Creates a new <see cref="SchemaDeclaration"/> object that is a copy of the current instance.
+        /// Creates a new <see cref="Schema"/> object that is a copy of the current instance.
         /// </summary>
-        /// <returns>A new <see cref="SchemaDeclaration"/> object that is a copy of this instance.</returns>
-        public SchemaDeclaration Clone()
+        /// <returns>A new <see cref="Schema"/> object that is a copy of this instance.</returns>
+        public Schema Clone()
         {
-            var clone = new SchemaDeclaration() { Name = Name };
+            var clone = new Schema() { Name = Name };
 
-            foreach (TableDeclaration table in Tables)
+            foreach (Table table in Tables)
             {
-                TableDeclaration copy = table.Clone();
+                Table copy = table.Clone();
                 copy.Schema = clone;
                 clone.Tables.Add(copy);
             }
@@ -557,9 +557,9 @@ namespace Acklann.Daterpillar.Configuration
 
         private readonly XmlSerializerNamespaces _namespace;
 
-        internal TableDeclaration FindMatch(TableDeclaration right)
+        internal Table FindMatch(Table right)
         {
-            foreach (TableDeclaration left in Tables)
+            foreach (Table left in Tables)
             {
                 if (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -583,11 +583,11 @@ namespace Acklann.Daterpillar.Configuration
 
         private void LinkChildNodes()
         {
-            foreach (TableDeclaration table in Tables)
+            foreach (Table table in Tables)
             {
                 if (table.Schema == null) table.Schema = this;
 
-                foreach (ColumnDeclaration column in table.Columns)
+                foreach (Column column in table.Columns)
                 {
                     if (column.Table == null) column.Table = table;
                 }

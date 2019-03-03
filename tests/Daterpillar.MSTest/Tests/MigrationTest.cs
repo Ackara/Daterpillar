@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Tests
             var assemblyFile = typeof(MigrationTest).Assembly.Location;
 
             // Act
-            var schema = AssemblyConverter.ToSchema(assemblyFile);
+            var schema = SchemaFactory.CreateFrom(assemblyFile);
 
             // Assert
             schema.Version.ShouldNotBeNullOrEmpty();
@@ -33,9 +33,9 @@ namespace Acklann.Daterpillar.Tests
             var totalTablesBeforeMerge = 0;
             var inputFile = TestData.GetSakilaInventoryXML().FullName;
 
-            var city = new TableDeclaration("city",
-                new ColumnDeclaration("Population", new DataType(SchemaType.INT)), /* add */
-                new ColumnDeclaration("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
+            var city = new Table("city",
+                new Column("Population", new DataType(SchemaType.INT)), /* add */
+                new Column("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
 
                 new ForeignKey("placeholder", "fake", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* add */
                 new ForeignKey("country_id", "country", "country_id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* update */
@@ -43,10 +43,10 @@ namespace Acklann.Daterpillar.Tests
                 new Index(IndexType.Index, new ColumnName("Population")), /* add */
                 new Index(IndexType.Index, new ColumnName("country_id", Order.DESC)) /* update */
                 );
-            var revisions = new SchemaDeclaration() { Tables = new System.Collections.Generic.List<TableDeclaration> { city } };
+            var revisions = new Schema() { Tables = new System.Collections.Generic.List<Table> { city } };
 
             // Act
-            if (SchemaDeclaration.TryLoad(inputFile, out SchemaDeclaration schema))
+            if (Schema.TryLoad(inputFile, out Schema schema))
             {
                 totalTablesBeforeMerge = schema.Tables.Count;
 
@@ -97,8 +97,8 @@ namespace Acklann.Daterpillar.Tests
             TestData.GetMusicXML().CopyTo(activeFile);
             TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
 
-            var oldSchema = new SchemaDeclaration();
-            if (SchemaDeclaration.TryLoad(activeFile, out SchemaDeclaration newSchema, out string errorMsg) == false)
+            var oldSchema = new Schema();
+            if (Schema.TryLoad(activeFile, out Schema newSchema, out string errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             newSchema.Merge();
@@ -109,11 +109,11 @@ namespace Acklann.Daterpillar.Tests
             // Case 2: No migrations/changes.
             newSchema.Merge();
             newSchema.Save(snapshotFile);
-            oldSchema = SchemaDeclaration.Load(snapshotFile);
+            oldSchema = Schema.Load(snapshotFile);
             var case2 = sut.GenerateMigrationScript(outFile, oldSchema, newSchema, syntax).Length;
 
             // Case 3: Migrations exists.
-            if (SchemaDeclaration.TryLoad(TestData.GetMusicRevisionsXML().FullName, out SchemaDeclaration revisions, out errorMsg) == false)
+            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             revisions.Save(activeFile);

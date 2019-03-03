@@ -77,26 +77,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Configuration\DataTypeFactory.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DataTypeFactory.cs</LastGenOutput>
-    </None>
-    <None Update="Configuration\Syntax.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Syntax.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Configuration\DataTypeFactory.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DataTypeFactory.tt</DependentUpon>
-    </Compile>
     <Compile Update="Configuration\Syntax.cs">
+      <DependentUpon>Syntax.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Syntax.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Configuration\DataTypeFactory.cs">
+      <DependentUpon>DataTypeFactory.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Translators\TranslatorBase.cs">
       <DesignTime>True</DesignTime>

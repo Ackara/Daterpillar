@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -10,35 +9,35 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> column.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public class ColumnDeclaration : ISqlStatement
+    public class Column : ISqlStatement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Column"/> class.
         /// </summary>
-        public ColumnDeclaration() : this(null, new DataType())
+        public Column() : this(null, new DataType())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Column"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
         /// <param name="nullable">if set to <c>true</c> [nullable].</param>
         /// <param name="defaultValue">The default value.</param>
-        public ColumnDeclaration(string name, SchemaType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null) : this(name, new DataType(dataType), autoIncrement, nullable, defaultValue)
+        public Column(string name, SchemaType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null) : this(name, new DataType(dataType), autoIncrement, nullable, defaultValue)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColumnDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Column"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="dataType">Type of the data.</param>
         /// <param name="autoIncrement">if set to <c>true</c> [automatic increment].</param>
         /// <param name="nullable">if set to <c>true</c> [nullable].</param>
         /// <param name="defaultValue">The default value.</param>
-        public ColumnDeclaration(string name, DataType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null)
+        public Column(string name, DataType dataType, bool autoIncrement = false, bool nullable = false, string defaultValue = null)
         {
             Name = name;
             DataType = dataType;
@@ -51,7 +50,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore]
-        public TableDeclaration Table;
+        public Table Table;
 
         [XmlAttribute("suid")]
         public string Id { get; set; }
@@ -107,7 +106,7 @@ namespace Acklann.Daterpillar.Configuration
 
         string ISqlStatement.GetName() => Name;
 
-        internal void Overwrite(ColumnDeclaration right)
+        internal void Overwrite(Column right)
         {
             Comment = right.Comment;
             DataType = right.DataType;
@@ -119,12 +118,12 @@ namespace Acklann.Daterpillar.Configuration
         #region ICloneable
 
         /// <summary>
-        /// Creates a new <see cref="ColumnDeclaration"/> object that is a copy of the current instance.
+        /// Creates a new <see cref="Column"/> object that is a copy of the current instance.
         /// </summary>
-        /// <returns>A new <see cref="ColumnDeclaration"/> object that is a copy of this instance.</returns>
-        public ColumnDeclaration Clone()
+        /// <returns>A new <see cref="Column"/> object that is a copy of this instance.</returns>
+        public Column Clone()
         {
-            return new ColumnDeclaration()
+            return new Column()
             {
                 Id = this.Id,
                 Name = this.Name,

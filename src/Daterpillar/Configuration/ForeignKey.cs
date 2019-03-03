@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore]
-        public TableDeclaration Table;
+        public Table Table;
 
         /// <summary>
         /// Gets or sets the name of the key.
@@ -65,7 +65,7 @@ namespace Acklann.Daterpillar.Configuration
             get { return (Table == null) ? string.Empty : Table.Name; }
             set
             {
-                if (Table == null) Table = new TableDeclaration();
+                if (Table == null) Table = new Table();
                 Table.Name = value;
             }
         }

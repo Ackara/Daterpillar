@@ -35,7 +35,7 @@ namespace Acklann.Daterpillar.Writers
             Writer.WriteLine();
         }
 
-        public override void Rename(ColumnDeclaration oldColumn, string newColumnName)
+        public override void Rename(Column oldColumn, string newColumnName)
         {
             Writer.WriteLine(Expand(RenameColumnFormatString,
                     oldColumn.Table.Name,
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Writers
             Writer.WriteLine();
         }
 
-        public override void Alter(ColumnDeclaration column)
+        public override void Alter(Column column)
         {
             WriteHeaderIf(Expand($"Modifying {Resolver.Escape(column.Table.Name)}.{Resolver.Escape(column.Name)}"), column.DefaultValue != null);
             base.Alter(column);

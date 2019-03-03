@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar.Writers
 
         internal static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
 
-        internal static bool IsIdentical(this TableDeclaration left, TableDeclaration right)
+        internal static bool IsIdentical(this Table left, Table right)
         {
             return
                 (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
@@ -29,7 +29,7 @@ namespace Acklann.Daterpillar.Writers
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
 
-        internal static bool IsIdentical(this ColumnDeclaration left, ColumnDeclaration right)
+        internal static bool IsIdentical(this Column left, Column right)
         {
             return
                 (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
@@ -40,10 +40,10 @@ namespace Acklann.Daterpillar.Writers
 
         internal static bool IsIdentical(this ISqlStatement left, ISqlStatement right)
         {
-            if (left is TableDeclaration)
-                return IsIdentical((TableDeclaration)left, (TableDeclaration)right);
-            else if (left is ColumnDeclaration)
-                return IsIdentical((ColumnDeclaration)left, (ColumnDeclaration)right);
+            if (left is Table)
+                return IsIdentical((Table)left, (Table)right);
+            else if (left is Column)
+                return IsIdentical((Column)left, (Column)right);
             else
                 return string.Equals(left.GetName(), right.GetName(), System.StringComparison.OrdinalIgnoreCase);
         }
@@ -76,12 +76,12 @@ namespace Acklann.Daterpillar.Writers
             return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
         }
 
-        internal static string GetIdOrName(this TableDeclaration table)
+        internal static string GetIdOrName(this Table table)
         {
             return (!string.IsNullOrEmpty(table?.Id) ? $"$({table.Id})" : table.Name);
         }
 
-        internal static string GetIdOrName(this ColumnDeclaration column)
+        internal static string GetIdOrName(this Column column)
         {
             return (!string.IsNullOrEmpty(column.Id) ? $"$({column.Id})" : column.Name);
         }

@@ -3,7 +3,7 @@ using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
-using SchemaDeclaration = Acklann.Daterpillar.Configuration.SchemaDeclaration;
+using Schema = Acklann.Daterpillar.Configuration.Schema;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -18,8 +18,8 @@ namespace Acklann.Daterpillar.Tests
             bool result1, result2;
 
             // Act
-            result1 = SchemaDeclaration.TryLoad(TestData.GetMusicXML().FullName, out SchemaDeclaration schema1);
-            result2 = SchemaDeclaration.TryLoad(TestData.GetBad_SchemaXML().FullName, out SchemaDeclaration schema2);
+            result1 = Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema1);
+            result2 = Schema.TryLoad(TestData.GetBad_SchemaXML().FullName, out Schema schema2);
 
             // Assert
             result1.ShouldBeTrue();
@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Tests
             var xsd = TestData.GetFile($"{nameof(Daterpillar)}.xsd".ToLowerInvariant()).FullName;
 
             // Act
-            if (SchemaDeclaration.TryLoad(TestData.GetMusicXML().FullName, out SchemaDeclaration schema, out string errorMsg))
+            if (Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema, out string errorMsg))
             {
                 schema.Save(resultFile);
                 xml = File.ReadAllText(resultFile);
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Tests
             else Assert.Fail(errorMsg);
 
             // Assert
-            Diff.ApproveXml(xml, xsd, SchemaDeclaration.XMLNS);
+            Diff.ApproveXml(xml, xsd, Schema.XMLNS);
         }
     }
 }

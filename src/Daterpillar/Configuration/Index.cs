@@ -53,7 +53,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent table.
         /// </summary>
         [XmlIgnore]
-        public TableDeclaration Table;
+        public Table Table;
 
         /// <summary>
         /// Gets or sets the name of the index.

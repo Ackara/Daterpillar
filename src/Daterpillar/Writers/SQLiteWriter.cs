@@ -32,7 +32,7 @@ namespace Acklann.Daterpillar.Writers
 
         // ==================== DROP ==================== //
 
-        public override void Drop(ColumnDeclaration column)
+        public override void Drop(Column column)
         {
         }
 
@@ -42,7 +42,7 @@ namespace Acklann.Daterpillar.Writers
 
         // ==================== ALTER ==================== //
 
-        public override void Alter(TableDeclaration oldTable, TableDeclaration newTable)
+        public override void Alter(Table oldTable, Table newTable)
         {
             WriteHeaderIf($"Modifying the [{oldTable.Name}] table.");
             Writer.WriteLine("PRAGMA foreign_keys=off;");
@@ -68,8 +68,8 @@ namespace Acklann.Daterpillar.Writers
 
             IEnumerable<string> oldColumns()
             {
-                foreach (ColumnDeclaration newColumn in newTable.Columns)
-                    foreach (ColumnDeclaration oldColumn in oldTable.Columns)
+                foreach (Column newColumn in newTable.Columns)
+                    foreach (Column oldColumn in oldTable.Columns)
                         if (oldColumn.IsIdentical(newColumn))
                         {
                             yield return Resolver.Escape(oldColumn.Name);
@@ -79,8 +79,8 @@ namespace Acklann.Daterpillar.Writers
 
             IEnumerable<string> newColumns()
             {
-                foreach (ColumnDeclaration newColumn in newTable.Columns)
-                    foreach (ColumnDeclaration oldColumn in oldTable.Columns)
+                foreach (Column newColumn in newTable.Columns)
+                    foreach (Column oldColumn in oldTable.Columns)
                         if (oldColumn.IsIdentical(newColumn))
                         {
                             yield return Resolver.Escape(newColumn.Name);
@@ -89,11 +89,11 @@ namespace Acklann.Daterpillar.Writers
             }
         }
 
-        public override void Alter(ColumnDeclaration column)
+        public override void Alter(Column column)
         {
         }
 
-        public override void Rename(ColumnDeclaration oldColumn, string newColumnName)
+        public override void Rename(Column oldColumn, string newColumnName)
         {
         }
     }

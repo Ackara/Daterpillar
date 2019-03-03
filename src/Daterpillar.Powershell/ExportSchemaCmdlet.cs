@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar
         {
             if (File.Exists(AssemblyFile))
             {
-                SchemaDeclaration schema = AssemblyConverter.ToSchema(AssemblyFile);
+                Schema schema = SchemaFactory.CreateFrom(AssemblyFile);
                 string outputFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
                 Helper.CreateDirectory(outputFile);
 
@@ -66,7 +66,7 @@ namespace Acklann.Daterpillar
                                     }
                                 };
 
-                                if (SchemaDeclaration.TryLoad(filePath, out SchemaDeclaration dependency, handler))
+                                if (Schema.TryLoad(filePath, out Schema dependency, handler))
                                 {
                                     schema.Merge(dependency);
                                     didNotFindDependency = false;

@@ -1,6 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Writers;
 using Acklann.Daterpillar.Translators;
+using Acklann.Daterpillar.Writers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,9 +11,9 @@ using System.Text;
 
 namespace Acklann.Daterpillar.Migration
 {
-    public static class AssemblyConverter
+    public static class SchemaFactory
     {
-        public static SchemaDeclaration ToSchema(Assembly assembly)
+        public static Schema CreateFrom(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
@@ -22,7 +22,7 @@ namespace Acklann.Daterpillar.Migration
                                         select t);
 
             var v = assembly.GetName().Version;
-            var schema = new SchemaDeclaration { Version = $"{v.Major}.{v.Minor}.{v.Build}" };
+            var schema = new Schema { Version = $"{v.Major}.{v.Minor}.{v.Build}" };
             string assemblyDocumentationFilePath = Path.ChangeExtension(assembly.Location, ".xml");
 
             foreach (Type type in tables)
@@ -32,7 +32,7 @@ namespace Acklann.Daterpillar.Migration
                     if (type.IsEnum)
                         ExtractEmunInfo(schema, type);
                     else
-                        schema.Add(ToTable(type));
+                        schema.Add(CreateFrom(type));
                 }
                 catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine($"Could not find {type.FullName} in the loaded assembly."); }
             }
@@ -43,13 +43,13 @@ namespace Acklann.Daterpillar.Migration
             return schema;
         }
 
-        public static SchemaDeclaration ToSchema(string assemblyFilePath)
+        public static Schema CreateFrom(string assemblyFilePath)
         {
             if (File.Exists(assemblyFilePath) == false) throw new FileNotFoundException($"Could not find assembly at '{assemblyFilePath}'.", assemblyFilePath);
-            return ToSchema(Assembly.Load(File.ReadAllBytes(assemblyFilePath)));
+            return CreateFrom(Assembly.Load(File.ReadAllBytes(assemblyFilePath)));
         }
 
-        public static TableDeclaration ToTable(Type type)
+        public static Table CreateFrom(Type type)
         {
             IEnumerable<MemberInfo> members = (from m in type.GetMembers()
                                                where
@@ -58,7 +58,7 @@ namespace Acklann.Daterpillar.Migration
                                                 m.IsDefined(typeof(SqlIgnoreAttribute)) == false
                                                select m).ToArray();
 
-            var table = new TableDeclaration(type.GetName()) { Id = type.GetId() };
+            var table = new Table(type.GetName()) { Id = type.GetId() };
             foreach (MemberInfo member in members)
             {
                 ExtractColumnInfo(table, member);
@@ -68,13 +68,13 @@ namespace Acklann.Daterpillar.Migration
             return table;
         }
 
-        // ==================== HELPERS (To Schema) ==================== //
+        // ==================== HELPERS ==================== //
 
-        private static void ExtractEmunInfo(SchemaDeclaration schema, Type type)
+        private static void ExtractEmunInfo(Schema schema, Type type)
         {
-            var table = new TableDeclaration(type.GetName(),
-                new ColumnDeclaration("Id", new DataType(SchemaType.INT)),
-                new ColumnDeclaration("Name", new DataType(SchemaType.VARCHAR)),
+            var table = new Table(type.GetName(),
+                new Column("Id", new DataType(SchemaType.INT)),
+                new Column("Name", new DataType(SchemaType.VARCHAR)),
 
                 new Index(IndexType.PrimaryKey, new ColumnName("Id")),
                 new Index(IndexType.Index, true, new ColumnName("Name"))
@@ -101,9 +101,9 @@ namespace Acklann.Daterpillar.Migration
             schema.Add(script);
         }
 
-        private static void ExtractColumnInfo(TableDeclaration table, MemberInfo member)
+        private static void ExtractColumnInfo(Table table, MemberInfo member)
         {
-            var column = new ColumnDeclaration();
+            var column = new Column();
             table.Add(column);
 
             var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
@@ -137,7 +137,7 @@ namespace Acklann.Daterpillar.Migration
             ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
 
-        private static void ExtractForiegnKeyInfo(TableDeclaration table, MemberInfo member, string columnName)
+        private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
         {
             if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
             {
@@ -168,7 +168,7 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
-        private static void ExtractIndexInfo(TableDeclaration table, IEnumerable<MemberInfo> members)
+        private static void ExtractIndexInfo(Table table, IEnumerable<MemberInfo> members)
         {
             var indecies = new List<(string, IndexAttribute)>();
             foreach (MemberInfo member in members)

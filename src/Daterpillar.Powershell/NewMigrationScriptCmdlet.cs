@@ -41,15 +41,15 @@ namespace Acklann.Daterpillar
 
         protected override void ProcessRecord()
         {
-            SchemaDeclaration oldSchema = null, newSchema = null;
+            Schema oldSchema = null, newSchema = null;
             string error, outputFile = Destination, description = "update_schema";
 
             if (!File.Exists(OldSchemaFilePath))
-                oldSchema = new SchemaDeclaration();
-            else if (!SchemaDeclaration.TryLoad(OldSchemaFilePath, out oldSchema, out error))
+                oldSchema = new Schema();
+            else if (!Schema.TryLoad(OldSchemaFilePath, out oldSchema, out error))
                 throw new System.ArgumentException($"{error} at '{OldSchemaFilePath}'.");
 
-            if (!SchemaDeclaration.TryLoad(NewSchemaFilePath, out newSchema, out error))
+            if (!Schema.TryLoad(NewSchemaFilePath, out newSchema, out error))
                 throw new System.ArgumentException($"{error} at '{NewSchemaFilePath}'.");
 
             if (!Path.HasExtension(outputFile))

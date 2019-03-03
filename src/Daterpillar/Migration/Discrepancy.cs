@@ -62,7 +62,7 @@ namespace Acklann.Daterpillar.Migration
 
             if (Value is Index) weight += 1;
             else if (Value is ForeignKey) weight += 2;
-            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is ColumnDeclaration) weight += 4;
+            else if ((Action == SqlAction.Create || Action == SqlAction.Alter) && Value is Column) weight += 4;
 
             return weight;
         }

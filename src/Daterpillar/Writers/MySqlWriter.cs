@@ -27,7 +27,7 @@ namespace Acklann.Daterpillar.Writers
 
         public override Syntax Syntax => Syntax.MySQL;
 
-        public override void Rename(ColumnDeclaration oldColumn, string newColumnName)
+        public override void Rename(Column oldColumn, string newColumnName)
         {
             Writer.Write(Expand(RenameColumnFormatString,
                 /* 0 */Resolver.Escape(oldColumn.Table.Name),

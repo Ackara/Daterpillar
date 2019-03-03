@@ -11,30 +11,30 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class TableDeclaration : ISqlStatement
+    public sealed class Table : ISqlStatement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
-        public TableDeclaration() : this(null, new ColumnDeclaration[0])
+        public Table() : this(null, new Column[0])
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableDeclaration"/> class.
+        /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public TableDeclaration(string name, params ISqlStatement[] sqlObjects)
+        public Table(string name, params ISqlStatement[] sqlObjects)
         {
             Name = name;
-            Columns = new List<ColumnDeclaration>();
+            Columns = new List<Column>();
             Indecies = new List<Index>();
             ForeignKeys = new List<ForeignKey>();
 
             foreach (var item in sqlObjects)
             {
-                if (item is ColumnDeclaration column)
+                if (item is Column column)
                 {
                     column.Table = this;
                     Columns.Add(column);
@@ -58,7 +58,7 @@ namespace Acklann.Daterpillar.Configuration
         /// The parent schema.
         /// </summary>
         [XmlIgnore]
-        public SchemaDeclaration Schema;
+        public Schema Schema;
 
         [XmlAttribute("suid")]
         public string Id { get; set; }
@@ -82,7 +82,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <value>The table columns.</value>
         [XmlElement("column")]
-        public List<ColumnDeclaration> Columns { get; set; }
+        public List<Column> Columns { get; set; }
 
         /// <summary>
         /// Gets or sets the table foreign keys.
@@ -98,7 +98,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("index")]
         public List<Index> Indecies { get; set; }
 
-        public void Add(ColumnDeclaration column)
+        public void Add(Column column)
         {
             column.Table = this;
             Columns.Add(column);
@@ -110,11 +110,11 @@ namespace Acklann.Daterpillar.Configuration
             ForeignKeys.Add(foreignKey);
         }
 
-        public void Merge(TableDeclaration table)
+        public void Merge(Table table)
         {
-            foreach (ColumnDeclaration right in table.Columns)
+            foreach (Column right in table.Columns)
             {
-                ColumnDeclaration left = Columns.Find(l => l.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
+                Column left = Columns.Find(l => l.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase));
                 if (left == null)
                     Columns.Add(right);
                 else
@@ -145,12 +145,12 @@ namespace Acklann.Daterpillar.Configuration
         #region ICloneable
 
         /// <summary>
-        /// Creates a new <see cref="TableDeclaration"/> object that is a copy of the current instance.
+        /// Creates a new <see cref="Table"/> object that is a copy of the current instance.
         /// </summary>
-        /// <returns>A new <see cref="TableDeclaration"/> object that is a copy of this instance.</returns>
-        public TableDeclaration Clone()
+        /// <returns>A new <see cref="Table"/> object that is a copy of this instance.</returns>
+        public Table Clone()
         {
-            var clone = new TableDeclaration()
+            var clone = new Table()
             {
                 Id = Id,
                 Name = this.Name,
