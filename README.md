@@ -4,10 +4,10 @@
 [![powershell](https://img.shields.io/powershellgallery/v/daterpillar.svg?style=flat)](https://www.powershellgallery.com/packages/Daterpillar)
 
 ## The Problem
-Your *.NET* project depends on a SQL database to store it's data, therefore you need a way to keep the tables in-sync with it's codebase counterparts/entities.
+Your *.NET* project depends on a SQL database to store it's data, therefore you need a way to keep your SQL tables in-sync with your class entities.
 
 ## The Solution
-This library keeps your entities and tables in-sync by generating **sql-migration-scripts** from your project's `.dll` files. Let's say you have the following class in your project.
+**Daterpillar** keep your classes and tables in-sync by generating **sql-migration-scripts** from your project's `.dll` file. Lets say you have the following class in your project. As you will see, the `User` class is decorated with the `Table` and `Column` attributes.
 
 ```csharp
 [Table()]
@@ -24,28 +24,26 @@ public class User
 }
 ```
 
-As you can see the `User` class is decorated with a `Table` and `Column` attribues. Now when you build your project, the *NUGET* package ships with a *MSBuild* target called `GenerateMigrationScript` that will run after the project has been built and produce `.sql` script that should update your database schema, but first you will need to configure it.
-
-Open your `.*proj` project-file and add the following elements inside a `<PropertyGroup>` element.
+The *NUGET* package ships with a *MSBuild* target called `GenerateDaterpillarMigrationScript`. It will run after the project has been built, and produce a `.sql` script that should update your database schema, but first you will need to configure it. Open your `.*proj` project-file and add the following elements inside a `<PropertyGroup>` element.
 
 ```xml
 <!-- This turn on the feature -->
-<GenerateMigrationScriptAfterBuild>true</GenerateMigrationScriptAfterBuild>
+<ShouldGenerateDaterpillarMigrationScriptAfterBuild>true</ShouldGenerateDaterpillarMigrationScriptAfterBuild>
 
 <!-- This is where the script will be saved. -->
-<DaterpillarMigrationsDirectory>Migrations</DaterpillarMigrationsDirectory>
+<DaterpillarMigrationsDirectory>migrations</DaterpillarMigrationsDirectory>
 
 <!-- The script's language. -->
-<DaterpillarLanguage>MySQL</<DaterpillarLanguage>
+<DaterpillarSqlLanguage>MySQL</DaterpillarSqlLanguage>
 
 <!-- This file represents the current state/structure of your live database. (Optional defaulats to 'snapshot.schema.xml') -->
-<DaterpillarSnapshot>snapshot.schema.xml</DaterpillarSnapshot>
+<DaterpillarSnapshotFilePath>snapshot.schema.xml</DaterpillarSnapshotFilePath>
 ```
 
-Once configured, everytime the project is built a `.sql` script will be created. 
+Once configured, whenever the project is built, a `.sql` script will be created. 
 
-example: `V1.0.2__create_schema.mysql.sql`
 ```sql
+# EXAMPLE: `V1.0.2__create_schema.mysql.sql`
 CREATE TABLE `user`(
     `Id` VARCHAR(64) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `full_name` VARCHAR(32) NOT NULL,
@@ -53,28 +51,17 @@ CREATE TABLE `user`(
 );
 ```
 
-Now that you have a migration-script you might need to run it. You can run the script manually, use another tool like [FlywayDB](https://flywaydb.org/), Powershell, or use the *MSBuild* target called `InvokeMigrationScripts`; however before you do, you will have to configure it.
+Now that you have a migration-script you will probably want to run it. You can run the script manually or use other tools like [Evolve](https://www.nuget.org/packages/Evolve/), [FlywayDB](https://flywaydb.org/) or [Powershell](https://www.powershellgallery.com/packages/Daterpillar). 
 
-Open your `.*proj` project-file and add the following elements inside a `<PropertyGroup>` element.
+What if generating migrations-scripts via *MSBuild* is not ideal for your project, perhaps it will be better to generate them during runtime, doing so is possible as well. To generate migration-scripts during runtime you will need to invoke the following functions.
 
-```xml
-<!-- This is the relative-path to a .json file that contains the target database connection-string -->
-<ConnectionStringFilePath>appsettings.json</ConnectionStringFilePath>
+```csharp
 
-<!-- This the jpath to locate the connection-string within the .json file -->
-<!-- The expected connection-string format is server=[your_address];user=[you_username];password=[your_password];database=[your_dbname] -->
-<ConnectionStringJPath>/localdb/connectionString</ConnectionStringJPath>
 ```
 
-The `InvokeMigrationScripts` target will have to be invoked manually either via the *dotnet-cli* or *MSBuild*. example:
+### More about .schema.xml
 
-`> dotnet msbuild -target:InvokeMigrationScripts`
-
-If using *MSBuild* targets is not your preference or maybe you just want more control, try the [Powershell Module](https://www.powershellgallery.com/packages/Daterpillar) instead.
-
-### Advance Usage
-
-To generated the `.sql` migration-script mentioned above. The difference between `snapshot.schema.xml` and `[your-assembly].schema.xml` is used to generate the script. So where did this `[your-assembly].schema.xml` file came from? The *MSBuild* target `ExportDaterpillarSchema`. You can extend schema by merging multiple schemas together.
+To generated the migration-script mentioned earlier, the difference between `snapshot.schema.xml` and `[your-assembly].schema.xml` is used to generate the script. So where did this `[your-assembly].schema.xml` file came from? The *MSBuild* target `ExportDaterpillarSchema`. You can extend schema by merging multiple schemas together.
 
 Lets say you want to add seed-data to a table; first you will have to add a `[assembly: Import("seed.schema.xml")]` attribute to your project. 
 
@@ -99,7 +86,7 @@ Next, you can add the `seed.schema.xml` to your project.
 </schema>
 ```
 
-**NOTE:** If the `language` attribute was set to 'MySQL' instead, the script would of only been included when MySQL explictly targeted.
+**NOTE:** If the `language` attribute was set to 'MySQL' instead, the script would of only been included when MySQL explicitly targeted.
 
 You can also override or add columns by redefining a table.
 
