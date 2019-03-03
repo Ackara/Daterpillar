@@ -16,6 +16,8 @@ Properties {
     $ShouldCommitChanges = $true;
 	$CurrentBranch = "";
 	$Configuration = "";
+	$Filter = $null;
+	$DryRun = $false;
 	$Major = $false;
 	$Minor = $false;
 }
@@ -82,10 +84,10 @@ Task "Generate-XmlSchemaFromDll" -alias "xsd" -description "This task generates 
 Task "Clean" -description "This task removes all generated files and folders from the solution." `
 -action {
 	Join-Path $SolutionFolder "*.sln" | Get-Item | Remove-GeneratedProjectItem -AdditionalItems @("artifacts");
-	Get-ChildItem $SolutionFolder -Recurse -File -Filter "*.*proj" | Remove-GeneratedProjectItem -AdditionalItems @("lib.zip", "node_modules", "package-lock.json");
+	Get-ChildItem $SolutionFolder -Recurse -File -Filter "*.*proj" | Remove-GeneratedProjectItem -AdditionalItems @("package-lock.json");
 }
 
-Task "Install-BuildDependencies" -alias "restore" -description "This task imports all build dependencies." `
+Task "Import-BuildDependencies" -alias "restore" -description "This task imports all build dependencies." `
 -action {
 	# Installing all required dependencies.
 	foreach ($moduleId in $Dependencies)
@@ -117,6 +119,11 @@ Task "Run-Tests" -alias "test" -description "This task invoke all tests within t
 	#Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*.tests.ps1" | Invoke-PowershellTest $ToolsFolder;
 	Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*MSTest.csproj" | Invoke-MSTest $Configuration;
 	#Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*Mocha.*proj" | Invoke-MochaTest;
+}
+
+Task "Run-Benchmarks" -alias "benchmark" -description "This task invoke all benchmark tests within the 'tests' folder." `
+-action {
+	$projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter "*" -DryRun:$DryRun;
 }
 
 #endregion

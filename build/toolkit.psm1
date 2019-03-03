@@ -272,6 +272,36 @@ function Install-WAWSDeploy([Parameter(Mandatory)][string]$InstallationFolder, [
     return $waws;
 }
 
+function Invoke-BenchmarkDotNet
+{
+	Param(
+		[string]$Filter = "*",
+
+		[Parameter(Mandatory, ValueFromPipeline)]
+		[ValidateScript({Test-Path $_.FullName})]
+		[IO.FileInfo]$ProjectFile,
+
+		[switch]$DryRun
+	)
+
+	PROCESS
+	{
+		$job = "Default";
+		if ($DryRun) { $job = "Dry"; }
+
+		Invoke-Tool { &dotnet build $ProjectFile.FullName --configuration "Release"; }
+		$dll = Join-Path $ProjectFile.DirectoryName "bin/Release/*/*$($ProjectFile.BaseName).dll" | Get-Item | Select-Object -Last 1;
+		try
+		{
+			Push-Location $ProjectFile.DirectoryName;
+			Write-Header "benchmark: '$($ProjectFile.BaseName)'";
+			Invoke-Tool { &dotnet $dll.FullName --filter $Filter --job $job | Write-Host; }
+			$report = Join-Path $PWD "BenchmarkDotNet.Artifacts/results" | Get-ChildItem -File -Filter "*vbench*.html" | Select-Object -First 1 -ExpandProperty FullName | Invoke-Item;
+		}
+		finally { Pop-Location; }
+	}
+}
+
 function Invoke-MochaTest
 {
 	Param(
@@ -429,7 +459,7 @@ function Invoke-NugetPack
 		try
 		{
 			Write-Header "dotnet: pack '$($ProjectFile.BaseName)' $Version";
-			Invoke-Tool { &dotnet pack $ProjectFile.FullName --output $ArtifactsFolder --configuration $Configuration $framework /p:PackageVersion=$Version; }
+			Invoke-Tool { &dotnet pack $ProjectFile.FullName --output $ArtifactsFolder --configuration $Configuration /p:PackageVersion=$Version; }
 		}
 		finally { Pop-Location; }
 	}
@@ -545,7 +575,6 @@ function New-GitTag
 
 	if (($CurrentBranch -eq "master") -and (Test-Git))
 	{
-		Write-Header "git tag $Version";
 		Invoke-Tool { &git tag v$Version; }
 		return $Version;
 	}
