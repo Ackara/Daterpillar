@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Equality;
 using Acklann.Daterpillar.Writers;
 using System;
 using System.Collections.Generic;

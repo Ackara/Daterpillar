@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Equality
+namespace Acklann.Daterpillar.Migration
 {
     internal class ForeignKeyEqualityComparer : IEqualityComparer<ForeignKey>
     {

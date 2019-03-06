@@ -2,7 +2,7 @@
 using Acklann.Daterpillar.Translators;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Equality
+namespace Acklann.Daterpillar.Migration
 {
     internal class ColumnEqualityComparer : IEqualityComparer<Column>
     {
