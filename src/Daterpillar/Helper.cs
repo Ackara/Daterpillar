@@ -4,15 +4,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Writers
+namespace Acklann.Daterpillar
 {
-    internal static class Utility
+    internal static class Helper
     {
-        internal static string Escape(this string text) => text?.Replace("'", @"\'");
+        public static string Escape(this string text) => text?.Replace("'", @"\'");
 
-        internal static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
+        public static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
 
-        internal static bool IsIdentical(this Table left, Table right)
+        public static bool IsIdentical(this Table left, Table right)
         {
             return
                 (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Writers
                 ;
         }
 
-        internal static void CreateDirectory(string scriptFile)
+        public static void CreateDirectory(string scriptFile)
         {
             if (string.IsNullOrEmpty(scriptFile)) throw new ArgumentNullException(nameof(scriptFile));
 
@@ -29,7 +29,7 @@ namespace Acklann.Daterpillar.Writers
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
 
-        internal static bool IsIdentical(this Column left, Column right)
+        public static bool IsIdentical(this Column left, Column right)
         {
             return
                 (left.Id == right?.Id && !string.IsNullOrEmpty(left?.Id) && !string.IsNullOrEmpty(right?.Id))
@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Writers
                 ;
         }
 
-        internal static bool IsIdentical(this ISqlStatement left, ISqlStatement right)
+        public static bool IsIdentical(this ISqlStatement left, ISqlStatement right)
         {
             if (left is Table)
                 return IsIdentical((Table)left, (Table)right);
@@ -48,12 +48,12 @@ namespace Acklann.Daterpillar.Writers
                 return string.Equals(left.GetName(), right.GetName(), System.StringComparison.OrdinalIgnoreCase);
         }
 
-        internal static string GetId(this MemberInfo member)
+        public static string GetId(this MemberInfo member)
         {
             return (!(member.GetCustomAttribute(typeof(StaticIdAttribute)) is StaticIdAttribute attr) ? null : attr.Id);
         }
 
-        internal static string GetName(this Type type)
+        public static string GetName(this Type type)
         {
             var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
             var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
@@ -68,7 +68,7 @@ namespace Acklann.Daterpillar.Writers
             return name;
         }
 
-        internal static string GetName(this MemberInfo member)
+        public static string GetName(this MemberInfo member)
         {
             var columnAttr = member?.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
             var nameAttr = member?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
@@ -76,17 +76,17 @@ namespace Acklann.Daterpillar.Writers
             return (string.IsNullOrEmpty(columnAttr?.Name) ? nameAttr?.DisplayName : columnAttr?.Name) ?? member.Name;
         }
 
-        internal static string GetIdOrName(this Table table)
+        public static string GetIdOrName(this Table table)
         {
             return (!string.IsNullOrEmpty(table?.Id) ? $"$({table.Id})" : table.Name);
         }
 
-        internal static string GetIdOrName(this Column column)
+        public static string GetIdOrName(this Column column)
         {
             return (!string.IsNullOrEmpty(column.Id) ? $"$({column.Id})" : column.Name);
         }
 
-        internal static string GetIdOrName(this MemberInfo member)
+        public static string GetIdOrName(this MemberInfo member)
         {
             var suidAttr = member.GetCustomAttribute(typeof(StaticIdAttribute)) as StaticIdAttribute;
 
@@ -94,12 +94,18 @@ namespace Acklann.Daterpillar.Writers
             else return GetName(member);
         }
 
-        internal static string GetEnumName(this MemberInfo member)
+        public static string GetEnumName(this MemberInfo member)
         {
             var enumAttr = member.GetCustomAttribute(typeof(EnumValueAttribute)) as EnumValueAttribute;
             var nameAttr = member.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
 
             return (string.IsNullOrEmpty(enumAttr?.Name) ? nameAttr?.DisplayName : enumAttr?.Name) ?? member.Name;
+        }
+
+        public static string GetVersion(this Assembly assembly)
+        {
+            Version version = assembly.GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 }

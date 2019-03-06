@@ -1,4 +1,4 @@
-﻿namespace Acklann.Daterpillar.Writers
+﻿namespace Acklann.Daterpillar.Migration
 {
     public enum SqlAction
     {

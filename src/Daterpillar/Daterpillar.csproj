@@ -82,11 +82,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Configuration\DataTypeFactory.cs">
-      <DependentUpon>DataTypeFactory.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Translators\TranslatorBase.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
