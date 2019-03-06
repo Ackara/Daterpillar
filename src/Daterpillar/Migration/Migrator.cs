@@ -1,28 +1,49 @@
-﻿using Acklann.Daterpillar.Writers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Equality;
+using Acklann.Daterpillar.Writers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Acklann.Daterpillar.Migration
 {
     public class Migrator
     {
-        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Syntax syntax = Syntax.Generic, bool shouldOmitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(Assembly assembly, string snapshotFilePath, Syntax language, bool omitDropStatements = false, string migrationsDirectory = null, string fileName = null)
         {
-            Utility.CreateDirectory(scriptFile);
-            using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
-            using (SqlWriter writer = _factory.CreateInstance(syntax, file))
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+            if (string.IsNullOrEmpty(snapshotFilePath)) throw new ArgumentNullException(nameof(snapshotFilePath));
+            if (string.IsNullOrEmpty(migrationsDirectory)) migrationsDirectory = Path.GetDirectoryName(snapshotFilePath);
+            if (string.IsNullOrEmpty(fileName)) fileName = $"V{assembly.GetVersion()}__schema_update.{language.ToString().ToLowerInvariant()}.sql";
+
+            var factory = new SqlWriterFactory();
+            string scriptFilePath = Path.Combine(migrationsDirectory, fileName);
+            Schema newSchema = SchemaFactory.CreateFrom(assembly);
+            Schema oldSchema = (File.Exists(snapshotFilePath) ? Schema.Load(snapshotFilePath) : new Schema());
+
+            Helper.CreateDirectory(scriptFilePath);
+            using (var stream = new FileStream(scriptFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (SqlWriter writer = factory.CreateInstance(language, stream))
             {
-                Discrepancy[] changes = GenerateMigrationScript(writer, from, to, shouldOmitDropStatements);
+                return GenerateMigrationScript(writer, oldSchema, newSchema, omitDropStatements);
+            }
+        }
+
+        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Syntax lanuage = Syntax.Generic, bool omitDropStatements = false)
+        {
+            Helper.CreateDirectory(scriptFile);
+            using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
+            using (SqlWriter writer = _factory.CreateInstance(lanuage, file))
+            {
+                Discrepancy[] changes = GenerateMigrationScript(writer, from, to, omitDropStatements);
                 if (changes.Length > 0) writer.Flush();
                 return changes;
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, bool shouldOmitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, bool omitDropStatements = false)
         {
             /// TASKS:
             /// (1) Mark all the tables that need to be created, altered or dropped.
@@ -48,7 +69,7 @@ namespace Acklann.Daterpillar.Migration
             AppendVaribales(writer, right);
 
             foreach (Discrepancy change in sortedTables)
-                WriteChanges(writer, change, scripts, !shouldOmitDropStatements);
+                WriteChanges(writer, change, scripts, !omitDropStatements);
 
             foreach (Script script in scripts)
                 writer.Create(script);
