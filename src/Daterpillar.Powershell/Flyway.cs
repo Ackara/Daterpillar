@@ -2,35 +2,54 @@
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Acklann.Daterpillar
 {
     public static class Flyway
     {
-        private const string Version = "5.2.4";
+        public const int DEFAULT_TIMEOUT = (5 * 60/*sec*/);
+        private const string VERSION = "5.2.4", FILESYSTEM = "filesystem:";
 
-        public static string Install(string version = Version, string baseDirectory = null)
+        public static ProcessResult Invoke(string verb, string flywayUrl, string user, string password, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
         {
-            string installationPath = GetDefaultInstallationPath(version, baseDirectory);
-            string url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{0}/flyway-commandline-{0}-{1}-x64{2}";
-            switch (Environment.OSVersion.Platform)
+            if (string.IsNullOrEmpty(flywayUrl)) throw new ArgumentNullException(nameof(flywayUrl));
+            if (string.IsNullOrEmpty(migrationsDirectory)) throw new ArgumentNullException(nameof(migrationsDirectory));
+
+            if (string.IsNullOrEmpty(installationPath)) installationPath = GetDefaultInstallationPath();
+            if (!migrationsDirectory.StartsWith(FILESYSTEM)) migrationsDirectory = $"{FILESYSTEM}{migrationsDirectory}";
+
+            var args = new ProcessStartInfo(installationPath, $"{verb} -url={flywayUrl.Trim()} -user={user?.Trim()} -password={password} -locations={migrationsDirectory.Trim()}")
             {
-                default:
-                case PlatformID.Win32NT:
-                    installationPath = $"{installationPath}.cmd";
-                    url = string.Format(url, version, "windows", ".zip");
-                    break;
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                WorkingDirectory = Path.GetDirectoryName(installationPath)
+            };
 
-                case PlatformID.MacOSX:
-                    url = string.Format(url, version, "macosx", "tar.gz");
-                    break;
-
-                case PlatformID.Unix:
-                    url = string.Format(url, version, "linux", "tar.gz");
-                    break;
+            using (var flyway = new Process { StartInfo = args })
+            {
+                flyway.Start();
+                flyway.WaitForExit(timeoutInSeconds * 1000);
+                return new ProcessResult(flyway.ExitCode, flyway.StandardOutput?.ReadToEnd(), flyway.StandardError?.ReadToEnd(), (flyway.ExitTime.Ticks - flyway.StartTime.Ticks));
             }
+        }
+
+        public static ProcessResult Invoke(string verb, Syntax connectionType, string connectionString, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
+        {
+            GetCredentials(connectionType, connectionString, out string flywayUrl, out string user, out string password);
+            return Invoke(verb, flywayUrl, user, password, migrationsDirectory, installationPath, timeoutInSeconds);
+        }
+
+        public static string Install(string baseDirectory = null, string version = VERSION)
+        {
+            string installationPath = GetDefaultInstallationPath(ref baseDirectory, version);
+            string url = GetPackageUrl(version);
 
             if (!File.Exists(installationPath))
             {
@@ -51,7 +70,6 @@ namespace Acklann.Daterpillar
                     {
                         if (!reader.Entry.IsDirectory)
                         {
-                            System.Diagnostics.Debug.WriteLine(reader.Entry.Key);
                             reader.WriteEntryToDirectory(tempFolder, new ExtractionOptions()
                             {
                                 Overwrite = true,
@@ -64,61 +82,104 @@ namespace Acklann.Daterpillar
                 // Renaming the folders to match the installation path.
                 string ver = Directory.EnumerateDirectories(tempFolder).First();
                 Directory.Move(ver, Path.Combine(Path.GetDirectoryName(ver), version));
-                Directory.Move(tempFolder, Path.Combine(Path.GetDirectoryName(tempFolder), "flyway"));
+                Directory.Move(tempFolder, Path.Combine(Path.GetDirectoryName(tempFolder), "Flyway"));
             }
 
             return installationPath;
         }
 
-        public static void Migrate(string flywayUrl, string user, string password, string migrationsDirectory, string installationPath)
+        public static string GetDefaultInstallationPath(string version = VERSION)
         {
+            string temp = null;
+            return GetDefaultInstallationPath(ref temp, version);
         }
 
-        public static void Migrate(Syntax language, string connectionString, string migrationsDirectory, string installationPath = null)
-        {
-        }
-
-        public static void GetCredentials(Syntax language, string connectionString, out string flywayUrl, out string user, out string password)
+        internal static void GetCredentials(Syntax connectionType, string connectionString, out string flywayUrl, out string user, out string password)
         {
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
 
-            string getValue(string[] prospect, params string[] names) => names.Contains(prospect[0].ToLowerInvariant()) ? prospect[1] : null;
-            string host, database;
+            bool tryGetValue(out string value, string[] term, params string[] possibleValues) { value = (possibleValues.Contains(term[0].ToLowerInvariant()) ? term[1] : null); return value != null; }
+            string host = null, database = null, port = null;
+            var optionals = new List<string>();
             string[] pair;
 
             flywayUrl = user = password = null;
             foreach (string item in connectionString.Split(';'))
             {
                 pair = item.Split('=');
-                user = (pair.Length == 2 ? getValue(pair, "u", "usr", "user") : null);
-                database = (pair.Length == 2 ? getValue(pair, "d", "db", "database") : null);
-                password = (pair.Length == 2 ? getValue(pair, "p", "pwd", "pass", "password") : null);
-                host = (pair.Length == 2 ? getValue(pair, "h", "host", "s", "server", "address") : null);
+                if (pair.Length != 2) continue;
 
-                flywayUrl = GetFlywayUrl(language, database, host);
+                if (string.IsNullOrEmpty(host))
+                    if (tryGetValue(out host, pair, "h", "host", "s", "server", "address", "data source")) continue;
+
+                if (string.IsNullOrEmpty(user))
+                    if (tryGetValue(out user, pair, "u", "usr", "user", "user id")) continue;
+
+                if (string.IsNullOrEmpty(password))
+                    if (tryGetValue(out password, pair, "p", "pwd", "pass", "password")) continue;
+
+                if (string.IsNullOrEmpty(database))
+                    if (tryGetValue(out database, pair, "d", "db", "database", "initial catalog")) continue;
+
+                if (string.IsNullOrEmpty(port))
+                    if (tryGetValue(out port, pair, "port")) continue;
+
+                optionals.Add(item);
             }
+            flywayUrl = GetFlywayUrl(connectionType, host, port, database, optionals.ToArray());
         }
 
-        public static string GetFlywayUrl(Syntax language, string database, string host)
+        internal static string GetFlywayUrl(Syntax connectionType, string address, string port, string database, params string[] args)
         {
-            if (string.IsNullOrEmpty(database)) throw new ArgumentNullException(nameof(database));
+            if (string.IsNullOrEmpty(address)) throw new ArgumentNullException(nameof(address));
 
-            string url = null;
-            switch (language)
+            string addressAndPort() => (string.IsNullOrEmpty(port) ? address : $"{address}:{port}");
+            string extra = (args.Length > 0 ? string.Empty : string.Concat("?", string.Join("&", args)));
+
+            string uri = null;
+            switch (connectionType)
             {
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(connectionType), $"A '{connectionType}' connection is not yet supported.");
+
+                case Syntax.SQLite:
+                    uri = $"jdbc:sqlite:{address}";
+                    break;
+
                 case Syntax.TSQL:
+                    uri = $"jdbc:sqlserver:////{addressAndPort()};databaseName={database}";
                     break;
 
                 case Syntax.MySQL:
-                    break;
-
-                case Syntax.SQLite:
+                    uri = $"jdbc:mysql://{addressAndPort()}/{database}{extra}";
                     break;
             }
 
-            return url;
+            return uri;
         }
 
-        public static string GetDefaultInstallationPath(string version = Version, string baseDirectory = null) => Path.Combine((baseDirectory ?? Path.GetTempPath()), "flyway", version, "flyway");
+        internal static string GetDefaultInstallationPath(ref string baseDirectory, string version = VERSION)
+        {
+            if (string.IsNullOrEmpty(baseDirectory)) baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filename = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "flyway.cmd" : "flyway");
+            return Path.Combine(baseDirectory, "Flyway", version, filename);
+        }
+
+        internal static string GetPackageUrl(string version)
+        {
+            string url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{0}/flyway-commandline-{0}-{1}-x64{2}";
+            switch (Environment.OSVersion.Platform)
+            {
+                default:
+                case PlatformID.Win32NT:
+                    return string.Format(url, version, "windows", ".zip");
+
+                case PlatformID.MacOSX:
+                    return string.Format(url, version, "macosx", "tar.gz");
+
+                case PlatformID.Unix:
+                    return string.Format(url, version, "linux", "tar.gz");
+            }
+        }
     }
 }

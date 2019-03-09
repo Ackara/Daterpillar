@@ -1,0 +1,20 @@
+﻿Flyway Community Edition 5.2.4 by Boxfuse
+Database: jdbc:sqlite:C:\Users\Ackeem\AppData\Local\Temp\dtp-flyway-migrate\test.sqlite (SQLite 3.23)
+Schema version: 1
+
++-----------+---------+-------------+------+---------------------+---------+
+| Category  | Version | Description | Type | Installed On        | State   |
++-----------+---------+-------------+------+---------------------+---------+
+| Versioned | 1       | init        | SQL  | 2019-03-06 18:14:40 | Success |
++-----------+---------+-------------+------+---------------------+---------+
+
+
+Flyway Community Edition 5.2.4 by Boxfuse
+Database: jdbc:sqlite:C:\Users\Ackeem\AppData\Local\Temp\dtp-flyway-migrate\test.sqlite (SQLite 3.23)
+Schema version: << Empty Schema >>
+
++-----------+---------+-------------+------+--------------+---------+
+| Category  | Version | Description | Type | Installed On | State   |
++-----------+---------+-------------+------+--------------+---------+
+| Versioned | 1       | init        | SQL  |              | Pending |
++-----------+---------+-------------+------+--------------+---------+

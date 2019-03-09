@@ -1,6 +1,7 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Migration;
 using Acklann.GlobN;
+using System;
 using System.IO;
 using System.Management.Automation;
 using System.Xml.Schema;
@@ -8,32 +9,42 @@ using System.Xml.Schema;
 namespace Acklann.Daterpillar
 {
     /// <summary>
-    /// <para type="synposis">Generates a '.schema.xml' file from a '.dll' file.</para>
+    /// <para type="synopsis">Generates a '.schema.xml' file from a '.dll' file.</para>
+    /// <para type="description">This cmdlet create a '.schema.xml' file from a '.dll' file.</para>
+    /// <para type="link">https://github.com/Ackara/Daterpillar</para>
+    /// <list type="alertSet">
+    /// <item>
+    /// <term>ProjectDirectory</term>
+    /// <description>
+    /// The project directory is solely used to locate any scripts specified in the '.shema.xml' import tag.
+    /// </description>
+    /// </item>
+    /// </list>
     /// </summary>
-    /// <seealso cref="System.Management.Automation.Cmdlet" />
-    [Cmdlet(VerbsData.Export, "Schema", ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true)]
+    /// <seealso cref="Cmdlet" />
+    [OutputType(typeof(FileInfo))]
+    [Cmdlet(VerbsData.Export, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true)]
     public class ExportSchemaCmdlet : Cmdlet
     {
         /// <summary>
+        /// <para type="description">The absolute-path of the target assembly.</para>
+        /// </summary>
+        [Alias("a", "path")]
+        [ValidateNotNullOrEmpty]
+        [Parameter(Mandatory = true, ValueFromPipeline = true)]
+        public string AssemblyFile { get; set; }
+
+        /// <summary>
         /// <para type="description">The absolute-path of your project.</para>
         /// </summary>
-        /// <value>
-        /// The project directory.
-        /// </value>
-        [Parameter(Position = 1)]
+        [ValidateNotNullOrEmpty]
+        [Alias("proj"), Parameter]
         public string ProjectDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly file.
-        /// <para type="description">The absolute-path of the target assembly.</para>
+        /// Processes the record.
         /// </summary>
-        /// <value>
-        /// The assembly file.
-        /// </value>
-        [ValidateNotNullOrEmpty]
-        [Parameter(Mandatory = true, ValueFromPipeline = true, Position = 2)]
-        public string AssemblyFile { get; set; }
-
+        /// <exception cref="FileNotFoundException">Could not find assembly file at '{AssemblyFile}</exception>
         protected override void ProcessRecord()
         {
             if (File.Exists(AssemblyFile))
@@ -42,34 +53,36 @@ namespace Acklann.Daterpillar
                 string outputFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
                 Helper.CreateDirectory(outputFile);
 
-                if (string.IsNullOrEmpty(ProjectDirectory)) { ProjectDirectory = Directory.GetCurrentDirectory(); }
-
                 if (string.IsNullOrEmpty(schema.Import) == false)
                 {
+                    if (string.IsNullOrEmpty(ProjectDirectory)) { ProjectDirectory = Directory.GetCurrentDirectory(); }
+
                     Glob pattern = schema.Import;
-                    foreach (var folder in new string[] { Path.GetDirectoryName(AssemblyFile), ProjectDirectory })
+                    foreach (var cwd in new string[] { Path.GetDirectoryName(AssemblyFile), ProjectDirectory })
                     {
                         bool didNotFindDependency = true;
-                        if (Directory.Exists(folder))
-                            foreach (var filePath in pattern.ResolvePath(folder, SearchOption.TopDirectoryOnly, true))
+                        if (Directory.Exists(cwd))
+                            foreach (var filePath in pattern.ResolvePath(cwd, SearchOption.TopDirectoryOnly))
                             {
                                 ValidationEventHandler handler = delegate (object sender, ValidationEventArgs e)
                                 {
                                     switch (e.Severity)
                                     {
                                         case XmlSeverityType.Error:
-                                            throw new System.Xml.XmlException($"[{e.Severity}] {e.Message} at '{filePath}'");
+                                            WriteError(new ErrorRecord(new System.Xml.XmlException($"[{e.Severity}] {e.Message} at '{filePath}' {e.Exception.LineNumber}:{e.Exception.LinePosition}"), $"DTP{e.Severity}", ErrorCategory.SyntaxError, sender));
+                                            break;
 
                                         case XmlSeverityType.Warning:
-                                            WriteWarning($"[{e.Severity}] {e.Message} at '{filePath}'");
+                                            WriteWarning($"[{e.Severity}] {e.Message} at '{filePath}' {e.Exception.LineNumber}:{e.Exception.LinePosition}");
                                             break;
                                     }
                                 };
 
-                                if (Schema.TryLoad(filePath, out Schema dependency, handler))
+                                if (Schema.TryLoad(Environment.ExpandEnvironmentVariables(filePath), out Schema dependency, handler))
                                 {
                                     schema.Merge(dependency);
                                     didNotFindDependency = false;
+                                    break;
                                 }
                             }
 
@@ -80,9 +93,9 @@ namespace Acklann.Daterpillar
                 using (var stream = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     schema.WriteTo(stream);
+                    WriteVerbose($"created '{outputFile}'.");
+                    WriteObject(new FileInfo(outputFile));
                 }
-                WriteVerbose($"Created '{outputFile}'.");
-                WriteObject(new FileInfo(outputFile));
             }
             else throw new FileNotFoundException($"Could not find assembly file at '{AssemblyFile}'.");
         }

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Net;
 
 namespace Acklann.Daterpillar
 {
@@ -10,7 +9,5 @@ namespace Acklann.Daterpillar
             string folder = Path.GetDirectoryName(filePath);
             if (Directory.Exists(folder) == false) Directory.CreateDirectory(folder);
         }
-
-       
     }
 }
