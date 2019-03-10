@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar
             if (string.IsNullOrEmpty(installationPath)) installationPath = GetDefaultInstallationPath();
             if (!migrationsDirectory.StartsWith(FILESYSTEM)) migrationsDirectory = $"{FILESYSTEM}{migrationsDirectory}";
 
-            var args = new ProcessStartInfo(installationPath, $"{verb} -url={flywayUrl.Trim()} -user={user?.Trim()} -password={password} -locations={migrationsDirectory.Trim()}")
+            var args = new ProcessStartInfo(installationPath, $"{verb} -url={flywayUrl.Expand()} -user={user?.Expand()} -password={password.Expand()} -locations={migrationsDirectory.Expand()}")
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,

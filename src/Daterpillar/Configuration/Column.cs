@@ -9,7 +9,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> column.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public class Column : ISqlStatement
+    public class Column : ISqlObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Column"/> class.
@@ -52,7 +52,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public Table Table;
 
-        [XmlAttribute("suid")]
+        [XmlAttribute(StaticIdAttribute.XName)]
         public string Id { get; set; }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
-        string ISqlStatement.GetName() => Name;
+        string ISqlObject.GetName() => Name;
 
         internal void Overwrite(Column right)
         {

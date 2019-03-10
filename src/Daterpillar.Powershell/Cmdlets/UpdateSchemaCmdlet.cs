@@ -3,7 +3,7 @@ using System.IO;
 using System.Management.Automation;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// <para type="synopsis">Migrates a schema to the latest version.</para>

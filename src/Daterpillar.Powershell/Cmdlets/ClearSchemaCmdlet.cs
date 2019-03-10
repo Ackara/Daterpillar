@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// <para type="synopsis">Drops all objects (tables, views, procedures, triggers, etc.).</para>

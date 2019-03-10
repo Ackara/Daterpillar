@@ -7,7 +7,7 @@ namespace Acklann.Daterpillar.Migration
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class Discrepancy
     {
-        public Discrepancy(ISqlStatement oldValue, ISqlStatement newValue) : this(SqlAction.None, oldValue, newValue)
+        public Discrepancy(ISqlObject oldValue, ISqlObject newValue) : this(SqlAction.None, oldValue, newValue)
         {
             if (oldValue == null && newValue == null)
                 Action = SqlAction.None;
@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Migration
                 Action = SqlAction.Alter;
         }
 
-        public Discrepancy(SqlAction action, ISqlStatement oldValue, ISqlStatement newValue)
+        public Discrepancy(SqlAction action, ISqlObject oldValue, ISqlObject newValue)
         {
             Action = action;
             OldValue = oldValue;
@@ -27,13 +27,13 @@ namespace Acklann.Daterpillar.Migration
             Children = new List<Discrepancy>();
         }
 
-        public readonly ISqlStatement OldValue;
+        public readonly ISqlObject OldValue;
 
-        public readonly ISqlStatement NewValue;
+        public readonly ISqlObject NewValue;
 
         public SqlAction Action { get; set; }
 
-        public ISqlStatement Value
+        public ISqlObject Value
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Acklann.Daterpillar.Migration
 
         public List<Discrepancy> Children { get; set; }
 
-        public void Add(SqlAction action, ISqlStatement oldValue, ISqlStatement newValue)
+        public void Add(SqlAction action, ISqlObject oldValue, ISqlObject newValue)
         {
             Children.Add(new Discrepancy(action, oldValue, newValue));
         }

@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar
                 ;
         }
 
-        public static bool IsIdentical(this ISqlStatement left, ISqlStatement right)
+        public static bool IsIdentical(this ISqlObject left, ISqlObject right)
         {
             if (left is Table)
                 return IsIdentical((Table)left, (Table)right);

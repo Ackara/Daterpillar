@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> index.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
-    public class Index : ISqlStatement
+    public class Index : ISqlObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Index"/> class.
@@ -91,7 +91,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlElement("columnName")]
         public ColumnName[] Columns { get; set; }
 
-        string ISqlStatement.GetName() => Name;
+        string ISqlObject.GetName() => Name;
 
         #region ICloneable
 

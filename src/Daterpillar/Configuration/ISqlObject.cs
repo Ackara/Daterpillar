@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a SQL object (<see cref="Table"/>, <see cref="ForeignKey"/> and <see cref="Index"/>).
     /// </summary>
     /// <seealso cref="System.ICloneable" />
-    public interface ISqlStatement : ICloneable
+    public interface ISqlObject : ICloneable
     {
         string GetName();
     }

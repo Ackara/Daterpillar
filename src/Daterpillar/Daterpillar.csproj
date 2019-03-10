@@ -62,6 +62,7 @@
       Add features:
       * Add DeleteIfExist switch to Add-Database cmdlet
     </PackageReleaseNotes>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

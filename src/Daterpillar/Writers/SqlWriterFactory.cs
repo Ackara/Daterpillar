@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Translators;
 using System;
 using System.Collections.Generic;
 using System.IO;

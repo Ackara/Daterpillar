@@ -3,7 +3,7 @@ using Acklann.Daterpillar.Migration;
 using System.IO;
 using System.Management.Automation;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// <para type="synopsis">Generates a new migration script from the two specified '.schema.xml' files.</para>

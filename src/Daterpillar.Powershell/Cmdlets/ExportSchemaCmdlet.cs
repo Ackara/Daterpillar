@@ -6,7 +6,7 @@ using System.IO;
 using System.Management.Automation;
 using System.Xml.Schema;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// <para type="synopsis">Generates a '.schema.xml' file from a '.dll' file.</para>
@@ -63,28 +63,12 @@ namespace Acklann.Daterpillar
                         bool didNotFindDependency = true;
                         if (Directory.Exists(cwd))
                             foreach (var filePath in pattern.ResolvePath(cwd, SearchOption.TopDirectoryOnly))
-                            {
-                                ValidationEventHandler handler = delegate (object sender, ValidationEventArgs e)
-                                {
-                                    switch (e.Severity)
-                                    {
-                                        case XmlSeverityType.Error:
-                                            WriteError(new ErrorRecord(new System.Xml.XmlException($"[{e.Severity}] {e.Message} at '{filePath}' {e.Exception.LineNumber}:{e.Exception.LinePosition}"), $"DTP{e.Severity}", ErrorCategory.SyntaxError, sender));
-                                            break;
-
-                                        case XmlSeverityType.Warning:
-                                            WriteWarning($"[{e.Severity}] {e.Message} at '{filePath}' {e.Exception.LineNumber}:{e.Exception.LinePosition}");
-                                            break;
-                                    }
-                                };
-
-                                if (Schema.TryLoad(Environment.ExpandEnvironmentVariables(filePath), out Schema dependency, handler))
+                                if (Schema.TryLoad(Environment.ExpandEnvironmentVariables(filePath), out Schema dependency, OnValidate))
                                 {
                                     schema.Merge(dependency);
                                     didNotFindDependency = false;
                                     break;
                                 }
-                            }
 
                         if (didNotFindDependency) WriteWarning($"Could not find '{schema.Import}'.");
                     }
@@ -98,6 +82,21 @@ namespace Acklann.Daterpillar
                 }
             }
             else throw new FileNotFoundException($"Could not find assembly file at '{AssemblyFile}'.");
+        }
+
+        private void OnValidate(XmlSeverityType severity, XmlSchemaException ex)
+        {
+            string message = $"[{severity}] {ex.GetTidyMessage()} At Line:{ex.LineNumber} Column:{ex.LinePosition}.";
+            switch (severity)
+            {
+                case XmlSeverityType.Error:
+                    WriteError(new ErrorRecord(new System.Xml.XmlException(message), $"DTP{(int)severity:00}", ErrorCategory.SyntaxError, null));
+                    break;
+
+                case XmlSeverityType.Warning:
+                    WriteWarning(message);
+                    break;
+            }
         }
     }
 }

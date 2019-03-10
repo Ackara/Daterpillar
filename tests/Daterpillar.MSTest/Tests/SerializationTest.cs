@@ -48,5 +48,28 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             Diff.ApproveXml(xml, xsd, Schema.XMLNS);
         }
+
+        [TestMethod]
+        public void Can_validate_a_schema_for_errors()
+        {
+            // Arrange
+            var sample = TestData.GetBad_SchemaXML();
+            bool isValid, returedLineNo = false, returnedColumnNo = false;
+
+            // Act
+            using (var stream = sample.OpenRead())
+            {
+                isValid = Schema.Validate(stream, (severity, ex) =>
+                {
+                    if (!returedLineNo) returedLineNo = (ex.LineNumber > 0);
+                    if (!returnedColumnNo) returnedColumnNo = (ex.LinePosition > 0);
+                });
+            }
+
+            // Assert
+            isValid.ShouldBeFalse();
+            returedLineNo.ShouldBeTrue();
+            returnedColumnNo.ShouldBeTrue();
+        }
     }
 }

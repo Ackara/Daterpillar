@@ -2,7 +2,7 @@
 using System.IO;
 using System.Management.Automation;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     public abstract class FlywayCmdletWrapper : Cmdlet
     {
@@ -24,8 +24,8 @@ namespace Acklann.Daterpillar
         /// </summary>
         [Alias("path", "sql")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 6)]
-        [Parameter(ParameterSetName = CONNSTR_SET, Mandatory = true, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 6)]
+        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
         public string MigrationsDirectory { get; set; }
 
         /// <summary>
@@ -119,6 +119,8 @@ namespace Acklann.Daterpillar
 
             if (string.IsNullOrEmpty(FlywayFilePath))
                 FlywayFilePath = Flyway.Install();
+            else
+                FlywayFilePath = FlywayFilePath.Expand();
 
             if (!File.Exists(FlywayFilePath))
                 throw new FileNotFoundException($"Cound not find flyway at '{FlywayFilePath}'; you can download it from 'https://flywaydb.org/download'.");

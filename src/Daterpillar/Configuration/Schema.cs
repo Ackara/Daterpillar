@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -109,49 +108,18 @@ namespace Acklann.Daterpillar.Configuration
 
         public static bool TryLoad(string filePath, out Schema schema, out string errorMsg)
         {
-            if (File.Exists(filePath) == false)
-            {
-                errorMsg = $"Could not find file at '{filePath}'.";
-                schema = null;
-                return false;
-            }
-
             errorMsg = null;
             var err = new StringBuilder();
-            void handler(object s, ValidationEventArgs e)
+            void handler(XmlSeverityType severity, XmlSchemaException e)
             {
-                err.Append($"[{e.Severity}] {e.Message}\r\n");
+                err.Append($"[{severity}] {e.Message}\r\n");
             }
 
-            bool isWellFormed = TryLoad(filePath, out schema, handler);
-            errorMsg = err.ToString();
-            return isWellFormed;
-        }
+            if (TryLoad(filePath, out schema, handler)) return true;
 
-        /// <summary>
-        /// Deserialize the <see cref="Schema" /> document contained by specified.
-        /// </summary>
-        /// <param name="stream">The input stream.</param>
-        /// <param name="schema">The schema.</param>
-        /// <param name="handler">The handler.</param>
-        /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
-        public static bool TryLoad(Stream stream, out Schema schema, ValidationEventHandler handler = null)
-        {
             schema = null;
-            bool isWellFormed;
-
-            using (stream)
-            {
-                isWellFormed = Validate(stream, handler);
-
-                if (isWellFormed)
-                {
-                    var serializer = new XmlSerializer(typeof(Schema));
-                    schema = (Schema)serializer.Deserialize(stream);
-                    schema.LinkChildNodes();
-                }
-            }
-            return isWellFormed;
+            errorMsg = err.ToString();
+            return false;
         }
 
         /// <summary>
@@ -162,18 +130,22 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="handler">The handler.</param>
         /// <returns><c>true</c> if the xml was well-formed <c>false</c> otherwise.</returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public static bool TryLoad(string filePath, out Schema schema, ValidationEventHandler handler = null)
+        public static bool TryLoad(string filePath, out Schema schema, Action<XmlSeverityType, XmlSchemaException> handler = null)
         {
-            if (File.Exists(filePath) == false)
+            schema = null;
+            if (!File.Exists(filePath))
             {
-                schema = null;
+                handler?.Invoke(XmlSeverityType.Error, new XmlSchemaException($"Could not find xml document at '{filePath}'."));
                 return false;
             }
 
             using (Stream stream = File.OpenRead(filePath))
             {
-                if (TryLoad(stream, out schema, handler))
+                if (Validate(stream, handler))
                 {
+                    var serializer = new XmlSerializer(typeof(Schema));
+                    schema = (Schema)serializer.Deserialize(stream);
+                    schema.LinkChildNodes();
                     schema.Path = filePath;
                     return true;
                 }
@@ -182,36 +154,43 @@ namespace Acklann.Daterpillar.Configuration
             return false;
         }
 
-        public static bool Validate(Stream stream, ValidationEventHandler handler = null, string xsdFile = null)
+        /// <summary>
+        /// Validates a xml document.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="handler">The handler.</param>
+        /// <returns></returns>
+        public static bool Validate(Stream stream, Action<XmlSeverityType, XmlSchemaException> handler = null)
         {
-            string xsdName = $"{nameof(Daterpillar)}.xsd".ToLowerInvariant();
-            if (string.IsNullOrEmpty(xsdFile)) xsdFile = System.IO.Path.Combine(AppContext.BaseDirectory, xsdName);
+            if (stream == null) return false;
 
-            if (File.Exists(xsdFile) == false)
+            var schemas = new XmlSchemas();
+            var exporter = new XmlSchemaExporter(schemas);
+            exporter.ExportTypeMapping(new XmlReflectionImporter().ImportTypeMapping(typeof(Schema)));
+            var set = new XmlSchemaSet();
+            foreach (XmlSchema xsd in schemas.ToArray()) set.Add(xsd);
+
+            try
             {
-                xsdFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), xsdName);
-                using (Stream data = Assembly.GetAssembly(typeof(Schema)).GetManifestResourceStream($"{nameof(Acklann)}.{nameof(Daterpillar)}.{xsdName}"))
-                using (var file = new FileStream(xsdFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+                var doc = XDocument.Load(stream, LoadOptions.SetLineInfo);
+                bool noErrorFound = true;
+                doc.Validate(set, delegate (object sender, ValidationEventArgs e)
                 {
-                    data.CopyTo(file);
-                    file.Flush();
-                }
+                    handler?.Invoke(e.Severity, e.Exception);
+                    if (e.Severity == XmlSeverityType.Error) noErrorFound = false;
+                    System.Diagnostics.Debug.WriteLine($"[{e.Severity}] {e.Message}");
+                });
+
+                return noErrorFound;
             }
-
-            var doc = XDocument.Load(stream);
-            var sets = new XmlSchemaSet();
-            sets.Add(XMLNS, xsdFile);
-            bool isWellFormed = true;
-            doc.Validate(sets, (delegate (object sender, ValidationEventArgs e)
+            catch (XmlException ex)
             {
-                if (e.Severity == XmlSeverityType.Error) isWellFormed = false;
-                System.Diagnostics.Debug.WriteLine($"[{e.Severity}] {e.Message}");
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                handler?.Invoke(XmlSeverityType.Error, new XmlSchemaException(ex.Message, ex, ex.LineNumber, ex.LinePosition));
+            }
+            finally { stream.Seek(0, SeekOrigin.Begin); }
 
-                handler?.Invoke(sender, e);
-            }));
-
-            stream.Seek(0, SeekOrigin.Begin);
-            return isWellFormed;
+            return false;
         }
 
         public IEnumerable<ForeignKey> GetForeignKeys()
@@ -309,21 +288,14 @@ namespace Acklann.Daterpillar.Configuration
 
             var list = new Stack<Schema>();
             var error = new StringBuilder();
-            void handler(object s, ValidationEventArgs e)
-            {
-                if (e.Severity == XmlSeverityType.Error)
-                {
-                    error.AppendLine($"[{e.Severity}] {e.Message}");
-                    System.Diagnostics.Debug.WriteLine($"[{e.Severity}] {e.Message}");
-                }
-            }
 
             foreach (string file in schemas)
             {
                 if (File.Exists(file) == false) throw new FileNotFoundException($"Could not find schema file at '{file}'.", file);
-                if (TryLoad(file, out Schema schema, handler))
+                if (TryLoad(file, out Schema schema, out string message))
                 {
                     list.Push(schema);
+                    error.AppendLine(message);
                 }
             }
 
@@ -388,136 +360,6 @@ namespace Acklann.Daterpillar.Configuration
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
-
-        #region IXmlSerializable
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            Import = reader.GetAttribute("include");
-
-            Table table = null;
-            Column column = null;
-            bool nullable = false, auto = false;
-            int id = 0;
-
-            while (reader.Read())
-                if (reader.NodeType == XmlNodeType.Element)
-                    switch (reader.LocalName)
-                    {
-                        case "table":
-                            table = new Table(reader.GetAttribute("name"));
-                            table.Id = reader.GetAttribute("suid");
-
-                            Add(table);
-                            break;
-
-                        case "column":
-                            if (reader.MoveToAttribute("suid"))
-                                int.TryParse(reader.GetAttribute("suid"), out id);
-
-                            if (reader.MoveToAttribute("nullable"))
-                                bool.TryParse(reader.GetAttribute("nullable"), out nullable);
-
-                            if (reader.MoveToAttribute("autoIncrement"))
-                                bool.TryParse(reader.GetAttribute("autoIncrement"), out auto);
-
-                            column = new Column
-                            {
-                                Name = reader.GetAttribute("name"),
-                                DefaultValue = reader.GetAttribute("default"),
-                                Id = reader.GetAttribute("suid"),
-                                IsNullable = nullable,
-                                AutoIncrement = auto
-                            };
-                            table.Add(column);
-                            break;
-
-                        case "dataType":
-                            int.TryParse(reader.GetAttribute("scale"), out int scale);
-                            int.TryParse(reader.GetAttribute("precision"), out int precision);
-                            reader.Read();
-                            column.DataType = new DataType(reader.Value, scale, precision);
-                            break;
-
-                        case "foreignKey":
-                            table.Add(new ForeignKey(
-                                reader.GetAttribute("localColumn"),
-                                reader.GetAttribute("foreignTable"),
-                                reader.GetAttribute("foreignColumn")));
-                            break;
-                    }
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            if (!string.IsNullOrEmpty(Import))
-                writer.WriteAttributeString("include", Import);
-
-            foreach (var table in Tables)
-            {
-                writer.WriteStartElement("table");
-                if (!string.IsNullOrEmpty(table.Id))
-                    writer.WriteAttributeString("id", table.Id.ToString());
-
-                if (!string.IsNullOrEmpty(table.Name))
-                    writer.WriteAttributeString("name", table.Name);
-
-                foreach (var column in table.Columns)
-                {
-                    // <column id="ff333" name="user" nullable="false" auto-increment="true">
-                    writer.WriteStartElement("column");
-
-                    if (!string.IsNullOrEmpty(column.Id))
-                        writer.WriteAttributeString("suid", column.Id.ToString());
-
-                    if (!string.IsNullOrEmpty(column.Name))
-                        writer.WriteAttributeString("name", column.Name);
-
-                    if (column.IsNullable)
-                        writer.WriteAttributeString("nullable", "true");
-
-                    if (column.AutoIncrement)
-                        writer.WriteAttributeString("autoIncrement", "true");
-
-                    if (column.DataType != null)
-                        writer.WriteAttributeString("default", column.DefaultValue);
-
-                    // <dataType scale="64" precision="0" />
-                    writer.WriteStartElement("dataType");
-                    if (column.DataType.Scale != 0)
-                        writer.WriteAttributeString("scale", column.DataType.Scale.ToString());
-
-                    if (column.DataType.Precision != 0)
-                        writer.WriteAttributeString("precision", column.DataType.Precision.ToString());
-
-                    writer.WriteValue(column.DataType.Name);
-                    writer.WriteEndElement();
-
-                    writer.WriteEndElement();
-                }
-
-                foreach (var fkey in table.ForeignKeys)
-                {
-                    // <foreign-key column="" foreign-table="" foreign-column="" on-update="" on-delete="">
-                    writer.WriteStartElement("foreignKey");
-                    writer.WriteAttributeString("localColumn", fkey.LocalColumn);
-                    writer.WriteAttributeString("foreignTable", fkey.ForeignTable);
-                    writer.WriteAttributeString("foreignColumn", fkey.ForeignColumn);
-                    writer.WriteAttributeString("onUpdate", fkey.OnUpdate.ToText());
-                    writer.WriteAttributeString("onDelete", fkey.OnDelete.ToText());
-                    writer.WriteEndElement();
-                }
-
-                writer.WriteEndElement();
-            }
-        }
-
-        #endregion IXmlSerializable
 
         #region ICloneable
 

@@ -19,5 +19,7 @@ namespace Acklann.Daterpillar
         /// The unique identifier
         /// </summary>
         public readonly string Id;
+
+        internal const string XName = "suid";
     }
 }

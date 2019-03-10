@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -11,7 +9,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class Table : ISqlStatement
+    public sealed class Table : ISqlObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -25,7 +23,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public Table(string name, params ISqlStatement[] sqlObjects)
+        public Table(string name, params ISqlObject[] sqlObjects)
         {
             Name = name;
             Columns = new List<Column>();
@@ -60,7 +58,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public Schema Schema;
 
-        [XmlAttribute("suid")]
+        [XmlAttribute(StaticIdAttribute.XName)]
         public string Id { get; set; }
 
         /// <summary>
@@ -140,7 +138,7 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        string ISqlStatement.GetName() => Name;
+        string ISqlObject.GetName() => Name;
 
         #region ICloneable
 

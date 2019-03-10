@@ -8,7 +8,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> foreign key.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay(), nq}")]
-    public class ForeignKey : ISqlStatement
+    public class ForeignKey : ISqlObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ForeignKey"/> class.
@@ -108,7 +108,7 @@ namespace Acklann.Daterpillar.Configuration
         [DefaultValue(ReferentialAction.Restrict)]
         public ReferentialAction OnDelete { get; set; }
 
-        string ISqlStatement.GetName() => Name;
+        string ISqlObject.GetName() => Name;
 
         #region ICloneable
 

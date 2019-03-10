@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Management.Automation;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Cmdlets
 {
     /// <summary>
     /// <para type="synopsis">Prints the details and status information about all the migrations.</para>
