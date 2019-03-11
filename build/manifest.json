@@ -1,26 +1,24 @@
 ﻿{
-  "BranchSuffixMap":
+  "name": "Daterpillar",
+  "author": "Ackara",
+  "company": "Ackara",
+  "copyright": "Copyright © 2015 Ackara",
+  "tags": "sql migration orm flyway build",
+  "website": "https://github.com/Ackara/Daterpillar",
+  "repositoryUrl": "https://github.com/Ackara/Daterpillar.git",
+  "license": "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
+  "icon": "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
+  "releaseNotes": "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
+  "description": "",
+  "version":
+  {
+    "major": 7,
+    "minor": 0,
+    "patch": 1
+  },
+  "branchSuffixMap":
   {
     "master": "",
-    "*": "beta"
-  },
-  "Version":
-  {
-    "Major": 7,
-    "Minor": 0,
-    "Patch": 1
-  },
-  "Id": "",
-  "Description": "",
-  "ReleaseNotes": "",
-  "Name": "Daterpillar",
-  "Author": "Ackara",
-  "Company": "Ackara",
-  "Copyright": "Copyright © 2015 Ackara",
-  "Tags": "sql orm migration flyway build",
-  "Website": "https://github.com/Ackara/Daterpillar",
-  "RepositoryUrl": "https://github.com/Ackara/Daterpillar.git",
-  "License": "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
-  "Icon": "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
-  "Summary": ""
+    "*": "alpha"
+  }
 }

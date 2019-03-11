@@ -20,6 +20,6 @@
 	[string]$OmitDropStatements
 )
 
-$dropSwitch = ([Convert]::ToBoolean($OmitDropStatements));
 Join-Path $PSScriptRoot "*.psd1" | Resolve-Path | Import-Module -Force;
-New-MigrationScript $OldSchemaFilePath $NewSchemaFilePath $Destination $Language -OmitDropStatements:$dropSwitch | Out-Null;
+$result = New-DaterpillarMigrationScript $Language $Destination $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements));
+return $result.Script;

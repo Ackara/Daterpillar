@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Import.ShouldBeNull();
+            schema.Imports.ShouldBeNull();
             totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
 
             result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();

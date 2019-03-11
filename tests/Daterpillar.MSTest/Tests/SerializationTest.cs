@@ -1,5 +1,4 @@
 ﻿using Acklann.Diffa;
-using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
@@ -8,10 +7,10 @@ using Schema = Acklann.Daterpillar.Configuration.Schema;
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
+    //[Reporter(typeof(FileReporter))]
     public class SerializationTest
     {
         [TestMethod]
-        [Reporter(typeof(FileReporter))]
         public void Can_deserialize_a_schema_xml_file()
         {
             // Arrange
@@ -29,13 +28,11 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [Reporter(typeof(FileReporter))]
-        public void Can_serialize_a_schema_object()
+        public void Can_serialize_a_schema_to_xml()
         {
             // Arrange
             string xml = null;
             var resultFile = Path.Combine(Path.GetTempPath(), $"{nameof(Daterpillar)}-test.xml");
-            var xsd = TestData.GetFile($"{nameof(Daterpillar)}.xsd".ToLowerInvariant()).FullName;
 
             // Act
             if (Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema, out string errorMsg))
@@ -46,7 +43,7 @@ namespace Acklann.Daterpillar.Tests
             else Assert.Fail(errorMsg);
 
             // Assert
-            Diff.ApproveXml(xml, xsd, Schema.XMLNS);
+            Diff.Approve(xml, ".xml");
         }
 
         [TestMethod]
@@ -70,6 +67,20 @@ namespace Acklann.Daterpillar.Tests
             isValid.ShouldBeFalse();
             returedLineNo.ShouldBeTrue();
             returnedColumnNo.ShouldBeTrue();
+        }
+
+        [TestMethod]
+        public void Can_merge_multiple_schemas()
+        {
+            // Arrange
+            var sut = Schema.Load(TestData.GetMusicXML().FullName);
+
+            // Act
+            sut.Merge();
+
+            // Assert
+            sut.Scripts.ShouldNotBeEmpty();
+            Diff.Approve(sut, ".xml");
         }
     }
 }

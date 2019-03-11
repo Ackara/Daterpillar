@@ -34,12 +34,14 @@ namespace Acklann.Daterpillar.Tests
             var dbFilePath = Path.Combine(baseDirectory, "test.sqlite");
 
             // Act
+            //if (Directory.Exists(baseDirectory)) Directory.Delete(baseDirectory, recursive: true);
             if (!Directory.Exists(baseDirectory)) Directory.CreateDirectory(baseDirectory);
+
             File.WriteAllText(Path.Combine(baseDirectory, "V1__init.sql"), "create table user(id int, name varchar(64));", Encoding.UTF8);
             if (!File.Exists(dbFilePath)) File.Create(dbFilePath).Dispose();
 
             var installationPath = Flyway.Install(baseDirectory);
-            var migrate = Flyway.Invoke("migrate", Language.SQLite, $"database={dbFilePath}", baseDirectory, installationPath);
+            var migrate = Flyway.Invoke("migrate", Language.SQLite, $"host={dbFilePath}", baseDirectory, installationPath);
 
             // Assert
             migrate.ExitCode.ShouldBe(0);

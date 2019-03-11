@@ -23,14 +23,21 @@
   </Target>
 
   <Target Name="ExportDaterpillarSchema">
-    <Message Condition="!$(TargetFramework.Contains('netcoreapp'))"
+    <Message Condition="$(TargetFramework.Contains('netcoreapp'))"
              Text="Skipped because the '$(TargetFramework)' framework is not compatible with this target as of yet; consider using 'netstandard' instead. " />
 
     <Exec Condition="Exists('$(DaterpillarExportScript)') AND Exists('$(TargetPath)') AND !$(TargetFramework.Contains('netcoreapp'))"
-          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarExportScript) $(TargetPath) $(MSBuildProjectDirectory)" />
+          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarExportScript) $(TargetPath)"
+          ConsoleToMSBuild ="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ExecReturnedObject" />
+    </Exec>
+
+    <Message Condition="'$(ExecReturnedObject)'!=''"
+             Text="$(MSBuildProjectName) -> $(ExecReturnedObject)"
+             Importance="high" />
   </Target>
 
-  <!-- Generate new script -->
+  <!-- Generate New Script -->
   <Target Name="GenerateDaterpillarMigrationScriptAfterBuild"
           AfterTargets="PostBuildEvent"
           DependsOnTargets="ExportDaterpillarSchema"
@@ -46,6 +53,12 @@
            Text="Could not find the assembly-schema at '$([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml'))'" />
 
     <Exec Condition="Exists('$(DaterpillarGenerateScript)')"
-          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarGenerateScript) $([System.IO.Path]::GetFullPath($(DaterpillarSnapshotFilePath))) $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml')) $([System.IO.Path]::GetFullPath($(DaterpillarMigrationsDirectory))) $(DaterpillarSqlLanguage) $(ShouldOmitDropStatementsFromDaterpillarScripts)" />
+          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarGenerateScript) $([System.IO.Path]::GetFullPath($(DaterpillarSnapshotFilePath))) $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml')) $([System.IO.Path]::GetFullPath($(DaterpillarMigrationsDirectory))) $(DaterpillarSqlLanguage) $(ShouldOmitDropStatementsFromDaterpillarScripts)">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ExecReturnedObject" />
+    </Exec>
+
+    <Message Condition="'$(ExecReturnedObject)'!=''"
+             Text="$(MSBuildProjectName) -> $(ExecReturnedObject)"
+             Importance="high" />
   </Target>
 </Project>

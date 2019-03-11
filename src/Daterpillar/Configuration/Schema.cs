@@ -65,13 +65,8 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>
         /// The include.
         /// </value>
-        [XmlAttribute("include")]
-        public string Import { get; set; }
-
-        public bool HasChildren
-        {
-            get => ((Tables?.Count ?? 0) == 0 && (Scripts?.Count ?? 0) == 0);
-        }
+        [XmlElement("include")]
+        public List<string> Imports { get; set; }
 
         /// <summary>
         /// Gets or sets the tables belonging to this instance.
@@ -102,22 +97,23 @@ namespace Acklann.Daterpillar.Configuration
             using (var stream = File.OpenRead(filePath))
             {
                 var serializer = new XmlSerializer(typeof(Schema));
-                return (Schema)serializer.Deserialize(stream);
+                var schema = (Schema)serializer.Deserialize(stream);
+                schema.Path = filePath;
+                return schema;
             }
         }
 
         public static bool TryLoad(string filePath, out Schema schema, out string errorMsg)
         {
-            errorMsg = null;
+            schema = null; errorMsg = null;
             var err = new StringBuilder();
             void handler(XmlSeverityType severity, XmlSchemaException e)
             {
-                err.Append($"[{severity}] {e.Message}\r\n");
+                err.Append($"[{severity}] {e.Message} at line:{e.LineNumber},{e.LinePosition}\r\n");
             }
 
             if (TryLoad(filePath, out schema, handler)) return true;
 
-            schema = null;
             errorMsg = err.ToString();
             return false;
         }
@@ -269,10 +265,11 @@ namespace Acklann.Daterpillar.Configuration
         /// <exception cref="ArgumentNullException">Occurs when this instance <see cref="Path"/> is null or empty.</exception>
         public void Merge()
         {
-            if (string.IsNullOrEmpty(Import) == false)
+            if (Imports != null && File.Exists(Path))
             {
-                if (string.IsNullOrEmpty(Path)) throw new ArgumentNullException(nameof(Path));
-                Merge(((Glob)Import).ResolvePath(System.IO.Path.GetDirectoryName(Path)).ToArray());
+                foreach (Glob pattern in Imports)
+                    if (!pattern.IsMatch(Path))
+                        Merge(pattern.ResolvePath(System.IO.Path.GetDirectoryName(Path), SearchOption.TopDirectoryOnly, true).ToArray());
             }
         }
 
@@ -289,14 +286,13 @@ namespace Acklann.Daterpillar.Configuration
             var list = new Stack<Schema>();
             var error = new StringBuilder();
 
-            foreach (string file in schemas)
+            foreach (string filePath in schemas)
             {
-                if (File.Exists(file) == false) throw new FileNotFoundException($"Could not find schema file at '{file}'.", file);
-                if (TryLoad(file, out Schema schema, out string message))
-                {
+                if (!File.Exists(filePath)) throw new FileNotFoundException($"Could not find schema file at '{filePath}'.", filePath);
+                if (TryLoad(filePath, out Schema schema, out string message))
                     list.Push(schema);
+                else
                     error.AppendLine(message);
-                }
             }
 
             if (error.Length > 0) throw new XmlSchemaValidationException(error.ToString());
@@ -309,30 +305,25 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="schemas">The schemas to merge.</param>
         public void Merge(params Schema[] schemas)
         {
-            foreach (Schema schema in schemas)
+            foreach (Schema foreignSchema in schemas)
             {
-                schema.Merge();
-                foreach (Table table in schema.Tables)
+                foreignSchema.Merge();
+                foreach (Table foreignTable in foreignSchema.Tables)
                 {
-                    Table match = FindMatch(table);
+                    Table match = FindMatch(foreignTable);
                     if (match == null)
-                        Tables.Add(table);
+                        Tables.Add(foreignTable.Clone());
                     else
-                        match.Merge(table);
+                        match.Merge(foreignTable);
                 }
 
-                foreach (Script script in schema.Scripts.Where(x => !string.IsNullOrEmpty(x.Content)))
+                foreach (Script foreignScript in foreignSchema.Scripts.Where(x => !string.IsNullOrWhiteSpace(x.Content)))
                 {
-                    Script match = FindMatch(script);
+                    Script match = FindMatch(foreignScript);
                     if (match == null)
-                        Scripts.Add(script);
+                        Scripts.Add(foreignScript);
                     else
-                        match.Content = script.Content;
-                }
-
-                if (string.IsNullOrEmpty(Import) == false && string.IsNullOrEmpty(schema.Path) == false)
-                {
-                    if (Glob.IsMatch(schema.Path, Import)) Import = null;
+                        match.Content = foreignScript.Content;
                 }
             }
         }
@@ -402,10 +393,7 @@ namespace Acklann.Daterpillar.Configuration
         {
             foreach (Table left in Tables)
             {
-                if (left.Name.Equals(right.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    return left;
-                }
+                if (left.IsIdentical(right)) return left;
             }
 
             return null;
@@ -414,7 +402,7 @@ namespace Acklann.Daterpillar.Configuration
         internal Script FindMatch(Script right)
         {
             foreach (Script left in Scripts)
-                if (left.Syntax == right.Syntax && (left?.Name?.Equals(right.Name, StringComparison.OrdinalIgnoreCase) ?? false))
+                if (left?.IsIdentical(right) ?? false)
                 {
                     return left;
                 }

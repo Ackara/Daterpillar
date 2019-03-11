@@ -1,5 +1,5 @@
-﻿using Acklann.Daterpillar.Writers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;

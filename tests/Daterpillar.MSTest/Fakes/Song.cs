@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Acklann.Daterpillar.Samples
+namespace Acklann.Daterpillar.Fakes
 {
     [StaticId(100)]
     [Table, DisplayName("song")]

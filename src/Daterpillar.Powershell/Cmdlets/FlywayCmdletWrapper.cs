@@ -8,6 +8,8 @@ namespace Acklann.Daterpillar.Cmdlets
     {
         internal const string CONNSTR_SET = "connection-string", DEFAULT_SET = "default";
 
+        private string _migrationDirectory = null;
+
         // ===== Parameter Set: all ===== //
 
         /// <summary>
@@ -22,11 +24,15 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <summary>
         /// <para type="description">The absolute-path of the directory that host the migration scripts.</para>
         /// </summary>
-        [Alias("path", "sql")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 6)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
-        public string MigrationsDirectory { get; set; }
+        [Alias("path", "fullname", "sql")]
+        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 6)]
+        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        public string MigrationsDirectory
+        {
+            get { return (string.IsNullOrEmpty(_migrationDirectory) ? InpuObject : _migrationDirectory); }
+            set { _migrationDirectory = value; }
+        }
 
         /// <summary>
         /// <para type="descrption">The absolute-path of the flyway executable file.</para>
@@ -44,6 +50,13 @@ namespace Acklann.Daterpillar.Cmdlets
         [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true)]
         [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
         public int Timeout { get; set; }
+
+        /// <summary>
+        /// <para type="description">The absolute-path of the directory that host the migration scripts.</para>
+        /// </summary>
+        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipeline = true)]
+        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipeline = true)]
+        public string InpuObject { get; set; }
 
         // ===== Parameter Set: default ===== //
 

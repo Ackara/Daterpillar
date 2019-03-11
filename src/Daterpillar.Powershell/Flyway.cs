@@ -36,6 +36,7 @@ namespace Acklann.Daterpillar
             {
                 flyway.Start();
                 flyway.WaitForExit(timeoutInSeconds * 1000);
+
                 return new ProcessResult(flyway.ExitCode, flyway.StandardOutput?.ReadToEnd(), flyway.StandardError?.ReadToEnd(), (flyway.ExitTime.Ticks - flyway.StartTime.Ticks));
             }
         }

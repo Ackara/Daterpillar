@@ -1,7 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Migration;
-using Acklann.GlobN;
-using System;
 using System.IO;
 using System.Management.Automation;
 using System.Xml.Schema;
@@ -23,56 +21,35 @@ namespace Acklann.Daterpillar.Cmdlets
     /// </summary>
     /// <seealso cref="Cmdlet" />
     [OutputType(typeof(FileInfo))]
-    [Cmdlet(VerbsData.Export, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true)]
+    [Cmdlet(VerbsData.Export, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true, DefaultParameterSetName = "default")]
     public class ExportSchemaCmdlet : Cmdlet
     {
         /// <summary>
         /// <para type="description">The absolute-path of the target assembly.</para>
         /// </summary>
-        [Alias("a", "path")]
         [ValidateNotNullOrEmpty]
-        [Parameter(Mandatory = true, ValueFromPipeline = true)]
+        [Alias("a", "path", "fullName")]
+        [Parameter(ParameterSetName = "default", Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         public string AssemblyFile { get; set; }
 
-        /// <summary>
-        /// <para type="description">The absolute-path of your project.</para>
-        /// </summary>
         [ValidateNotNullOrEmpty]
-        [Alias("proj"), Parameter]
-        public string ProjectDirectory { get; set; }
+        [Parameter(ParameterSetName = "piped", ValueFromPipeline = true)]
+        public string InputObject { get; set; }
 
         /// <summary>
         /// Processes the record.
         /// </summary>
-        /// <exception cref="FileNotFoundException">Could not find assembly file at '{AssemblyFile}</exception>
+        /// <exception cref="FileNotFoundException">Could not find assembly file.</exception>
         protected override void ProcessRecord()
         {
+            if (string.IsNullOrEmpty(AssemblyFile)) AssemblyFile = InputObject;
+
             if (File.Exists(AssemblyFile))
             {
                 Schema schema = SchemaFactory.CreateFrom(AssemblyFile);
                 string outputFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
                 Helper.CreateDirectory(outputFile);
-
-                if (string.IsNullOrEmpty(schema.Import) == false)
-                {
-                    if (string.IsNullOrEmpty(ProjectDirectory)) { ProjectDirectory = Directory.GetCurrentDirectory(); }
-
-                    Glob pattern = schema.Import;
-                    foreach (var cwd in new string[] { Path.GetDirectoryName(AssemblyFile), ProjectDirectory })
-                    {
-                        bool didNotFindDependency = true;
-                        if (Directory.Exists(cwd))
-                            foreach (var filePath in pattern.ResolvePath(cwd, SearchOption.TopDirectoryOnly))
-                                if (Schema.TryLoad(Environment.ExpandEnvironmentVariables(filePath), out Schema dependency, OnValidate))
-                                {
-                                    schema.Merge(dependency);
-                                    didNotFindDependency = false;
-                                    break;
-                                }
-
-                        if (didNotFindDependency) WriteWarning($"Could not find '{schema.Import}'.");
-                    }
-                }
+                schema.Merge();
 
                 using (var stream = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {

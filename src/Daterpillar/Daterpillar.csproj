@@ -78,8 +78,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Configuration\Syntax.cs">
-      <DependentUpon>Syntax.tt</DependentUpon>
+    <Compile Update="Configuration\Language.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>

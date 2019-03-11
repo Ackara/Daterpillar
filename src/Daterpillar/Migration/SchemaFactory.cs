@@ -1,6 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Translators;
-using Acklann.Daterpillar.Writers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,8 +36,9 @@ namespace Acklann.Daterpillar.Migration
                 catch (FileNotFoundException) { System.Diagnostics.Debug.WriteLine($"Could not find {type.FullName} in the loaded assembly."); }
             }
 
+            schema.Imports = new List<string>();
             foreach (IncludeAttribute attribute in assembly.GetCustomAttributes(typeof(IncludeAttribute)))
-                schema.Import = attribute.FilePath;
+                schema.Imports.Add(attribute.FilePath);
 
             return schema;
         }

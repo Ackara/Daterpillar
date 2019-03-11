@@ -11,41 +11,62 @@ namespace Acklann.Daterpillar.Cmdlets
     /// <para type="link">https://github.com/Ackara/Daterpillar</para>
     /// </summary>
     [OutputType(typeof(PSObject))]
-    [Cmdlet(VerbsCommon.New, (nameof(Daterpillar) + "MigrationScript"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
+    [Cmdlet(VerbsCommon.New, (nameof(Daterpillar) + "MigrationScript"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true, DefaultParameterSetName = DEFAULT_SET)]
     public class NewScriptCmdlet : Cmdlet
     {
+        private const string DEFAULT_SET = "default", PIPELINE_SET = "pipeline";
+        private string _newSchemaFilePath = null;
+
         /// <summary>
         /// <para type="description">The absolute-path of old/production '.schema.xml' file.</para>
         /// </summary>
         [ValidateNotNullOrEmpty]
-        [Alias("o", "old", "snapshot"), Parameter(Mandatory = true, Position = 3)]
+        [Alias("o", "old", "snapshot")]
+        [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, Position = 3)]
+        [Parameter(ParameterSetName = PIPELINE_SET, Mandatory = true, Position = 3)]
         public string OldSchemaFilePath { get; set; }
 
         /// <summary>
         /// <para type="description">The absolute-path of new/current '.schema.xml' file.</para>
         /// </summary>
         [ValidateNotNullOrEmpty]
-        [Alias("n", "new"), Parameter(Mandatory = true, ValueFromPipeline = true, Position = 4)]
-        public string NewSchemaFilePath { get; set; }
+        [Alias("n", "new", "path", "fullname")]
+        [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 4)]
+        [Parameter(ParameterSetName = PIPELINE_SET, ValueFromPipelineByPropertyName = true, Position = 4)]
+        public string NewSchemaFilePath
+        {
+            get { return (string.IsNullOrEmpty(_newSchemaFilePath) ? InputObject : _newSchemaFilePath); }
+            set { _newSchemaFilePath = value; }
+        }
 
         /// <summary>
         /// <para type="description">The absolute-path of the new migration script.</para>
         /// </summary>
-        [Alias("d", "dest"), Parameter(Position = 2)]
+        [Alias("d", "dest")]
+        [Parameter(ParameterSetName = DEFAULT_SET, Position = 2)]
+        [Parameter(ParameterSetName = PIPELINE_SET, Position = 2)]
         public string Destination { get; set; }
 
         /// <summary>
         /// <para type="description">The dialect of the sql script.</para>
         /// </summary>
         [ValidateNotNullOrEmpty]
-        [Alias("l", "lang"), Parameter(Mandatory = true, Position = 1)]
+        [Alias("l", "lang")]
+        [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, Position = 1)]
+        [Parameter(ParameterSetName = PIPELINE_SET, Mandatory = true, Position = 1)]
         public Language Language { get; set; }
 
         /// <summary>
         /// <para type="description">Exclude all drop statements, when present.</para>
         /// </summary>
-        [Alias("no-drop"), Parameter]
+        [Alias("no-drop")]
+        [Parameter(ParameterSetName = DEFAULT_SET)]
+        [Parameter(ParameterSetName = PIPELINE_SET)]
         public SwitchParameter OmitDropStatements { get; set; }
+
+        [ValidateNotNullOrEmpty]
+        [Parameter(ParameterSetName = PIPELINE_SET, ValueFromPipeline = true)]
+        public string InputObject { get; set; }
 
         /// <summary>
         /// Processes the record.

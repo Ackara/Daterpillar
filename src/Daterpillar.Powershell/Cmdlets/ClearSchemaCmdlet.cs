@@ -19,15 +19,18 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <exception cref="Exception"></exception>
         protected override void ProcessRecord()
         {
-            ProcessResult flyway = Flyway.Invoke("clean", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
-            if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));
+            if (ShouldProcess(MigrationsDirectory, "flyway-clean"))
+            {
+                ProcessResult flyway = Flyway.Invoke("clean", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
+                if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));
 
-            foreach (string line in flyway.GetOutput())
-                WriteVerbose(line);
+                foreach (string line in flyway.GetOutput())
+                    WriteVerbose(line);
 
-            PSObject result = CreateInputObject();
-            result.Members.Add(new PSNoteProperty("Output", flyway.StandardOutput));
-            WriteObject(result);
+                PSObject result = CreateInputObject();
+                result.Members.Add(new PSNoteProperty("Output", flyway.StandardOutput));
+                WriteObject(result);
+            }
         }
     }
 }

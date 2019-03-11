@@ -7,7 +7,7 @@ Describe "help" {
 		foreach ($name in @("Clear-DaterpillarSchema", "Show-DaterpillarMigrationHistory", "New-DaterpillarMigrationScript", "Export-DaterpillarSchema", "Update-DaterpillarSchema"))
 		{
 			$menu = help $name | Out-String;
-			$menu | Write-Host; Write-Host "===============";
+			#$menu | Write-Host; Write-Host "===============";
 			$menu | Should Not BeNullOrEmpty;
 		}
 	}
@@ -26,7 +26,7 @@ Describe "Export-Schema" {
 			Pop-Location;
 
 			Split-Path $targetPath -Parent | Push-Location;
-			$targetPath | Export-DaterpillarSchema -proj $projectFolder -Verbose | Should Exist;
+			$targetPath | Export-DaterpillarSchema -Verbose | Should Exist;
 		}
 		finally { Pop-Location; }
 	}
@@ -43,6 +43,9 @@ Describe "New-MigrationScript" {
 		$resultFile = New-DaterpillarMigrationScript "mysql" $outFolder $oldSchema $newSchema;
 		$resultFile.Script | Should Exist;
 		$resultFile.Script.Length | Should BeGreaterThan 100;
+
+		$resultFile = $newSchema | New-DaterpillarMigrationScript "mysql" $outFolder $oldSchema;
+		$resultFile.Script | Should Exist;
 	}
 }
 

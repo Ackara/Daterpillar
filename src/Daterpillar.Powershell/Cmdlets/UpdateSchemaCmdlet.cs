@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Cmdlets
             ProcessResult flyway = new ProcessResult();
             if (Directory.Exists(MigrationsDirectory))
             {
-                if (base.ShouldProcess(MigrationsDirectory))
+                if (ShouldProcess(MigrationsDirectory, "flyway-migrate"))
                 {
                     flyway = Flyway.Invoke("migrate", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
                     if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));

@@ -1,103 +1,89 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
 <schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
   <include>music-data.xml</include>
-
   <table suid="100" name="song">
     <column name="Id" autoIncrement="true">
       <dataType>int</dataType>
     </column>
-
     <column name="Name">
       <dataType>varchar</dataType>
     </column>
-
     <column suid="201" name="Length">
       <documentation>Get or set the song's length in seconds.</documentation>
       <dataType>int</dataType>
     </column>
-
     <column name="Genre">
       <dataType>int</dataType>
     </column>
-
     <column name="Disc" default="1">
       <dataType>int</dataType>
     </column>
-
     <column name="Track">
       <dataType>smallInt</dataType>
     </column>
-
     <column name="Artist">
       <dataType>varchar</dataType>
     </column>
-
     <column name="Album">
       <dataType>varchar</dataType>
     </column>
-
-    <foreignKey localColumn="Genre" foreignTable="genre" />
-
+    <foreignKey localColumn="Genre" foreignTable="genre" foreignColumn="Id" />
     <index>
       <columnName>Name</columnName>
     </index>
-
     <index>
       <columnName>Genre</columnName>
     </index>
   </table>
-
   <table name="artist">
     <column name="Name">
       <dataType scale="32">varchar</dataType>
     </column>
-
     <column name="Bio">
       <dataType>text</dataType>
     </column>
-
     <column name="Id">
       <dataType>int</dataType>
     </column>
-
     <column name="DOB">
       <dataType>dateTime</dataType>
     </column>
-
     <index type="primary-key">
       <columnName>Id</columnName>
     </index>
   </table>
-
   <table name="genre">
     <column name="Id">
       <dataType>int</dataType>
     </column>
-
     <column name="Name">
       <dataType>varchar</dataType>
     </column>
-
     <index unique="true">
       <columnName>Name</columnName>
     </index>
-
     <index type="primary-key">
       <columnName>Id</columnName>
     </index>
   </table>
-
   <script name="seed-1">
-    <![CDATA[
 -- Seed-Data
 -- -----------------------------------------------
 INSERT INTO genre (Id, Name)
-VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&B');
-]]>
-  </script>
+VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&amp;B');
+</script>
+  <script name="message">-- If you're reading this it means multiple scrips can be used.</script>
+  <script name="seed-2">
+-- Seed-Data
+-- -----------------------------------------------
 
-  <script name="message">
-    <![CDATA[-- If you're reading this it means multiple scrips can be used.]]>
-  </script>
+INSERT INTO song (Name, Artist, Album, Genre, Track, Length)
+VALUES
+('Survival', 'Drake', 'Scorpion', '1', '1', '136')
+;
+
+INSERT INTO artist (Id, Name, Bio, DOB)
+VALUES
+(6, 'Drake', 'canadian-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
+;
+    </script>
 </schema>
