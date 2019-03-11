@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <exception cref="Exception"></exception>
         protected override void ProcessRecord()
         {
-            ProcessResult flyway = Flyway.Invoke("clean", Language, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
+            ProcessResult flyway = Flyway.Invoke("clean", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
             if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));
 
             foreach (string line in flyway.GetOutput())

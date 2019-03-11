@@ -26,7 +26,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            ProcessResult flyway = Flyway.Invoke("info", Language, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
+            ProcessResult flyway = Flyway.Invoke("info", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
             if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));
 
             if (PassThru)

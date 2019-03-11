@@ -13,11 +13,11 @@ namespace Acklann.Daterpillar.Cmdlets
         /// <summary>
         /// <para type="description">The SQL language of the script.</para>
         /// </summary>
-        [Alias("l", "lang")]
         [ValidateNotNullOrEmpty]
+        [Alias("lang", "type", "connection-type")]
         [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         [Parameter(ParameterSetName = CONNSTR_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        public Language Language { get; set; }
+        public Language ConnectionType { get; set; }
 
         /// <summary>
         /// <para type="description">The absolute-path of the directory that host the migration scripts.</para>
@@ -95,7 +95,7 @@ namespace Acklann.Daterpillar.Cmdlets
         {
             var obj = new PSObject();
 
-            obj.Members.Add(new PSNoteProperty(nameof(Language), Language));
+            obj.Members.Add(new PSNoteProperty(nameof(ConnectionType), ConnectionType));
             obj.Members.Add(new PSNoteProperty(nameof(FlywayFilePath), FlywayFilePath));
             obj.Members.Add(new PSNoteProperty(nameof(MigrationsDirectory), MigrationsDirectory));
             obj.Members.Add(new PSNoteProperty(nameof(Timeout), Timeout));

@@ -40,7 +40,7 @@ namespace Acklann.Daterpillar.Cmdlets
             {
                 if (base.ShouldProcess(MigrationsDirectory))
                 {
-                    flyway = Flyway.Invoke("migrate", Language, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
+                    flyway = Flyway.Invoke("migrate", ConnectionType, ConnectionString, MigrationsDirectory, FlywayFilePath, Timeout);
                     if (flyway.ExitCode != 0) throw new Exception(string.Concat(flyway.GetOutput()));
 
                     if (OldSchema != null && NewSchema != null)
