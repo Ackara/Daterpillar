@@ -40,7 +40,7 @@ namespace Acklann.Daterpillar
             }
         }
 
-        public static ProcessResult Invoke(string verb, Syntax connectionType, string connectionString, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
+        public static ProcessResult Invoke(string verb, Language connectionType, string connectionString, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
         {
             GetCredentials(connectionType, connectionString, out string flywayUrl, out string user, out string password);
             return Invoke(verb, flywayUrl, user, password, migrationsDirectory, installationPath, timeoutInSeconds);
@@ -94,7 +94,7 @@ namespace Acklann.Daterpillar
             return GetDefaultInstallationPath(ref temp, version);
         }
 
-        internal static void GetCredentials(Syntax connectionType, string connectionString, out string flywayUrl, out string user, out string password)
+        internal static void GetCredentials(Language connectionType, string connectionString, out string flywayUrl, out string user, out string password)
         {
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
 
@@ -129,7 +129,7 @@ namespace Acklann.Daterpillar
             flywayUrl = GetFlywayUrl(connectionType, host, port, database, optionals.ToArray());
         }
 
-        internal static string GetFlywayUrl(Syntax connectionType, string address, string port, string database, params string[] args)
+        internal static string GetFlywayUrl(Language connectionType, string address, string port, string database, params string[] args)
         {
             if (string.IsNullOrEmpty(address)) throw new ArgumentNullException(nameof(address));
 
@@ -142,15 +142,15 @@ namespace Acklann.Daterpillar
                 default:
                     throw new ArgumentOutOfRangeException(nameof(connectionType), $"A '{connectionType}' connection is not yet supported.");
 
-                case Syntax.SQLite:
+                case Language.SQLite:
                     uri = $"jdbc:sqlite:{address}";
                     break;
 
-                case Syntax.TSQL:
+                case Language.TSQL:
                     uri = $"jdbc:sqlserver:////{addressAndPort()};databaseName={database}";
                     break;
 
-                case Syntax.MySQL:
+                case Language.MySQL:
                     uri = $"jdbc:mysql://{addressAndPort()}/{database}{extra}";
                     break;
             }

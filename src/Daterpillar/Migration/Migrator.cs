@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Migration
 {
     public class Migrator
     {
-        public Discrepancy[] GenerateMigrationScript(Assembly assembly, string snapshotFilePath, Syntax language, bool omitDropStatements = false, string migrationsDirectory = null, string fileName = null)
+        public Discrepancy[] GenerateMigrationScript(Assembly assembly, string snapshotFilePath, Language language, bool omitDropStatements = false, string migrationsDirectory = null, string fileName = null)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
             if (string.IsNullOrEmpty(snapshotFilePath)) throw new ArgumentNullException(nameof(snapshotFilePath));
@@ -30,7 +30,7 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Syntax lanuage = Syntax.Generic, bool omitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Language lanuage = Language.SQL, bool omitDropStatements = false)
         {
             Helper.CreateDirectory(scriptFile);
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
@@ -297,7 +297,7 @@ namespace Acklann.Daterpillar.Migration
 
                     /// NOTE: Because SQLite do not support native functions for modifying constraints.
                     /// I have to reconstruct the entire table.
-                    if ((writer.Syntax == Syntax.SQLite && discrepancy.Children.IsNotEmpty()) || string.Equals(oldTable.Comment, newTable.Comment) == false)
+                    if ((writer.Syntax == Language.SQLite && discrepancy.Children.IsNotEmpty()) || string.Equals(oldTable.Comment, newTable.Comment) == false)
                     {
                         writer.Alter(oldTable, newTable);
                         break;
@@ -401,7 +401,7 @@ namespace Acklann.Daterpillar.Migration
             if (string.IsNullOrEmpty(schema.Name) == false) writer.Variables.Add("schema", schema.Name);
         }
 
-        private IEnumerable<Script> FindAssociatedScripts(LinkedList<Script> propspects, Discrepancy discrepancy, Syntax syntax)
+        private IEnumerable<Script> FindAssociatedScripts(LinkedList<Script> propspects, Discrepancy discrepancy, Language syntax)
         {
             string suid = (discrepancy.Value as Table).Id;
             if (string.IsNullOrEmpty(suid)) yield break;
@@ -417,7 +417,7 @@ namespace Acklann.Daterpillar.Migration
                 matchFound =
                     (script.Before == suid || script.After == suid)
                     &&
-                    (script.Syntax == Syntax.Generic || script.Syntax == syntax);
+                    (script.Syntax == Language.SQL || script.Syntax == syntax);
 
                 prev = current;
                 current = current.Next;

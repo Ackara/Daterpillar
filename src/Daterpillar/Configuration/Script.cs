@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="content">The content.</param>
         /// <param name="syntax">The syntax.</param>
         /// <param name="name">The name.</param>
-        public Script(string content, Syntax syntax = Syntax.Generic, string name = null)
+        public Script(string content, Language syntax = Language.SQL, string name = null)
         {
             Name = name;
             Syntax = syntax;
@@ -43,8 +43,8 @@ namespace Acklann.Daterpillar.Configuration
         /// <value>
         /// The syntax.
         /// </value>
-        [XmlAttribute(syntax), DefaultValue(Syntax.Generic)]
-        public Syntax Syntax { get; set; }
+        [XmlAttribute(syntax), DefaultValue(Language.SQL)]
+        public Language Syntax { get; set; }
 
         [XmlAttribute(before)]
         public string Before { get; set; }

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Acklann.Daterpillar.Writers
 {
-    [System.ComponentModel.Category(nameof(Syntax.TSQL))]
+    [System.ComponentModel.Category(nameof(Language.TSQL))]
     public class TSqlWriter : SqlWriter
     {
         public TSqlWriter(Stream stream) : this(new StreamWriter(stream), new TSQLTranslator())
@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Writers
             RenameColumnFormatString = "EXEC sp_RENAME '{0}.{1}', '{2}', 'COLUMN'";
         }
 
-        public override Syntax Syntax => Syntax.TSQL;
+        public override Language Syntax => Language.TSQL;
 
         public override void Rename(string oldTableName, string newTableName)
         {

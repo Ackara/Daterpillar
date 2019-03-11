@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Cmdlets
         [ValidateNotNullOrEmpty]
         [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         [Parameter(ParameterSetName = CONNSTR_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        public Syntax Language { get; set; }
+        public Language Language { get; set; }
 
         /// <summary>
         /// <para type="description">The absolute-path of the directory that host the migration scripts.</para>

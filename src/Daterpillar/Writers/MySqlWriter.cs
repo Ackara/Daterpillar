@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Acklann.Daterpillar.Writers
 {
-    [System.ComponentModel.Category(nameof(Syntax.MySQL))]
+    [System.ComponentModel.Category(nameof(Language.MySQL))]
     public class MySqlWriter : SqlWriter
     {
         public MySqlWriter(Stream stream) : this(new StreamWriter(stream), new MySQLTranslator())
@@ -25,7 +25,7 @@ namespace Acklann.Daterpillar.Writers
             RenameColumnFormatString = "ALTER TABLE {0} CHANGE COLUMN {1} {2}{3}{4}{5}{6} COMMENT '{7}'";
         }
 
-        public override Syntax Syntax => Syntax.MySQL;
+        public override Language Syntax => Language.MySQL;
 
         public override void Rename(Column oldColumn, string newColumnName)
         {

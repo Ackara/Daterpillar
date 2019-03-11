@@ -39,7 +39,7 @@ namespace Acklann.Daterpillar.Tests
             if (!File.Exists(dbFilePath)) File.Create(dbFilePath).Dispose();
 
             var installationPath = Flyway.Install(baseDirectory);
-            var migrate = Flyway.Invoke("migrate", Syntax.SQLite, $"database={dbFilePath}", baseDirectory, installationPath);
+            var migrate = Flyway.Invoke("migrate", Language.SQLite, $"database={dbFilePath}", baseDirectory, installationPath);
 
             // Assert
             migrate.ExitCode.ShouldBe(0);

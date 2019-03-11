@@ -56,7 +56,7 @@ namespace Acklann.Daterpillar.Writers
 
         public IDictionary Variables { get; }
 
-        public abstract Syntax Syntax { get; }
+        public abstract Language Syntax { get; }
 
         public void Write(object value)
         {
@@ -213,7 +213,7 @@ namespace Acklann.Daterpillar.Writers
 
         public virtual void Create(Script script)
         {
-            if (script.Syntax == Syntax || script.Syntax == Syntax.Generic)
+            if (script.Syntax == Syntax || script.Syntax == Language.SQL)
             {
                 Writer.WriteLine(Expand(script.Content));
                 Writer.WriteLine();

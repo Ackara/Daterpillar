@@ -73,10 +73,10 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod]
-        [DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.MySQL)]
-        [DataRow(Syntax.SQLite)]
-        public void Can_generate_a_migration_script(Syntax syntax)
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
+        public void Can_generate_a_migration_script(Language syntax)
         {
             // Arrange
             var results = new Tuple<bool, string>[2];

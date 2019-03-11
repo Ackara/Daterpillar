@@ -39,7 +39,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [ValidateNotNullOrEmpty]
         [Alias("l", "lang"), Parameter(Mandatory = true, Position = 1)]
-        public Syntax Language { get; set; }
+        public Language Language { get; set; }
 
         /// <summary>
         /// <para type="description">Exclude all drop statements, when present.</para>

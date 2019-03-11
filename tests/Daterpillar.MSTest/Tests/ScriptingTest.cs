@@ -13,10 +13,10 @@ namespace Acklann.Daterpillar.Tests
     public class ScriptingTest
     {
         [DataTestMethod]
-        [DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.MySQL)]
-        [DataRow(Syntax.SQLite)]
-        public void Can_generate_scripts_to_create_sql_objects(Syntax syntax)
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
+        public void Can_generate_scripts_to_create_sql_objects(Language syntax)
         {
             #region Arrange
 
@@ -53,7 +53,7 @@ namespace Acklann.Daterpillar.Tests
             var genreSeed = new Script("INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');", syntax);
             var songSeed = new Script("INSERT INTO song (Name, GenreId, Track) VALUES ('Survival', '1', '1');", syntax);
             var albumSeed = new Script("INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorpion', '2018', '14.99');");
-            var generic = new Script("-- If you are reading this, I don't discriminate.", Syntax.Generic);
+            var generic = new Script("-- If you are reading this, I don't discriminate.", Language.SQL);
             var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
 
             var name_idx = new Index(IndexType.Index, true, new ColumnName("Name", Order.DESC)) { Table = song };
@@ -98,10 +98,10 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod]
-        [DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.MySQL)]
-        [DataRow(Syntax.SQLite)]
-        public void Can_generate_scripts_to_drop_sql_objects(Syntax syntax)
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
+        public void Can_generate_scripts_to_drop_sql_objects(Language syntax)
         {
             // Arrange
             var factory = new SqlWriterFactory();
@@ -136,10 +136,10 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod]
-        [DataRow(Syntax.TSQL)]
-        [DataRow(Syntax.MySQL)]
-        [DataRow(Syntax.SQLite)]
-        public void Can_generate_scripts_to_alter_sql_objects(Syntax syntax)
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
+        public void Can_generate_scripts_to_alter_sql_objects(Language syntax)
         {
             // Arrange
             var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-alter.sql");
@@ -178,7 +178,7 @@ namespace Acklann.Daterpillar.Tests
             generatedSqlIsExecutable.ShouldBeTrue();
         }
 
-        private static void TestScript(string scriptFile, Syntax syntax, out string sql, out bool generatedSqlIsExecutable)
+        private static void TestScript(string scriptFile, Language syntax, out string sql, out bool generatedSqlIsExecutable)
         {
             using (var db = new Database(syntax, "dtp-scriptingTest"))
             {

@@ -7,7 +7,7 @@ namespace Acklann.Daterpillar.Writers
 {
     /* Documentation: https://www.sqlite.org/lang.html */
 
-    [System.ComponentModel.Category(nameof(Syntax.SQLite))]
+    [System.ComponentModel.Category(nameof(Language.SQLite))]
     public class SQLiteWriter : SqlWriter
     {
         public SQLiteWriter(Stream stream) : this(new StreamWriter(stream, System.Text.Encoding.UTF8))
@@ -22,7 +22,7 @@ namespace Acklann.Daterpillar.Writers
             ForeignKeyFormatString = "FOREIGN KEY ({1}) REFERENCES {2}({3}) ON UPDATE {4} ON DELETE {5}";
         }
 
-        public override Syntax Syntax => Syntax.SQLite;
+        public override Language Syntax => Language.SQLite;
 
         // ==================== CREATE ==================== //
 

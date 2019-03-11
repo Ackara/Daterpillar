@@ -27,12 +27,12 @@ namespace Acklann.Daterpillar.Writers
             }
         }
 
-        public SqlWriter CreateInstance(Syntax syntax, Stream stream)
+        public SqlWriter CreateInstance(Language syntax, Stream stream)
         {
             return CreateInstance(syntax, new StreamWriter(stream));
         }
 
-        public SqlWriter CreateInstance(Syntax syntax, TextWriter writer)
+        public SqlWriter CreateInstance(Language syntax, TextWriter writer)
         {
             if (_returnTypes.ContainsKey(syntax.ToString()))
             {

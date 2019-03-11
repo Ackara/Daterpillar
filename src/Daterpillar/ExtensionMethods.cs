@@ -81,24 +81,24 @@ namespace Acklann.Daterpillar
         }
 
         /// <summary>
-        /// Escapes the specified sql object's name according to the rules of the specified <see cref="Syntax"/>.
+        /// Escapes the specified sql object's name according to the rules of the specified <see cref="Language"/>.
         /// </summary>
         /// <param name="name">The sql object name.</param>
         /// <param name="syntax">The syntax.</param>
         /// <returns>An escaped name.</returns>
-        public static string Escape(this string name, Syntax syntax)
+        public static string Escape(this string name, Language syntax)
         {
             switch (syntax)
             {
                 default:
-                case Syntax.Generic:
+                case Language.SQL:
                     return name;
 
-                case Syntax.MySQL:
+                case Language.MySQL:
                     return $"`{name}`";
 
-                case Syntax.TSQL:
-                case Syntax.SQLite:
+                case Language.TSQL:
+                case Language.SQLite:
                     return $"[{name}]";
             }
         }

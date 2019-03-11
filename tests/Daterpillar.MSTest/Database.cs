@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     internal sealed class Database : IDisposable
     {
-        public Database(Syntax syntax, string name = null, string connectionString = null)
+        public Database(Language syntax, string name = null, string connectionString = null)
         {
             _syntax = syntax;
             _databaseName = name ?? nameof(Daterpillar);
@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar
             System.Data.Common.DbConnectionStringBuilder builder;
             switch (syntax)
             {
-                case Syntax.TSQL:
+                case Language.TSQL:
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                         connStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -27,12 +27,12 @@ namespace Acklann.Daterpillar
                     _connection = new System.Data.SqlClient.SqlConnection(builder.ToString());
                     break;
 
-                case Syntax.MySQL:
+                case Language.MySQL:
                     builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connStr) { Database = "sys", ConnectionTimeout = 5 };
                     _connection = new MySql.Data.MySqlClient.MySqlConnection(builder.ToString());
                     break;
 
-                case Syntax.SQLite:
+                case Language.SQLite:
                     _dbFile = Path.Combine(Path.GetTempPath(), $"{_databaseName}.sqlite.db");
                     builder = new System.Data.SQLite.SQLiteConnectionStringBuilder() { DataSource = _dbFile };
                     _connection = new System.Data.SQLite.SQLiteConnection(builder.ToString());
@@ -76,15 +76,15 @@ namespace Acklann.Daterpillar
                 default:
                     throw new ArgumentException($"No database reset method for {_syntax} was found; you need to create one.");
 
-                case Syntax.TSQL:
+                case Language.TSQL:
                     TSqlRefresh();
                     break;
 
-                case Syntax.MySQL:
+                case Language.MySQL:
                     MySqlRefresh();
                     break;
 
-                case Syntax.SQLite:
+                case Language.SQLite:
                     SqliteRefresh();
                     break;
             }
@@ -217,7 +217,7 @@ CREATE INDEX {ObjectName.SubscribersIndex} ON [service] (Subscribers);
 
         #region Private Members
 
-        private readonly Syntax _syntax;
+        private readonly Language _syntax;
         private readonly string _databaseName;
         private readonly IDbConnection _connection;
 
