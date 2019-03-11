@@ -16,7 +16,7 @@
   "Name": "Daterpillar",
   "Author": "Ackara",
   "Company": "Ackara",
-  "Copyright": "MIT License",
+  "Copyright": "Copyright © 2015 Ackara",
   "Tags": "sql orm migration flyway build",
   "Website": "https://github.com/Ackara/Daterpillar",
   "RepositoryUrl": "https://github.com/Ackara/Daterpillar.git",
