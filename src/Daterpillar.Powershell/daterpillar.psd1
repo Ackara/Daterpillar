@@ -7,11 +7,12 @@
 #
 
 @{
+
 # Script module or binary module file associated with this manifest.
 RootModule = 'Acklann.Daterpillar.Powershell.dll'
 
 # Version number of this module.
-ModuleVersion = '7.0.1'
+ModuleVersion = '7.0.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -26,10 +27,10 @@ Author = 'Ackara'
 CompanyName = 'Ackara'
 
 # Copyright statement for this module
-Copyright = 'Copyright (c) 2015 Ackara.'
+Copyright = 'Copyright © 2015 Ackara'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Generate migration scripts'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -90,36 +91,42 @@ AliasesToExport = @()
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
+
     PSData = @{
+
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = 'sql','migration','orm','flyway','build'
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/Ackara/Daterpillar/blob/master/license.txt'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/Ackara/Daterpillar'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png'
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt'
 
         # Prerelease string of this module
         # Prerelease = ''
 
-        # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-        # RequireLicenseAcceptance = False
+        # Flag to indicate whether the module requires explicit user acceptance for install/update
+        # RequireLicenseAcceptance = $false
 
         # External dependent modules of this module
-        # ExternalModuleDependencies = ''
+        # ExternalModuleDependencies = @()
+
     } # End of PSData hashtable
-} # End of PrivateData hashtable
+
+ } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
 # HelpInfoURI = ''
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
+
 }
+

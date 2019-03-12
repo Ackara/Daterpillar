@@ -1,4 +1,5 @@
 <schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+  <include>sakila-business.xml</include>
   <table name="store">
     <column name="store_id" autoIncrement="true">
       <dataType>tinyInt</dataType>

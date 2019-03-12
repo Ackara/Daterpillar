@@ -92,16 +92,15 @@ namespace Acklann.Daterpillar.Cmdlets
             if (!Path.HasExtension(outputFile))
                 outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{description}.{Language.ToString().ToLowerInvariant()}.sql");
 
-            if (ShouldProcess(outputFile))
+            if (ShouldProcess(oldSchema.ResolveName()?? newSchema.ResolveName()))
             {
                 Helper.CreateDirectory(outputFile);
-                var changes = (new Migrator()).GenerateMigrationScript(outputFile, oldSchema, newSchema, Language, OmitDropStatements.IsPresent);
+                var changes = (new Migrator()).GenerateMigrationScript(Language, oldSchema, newSchema, outputFile, OmitDropStatements.IsPresent);
 
                 if (changes.Length > 0)
                 {
-                    WriteVerbose("changes detected:");
                     foreach (var item in changes)
-                        WriteVerbose($"[{item.Action}] {item.Value.GetName()}");
+                        WriteVerbose($" * {item.Action} {item.Value} {item.Value.GetType().Name}".ToLowerInvariant());
                 }
                 else WriteVerbose("no changes detected.");
 

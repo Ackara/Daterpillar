@@ -31,7 +31,6 @@ namespace Acklann.Daterpillar.Configuration
         ///
         public Schema(string name)
         {
-            _namespace = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, XMLNS) });
             Scripts = new List<Script>();
             Tables = new List<Table>();
             Name = name;
@@ -141,6 +140,7 @@ namespace Acklann.Daterpillar.Configuration
                 {
                     var serializer = new XmlSerializer(typeof(Schema));
                     schema = (Schema)serializer.Deserialize(stream);
+
                     schema.LinkChildNodes();
                     schema.Path = filePath;
                     return true;
@@ -239,7 +239,7 @@ namespace Acklann.Daterpillar.Configuration
             using (var writer = XmlWriter.Create(stream, settings))
             {
                 var serializer = new XmlSerializer(typeof(Schema));
-                serializer.Serialize(writer, this, _namespace);
+                serializer.Serialize(writer, this, _namespaces);
             }
         }
 
@@ -329,6 +329,15 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
+        /// Resolves the name.
+        /// </summary>
+        /// <returns></returns>
+        public string ResolveName()
+        {
+            return (string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Path) ? System.Text.RegularExpressions.Regex.Replace(System.IO.Path.GetFileNameWithoutExtension(Path), @"(?i)\.schema", string.Empty) : Name);
+        }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>
@@ -347,7 +356,7 @@ namespace Acklann.Daterpillar.Configuration
             using (var writer = XmlWriter.Create(stream, settings))
             {
                 var serializer = new XmlSerializer(typeof(Schema));
-                serializer.Serialize(writer, this, _namespace);
+                serializer.Serialize(writer, this, _namespaces);
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
@@ -387,7 +396,10 @@ namespace Acklann.Daterpillar.Configuration
 
         #region Private Members
 
-        private readonly XmlSerializerNamespaces _namespace;
+        private static readonly XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
+        {
+            new XmlQualifiedName(string.Empty, XMLNS)
+        });
 
         internal Table FindMatch(Table right)
         {

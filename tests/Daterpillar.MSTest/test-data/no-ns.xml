@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<schema>
+  <include>music-data.xml</include>
+
+  <table suid="100" name="user">
+    <column name="Id" auto_Increment="true">
+      <dataType>int</dataType>
+    </column>
+
+    <column name="Name">
+      <dataType>varchar</dataType>
+    </column>
+  </table>
+</schema>

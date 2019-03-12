@@ -34,6 +34,7 @@ namespace Acklann.Daterpillar
 		public static FileInfo GetMusicDataXML() => GetFile(@"music-data.xml");
 		public static FileInfo GetMusicRevisionsXML() => GetFile(@"music-revisions.xml");
 		public static FileInfo GetMusicXML() => GetFile(@"music.xml");
+		public static FileInfo GetNoNsXML() => GetFile(@"no-ns.xml");
 		public static FileInfo GetSakilaBusinessXML() => GetFile(@"sakila-business.xml");
 		public static FileInfo GetSakilaCustomerXML() => GetFile(@"sakila-customer.xml");
 		public static FileInfo GetSakilaInventoryXML() => GetFile(@"sakila-inventory.xml");
@@ -47,6 +48,7 @@ namespace Acklann.Daterpillar
 			public const string MusicDataXML = @"music-data.xml";
 			public const string MusicRevisionsXML = @"music-revisions.xml";
 			public const string MusicXML = @"music.xml";
+			public const string NoNsXML = @"no-ns.xml";
 			public const string SakilaBusinessXML = @"sakila-business.xml";
 			public const string SakilaCustomerXML = @"sakila-customer.xml";
 			public const string SakilaInventoryXML = @"sakila-inventory.xml";

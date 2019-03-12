@@ -40,7 +40,7 @@ Describe "New-MigrationScript" {
 		$oldSchema = Join-Path $outFolder "snapshot.schema.xml";
 		Get-SampleFile $context "music.xml" | Copy-Item -Destination $newSchema;
 
-		$resultFile = New-DaterpillarMigrationScript "mysql" $outFolder $oldSchema $newSchema;
+		$resultFile = New-DaterpillarMigrationScript "mysql" $outFolder $oldSchema $newSchema -Verbose;
 		$resultFile.Script | Should Exist;
 		$resultFile.Script.Length | Should BeGreaterThan 100;
 

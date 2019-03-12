@@ -66,6 +66,9 @@
     <None Update="connections.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="test-data\no-ns.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="test-data\sakila-business.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -100,7 +103,7 @@
     <ConnectionStrings Include="../../secrets.json" />
   </ItemGroup>
 
-  <Target Name="ImportConnectionStrings" BeforeTargets="CoreCompile">
+  <Target Name="ImportConnectionStrings" BeforeTargets="PreBuildEvent">
     <Copy Condition="Exists('@(ConnectionStrings)')" SourceFiles="@(ConnectionStrings)" DestinationFiles="connections.json" SkipUnchangedFiles="true" />
   </Target>
 </Project>

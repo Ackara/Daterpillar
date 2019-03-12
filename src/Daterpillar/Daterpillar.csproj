@@ -64,4 +64,9 @@
       <PackagePath>tools\$(TargetFramework)</PackagePath>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="daterpillar.xsd">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

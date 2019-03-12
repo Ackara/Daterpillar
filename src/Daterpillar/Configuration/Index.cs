@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Acklann.Daterpillar.Configuration
@@ -92,6 +91,18 @@ namespace Acklann.Daterpillar.Configuration
         public ColumnName[] Columns { get; set; }
 
         string ISqlObject.GetName() => Name;
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            string parent = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"[{Table.Name}].");
+            return $"{parent}[{Name}]";
+        }
 
         #region ICloneable
 

@@ -10,7 +10,7 @@ namespace Acklann.Daterpillar.Migration
 {
     public class Migrator
     {
-        public Discrepancy[] GenerateMigrationScript(Assembly assembly, string snapshotFilePath, Language language, bool omitDropStatements = false, string migrationsDirectory = null, string fileName = null)
+        public Discrepancy[] GenerateMigrationScript(Language language, Assembly assembly, string snapshotFilePath, string migrationsDirectory = null, string fileName = null, bool omitDropStatements = false)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
             if (string.IsNullOrEmpty(snapshotFilePath)) throw new ArgumentNullException(nameof(snapshotFilePath));
@@ -30,7 +30,7 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(string scriptFile, Schema from, Schema to, Language lanuage = Language.SQL, bool omitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(Language lanuage, Schema from, Schema to, string scriptFile, bool omitDropStatements = false)
         {
             Helper.CreateDirectory(scriptFile);
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))

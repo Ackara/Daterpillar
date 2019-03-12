@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             schema.ShouldNotBeNull();
-            schema.Imports.ShouldBeNull();
+            //schema.Imports.ShouldBeNull();
             totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
 
             result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();
@@ -102,7 +102,7 @@ namespace Acklann.Daterpillar.Tests
                 Assert.Fail(errorMsg);
 
             newSchema.Merge();
-            var case1 = sut.GenerateMigrationScript(outFile, oldSchema, newSchema, syntax).Length;
+            var case1 = sut.GenerateMigrationScript(syntax, oldSchema, newSchema, outFile).Length;
 
             File.Copy(outFile, Path.Combine(migrationsDir, $"V1.0__init.{syntax}.sql"));
 
@@ -110,14 +110,14 @@ namespace Acklann.Daterpillar.Tests
             newSchema.Merge();
             newSchema.Save(snapshotFile);
             oldSchema = Schema.Load(snapshotFile);
-            var case2 = sut.GenerateMigrationScript(outFile, oldSchema, newSchema, syntax).Length;
+            var case2 = sut.GenerateMigrationScript(syntax, oldSchema, newSchema, outFile).Length;
 
             // Case 3: Migrations exists.
             if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             revisions.Save(activeFile);
-            var case3 = sut.GenerateMigrationScript(outFile, oldSchema, revisions, syntax).Length;
+            var case3 = sut.GenerateMigrationScript(syntax, oldSchema, revisions, outFile).Length;
 
             // === Results === //
 

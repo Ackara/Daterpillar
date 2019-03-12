@@ -115,6 +115,18 @@ namespace Acklann.Daterpillar.Configuration
             AutoIncrement = right.AutoIncrement;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            string parent = (string.IsNullOrEmpty(Table?.Name) ? string.Empty : $"[{Table.Name}].");
+            return $"{parent}[{Name}]";
+        }
+
         #region ICloneable
 
         /// <summary>

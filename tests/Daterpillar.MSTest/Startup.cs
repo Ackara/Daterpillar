@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar
         public static void Cleanup()
         {
             var mssqlFiles = from f in Directory.EnumerateFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))
-                             where f.StartsWith("dtp-") && (f.EndsWith(".mdf") || f.EndsWith(".ldf"))
+                             where Path.GetFileName(f).StartsWith("dtp-")
                              select f;
 
             foreach (string filePath in mssqlFiles)

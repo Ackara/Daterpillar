@@ -13,18 +13,27 @@ namespace Acklann.Daterpillar.Tests
         [TestMethod]
         public void Can_deserialize_a_schema_xml_file()
         {
-            // Arrange
-            bool result1, result2;
-
-            // Act
-            result1 = Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema1);
-            result2 = Schema.TryLoad(TestData.GetBad_SchemaXML().FullName, out Schema schema2);
+            // Arrange + Act
+            var result1 = Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema1);
+            var result2 = Schema.TryLoad(TestData.GetBad_SchemaXML().FullName, out Schema schema2);
 
             // Assert
             result1.ShouldBeTrue();
             result2.ShouldBeFalse();
 
             Diff.Approve(schema1, ".xml");
+        }
+
+        //[TestMethod]
+        public void Can_deserialize_a_schema_xml_file_with_no_xmlns()
+        {
+            // Arrange + Act
+            var result = Schema.TryLoad(TestData.GetNoNsXML().FullName, out Schema schema);
+
+            // Assert
+            result.ShouldBeTrue();
+
+            Diff.Approve(schema, ".xml");
         }
 
         [TestMethod]

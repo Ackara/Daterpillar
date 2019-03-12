@@ -140,6 +140,11 @@ namespace Acklann.Daterpillar.Configuration
 
         string ISqlObject.GetName() => Name;
 
+        public override string ToString()
+        {
+            return $"[{Name}]";
+        }
+
         #region ICloneable
 
         /// <summary>
