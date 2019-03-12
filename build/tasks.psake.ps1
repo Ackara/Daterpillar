@@ -59,11 +59,10 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	Exec { &dotnet publish $projectFile.FullName --configuration $Configuration --output $moduleFolder; }
 	Write-Header;
 
+	$manifest = Get-Content $ManifestFilePath | ConvertFrom-Json;
 	$dll = Join-Path $moduleFolder "*.Powershell.dll" | Get-Item;
 	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
-	Update-ModuleManifest $psd1.FullName `
-	-RootModule $dll.Name `
-	-ModuleVersion $version.Version;
+	$psd1 | Update-NcrementProjectFile $ManifestFilePath;
 	Copy-Item $psd1.FullName -Destination $moduleFolder -Force;
 
 	# Building the nuget package.
@@ -76,7 +75,7 @@ Task "Generate-XmlSchemaFromDll" -alias "xsd" -description "This task generates 
 -precondition { return Test-XsdExe; } `
 -action {
 	Join-Path $SolutionFolder "src/*/$(Split-Path $SolutionFolder -Leaf).csproj" | Get-ChildItem `
-		| Export-XmlSchemaFromDll $Configuration -FullyQualifiedTypeName "Acklann.Daterpillar.Configuration.SchemaDeclaration" -Force;
+		| Export-XmlSchemaFromDll $Configuration -FullyQualifiedTypeName "Acklann.Daterpillar.Configuration.Schema" -Force;
 }
 
 #region ----- COMPILATION ----------------------------------------------
@@ -105,7 +104,7 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 	$manifest | ConvertTo-Json | Out-File $ManifestFilePath -Encoding utf8;
 	Invoke-Tool { &git add $ManifestFilePath | Out-Null; };
 
-	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-ProjectFile $manifest -Commit:$ShouldCommitChanges `
+	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
 		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 }
 
