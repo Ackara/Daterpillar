@@ -1,24 +1,22 @@
 ﻿{
-  "name": "Daterpillar",
-  "author": "Ackara",
-  "company": "Ackara",
-  "copyright": "Copyright © 2015 Ackara",
-  "tags": "sql migration orm flyway build",
-  "website": "https://github.com/Ackara/Daterpillar",
-  "repositoryUrl": "https://github.com/Ackara/Daterpillar.git",
-  "license": "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
-  "icon": "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
-  "releaseNotes": "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
-  "description": "A tool that generates sql-migration scripts from your classes.",
-  "version":
-  {
-    "major": 7,
-    "minor": 0,
-    "patch": 2
-  },
-  "branchSuffixMap":
-  {
-    "master": "",
-    "*": "alpha"
-  }
+    "name":  "Daterpillar",
+    "author":  "Ackara",
+    "company":  "Ackara",
+    "copyright":  "Copyright © 2015 Ackara",
+    "tags":  "sql migration orm flyway build",
+    "website":  "https://github.com/Ackara/Daterpillar",
+    "repositoryUrl":  "https://github.com/Ackara/Daterpillar.git",
+    "license":  "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
+    "icon":  "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
+    "releaseNotes":  "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
+    "description":  "A tool that generates sql-migration scripts from your classes.",
+    "version":  {
+                    "major":  7,
+                    "minor":  0,
+                    "patch":  3
+                },
+    "branchSuffixMap":  {
+                            "master":  "",
+                            "*":  "alpha"
+                        }
 }

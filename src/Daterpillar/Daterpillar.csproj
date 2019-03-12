@@ -7,8 +7,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <Title>Daterpillar</Title>
-    <PackageVersion>7.0.2</PackageVersion>
-    <AssemblyVersion>7.0.2</AssemblyVersion>
+    <PackageVersion>7.0.3</PackageVersion>
+    <AssemblyVersion>7.0.3</AssemblyVersion>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <Description>A mico orm</Description>
+    <Description>A tool that generates sql-migration scripts from your classes.</Description>
     <PackageTags>sql migration orm flyway build</PackageTags>
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
