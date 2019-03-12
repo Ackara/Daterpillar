@@ -4,12 +4,18 @@
 [![powershell](https://img.shields.io/powershellgallery/v/daterpillar.svg?style=flat)](https://www.powershellgallery.com/packages/Daterpillar)
 
 ## The Problem
-Your *.NET* project depends on a SQL database to store it's data, therefore you need a way to keep your SQL tables in-sync with your class entities.
+Your *.NET* project depends on a SQL database to store it's data, therefore you need a way to keep your SQL tables in-sync with your entities/classes.
 
 ## The Solution
-**Daterpillar** keep your classes and tables in-sync by generating **sql-migration-scripts** from your project's `.dll` file. Lets say you have the following class in your project. As you will see, the `User` class is decorated with the `Table` and `Column` attributes.
+**Daterpillar** is a *netstandard* library keep your classes and tables in-sync by generating **sql-migration-scripts** from your project's `.dll` file. 
+
+### Usage
+
+Lets say you have the following class in your project.
 
 ```csharp
+// Notice the `User` class is decorated with the `Table` and `Column` attributes.
+
 [Table()]
 public class User
 {
@@ -43,7 +49,7 @@ The *NUGET* package ships with a *MSBuild* target called `GenerateDaterpillarMig
 Once configured, whenever the project is built, a `.sql` script will be created. 
 
 ```sql
-# EXAMPLE: `V1.0.2__create_schema.mysql.sql`
+# EXAMPLE: `V1.0.0__create_schema.mysql.sql`
 CREATE TABLE `user`(
     `Id` VARCHAR(64) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `full_name` VARCHAR(32) NOT NULL,
@@ -51,23 +57,21 @@ CREATE TABLE `user`(
 );
 ```
 
-Now that you have a migration-script you will probably want to run it. You can run the script manually or use other tools like [Evolve](https://www.nuget.org/packages/Evolve/), [FlywayDB](https://flywaydb.org/) or [Powershell](https://www.powershellgallery.com/packages/Daterpillar). 
-
-What if generating migrations-scripts via *MSBuild* is not ideal for your project, perhaps it will be better to generate them during runtime, doing so is possible as well. To generate migration-scripts during runtime you will need to invoke the following functions.
+It is also possible to generate a new script at runtime.
 
 ```csharp
-
+var migrator = new Migrator();
+migrator.GenerateMigrationScript(Language.MySQL, typeof(User).Assembly, snapshotFilePath, migrationDirectory, fileName);
 ```
 
-### More about .schema.xml
+Now that you have a migration-script you will probably want to run it. You can run the script manually or use other tools like [Evolve](https://www.nuget.org/packages/Evolve/), [FlywayDB](https://flywaydb.org/) or [Powershell](https://www.powershellgallery.com/packages/Daterpillar). 
 
-To generated the migration-script mentioned earlier, the difference between `snapshot.schema.xml` and `[your-assembly].schema.xml` is used to generate the script. So where did this `[your-assembly].schema.xml` file came from? The *MSBuild* target `ExportDaterpillarSchema`. You can extend schema by merging multiple schemas together.
+#### More about .schema.xml
 
-Lets say you want to add seed-data to a table; first you will have to add a `[assembly: Import("seed.schema.xml")]` attribute to your project. 
-
-example: `./Properties/AssemblyInfo.cs`
+To generated the migration-script mentioned earlier, the difference between `snapshot.schema.xml` and `[your-assembly].schema.xml` is used to generate the script. So where did this `[your-assembly].schema.xml` file came from? The *MSBuild* target `ExportDaterpillarSchema`, and it is executed after each successful build. You can extend a schema by merging multiple schemas together. Lets say you want to add seed-data to a table, first you will have to add a `[assembly: Import("seed.schema.xml")]` attribute to your project. 
 
 ```csharp
+// example: `./Properties/AssemblyInfo.cs`
 ...
 [assembly: Acklann.Daterpillar.Import("seed.schema.xml")]
 // or
@@ -75,18 +79,16 @@ example: `./Properties/AssemblyInfo.cs`
 ...
 ```
 
-Next, you can add the `seed.schema.xml` to your project.
+Next add the `seed.schema.xml` to your project, and make sure it is being copied next to the `.dll` (**Copy To Output Directory: Copy if newer**).
 
 ```xml
 <schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
     <!-- This script will be appended -->
-    <script name="seed" language="Generic">
+    <script name="seed" language="MySQL">
     INSERT INTO User (full_name, DOB) VALUES ('Petra Ral', '2000-11-15');
     </script>
 </schema>
 ```
-
-**NOTE:** If the `language` attribute was set to 'MySQL' instead, the script would of only been included when MySQL explicitly targeted.
 
 You can also override or add columns by redefining a table.
 
