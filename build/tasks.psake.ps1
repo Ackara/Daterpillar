@@ -6,11 +6,11 @@ Properties {
 	$Dependencies = @("Ncrement");
 
 	# Files & Folders
-    $SolutionFolder = (Split-Path $PSScriptRoot -Parent);
+	$SolutionFolder = (Split-Path $PSScriptRoot -Parent);
 	$ManifestFilePath = (Join-Path $PSScriptRoot  "manifest.json");
 	$SecretsFilePath = (Join-Path $SolutionFolder "secrets.json");
 	$ArtifactsFolder = (Join-Path $SolutionFolder "artifacts");
-    $ToolsFolder = "";
+	$ToolsFolder = "";
 
 	# Arguments
     $ShouldCommitChanges = $true;
@@ -20,6 +20,7 @@ Properties {
 	$DryRun = $false;
 	$Major = $false;
 	$Minor = $false;
+	$Force = $false;
 }
 
 Task "Default" -depends @("configure", "build", "test", "pack");
