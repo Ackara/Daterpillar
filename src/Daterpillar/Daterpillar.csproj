@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <AssemblyName>Acklann.Daterpillar</AssemblyName>
+    <AssemblyName>Daterpillar</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <Title>Daterpillar</Title>
+    <Title>$(MSBuildProjectName)</Title>
     <PackageVersion>7.0.3</PackageVersion>
     <AssemblyVersion>7.0.3</AssemblyVersion>
     <Authors>Ackara</Authors>

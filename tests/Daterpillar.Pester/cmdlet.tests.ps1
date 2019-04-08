@@ -21,7 +21,7 @@ Describe "Export-Schema" {
 		{
 			Push-Location $PSScriptRoot;
 			[string]$projectFolder = "../*.Sample/" | Resolve-Path;
-			[string]$targetPath = Join-Path $projectFolder "bin/*/*/*.Sample.dll" | Resolve-Path | Select-Object -First 1;
+			[string]$targetPath = Join-Path $projectFolder "bin/Release/*/*.Sample.dll" | Resolve-Path | Select-Object -First 1;
 			$expectedFile = [IO.Path]::ChangeExtension($targetPath, ".schema.xml");
 			Pop-Location;
 

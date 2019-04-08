@@ -4,7 +4,7 @@
     <Optimize>false</Optimize>
     <IsPackable>false</IsPackable>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Acklann.Daterpillar.MSTest</AssemblyName>
+    <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   </PropertyGroup>
 

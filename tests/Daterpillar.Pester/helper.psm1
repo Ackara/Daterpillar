@@ -5,8 +5,9 @@
 	try
 	{
 		$moduleFolder = Join-Path ([System.IO.Path]::GetTempPath()) "daterpillar-pester";
-		if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
-
+		if (Test-Path $moduleFolder) { Remove-Item $moduleFolder -Recurse -Force; }
+		New-Item $moduleFolder -ItemType Directory | Out-Null
+		
 		Push-Location $PSScriptRoot;
 		[string]$projectFile = "../../src/*.Powershell/*.*proj" | Resolve-Path;
 		&dotnet publish $projectFile --configuration "Release" --output $moduleFolder;

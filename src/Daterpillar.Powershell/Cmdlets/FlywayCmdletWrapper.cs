@@ -35,7 +35,7 @@ namespace Acklann.Daterpillar.Cmdlets
         }
 
         /// <summary>
-        /// <para type="descrption">The absolute-path of the flyway executable file.</para>
+        /// <para type="description">The absolute-path of the flyway executable file.</para>
         /// </summary>
         [Alias("flyway")]
         [ValidateNotNullOrEmpty]

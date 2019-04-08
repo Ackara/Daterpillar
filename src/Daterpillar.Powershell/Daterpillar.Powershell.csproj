@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Acklann.Daterpillar.Powershell</AssemblyName>
+    <AssemblyName>Daterpillar.Powershell</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
@@ -36,8 +36,13 @@
     <ProjectReference Include="..\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="daterpillar.psd1">
+    <None Update="manifest.psd1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="UpdatePowershellManifest"
+          BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -Command Update-ModuleManifest manifest.psd1 -RootModule $(AssemblyName).dll -ModuleVersion $(AssemblyVersion)" />
+  </Target>
 </Project>

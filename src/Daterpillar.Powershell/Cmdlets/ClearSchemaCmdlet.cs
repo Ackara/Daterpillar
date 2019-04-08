@@ -9,6 +9,10 @@ namespace Acklann.Daterpillar.Cmdlets
     /// <para type="link">https://github.com/Ackara/Daterpillar</para>
     /// <para type="link">https://flywaydb.org/documentation/commandline/clean</para>
     /// </summary>
+    /// <example>
+    /// <code>Clear-DaterpillarSchema SQLite 'C:/app/db.sqlite'</code>
+    /// <para>This will remove all table from the schema.</para>
+    /// </example>
     /// <seealso cref="FlywayCmdletWrapper" />
     [Cmdlet(VerbsCommon.Clear, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
     public class ClearSchemaCmdlet : FlywayCmdletWrapper
