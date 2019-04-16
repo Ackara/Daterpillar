@@ -1,6 +1,6 @@
 # Daterpillar 
 
-[![nuget](https://img.shields.io/nuget/v/Acklann.Daterpillar.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Acklann.Daterpillar)
+[![nuget](https://img.shields.io/nuget/v/Daterpillar.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Daterpillar)
 [![powershell](https://img.shields.io/powershellgallery/v/daterpillar.svg?style=flat)](https://www.powershellgallery.com/packages/Daterpillar)
 
 ## The Problem

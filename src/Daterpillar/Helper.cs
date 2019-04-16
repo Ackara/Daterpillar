@@ -66,7 +66,7 @@ namespace Acklann.Daterpillar
         {
             var tableAttr = type?.GetCustomAttribute(typeof(TableAttribute)) as TableAttribute;
             var nameAttr = type?.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-
+            
             string name = (string.IsNullOrEmpty(tableAttr?.Name) ? nameAttr?.DisplayName : tableAttr?.Name);
             if (string.IsNullOrEmpty(name))
             {

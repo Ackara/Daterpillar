@@ -26,7 +26,7 @@ Properties {
 Task "Default" -depends @("configure", "build", "test", "pack");
 
 Task "Deploy" -alias "publish" -description "This task compiles, test then publish all packages to their respective destination." `
--depends @("clean", "version", "build", "xsd", "test", "pack", "push-nuget", "push-vsix", "push-ps", "tag");
+-depends @("clean", "version", "build", "xsd", "test", "pack", "push-nuget", "tag");
 
 # ======================================================================
 
@@ -123,7 +123,7 @@ Task "Run-Tests" -alias "test" -description "This task invoke all tests within t
 
 Task "Run-Benchmarks" -alias "benchmark" -description "This task invoke all benchmark tests within the 'tests' folder." `
 -action {
-	$projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter "*" -DryRun:$DryRun;
+	$projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter $Filter -DryRun:$DryRun;
 }
 
 #endregion

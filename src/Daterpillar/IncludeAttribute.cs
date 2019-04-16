@@ -14,6 +14,9 @@ namespace Acklann.Daterpillar
             FilePath = relativePath;
         }
 
+        /// <summary>
+        /// The relative/absolute path of the '.schema.xml' file.
+        /// </summary>
         public readonly string FilePath;
     }
 }
