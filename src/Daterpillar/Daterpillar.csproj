@@ -7,8 +7,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <Title>$(MSBuildProjectName)</Title>
-    <PackageVersion>7.0.4</PackageVersion>
-    <AssemblyVersion>7.0.4</AssemblyVersion>
+    <PackageVersion>7.0.5</PackageVersion>
+    <AssemblyVersion>7.0.5</AssemblyVersion>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
