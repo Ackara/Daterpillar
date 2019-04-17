@@ -108,7 +108,7 @@ namespace Acklann.Daterpillar.Migration
 
             var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
             var defaultAttr = member.GetCustomAttribute(typeof(DefaultValueAttribute)) as DefaultValueAttribute;
-
+            
             column.DefaultValue = Convert.ToString(columnAttr?.DefaultValue ?? defaultAttr?.Value);
             if (string.IsNullOrEmpty(column.DefaultValue)) column.DefaultValue = null;
             column.AutoIncrement = (columnAttr?.AutoIncrement ?? false);

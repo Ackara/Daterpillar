@@ -12,14 +12,14 @@ namespace Acklann.Daterpillar
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
         /// </summary>
-        public ColumnAttribute() : this(null, 0, 0)
+        public ColumnAttribute() : this(null, null, 0, 0)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public ColumnAttribute(string name) : this(name, 0, 0)
+        public ColumnAttribute(string name) : this(name, null, 0, 0)
         { }
 
         /// <summary>
@@ -28,20 +28,21 @@ namespace Acklann.Daterpillar
         /// <param name="schemaType">Name of the type.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public ColumnAttribute(SchemaType schemaType, int scale = 0, int precision = 0) : this(Configuration.DataType.ConvertToString(schemaType), scale, precision)
+        public ColumnAttribute(SchemaType schemaType, int scale = 0, int precision = 0) : this(null, Configuration.DataType.ConvertToString(schemaType), scale, precision)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ColumnAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="typeName">The data-type.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        ///
-        public ColumnAttribute(string name, int scale = 0, int precision = 0)
+        public ColumnAttribute(string name, string typeName, int scale = 0, int precision = 0)
         {
             Name = name;
             Scale = scale;
+            TypeName = typeName;
             DefaultValue = null;
             Precision = precision;
         }

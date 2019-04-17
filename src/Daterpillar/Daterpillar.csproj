@@ -69,4 +69,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Linq\" />
+  </ItemGroup>
 </Project>
