@@ -13,7 +13,7 @@ namespace Acklann.Daterpillar
         {
         }
 
-        [AssemblyCleanup]
+        //[AssemblyCleanup]
         public static void Cleanup()
         {
             var mssqlFiles = from f in Directory.EnumerateFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))

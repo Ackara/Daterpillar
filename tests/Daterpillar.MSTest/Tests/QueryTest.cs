@@ -14,10 +14,12 @@ namespace Acklann.Daterpillar.Tests
 	[TestClass]
 	public class QueryTest
 	{
-		[TestMethod]
-		public void Can_build_select_query()
-		{
-            throw new System.NotImplementedException();
+        //[TestMethod]
+        public void MyTestMethod()
+        {
+            dynamic sut = null;
+
+            sut.select("", "", "").from("").where("", "");
         }
 	}
 }

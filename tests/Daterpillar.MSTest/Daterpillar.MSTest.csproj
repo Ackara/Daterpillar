@@ -103,10 +103,6 @@
     <ConnectionStrings Include="../../secrets.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tests\Bugs\" />
-  </ItemGroup>
-
   <Target Name="ImportConnectionStrings" BeforeTargets="PreBuildEvent">
     <Copy Condition="Exists('@(ConnectionStrings)')" SourceFiles="@(ConnectionStrings)" DestinationFiles="connections.json" SkipUnchangedFiles="true" />
   </Target>
