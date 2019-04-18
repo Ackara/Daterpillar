@@ -117,6 +117,7 @@ namespace Acklann.Daterpillar.Migration
             column.Id = member.GetId();
 
             var dataType = new DataType(columnAttr?.TypeName);
+
             if (string.IsNullOrEmpty(dataType.Name))
             {
                 if (member is PropertyInfo prop)

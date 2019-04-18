@@ -27,6 +27,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
+    <PackageReference Include="System.Memory" Version="4.5.2" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
