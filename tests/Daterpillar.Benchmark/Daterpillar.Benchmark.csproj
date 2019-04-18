@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Benchmarkable" Version="1.0.1" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.110" />
     <PackageReference Include="VBench" Version="0.0.13-rc" />

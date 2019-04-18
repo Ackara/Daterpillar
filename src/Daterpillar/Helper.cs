@@ -116,11 +116,11 @@ namespace Acklann.Daterpillar
 
         internal static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
 
-        internal static void CreateDirectory(string scriptFile)
+        internal static void CreateDirectory(string filePath)
         {
-            if (string.IsNullOrEmpty(scriptFile)) throw new ArgumentNullException(nameof(scriptFile));
+            if (string.IsNullOrEmpty(filePath)) throw new ArgumentNullException(nameof(filePath));
 
-            string folder = Path.GetDirectoryName(scriptFile);
+            string folder = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
 

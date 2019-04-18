@@ -94,7 +94,7 @@ namespace Acklann.Daterpillar.Cmdlets
 
             if (ShouldProcess(oldSchema.ResolveName()?? newSchema.ResolveName()))
             {
-                Helper.CreateDirectory(outputFile);
+                PSHelper.CreateDirectory(outputFile);
                 var changes = (new Migrator()).GenerateMigrationScript(Language, oldSchema, newSchema, outputFile, OmitDropStatements.IsPresent);
 
                 if (changes.Length > 0)

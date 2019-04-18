@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Acklann.Daterpillar
 {
-    internal static class Helper
+    internal static class PSHelper
     {
         public static void CreateDirectory(string filePath)
         {

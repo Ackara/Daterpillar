@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 namespace Acklann.Daterpillar.Tests
 {
 	[TestClass]
-	public class QueryTest
+	public class QueringSuite
 	{
         //[TestMethod]
         public void MyTestMethod()
