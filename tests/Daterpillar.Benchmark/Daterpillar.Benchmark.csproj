@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Benchmarkable" Version="1.0.1" />
+    <PackageReference Include="Benchmarkable" Version="1.0.1" Condition="$(Configuration)=='Debug'" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.110" />
-    <PackageReference Include="VBench" Version="0.0.13-rc" />
+    <PackageReference Include="VBench" Version="0.0.14-beta" />
   </ItemGroup>
 
   <ItemGroup>

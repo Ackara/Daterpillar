@@ -6,7 +6,6 @@
     <AssemblyName>Daterpillar</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <Title>$(MSBuildProjectName)</Title>
     <PackageVersion>7.0.7</PackageVersion>
     <AssemblyVersion>7.0.7</AssemblyVersion>
     <Authors>Ackara</Authors>
@@ -20,7 +19,7 @@
     <Description>A tool that generates sql-migration scripts from your classes.</Description>
     <PackageTags>sql migration orm flyway build</PackageTags>
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -32,19 +31,11 @@
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Configuration\Language.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Translators\TranslatorBase.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
+
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
+
   <ItemGroup Label="Nuget">
     <Content Include="..\..\readme.md">
       <PackagePath>readme.md</PackagePath>

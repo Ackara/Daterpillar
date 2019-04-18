@@ -1,9 +1,9 @@
 ﻿using Acklann.VBench;
-using Benchmarkable;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using System;
-using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
 {
@@ -12,38 +12,96 @@ namespace Acklann.Daterpillar
         private static void Main(string[] args)
         {
 #if DEBUG
-            Debug();
+            QuickTest();
 #else
-            Release();
+            Release(args);
 #endif
         }
 
-        private static void Debug()
+        private static void QuickTest()
         {
-            Console.WriteLine("running ...");Console.WriteLine();
+            Console.WriteLine("running ..."); Console.WriteLine();
 
-            var obj = new Foo();
-            var dic = new Dictionary<string, object>
+            const string sample = "the dog bark woof woof";
+            void plusequal()
             {
-                { nameof(Foo.Id), 0 },
-                { nameof(Foo.Name), 0 }
-            };
-            dynamic d = new System.Dynamic.ExpandoObject();
+                string r = ""; char c;
+                for (int i = 0; i < sample.Length; i++)
+                {
+                    c = sample[i];
+                    r += c;
+                }
+            }
 
-            void baseLine() { obj.Id = 10; obj.Name = "sally"; }
-            void dictionary() { dic[nameof(Foo.Id)] = 10; dic[nameof(Foo.Name)] = "sally"; }
-            void dynamicM() { d.Id = 10; d.Name = "sally"; }
+            void builder()
+            {
+                var r = new StringBuilder(); char c;
+                for (int i = 0; i < sample.Length; i++)
+                {
+                    c = sample[i];
+                    r.Append(c);
+                }
 
+                r.ToString();
+            }
 
-            
-            
-            var test = new Benchmark();
-            test.Add(baseLine, nameof(baseLine));
-            test.Add(dictionary, nameof(dictionary));
-            test.Add(dynamicM, nameof(dynamicM));
+            void array()
+            {
+                var r = new char[sample.Length]; char c;
+                for (int i = 0; i < sample.Length; i++)
+                {
+                    c = sample[i];
+                    r[i] = c;
+                }
+            }
+
+            void span()
+            {
+                Span<char> r = new Span<char>();
+                ReadOnlySpan<char> t = sample.AsSpan();
+
+                for (int i = 0; i < t.Length; i++)
+                {
+                    r.Fill(t[i]);
+                }
+
+                r.ToString();
+            }
+
+            void spanBuilderB()
+            {
+                char c; ReadOnlySpan<char> t = sample.AsSpan();
+                var r = new StringBuilder();
+                for (int i = 0; i < t.Length; i++)
+                {
+                    c = t[i];
+                    r.Append(c);
+                }
+
+                r.ToString();
+            }
+
+            void spanBuilderA()
+            {
+                char c; ReadOnlySpan<char> t = sample.AsSpan();
+                var r = new StringBuilder();
+                for (int i = 0; i < t.Length; i++)
+                {
+                    r.Append(t[i]);
+                }
+
+                r.ToString();
+            }
+
+#if DEBUG
+            var list = new Action[] { array, plusequal, builder, spanBuilderB, spanBuilderA, span };
+
+            var regex = new Regex(@"(?i)[^a-z]");
+            var test = new Benchmarkable.Benchmark();
+            for (int i = 0; i < list.Length; i++)
+                test.Add(list[i], regex.Replace(list[i].Method.Name.Replace($"<{nameof(QuickTest)}>g", string.Empty), string.Empty));
             test.Run().Print();
-            
-
+#endif
             // ==================== EXIT ==================== //
             Console.WriteLine();
             Console.Write("press any key to exit ...");
@@ -58,7 +116,6 @@ namespace Acklann.Daterpillar
                 );
         }
 
-        private class Foo
-        { public int Id; public string Name; }
+        private class Foo { public int Id; public string Name; }
     }
 }

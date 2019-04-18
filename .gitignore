@@ -270,6 +270,10 @@ Help_Backup/
 !**/[Xx]64/SQLite.Interop.dll
 !**/[Xx]86/SQLite.Interop.dll
 
+# BenchmarkDotNet Files
+BenchmarkDotNet.Artifacts/
+!BenchmarkDotNet.Artifacts/results/
+
 # Build tools
 tools/
 

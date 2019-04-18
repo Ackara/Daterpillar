@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace Acklann.Daterpillar
 {
@@ -46,19 +47,25 @@ namespace Acklann.Daterpillar
         public static string ToPascal(this string text, params char[] separator)
         {
             if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToUpper();
+            else if (text.Length == 1) return text.ToUpperInvariant();
             else
             {
-                separator = (separator.Length == 0 ? new char[] { ' ' } : separator);
-                string[] words = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                string pascal = "";
+                var span = text.AsSpan();
+                var pascal = new StringBuilder();
 
-                foreach (var word in words)
+                for (int i = 0; i < span.Length; i++)
                 {
-                    pascal += char.ToUpperInvariant(word[0]) + word.Substring(1);
+                    if (span[i] == ' ' || span[i] == '_')
+                        continue;
+                    else if (i == 0)
+                        pascal.Append(char.ToUpperInvariant(span[i]));
+                    else if (span[i - 1] == ' ' || span[i - 1] == '_')
+                        pascal.Append(char.ToUpperInvariant(span[i]));
+                    else
+                        pascal.Append(span[i]);
                 }
 
-                return pascal;
+                return pascal.ToString();
             }
         }
 
@@ -77,7 +84,7 @@ namespace Acklann.Daterpillar
         public static string ToCamel(this string text, params char[] separator)
         {
             if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToLower();
+            else if (text.Length == 1) return text.ToLowerInvariant();
             else
             {
                 string pascal = ToPascal(text, separator);
