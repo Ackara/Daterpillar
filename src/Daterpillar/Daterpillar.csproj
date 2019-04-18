@@ -6,8 +6,8 @@
     <AssemblyName>Daterpillar</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>7.0.7</PackageVersion>
-    <AssemblyVersion>7.0.7</AssemblyVersion>
+    <PackageVersion>7.0.8</PackageVersion>
+    <AssemblyVersion>7.0.8</AssemblyVersion>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
@@ -31,11 +31,9 @@
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
   <ItemGroup Label="Nuget">
     <Content Include="..\..\readme.md">
       <PackagePath>readme.md</PackagePath>
