@@ -41,6 +41,7 @@ namespace Acklann.Daterpillar.Tests
         [DataRow("snake_case", "snake_case")]
         [DataRow("A Short Title", "a_short_title")]
         [DataRow("a short title", "a_short_title")]
+        [DataRow(" a  short  title ", "_a__short__title_")]
         [DataTestMethod]
         public void Can_convert_text_to_snake_case(string sample, string expectedValue)
         {

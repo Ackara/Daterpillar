@@ -22,79 +22,27 @@ namespace Acklann.Daterpillar
         {
             Console.WriteLine("running ..."); Console.WriteLine();
 
-            const string sample = "the dog bark woof woof";
+            const string sample1 = "the dog bark woof woof";
+            const string sample2 = "the dog bark woof woof";
             void plusequal()
             {
-                string r = ""; char c;
-                for (int i = 0; i < sample.Length; i++)
-                {
-                    c = sample[i];
-                    r += c;
-                }
+                string c = sample1 + sample2;
             }
 
             void builder()
             {
-                var r = new StringBuilder(); char c;
-                for (int i = 0; i < sample.Length; i++)
-                {
-                    c = sample[i];
-                    r.Append(c);
-                }
-
-                r.ToString();
-            }
-
-            void array()
-            {
-                var r = new char[sample.Length]; char c;
-                for (int i = 0; i < sample.Length; i++)
-                {
-                    c = sample[i];
-                    r[i] = c;
-                }
-            }
-
-            void span()
-            {
-                Span<char> r = new Span<char>();
-                ReadOnlySpan<char> t = sample.AsSpan();
-
-                for (int i = 0; i < t.Length; i++)
-                {
-                    r.Fill(t[i]);
-                }
-
-                r.ToString();
-            }
-
-            void spanBuilderB()
-            {
-                char c; ReadOnlySpan<char> t = sample.AsSpan();
                 var r = new StringBuilder();
-                for (int i = 0; i < t.Length; i++)
-                {
-                    c = t[i];
-                    r.Append(c);
-                }
-
-                r.ToString();
+                r.Append(sample1);
+                r.Append(sample2);
             }
 
-            void spanBuilderA()
+            void concat()
             {
-                char c; ReadOnlySpan<char> t = sample.AsSpan();
-                var r = new StringBuilder();
-                for (int i = 0; i < t.Length; i++)
-                {
-                    r.Append(t[i]);
-                }
-
-                r.ToString();
+                string c = string.Concat(sample1, sample2);
             }
 
 #if DEBUG
-            var list = new Action[] { array, plusequal, builder, spanBuilderB, spanBuilderA, span };
+            var list = new Action[] { plusequal, builder, concat };
 
             var regex = new Regex(@"(?i)[^a-z]");
             var test = new Benchmarkable.Benchmark();

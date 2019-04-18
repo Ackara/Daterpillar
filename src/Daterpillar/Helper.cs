@@ -36,22 +36,15 @@ namespace Acklann.Daterpillar
         /// Converts the specified string to pascal case.
         /// </summary>
         /// <param name="text">The string to convert to pascal case.</param>
-        /// <param name="separator">The separator.</param>
         /// <returns>The specified string converted to pascal case.</returns>
-        /// <remarks><list type="bullet">
-        ///   <listheader>Rules</listheader>
-        ///   <item>Capitalize the first letter in the text.</item>
-        ///   <item>Capitalize the first letter for each subsequent word.</item>
-        ///   <item>Concatenate each word.</item>
-        /// </list></remarks>
-        public static string ToPascal(this string text, params char[] separator)
+        public static string ToPascal(this string text)
         {
             if (string.IsNullOrEmpty(text)) return text;
             else if (text.Length == 1) return text.ToUpperInvariant();
             else
             {
-                var span = text.AsSpan();
                 var pascal = new StringBuilder();
+                ReadOnlySpan<char> span = text.AsSpan();
 
                 for (int i = 0; i < span.Length; i++)
                 {
@@ -73,49 +66,60 @@ namespace Acklann.Daterpillar
         /// Converts the specified string to camel case.
         /// </summary>
         /// <param name="text">The string to convert to camel case.</param>
-        /// <param name="separator">The separator.</param>
         /// <returns>The specified string converted to camel case.</returns>
-        /// <remarks><list type="bullet">
-        ///   <listheader>Rules</listheader>
-        ///   <item>Lower the first letter in the text.</item>
-        ///   <item>Capitalize the first letter for each subsequent word.</item>
-        ///   <item>Concatenate each word.</item>
-        /// </list></remarks>
-        public static string ToCamel(this string text, params char[] separator)
+        public static string ToCamel(this string text)
         {
             if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToLowerInvariant();
+            else if (text.Length == 1) return text.ToUpperInvariant();
             else
             {
-                string pascal = ToPascal(text, separator);
-                return char.ToLowerInvariant(pascal[0]) + pascal.Substring(1);
+                var camel = new StringBuilder();
+                ReadOnlySpan<char> span = text.AsSpan();
+
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (span[i] == ' ' || span[i] == '_')
+                        continue;
+                    else if (i == 0)
+                        camel.Append(char.ToLowerInvariant(span[i]));
+                    else if (span[i - 1] == ' ' || span[i - 1] == '_')
+                        camel.Append(char.ToUpperInvariant(span[i]));
+                    else
+                        camel.Append(span[i]);
+                }
+
+                return camel.ToString();
             }
         }
 
-        public static string ToSnake(this string text, params char[] separator)
+        /// <summary>
+        /// Converts the specified string to camel case.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>The specified string converted to snake case.</returns>
+        public static string ToSnake(this string text)
         {
             if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToLower();
+            else if (text.Length == 1) return text.ToUpperInvariant();
             else
             {
-                separator = (separator.Length == 0 ? new char[] { ' ' } : separator);
-                string[] words = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                string snake = "";
-                char c;
+                var span = text.AsSpan();
+                var snake = new StringBuilder();
 
-                for (int i = 0; i < text.Length; i++)
+                for (int i = 0; i < span.Length; i++)
                 {
-                    c = text[i];
-                    if (c == ' ') snake += '_';
-                    else if (char.IsUpper(c))
+                    if (span[i] == ' ')
+                        snake.Append('_');
+                    else if (char.IsUpper(span[i]) && i > 0 && (span[i - 1] != ' ' && span[i - 1] != '_'))
                     {
-                        if (i > 0 && text[i - 1] != ' ') snake += '_';
-                        snake += char.ToLowerInvariant(c);
+                        snake.Append('_');
+                        snake.Append(char.ToLowerInvariant(span[i]));
                     }
-                    else snake += char.ToLowerInvariant(c);
+                    else
+                        snake.Append(char.ToLowerInvariant(span[i]));
                 }
 
-                return snake;
+                return snake.ToString();
             }
         }
 
