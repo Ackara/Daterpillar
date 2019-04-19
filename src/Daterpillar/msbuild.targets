@@ -8,7 +8,7 @@
     <ShouldGenerateDaterpillarMigrationScriptAfterBuild Condition="$(ShouldGenerateDaterpillarMigrationScriptAfterBuild)==''">false</ShouldGenerateDaterpillarMigrationScriptAfterBuild>
     <ShouldOmitDropStatementsFromDaterpillarScripts Condition="$(ShouldOmitDropStatementsFromDaterpillarScripts)==''">false</ShouldOmitDropStatementsFromDaterpillarScripts>
 
-    <DaterpillarSqlLanguage Condition="$(DaterpillarLanguage)==''">SQLite</DaterpillarSqlLanguage>
+    <DaterpillarSqlLanguage Condition="$(DaterpillarSqlLanguage)==''">SQLite</DaterpillarSqlLanguage>
     <DaterpillarMigrationsDirectory Condition="$(DaterpillarMigrationsDirectory)==''">migrations</DaterpillarMigrationsDirectory>
     <DaterpillarSnapshotFilePath Condition="$(DaterpillarSnapshotFilePath)==''">$([System.IO.Path]::Combine($(DaterpillarMigrationsDirectory), 'snapshot.schema.xml'))</DaterpillarSnapshotFilePath>
 
