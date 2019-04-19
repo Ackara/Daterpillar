@@ -8,11 +8,6 @@ namespace Acklann.Daterpillar
     [TestClass]
     public class Startup
     {
-        [AssemblyInitialize]
-        public static void Initialize(TestContext context)
-        {
-        }
-
         //[AssemblyCleanup]
         public static void Cleanup()
         {

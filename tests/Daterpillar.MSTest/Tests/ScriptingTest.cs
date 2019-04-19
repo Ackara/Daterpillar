@@ -45,7 +45,9 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(Language.SQLite)]
         public void Can_generate_scripts_to_create_sql_objects(Language syntax)
         {
-            #region Arrange
+            // Arrange
+
+            #region Construct Schema
 
             var scriptFile = Path.Combine(Path.GetTempPath(), $"dtp-create.{syntax}".ToLowerInvariant());
             var schema = new Schema();
@@ -89,14 +91,13 @@ namespace Acklann.Daterpillar.Tests
             var song_fk = new ForeignKey("SongId", "song", "Id") { Table = album };
             var pKey = new Index(IndexType.PrimaryKey, new ColumnName("SongId"), new ColumnName("ArtistId")) { Table = album };
 
-            var factory = new SqlWriterFactory();
-
-            #endregion Arrange
+            #endregion Construct Schema
 
             // Act
             TestData.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
+            var factory = new SqlWriterFactory();
             using (var file = File.OpenWrite(scriptFile))
             using (var writer = factory.CreateInstance(syntax, file))
             {
@@ -117,11 +118,11 @@ namespace Acklann.Daterpillar.Tests
                 writer.Flush();
             }
 
-            TestScript(scriptFile, syntax, out string sql, out bool generatedSqlIsExecutable);
+            TestScript(scriptFile, syntax, out string results, out bool executedScriptSuccessfully);
 
             // Assert
-            Diff.Approve(sql, ".sql", syntax);
-            generatedSqlIsExecutable.ShouldBeTrue();
+            Diff.Approve(results, ".sql", syntax);
+            executedScriptSuccessfully.ShouldBeTrue();
         }
 
         [DataTestMethod]
@@ -134,7 +135,7 @@ namespace Acklann.Daterpillar.Tests
             var factory = new SqlWriterFactory();
             var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-drop.sql");
 
-            var schema = Database.Sample.CreateInstance();
+            var schema = CreateInstance();
             var service = schema.Tables[2];
 
             // Act
@@ -170,7 +171,7 @@ namespace Acklann.Daterpillar.Tests
         {
             // Arrange
             var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-alter.sql");
-            var schema = Database.Sample.CreateInstance();
+            var schema = CreateInstance();
             var factory = new SqlWriterFactory();
 
             var service = schema.Tables[2];
@@ -205,17 +206,44 @@ namespace Acklann.Daterpillar.Tests
             generatedSqlIsExecutable.ShouldBeTrue();
         }
 
-        private static void TestScript(string scriptFile, Language syntax, out string sql, out bool generatedSqlIsExecutable)
+        private static void TestScript(string scriptFile, Language syntax, out string results, out bool scriptExecutionWasSuccessful)
         {
-            using (var db = new Database(syntax, "dtp-scriptingTest"))
+            string schemaName = "dtp_scripting_test";
+            using (var database = MockDatabase.CreateConnection(syntax, schemaName))
             {
-                db.Refresh();
+                database.RebuildSchema(schemaName);
 
-                sql = File.ReadAllText(scriptFile);
-                generatedSqlIsExecutable = db.TryExecute(sql, out string error);
+                results = File.ReadAllText(scriptFile);
+                scriptExecutionWasSuccessful = database.TryExecute(results, out string error);
                 var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
-                sql = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, sql, nl);
+                results = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, results, nl);
             }
+        }
+
+        public static Schema CreateInstance()
+        {
+            var schema = new Schema();
+            schema.Add(
+                new Table("zombie"),
+
+                new Table("placeholder",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR, nullable: true)
+                ),
+
+                new Table("service",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR),
+                    new Column("Subscribers", SchemaType.INT),
+                    new Column("Zombie", SchemaType.VARCHAR),
+                    new Column("Zombie_fk", SchemaType.INT),
+
+                    new ForeignKey("Zombie_fk", "placeholder", "Id"),
+                    new Index(IndexType.Index, new ColumnName("Subscribers"))
+                )
+                );
+
+            return schema;
         }
     }
 }

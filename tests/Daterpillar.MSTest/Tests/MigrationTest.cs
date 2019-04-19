@@ -12,6 +12,15 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class MigrationTest
     {
+        [DataTestMethod]
+        [DataRow(Language.SQLite)]
+        public void Can_create_new_database_on_server(Language kind)
+        {
+            // Arrange
+            var connection =  MockDatabase.CreateConnection(kind);
+            
+        }
+
         [TestMethod]
         public void Can_build_a_schema_from_an_assembly()
         {
@@ -122,16 +131,17 @@ namespace Acklann.Daterpillar.Tests
             // === Results === //
 
             int index = 0;
-            using (var db = new Database(syntax, "dtp-migrate-test"))
+            string schemaName = "dtp-migrate-test";
+            using (var db = MockDatabase.CreateConnection(syntax, schemaName))
             {
-                db.Refresh();
+                db.RebuildSchema(schemaName, false);
                 foreach (var file in Directory.EnumerateFiles(migrationsDir))
                 {
                     var script = File.ReadAllText(file);
                     var passed = db.TryExecute(script, out errorMsg);
 
                     if (!passed) script = (errorMsg + script);
-                    script = $"file: {Path.GetFileName(file)}\r\n\r\n\r\n{script}";
+                    script = $"file: {Path.GetFileName(file)}\n\n\n{script}";
                     results[index++] = Tuple.Create(passed, script);
                 }
             }
