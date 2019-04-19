@@ -22,27 +22,13 @@ namespace Acklann.Daterpillar
         {
             Console.WriteLine("running ..."); Console.WriteLine();
 
-            const string sample1 = "the dog bark woof woof";
-            const string sample2 = "the dog bark woof woof";
-            void plusequal()
+            var list = new Action[]
             {
-                string c = sample1 + sample2;
-            }
 
-            void builder()
-            {
-                var r = new StringBuilder();
-                r.Append(sample1);
-                r.Append(sample2);
-            }
-
-            void concat()
-            {
-                string c = string.Concat(sample1, sample2);
-            }
+            };
 
 #if DEBUG
-            var list = new Action[] { plusequal, builder, concat };
+            
 
             var regex = new Regex(@"(?i)[^a-z]");
             var test = new Benchmarkable.Benchmark();
@@ -64,6 +50,6 @@ namespace Acklann.Daterpillar
                 );
         }
 
-        private class Foo { public int Id; public string Name; }
+        //private class Foo { public int Id; public string Name; }
     }
 }

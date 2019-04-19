@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,8 +11,34 @@ using System.Linq;
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
+    [TestCategory("sql")]
     public class ScriptingTest
     {
+        [DataTestMethod]
+        [DataRow("", "''")]
+        [DataRow(22, "'22'")]
+        [DataRow(null, "null")]
+        [DataRow("foo", "'foo'")]
+        [DataRow(12.54f, "'12.54'")]
+        [DataRow(DayOfWeek.Friday, "'5'")]
+        [DataRow("abc ' '' def", "'abc '' '''' def'")]
+        [DataRow("2015-1-1 1:1:1", "'2015-01-01 01:01:01'")]
+        public void Can_serialize_an_object_to_a_sql_value(object input, string expectedValue)
+        {
+            if (DateTime.TryParse(input?.ToString(), out DateTime dt))
+                input = dt;
+
+            SqlComposer.Serialize(input).ShouldBe(expectedValue);
+        }
+
+        [TestMethod]
+        public void MyTestMethod()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        // ==================== SCHEMA BUILDING ==================== //
+
         [DataTestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]

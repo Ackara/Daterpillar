@@ -24,18 +24,6 @@ namespace Acklann.Daterpillar.Tests
             Diff.Approve(schema1, ".xml");
         }
 
-        //[TestMethod]
-        public void Can_deserialize_a_schema_xml_file_with_no_xmlns()
-        {
-            // Arrange + Act
-            var result = Schema.TryLoad(TestData.GetNoNsXML().FullName, out Schema schema);
-
-            // Assert
-            result.ShouldBeTrue();
-
-            Diff.Approve(schema, ".xml");
-        }
-
         [TestMethod]
         public void Can_serialize_a_schema_to_xml()
         {
