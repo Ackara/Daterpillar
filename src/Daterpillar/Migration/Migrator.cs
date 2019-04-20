@@ -22,7 +22,7 @@ namespace Acklann.Daterpillar.Migration
             Schema newSchema = SchemaFactory.CreateFrom(assembly);
             Schema oldSchema = (File.Exists(snapshotFilePath) ? Schema.Load(snapshotFilePath) : new Schema());
 
-            Helper.CreateDirectory(scriptFilePath);
+            InternalHelper.EnsureDirectoryExists(scriptFilePath);
             using (var stream = new FileStream(scriptFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (SqlWriter writer = factory.CreateInstance(language, stream))
             {
@@ -32,7 +32,7 @@ namespace Acklann.Daterpillar.Migration
 
         public Discrepancy[] GenerateMigrationScript(Language lanuage, Schema from, Schema to, string scriptFile, bool omitDropStatements = false)
         {
-            Helper.CreateDirectory(scriptFile);
+            InternalHelper.EnsureDirectoryExists(scriptFile);
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
             using (SqlWriter writer = _factory.CreateInstance(lanuage, file))
             {
@@ -65,7 +65,7 @@ namespace Acklann.Daterpillar.Migration
             Discrepancy[] sortedTables = GetTablesSortedByDependency().ToArray();
 
             /// 3: Write
-            AppendVaribales(writer, right);
+            writer.AppendVaribales(right);
 
             foreach (Discrepancy change in sortedTables)
                 WriteChanges(writer, change, scripts, !omitDropStatements);
@@ -265,7 +265,7 @@ namespace Acklann.Daterpillar.Migration
             Script[] associatedScripts = FindAssociatedScripts(scripts, discrepancy, writer.Syntax).ToArray();
             int children = associatedScripts.Length;
 
-            // BEFORE
+            // Run Scripts Before All
             foreach (Script script in associatedScripts)
                 if (!string.IsNullOrEmpty(script?.Before))
                     writer.Create(script);
@@ -310,7 +310,7 @@ namespace Acklann.Daterpillar.Migration
                     break;
             }
 
-            // AFTER
+            // Run Scripts After All
             foreach (Script script in associatedScripts)
                 if (!string.IsNullOrEmpty(script.After))
                     writer.Create(script);

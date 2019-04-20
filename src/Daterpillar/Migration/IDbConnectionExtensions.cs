@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Migration
 {
-    public static class MigratorExtensions
+    public static class IDbConnectionExtensions
     {
         // TODO: Create a method that would query the database for its tables then remove all of them.
 
@@ -68,35 +68,52 @@ namespace Acklann.Daterpillar.Migration
         {
             if (connection == null) throw new ArgumentNullException(nameof(connection));
             if (schema == null) throw new ArgumentNullException(nameof(schema));
-
             string schemaName = schema.ResolveName();
-            if (string.IsNullOrEmpty(schemaName)) throw new ArgumentNullException(nameof(schemaName), $"You did not give the schema a name.");
+            if (string.IsNullOrEmpty(schemaName)) throw new ArgumentNullException(nameof(schema), $"You did not give the schema a name.");
+
             if (kind == Language.SQLite)
             {
                 return CreateSQLiteDatabase(connection, schema, dropIfExists);
             }
 
+            Open(connection);
+
             // I am checking if the database already exist by trying to change to it.
             bool schemaNotFound = false;
-            Open(connection);
+            string original = connection.Database;// I am saving this now for when I need to drop the database.
             try { connection.ChangeDatabase(schemaName); }
             catch (NotImplementedException) { schemaNotFound = true; }
             catch (System.Data.Common.DbException) { schemaNotFound = true; }
 
             if (schemaNotFound || dropIfExists)
             {
+                IDbCommand command;
                 var factory = new SqlWriterFactory();
-                using (var data = new MemoryStream())
-                using (var writer = factory.CreateInstance(kind, new StreamWriter(data)))
-                {
-                    if (dropIfExists) RemoveDatabase(connection, schemaName, kind);
 
-                    schema.Merge();
-                    writer.Create(schema);
-                    writer.Flush();
-
-                    using (IDbCommand command = connection.CreateCommand())
+                if (dropIfExists)
+                    using (var data = new MemoryStream())
+                    using (SqlWriter writer = factory.CreateInstance(kind, new StreamWriter(data)))
                     {
+                        connection.ChangeDatabase(original);
+                        RemoveDatabase(connection, schemaName, kind);
+                        using (command = connection.CreateCommand())
+                        {
+                            writer.Create(schemaName);
+                            writer.Flush();
+                            command.CommandText = Encoding.UTF8.GetString(data.ToArray());
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                using (var data = new MemoryStream())
+                using (SqlWriter writer = factory.CreateInstance(kind, data))
+                {
+                    connection.ChangeDatabase(schemaName);
+                    using (command = connection.CreateCommand())
+                    {
+                        schema.Merge();
+                        writer.Create(schema);
+                        writer.Flush();
                         command.CommandText = Encoding.UTF8.GetString(data.ToArray());
                         command.ExecuteNonQuery();
                     }

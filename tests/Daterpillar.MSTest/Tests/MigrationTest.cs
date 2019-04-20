@@ -15,11 +15,10 @@ namespace Acklann.Daterpillar.Tests
     {
         public TestContext TestContext { get; set; }
 
-        [TestCategory("now")]
-        
         [DataTestMethod]
+        [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
-        //[DataRow(Language.SQLite)]
+        [DataRow(Language.SQLite)]
         public void Can_create_new_database_on_server(Language kind)
         {
             string databaseName = TestContext.TestName;
@@ -173,27 +172,26 @@ namespace Acklann.Daterpillar.Tests
         [TestMethod]
         public void Can_get_the_sql_enum_from_the_connection_type(Type connectionType, Language excepectedValue)
         {
-            MigratorExtensions.GetLanguage(connectionType).ShouldBe(excepectedValue);
+            IDbConnectionExtensions.GetLanguage(connectionType).ShouldBe(excepectedValue);
         }
 
         // ==================== ENUMERATOR ==================== //
 
-        [TestCategory("now")]
         [DataTestMethod]
         [DataRow(0, "")]
         [DataRow(1, "a")]
         [DataRow(2, "a b")]
+        [DataRow(9, "a b")]
         [DataRow(3, "b a c d")]
         [DataRow(4, "b a d c")]
         [DataRow(5, "b c a d")]
         [DataRow(6, "a c b d")]
         [DataRow(7, "d a c b")]
         [DataRow(8, "a d c b")]
-        [DataRow(9, "a b")]
         public void Can_enumerate_a_schema_by_its_dependencies(int caseNo, string exceptedValue)
         {
             var sut = GetEnumeratorCase(caseNo);
-            var results = string.Join(" ", sut.Select(x => x.Name));
+            var results = string.Join(" ", sut.EnumerateTables().Select(x => x.Name));
             results.ShouldBe(exceptedValue);
         }
 

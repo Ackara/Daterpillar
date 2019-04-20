@@ -26,6 +26,10 @@ namespace Acklann.Daterpillar.Writers
 
         // ==================== CREATE ==================== //
 
+        public override void Create(string databaseName)
+        {
+        }
+
         public override void Create(ForeignKey foreignKey)
         {
         }

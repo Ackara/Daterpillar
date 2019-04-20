@@ -29,6 +29,7 @@ namespace Acklann.Daterpillar.Writers
 
             TableCommentFormatString = string.Empty,
             CreateTableFormatString = "CREATE TABLE {0}",
+            CreateDatabaseFormatString = "CREATE DATABASE {0}",
 
             // *** Column *** //
             ColumnFormatString = "{0}{1}{2}{3}{4}",
@@ -75,9 +76,15 @@ namespace Acklann.Daterpillar.Writers
 
         // ==================== CREATE ==================== //
 
+        public virtual void Create(string databaseName)
+        {
+            Writer.WriteLine(CreateDatabaseFormatString, Resolver.Escape(databaseName));
+        }
+
         public virtual void Create(Schema schema)
         {
-            foreach (Table table in schema)
+            AppendVaribales(schema);
+            foreach (Table table in schema.EnumerateTables())
                 Create(table);
 
             foreach (Script script in schema.Scripts)
@@ -310,7 +317,37 @@ namespace Acklann.Daterpillar.Writers
             Writer.WriteLine();
         }
 
-        // ==================== PROTECTED ==================== //
+        // ==================== HELPERS ==================== //
+
+        internal void AppendVaribales(Schema schema)
+        {
+            foreach (Table table in schema.Tables)
+            {
+                AppendVariables(table);
+            }
+
+            if (string.IsNullOrEmpty(schema.Name) == false) Variables.Add("schema", schema.Name);
+        }
+
+        internal void AppendVariables(Table table)
+        {
+            if (string.IsNullOrEmpty(table.Id)) return;
+
+            if (Variables.Contains(table.Id))
+                throw new System.Data.DuplicateNameException(string.Format(BadKeyExceptionFormatString, table.Name, table.Id, "table"));
+            else
+                Variables.Add(table.Id, table.Name);
+
+            foreach (Column column in table.Columns)
+            {
+                if (string.IsNullOrEmpty(column.Id)) continue;
+
+                if (Variables.Contains(column.Id))
+                    throw new System.Data.DuplicateNameException(string.Format(BadKeyExceptionFormatString, $"'{table.Name}'.'{column.Name}'", column.Id, "column"));
+                else
+                    Variables.Add(column.Id, column.Name);
+            }
+        }
 
         protected string Expand(string format, params object[] args)
         {
@@ -343,6 +380,7 @@ namespace Acklann.Daterpillar.Writers
 
         #region Private Members
 
+        private const string BadKeyExceptionFormatString = "Your {0} {2} SUID ({1}) is not unique.";
         private int _indentation = 0;
 
         internal void WriteHeaderIf(string text, bool condition = true)

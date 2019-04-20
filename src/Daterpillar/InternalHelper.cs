@@ -4,20 +4,19 @@ using System.Collections;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace Acklann.Daterpillar
 {
-    public static class Helper
+    internal static class InternalHelper
     {
-        public static string Escape(this string text) => text?.Replace("'", @"\'");
+        internal static string Escape(this string text) => text?.Replace("'", @"\'");
 
         /// <summary>
         /// Determines whether the specified list is empty.
         /// </summary>
         /// <param name="list">The list.</param>
         /// <returns><c>true</c> if the specified list is empty; otherwise, <c>false</c>.</returns>
-        public static bool IsEmpty(this ICollection list)
+        internal static bool IsEmpty(this ICollection list)
         {
             return list.Count == 0;
         }
@@ -27,107 +26,14 @@ namespace Acklann.Daterpillar
         /// </summary>
         /// <param name="list">The list.</param>
         /// <returns><c>true</c> if the specified list is not empty; otherwise, <c>false</c>.</returns>
-        public static bool IsNotEmpty(this ICollection list)
+        internal static bool IsNotEmpty(this ICollection list)
         {
             return list?.Count > 0;
         }
 
-        /// <summary>
-        /// Converts the specified string to pascal case.
-        /// </summary>
-        /// <param name="text">The string to convert to pascal case.</param>
-        /// <returns>The specified string converted to pascal case.</returns>
-        public static string ToPascal(this string text)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToUpperInvariant();
-            else
-            {
-                var pascal = new StringBuilder();
-                ReadOnlySpan<char> span = text.AsSpan();
-
-                for (int i = 0; i < span.Length; i++)
-                {
-                    if (span[i] == ' ' || span[i] == '_')
-                        continue;
-                    else if (i == 0)
-                        pascal.Append(char.ToUpperInvariant(span[i]));
-                    else if (span[i - 1] == ' ' || span[i - 1] == '_')
-                        pascal.Append(char.ToUpperInvariant(span[i]));
-                    else
-                        pascal.Append(span[i]);
-                }
-
-                return pascal.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Converts the specified string to camel case.
-        /// </summary>
-        /// <param name="text">The string to convert to camel case.</param>
-        /// <returns>The specified string converted to camel case.</returns>
-        public static string ToCamel(this string text)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToUpperInvariant();
-            else
-            {
-                var camel = new StringBuilder();
-                ReadOnlySpan<char> span = text.AsSpan();
-
-                for (int i = 0; i < span.Length; i++)
-                {
-                    if (span[i] == ' ' || span[i] == '_')
-                        continue;
-                    else if (i == 0)
-                        camel.Append(char.ToLowerInvariant(span[i]));
-                    else if (span[i - 1] == ' ' || span[i - 1] == '_')
-                        camel.Append(char.ToUpperInvariant(span[i]));
-                    else
-                        camel.Append(span[i]);
-                }
-
-                return camel.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Converts the specified string to camel case.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>The specified string converted to snake case.</returns>
-        public static string ToSnake(this string text)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-            else if (text.Length == 1) return text.ToUpperInvariant();
-            else
-            {
-                var span = text.AsSpan();
-                var snake = new StringBuilder();
-
-                for (int i = 0; i < span.Length; i++)
-                {
-                    if (span[i] == ' ')
-                        snake.Append('_');
-                    else if (char.IsUpper(span[i]) && i > 0 && (span[i - 1] != ' ' && span[i - 1] != '_'))
-                    {
-                        snake.Append('_');
-                        snake.Append(char.ToLowerInvariant(span[i]));
-                    }
-                    else
-                        snake.Append(char.ToLowerInvariant(span[i]));
-                }
-
-                return snake.ToString();
-            }
-        }
-
-        // ==================== INTERNAL MEMBERS ==================== //
-
         internal static string WithSpace(this string text) => string.IsNullOrEmpty(text) ? string.Empty : $" {text.Trim()}";
 
-        internal static void CreateDirectory(string filePath)
+        internal static void EnsureDirectoryExists(string filePath)
         {
             if (string.IsNullOrEmpty(filePath)) throw new ArgumentNullException(nameof(filePath));
 

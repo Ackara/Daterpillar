@@ -1,6 +1,5 @@
 ﻿using Acklann.GlobN;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,9 +14,9 @@ namespace Acklann.Daterpillar.Configuration
     /// <summary>
     /// A database schema.
     /// </summary>
+    [System.Diagnostics.DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "()}")]
     [XmlRoot("schema", Namespace = XMLNS)]
-    [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay()}")]
-    public class Schema : IEnumerable<Table>, ICloneable
+    public partial class Schema : ICloneable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
@@ -190,6 +189,10 @@ namespace Acklann.Daterpillar.Configuration
             return false;
         }
 
+        /// <summary>
+        /// Enumerate all <see cref="ForeignKey"/> for this instance.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ForeignKey> GetForeignKeys()
         {
             foreach (Table table in Tables)
@@ -362,18 +365,6 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        #region IEnumerable
-
-        public IEnumerator<Table> GetEnumerator()
-        {
-            if (_enumerator == null) _enumerator = new SchemaEnumerator(this);
-            return _enumerator;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion IEnumerable
-        
         #region ICloneable
 
         /// <summary>
@@ -413,8 +404,6 @@ namespace Acklann.Daterpillar.Configuration
         {
             new XmlQualifiedName(string.Empty, XMLNS)
         });
-
-        private SchemaEnumerator _enumerator;
 
         internal Table FindMatch(Table right)
         {
@@ -469,6 +458,5 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         #endregion Private Members
-
     }
 }

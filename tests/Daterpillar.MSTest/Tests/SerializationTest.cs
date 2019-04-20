@@ -2,19 +2,21 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
+using System.Xml.Schema;
 using Schema = Acklann.Daterpillar.Configuration.Schema;
 
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
-    //[Reporter(typeof(FileReporter))]
     public class SerializationTest
     {
         [TestMethod]
         public void Can_deserialize_a_schema_xml_file()
         {
+            void print(XmlSeverityType s, XmlSchemaException ex) => System.Console.WriteLine($"[{s}] {ex.Message}");
+
             // Arrange + Act
-            var result1 = Schema.TryLoad(Sample.GetMusicXML().FullName, out Schema schema1);
+            var result1 = Schema.TryLoad(Sample.GetMusicXML().FullName, out Schema schema1, print);
             var result2 = Schema.TryLoad(Sample.GetBad_SchemaXML().FullName, out Schema schema2);
 
             // Assert
