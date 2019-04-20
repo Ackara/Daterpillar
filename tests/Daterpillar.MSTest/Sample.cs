@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Acklann.Daterpillar
 {
-	internal static partial class TestData
+	internal static partial class Sample
 	{
-		public const string FOLDER_NAME = "test-data";
+		public const string FOLDER_NAME = "sample-data";
 
 		public static string DirectoryName => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FOLDER_NAME);
 

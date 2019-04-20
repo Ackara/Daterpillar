@@ -1,5 +1,6 @@
 ﻿using Acklann.GlobN;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Acklann.Daterpillar.Configuration
     /// </summary>
     [XmlRoot("schema", Namespace = XMLNS)]
     [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay()}")]
-    public class Schema : ICloneable
+    public class Schema : IEnumerable<Table>, ICloneable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
@@ -361,6 +362,18 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
+        #region IEnumerable
+
+        public IEnumerator<Table> GetEnumerator()
+        {
+            if (_enumerator == null) _enumerator = new SchemaEnumerator(this);
+            return _enumerator;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        #endregion IEnumerable
+        
         #region ICloneable
 
         /// <summary>
@@ -400,6 +413,8 @@ namespace Acklann.Daterpillar.Configuration
         {
             new XmlQualifiedName(string.Empty, XMLNS)
         });
+
+        private SchemaEnumerator _enumerator;
 
         internal Table FindMatch(Table right)
         {
@@ -454,5 +469,6 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         #endregion Private Members
+
     }
 }

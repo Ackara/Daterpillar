@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="test-data\daterpillar.xsd">
+    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="sample-data\daterpillar.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -45,45 +45,45 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="test-data\bad_schema.xml">
+    <None Update="sample-data\bad_schema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\flyway-output.txt">
+    <None Update="sample-data\flyway-output.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\init.sql">
+    <None Update="sample-data\init.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\music-data.xml">
+    <None Update="sample-data\music-data.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\music-revisions.xml">
+    <None Update="sample-data\music-revisions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\music.xml">
+    <None Update="sample-data\music.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="connections.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\no-ns.xml">
+    <None Update="sample-data\no-ns.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\sakila-business.xml">
+    <None Update="sample-data\sakila-business.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\sakila-customer.xml">
+    <None Update="sample-data\sakila-customer.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\sakila-inventory.xml">
+    <None Update="sample-data\sakila-inventory.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="test-data\sakila-views.xml">
+    <None Update="sample-data\sakila-views.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData.tt">
+    <None Update="Sample.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TestData.cs</LastGenOutput>
+      <LastGenOutput>Sample.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -92,10 +92,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="TestData.cs">
+    <Compile Update="Sample.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>TestData.tt</DependentUpon>
+      <DependentUpon>Sample.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

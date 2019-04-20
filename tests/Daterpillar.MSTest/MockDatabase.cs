@@ -8,14 +8,6 @@ using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
 {
-    public struct ObjectName
-    {
-        public const string
-            ServiceFK = "service_Zombie_fk_TO_placeholder_Id__fk",
-            SubscribersIndex = "service__Subscribers_index"
-            ;
-    }
-
     public static class MockDatabase
     {
         public static IDbConnection CreateConnection(Language kind = Language.SQLite, [CallerMemberName]string name = null)
@@ -242,6 +234,14 @@ namespace Acklann.Daterpillar
                     ";
                     command.ExecuteNonQuery();
                 }
+        }
+
+        private struct ObjectName
+        {
+            public const string
+                ServiceFK = "service_Zombie_fk_TO_placeholder_Id__fk",
+                SubscribersIndex = "service__Subscribers_index"
+                ;
         }
     }
 }

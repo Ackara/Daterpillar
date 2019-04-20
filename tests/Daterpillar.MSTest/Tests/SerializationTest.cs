@@ -14,8 +14,8 @@ namespace Acklann.Daterpillar.Tests
         public void Can_deserialize_a_schema_xml_file()
         {
             // Arrange + Act
-            var result1 = Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema1);
-            var result2 = Schema.TryLoad(TestData.GetBad_SchemaXML().FullName, out Schema schema2);
+            var result1 = Schema.TryLoad(Sample.GetMusicXML().FullName, out Schema schema1);
+            var result2 = Schema.TryLoad(Sample.GetBad_SchemaXML().FullName, out Schema schema2);
 
             // Assert
             result1.ShouldBeTrue();
@@ -32,7 +32,7 @@ namespace Acklann.Daterpillar.Tests
             var resultFile = Path.Combine(Path.GetTempPath(), $"{nameof(Daterpillar)}-test.xml");
 
             // Act
-            if (Schema.TryLoad(TestData.GetMusicXML().FullName, out Schema schema, out string errorMsg))
+            if (Schema.TryLoad(Sample.GetMusicXML().FullName, out Schema schema, out string errorMsg))
             {
                 schema.Save(resultFile);
                 xml = File.ReadAllText(resultFile);
@@ -47,7 +47,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_validate_a_schema_for_errors()
         {
             // Arrange
-            var sample = TestData.GetBad_SchemaXML();
+            var sample = Sample.GetBad_SchemaXML();
             bool isValid, returedLineNo = false, returnedColumnNo = false;
 
             // Act
@@ -70,7 +70,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_merge_multiple_schemas()
         {
             // Arrange
-            var sut = Schema.Load(TestData.GetMusicXML().FullName);
+            var sut = Schema.Load(Sample.GetMusicXML().FullName);
 
             // Act
             sut.Merge();

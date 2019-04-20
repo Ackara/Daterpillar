@@ -6,19 +6,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
     public class MigrationTest
     {
+        public TestContext TestContext { get; set; }
+
+        [TestCategory("now")]
+        
         [DataTestMethod]
-        [DataRow(Language.SQLite)]
+        [DataRow(Language.MySQL)]
+        //[DataRow(Language.SQLite)]
         public void Can_create_new_database_on_server(Language kind)
         {
-            // Arrange
-            var connection =  MockDatabase.CreateConnection(kind);
-            
+            string databaseName = TestContext.TestName;
+            var connection = MockDatabase.CreateConnection(kind);
+            connection.CreateDatabase(typeof(MigrationTest).Assembly, kind, databaseName, true);
         }
 
         [TestMethod]
@@ -40,7 +46,7 @@ namespace Acklann.Daterpillar.Tests
         {
             // Arrange
             var totalTablesBeforeMerge = 0;
-            var inputFile = TestData.GetSakilaInventoryXML().FullName;
+            var inputFile = Sample.GetSakilaInventoryXML().FullName;
 
             var city = new Table("city",
                 new Column("Population", new DataType(SchemaType.INT)), /* add */
@@ -103,8 +109,8 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
             // Case 1: First migration; left (snapshot) is empty.
-            TestData.GetMusicXML().CopyTo(activeFile);
-            TestData.GetMusicDataXML().CopyTo(Path.Combine(baseDir, TestData.File.MusicDataXML));
+            Sample.GetMusicXML().CopyTo(activeFile);
+            Sample.GetMusicDataXML().CopyTo(Path.Combine(baseDir, Sample.File.MusicDataXML));
 
             var oldSchema = new Schema();
             if (Schema.TryLoad(activeFile, out Schema newSchema, out string errorMsg) == false)
@@ -122,7 +128,7 @@ namespace Acklann.Daterpillar.Tests
             var case2 = sut.GenerateMigrationScript(syntax, oldSchema, newSchema, outFile).Length;
 
             // Case 3: Migrations exists.
-            if (Schema.TryLoad(TestData.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
+            if (Schema.TryLoad(Sample.GetMusicRevisionsXML().FullName, out Schema revisions, out errorMsg) == false)
                 Assert.Fail(errorMsg);
 
             revisions.Save(activeFile);
@@ -158,6 +164,98 @@ namespace Acklann.Daterpillar.Tests
             case1.ShouldBeGreaterThan(0, "The 1st migration failed.");
             case2.ShouldBe(0, "The 2nd migration failed.");
             case3.ShouldBeGreaterThan(0, "The 3rd migration failed.");
+        }
+
+        [DataTestMethod]
+        [DataRow(typeof(System.Data.SqlClient.SqlConnection), Language.TSQL)]
+        [DataRow(typeof(System.Data.SQLite.SQLiteConnection), Language.SQLite)]
+        [DataRow(typeof(MySql.Data.MySqlClient.MySqlConnection), Language.MySQL)]
+        [TestMethod]
+        public void Can_get_the_sql_enum_from_the_connection_type(Type connectionType, Language excepectedValue)
+        {
+            MigratorExtensions.GetLanguage(connectionType).ShouldBe(excepectedValue);
+        }
+
+        // ==================== ENUMERATOR ==================== //
+
+        [TestCategory("now")]
+        [DataTestMethod]
+        [DataRow(0, "")]
+        [DataRow(1, "a")]
+        [DataRow(2, "a b")]
+        [DataRow(3, "b a c d")]
+        [DataRow(4, "b a d c")]
+        [DataRow(5, "b c a d")]
+        [DataRow(6, "a c b d")]
+        [DataRow(7, "d a c b")]
+        [DataRow(8, "a d c b")]
+        [DataRow(9, "a b")]
+        public void Can_enumerate_a_schema_by_its_dependencies(int caseNo, string exceptedValue)
+        {
+            var sut = GetEnumeratorCase(caseNo);
+            var results = string.Join(" ", sut.Select(x => x.Name));
+            results.ShouldBe(exceptedValue);
+        }
+
+        private static Schema GetEnumeratorCase(int index)
+        {
+            var a = new Table("a"); var b = new Table("b");
+            var c = new Table("c"); var d = new Table("d");
+            var e = new Table("e"); var f = new Table("f");
+            var s = new Schema();
+
+            switch (index)
+            {
+                case 0: return s;
+
+                case 1:
+                    s.Add(a);
+                    return s;
+
+                case 2:
+                    s.Add(a, b);
+                    return s;
+
+                case 3:
+                    s.Add(a, b, c, d);
+                    join(a, b);
+                    return s;
+
+                case 4:
+                    s.Add(a, b, c, d);
+                    join(a, b); join(c, d);
+                    return s;
+
+                case 5:
+                    s.Add(a, b, c, d);
+                    join(a, b); join(a, c);
+                    return s;
+
+                case 6:
+                    s.Add(a, b, c, d);
+                    join(b, c); join(c, a);
+                    return s;
+
+                case 7:
+                    s.Add(a, b, c, d);
+                    join(a, d); join(b, c); join(c, a);
+                    return s;
+
+                case 8:
+                    s.Add(a, b, c, d);
+                    join(b, c); join(c, d);
+                    join(b, a); join(c, a); join(d, a);
+                    return s;
+
+                case 9:
+                    s.Add(a, b);
+                    join(a, b); join(b, a);
+                    return s;
+            }
+
+            throw new IndexOutOfRangeException();
+
+            void join(Table x, Table y) => x.Add(new ForeignKey("", y.Name, ""));
         }
     }
 }

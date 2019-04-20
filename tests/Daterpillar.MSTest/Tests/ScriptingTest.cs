@@ -14,6 +14,32 @@ namespace Acklann.Daterpillar.Tests
     [TestCategory("sql")]
     public class ScriptingTest
     {
+        public static Schema CreateInstance()
+        {
+            var schema = new Schema();
+            schema.Add(
+                new Table("zombie"),
+
+                new Table("placeholder",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR, nullable: true)
+                ),
+
+                new Table("service",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR),
+                    new Column("Subscribers", SchemaType.INT),
+                    new Column("Zombie", SchemaType.VARCHAR),
+                    new Column("Zombie_fk", SchemaType.INT),
+
+                    new ForeignKey("Zombie_fk", "placeholder", "Id"),
+                    new Index(IndexType.Index, new ColumnName("Subscribers"))
+                )
+                );
+
+            return schema;
+        }
+
         [DataTestMethod]
         [DataRow("", "''")]
         [DataRow(22, "'22'")]
@@ -29,12 +55,6 @@ namespace Acklann.Daterpillar.Tests
                 input = dt;
 
             SqlComposer.Serialize(input).ShouldBe(expectedValue);
-        }
-
-        [TestMethod]
-        public void MyTestMethod()
-        {
-            throw new System.NotImplementedException();
         }
 
         // ==================== SCHEMA BUILDING ==================== //
@@ -94,7 +114,7 @@ namespace Acklann.Daterpillar.Tests
             #endregion Construct Schema
 
             // Act
-            TestData.CreateDirectory(scriptFile);
+            Sample.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
             var factory = new SqlWriterFactory();
@@ -139,7 +159,7 @@ namespace Acklann.Daterpillar.Tests
             var service = schema.Tables[2];
 
             // Act
-            TestData.CreateDirectory(scriptFile);
+            Sample.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
             using (var file = File.OpenWrite(scriptFile))
@@ -178,7 +198,7 @@ namespace Acklann.Daterpillar.Tests
             var oldTable = service.Clone();
 
             // Act
-            TestData.CreateDirectory(scriptFile);
+            Sample.CreateDirectory(scriptFile);
             if (File.Exists(scriptFile)) File.Delete(scriptFile);
 
             using (var file = File.OpenWrite(scriptFile))
@@ -218,32 +238,6 @@ namespace Acklann.Daterpillar.Tests
                 var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
                 results = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, results, nl);
             }
-        }
-
-        public static Schema CreateInstance()
-        {
-            var schema = new Schema();
-            schema.Add(
-                new Table("zombie"),
-
-                new Table("placeholder",
-                    new Column("Id", SchemaType.INT, autoIncrement: true),
-                    new Column("Name", SchemaType.VARCHAR, nullable: true)
-                ),
-
-                new Table("service",
-                    new Column("Id", SchemaType.INT, autoIncrement: true),
-                    new Column("Name", SchemaType.VARCHAR),
-                    new Column("Subscribers", SchemaType.INT),
-                    new Column("Zombie", SchemaType.VARCHAR),
-                    new Column("Zombie_fk", SchemaType.INT),
-
-                    new ForeignKey("Zombie_fk", "placeholder", "Id"),
-                    new Index(IndexType.Index, new ColumnName("Subscribers"))
-                )
-                );
-
-            return schema;
         }
     }
 }

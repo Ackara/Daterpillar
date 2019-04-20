@@ -77,7 +77,7 @@ namespace Acklann.Daterpillar.Writers
 
         public virtual void Create(Schema schema)
         {
-            foreach (Table table in schema.Tables)
+            foreach (Table table in schema)
                 Create(table);
 
             foreach (Script script in schema.Scripts)
@@ -221,6 +221,11 @@ namespace Acklann.Daterpillar.Writers
         }
 
         // ==================== DROP ==================== //
+
+        public virtual void Drop(string databaseName)
+        {
+            Writer.WriteLine($"DROP DATABASE IF EXISTS {Resolver.Escape(databaseName)};");
+        }
 
         public virtual void Drop(Table table)
         {

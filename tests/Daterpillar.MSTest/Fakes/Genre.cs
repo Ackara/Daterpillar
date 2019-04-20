@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar.Fakes
 
         Country,
 
-        [EnumValue("Rock n' Roll")]
+        [EnumValue("Rock n Roll")]
         Rock
     }
 }
