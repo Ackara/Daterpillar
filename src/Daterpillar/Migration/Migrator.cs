@@ -125,13 +125,13 @@ namespace Acklann.Daterpillar.Migration
             /// (3) Alter all objects that exist on both sides.
 
             bool noMatchFound;
-            LinkedList<ISqlObject> oldItems, newItems;
-            LinkedListNode<ISqlObject> oldI = null, newI = null;
+            LinkedList<ISchemaObject> oldItems, newItems;
+            LinkedListNode<ISchemaObject> oldI = null, newI = null;
 
             // *** COLUMNS *** //
 
-            oldItems = new LinkedList<ISqlObject>(left.Columns);
-            newItems = new LinkedList<ISqlObject>(right.Columns);
+            oldItems = new LinkedList<ISchemaObject>(left.Columns);
+            newItems = new LinkedList<ISchemaObject>(right.Columns);
             caputure(_columnComparer, () =>
             {
                 discrepancy.Add(SqlAction.Alter, oldI.Value, newI.Value);
@@ -139,14 +139,14 @@ namespace Acklann.Daterpillar.Migration
 
             // *** FOREIGN KEY *** //
 
-            oldItems = new LinkedList<ISqlObject>(left.ForeignKeys);
-            newItems = new LinkedList<ISqlObject>(right.ForeignKeys);
+            oldItems = new LinkedList<ISchemaObject>(left.ForeignKeys);
+            newItems = new LinkedList<ISchemaObject>(right.ForeignKeys);
             caputure(_foreignKeyComparer, contraintHandler);
 
             // *** INDEX *** //
 
-            oldItems = new LinkedList<ISqlObject>(left.Indecies);
-            newItems = new LinkedList<ISqlObject>(right.Indecies);
+            oldItems = new LinkedList<ISchemaObject>(left.Indecies);
+            newItems = new LinkedList<ISchemaObject>(right.Indecies);
             caputure(_indexComparer, contraintHandler);
 
             // *** //
@@ -185,7 +185,7 @@ namespace Acklann.Daterpillar.Migration
                 }
 
                 /// 2: Create new objects
-                foreach (ISqlObject item in newItems)
+                foreach (ISchemaObject item in newItems)
                     discrepancy.Add(SqlAction.Create, left, item);
             }
 

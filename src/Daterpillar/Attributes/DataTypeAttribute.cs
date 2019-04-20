@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar
         public DataTypeAttribute(SchemaType type, int scale = 0, int precision = 0)
         {
             Precision = precision;
-            TypeName = Configuration.DataType.ConvertToString(type);
+            TypeName = Translators.TranslatorBase.ConvertToString(type);
             Scale = scale;
         }
 

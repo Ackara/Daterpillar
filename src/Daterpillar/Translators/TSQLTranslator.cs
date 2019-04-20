@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
-    /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MSSQL data type.
+    /// Provides methods for converting SQL name/type to it TSQL equivalent.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
+    /// <seealso cref="Acklann.Daterpillar.Translators.TranslatorBase" />
     public class TSQLTranslator : TranslatorBase
     {
         /// <summary>
@@ -21,24 +21,36 @@ namespace Acklann.Daterpillar.Translators
             TypeMap[TIMESTAMP] = "DATETIME";
         }
 
+        /// <summary>
+        /// Escapes the specified object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>
+        /// The escaped name.
+        /// </returns>
         public override string Escape(string objectName)
         {
             return $"[{objectName}]";
         }
 
+        /// <summary>
+        /// Replaces the name of each placeholder variable embedded in the specified string with the string equivalent of the value of the variable, then returns the resulting string.
+        /// </summary>
+        /// <param name="name">A string containing the names of zero or more environment variables.</param>
+        /// <returns></returns>
         public override string ExpandVariables(string name)
         {
             if (string.IsNullOrEmpty(name)) return string.Empty;
-            else return Regex.Replace(name, Placeholder.NOW, "GETDATE()");
+            else return Regex.Replace(name, PlaceholderPattern.NOW, "GETDATE()");
         }
 
         /// <summary>
-        /// Maps the specified <see cref="T:Ackara.Daterpillar.DataType" /> to a MSSQL data type.
+        /// Converts the <see cref="Acklann.Daterpillar.Configuration.DataType" /> value to its equivalent TSQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
-        /// <returns>The MSSQL type name.</returns>
-        /// <exception cref="System.ArgumentException">dataType</exception>
-        public override string GetTypeName(DataType dataType)
+        /// <returns>The <see cref="DataType"/> as a string.</returns>
+        /// <exception cref="ArgumentException">Could not map <paramref name="dataType"/></exception>
+        public override string ConvertToString(DataType dataType)
         {
             int scale, precision;
             string type = dataType.Name, name = "", temp;
@@ -74,12 +86,17 @@ namespace Acklann.Daterpillar.Translators
             return name.ToUpper();
         }
 
-        public override string GetActionName(ReferentialAction action)
+        /// <summary>
+        /// Converts the <see cref="Acklann.Daterpillar.ReferentialAction" /> value to its equivalent TSQL representation.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>The <see cref="ReferentialAction"/> as a string.</returns>
+        public override string ConvertToString(ReferentialAction action)
         {
             switch (action)
             {
                 default:
-                    return base.GetActionName(action);
+                    return base.ConvertToString(action);
 
                 case ReferentialAction.Restrict:
                     return "NO ACTION";

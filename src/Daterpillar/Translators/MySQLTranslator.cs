@@ -4,29 +4,39 @@ using System.Text.RegularExpressions;
 namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
-    /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a MySQL data type.
+    /// Provides methods for converting SQL name/type to it MySQL equivalent.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
+    /// <seealso cref="Acklann.Daterpillar.Translators.TranslatorBase" />
     public class MySQLTranslator : TranslatorBase
     {
-        public MySQLTranslator()
-        {
-        }
-
+        /// <summary>
+        /// Escapes the specified object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>
+        /// The escaped name.
+        /// </returns>
         public override string Escape(string objectName) => $"`{objectName}`";
 
+        /// <summary>
+        /// Replaces the name of each placeholder variable embedded in the specified string with the string equivalent of the value of the variable, then returns the resulting string.
+        /// </summary>
+        /// <param name="name">A string containing the names of zero or more environment variables.</param>
+        /// <returns></returns>
         public override string ExpandVariables(string name)
         {
             if (string.IsNullOrEmpty(name)) return string.Empty;
-            else return Regex.Replace(name, Placeholder.NOW, "CURRENT_TIMESTAMP");
+            else return Regex.Replace(name, PlaceholderPattern.NOW, "CURRENT_TIMESTAMP");
         }
 
         /// <summary>
-        /// Maps the specified <see cref="T:Ackara.Daterpillar.DataType" /> to a MySQL data type.
+        /// Converts the <see cref="DataType" /> value to its equivalent MySQL equivalent.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
-        /// <returns>The MySQL type name.</returns>
-        public override string GetTypeName(DataType dataType)
+        /// <returns>
+        /// The type name.
+        /// </returns>
+        public override string ConvertToString(DataType dataType)
         {
             int scale, precision;
             string typeName = dataType.Name;

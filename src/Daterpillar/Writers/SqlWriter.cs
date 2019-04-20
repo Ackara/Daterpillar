@@ -110,7 +110,7 @@ namespace Acklann.Daterpillar.Writers
                 Writer.Write(IndentChars);
                 Writer.Write(Expand(ColumnFormatString,
                     /* 0 */Resolver.Escape(column.Name),
-                    /* 1 */Resolver.GetTypeName(column.DataType).WithSpace(),
+                    /* 1 */Resolver.ConvertToString(column.DataType).WithSpace(),
                     /* 2 */(column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     /* 3 */(column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
@@ -156,8 +156,8 @@ namespace Acklann.Daterpillar.Writers
                     Resolver.Escape(fk.LocalColumn),
                     Resolver.Escape(fk.ForeignTable),
                     Resolver.Escape(fk.ForeignColumn),
-                    Resolver.GetActionName(fk.OnUpdate),
-                    Resolver.GetActionName(fk.OnDelete)
+                    Resolver.ConvertToString(fk.OnUpdate),
+                    Resolver.ConvertToString(fk.OnDelete)
                     ));
             }
 
@@ -178,7 +178,7 @@ namespace Acklann.Daterpillar.Writers
             Writer.Write(Expand(CreateColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
-                    Resolver.GetTypeName(column.DataType).WithSpace(),
+                    Resolver.ConvertToString(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)).WithSpace(),
@@ -196,8 +196,8 @@ namespace Acklann.Daterpillar.Writers
                 /* 2 */Resolver.Escape(foreignKey.LocalColumn),
                 /* 3 */Resolver.Escape(foreignKey.ForeignTable),
                 /* 4 */Resolver.Escape(foreignKey.ForeignColumn),
-                /* 5 */Resolver.GetActionName(foreignKey.OnUpdate),
-                /* 6 */Resolver.GetActionName(foreignKey.OnDelete)
+                /* 5 */Resolver.ConvertToString(foreignKey.OnUpdate),
+                /* 6 */Resolver.ConvertToString(foreignKey.OnDelete)
                 ));
             Writer.WriteLine(";");
             Writer.WriteLine();
@@ -281,7 +281,7 @@ namespace Acklann.Daterpillar.Writers
             Writer.Write(Expand(AlterColumnFormatString,
                     Resolver.Escape(column.Table.Name),
                     Resolver.Escape(column.Name),
-                    Resolver.GetTypeName(column.DataType).WithSpace(),
+                    Resolver.ConvertToString(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
                     (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),

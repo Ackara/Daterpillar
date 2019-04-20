@@ -33,7 +33,7 @@ namespace Acklann.Daterpillar.Writers
                 /* 0 */Resolver.Escape(oldColumn.Table.Name),
                 /* 1 */Resolver.Escape(oldColumn.Name),
                 /* 2 */Resolver.Escape(newColumnName),
-                /* 3 */Resolver.GetTypeName(oldColumn.DataType).WithSpace(),
+                /* 3 */Resolver.ConvertToString(oldColumn.DataType).WithSpace(),
                 /* 4 */(oldColumn.IsNullable ? string.Empty : NotNull).WithSpace(),
                 /* 5 */(oldColumn.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
                 /* 6 */(oldColumn.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(oldColumn.DefaultValue))).WithSpace(),

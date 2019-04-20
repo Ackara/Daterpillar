@@ -67,7 +67,7 @@ namespace Acklann.Daterpillar
                 x.Syntax == y.Syntax;
         }
 
-        internal static bool IsIdentical(this ISqlObject x, ISqlObject y)
+        internal static bool IsIdentical(this ISchemaObject x, ISchemaObject y)
         {
             if (x is Table)
                 return IsIdentical((Table)x, (Table)y);

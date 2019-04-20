@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
-    /// Provides a method that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to to a SQLite data type.
+    /// Provides methods for converting SQL name/type to it SQLite equivalent.
     /// </summary>
     /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
     public class SQLiteTranslator : TranslatorBase
@@ -22,22 +22,34 @@ namespace Acklann.Daterpillar.Translators
             TypeMap[TIMESTAMP] = "TEXT";
         }
 
+        /// <summary>
+        /// Escapes the specified object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>
+        /// The escaped name.
+        /// </returns>
         public override string Escape(string objectName)
         {
             return $"[{objectName}]";
         }
 
+        /// <summary>
+        /// Replaces the name of each placeholder variable embedded in the specified string with the string equivalent of the value of the variable, then returns the resulting string.
+        /// </summary>
+        /// <param name="name">A string containing the names of zero or more environment variables.</param>
+        /// <returns></returns>
         public override string ExpandVariables(string name)
         {
-            return Regex.Replace(name, Placeholder.NOW, "''");
+            return Regex.Replace(name, PlaceholderPattern.NOW, "''");
         }
 
         /// <summary>
-        /// Maps the specified <see cref="T:Ackara.Daterpillar.DataType" /> to a SQLite data type.
+        /// Converts the <see cref="DataType" /> value to its equivalent SQLite equivalent.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
-        /// <returns>The SQLite type name.</returns>
-        public override string GetTypeName(DataType dataType)
+        /// <returns>A SQLite data type.</returns>
+        public override string ConvertToString(DataType dataType)
         {
             int s, p;
             string name = "";

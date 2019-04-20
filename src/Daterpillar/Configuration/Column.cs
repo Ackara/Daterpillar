@@ -9,7 +9,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Table"/> column.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public class Column : ISqlObject
+    public class Column : ISchemaObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Column"/> class.
@@ -104,7 +104,7 @@ namespace Acklann.Daterpillar.Configuration
         [XmlIgnore]
         public int OrdinalPosition { get; set; }
 
-        string ISqlObject.GetName() => Name;
+        string ISchemaObject.GetName() => Name;
 
         internal void Overwrite(Column right)
         {

@@ -137,6 +137,8 @@ namespace Acklann.Daterpillar.Migration
             return CreateDatabase(connection, schema, kind, dropIfExists);
         }
 
+        // ==================== SQLITE ==================== //
+
         private static IDbConnection CreateSQLiteDatabase(IDbConnection connection, Schema schema, bool dropIfExists)
         {
             if (dropIfExists) RemoveSQLiteDatabase(connection);

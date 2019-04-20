@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="precision">The precision.</param>
         public DataType(SchemaType name, int scale = 0, int precision = 0)
         {
-            Name = ConvertToString(name);
+            Name = Translators.TranslatorBase.ConvertToString(name);
             Precision = precision;
             Scale = scale;
         }
@@ -58,67 +58,31 @@ namespace Acklann.Daterpillar.Configuration
         public int Precision { get; set; }
 
         /// <summary>
-        /// Converts the specified <see cref="SchemaType" /> value to its equivalent string representation.
+        /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        public static string ConvertToString(SchemaType type)
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
         {
-            switch (type)
-            {
-                default:
-                    return null;
-
-                case SchemaType.BOOL:
-                    return "bool";
-
-                case SchemaType.BLOB:
-                    return "blob";
-
-                case SchemaType.CHAR:
-                    return "char";
-
-                case SchemaType.TEXT:
-                    return "text";
-
-                case SchemaType.VARCHAR:
-                    return "varchar";
-
-                case SchemaType.INT:
-                    return "int";
-
-                case SchemaType.BIGINT:
-                    return "bigInt";
-
-                case SchemaType.MEDIUMINT:
-                    return "mediumInt";
-
-                case SchemaType.SMALLINT:
-                    return "smallInt";
-
-                case SchemaType.TINYINT:
-                    return "tinyInt";
-
-                case SchemaType.FLOAT:
-                    return "float";
-
-                case SchemaType.DOUBLE:
-                    return "double";
-
-                case SchemaType.DECIMAL:
-                    return "decimal";
-
-                case SchemaType.DATE:
-                    return "date";
-
-                case SchemaType.TIME:
-                    return "time";
-
-                case SchemaType.DATETIME:
-                    return "dateTime";
-
-                case SchemaType.TIMESTAMP:
-                    return "timeStamp";
-            }
+            return $"{Name}({Scale}, {Precision})";
         }
+
+        #region IEquatable
+
+        /// <summary>
+        /// Implements the == operator.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(DataType left, DataType right) => left.Equals(right);
+
+        /// <summary>
+        /// Implements the != operator.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(DataType left, DataType right) => !left.Equals(right);
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
@@ -152,33 +116,6 @@ namespace Acklann.Daterpillar.Configuration
             return Name.GetHashCode() ^ Precision.GetHashCode() ^ Scale.GetHashCode();
         }
 
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-        public override string ToString()
-        {
-            return $"{Name}({Scale}, {Precision})";
-        }
-
-        #region Operators
-
-        /// <summary>
-        /// Implements the == operator.
-        /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator ==(DataType left, DataType right) => left.Equals(right);
-
-        /// <summary>
-        /// Implements the != operator.
-        /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator !=(DataType left, DataType right) => !left.Equals(right);
-
-        #endregion Operators
+        #endregion IEquatable
     }
 }

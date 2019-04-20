@@ -92,7 +92,7 @@ namespace Acklann.Daterpillar.Translators
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <returns>The type name.</returns>
-        public override string GetTypeName(DataType dataType)
+        public override string ConvertToString(DataType dataType)
         {
             return TypeMap[dataType.Name.ToLowerInvariant()];
         }

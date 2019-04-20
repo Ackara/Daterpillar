@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Acklann.Daterpillar.Translators
 {
     /// <summary>
-    /// Defines a method that maps a https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd TypeName to another language's type name.
+    /// Provides methods for translating SQL name/type to another SQL dialect.
     /// </summary>
-    /// <seealso cref="ITranslator" />
+    /// <seealso cref="Acklann.Daterpillar.Translators.ITranslator" />
     public abstract partial class TranslatorBase : ITranslator
     {
         #region Keys
@@ -96,6 +96,74 @@ namespace Acklann.Daterpillar.Translators
         /// </summary>
         protected IDictionary<string, string> TypeMap { get; set; }
 
+        /// <summary>
+        /// Converts the specified <see cref="SchemaType" /> value to its equivalent string representation.
+        /// </summary>
+        public static string ConvertToString(SchemaType type)
+        {
+            switch (type)
+            {
+                default:
+                    return null;
+
+                case SchemaType.BOOL:
+                    return BOOL;
+
+                case SchemaType.BLOB:
+                    return BLOB;
+
+                case SchemaType.CHAR:
+                    return CHAR;
+
+                case SchemaType.TEXT:
+                    return TEXT;
+
+                case SchemaType.VARCHAR:
+                    return VARCHAR;
+
+                case SchemaType.INT:
+                    return INT;
+
+                case SchemaType.BIGINT:
+                    return BIGINT;
+
+                case SchemaType.MEDIUMINT:
+                    return MEDIUMINT;
+
+                case SchemaType.SMALLINT:
+                    return SMALLINT;
+
+                case SchemaType.TINYINT:
+                    return TINYINT;
+
+                case SchemaType.FLOAT:
+                    return FLOAT;
+
+                case SchemaType.DOUBLE:
+                    return DOUBLE;
+
+                case SchemaType.DECIMAL:
+                    return DECIMAL;
+
+                case SchemaType.DATE:
+                    return DATE;
+
+                case SchemaType.TIME:
+                    return TIME;
+
+                case SchemaType.DATETIME:
+                    return DATETIME;
+
+                case SchemaType.TIMESTAMP:
+                    return TIMESTAMP;
+            }
+        }
+
+        /// <summary>
+        /// Replaces the name of each placeholder variable embedded in the specified string with the string equivalent of the value of the variable, then returns the resulting string.
+        /// </summary>
+        /// <param name="name">A string containing the names of zero or more environment variables.</param>
+        /// <returns></returns>
         public virtual string ExpandVariables(string name) => name;
 
         /// <summary>
@@ -105,7 +173,12 @@ namespace Acklann.Daterpillar.Translators
         /// <returns>The escaped name.</returns>
 		public virtual string Escape(string objectName) => objectName;
 
-        public virtual string GetActionName(ReferentialAction action)
+        /// <summary>
+        /// Converts the <see cref="ReferentialAction" /> value to its equivalent SQL representation.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public virtual string ConvertToString(ReferentialAction action)
         {
             switch (action)
             {
@@ -128,13 +201,15 @@ namespace Acklann.Daterpillar.Translators
         }
 
         /// <summary>
-        /// Maps the specified <see cref="DataType"/>.
+        /// Converts the <see cref="DataType" /> value to its equivalent SQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
-        /// <returns>The type name.</returns>
-        public abstract string GetTypeName(DataType dataType);
+        /// <returns>
+        /// The type name.
+        /// </returns>
+        public abstract string ConvertToString(DataType dataType);
 
-        internal struct Placeholder
+        internal struct PlaceholderPattern
         {
             public const string NOW = @"(?i)\$\(now\)";
         }

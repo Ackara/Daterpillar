@@ -9,7 +9,7 @@ namespace Acklann.Daterpillar.Configuration
     /// Represents a <see cref="Schema"/> table.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{Name}")]
-    public sealed class Table : ISqlObject
+    public sealed class Table : ISchemaObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="sqlObjects">The SQL objects.</param>
-        public Table(string name, params ISqlObject[] sqlObjects)
+        public Table(string name, params ISchemaObject[] sqlObjects)
         {
             Name = name;
             Columns = new List<Column>();
@@ -138,7 +138,7 @@ namespace Acklann.Daterpillar.Configuration
             }
         }
 
-        string ISqlObject.GetName() => Name;
+        string ISchemaObject.GetName() => Name;
 
         public override string ToString()
         {
