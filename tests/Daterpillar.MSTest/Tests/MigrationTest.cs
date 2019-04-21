@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Migration;
+using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,7 +24,7 @@ namespace Acklann.Daterpillar.Tests
         {
             string databaseName = TestContext.TestName;
             var connection = MockDatabase.CreateConnection(kind);
-            connection.CreateDatabase(typeof(MigrationTest).Assembly, kind, databaseName, true);
+            connection.CreateDatabase(typeof(MigrationTest).Assembly, databaseName, kind, true);
         }
 
         [TestMethod]

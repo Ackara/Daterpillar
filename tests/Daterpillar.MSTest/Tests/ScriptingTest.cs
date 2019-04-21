@@ -2,11 +2,13 @@
 using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
+using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -14,30 +16,65 @@ namespace Acklann.Daterpillar.Tests
     [TestCategory("sql")]
     public class ScriptingTest
     {
-        public static Schema CreateInstance()
+        public TestContext TestContext { get; set; }
+
+        [DataTestMethod]
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
+        public void Can_generate_script_to_insert_data(Language kind)
         {
-            var schema = new Schema();
-            schema.Add(
-                new Table("zombie"),
+            // Arrange
+            var script = new StringBuilder();
+            var tableName = "foo";
+            var createStatement = $"create table {tableName}(id int, name varchar(64), age int);";
+            var columns = new string[] { "id", "name", "age" };
+            var values1 = new object[] { 1, "sally", 12 };
+            var values2 = new object[] { 2, "peggy", 21 };
+            var values3 = new object[] { 3, "don", 40 };
 
-                new Table("placeholder",
-                    new Column("Id", SchemaType.INT, autoIncrement: true),
-                    new Column("Name", SchemaType.VARCHAR, nullable: true)
-                ),
+            var sample1 = A.Fake<ISqlObject>();
+            A.CallTo(() => sample1.TableName).Returns(tableName);
+            A.CallTo(() => sample1.GetColumnList()).Returns(columns);
 
-                new Table("service",
-                    new Column("Id", SchemaType.INT, autoIncrement: true),
-                    new Column("Name", SchemaType.VARCHAR),
-                    new Column("Subscribers", SchemaType.INT),
-                    new Column("Zombie", SchemaType.VARCHAR),
-                    new Column("Zombie_fk", SchemaType.INT),
+            var sample2 = A.Fake<ISqlObject>();
+            A.CallTo(() => sample2.TableName).Returns(tableName);
+            A.CallTo(() => sample2.GetColumnList()).Returns(columns);
 
-                    new ForeignKey("Zombie_fk", "placeholder", "Id"),
-                    new Index(IndexType.Index, new ColumnName("Subscribers"))
-                )
-                );
+            // Act
+            var case1 = SqlComposer.GenerateInsertStatements();
 
-            return schema;
+            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 1, "'sally'", 12 });
+            var case2 = SqlComposer.GenerateInsertStatements(sample1);
+
+            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 2, "'mark'", 21 });
+            A.CallTo(() => sample2.GetValueList()).Returns(new object[] { 3, "'mary'", 25 });
+            var case3 = SqlComposer.GenerateInsertStatements(sample1, sample2);
+
+            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 4, "'jim'", 40 });
+            A.CallTo(() => sample2.GetValueList()).Returns(new object[] { 5, "'sal'", 50 });
+            var case4 = SqlComposer.GenerateJoinedInsertStatements(sample1, sample2);
+
+            using (var connection = MockDatabase.CreateConnection(kind))
+            {
+                System.Diagnostics.Debug.WriteLine($"connection: {connection.ConnectionString}");
+                connection.TryExecute($"drop table {tableName};", out string errorMsg);
+                bool failed = !connection.TryExecute(createStatement, out errorMsg);
+                if (failed) Assert.Fail($"Failed to create {tableName} table.\n\n{errorMsg}");
+
+                var separator = string.Concat(Enumerable.Repeat('=', 50));
+                foreach (var item in (case2.Concat(case3).Append(case4)))
+                {
+                    connection.TryExecute(item, out errorMsg);
+                    script.Append(errorMsg)
+                          .AppendLine(item)
+                          .AppendLine();
+                }
+            }
+
+            // Assert
+            case1.ShouldBeEmpty();
+            Diff.Approve(script, ".sql", kind);
         }
 
         [DataTestMethod]
@@ -63,7 +100,7 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
         [DataRow(Language.SQLite)]
-        public void Can_generate_scripts_to_create_sql_objects(Language syntax)
+        public void Can_generate_script_to_create_a_database_schema(Language syntax)
         {
             // Arrange
 
@@ -149,13 +186,13 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
         [DataRow(Language.SQLite)]
-        public void Can_generate_scripts_to_drop_sql_objects(Language syntax)
+        public void Can_generate_script_to_drop_a_database_schema(Language syntax)
         {
             // Arrange
             var factory = new SqlWriterFactory();
             var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-drop.sql");
 
-            var schema = CreateInstance();
+            var schema = CreateSchemaInstance();
             var service = schema.Tables[2];
 
             // Act
@@ -187,11 +224,11 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
         [DataRow(Language.SQLite)]
-        public void Can_generate_scripts_to_alter_sql_objects(Language syntax)
+        public void Can_generate_script_to_modify_a_database_schema(Language syntax)
         {
             // Arrange
             var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-alter.sql");
-            var schema = CreateInstance();
+            var schema = CreateSchemaInstance();
             var factory = new SqlWriterFactory();
 
             var service = schema.Tables[2];
@@ -238,6 +275,32 @@ namespace Acklann.Daterpillar.Tests
                 var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
                 results = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, results, nl);
             }
+        }
+
+        private static Schema CreateSchemaInstance()
+        {
+            var schema = new Schema();
+            schema.Add(
+                new Table("zombie"),
+
+                new Table("placeholder",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR, nullable: true)
+                ),
+
+                new Table("service",
+                    new Column("Id", SchemaType.INT, autoIncrement: true),
+                    new Column("Name", SchemaType.VARCHAR),
+                    new Column("Subscribers", SchemaType.INT),
+                    new Column("Zombie", SchemaType.VARCHAR),
+                    new Column("Zombie_fk", SchemaType.INT),
+
+                    new ForeignKey("Zombie_fk", "placeholder", "Id"),
+                    new Index(IndexType.Index, new ColumnName("Subscribers"))
+                )
+                );
+
+            return schema;
         }
     }
 }

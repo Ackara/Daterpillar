@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Configuration;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 
@@ -7,49 +6,44 @@ namespace Acklann.Daterpillar.Linq
 {
     public static class SqlComposer
     {
-        public static string GenerateInsertStatement(params ISqlObject[] entities)
+        public static string[] GenerateInsertStatements(params ISqlObject[] entities)
         {
+            if (entities == null || entities.Length == 0) return new string[0];
+
+            ISqlObject entity;
+            var statements = new string[entities.Length];
+            for (int i = 0; i < entities.Length; i++)
+            {
+                entity = entities[i];
+                statements[i] = $"INSERT INTO {entity.TableName}({string.Join(",", entity.GetColumnList())})VALUES({string.Join(",", entity.GetValueList())});";
+            }
+            return statements;
+        }
+
+        public static string GenerateJoinedInsertStatements(params ISqlObject[] entities)
+        {
+            if (entities == null || entities.Length == 0) return string.Empty;
+
             ISqlObject e;
             var builder = new StringBuilder();
+            string comma = ","; int n = entities.Length;
 
-            if (entities == null || entities.Length == 0) return string.Empty;
-            else if (entities.Length == 1)
+            for (int i = 0; i < n; i++)
             {
-                e = entities[0];
-                builder.Append($"INSERT INTO {e.TableName} ({JoinColumns(e.GetColumnList())}) VALUES ({JoinValues(e.GetValueList())});");
-            }
-            else
-            {
-                string comma = ","; int n = entities.Length;
-                builder.Append($"INSERT INTO ");
-                for (int i = 0; i < entities.Length; i++)
+                e = entities[i];
+                if (i == 0)
                 {
-                    e = entities[i];
-
-                    if (i == 0)
-                    {
-                        builder.AppendLine(e.TableName);
-                        builder.AppendLine($"({JoinColumns(e.GetColumnList())})");
-                        builder.AppendLine("VALUES");
-                    }
-
-                    if (n == (n - 1)) comma = string.Empty;
-                    builder.AppendLine($"({JoinValues(e.GetValueList())}){comma}");
+                    builder.Append($"INSERT INTO ");
+                    builder.AppendLine(e.TableName)
+                           .AppendLine($"({string.Join(", ", e.GetColumnList())})")
+                           .AppendLine("VALUES");
                 }
-                builder.Append(';');
+
+                if (i == (n - 1)) comma = string.Empty;
+                builder.AppendLine($"({string.Join(", ", e.GetValueList())}){comma}");
             }
-
+            builder.Append(';');
             return builder.ToString();
-        }
-
-        public static string JoinColumns(params string[] columns)
-        {
-            return string.Join(", ", columns.Select(x => x));
-        }
-
-        public static string JoinValues(params object[] values)
-        {
-            return string.Join(", ", values.Select(x => x));
         }
 
         public static string Serialize(this object value)
@@ -94,6 +88,16 @@ namespace Acklann.Daterpillar.Linq
                 case Language.MySQL:
                     return $"`{sqlName}`";
             }
+        }
+
+        public static string JoinColumns(params string[] columns)
+        {
+            return string.Join(", ", columns.Select(x => Escape(x)));
+        }
+
+        public static string JoinValues(params object[] values)
+        {
+            return string.Join(", ", values.Select(x => Serialize(x)));
         }
     }
 }

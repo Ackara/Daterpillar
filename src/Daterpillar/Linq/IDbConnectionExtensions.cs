@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Linq
 {
     public static class IDbConnectionExtensions
     {
@@ -33,6 +33,30 @@ namespace Acklann.Daterpillar.Migration
             if (connection == null) throw new ArgumentNullException(nameof(connection));
             if (connection.State != ConnectionState.Open) connection.Open();
             return connection;
+        }
+
+        // ==================== INSERT DATA ==================== //
+
+        public static bool Insert(this IDbConnection connection, params ISqlObject[] entities)
+        {
+            Open(connection);
+            using (IDbTransaction transaction = connection.BeginTransaction())
+                try
+                {
+                    using (IDbCommand command = connection.CreateCommand())
+                    {
+                        command.Transaction = transaction;
+                        foreach (string sql in SqlComposer.GenerateInsertStatements(entities))
+                        {
+                            command.CommandText = sql;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit();
+                    return true;
+                }
+                catch { transaction.Rollback(); }
+            return false;
         }
 
         // ==================== DROP DATABASE ==================== //
@@ -123,16 +147,16 @@ namespace Acklann.Daterpillar.Migration
             return connection;
         }
 
-        public static IDbConnection CreateDatabase(this IDbConnection connection, Assembly assembly, Language kind, string schemaName, bool dropIfExists = false)
+        public static IDbConnection CreateDatabase(this IDbConnection connection, Assembly assembly, string name, Language kind, bool dropIfExists = false)
         {
-            var schema = SchemaFactory.CreateFrom(assembly);
-            schema.Name = schemaName;
+            var schema = Migration.SchemaFactory.CreateFrom(assembly);
+            schema.Name = name;
             return CreateDatabase(connection, schema, kind, dropIfExists);
         }
 
         public static IDbConnection CreateDatabase(this IDbConnection connection, string assemblyPath, string name, Language kind, bool dropIfExists = false)
         {
-            var schema = SchemaFactory.CreateFrom(assemblyPath);
+            var schema = Migration.SchemaFactory.CreateFrom(assemblyPath);
             schema.Name = name;
             return CreateDatabase(connection, schema, kind, dropIfExists);
         }

@@ -62,7 +62,8 @@ namespace Acklann.Daterpillar
                     }
 
                 string tempFolder = Path.Combine(baseDirectory, "dtp-temp");
-                if (!Directory.Exists(tempFolder)) Directory.CreateDirectory(tempFolder);
+                if (Directory.Exists(tempFolder)) Directory.Delete(tempFolder, true);
+                Directory.CreateDirectory(tempFolder);
 
                 using (Stream stream = File.OpenRead(packagePath))
                 using (IReader reader = ReaderFactory.Open(stream))
