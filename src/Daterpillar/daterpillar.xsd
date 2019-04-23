@@ -28,7 +28,7 @@
   </xs:complexType>
   <xs:complexType name="Table">
     <xs:annotation>
-      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.Table.Schema table.</xs:documentation>
+      <xs:documentation>Indicates that a class or enum represents a SQL table. This class cannot be inherited.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="xs:string" />
@@ -83,7 +83,7 @@
   </xs:complexType>
   <xs:complexType name="DataType">
     <xs:annotation>
-      <xs:documentation>Represents a SQL data type.</xs:documentation>
+      <xs:documentation>Represents a column's data-type. This class cannot be inherited.</xs:documentation>
     </xs:annotation>
     <xs:simpleContent>
       <xs:extension base="xs:string">
@@ -94,7 +94,7 @@
   </xs:complexType>
   <xs:complexType name="ForeignKey">
     <xs:annotation>
-      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.ForeignKey.Table foreign key.</xs:documentation>
+      <xs:documentation>Indicates that a public field or property represents a SQL foreign key constraint. This class cannot be inherited.</xs:documentation>
     </xs:annotation>
     <xs:attribute name="localColumn" type="xs:string">
       <xs:annotation>
@@ -133,7 +133,7 @@
   </xs:simpleType>
   <xs:complexType name="Index">
     <xs:annotation>
-      <xs:documentation>Represents a F:Acklann.Daterpillar.Configuration.Index.Table index.</xs:documentation>
+      <xs:documentation>Indicates that a public field or property represents a SQL index. This class cannot be inherited.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="columnName" type="tns:ColumnName" />

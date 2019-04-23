@@ -30,6 +30,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 	var map = new Dictionary<string, (MemberInfo, string)>();
 	foreach (var (type, table) in EnumerateEntities(entryPoint))
 	{
+		map.Clear();
 		WriteLine($"partial class {type.Name} : IEntity");
 		WriteLine("{");
 		PushIndent("\t");

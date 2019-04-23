@@ -71,7 +71,7 @@
   <!-- Add T4 Template -->
   <Target Name="AddT4TemplateAfterBuild" AfterTargets="PostBuildEvent">
     <CallTarget Targets="AddT4Template"
-                Condition="$(ShouldAddT4TemplateAfterBuild)=='true' AND Exits('$(MSBuildProjectDirectory)\$(DaterpillarT4TemplateDestination)')" />
+                Condition="$(ShouldAddT4TemplateAfterBuild)=='true' AND !Exists('$(MSBuildProjectDirectory)\$(DaterpillarT4TemplateDestination)')" />
   </Target>
 
   <Target Name="AddT4Template">
