@@ -48,7 +48,7 @@ namespace Acklann.Daterpillar.Cmdlets
             {
                 Schema schema = SchemaFactory.CreateFrom(AssemblyFile);
                 string outputFile = Path.ChangeExtension(AssemblyFile, ".schema.xml");
-                PSHelper.CreateDirectory(outputFile);
+                PSHelper.EnsureDirectoryExists(outputFile);
                 schema.Merge();
 
                 using (var stream = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.Read))

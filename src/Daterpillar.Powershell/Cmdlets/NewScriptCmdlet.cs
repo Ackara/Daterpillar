@@ -1,7 +1,10 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Attributes;
+using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Migration;
 using System.IO;
 using System.Management.Automation;
+using System.Reflection;
+using System.Text;
 
 namespace Acklann.Daterpillar.Cmdlets
 {
@@ -92,25 +95,44 @@ namespace Acklann.Daterpillar.Cmdlets
             if (!Path.HasExtension(outputFile))
                 outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{description}.{Language.ToString().ToLowerInvariant()}.sql");
 
-            if (ShouldProcess(oldSchema.ResolveName()?? newSchema.ResolveName()))
+            if (ShouldProcess(oldSchema.ResolveName() ?? newSchema.ResolveName()))
             {
-                PSHelper.CreateDirectory(outputFile);
-                var changes = (new Migrator()).GenerateMigrationScript(Language, oldSchema, newSchema, outputFile, OmitDropStatements.IsPresent);
+                PSHelper.EnsureDirectoryExists(outputFile);
+                Discrepancy[] changes = (new Migrator()).GenerateMigrationScript(Language, oldSchema, newSchema, outputFile, OmitDropStatements.IsPresent);
 
+                var builer = new StringBuilder();
                 if (changes.Length > 0)
                 {
-                    foreach (var item in changes)
+                    foreach (Discrepancy item in changes)
+                    {
                         WriteVerbose($" * {item.Action} {item.Value} {item.Value.GetType().Name}".ToLowerInvariant());
+                        AppendDiscrepancy(builer, item);
+                    }
                 }
                 else WriteVerbose("no changes detected.");
 
                 WriteObject(new
                 {
+                    Warning = builer.ToString(),
                     Script = new FileInfo(outputFile),
                     OldSchema = new FileInfo(OldSchemaFilePath),
                     NewSchema = new FileInfo(NewSchemaFilePath)
                 });
             }
+        }
+
+        private static void AppendDiscrepancy(StringBuilder builder, Discrepancy discrepancy)
+        {
+            bool accept(Discrepancy d) => d.Action != SqlAction.Create && (d.OldValue.GetType().IsDefined(typeof(TableAttribute)) || d.OldValue.GetType().IsDefined(typeof(ColumnAttribute)));
+
+            if (accept(discrepancy))
+                builder.AppendLine($"The '{discrepancy.OldValue.GetName()}' table was {discrepancy.Action}.");
+
+            foreach (var item in discrepancy.Children)
+                if (accept(item))
+                {
+                    builder.AppendLine($"\t[{item.OldValue.GetName()}].[{item.OldValue.GetName()}] column was {item.Action}.");
+                }
         }
     }
 }

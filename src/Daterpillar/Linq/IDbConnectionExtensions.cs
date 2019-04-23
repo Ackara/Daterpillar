@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar.Linq
 
         // ==================== INSERT DATA ==================== //
 
-        public static bool Insert(this IDbConnection connection, params ISqlObject[] entities)
+        public static bool Insert(this IDbConnection connection, params IEntity[] entities)
         {
             Open(connection);
             using (IDbTransaction transaction = connection.BeginTransaction())

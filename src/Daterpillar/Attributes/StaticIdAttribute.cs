@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Attributes
 {
     [AttributeUsage((AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
     public class StaticIdAttribute : Attribute

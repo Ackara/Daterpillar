@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar
 {
     internal static class PSHelper
     {
-        public static void CreateDirectory(string filePath)
+        public static void EnsureDirectoryExists(string filePath)
         {
             string folder = Path.GetDirectoryName(filePath);
             if (Directory.Exists(folder) == false) Directory.CreateDirectory(folder);

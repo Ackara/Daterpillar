@@ -1,0 +1,150 @@
+<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="NetStandard" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.IO" #>
+<#@ assembly name="nuget" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Acklann.Daterpillar.Migration" #>
+<#@ import namespace="Acklann.Daterpillar.Attributes" #>
+<#@ import namespace="Acklann.Daterpillar.Configuration" #>
+<#@ output extension=".cs" #>
+using System;
+using Acklann.Daterpillar.Linq;
+
+namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
+{
+	<#
+	Assembly entryPoint = null;
+	if (entryPoint == null)
+	{
+		Warning("The T4 template won't generate any objects until supply a valid assembly.");
+		return string.Empty;
+	}
+
+	PushIndent("\t");
+	var map = new Dictionary<string, (MemberInfo, string)>();
+	foreach (var (type, table) in EnumerateEntities(entryPoint))
+	{
+		WriteLine($"partial class {type.Name} : IEntity");
+		WriteLine("{");
+		PushIndent("\t");
+		
+		WriteLine($"public const string TABLE = \"{table}\";");
+		foreach (var (member, columnName) in GetColumns(type))
+		{
+			WriteLine($"public const string {ToSnake(columnName).ToUpper()} = \"{columnName}\";");
+			map.Add(member.Name, (member, columnName));
+		}
+
+		WriteLine("");
+		WriteLine($"public string GetTableName() => \"{table}\";");
+		WriteGetColumnListImplementation(map);
+		WriteGetValueListImplementation(map);
+
+		PopIndent();
+		WriteLine("}");
+	}
+
+	PopIndent();
+	#>
+}
+<#+
+
+IEnumerable<(Type, string)> EnumerateEntities(System.Reflection.Assembly assembly)
+{
+	return  from t in assembly.ExportedTypes
+			where t.IsDefined(typeof(TableAttribute)) && !t.IsInterface && !t.IsAbstract
+			let attr = t.GetCustomAttribute<TableAttribute>()
+			select (t, (string.IsNullOrEmpty(attr.Name)? t.Name : attr.Name));
+}
+
+IEnumerable<(MemberInfo, string)> GetColumns(Type type)
+{
+	return  from m in type.GetMembers()
+			where !m.IsDefined(typeof(SqlIgnoreAttribute))
+				  &&
+				  m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field
+			let attr = m.GetCustomAttribute<ColumnAttribute>()
+			select (m, (string.IsNullOrEmpty(attr?.Name)? m.Name : attr?.Name));
+}
+
+void WriteGetColumnListImplementation(IDictionary<string, (MemberInfo, string ColumnName)> map)
+{
+	var list = string.Join(", ", map.Values.Select(x => $"\"{x.ColumnName}\""));
+
+	WriteLine("");
+	WriteLine($"public string[] GetColumnList() => ColumnList;");
+	WriteLine($"internal static readonly string[] ColumnList = new string[{map.Count}] {{ {list} }};");
+}
+
+void WriteGetValueListImplementation(IDictionary<string, (MemberInfo Member, string)> map)
+{
+	WriteLine("");
+	WriteLine($"public object[] GetValueList()");
+	WriteLine("{");
+	PushIndent("\t");
+
+	string method = "esc";
+	WriteLine($"object {method}(object v) => (v == null? \"null\" : $\"'{{v}}'\");");
+
+	var values = string.Join(", ", map.Values.Select(x=> Serialize(x.Member, method)));
+	WriteLine($"return new object[] {{ {values} }};");
+
+	PopIndent();
+	WriteLine("}");
+}
+
+string Serialize(MemberInfo info, string func)
+{
+	Type type = null; string name = info.Name;
+	if (info is PropertyInfo prop) type = prop.PropertyType;
+	else if(info is FieldInfo field) type = field.FieldType;
+	
+	if (type == typeof(string))
+		return string.Format("{0}({1}?.Replace(\"'\", @\"\\'\"))", func, name);
+	else if (type == typeof(bool))
+		return $"({name}? \"1\" : \"0\")";
+	else if (type == typeof(DateTime))
+		return $"{func}({info.Name}.ToString(\"yyyy-MM-dd HH:mm:ss\"))";
+	else if (type == typeof(TimeSpan))
+		return string.Format("{0}({1}.ToString(@\"hh\\:mm\\:ss\"))", func, name);
+	else if (type == typeof(string))
+		return $"{name}";
+	else if (type.IsEnum)
+		return $"((int){name})";
+	else if (type.IsArray)
+		return $"{func}(string.Join(\",\", {name}))";
+	else return $"{name}";
+}
+
+string ToSnake(string text)
+{
+    if (string.IsNullOrEmpty(text)) return text;
+    else if (text.Length == 1) return text.ToUpperInvariant();
+    else
+    {
+        var snake = new StringBuilder();
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == ' ')
+                snake.Append('_');
+            else if (char.IsUpper(text[i]) && i > 0 && (text[i - 1] != ' ' && text[i - 1] != '_' && !char.IsUpper(text[i - 1])))
+            {
+                snake.Append('_');
+                snake.Append(char.ToLowerInvariant(text[i]));
+            }
+            else
+                snake.Append(char.ToLowerInvariant(text[i]));
+        }
+
+        return snake.ToString();
+    }
+}
+
+#>

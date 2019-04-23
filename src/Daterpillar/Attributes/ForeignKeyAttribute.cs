@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Attributes
 {
     /// <summary>
     /// Indicates that a public field or property represents a SQL foreign key constraint. This class cannot be inherited.

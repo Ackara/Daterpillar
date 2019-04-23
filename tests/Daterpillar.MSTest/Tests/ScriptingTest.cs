@@ -33,12 +33,12 @@ namespace Acklann.Daterpillar.Tests
             var values2 = new object[] { 2, "peggy", 21 };
             var values3 = new object[] { 3, "don", 40 };
 
-            var sample1 = A.Fake<ISqlObject>();
-            A.CallTo(() => sample1.TableName).Returns(tableName);
+            var sample1 = A.Fake<IEntity>();
+            A.CallTo(() => sample1.GetTableName()).Returns(tableName);
             A.CallTo(() => sample1.GetColumnList()).Returns(columns);
 
-            var sample2 = A.Fake<ISqlObject>();
-            A.CallTo(() => sample2.TableName).Returns(tableName);
+            var sample2 = A.Fake<IEntity>();
+            A.CallTo(() => sample2.GetTableName()).Returns(tableName);
             A.CallTo(() => sample2.GetColumnList()).Returns(columns);
 
             // Act

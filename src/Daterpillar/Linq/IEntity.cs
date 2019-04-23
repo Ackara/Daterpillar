@@ -1,8 +1,8 @@
 namespace Acklann.Daterpillar.Linq
 {
-    public interface ISqlObject
+    public interface IEntity
     {
-        string TableName { get; }
+        string GetTableName();
 
         string[] GetColumnList();
 

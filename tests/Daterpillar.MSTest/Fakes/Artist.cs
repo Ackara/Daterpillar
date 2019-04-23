@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Acklann.Daterpillar.Attributes;
+using System;
 
 namespace Acklann.Daterpillar.Fakes
 {

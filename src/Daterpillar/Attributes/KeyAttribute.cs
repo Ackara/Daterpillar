@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Attributes
 {
     /// <summary>
     /// Indicates a column is a key. This class cannot be inherited.

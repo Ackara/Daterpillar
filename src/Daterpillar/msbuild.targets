@@ -4,15 +4,19 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <ShouldAddT4TemplateAfterBuild Condition="$(ShouldAddT4TemplateAfterBuild)==''">false</ShouldAddT4TemplateAfterBuild>
+    <ShouldEnsureXmlSchemaExistsBeforeBuild Condition="$(ShouldEnsureXmlSchemaExistsBeforeBuild)==''">false</ShouldEnsureXmlSchemaExistsBeforeBuild>
     <ShouldExportDaterpillarSchemaAfterBuild Condition="$(ShouldExportDaterpillarSchemaAfterBuild)==''">true</ShouldExportDaterpillarSchemaAfterBuild>
-    <ShouldGenerateDaterpillarMigrationScriptAfterBuild Condition="$(ShouldGenerateDaterpillarMigrationScriptAfterBuild)==''">false</ShouldGenerateDaterpillarMigrationScriptAfterBuild>
     <ShouldOmitDropStatementsFromDaterpillarScripts Condition="$(ShouldOmitDropStatementsFromDaterpillarScripts)==''">false</ShouldOmitDropStatementsFromDaterpillarScripts>
+    <ShouldGenerateDaterpillarMigrationScriptAfterBuild Condition="$(ShouldGenerateDaterpillarMigrationScriptAfterBuild)==''">false</ShouldGenerateDaterpillarMigrationScriptAfterBuild>
 
-    <DaterpillarSqlLanguage Condition="$(DaterpillarSqlLanguage)==''">SQLite</DaterpillarSqlLanguage>
+    <DaterpillarSqlLanguages Condition="$(DaterpillarSqlLanguages)==''">SQLite</DaterpillarSqlLanguages>
     <DaterpillarMigrationsDirectory Condition="$(DaterpillarMigrationsDirectory)==''">migrations</DaterpillarMigrationsDirectory>
+    <DaterpillarT4TemplateDestination Condition="$(DaterpillarT4TemplateDestination)==''">Entities.tt</DaterpillarT4TemplateDestination>
     <DaterpillarSnapshotFilePath Condition="$(DaterpillarSnapshotFilePath)==''">$([System.IO.Path]::Combine($(DaterpillarMigrationsDirectory), 'snapshot.schema.xml'))</DaterpillarSnapshotFilePath>
 
     <DaterpillarTargetFramework>netstandard2.0</DaterpillarTargetFramework>
+    <DaterpillarT4Script>$(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\t4.ps1</DaterpillarT4Script>
     <DaterpillarExportScript>$(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\export.ps1</DaterpillarExportScript>
     <DaterpillarGenerateScript>$(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\generate.ps1</DaterpillarGenerateScript>
   </PropertyGroup>
@@ -55,12 +59,34 @@
            Text="Could not find the assembly-schema at '$([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml'))'" />
 
     <Exec Condition="Exists('$(DaterpillarGenerateScript)')"
-          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarGenerateScript) $([System.IO.Path]::GetFullPath($(DaterpillarSnapshotFilePath))) $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml')) $([System.IO.Path]::GetFullPath($(DaterpillarMigrationsDirectory))) $(DaterpillarSqlLanguage) $(ShouldOmitDropStatementsFromDaterpillarScripts)">
+          Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(DaterpillarGenerateScript) $([System.IO.Path]::GetFullPath($(DaterpillarSnapshotFilePath))) $([System.IO.Path]::ChangeExtension($(TargetPath), '.schema.xml')) $([System.IO.Path]::GetFullPath($(DaterpillarMigrationsDirectory))) $(DaterpillarSqlLanguages) $(ShouldOmitDropStatementsFromDaterpillarScripts)">
       <Output TaskParameter="ConsoleOutput" PropertyName="ExecReturnedObject" />
     </Exec>
 
-    <Message Condition="'$(ExecReturnedObject)'!=''"
-             Text="$(MSBuildProjectName) -> $(ExecReturnedObject)"
+    <Warning Condition="'$(ExecReturnedObject)'!=''"
+             Text="$(ExecReturnedObject)"
              Importance="high" />
+  </Target>
+
+  <!-- Add T4 Template -->
+  <Target Name="AddT4TemplateAfterBuild" AfterTargets="PostBuildEvent">
+    <CallTarget Targets="AddT4Template"
+                Condition="$(ShouldAddT4TemplateAfterBuild)=='true' AND Exits('$(MSBuildProjectDirectory)\$(DaterpillarT4TemplateDestination)')" />
+  </Target>
+
+  <Target Name="AddT4Template">
+    <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $([System.IO.Path]::GetFullPath($(DaterpillarT4Script))) &quot;$(MSBuildProjectDirectory)\$(DaterpillarT4TemplateDestination)&quot;" />
+  </Target>
+
+  <!-- Add Xml Schema -->
+  <Target Name="EnsureXmlSchemaExistsBeforeBuild" BeforeTargets="PreBuildEvent">
+    <CallTarget Targets="EnsureXmlSchemaExists"
+                Condition="$(ShouldEnsureXmlSchemaExistsBeforeBuild)=='true'" />
+  </Target>
+
+  <Target Name="EnsureXmlSchemaExists">
+    <Copy SourceFiles="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\tools\$(DaterpillarTargetFramework)\daterpillar.xsd))"
+          DestinationFolder="$(MSBuildProjectDirectory)"
+          SkipUnchangedFiles="true" />
   </Target>
 </Project>

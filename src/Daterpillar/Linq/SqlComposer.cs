@@ -6,25 +6,25 @@ namespace Acklann.Daterpillar.Linq
 {
     public static class SqlComposer
     {
-        public static string[] GenerateInsertStatements(params ISqlObject[] entities)
+        public static string[] GenerateInsertStatements(params IEntity[] entities)
         {
             if (entities == null || entities.Length == 0) return new string[0];
 
-            ISqlObject entity;
+            IEntity entity;
             var statements = new string[entities.Length];
             for (int i = 0; i < entities.Length; i++)
             {
                 entity = entities[i];
-                statements[i] = $"INSERT INTO {entity.TableName}({string.Join(",", entity.GetColumnList())})VALUES({string.Join(",", entity.GetValueList())});";
+                statements[i] = $"INSERT INTO {entity.GetTableName()}({string.Join(",", entity.GetColumnList())})VALUES({string.Join(",", entity.GetValueList())});";
             }
             return statements;
         }
 
-        public static string GenerateJoinedInsertStatements(params ISqlObject[] entities)
+        public static string GenerateJoinedInsertStatements(params IEntity[] entities)
         {
             if (entities == null || entities.Length == 0) return string.Empty;
 
-            ISqlObject e;
+            IEntity e;
             var builder = new StringBuilder();
             string comma = ","; int n = entities.Length;
 
@@ -34,7 +34,7 @@ namespace Acklann.Daterpillar.Linq
                 if (i == 0)
                 {
                     builder.Append($"INSERT INTO ");
-                    builder.AppendLine(e.TableName)
+                    builder.AppendLine(e.GetTableName())
                            .AppendLine($"({string.Join(", ", e.GetColumnList())})")
                            .AppendLine("VALUES");
                 }
@@ -44,6 +44,22 @@ namespace Acklann.Daterpillar.Linq
             }
             builder.Append(';');
             return builder.ToString();
+        }
+
+        public static string Escape(this string name, Language syntax = Language.SQL)
+        {
+            switch (syntax)
+            {
+                default:
+                    return name;
+
+                case Language.TSQL:
+                case Language.SQLite:
+                    return $"[{name}]";
+
+                case Language.MySQL:
+                    return $"`{name}`";
+            }
         }
 
         public static string Serialize(this object value)
@@ -71,22 +87,6 @@ namespace Acklann.Daterpillar.Linq
             else
             {
                 return $"'{value.ToString().Replace("'", "''")}'";
-            }
-        }
-
-        public static string Escape(this string sqlName, Language syntax = Language.SQL)
-        {
-            switch (syntax)
-            {
-                default:
-                    return sqlName;
-
-                case Language.TSQL:
-                case Language.SQLite:
-                    return $"[{sqlName}]";
-
-                case Language.MySQL:
-                    return $"`{sqlName}`";
             }
         }
 

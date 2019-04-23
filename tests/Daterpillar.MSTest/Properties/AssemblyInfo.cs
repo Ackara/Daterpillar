@@ -1,4 +1,5 @@
 ﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Attributes;
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
 

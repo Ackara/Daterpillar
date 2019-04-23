@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Attributes
 {
     [AttributeUsage((AttributeTargets.Assembly), AllowMultiple = true, Inherited = false)]
     public sealed class IncludeAttribute : Attribute
