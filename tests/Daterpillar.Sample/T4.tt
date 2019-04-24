@@ -66,12 +66,22 @@ IEnumerable<(Type, string)> EnumerateEntities(System.Reflection.Assembly assembl
 
 IEnumerable<(MemberInfo, string)> GetColumns(Type type)
 {
-	return  from m in type.GetMembers()
-			where !m.IsDefined(typeof(SqlIgnoreAttribute))
-				  &&
-				  m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field
-			let attr = m.GetCustomAttribute<ColumnAttribute>()
-			select (m, (string.IsNullOrEmpty(attr?.Name)? m.Name : attr?.Name));
+	var members =	from m in type.GetMembers()
+					where !m.IsDefined(typeof(SqlIgnoreAttribute))
+						  &&
+						  m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field
+					select m;
+
+	foreach (var m in members)
+	{
+		var attr = m.GetCustomAttribute<ColumnAttribute>();
+		if (m is FieldInfo field)
+		{
+			if (field.IsLiteral) continue;
+		}
+
+		yield return (m, (attr == null? m.Name : attr.Name));
+	}
 }
 
 void WriteGetColumnListImplementation(IDictionary<string, (MemberInfo, string ColumnName)> map)
