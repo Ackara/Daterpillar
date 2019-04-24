@@ -15,6 +15,7 @@
 <#@ output extension=".cs" #>
 using System;
 using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.Attributes;
 
 namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 {
@@ -35,10 +36,10 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 		WriteLine("{");
 		PushIndent("\t");
 		
-		WriteLine($"public const string TABLE = \"{table}\";");
+		WriteLine($"[SqlIgnore]public const string TABLE = \"{table}\";");
 		foreach (var (member, columnName) in GetColumns(type))
 		{
-			WriteLine($"public const string {ToSnake(columnName).ToUpper()} = \"{columnName}\";");
+			WriteLine($"[SqlIgnore]public const string {ToSnake(columnName).ToUpper()} = \"{columnName}\";");
 			map.Add(member.Name, (member, columnName));
 		}
 
