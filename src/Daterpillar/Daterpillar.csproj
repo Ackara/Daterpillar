@@ -6,8 +6,8 @@
     <AssemblyName>Daterpillar</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>8.0.1</PackageVersion>
-    <AssemblyVersion>8.0.1</AssemblyVersion>
+    <PackageVersion>8.0.2</PackageVersion>
+    <AssemblyVersion>8.0.2</AssemblyVersion>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
