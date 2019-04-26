@@ -1,3 +1,4 @@
+using Acklann.Daterpillar.Fakes;
 using Acklann.Mockaroo;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,25 @@ namespace Acklann.Daterpillar
     {
         public static IEnumerable<T> CreateInstances<T>(int take)
         {
-            const int max = 100;
+            const int max = 500;
             if (take > max) throw new ArgumentOutOfRangeException(nameof(take), $"{nameof(take)} cannot be greater than {max}.");
 
-            var path = Path.Combine(Path.GetTempPath(), nameof(Mockaroo), typeof(T).Name);
+            var path = Path.Combine(Path.GetTempPath(), nameof(Daterpillar));
             var repository = new MockarooRepository<T>(Config.MockarooKey, max, path);
+            EditSchema(repository);
             return repository.Take(take);
+        }
+
+        private static void EditSchema<T>(MockarooRepository<T> repository)
+        {
+            switch (repository.Schema)
+            {
+                case Schema<Contact> contact:
+                    contact.Replace(x => x.Name, DataType.UserName);
+                    contact.Replace(x => x.Email, DataType.EmailAddress);
+                    break;
+            }
+            repository.Save();
         }
     }
 }

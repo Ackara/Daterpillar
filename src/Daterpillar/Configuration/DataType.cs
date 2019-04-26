@@ -37,6 +37,17 @@ namespace Acklann.Daterpillar.Configuration
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DataType"/> struct.
+        /// </summary>
+        /// <param name="attribute">The attribute.</param>
+        internal DataType(Attributes.ColumnAttribute attribute)
+        {
+            Name = attribute?.TypeName;
+            Scale = attribute?.Scale ?? 0;
+            Precision = attribute?.Precision ?? 0;
+        }
+
+        /// <summary>
         /// Gets or sets the name of the SQL type.
         /// </summary>
         /// <value>The name.</value>

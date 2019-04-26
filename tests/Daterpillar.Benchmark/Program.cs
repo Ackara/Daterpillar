@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using System;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
@@ -24,11 +23,9 @@ namespace Acklann.Daterpillar
 
             var list = new Action[]
             {
-
             };
 
 #if DEBUG
-            
 
             var regex = new Regex(@"(?i)[^a-z]");
             var test = new Benchmarkable.Benchmark();
@@ -49,7 +46,5 @@ namespace Acklann.Daterpillar
                 .With(new TimelineExporter())
                 );
         }
-
-        //private class Foo { public int Id; public string Name; }
     }
 }

@@ -1,9 +1,13 @@
+using Acklann.Daterpillar.Linq;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
@@ -26,6 +30,32 @@ namespace Acklann.Daterpillar
                 case Language.MySQL:
                     return CreateMySQLConnection(connectionString);
             }
+        }
+
+        public static IDbConnection CreateDatabase<T>([CallerMemberName]string name = null)
+        {
+            var members = from m in typeof(T).GetMembers()
+                          where m.MemberType == MemberTypes.Property
+                          let prop = ((PropertyInfo)m)
+                          where prop.CanWrite
+                          select $"{prop.Name} {Translators.CSharpTranslator.GetDataType(prop.PropertyType).Name} NOT NULL";
+
+            var builder = new StringBuilder();
+            builder.AppendLine($"CREATE TABLE {typeof(T).Name}");
+            builder.AppendLine("(");
+            builder.AppendJoin(", ", members);
+            builder.AppendLine(");");
+
+            IDbConnection connection = CreateConnection(Language.SQLite, name);
+            RebuildSchema(connection, name, false);
+            if (connection.State != ConnectionState.Open) connection.Open();
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = builder.ToString();
+                command.ExecuteNonQuery();
+            }
+
+            return connection;
         }
 
         public static bool TryExecute(this IDbConnection connection, string sql, out string errorMsg)

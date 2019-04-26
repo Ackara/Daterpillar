@@ -7,5 +7,7 @@ namespace Acklann.Daterpillar.Linq
         string[] GetColumnList();
 
         object[] GetValueList();
+
+        void Load(System.Data.IDataRecord record);
     }
 }

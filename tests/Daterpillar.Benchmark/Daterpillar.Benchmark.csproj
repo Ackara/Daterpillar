@@ -17,4 +17,10 @@
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="sample.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -10,11 +10,11 @@ namespace Acklann.Daterpillar
     [TestClass]
     public class Startup
     {
-        [AssemblyCleanup]
+        //[AssemblyCleanup]
         public static void Cleanup()
         {
             //RemoveMSSQLFiles();
-            //RemoveUnusedApprovalFiles(@"C:\Users\Ackeem\Projects\Daterpillar\tests\Daterpillar.MSTest\Tests\approved-results");
+            RemoveUnusedApprovalFiles(@"C:\Users\Ackeem\Projects\Daterpillar\tests\Daterpillar.MSTest\Tests\approved-results");
         }
 
         private static void RemoveUnusedApprovalFiles(string path)

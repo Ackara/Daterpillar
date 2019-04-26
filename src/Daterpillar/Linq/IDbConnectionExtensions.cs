@@ -1,11 +1,14 @@
 using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Writers;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Acklann.Daterpillar.Linq
 {
@@ -35,6 +38,34 @@ namespace Acklann.Daterpillar.Linq
             return connection;
         }
 
+        // ==================== SELECT DATA ==================== //
+
+        public static IEnumerable<TEntity> Select<TEntity>(this IDbConnection connection, string query) where TEntity : IEntity
+        {
+            if (string.IsNullOrEmpty(query)) yield break;
+
+            Open(connection);
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = query;
+                using (IDataReader result = command.ExecuteReader())
+                {
+                    TEntity entity;
+                    while (result.Read())
+                    {
+                        entity = Activator.CreateInstance<TEntity>();
+                        entity.Load(result);
+                        yield return entity;
+                    }
+                }
+            }
+        }
+
+        public static Task<TEntity[]> SelectAsync<TEntity>(this IDbConnection connection, string query, System.Threading.CancellationToken cancellationToken = default) where TEntity : IEntity
+        {
+            return Task.Run(() => { return Select<TEntity>(connection, query).ToArray(); }, cancellationToken);
+        }
+
         // ==================== INSERT DATA ==================== //
 
         public static bool Insert(this IDbConnection connection, params IEntity[] entities)
@@ -57,6 +88,11 @@ namespace Acklann.Daterpillar.Linq
                 }
                 catch { transaction.Rollback(); }
             return false;
+        }
+
+        public static Task<bool> InsertAsync(this IDbConnection connection, params IEntity[] entities)
+        {
+            return Task.Run(() => { return Insert(connection, entities); });
         }
 
         // ==================== DROP DATABASE ==================== //

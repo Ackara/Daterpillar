@@ -117,8 +117,7 @@ namespace Acklann.Daterpillar.Migration
             column.Name = member.GetName();
             column.Id = member.GetId();
 
-            var dataType = new DataType(columnAttr?.TypeName);
-
+            var dataType = new DataType(columnAttr);
             if (string.IsNullOrEmpty(dataType.Name))
             {
                 if (member is PropertyInfo prop)
@@ -132,7 +131,6 @@ namespace Acklann.Daterpillar.Migration
                     if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
                 }
             }
-
             DataTypeAttribute typeAttr = member.GetCustomAttribute(typeof(DataTypeAttribute)) as DataTypeAttribute;
             column.DataType = (typeAttr == null ? dataType : typeAttr.ToDataType());
 
