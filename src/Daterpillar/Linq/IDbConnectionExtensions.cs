@@ -6,7 +6,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,8 +15,6 @@ namespace Acklann.Daterpillar.Linq
     public static class IDbConnectionExtensions
     {
         // TODO: Create a method that would query the database for its tables then remove all of them.
-
-        private delegate IEntity DynamicConstructor();
 
         public static Language GetLanguage(Type connectionType)
         {
@@ -54,9 +51,16 @@ namespace Acklann.Daterpillar.Linq
                 using (IDataReader result = command.ExecuteReader())
                 {
                     TEntity entity;
+                    EntityConstructor ctor = null;
                     while (result.Read())
                     {
-                        entity = Activator.CreateInstance<TEntity>();
+                        if (ctor == null)
+                        {
+                            entity = Activator.CreateInstance<TEntity>();
+                            ctor = entity.GetConstructor();
+                        }
+                        else entity = (TEntity)ctor();
+
                         entity.Load(result);
                         yield return entity;
                     }
@@ -249,19 +253,5 @@ namespace Acklann.Daterpillar.Linq
         }
 
         // ==================== END ==================== //
-
-        private static DynamicConstructor GetConstructor<TEntity>(TEntity entityType) where TEntity : IEntity
-        {
-            Type t = typeof(TEntity);
-            ConstructorInfo ctor = t.GetConstructor(new Type[0]);
-
-            string methodName = (t.Name + "Ctor");
-            var method = new DynamicMethod(methodName, t, new Type[0], typeof(Activator));
-            var il = method.GetILGenerator();
-            il.Emit(OpCodes.Newobj, ctor);
-            il.Emit(OpCodes.Ret);
-
-            return (DynamicConstructor)method.CreateDelegate(typeof(DynamicConstructor));
-        }
     }
 }

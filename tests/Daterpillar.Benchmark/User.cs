@@ -6,6 +6,8 @@ namespace Acklann.Daterpillar
 {
     public class User : IEntity
     {
+        private EntityConstructor _ctor = null;
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -25,6 +27,12 @@ namespace Acklann.Daterpillar
         public object[] GetValueList()
         {
             return new object[] { Id, $"'{Name}'", $"'{Email}'" };
+        }
+
+        public EntityConstructor GetConstructor()
+        {
+            if (_ctor == null) _ctor = EntityBase.CreateConstructor(GetType());
+            return _ctor;
         }
 
         public void Load(IDataRecord record)

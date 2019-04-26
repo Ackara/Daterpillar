@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Acklann.Daterpillar.Fakes
 {
-    public class Contact : IEntity
+    public class Contact : EntityBase
     {
         public int Id { get; set; }
 
@@ -12,22 +12,22 @@ namespace Acklann.Daterpillar.Fakes
 
         public string Email { get; set; }
 
-        public string GetTableName()
+        public override string GetTableName()
         {
             return nameof(Contact);
         }
 
-        public string[] GetColumnList()
+        public override string[] GetColumnList()
         {
             return new string[] { nameof(Id), nameof(Name), nameof(Email) };
         }
 
-        public object[] GetValueList()
+        public override object[] GetValueList()
         {
             return new object[] { Id, $"'{Name}'", $"'{Email}'" };
         }
 
-        public void Load(IDataRecord record)
+        public override void Load(IDataRecord record)
         {
             Id = record.GetInt32(0);
             Name = record.GetString(1);

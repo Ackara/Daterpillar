@@ -84,7 +84,7 @@ namespace Acklann.Daterpillar.Linq
         #region Private Members
 
         private int _limit;
-        private string _select, _from, _where, _join, _group, _order;
+        private string _select, _from, _where, _group, _order;
 
         private StringBuilder _builder = new StringBuilder();
 
