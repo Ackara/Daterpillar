@@ -10,8 +10,6 @@ namespace Acklann.Daterpillar.Linq
 
         object[] GetValueList();
 
-        EntityConstructor GetConstructor();
-
         void Load(System.Data.IDataRecord record);
     }
 }

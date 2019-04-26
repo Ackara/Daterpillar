@@ -51,16 +51,9 @@ namespace Acklann.Daterpillar.Linq
                 using (IDataReader result = command.ExecuteReader())
                 {
                     TEntity entity;
-                    EntityConstructor ctor = null;
                     while (result.Read())
                     {
-                        if (ctor == null)
-                        {
-                            entity = Activator.CreateInstance<TEntity>();
-                            ctor = entity.GetConstructor();
-                        }
-                        else entity = (TEntity)ctor();
-
+                        entity = Activator.CreateInstance<TEntity>();
                         entity.Load(result);
                         yield return entity;
                     }

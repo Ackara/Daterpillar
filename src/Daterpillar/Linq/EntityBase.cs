@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 
 namespace Acklann.Daterpillar.Linq
 {
+    [Obsolete("Experimental")]
     public abstract class EntityBase : IEntity
     {
         private EntityConstructor _ctor = null;
