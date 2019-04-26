@@ -6,12 +6,13 @@ using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
+    [RankColumn]
     public class QueryBenchmark
     {
         private static readonly string _query = $"select * from {nameof(User)};";
 
-        [Benchmark]
-        public int Daterpillar()
+        [Benchmark(Description = nameof(Daterpillar))]
+        public int RunDaterpillar()
         {
             int count = 0;
             using (IDbConnection connection = Helper.CreateDatabase())
@@ -24,8 +25,8 @@ namespace Acklann.Daterpillar.Tests
             return count;
         }
 
-        [Benchmark]
-        public int Dapper()
+        [Benchmark(Description = nameof(Dapper))]
+        public int RunDapper()
         {
             int count = 0;
             using (IDbConnection connection = Helper.CreateDatabase())
