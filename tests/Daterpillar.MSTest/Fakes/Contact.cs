@@ -12,6 +12,12 @@ namespace Acklann.Daterpillar.Fakes
 
         public string Email { get; set; }
 
+        public DayOfWeek DayBorn { get; set; }
+
+        public TimeSpan TimeBorn { get; set; }
+
+        public DateTime BirthDay { get; set; }
+
         public string GetTableName()
         {
             return nameof(Contact);
@@ -19,19 +25,21 @@ namespace Acklann.Daterpillar.Fakes
 
         public string[] GetColumnList()
         {
-            return new string[] { nameof(Id), nameof(Name), nameof(Email) };
+            return new string[] { nameof(Id), nameof(Name), nameof(Email), nameof(DayBorn), nameof(TimeBorn), nameof(BirthDay) };
         }
 
         public object[] GetValueList()
         {
-            return new object[] { Id, $"'{Name}'", $"'{Email}'" };
+            return new object[] { Id, $"'{Name}'", $"'{Email}'", (int)DayBorn, $"'{TimeBorn.ToString(@"hh\:mm\:ss")}'", $"'{BirthDay.ToString("yyyy-MM-dd HH:mm:ss")}'" };
         }
 
         public void Load(IDataRecord record)
         {
-            Id = record.GetInt32(0);
-            Name = record.GetString(1);
+            Id = (int)record[0];
+            Name = (string)record[1];
             Email = Convert.ToString(record[nameof(Email)]);
+            DayBorn = (DayOfWeek)record[3];
+            TimeBorn = Convert.ToDateTime(record[4]).TimeOfDay;
         }
     }
 }

@@ -14,9 +14,7 @@ namespace Acklann.Daterpillar
 
         public DayOfWeek BirthDay { get; set; }
 
-        public DateTime DOB { get; set; }
-
-        public TimeSpan Duaration { get; set; }
+        public DateTime Dob { get; set; }
 
         public bool IsVerified { get; set; }
 

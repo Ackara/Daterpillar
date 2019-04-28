@@ -37,6 +37,7 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             results.ShouldNotBeEmpty();
             records.ShouldAllBe(x => !string.IsNullOrEmpty(x.Name) && !string.IsNullOrEmpty(x.Email));
+            records.ShouldAllBe(x => x.TimeBorn != default);
         }
 
         [TestMethod]

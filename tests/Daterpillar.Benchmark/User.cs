@@ -29,9 +29,9 @@ namespace Acklann.Daterpillar
 
         public void Load(IDataRecord record)
         {
-            Id = Convert.ToInt32(record[nameof(Id)]);
-            Name = Convert.ToString(record[nameof(Name)]);
-            Email = Convert.ToString(record[nameof(Email)]);
+            Id = (int)(record[nameof(Id)]);
+            Name = (string)(record[nameof(Name)]);
+            Email = (string)(record[nameof(Email)]);
         }
     }
 }

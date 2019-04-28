@@ -10,7 +10,7 @@
     <PackageReference Include="Benchmarkable" Version="1.0.1" Condition="$(Configuration)=='Debug'" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.110" />
-    <PackageReference Include="VBench" Version="0.0.14-beta" />
+    <PackageReference Include="VBench" Version="0.0.15-beta" />
   </ItemGroup>
 
   <ItemGroup>

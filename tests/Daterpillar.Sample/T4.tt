@@ -2,7 +2,7 @@
 <#@ assembly name="NetStandard" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.IO" #>
-<#@ assembly name="nuget" #>
+<#@ assembly name="$(TargetDir)\Daterpillar.dll" #>
 <#@ assembly name="$(TargetPath)" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Text" #>
@@ -14,13 +14,20 @@
 <#@ import namespace="Acklann.Daterpillar.Configuration" #>
 <#@ output extension=".cs" #>
 using System;
+using System.Data;
 using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Attributes;
 
 namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 {
 	<#
+	// =============== PARMETERS =============== //
+
 	Assembly entryPoint = null;
+	var exclude = new Type[] { };
+
+	// =============== END =============== //
+
 	if (entryPoint == null)
 	{
 		Warning("The T4 template won't generate any objects until supply a valid assembly.");
@@ -29,7 +36,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 
 	PushIndent("\t");
 	var map = new Dictionary<string, (MemberInfo, string)>();
-	foreach (var (type, table) in EnumerateEntities(entryPoint))
+	foreach (var (type, table) in EnumerateEntities(entryPoint, exclude))
 	{
 		map.Clear();
 		WriteLine($"partial class {type.Name} : IEntity");
@@ -47,6 +54,7 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 		WriteLine($"public string GetTableName() => \"{table}\";");
 		WriteGetColumnListImplementation(map);
 		WriteGetValueListImplementation(map);
+		WriteLoadImplementation(map);
 
 		PopIndent();
 		WriteLine("}");
@@ -57,10 +65,13 @@ namespace <#= Host.ResolveAssemblyReference("$(RootNamespace)") #>
 }
 <#+
 
-IEnumerable<(Type, string)> EnumerateEntities(System.Reflection.Assembly assembly)
+IEnumerable<(Type, string)> EnumerateEntities(System.Reflection.Assembly assembly, params Type[] exclusionList)
 {
 	return  from t in assembly.ExportedTypes
-			where t.IsDefined(typeof(TableAttribute)) && !t.IsInterface && !t.IsAbstract
+			where 
+				t.IsDefined(typeof(TableAttribute)) && !t.IsInterface && !t.IsAbstract
+				&&
+				!exclusionList.Contains(t)
 			let attr = t.GetCustomAttribute<TableAttribute>()
 			select (t, (string.IsNullOrEmpty(attr.Name)? t.Name : attr.Name));
 }
@@ -106,6 +117,36 @@ void WriteGetValueListImplementation(IDictionary<string, (MemberInfo Member, str
 
 	var values = string.Join(", ", map.Values.Select(x=> Serialize(x.Member, method)));
 	WriteLine($"return new object[] {{ {values} }};");
+
+	PopIndent();
+	WriteLine("}");
+}
+
+void WriteLoadImplementation(IDictionary<string, (MemberInfo, string)> map)
+{
+	WriteLine("public void Load(IDataRecord record)");
+	WriteLine("{");
+	PushIndent("\t");
+
+	foreach (var (member, columnName) in map.Values)
+	{
+		Type t;
+		if (member is PropertyInfo p) t = p.PropertyType;
+		else if (member is FieldInfo f) t = f.FieldType;
+		else continue;
+
+		string type = null;
+		if (t.IsEnum) type = "Int32";
+		else type = t.Name;
+
+		string cast = "";
+		if (t.IsEnum) cast = $"({t.Name})";
+
+		string func = $"Convert.To{t.Name}";
+		if (t.IsEnum) func = $"Convert.ToInt32";
+
+		WriteLine("{0} = {1}{3}(record[\"{2}\"]);", member.Name, cast, columnName, func);
+	}
 
 	PopIndent();
 	WriteLine("}");
@@ -157,6 +198,11 @@ string ToSnake(string text)
 
         return snake.ToString();
     }
+}
+
+string SimplifyName(Type t)
+{
+	return "";
 }
 
 #>

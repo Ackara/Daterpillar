@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,9 +14,6 @@ namespace Acklann.Daterpillar.Tests
     public class ScriptingTest
     {
         public TestContext TestContext { get; set; }
-
-       
-        // ==================== SCHEMA BUILDING ==================== //
 
         [DataTestMethod]
         [DataRow(Language.TSQL)]
