@@ -17,7 +17,9 @@
 
 	[Parameter(Mandatory)]
 	[ValidateNotNullOrEmpty()]
-	[string]$OmitDropStatements
+	[string]$OmitDropStatements,
+
+	[string]$Description
 )
 
 Join-Path $PSScriptRoot "*.psd1" | Resolve-Path | Import-Module -Force;
@@ -25,7 +27,7 @@ Join-Path $PSScriptRoot "*.psd1" | Resolve-Path | Import-Module -Force;
 $folders = $Language.Split(@(';', ',', ' '));
 if ($folders.Length -eq 1)
 {
-	$result = New-DaterpillarMigrationScript $Language $Destination $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements));
+	$result = New-DaterpillarMigrationScript $Language $Destination $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements)) -Descripiton $Description;
 	return $result.Warning;
 }
 elseif ($folders.Length -gt 1)
@@ -42,7 +44,7 @@ elseif ($folders.Length -gt 1)
 		else
 		{ $dest  = Join-Path $Destination $lang; }
 
-		$result = New-DaterpillarMigrationScript $lang $dest $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements));
+		$result = New-DaterpillarMigrationScript $lang $dest $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements)) -Descripiton $Description;
 		$builder.AppendLine($result.Warning) | Out-Null;
 	}
 	return $builder.ToString();

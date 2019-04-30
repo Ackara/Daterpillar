@@ -67,6 +67,17 @@ namespace Acklann.Daterpillar.Cmdlets
         [Parameter(ParameterSetName = PIPELINE_SET)]
         public SwitchParameter OmitDropStatements { get; set; }
 
+        /// <summary>
+        /// Gets or sets the descripiton.
+        /// </summary>
+        /// <value>
+        /// The descripiton.
+        /// </value>
+        [Alias("desc")]
+        [Parameter(ParameterSetName = DEFAULT_SET)]
+        [Parameter(ParameterSetName = PIPELINE_SET)]
+        public string Descripiton { get; set; }
+
         [ValidateNotNullOrEmpty]
         [Parameter(ParameterSetName = PIPELINE_SET, ValueFromPipeline = true)]
         public string InputObject { get; set; }
@@ -79,7 +90,7 @@ namespace Acklann.Daterpillar.Cmdlets
         protected override void ProcessRecord()
         {
             Schema oldSchema = null, newSchema = null;
-            string error, outputFile = Destination, description = "schema_update";
+            string error, outputFile = Destination;
 
             if (!File.Exists(OldSchemaFilePath))
                 oldSchema = new Schema();
@@ -93,7 +104,7 @@ namespace Acklann.Daterpillar.Cmdlets
                 outputFile = Path.GetDirectoryName(OldSchemaFilePath);
 
             if (!Path.HasExtension(outputFile))
-                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{description}.{Language.ToString().ToLowerInvariant()}.sql");
+                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{Descripiton}.{Language.ToString().ToLowerInvariant()}.sql");
 
             if (ShouldProcess(oldSchema.ResolveName() ?? newSchema.ResolveName()))
             {

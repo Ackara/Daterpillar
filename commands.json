@@ -23,7 +23,7 @@
     {
       "fileName": "powershell.exe",
       "workingDirectory": ".",
-      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 push"
+      "arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build.ps1 deploy"
     },
     "configure":
     {
