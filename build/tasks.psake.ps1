@@ -107,6 +107,9 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 
 	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
 		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
+
+	Join-Path $SolutionFolder "src/*/*.*psd1" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
+		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 }
 
 Task "Build-Solution" -alias "build" -description "This task compiles projects in the solution." `
