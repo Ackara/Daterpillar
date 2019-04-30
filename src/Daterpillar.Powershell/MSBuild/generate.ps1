@@ -23,7 +23,7 @@
 Join-Path $PSScriptRoot "*.psd1" | Resolve-Path | Import-Module -Force;
 
 $folders = $Language.Split(@(';', ',', ' '));
-if ($folders.Length == 1)
+if ($folders.Length -eq 1)
 {
 	$result = New-DaterpillarMigrationScript $Language $Destination $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements));
 	return $result.Warning;
@@ -33,7 +33,7 @@ elseif ($folders.Length -gt 1)
 	$builder = [System.Text.StringBuilder]::new();
 	foreach($lang in $folders)
 	{
-		[stirng]$dest = $Destination;
+		[string]$dest = $Destination;
 		if ([IO.Path]::HasExtension($Destination))
 		{
 			$dir = Split-Path $Destination -Parent;
@@ -41,9 +41,9 @@ elseif ($folders.Length -gt 1)
 		}
 		else
 		{ $dest  = Join-Path $Destination $lang; }
-		
+
 		$result = New-DaterpillarMigrationScript $lang $dest $OldSchemaFilePath $NewSchemaFilePath -OmitDropStatements:([Convert]::ToBoolean($OmitDropStatements));
-		$builder.AppendLine($result.Warning);
+		$builder.AppendLine($result.Warning) | Out-Null;
 	}
 	return $builder.ToString();
 }
