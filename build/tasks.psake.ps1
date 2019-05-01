@@ -26,7 +26,7 @@ Properties {
 Task "Default" -depends @("configure", "build", "test", "pack");
 
 Task "Deploy" -alias "publish" -description "This task compiles, test then publish all packages to their respective destination." `
--depends @("clean", "version", "build", "xsd", "test", "pack", "push-nuget", "tag");
+-depends @("clean", "version", "build", "xsd", "test", "pack", "push-nuget", "push-ps", "tag");
 
 # ======================================================================
 
@@ -63,9 +63,9 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	$manifest = Get-Content $ManifestFilePath | ConvertFrom-Json;
 	$dll = Join-Path $moduleFolder "*.Powershell.dll" | Get-Item;
 	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
-	$psd1 | Update-NcrementProjectFile $ManifestFilePath;
-	Copy-Item $psd1.FullName -Destination $moduleFolder -Force;
-
+	Get-ChildItem $moduleFolder -Filter "*.psd1" | Remove-Item;
+	Copy-Item $psd1.FullName -Destination (Join-Path $moduleFolder "$(Split-Path $moduleFolder -Leaf).psd1") -Force;
+	
 	# Building the nuget package.
 	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
 	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
@@ -105,7 +105,7 @@ Task "Increment-VersionNumber" -alias "version" -description "This task incremen
 	$manifest | ConvertTo-Json | Out-File $ManifestFilePath -Encoding utf8;
 	Invoke-Tool { &git add $ManifestFilePath | Out-Null; };
 
-	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
+	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest `
 		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 
 	Join-Path $SolutionFolder "src/*/*.*psd1" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
