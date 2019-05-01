@@ -65,7 +65,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
 	Get-ChildItem $moduleFolder -Filter "*.psd1" | Remove-Item;
 	Copy-Item $psd1.FullName -Destination (Join-Path $moduleFolder "$(Split-Path $moduleFolder -Leaf).psd1") -Force;
-	
+
 	# Building the nuget package.
 	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
 	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
@@ -118,16 +118,10 @@ Task "Build-Solution" -alias "build" -description "This task compiles projects i
 }
 
 Task "Run-Tests" -alias "test" -description "This task invoke all tests within the 'tests' folder." `
--action {
-	#Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*.tests.ps1" | Invoke-PowershellTest $ToolsFolder;
-	Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*MSTest.csproj" | Invoke-MSTest $Configuration;
-	#Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*Mocha.*proj" | Invoke-MochaTest;
-}
+-action { Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*MSTest.csproj" | Invoke-MSTest $Configuration; }
 
 Task "Run-Benchmarks" -alias "benchmark" -description "This task invoke all benchmark tests within the 'tests' folder." `
--action {
-	$projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter $Filter -DryRun:$DryRun;
-}
+-action { $projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter $Filter -DryRun:$DryRun; }
 
 #endregion
 
@@ -139,7 +133,7 @@ Task "Publish-NuGetPackages" -alias "push-nuget" -description "This task publish
 
 Task "Publish-PowershellModules" -alias "push-ps" -description "" `
 -precondition { return Test-Path $ArtifactsFolder -PathType Container } `
--action { Get-ChildItem $ArtifactsFolder -Recurse -Filter "*.psd1" | Publish-PackageToPowershellGallery $SecretsFilePath "psGalleryKey"; }
+-action { Get-ChildItem "$ArtifactsFolder/*/" -Filter "*.psd1" | Publish-PackageToPowershellGallery $SecretsFilePath "psGalleryKey"; }
 
 Task "Publish-VSIXPackage" -alias "push-vsix" -description "This task publish all .vsix packages." `
 -precondition { return Test-Path $ArtifactsFolder -PathType Container } `

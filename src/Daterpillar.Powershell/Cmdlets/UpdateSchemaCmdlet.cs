@@ -45,7 +45,7 @@ namespace Acklann.Daterpillar.Cmdlets
 
                     if (OldSchema != null && NewSchema != null)
                     {
-                        NewSchema.CopyTo(OldSchema.FullName);
+                        NewSchema.CopyTo(OldSchema.FullName, overwrite: true);
                         WriteVerbose($"replaced '{OldSchema.Name}' with '{NewSchema.Name}'.");
                     }
 
@@ -69,11 +69,14 @@ namespace Acklann.Daterpillar.Cmdlets
         {
             int count = 0; TimeSpan time = default(TimeSpan);
 
-            Match match = Regex.Match(output, @"(?i)successfully applied (?<count>\d+) migration to schema .+ \(execution time (?<time>\d+:\d+\.\d+)\w+\)");
-            if (match.Success)
+            if (!string.IsNullOrEmpty(output))
             {
-                int.TryParse(match.Groups["count"].Value, out count);
-                TimeSpan.TryParse($"00:{match.Groups["time"].Value}", out time);
+                Match match = Regex.Match(output, @"(?i)successfully applied (?<count>\d+) migration to schema .+ \(execution time (?<time>\d+:\d+\.\d+)\w+\)");
+                if (match.Success)
+                {
+                    int.TryParse(match.Groups["count"].Value, out count);
+                    TimeSpan.TryParse($"00:{match.Groups["time"].Value}", out time);
+                }
             }
 
             return (count, time.ToString());
