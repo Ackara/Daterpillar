@@ -65,6 +65,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
 	Get-ChildItem $moduleFolder -Filter "*.psd1" | Remove-Item;
 	Copy-Item $psd1.FullName -Destination (Join-Path $moduleFolder "$(Split-Path $moduleFolder -Leaf).psd1") -Force;
+	Join-Path $projectFile.DirectoryName "bin/$Configuration/*/*-help.xml" | Get-Item | Copy-Item -Destination $moduleFolder -Force;
 
 	# Building the nuget package.
 	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
@@ -133,7 +134,7 @@ Task "Publish-NuGetPackages" -alias "push-nuget" -description "This task publish
 
 Task "Publish-PowershellModules" -alias "push-ps" -description "" `
 -precondition { return Test-Path $ArtifactsFolder -PathType Container } `
--action { Get-ChildItem "$ArtifactsFolder/*/" -Filter "*.psd1" | Publish-PackageToPowershellGallery $SecretsFilePath "psGalleryKey"; }
+-action { Join-Path $ArtifactsFolder "*/*.psd1" | Get-Item | Publish-PackageToPowershellGallery $SecretsFilePath "psGalleryKey"; }
 
 Task "Publish-VSIXPackage" -alias "push-vsix" -description "This task publish all .vsix packages." `
 -precondition { return Test-Path $ArtifactsFolder -PathType Container } `
