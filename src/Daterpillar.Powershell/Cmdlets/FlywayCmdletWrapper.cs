@@ -1,13 +1,10 @@
-﻿using Acklann.Daterpillar.Configuration;
-using System.IO;
+﻿using System.IO;
 using System.Management.Automation;
 
 namespace Acklann.Daterpillar.Cmdlets
 {
     public abstract class FlywayCmdletWrapper : Cmdlet
     {
-        internal const string CONNSTR_SET = "connection-string", DEFAULT_SET = "default";
-
         private string _migrationDirectory = null;
 
         // ===== Parameter Set: all ===== //
@@ -17,8 +14,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [ValidateNotNullOrEmpty]
         [Alias("lang", "type", "connection-type")]
-        [Parameter(ParameterSetName = DEFAULT_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        [Parameter(ParameterSetName = CONNSTR_SET, Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         public Language ConnectionType { get; set; }
 
         /// <summary>
@@ -26,8 +22,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [ValidateNotNullOrEmpty]
         [Alias("path", "fullname", "sql")]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 6)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true, Position = 6)]
         public string MigrationsDirectory
         {
             get { return (string.IsNullOrEmpty(_migrationDirectory) ? InpuObject : _migrationDirectory); }
@@ -39,23 +34,20 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [Alias("flyway")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true)]
         public string FlywayFilePath { get; set; }
 
         /// <summary>
         /// <para type="description">The operation timeout interval in seconds. Defaults to 5 minutes.</para>
         /// </summary>
         [ValidateRange(1, int.MaxValue)]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true)]
         public int Timeout { get; set; }
 
         /// <summary>
         /// <para type="description">The absolute-path of the directory that host the migration scripts.</para>
         /// </summary>
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipeline = true)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipeline = true)]
+        [Parameter(ValueFromPipeline = true)]
         public string InpuObject { get; set; }
 
         // ===== Parameter Set: default ===== //
@@ -65,7 +57,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [Alias("h")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 2)]
+        [Parameter(ValueFromPipelineByPropertyName = true, Position = 2)]
         public string Host { get; set; }
 
         /// <summary>
@@ -73,7 +65,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [Alias("u")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 3)]
+        [Parameter(ValueFromPipelineByPropertyName = true, Position = 3)]
         public string User { get; set; }
 
         /// <summary>
@@ -81,7 +73,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [Alias("p")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 4)]
+        [Parameter(ValueFromPipelineByPropertyName = true, Position = 4)]
         public string Password { get; set; }
 
         /// <summary>
@@ -89,7 +81,7 @@ namespace Acklann.Daterpillar.Cmdlets
         /// </summary>
         [Alias("d")]
         [ValidateNotNullOrEmpty]
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true, Position = 5)]
+        [Parameter(ValueFromPipelineByPropertyName = true, Position = 5)]
         public string Database { get; set; }
 
         // ===== Parameter Set: connection-string ===== //
@@ -101,10 +93,26 @@ namespace Acklann.Daterpillar.Cmdlets
         [Alias("c", "connstr")]
         [ValidateNotNullOrEmpty]
         [ValidatePattern("(?i)[^=;]+=[^=;]+")]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true)]
         public string ConnectionString { get; set; }
 
-        protected internal PSObject CreateInputObject()
+        protected override void BeginProcessing()
+        {
+            if (Timeout <= 0) Timeout = Flyway.DEFAULT_TIMEOUT;
+
+            if (string.IsNullOrEmpty(ConnectionString))
+                ConnectionString = $"server={Host};user={User};password={Password};database={Database};";
+
+            if (string.IsNullOrEmpty(FlywayFilePath))
+                FlywayFilePath = Flyway.Install();
+            else
+                FlywayFilePath = FlywayFilePath.Expand();
+
+            if (!File.Exists(FlywayFilePath))
+                throw new FileNotFoundException($"Cound not find flyway at '{FlywayFilePath}'; you can download it from 'https://flywaydb.org/download'.");
+        }
+
+        protected PSObject CreateInputObject()
         {
             var obj = new PSObject();
 
@@ -121,22 +129,6 @@ namespace Acklann.Daterpillar.Cmdlets
             obj.Members.Add(new PSNoteProperty(nameof(ConnectionString), ConnectionString));
 
             return obj;
-        }
-
-        protected override void BeginProcessing()
-        {
-            if (Timeout <= 0) Timeout = Flyway.DEFAULT_TIMEOUT;
-
-            if (string.IsNullOrEmpty(ConnectionString))
-                ConnectionString = $"server={Host};user={User};password={Password};database={Database};";
-
-            if (string.IsNullOrEmpty(FlywayFilePath))
-                FlywayFilePath = Flyway.Install();
-            else
-                FlywayFilePath = FlywayFilePath.Expand();
-
-            if (!File.Exists(FlywayFilePath))
-                throw new FileNotFoundException($"Cound not find flyway at '{FlywayFilePath}'; you can download it from 'https://flywaydb.org/download'.");
         }
     }
 }

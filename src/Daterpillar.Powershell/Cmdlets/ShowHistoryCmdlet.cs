@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar.Cmdlets
     /// <para type="link">https://flywaydb.org/documentation/commandline/info</para>
     /// </summary>
     /// <seealso cref="FlywayCmdletWrapper" />
-    [Cmdlet(VerbsCommon.Show, (nameof(Daterpillar) + "MigrationHistory"), DefaultParameterSetName = DEFAULT_SET)]
+    [Cmdlet(VerbsCommon.Show, (nameof(Daterpillar) + "MigrationHistory"))]
     public class ShowHistoryCmdlet : FlywayCmdletWrapper
     {
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Configuration;
-using SharpCompress.Common;
+﻿using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
@@ -106,7 +105,7 @@ namespace Acklann.Daterpillar
             string[] pair;
 
             flywayUrl = user = password = null;
-            foreach (string item in connectionString.Split(';'))
+            foreach (string item in connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 pair = item.Split('=');
                 if (pair.Length != 2) continue;

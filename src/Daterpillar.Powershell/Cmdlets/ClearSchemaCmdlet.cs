@@ -14,7 +14,7 @@ namespace Acklann.Daterpillar.Cmdlets
     /// <para>This will remove all table from the schema.</para>
     /// </example>
     /// <seealso cref="FlywayCmdletWrapper" />
-    [Cmdlet(VerbsCommon.Clear, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true, DefaultParameterSetName = DEFAULT_SET)]
+    [Cmdlet(VerbsCommon.Clear, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
     public class ClearSchemaCmdlet : FlywayCmdletWrapper
     {
         /// <summary>

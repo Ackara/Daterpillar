@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
 using System.Text;

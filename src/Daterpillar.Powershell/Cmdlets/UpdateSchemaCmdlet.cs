@@ -12,21 +12,19 @@ namespace Acklann.Daterpillar.Cmdlets
     /// <para type="link">https://flywaydb.org/documentation/commandline/migrate</para>
     /// </summary>
     /// <seealso cref="Cmdlet" />
-    [Cmdlet(VerbsData.Update, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true, DefaultParameterSetName = DEFAULT_SET)]
+    [Cmdlet(VerbsData.Update, (nameof(Daterpillar) + "Schema"), ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true)]
     public class UpdateSchemaCmdlet : FlywayCmdletWrapper
     {
         /// <summary>
         /// <para type="description">The current/production '.schema.xml' file. Typically the 'snapshot.schema.xml' file.</para>
         /// </summary>
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true)]
         public FileInfo OldSchema { get; set; }
 
         /// <summary>
         /// <para type="description">The new '.schema.xml' file. Typically the '[assembly].schema.xml' file.</para>
         /// </summary>
-        [Parameter(ParameterSetName = DEFAULT_SET, ValueFromPipelineByPropertyName = true)]
-        [Parameter(ParameterSetName = CONNSTR_SET, ValueFromPipelineByPropertyName = true)]
+        [Parameter(ValueFromPipelineByPropertyName = true)]
         public FileInfo NewSchema { get; set; }
 
         /// <summary>

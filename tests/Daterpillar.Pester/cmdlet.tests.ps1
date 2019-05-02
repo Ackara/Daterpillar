@@ -95,7 +95,7 @@ Describe "Update-Schema" {
 		$result = Update-DaterpillarSchema "SQLite" -sql $outFolder -connstr "host=$db" -Verbose;
 		$result | Should Be $true;
 
-		Update-DaterpillarSchema "SQLite" -sql $outFolder -connstr "host=$db" | Show-DaterpillarMigrationHistory "SQLite";
+		Update-DaterpillarSchema "SQLite" -sql $outFolder -connstr "host=$db";
 	}
 
 	It "[PS] Should throw exception on error" {
