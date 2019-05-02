@@ -4,6 +4,12 @@ namespace Acklann.Daterpillar.Linq
 {
     public class QueryBuilder
     {
+        public QueryBuilder SelectAll()
+        {
+            _select = "*";
+            return this;
+        }
+
         public QueryBuilder Select(params string[] columns)
         {
             _select = string.Join(", ", columns);
@@ -42,16 +48,18 @@ namespace Acklann.Daterpillar.Linq
 
         public string ToString(Language language)
         {
-            _builder.Clear().
-                     Append("SELECT");
+            _builder.Clear().Append("SELECT");
+
             if (language == Language.TSQL && _limit > 0)
                 _builder.AppendLine($" TOP {_limit}");
             else
                 _builder.AppendLine();
 
             _builder.AppendLine(_select)
-                    .AppendLine($"FROM {_from}")
-                    .AppendLine($"WHERE {_where}");
+                    .AppendLine($"FROM {_from}");
+
+            if (!string.IsNullOrEmpty(_where))
+                _builder.AppendLine($"WHERE {_where}");
 
             if (!string.IsNullOrEmpty(_group))
                 _builder.AppendLine($"GROUP BY {_group}");

@@ -47,18 +47,23 @@ namespace Acklann.Daterpillar.Tests
             var sut = new QueryBuilder();
 
             // Act
+            sut.SelectAll()
+                .From("profile");
+            var case1 = sut.ToString();
+
             sut.Select("id", "name")
                 .From("profile")
                 .Where($"id = 234");
-            var case1 = sut.ToString();
+            var case2 = sut.ToString();
 
             sut.OrderBy("name")
                 .Limit(10);
-            var case2 = sut.ToString(Language.TSQL);
+            var case3 = sut.ToString(Language.TSQL);
 
             // Assert
-            case1.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+;");
-            case2.ShouldMatch(@"(?i)select top 10\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+;");
+            case1.ShouldMatch(@"(?i)select\s+\*\s+from profile\s*;");
+            case2.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+;");
+            case3.ShouldMatch(@"(?i)select top 10\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+;");
         }
 
         [DataTestMethod]
