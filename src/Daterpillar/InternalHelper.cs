@@ -116,6 +116,14 @@ namespace Acklann.Daterpillar
             return (!string.IsNullOrEmpty(column.Id) ? $"$({column.Id})" : column.Name);
         }
 
+        internal static string GetIdOrName(this Type type)
+        {
+            var suidAttr = type.GetCustomAttribute(typeof(StaticIdAttribute)) as StaticIdAttribute;
+
+            if (!string.IsNullOrEmpty(suidAttr?.Id)) return $"$({suidAttr.Id})";
+            else return GetName(type);
+        }
+
         internal static string GetIdOrName(this MemberInfo member)
         {
             var suidAttr = member.GetCustomAttribute(typeof(StaticIdAttribute)) as StaticIdAttribute;
