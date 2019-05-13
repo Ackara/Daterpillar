@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
   <include>sakila-customer.xml</include>
   <table name="store">
     <column name="store_id" autoIncrement="true">

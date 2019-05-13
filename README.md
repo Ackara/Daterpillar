@@ -40,7 +40,7 @@ The *NUGET* package ships with a *MSBuild* target called `GenerateDaterpillarMig
 <DaterpillarMigrationsDirectory>migrations</DaterpillarMigrationsDirectory>
 
 <!-- The script's language. -->
-<DaterpillarSqlLanguage>MySQL</DaterpillarSqlLanguage>
+<DaterpillarSqlLanguages>MySQL</DaterpillarSqlLanguages>
 
 <!-- This file represents the current state/structure of your live database. (Optional defaulats to 'snapshot.schema.xml') -->
 <DaterpillarSnapshotFilePath>snapshot.schema.xml</DaterpillarSnapshotFilePath>
@@ -82,7 +82,7 @@ To generated the migration-script mentioned earlier, the difference between `sna
 Next add the `seed.schema.xml` to your project, and make sure it is being copied next to the `.dll` (**Copy To Output Directory: Copy if newer**).
 
 ```xml
-<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
     <!-- This script will be appended -->
     <script name="seed" language="MySQL">
     INSERT INTO User (full_name, DOB) VALUES ('Petra Ral', '2000-11-15');
@@ -93,7 +93,7 @@ Next add the `seed.schema.xml` to your project, and make sure it is being copied
 You can also override or add columns by redefining a table.
 
 ```xml
-<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
     <table name="User">
         <!-- This will rename the existing 'full_name' column -->
         <column id="ec35bf5d-9a40-4e6f-8412-852b81807a09" name="first_name">

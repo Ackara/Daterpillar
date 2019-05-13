@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" elementFormDefault="qualified" targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:tns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd" elementFormDefault="qualified" targetNamespace="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="schema" nillable="true" type="tns:Schema" />
   <xs:complexType name="Schema">
     <xs:annotation>

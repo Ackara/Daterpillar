@@ -1,4 +1,4 @@
-<schema version="1.0.0" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd">
+<schema version="1.0.0" xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
   <include>music-data.xml</include>
   <table name="Album">
     <column name="Name">

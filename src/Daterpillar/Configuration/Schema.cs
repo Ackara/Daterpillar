@@ -39,7 +39,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <summary>
         /// The xml namespace.
         /// </summary>
-        public const string XMLNS = "https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/daterpillar.xsd";
+        public const string XMLNS = "https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd";
 
         /// <summary>
         /// Gets or sets the name of the schema.
