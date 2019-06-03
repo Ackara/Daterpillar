@@ -60,10 +60,17 @@ namespace Acklann.Daterpillar.Tests
                 .Limit(10);
             var case3 = sut.ToString(Language.TSQL);
 
+            sut.Limit(5).Offset(10);
+            var case4 = sut.ToString(Language.TSQL);
+
+            var case5 = sut.ToString(Language.MySQL);
+
             // Assert
             case1.ShouldMatch(@"(?i)select\s+\*\s+from profile\s*;");
             case2.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+;");
             case3.ShouldMatch(@"(?i)select top 10\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+;");
+            case4.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+offset \d+ rows fetch next \d+ rows only\s+;");
+            case5.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+limit \d+\s+offset \d+\s+;");
         }
 
         [DataTestMethod]

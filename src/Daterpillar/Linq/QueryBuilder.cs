@@ -4,6 +4,11 @@ namespace Acklann.Daterpillar.Linq
 {
     public class QueryBuilder
     {
+        public QueryBuilder(Language language = Language.SQL)
+        {
+            _language = language;
+        }
+
         public QueryBuilder SelectAll()
         {
             _select = "*";
@@ -46,11 +51,17 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public QueryBuilder Offset(int value)
+        {
+            _offset = value;
+            return this;
+        }
+
         public string ToString(Language language)
         {
             _builder.Clear().Append("SELECT");
 
-            if (language == Language.TSQL && _limit > 0)
+            if (language == Language.TSQL && _limit > 0 && _offset < 1)
                 _builder.AppendLine($" TOP {_limit}");
             else
                 _builder.AppendLine();
@@ -67,31 +78,37 @@ namespace Acklann.Daterpillar.Linq
             if (!string.IsNullOrEmpty(_order))
                 _builder.AppendLine($"ORDER BY {_order}");
 
-            if (language != Language.TSQL && _limit > 0)
-                _builder.AppendLine($"LIMIT {_limit};");
-            else
-                _builder.Append(';');
+            if (language == Language.TSQL && _offset > 0)
+                _builder.AppendLine($"OFFSET {_offset} ROWS FETCH NEXT {_limit} ROWS ONLY");
 
+            if (language != Language.TSQL && _limit > 0)
+                _builder.AppendLine($"LIMIT {_limit}");
+
+            if (language != Language.TSQL && _offset > 0)
+                _builder.AppendLine($"OFFSET {_offset}");
+
+            _builder.Append(';');
             return _builder.ToString();
         }
 
         public override string ToString()
         {
-            return ToString(Language.SQL);
+            return ToString(_language);
         }
 
         #region Operators
 
         public static implicit operator string(QueryBuilder obj)
         {
-            return obj.ToString(Language.SQL);
+            return obj.ToString(obj._language);
         }
 
         #endregion Operators
 
         #region Private Members
 
-        private int _limit;
+        private Language _language;
+        private int _limit, _offset;
         private string _select, _from, _where, _group, _order;
 
         private StringBuilder _builder = new StringBuilder();
