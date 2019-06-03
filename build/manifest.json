@@ -1,4 +1,4 @@
-﻿{ 
+﻿{
     "author":  "Ackara",
     "company":  "Ackara",
     "copyright":  "Copyright © 2015 Ackara",
@@ -11,7 +11,7 @@
     "description":  "A tool that generates sql-migration scripts from your classes.",
     "version":  {
                     "major":  10,
-                    "minor":  0,
+                    "minor":  1,
                     "patch":  0
                 },
     "branchSuffixMap":  {
