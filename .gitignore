@@ -277,6 +277,9 @@ BenchmarkDotNet.Artifacts/
 # Build tools
 tools/
 
+# User Files
+commands.json
+
 # Sensitive Files
 connections.*
 credentials.*
