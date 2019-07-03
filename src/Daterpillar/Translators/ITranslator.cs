@@ -22,6 +22,13 @@ namespace Acklann.Daterpillar.Translators
         string ExpandVariables(string name);
 
         /// <summary>
+        /// Get default value for the specified <paramref name="typeName"/>.
+        /// </summary>
+        /// <param name="typeName">The name of the data-type.</param>
+        /// <returns>A default value.</returns>
+        string GetDefaultValue(string typeName);
+
+        /// <summary>
         /// Converts the <see cref="DataType"/> value to its equivalent SQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>

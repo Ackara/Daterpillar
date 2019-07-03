@@ -181,7 +181,7 @@ namespace Acklann.Daterpillar.Writers
                     Resolver.ConvertToString(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
-                    string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue)).WithSpace(),
+                    string.Format(DefaultFormatString, GetDefaultValue(column)).WithSpace(),
                     column.Comment.Escape()
                 ));
             Writer.WriteLine(";");
@@ -284,7 +284,7 @@ namespace Acklann.Daterpillar.Writers
                     Resolver.ConvertToString(column.DataType).WithSpace(),
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
-                    (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
+                    (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, GetDefaultValue(column))).WithSpace(),
                     column.Comment.Escape()
                 ));
             Writer.WriteLine(';');
@@ -347,6 +347,12 @@ namespace Acklann.Daterpillar.Writers
                 else
                     Variables.Add(column.Id, column.Name);
             }
+        }
+
+        protected virtual string GetDefaultValue(Column column)
+        {
+            if (column.IsNullable) return Resolver.ExpandVariables(column.DefaultValue ?? Resolver.GetDefaultValue(null));
+            else return Resolver.ExpandVariables(column.DefaultValue ?? Resolver.GetDefaultValue(column.DataType.Name));
         }
 
         protected string Expand(string format, params object[] args)

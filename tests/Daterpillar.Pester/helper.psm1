@@ -13,7 +13,7 @@
 		&dotnet publish $projectFile --configuration "Release" --output $moduleFolder;
 		Join-Path (Split-Path $projectFile -Parent) "bin/Release/*/*.dll-Help.xml" | Get-Item | Copy-Item -Destination $moduleFolder -Force;
 		$modulePath = Get-ChildItem $moduleFolder -Filter "*.psd1" | Select-Object -ExpandProperty FullName -First 1;
-
+		
 		$sampleFolder = Join-Path $moduleFolder "sample-data";
 		if (-not (Test-Path $sampleFolder)) { New-Item $sampleFolder -ItemType Directory | Out-Null; }
 		"../../tests/*.MSTest/*-data/" | Resolve-Path | Get-ChildItem -Recurse | Copy-Item -Destination $sampleFolder -Force;

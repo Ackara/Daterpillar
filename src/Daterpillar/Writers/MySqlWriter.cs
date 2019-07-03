@@ -36,7 +36,7 @@ namespace Acklann.Daterpillar.Writers
                 /* 3 */Resolver.ConvertToString(oldColumn.DataType).WithSpace(),
                 /* 4 */(oldColumn.IsNullable ? string.Empty : NotNull).WithSpace(),
                 /* 5 */(oldColumn.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
-                /* 6 */(oldColumn.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(oldColumn.DefaultValue))).WithSpace(),
+                /* 6 */(oldColumn.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, GetDefaultValue(oldColumn))).WithSpace(),
                 /* 7 */oldColumn.Comment.Escape()
                 ));
             Writer.WriteLine(';');

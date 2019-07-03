@@ -6,60 +6,99 @@ namespace Acklann.Daterpillar.Translators
     /// <summary>
     /// Provides methods for translating SQL name/type to another SQL dialect.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.Translators.ITranslator" />
+    /// <seealso cref="Acklann.Daterpillar.Translators.ITranslator"/>
     public abstract partial class TranslatorBase : ITranslator
     {
         #region Keys
 
-        /// <summary>bool.</summary>
+        /// <summary>
+        /// null.
+        /// </summary>
+        internal const string NULL = "NULL";
+
+        /// <summary>
+        /// bool.
+        /// </summary>
         internal const string BOOL = "bool";
 
-        /// <summary>blob.</summary>
+        /// <summary>
+        /// blob.
+        /// </summary>
         internal const string BLOB = "blob";
 
-        /// <summary>char.</summary>
+        /// <summary>
+        /// char.
+        /// </summary>
         internal const string CHAR = "char";
 
-        /// <summary>text.</summary>
+        /// <summary>
+        /// text.
+        /// </summary>
         internal const string TEXT = "text";
 
-        /// <summary>varchar.</summary>
+        /// <summary>
+        /// varchar.
+        /// </summary>
         internal const string VARCHAR = "varchar";
 
-        /// <summary>int.</summary>
+        /// <summary>
+        /// int.
+        /// </summary>
         internal const string INT = "int";
 
-        /// <summary>bigInt.</summary>
+        /// <summary>
+        /// bigInt.
+        /// </summary>
         internal const string BIGINT = "bigInt";
 
-        /// <summary>mediumInt.</summary>
+        /// <summary>
+        /// mediumInt.
+        /// </summary>
         internal const string MEDIUMINT = "mediumInt";
 
-        /// <summary>smallInt.</summary>
+        /// <summary>
+        /// smallInt.
+        /// </summary>
         internal const string SMALLINT = "smallInt";
 
-        /// <summary>tinyInt.</summary>
+        /// <summary>
+        /// tinyInt.
+        /// </summary>
         internal const string TINYINT = "tinyInt";
 
-        /// <summary>float.</summary>
+        /// <summary>
+        /// float.
+        /// </summary>
         internal const string FLOAT = "float";
 
-        /// <summary>double.</summary>
+        /// <summary>
+        /// double.
+        /// </summary>
         internal const string DOUBLE = "double";
 
-        /// <summary>decimal.</summary>
+        /// <summary>
+        /// decimal.
+        /// </summary>
         internal const string DECIMAL = "decimal";
 
-        /// <summary>date.</summary>
+        /// <summary>
+        /// date.
+        /// </summary>
         internal const string DATE = "date";
 
-        /// <summary>time.</summary>
+        /// <summary>
+        /// time.
+        /// </summary>
         internal const string TIME = "time";
 
-        /// <summary>dateTime.</summary>
+        /// <summary>
+        /// dateTime.
+        /// </summary>
         internal const string DATETIME = "dateTime";
 
-        /// <summary>timeStamp.</summary>
+        /// <summary>
+        /// timeStamp.
+        /// </summary>
         internal const string TIMESTAMP = "timeStamp";
 
         #endregion Keys
@@ -97,7 +136,7 @@ namespace Acklann.Daterpillar.Translators
         protected IDictionary<string, string> TypeMap { get; set; }
 
         /// <summary>
-        /// Converts the specified <see cref="SchemaType" /> value to its equivalent string representation.
+        /// Converts the specified <see cref="SchemaType"/> value to its equivalent string representation.
         /// </summary>
         public static string ConvertToString(SchemaType type)
         {
@@ -160,7 +199,8 @@ namespace Acklann.Daterpillar.Translators
         }
 
         /// <summary>
-        /// Replaces the name of each placeholder variable embedded in the specified string with the string equivalent of the value of the variable, then returns the resulting string.
+        /// Replaces the name of each placeholder variable embedded in the specified string with the
+        /// string equivalent of the value of the variable, then returns the resulting string.
         /// </summary>
         /// <param name="name">A string containing the names of zero or more environment variables.</param>
         /// <returns></returns>
@@ -174,7 +214,7 @@ namespace Acklann.Daterpillar.Translators
 		public virtual string Escape(string objectName) => objectName;
 
         /// <summary>
-        /// Converts the <see cref="ReferentialAction" /> value to its equivalent SQL representation.
+        /// Converts the <see cref="ReferentialAction"/> value to its equivalent SQL representation.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns></returns>
@@ -201,13 +241,36 @@ namespace Acklann.Daterpillar.Translators
         }
 
         /// <summary>
-        /// Converts the <see cref="DataType" /> value to its equivalent SQL representation.
+        /// Converts the <see cref="DataType"/> value to its equivalent SQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
-        /// <returns>
-        /// The type name.
-        /// </returns>
+        /// <returns>The type name.</returns>
         public abstract string ConvertToString(DataType dataType);
+
+        /// <summary>
+        /// Get default value for the specified <paramref name="typeName"/>.
+        /// </summary>
+        /// <param name="typeName">The name of the data-type.</param>
+        /// <returns>A default value.</returns>
+        public virtual string GetDefaultValue(string typeName)
+        {
+            if (typeName == null) return NULL;
+
+            switch (typeName)
+            {
+                default: return "''";
+
+                case INT:
+                case TINYINT:
+                case SMALLINT:
+                case MEDIUMINT:
+                case BIGINT:
+                case FLOAT:
+                case DOUBLE:
+                case DECIMAL:
+                case BOOL: return "0";
+            }
+        }
 
         internal struct PlaceholderPattern
         {

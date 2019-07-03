@@ -52,7 +52,7 @@ namespace Acklann.Daterpillar.Writers
             base.Alter(column);
             if (column.DefaultValue != null)
             {
-                Writer.WriteLine(Expand($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {Resolver.ExpandVariables(column.DefaultValue)} FOR {Resolver.Escape(column.Name)};"));
+                Writer.WriteLine(Expand($"ALTER TABLE {Resolver.Escape(column.Table.Name)} ADD DEFAULT {GetDefaultValue(column)} FOR {Resolver.Escape(column.Name)};"));
                 Writer.WriteLine();
             }
             WriteEndIf(column.DefaultValue != null);
