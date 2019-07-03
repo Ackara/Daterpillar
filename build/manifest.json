@@ -12,7 +12,7 @@
     "version":  {
                     "major":  10,
                     "minor":  1,
-                    "patch":  0
+                    "patch":  1
                 },
     "branchSuffixMap":  {
                             "master":  "",
