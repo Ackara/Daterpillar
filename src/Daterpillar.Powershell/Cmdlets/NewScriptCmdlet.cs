@@ -1,6 +1,7 @@
 ﻿using Acklann.Daterpillar.Attributes;
 using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Migration;
+using System;
 using System.IO;
 using System.Management.Automation;
 using System.Reflection;
@@ -90,21 +91,22 @@ namespace Acklann.Daterpillar.Cmdlets
         protected override void ProcessRecord()
         {
             Schema oldSchema = null, newSchema = null;
-            string error, outputFile = Destination;
+            string error, outputFile = null;
 
             if (!File.Exists(OldSchemaFilePath))
                 oldSchema = new Schema();
             else if (!Schema.TryLoad(OldSchemaFilePath, out oldSchema, out error))
-                throw new System.ArgumentException($"{error} at '{OldSchemaFilePath}'.");
+                throw new ArgumentException($"{error} at '{OldSchemaFilePath}'.");
 
             if (!Schema.TryLoad(NewSchemaFilePath, out newSchema, out error))
-                throw new System.ArgumentException($"{error} at '{NewSchemaFilePath}'.");
+                throw new ArgumentException($"{error} at '{NewSchemaFilePath}'.");
 
+            outputFile = Environment.ExpandEnvironmentVariables(string.Format((Destination ?? string.Empty), newSchema.Version, Descripiton, Language, (Language.ToString().ToLowerInvariant())));
             if (string.IsNullOrEmpty(outputFile))
                 outputFile = Path.GetDirectoryName(OldSchemaFilePath);
 
-            if (!Path.HasExtension(outputFile))
-                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{Descripiton}.{Language.ToString().ToLowerInvariant()}.sql");
+            if (!Path.HasExtension(outputFile)) // not a file
+                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{Descripiton}.{Language.ToString().ToLowerInvariant()}");
 
             if (ShouldProcess(oldSchema.ResolveName() ?? newSchema.ResolveName()))
             {

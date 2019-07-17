@@ -37,6 +37,29 @@
       <columnName>Name</columnName>
     </index>
   </table>
+  <table name="Extra">
+    <column name="Id">
+      <dataType>int</dataType>
+    </column>
+    <column name="Name">
+      <dataType>varchar</dataType>
+    </column>
+    <column name="PlanId">
+      <dataType>varchar</dataType>
+    </column>
+    <column name="OwnerId">
+      <dataType>varchar</dataType>
+    </column>
+    <index type="primary-key">
+      <columnName>Id</columnName>
+    </index>
+    <index>
+      <columnName>PlanId</columnName>
+    </index>
+    <index>
+      <columnName>OwnerId</columnName>
+    </index>
+  </table>
   <table name="genre">
     <column name="Id">
       <dataType>int</dataType>

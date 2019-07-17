@@ -191,7 +191,7 @@ namespace Acklann.Daterpillar.Migration
                 }
             }
 
-            foreach (var index in indecies.GroupBy(a => a.Item2.Name))
+            foreach (var index in indecies.GroupBy(a => (string.IsNullOrEmpty(a.Item2.Name) ? a.Item1 : a.Item2.Name)))
             {
                 Index idx = null;
                 var names = new List<ColumnName>();
