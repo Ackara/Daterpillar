@@ -106,7 +106,7 @@ namespace Acklann.Daterpillar.Cmdlets
                 outputFile = Path.GetDirectoryName(OldSchemaFilePath);
 
             if (!Path.HasExtension(outputFile)) // not a file
-                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{Descripiton}.{Language.ToString().ToLowerInvariant()}");
+                outputFile = Path.Combine(outputFile, $"V{newSchema.Version}__{Descripiton}.{Language.ToString().ToLowerInvariant()}.sql");
 
             if (ShouldProcess(oldSchema.ResolveName() ?? newSchema.ResolveName()))
             {
