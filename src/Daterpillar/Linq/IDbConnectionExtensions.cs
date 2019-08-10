@@ -61,9 +61,36 @@ namespace Acklann.Daterpillar.Linq
             }
         }
 
+        public static TEntity SelectOne<TEntity>(this IDbConnection connection, string query) where TEntity : IEntity
+        {
+            if (string.IsNullOrEmpty(query)) return default;
+
+            Open(connection);
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = query;
+                using (IDataReader result = command.ExecuteReader())
+                {
+                    if (result.Read())
+                    {
+                        TEntity entity = Activator.CreateInstance<TEntity>();
+                        entity.Load(result);
+                        return entity;
+                    }
+                }
+            }
+
+            return default;
+        }
+
         public static Task<TEntity[]> SelectAsync<TEntity>(this IDbConnection connection, string query, System.Threading.CancellationToken cancellationToken = default) where TEntity : IEntity
         {
-            return Task.Run(() => { return Select<TEntity>(connection, query).ToArray(); }, cancellationToken);
+            return Task.Run(() => Select<TEntity>(connection, query).ToArray(), cancellationToken);
+        }
+
+        public static Task<TEntity> SelectOneAsync<TEntity>(this IDbConnection connection, string query, System.Threading.CancellationToken cancellationToken = default) where TEntity : IEntity
+        {
+            return Task.Run(() => SelectOne<TEntity>(connection, query), cancellationToken);
         }
 
         // ==================== INSERT DATA ==================== //
