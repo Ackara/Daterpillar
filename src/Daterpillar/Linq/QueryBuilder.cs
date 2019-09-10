@@ -17,13 +17,19 @@ namespace Acklann.Daterpillar.Linq
 
         public QueryBuilder Select(params string[] columns)
         {
-            _select = string.Join(", ", columns);
+            _select = Join(columns);
             return this;
         }
 
         public QueryBuilder From(string table)
         {
-            _from = table;
+            _from = SqlComposer.Escape(table, _language);
+            return this;
+        }
+
+        public QueryBuilder From(string format, params object[] args)
+        {
+            _from = string.Format(format, args);
             return this;
         }
 
@@ -33,15 +39,33 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public QueryBuilder Predicate(string column, object value, string operand = "=")
+        {
+            _where = string.Concat(SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            return this;
+        }
+
+        public QueryBuilder And(string column, object value, string operand = "=")
+        {
+            _where = string.Concat(_where, " AND ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            return this;
+        }
+
+        public QueryBuilder Or(string column, object value, string operand = "=")
+        {
+            _where = string.Concat(_where, " OR ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            return this;
+        }
+
         public QueryBuilder GroupBy(params string[] columns)
         {
-            _group = string.Join(", ", columns);
+            _group = Join(columns);
             return this;
         }
 
         public QueryBuilder OrderBy(params string[] columns)
         {
-            _order = string.Join(", ", columns);
+            _order = Join(columns);
             return this;
         }
 
@@ -112,6 +136,19 @@ namespace Acklann.Daterpillar.Linq
         private string _select, _from, _where, _group, _order;
 
         private StringBuilder _builder = new StringBuilder();
+
+        private string Join(string[] columns)
+        {
+            var builder = new StringBuilder();
+            int n = columns.Length;
+            for (int i = 0; i < n; i++)
+            {
+                builder.Append(SqlComposer.Escape(columns[i], _language));
+                if (i < (n - 1)) builder.Append(", ");
+            }
+
+            return builder.ToString();
+        }
 
         #endregion Private Members
     }

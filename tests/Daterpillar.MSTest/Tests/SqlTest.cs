@@ -65,12 +65,38 @@ namespace Acklann.Daterpillar.Tests
 
             var case5 = sut.ToString(Language.MySQL);
 
+            var case6 = sut.ToString();
+
             // Assert
             case1.ShouldMatch(@"(?i)select\s+\*\s+from profile\s*;");
             case2.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+;");
             case3.ShouldMatch(@"(?i)select top 10\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+;");
             case4.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+offset \d+ rows fetch next \d+ rows only\s+;");
             case5.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+limit \d+\s+offset \d+\s+;");
+        }
+
+        [TestMethod]
+        public void Can_build_update_statement()
+        {
+            // Arrange
+            var builder = new UpdateBuilder("foo");
+
+            // Act
+            builder.Set("id", 123)
+                .Set("name", "abc")
+                .Predicate("id", "test");
+            var case1 = builder.ToString();
+
+            builder.Predicate("id", "test").And("name", "jane");
+            var case2 = builder.ToString();
+
+            builder.Set("age", 12);
+            var case3 = builder.ToString();
+
+            // Assert
+            case1.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc' where id='test';");
+            case2.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc' where id='test' and name='jane';");
+            case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
         }
 
         [DataTestMethod]
