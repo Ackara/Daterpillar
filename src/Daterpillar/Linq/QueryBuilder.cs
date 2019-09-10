@@ -21,6 +21,12 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public QueryBuilder SelectRaw(params string[] columns)
+        {
+            _select = string.Join(", ", columns);
+            return this;
+        }
+
         public QueryBuilder From(string table)
         {
             _from = SqlComposer.Escape(table, _language);
@@ -63,9 +69,21 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public QueryBuilder GroupByRaw(params string[] columns)
+        {
+            _group = string.Join(", ", columns);
+            return this;
+        }
+
         public QueryBuilder OrderBy(params string[] columns)
         {
             _order = Join(columns);
+            return this;
+        }
+
+        public QueryBuilder OrderByRaw(params string[] columns)
+        {
+            _order = string.Join(", ", columns);
             return this;
         }
 
@@ -81,6 +99,7 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        [System.Obsolete]
         public string ToString(Language language)
         {
             _builder.Clear().Append("SELECT");

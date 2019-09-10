@@ -8,7 +8,7 @@
     <Description>A tool that generates sql-migration scripts from your classes.</Description>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>11.0.8</PackageVersion>
+    <PackageVersion>11.1.1</PackageVersion>
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageTags>sql migration orm flyway build</PackageTags>
     <Title>Daterpillar</Title>
@@ -18,7 +18,7 @@
     <Authors>Ackara</Authors>
     <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <AssemblyVersion>11.0.8</AssemblyVersion>
+    <AssemblyVersion>11.1.1</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
