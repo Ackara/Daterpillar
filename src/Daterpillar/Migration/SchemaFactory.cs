@@ -62,6 +62,17 @@ namespace Acklann.Daterpillar.Migration
             var table = new Table(type.GetName()) { Id = type.GetId() };
             foreach (MemberInfo member in members)
             {
+                switch (member)
+                {
+                    case PropertyInfo prop:
+                        if (prop.CanWrite == false) continue;
+                        break;
+
+                    case FieldInfo field:
+                        if (field.IsLiteral || field.IsInitOnly || field.IsStatic) continue;
+                        break;
+                }
+
                 ExtractColumnInfo(table, member);
             }
             ExtractIndexInfo(table, members);
@@ -109,8 +120,6 @@ namespace Acklann.Daterpillar.Migration
 
             var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
             var defaultAttr = member.GetCustomAttribute(typeof(DefaultValueAttribute)) as DefaultValueAttribute;
-            //var maxAttr = member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>();
-            //var minAttr = member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MinLengthAttribute>();
 
             column.DefaultValue = Convert.ToString(columnAttr?.DefaultValue ?? defaultAttr?.Value);
             if (string.IsNullOrEmpty(column.DefaultValue)) column.DefaultValue = null;
@@ -133,6 +142,13 @@ namespace Acklann.Daterpillar.Migration
                     if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
                 }
             }
+
+            var stringLenAttr = (dataType.Scale == default ? member.GetCustomAttribute<System.ComponentModel.DataAnnotations.StringLengthAttribute>() : null);
+            if (stringLenAttr != null) dataType.Scale = stringLenAttr.MaximumLength;
+
+            var maxLenAttr = (dataType.Scale == default ? member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>() : null);
+            if (maxLenAttr != null) dataType.Scale = maxLenAttr.Length;
+
             DataTypeAttribute typeAttr = member.GetCustomAttribute(typeof(DataTypeAttribute)) as DataTypeAttribute;
             column.DataType = (typeAttr == null ? dataType : typeAttr.ToDataType());
 
