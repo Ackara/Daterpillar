@@ -12,7 +12,7 @@
 RootModule = 'Daterpillar.Powershell.dll'
 
 # Version number of this module.
-ModuleVersion = '11.0.6'
+ModuleVersion = '11.0.7'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
