@@ -18,12 +18,12 @@ namespace Acklann.Daterpillar.Linq
 
         public static Language GetLanguage(Type connectionType)
         {
-            string name = connectionType.Name;
-            if (name.Contains("SQLite"))
+            string name = connectionType.Name.ToLowerInvariant();
+            if (name.Contains("sqlite"))
                 return Language.SQLite;
-            else if (name.Contains("MySql"))
+            else if (name.Contains("mysql"))
                 return Language.MySQL;
-            else if (name.Contains("Sql"))
+            else if (name.Contains("sql"))
                 return Language.TSQL;
 
             throw new InvalidCastException($"Could not cast '{connectionType.Name}' to '{nameof(Language)}'.");
@@ -97,6 +97,11 @@ namespace Acklann.Daterpillar.Linq
 
         public static bool Insert(this IDbConnection connection, params IEntity[] entities)
         {
+            return Insert(connection, GetLanguage(connection), entities);
+        }
+
+        public static bool Insert(this IDbConnection connection, Language kind, params IEntity[] entities)
+        {
             Open(connection);
             using (IDbTransaction transaction = connection.BeginTransaction())
                 try
@@ -104,7 +109,7 @@ namespace Acklann.Daterpillar.Linq
                     using (IDbCommand command = connection.CreateCommand())
                     {
                         command.Transaction = transaction;
-                        foreach (string sql in SqlComposer.GenerateInsertStatements(entities))
+                        foreach (string sql in SqlComposer.GenerateInsertStatements(kind, entities))
                         {
                             command.CommandText = sql;
                             command.ExecuteNonQuery();
@@ -119,7 +124,12 @@ namespace Acklann.Daterpillar.Linq
 
         public static Task<bool> InsertAsync(this IDbConnection connection, params IEntity[] entities)
         {
-            return Task.Run(() => { return Insert(connection, entities); });
+            return InsertAsync(connection, GetLanguage(connection), entities);
+        }
+
+        public static Task<bool> InsertAsync(this IDbConnection connection, Language lang, params IEntity[] entities)
+        {
+            return Task.Run(() => { return Insert(connection, lang, entities); });
         }
 
         // ==================== DROP DATABASE ==================== //
@@ -271,7 +281,5 @@ namespace Acklann.Daterpillar.Linq
 
             return null;
         }
-
-        // ==================== END ==================== //
     }
 }

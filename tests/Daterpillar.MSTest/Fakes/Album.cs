@@ -5,6 +5,8 @@ namespace Acklann.Daterpillar.Fakes
     [Table]
     public class Album
     {
+        public const string album = "album";
+
         [SqlIgnore]
         public int TotalTracks;
 

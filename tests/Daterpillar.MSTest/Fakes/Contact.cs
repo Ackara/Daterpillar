@@ -6,6 +6,8 @@ namespace Acklann.Daterpillar.Fakes
 {
     public class Contact : IEntity
     {
+        public const string TABLE = "contact";
+
         public int Id { get; set; }
 
         public string Name { get; set; }
