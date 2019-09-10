@@ -2,7 +2,7 @@ namespace Acklann.Daterpillar.Linq
 {
     public class UpdateBuilder
     {
-        public UpdateBuilder()
+        public UpdateBuilder(Language language) : this(null, language)
         {
         }
 
@@ -66,6 +66,15 @@ namespace Acklann.Daterpillar.Linq
         {
             return $"UPDATE {_table} SET {_set} WHERE {_where};";
         }
+
+        #region Operators
+
+        public static implicit operator string(UpdateBuilder obj)
+        {
+            return obj.ToString();
+        }
+
+        #endregion Operators
 
         #region Backing Members
 
