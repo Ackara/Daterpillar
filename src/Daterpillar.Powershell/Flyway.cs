@@ -11,8 +11,8 @@ namespace Acklann.Daterpillar
 {
     public static class Flyway
     {
-        public const int DEFAULT_TIMEOUT = (5 * 60/*sec*/);
-        private const string VERSION = "5.2.4", FILESYSTEM = "filesystem:";
+        public const int DEFAULT_TIMEOUT = (5 * 60 /*sec*/);
+        private const string DEFAULT_VERSION = "6.1.4", FILESYSTEM = "filesystem:";
 
         public static ProcessResult Invoke(string verb, string flywayUrl, string user, string password, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
         {
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar
             return Invoke(verb, flywayUrl, user, password, migrationsDirectory, installationPath, timeoutInSeconds);
         }
 
-        public static string Install(string baseDirectory = null, string version = VERSION)
+        public static string Install(string baseDirectory = null, string version = DEFAULT_VERSION)
         {
             string installationPath = GetDefaultInstallationPath(ref baseDirectory, version);
             string url = GetPackageUrl(version);
@@ -89,7 +89,7 @@ namespace Acklann.Daterpillar
             return installationPath;
         }
 
-        public static string GetDefaultInstallationPath(string version = VERSION)
+        public static string GetDefaultInstallationPath(string version = DEFAULT_VERSION)
         {
             string temp = null;
             return GetDefaultInstallationPath(ref temp, version);
@@ -159,7 +159,7 @@ namespace Acklann.Daterpillar
             return uri;
         }
 
-        internal static string GetDefaultInstallationPath(ref string baseDirectory, string version = VERSION)
+        internal static string GetDefaultInstallationPath(ref string baseDirectory, string version = DEFAULT_VERSION)
         {
             if (string.IsNullOrEmpty(baseDirectory)) baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string filename = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "flyway.cmd" : "flyway");
@@ -168,7 +168,7 @@ namespace Acklann.Daterpillar
 
         internal static string GetPackageUrl(string version)
         {
-            string url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{0}/flyway-commandline-{0}-{1}-x64{2}";
+            const string url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/{0}/flyway-commandline-{0}-{1}-x64{2}";
             switch (Environment.OSVersion.Platform)
             {
                 default:
@@ -176,10 +176,10 @@ namespace Acklann.Daterpillar
                     return string.Format(url, version, "windows", ".zip");
 
                 case PlatformID.MacOSX:
-                    return string.Format(url, version, "macosx", "tar.gz");
+                    return string.Format(url, version, "macosx", ".tar.gz");
 
                 case PlatformID.Unix:
-                    return string.Format(url, version, "linux", "tar.gz");
+                    return string.Format(url, version, "linux", ".tar.gz");
             }
         }
     }

@@ -63,9 +63,21 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
+        public QueryBuilder Group(string text)
+        {
+            _group = text;
+            return this;
+        }
+
         public QueryBuilder OrderBy(params string[] columns)
         {
             _order = Join(columns);
+            return this;
+        }
+
+        public QueryBuilder Order(string text)
+        {
+            _order = text;
             return this;
         }
 
