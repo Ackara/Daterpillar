@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Optimize>false</Optimize>
@@ -6,7 +6,19 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-  </PropertyGroup>
+  
+<Description>A tool that generates sql-migration scripts from your classes.</Description>
+<Version>11.2.0</Version>
+<AssemblyVersion>11.2.0</AssemblyVersion>
+<AssemblyFileVersion>11.2.0</AssemblyFileVersion>
+<PackageIcon>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIcon>
+<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+<PackageTags>sql migration orm flyway build</PackageTags>
+<Company>Ackara</Company>
+<Copyright>Copyright © 2015 Ackara</Copyright>
+<PackageLicenseFile>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseFile>
+</PropertyGroup>
 
   <PropertyGroup>
     <GenerateDaterpillarSchemaOnBuild>false</GenerateDaterpillarSchemaOnBuild>
@@ -108,4 +120,6 @@
   <Target Name="ImportConnectionStrings" BeforeTargets="PreBuildEvent">
     <Copy Condition="Exists('@(ConnectionStrings)')" SourceFiles="@(ConnectionStrings)" DestinationFiles="connections.json" SkipUnchangedFiles="true" />
   </Target>
+
+
 </Project>

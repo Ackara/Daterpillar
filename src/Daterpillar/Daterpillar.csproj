@@ -1,20 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
+
+    <Version>11.2.0</Version>
+    <AssemblyFileVersion>11.2.0</AssemblyFileVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>11.1.1</PackageVersion>
-    <AssemblyVersion>11.1.1</AssemblyVersion>
+    <AssemblyVersion>11.2.0</AssemblyVersion>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
     <Copyright>Copyright © 2015 Ackara</Copyright>
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
     <Description>A tool that generates sql-migration scripts from your classes.</Description>
     <PackageTags>sql migration orm flyway build</PackageTags>
@@ -36,11 +38,23 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
+  
   <ItemGroup Label="Nuget">
     <Content Include="..\..\readme.md">
       <PackagePath>readme.md</PackagePath>
       <Visible>false</Visible>
     </Content>
+
+    <Content Include="..\..\license.txt">
+      <PackagePath>license.txt</PackagePath>
+      <Visible>false</Visible>
+    </Content>
+
+    <Content Include="..\..\art\icon.png">
+      <Visible>false</Visible>
+      <PackagePath>icon.png</PackagePath>
+    </Content>
+    
     <Content Include="msbuild.targets">
       <PackagePath>build\$(AssemblyName).targets</PackagePath>
     </Content>

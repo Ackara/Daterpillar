@@ -49,7 +49,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 -depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
-	$version = ConvertTo-NcrementVersionNumber $ManifestFilePath $CurrentBranch;
+	$version = $ManifestFilePath | Select-NcrementVersionNumber;
 
 	# Building the powersehll manifest.
 	$moduleFolder = Join-Path $ArtifactsFolder (Split-Path $SolutionFolder -Leaf);
@@ -69,7 +69,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 
 	# Building the nuget package.
 	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
-	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version.FullVersion;
+	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version;
 	Get-ChildItem $ArtifactsFolder -Recurse -File -Filter "*.nupkg" | Expand-NugetPackage (Join-Path $ArtifactsFolder "msbuild");
 }
 
@@ -91,26 +91,32 @@ Task "Clean" -description "This task removes all generated files and folders fro
 Task "Import-BuildDependencies" -alias "restore" -description "This task imports all build dependencies." `
 -action {
 	# Installing all required dependencies.
-	foreach ($moduleId in $Dependencies)
-	{
-		$modulePath = Join-Path $ToolsFolder "$moduleId/*/*.psd1";
-		if (-not (Test-Path $modulePath)) { Save-Module $moduleId -Path $ToolsFolder; }
-		Import-Module $modulePath -Force;
-		Write-Host "  * imported the '$moduleId.$(Split-Path (Get-Item $modulePath).DirectoryName -Leaf)' powershell module.";
-	}
+	$moduleId = "Ncrement";
+	$modulePath = Join-Path $ToolsFolder "$moduleId/*/*.psd1";
+	if (-not (Test-Path $modulePath)) { Save-Module $moduleId -Path $ToolsFolder -MaximumVersion "8.2.18"; }
+	Import-Module $modulePath -Force;
+	Write-Host "  * imported the '$moduleId.$(Split-Path (Get-Item $modulePath).DirectoryName -Leaf)' powershell module.";
 }
 
 Task "Increment-VersionNumber" -alias "version" -description "This task increments all of the projects version number." `
 -depends @("restore") -action {
-	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch;
-	$manifest | ConvertTo-Json | Out-File $ManifestFilePath -Encoding utf8;
-	Invoke-Tool { &git add $ManifestFilePath | Out-Null; };
+	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch | Edit-NcrementManifest $ManifestFilePath;
+	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber;
+	
+	foreach ($item in @("*/*/*.*proj"))
+	{
+		$itemPath = Join-Path $SolutionFolder $item;
+		if (Test-Path $itemPath)
+		{
+			Get-ChildItem $itemPath | Update-NcrementProjectFile $ManifestFilePath;
+		}
+	}
 
-	Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest `
-		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
+	#Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest `
+	#	| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 
-	Join-Path $SolutionFolder "src/*/*.*psd1" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
-		| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
+	#Join-Path $SolutionFolder "src/*/*.*psd1" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
+	#	| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 }
 
 Task "Build-Solution" -alias "build" -description "This task compiles projects in the solution." `
