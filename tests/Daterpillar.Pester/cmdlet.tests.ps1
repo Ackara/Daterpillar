@@ -6,9 +6,9 @@ Describe "help" {
 	It "[PS] Should have full-detailed help" {
 		foreach ($name in @("Clear-DaterpillarSchema", "Show-DaterpillarMigrationHistory", "New-DaterpillarMigrationScript", "Export-DaterpillarSchema", "Update-DaterpillarSchema"))
 		{
-			#$menu = help $name | Out-String;
-			#$menu | Write-Host; Write-Host "===============";
-			#$menu | Should Not BeNullOrEmpty;
+			$menu = help $name | Out-String;
+			$menu | Write-Host; Write-Host "===============";
+			$menu | Should Not BeNullOrEmpty;
 		}
 	}
 }

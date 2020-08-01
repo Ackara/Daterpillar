@@ -1,6 +1,7 @@
 using Acklann.Daterpillar.Fakes;
 using Acklann.Daterpillar.Linq;
 using Acklann.Diffa;
+using AutoBogus;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -20,7 +21,7 @@ namespace Acklann.Daterpillar.Tests
             // Arrange
             Contact[] results = null;
             var database = MockDatabase.CreateDatabase<Contact>();
-            var records = Sample.CreateInstances<Contact>(100).ToArray();
+            var records = AutoFaker.Generate<Contact>(100).ToArray();
 
             // Act
             if (database.State != ConnectionState.Open) database.Open();

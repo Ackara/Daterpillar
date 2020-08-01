@@ -170,7 +170,7 @@ namespace Acklann.Daterpillar
         {
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
 
-            var builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = "sys" };
+            var builder = new MySql.Data.MySqlClient.MySqlConnectionStringBuilder(connectionString) { Database = "mysql" };
             return new MySql.Data.MySqlClient.MySqlConnection(builder.ToString());
         }
 
