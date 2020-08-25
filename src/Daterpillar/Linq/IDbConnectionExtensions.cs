@@ -102,23 +102,42 @@ namespace Acklann.Daterpillar.Linq
 
         public static bool Insert(this IDbConnection connection, Language kind, params IEntity[] entities)
         {
+            return Insert(connection, kind, out string _, entities);
+        }
+
+        public static bool Insert(this IDbConnection connection, Language kind, out string errorMessage, params IEntity[] entities)
+        {
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
+            errorMessage = null;
+
             Open(connection);
-            using (IDbTransaction transaction = connection.BeginTransaction())
-                try
+            IDbTransaction transaction = connection.BeginTransaction();
+            IDbCommand command = connection.CreateCommand();
+            command.Transaction = transaction;
+
+            try
+            {
+                string[] statements = SqlComposer.GenerateInsertStatements(kind, entities);
+                for (int i = 0; i < statements.Length; i++)
                 {
-                    using (IDbCommand command = connection.CreateCommand())
-                    {
-                        command.Transaction = transaction;
-                        foreach (string sql in SqlComposer.GenerateInsertStatements(kind, entities))
-                        {
-                            command.CommandText = sql;
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit();
-                    return true;
+                    command.CommandText = statements[i];
+                    command.ExecuteNonQuery();
                 }
-                catch { transaction.Rollback(); }
+
+                transaction.Commit();
+                return true;
+            }
+            catch (System.Data.Common.DbException ex)
+            {
+                errorMessage = ex.Message;
+                transaction.Rollback();
+            }
+            finally
+            {
+                command.Dispose();
+                transaction.Dispose();
+            }
+
             return false;
         }
 

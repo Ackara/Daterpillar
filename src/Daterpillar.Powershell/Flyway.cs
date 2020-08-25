@@ -12,7 +12,7 @@ namespace Acklann.Daterpillar
     public static class Flyway
     {
         public const int DEFAULT_TIMEOUT = (5 * 60 /*sec*/);
-        private const string DEFAULT_VERSION = "6.1.4", FILESYSTEM = "filesystem:";
+        private const string DEFAULT_VERSION = "6.5.3", FILESYSTEM = "filesystem:";
 
         public static ProcessResult Invoke(string verb, string flywayUrl, string user, string password, string migrationsDirectory, string installationPath = null, int timeoutInSeconds = DEFAULT_TIMEOUT)
         {

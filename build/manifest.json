@@ -2,7 +2,7 @@
     "description":  "A tool that generates sql-migration scripts from your classes.",
     "version":  {
                     "major":  11,
-                    "minor":  1,
+                    "minor":  2,
                     "patch":  9
                 },
     "company":  "Ackara",
