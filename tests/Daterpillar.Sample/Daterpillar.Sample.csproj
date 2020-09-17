@@ -1,11 +1,25 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Daterpillar.Sample</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-  </PropertyGroup>
+    <AssemblyVersion>11.2.20</AssemblyVersion>
+  
+<Description>A tool that generates sql-migration scripts from your classes.</Description>
+<Version>11.2.20</Version>
+<AssemblyFileVersion>11.2.20</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/changelog.md</PackageReleaseNotes>
+<PackageTags>sql migration orm flyway build</PackageTags>
+<Company>Ackara</Company>
+<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+
+<Title>Daterpillar</Title>
+<RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
+</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
@@ -31,4 +45,8 @@
   </ItemGroup>
 
   <Import Project="..\..\artifacts\msbuild\build\Daterpillar.targets" Condition="Exists('..\..\artifacts\msbuild\build\Daterpillar.targets')" />
+
+
+
+
 </Project>

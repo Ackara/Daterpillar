@@ -1,15 +1,23 @@
 ﻿{
-    "description":  "A tool that generates sql-migration scripts from your classes.",
-    "version":  {
-                    "major":  11,
-                    "minor":  2,
-                    "patch":  9
-                },
-    "company":  "Ackara",
-    "copyright":  "Copyright © 2015 Ackara",
-    "license":  "https://github.com/Ackara/Daterpillar/blob/master/license.txt",
-    "website":  "https://github.com/Ackara/Daterpillar",
-    "icon":  "https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png",
-    "releaseNotes":  "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
-    "tags":  "sql migration orm flyway build"
+  "name": "Daterpillar",
+  "description": "A tool that generates sql-migration scripts from your classes.",
+  "company": "Ackara",
+  "copyright": "Copyright {year} {company}, All Rights Reserved.",
+  "license": "license.txt",
+  "website": "https://github.com/{company}/{name}",
+  "repository": "https://github.com/{company}/{name}.git",
+  "icon": "icon.png",
+  "releaseNotes": "https://github.com/{company}/{name}/blob/master/releaseNotes.txt",
+  "tags": "sql migration orm flyway build",
+  "version":
+  {
+    "major": 11,
+    "minor": 2,
+    "patch": 20
+  },
+  "branchVersionMap":
+  {
+    "production": "C",
+    "default": "x.y.z-\\beta"
+  }
 }

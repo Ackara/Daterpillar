@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
@@ -7,7 +7,20 @@
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>
     <Name>Daterpillar.Pester</Name>
-  </PropertyGroup>
+  
+<Description>A tool that generates sql-migration scripts from your classes.</Description>
+<Version>11.2.20</Version>
+<PackageIcon>icon.png</PackageIcon>
+<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/changelog.md</PackageReleaseNotes>
+<PackageTags>sql migration orm flyway build</PackageTags>
+<Company>Ackara</Company>
+<Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+
+<Title>Daterpillar</Title>
+<RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
+</PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -33,4 +46,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
   <Import Project="$(MSBuildExtensionsPath)\PowerShell Tools for Visual Studio\PowerShellTools.targets" Condition="Exists('$(MSBuildExtensionsPath)\PowerShell Tools for Visual Studio\PowerShellTools.targets')" />
+
+
+
+
 </Project>

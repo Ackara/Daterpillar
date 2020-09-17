@@ -3,7 +3,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Daterpillar.Powershell</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-  </PropertyGroup>
+  
+<Version>11.2.20</Version>
+<AssemblyFileVersion>11.2.20</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+</PropertyGroup>
   <PropertyGroup>
     <Description>A tool that generates sql-migration scripts from your classes.</Description>
   </PropertyGroup>
@@ -14,12 +19,12 @@
     <Title>Daterpillar</Title>
     <Company>Ackara</Company>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
-    <Copyright>Copyright © 2015 Ackara</Copyright>
+    <Copyright>Copyright 2020 Ackara, All Rights Reserved.</Copyright>
     <Authors>Ackara</Authors>
     <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <AssemblyVersion>11.0.9</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+    <AssemblyVersion>11.2.20</AssemblyVersion>
+    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/changelog.md</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -43,4 +48,6 @@
   <Target Name="UpdatePowershellManifest" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -Command Update-ModuleManifest manifest.psd1 -RootModule $(AssemblyName).dll -ModuleVersion $(AssemblyVersion)" />
   </Target>
+
+
 </Project>

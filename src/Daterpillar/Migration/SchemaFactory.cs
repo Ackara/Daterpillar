@@ -18,7 +18,11 @@ namespace Acklann.Daterpillar.Migration
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
             IEnumerable<Type> tables = (from t in assembly.ExportedTypes
-                                        where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
+                                        where
+                                            t.IsInterface == false
+                                            && t.IsAbstract == false
+                                            && t.IsDefined(typeof(TableAttribute))
+                                            && t.IsDefined(typeof(SqlIgnoreAttribute)) == false
                                         select t);
 
             var v = assembly.GetName().Version;
