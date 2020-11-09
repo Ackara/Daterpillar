@@ -45,5 +45,18 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             migrate.ExitCode.ShouldBe(0);
         }
+
+        [TestMethod]
+        public void Can_deserialize_connection_string()
+        {
+            // Arrange
+
+
+            // Act
+
+
+
+            // Assert
+        }
     }
 }

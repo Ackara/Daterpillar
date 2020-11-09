@@ -87,8 +87,9 @@ namespace Acklann.Daterpillar.Linq
 
                 case Language.TSQL:
                     statement = string.Concat(
-                        "UPDATE ", _table,
-                        (_limit > 0 ? $" TOP {_limit}" : null),
+                        "UPDATE ",
+                        (_limit > 0 ? $" TOP ({_limit}) " : null),
+                        _table,
                         " SET ", _set,
                         (string.IsNullOrEmpty(_where) ? null : $" WHERE {_where}"),
                         ';'

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "build", "build\build.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
 EndProject
@@ -27,7 +27,7 @@ Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "Daterpillar.Pester", "tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Daterpillar.Sample", "tests\Daterpillar.Sample\Daterpillar.Sample.csproj", "{C0865B21-E3D7-471F-8B97-403C6E96E6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daterpillar.Benchmark", "tests\Daterpillar.Benchmark\Daterpillar.Benchmark.csproj", "{975037EF-D7D2-414B-BD00-75B272159638}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Daterpillar.Benchmark", "tests\Daterpillar.Benchmark\Daterpillar.Benchmark.csproj", "{975037EF-D7D2-414B-BD00-75B272159638}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
