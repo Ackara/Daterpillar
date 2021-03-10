@@ -4,6 +4,11 @@ namespace Acklann.Daterpillar.Modeling
 {
     public abstract class DataRecord : DataViewRecord, IInsertable
     {
+        public DataRecord()
+        {
+            ColumnMap.Register(GetType());
+        }
+
         public string GetTableName()
         {
             throw new NotImplementedException();
@@ -11,6 +16,8 @@ namespace Acklann.Daterpillar.Modeling
 
         public virtual string[] GetColumns()
         {
+            
+
             throw new NotImplementedException();
         }
 

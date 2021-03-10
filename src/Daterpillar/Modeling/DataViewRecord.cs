@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Acklann.Daterpillar.Modeling
 {
@@ -15,29 +10,18 @@ namespace Acklann.Daterpillar.Modeling
             ColumnMap.Register(GetType());
         }
 
-        public void Load(IDataRecord row)
+        public virtual void Load(IDataRecord data)
         {
-            int n = row.FieldCount;
+            int n = data.FieldCount;
             for (int i = 0; i < n; i++)
             {
-                Read(row.GetName(i));
+                ReadDataRow(ColumnMap.GetMember(data.GetName(i)), data.GetValue(i), data);
             }
-
-
-            throw new NotImplementedException();
         }
 
-        protected virtual void Read(string columnName)
+        protected virtual void ReadDataRow(PropertyInfo member, object value, IDataRecord record)
         {
-
+            member?.SetValue(this, value);
         }
-
-
-
-        #region Backing Members
-
-        
-
-        #endregion
     }
 }

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
-    internal class ColumnMap
+    internal static class ColumnMap
     {
         public static void Register(Type recordType)
         {
@@ -14,16 +14,19 @@ namespace Acklann.Daterpillar.Modeling
             if (_map.ContainsKey(tableName)) return;
             else _map.Add(tableName, null);
 
-
-
             foreach (PropertyInfo prop in recordType.GetColumns())
             {
-                string qualifiedName = string.Concat(tableName, '.');
+                string qualifiedName = string.Concat(tableName, '.', prop.GetName());
                 if (_map.ContainsKey(qualifiedName) == false)
                 {
                     _map.Add(qualifiedName, prop);
                 }
             }
+        }
+
+        public static PropertyInfo GetMember(string columnName)
+        {
+            return _map[columnName];
         }
 
         private static readonly IDictionary<string, PropertyInfo> _map = new Dictionary<string, PropertyInfo>();
