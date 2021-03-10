@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar.Attributes;
 using System.ComponentModel;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     [StaticId(100)]
     [Table, DisplayName("song")]

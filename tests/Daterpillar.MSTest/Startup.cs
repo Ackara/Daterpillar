@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Prototyping;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,11 +12,28 @@ namespace Acklann.Daterpillar
     [TestClass]
     public class Startup
     {
-        //[AssemblyCleanup]
+        [AssemblyInitialize]
+        public static void Setup(TestContext _)
+        {
+            RestoreDatabase();
+        }
+
+        [AssemblyCleanup]
         public static void Cleanup()
         {
-            //RemoveMSSQLFiles();
-            RemoveUnusedApprovalFiles(@"C:\Users\Ackeem\Projects\Daterpillar\tests\Daterpillar.MSTest\Tests\approved-results");
+            
+        }
+
+        private static void RestoreDatabase()
+        {
+            Schema schema = Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            
+        }
+
+        private static Schema CreateSchema()
+        {
+            return Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            
         }
 
         private static void RemoveUnusedApprovalFiles(string path)

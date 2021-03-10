@@ -4,7 +4,7 @@ using Shouldly;
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
-    public class FormatTest
+    public class FormattingTest
     {
         [DataRow("", "")]
         [DataRow(null, null)]

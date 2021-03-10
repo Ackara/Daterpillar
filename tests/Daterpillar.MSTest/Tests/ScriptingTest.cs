@@ -13,7 +13,19 @@ namespace Acklann.Daterpillar.Tests
     [TestCategory("sql")]
     public class ScriptingTest
     {
+        [ClassInitialize]
+        public static void Setup(TestContext context)
+        {
+
+        }
+
         public TestContext TestContext { get; set; }
+
+        // ==================== SELECT ==================== //
+
+
+
+        // ==================== placholder ==================== //
 
         [DataTestMethod]
         [DataRow(Language.TSQL)]

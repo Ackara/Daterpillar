@@ -3,42 +3,46 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-
     <Version>11.2.0</Version>
+    <AssemblyVersion>11.2.0</AssemblyVersion>
     <AssemblyFileVersion>11.2.0</AssemblyFileVersion>
   </PropertyGroup>
+
   <PropertyGroup>
-    <AssemblyVersion>11.2.0</AssemblyVersion>
+    <Description>A tool that generates sql-migration scripts from your classes.</Description>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
     <Copyright>Copyright © 2015 Ackara</Copyright>
+
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+    <PackageTags>sql migration orm flyway build</PackageTags>
+
+    <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <Description>A tool that generates sql-migration scripts from your classes.</Description>
-    <PackageTags>sql migration orm flyway build</PackageTags>
-    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="System.Memory" Version="4.5.3" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  
+
   <ItemGroup Label="Nuget">
     <Content Include="..\..\readme.md">
       <PackagePath>readme.md</PackagePath>
@@ -54,7 +58,7 @@
       <Visible>false</Visible>
       <PackagePath>icon.png</PackagePath>
     </Content>
-    
+
     <Content Include="msbuild.targets">
       <PackagePath>build\$(AssemblyName).targets</PackagePath>
     </Content>

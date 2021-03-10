@@ -1,7 +1,7 @@
 using Acklann.Daterpillar.Attributes;
 using Acklann.Daterpillar.Configuration;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     [Table]
     public class Extra

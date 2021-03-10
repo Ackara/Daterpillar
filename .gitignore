@@ -22,6 +22,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Tt]ools/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -274,14 +275,9 @@ Help_Backup/
 BenchmarkDotNet.Artifacts/
 !BenchmarkDotNet.Artifacts/results/
 
-# Build tools
-tools/
-
-# User Files
-commands.json
-
 # Sensitive Files
 connections.*
 credentials.*
 app.config
 secrets.*
+[Aa]ppsettings.json

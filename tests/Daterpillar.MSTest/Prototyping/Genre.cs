@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar.Attributes;
 using System.ComponentModel;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     [Table, DisplayName("genre")]
     public enum Genre

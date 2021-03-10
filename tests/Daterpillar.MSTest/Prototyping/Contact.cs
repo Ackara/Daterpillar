@@ -2,7 +2,7 @@ using Acklann.Daterpillar.Linq;
 using System;
 using System.Data;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     public class Contact : IEntity
     {

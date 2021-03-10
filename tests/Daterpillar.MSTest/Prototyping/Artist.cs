@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar.Attributes;
 using System;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     [Table("artist")]
     public class Artist

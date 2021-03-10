@@ -1,6 +1,6 @@
 ﻿using Acklann.Daterpillar.Attributes;
 
-namespace Acklann.Daterpillar.Fakes
+namespace Acklann.Daterpillar.Prototyping
 {
     [Table]
     public class Album
