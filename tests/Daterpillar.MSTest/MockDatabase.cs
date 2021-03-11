@@ -1,5 +1,5 @@
 using Acklann.Daterpillar.Linq;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data;
 using System.Data.SQLite;
@@ -14,10 +14,14 @@ namespace Acklann.Daterpillar
 {
     public static class MockDatabase
     {
-        public static IDbConnection CreateConnection(Language kind = Language.SQLite, [CallerMemberName]string name = null)
+        public static IDbConnection CreateConnection(Language kind = Language.SQLite, [CallerMemberName] string name = null)
         {
-            var config = JObject.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "connections.json")));
-            string connectionString = config.SelectToken((kind).ToString().ToLowerInvariant())?.Value<string>();
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            string connectionString = config.GetValue<string>(kind.ToString());
 
             switch (kind)
             {
@@ -32,7 +36,7 @@ namespace Acklann.Daterpillar
             }
         }
 
-        public static IDbConnection CreateDatabase<T>([CallerMemberName]string name = null)
+        public static IDbConnection CreateDatabase<T>([CallerMemberName] string name = null)
         {
             var members = from m in typeof(T).GetMembers()
                           where m.MemberType == MemberTypes.Property

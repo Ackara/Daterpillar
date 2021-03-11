@@ -4,10 +4,10 @@
     <AssemblyName>Daterpillar.Powershell</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   
-<Version>11.2.0</Version>
-<AssemblyFileVersion>11.2.0</AssemblyFileVersion>
-<PackageIcon>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIcon>
-<PackageLicenseFile>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseFile>
+<Version>12.0.0</Version>
+<AssemblyFileVersion>12.0.0</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
   <PropertyGroup>
     <Description>A tool that generates sql-migration scripts from your classes.</Description>
@@ -23,7 +23,7 @@
     <Authors>Ackara</Authors>
     <PackageLicenseUrl>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <AssemblyVersion>11.2.0</AssemblyVersion>
+    <AssemblyVersion>12.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

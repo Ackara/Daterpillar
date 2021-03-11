@@ -2,14 +2,23 @@
 using Acklann.Daterpillar.Configuration;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Acklann.Daterpillar
 {
     internal static class InternalHelper
     {
+        public static IEnumerable<PropertyInfo> GetColumns(this Type model)
+        {
+            return from t in model.GetProperties()
+                   where t.IsDefined(typeof(Attributes.ColumnAttribute))
+                   select t;
+        }
+
         internal static string Escape(this string text) => text?.Replace("'", @"\'");
 
         /// <summary>

@@ -7,8 +7,8 @@
   "icon": "icon.png",
   "releaseNotes": "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
   "version": {
-    "major": 11,
-    "minor": 2,
+    "major": 12,
+    "minor": 0,
     "patch": 0
   },
   "branchVersionMap": {

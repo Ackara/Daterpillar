@@ -4,8 +4,6 @@ namespace Acklann.Daterpillar.Modeling
 {
     public interface IReadable
     {
-        void Load(IDataRecord row);
-
-
+        void Load(IDataRecord record);
     }
 }

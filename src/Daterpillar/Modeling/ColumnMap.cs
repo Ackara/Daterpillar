@@ -16,7 +16,7 @@ namespace Acklann.Daterpillar.Modeling
 
             foreach (PropertyInfo prop in recordType.GetColumns())
             {
-                string qualifiedName = string.Concat(tableName, '.', prop.GetName());
+                string qualifiedName = GetFullName(tableName, prop.Name);
                 if (_map.ContainsKey(qualifiedName) == false)
                 {
                     _map.Add(qualifiedName, prop);
@@ -28,6 +28,13 @@ namespace Acklann.Daterpillar.Modeling
         {
             return _map[columnName];
         }
+
+        public static PropertyInfo GetMember(string tableName, string columnName)
+        {
+            return _map[GetFullName(tableName, columnName)];
+        }
+
+        public static string GetFullName(string tableName, string columnName) => string.Concat(tableName, '.', columnName);
 
         private static readonly IDictionary<string, PropertyInfo> _map = new Dictionary<string, PropertyInfo>();
     }

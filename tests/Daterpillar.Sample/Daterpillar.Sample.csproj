@@ -4,18 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Daterpillar.Sample</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
-    <AssemblyVersion>11.2.0</AssemblyVersion>
+    <AssemblyVersion>12.0.0</AssemblyVersion>
   
 <Description>A tool that generates sql-migration scripts from your classes.</Description>
-<Version>11.2.0</Version>
-<AssemblyFileVersion>11.2.0</AssemblyFileVersion>
-<PackageIcon>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIcon>
+<Version>12.0.0</Version>
+<AssemblyFileVersion>12.0.0</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
 <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
 <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
 <PackageTags>sql migration orm flyway build</PackageTags>
 <Company>Ackara</Company>
 <Copyright>Copyright © 2015 Ackara</Copyright>
-<PackageLicenseFile>https://github.com/Ackara/Daterpillar/blob/master/license.txt</PackageLicenseFile>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
 
   <ItemGroup>
