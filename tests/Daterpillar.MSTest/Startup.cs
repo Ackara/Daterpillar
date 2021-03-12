@@ -1,11 +1,19 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar;
+using Acklann.Daterpillar.Attributes;
+using Acklann.Daterpillar.Configuration;
 using Acklann.Daterpillar.Prototyping;
+using Acklann.Diffa;
+using Acklann.Diffa.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
+[assembly: Reporter(typeof(DiffReporter))]
+[assembly: ApprovedFolder("approved-results")]
+[assembly: Include(Sample.File.MusicDataXML)]
 
 namespace Acklann.Daterpillar
 {
@@ -21,19 +29,16 @@ namespace Acklann.Daterpillar
         [AssemblyCleanup]
         public static void Cleanup()
         {
-            
         }
 
         private static void RestoreDatabase()
         {
             Schema schema = Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
-            
         }
 
         private static Schema CreateSchema()
         {
             return Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
-            
         }
 
         private static void RemoveUnusedApprovalFiles(string path)

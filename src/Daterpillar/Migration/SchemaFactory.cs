@@ -17,12 +17,12 @@ namespace Acklann.Daterpillar.Migration
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            IEnumerable<Type> tables = (from t in assembly.ExportedTypes
+            IEnumerable<Type> tables = (from t in assembly.DefinedTypes
                                         where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
                                         select t);
 
-            var v = assembly.GetName().Version;
-            var schema = new Schema { Version = $"{v.Major}.{v.Minor}.{v.Build}" };
+            
+            var schema = new Schema { Version = assembly.GetName().Version.ToString(3) };
             string assemblyDocumentationFilePath = Path.ChangeExtension(assembly.Location, ".xml");
 
             foreach (Type type in tables)

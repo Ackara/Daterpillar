@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar
 {
-    public static class MockDatabase
+    public static class TestDatabase
     {
         public static IDbConnection CreateConnection(Language kind = Language.SQLite, [CallerMemberName] string name = null)
         {

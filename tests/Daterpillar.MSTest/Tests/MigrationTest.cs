@@ -16,6 +16,21 @@ namespace Acklann.Daterpillar.Tests
     {
         public TestContext TestContext { get; set; }
 
+        [TestMethod]
+        public void Can_create_new_database_schema(Language dialect)
+        {
+            // Arrange
+            Schema schema = CreateSchema();
+            using var database = TestDatabase.CreateConnection(dialect);
+
+            // Act
+            Writers.SqlWriterFactory f = new SqlWriterFactory();
+            
+            
+
+            // Assert
+        }
+
         [DataTestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
@@ -23,7 +38,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_create_new_database_on_server(Language kind)
         {
             string databaseName = TestContext.TestName;
-            var connection = MockDatabase.CreateConnection(kind);
+            var connection = TestDatabase.CreateConnection(kind);
             connection.CreateDatabase(typeof(MigrationTest).Assembly, databaseName, kind, true);
         }
 
@@ -138,7 +153,7 @@ namespace Acklann.Daterpillar.Tests
 
             int index = 0;
             string schemaName = "dtp-migrate-test";
-            using (var db = MockDatabase.CreateConnection(syntax, schemaName))
+            using (var db = TestDatabase.CreateConnection(syntax, schemaName))
             {
                 db.RebuildSchema(schemaName, false);
                 foreach (var file in Directory.EnumerateFiles(migrationsDir))
@@ -194,6 +209,14 @@ namespace Acklann.Daterpillar.Tests
             var sut = GetEnumeratorCase(caseNo);
             var results = string.Join(" ", sut.EnumerateTables().Select(x => x.Name));
             results.ShouldBe(exceptedValue);
+        }
+
+        #region Backing Members
+
+        private static Schema CreateSchema()
+        {
+            string assemblyFile = typeof(MigrationTest).Assembly.Location;
+            return SchemaFactory.CreateFrom(assemblyFile);
         }
 
         private static Schema GetEnumeratorCase(int index)
@@ -256,5 +279,7 @@ namespace Acklann.Daterpillar.Tests
 
             void join(Table x, Table y) => x.Add(new ForeignKey("", y.Name, ""));
         }
+
+        #endregion Backing Members
     }
 }
