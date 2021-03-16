@@ -17,18 +17,35 @@ namespace Acklann.Daterpillar.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite)]
         public void Can_create_new_database_schema(Language dialect)
         {
             // Arrange
+            using var database = TestDatabase2.CreateConnection(dialect);
+            TestDatabase2.ClearSchema(database, dialect);
+
             Schema schema = CreateSchema();
-            using var database = TestDatabase.CreateConnection(dialect);
 
             // Act
-            Writers.SqlWriterFactory f = new SqlWriterFactory();
-            
-            
+            string sql;
+            using (var stream = new MemoryStream())
+            using (var reader = new StreamReader(stream))
+            {
+                var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
+                writer.Create(schema);
+                writer.Flush();
+
+                stream.Seek(0, SeekOrigin.Begin);
+                sql = reader.ReadToEnd();
+            }
+
+            var result = TestDatabase.TryExecute(database, sql, out string error);
 
             // Assert
+            sql.ShouldNotBeNullOrWhiteSpace();
+            result.ShouldBeTrue(error);
         }
 
         [DataTestMethod]

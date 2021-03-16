@@ -41,12 +41,13 @@
 
   <ItemGroup>
     <PackageReference Include="Acklann.Diffa" Version="1.1.1" />
-    <PackageReference Include="AutoBogus.Conventions" Version="2.12.0" />
+    <PackageReference Include="ApprovalTests" Version="5.4.6" />
+    <PackageReference Include="AutoBogus.Conventions" Version="2.13.0" />
     <PackageReference Include="Cecrets" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FakeItEasy" Version="6.2.1" />
+    <PackageReference Include="FakeItEasy" Version="7.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
