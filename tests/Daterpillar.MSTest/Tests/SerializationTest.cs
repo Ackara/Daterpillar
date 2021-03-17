@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Tests
             result1.ShouldBeTrue();
             result2.ShouldBeFalse();
 
-            Diff.Approve(schema1, ".xml");
+            Diff.Approve(schema1.ToXml(), ".xml");
         }
 
         [TestMethod]
@@ -79,7 +79,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             sut.Scripts.ShouldNotBeEmpty();
-            Diff.Approve(sut, ".xml");
+            Diff.Approve(sut.ToXml(), ".xml");
         }
     }
 }

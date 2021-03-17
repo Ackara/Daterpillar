@@ -347,7 +347,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <returns>
         /// A <see cref="System.String" /> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public string ToXml()
         {
             var settings = new XmlWriterSettings()
             {

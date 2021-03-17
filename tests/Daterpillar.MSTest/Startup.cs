@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+[assembly: ApprovalTests.Reporters.UseReporter(typeof(ApprovalTests.Reporters.DiffReporter))]
+[assembly: ApprovalTests.Namers.UseApprovalSubdirectory("approved-results")]
 [assembly: Reporter(typeof(DiffReporter))]
 [assembly: ApprovedFolder("approved-results")]
 [assembly: Include(Sample.File.MusicDataXML)]

@@ -3,9 +3,11 @@ using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Migration;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
+using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -14,6 +16,11 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class MigrationTest
     {
+        [ClassInitialize]
+        public static void Setup(TestContext _)
+        {
+        }
+
         public TestContext TestContext { get; set; }
 
         [TestMethod]
@@ -48,78 +55,31 @@ namespace Acklann.Daterpillar.Tests
             result.ShouldBeTrue(error);
         }
 
-        [DataTestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_create_new_database_on_server(Language kind)
+        [TestMethod]
+        [DynamicData(nameof(GetMigrations), DynamicDataSourceType.Method)]
+        public void Can_generate_migration_script(string label, Language dialect, Schema remote, Schema local)
         {
-            string databaseName = TestContext.TestName;
-            var connection = TestDatabase.CreateConnection(kind);
-            connection.CreateDatabase(typeof(MigrationTest).Assembly, databaseName, kind, true);
+            // Arrange
+            using var database = TestDatabase2.CreateConnection(dialect);
+            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label, dialect);
+
+            string resultFile = Path.Combine(Path.GetTempPath(), $"daterpillar-{Guid.NewGuid()}.sql");
+
+            var sut = new Migrator();
+
+            // Act
+            var results = sut.GenerateMigrationScript(dialect, remote, local, resultFile);
+            var script = File.ReadAllText(resultFile);
+            System.Diagnostics.Debug.WriteLine(script);
+            var success = TestDatabase2.TryExecute2(database, script, out string error);
+
+            // Assert
+            success.ShouldBeTrue(error);
+            results.ShouldNotBeNull();
+            Approvals.VerifyFile(resultFile);
         }
 
         [TestMethod]
-        public void Can_build_a_schema_from_an_assembly()
-        {
-            // Arrange
-            var assemblyFile = typeof(MigrationTest).Assembly.Location;
-
-            // Act
-            var schema = SchemaFactory.CreateFrom(assemblyFile);
-
-            // Assert
-            schema.Version.ShouldNotBeNullOrEmpty();
-            Diff.Approve(schema, ".xml");
-        }
-
-        [TestMethod]
-        public void Should_merge_referenced_schema_when_applied()
-        {
-            // Arrange
-            var totalTablesBeforeMerge = 0;
-            var inputFile = Sample.GetSakilaInventoryXML().FullName;
-
-            var city = new Table("city",
-                new Column("Population", new DataType(SchemaType.INT)), /* add */
-                new Column("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
-
-                new ForeignKey("placeholder", "fake", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* add */
-                new ForeignKey("country_id", "country", "country_id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* update */
-
-                new Index(IndexType.Index, new ColumnName("Population")), /* add */
-                new Index(IndexType.Index, new ColumnName("country_id", Order.DESC)) /* update */
-                );
-            var revisions = new Schema() { Tables = new System.Collections.Generic.List<Table> { city } };
-
-            // Act
-            if (Schema.TryLoad(inputFile, out Schema schema))
-            {
-                totalTablesBeforeMerge = schema.Tables.Count;
-
-                schema.Merge();
-                schema.Merge(revisions);
-            }
-            var result = schema.Tables.Find(x => x.Name == city.Name);
-
-            // Assert
-            schema.ShouldNotBeNull();
-            //schema.Imports.ShouldBeNull();
-            totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
-
-            result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();
-            result.Columns.Find(x => x.Name == city.Columns[1].Name).DataType.ShouldBe(new DataType(SchemaType.SMALLINT));
-
-            result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[0].Name).ShouldNotBeNull();
-            result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[1].Name).OnDelete.ShouldBe(ReferentialAction.Cascade);
-
-            result.Indecies.Find(x => x.Name == city.Indecies[0].Name).ShouldNotBeNull();
-            result.Indecies.Find(x => x.Name == city.Indecies[1].Name).Columns[0].Order.ShouldBe(Order.DESC);
-
-            Diff.Approve(schema, ".xml");
-        }
-
-        [DataTestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
         [DataRow(Language.SQLite)]
@@ -198,19 +158,64 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldBeGreaterThan(0, "The 3rd migration failed.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
+        public void Should_merge_referenced_schema_when_applied()
+        {
+            // Arrange
+            var totalTablesBeforeMerge = 0;
+            var inputFile = Sample.GetSakilaInventoryXML().FullName;
+
+            var city = new Table("city",
+                new Column("Population", new DataType(SchemaType.INT)), /* add */
+                new Column("city_id", new DataType(SchemaType.SMALLINT), true), /* update */
+
+                new ForeignKey("placeholder", "fake", "Id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* add */
+                new ForeignKey("country_id", "country", "country_id", ReferentialAction.Cascade, ReferentialAction.Cascade), /* update */
+
+                new Index(IndexType.Index, new ColumnName("Population")), /* add */
+                new Index(IndexType.Index, new ColumnName("country_id", Order.DESC)) /* update */
+                );
+            var revisions = new Schema() { Tables = new System.Collections.Generic.List<Table> { city } };
+
+            // Act
+            if (Schema.TryLoad(inputFile, out Schema schema))
+            {
+                totalTablesBeforeMerge = schema.Tables.Count;
+
+                schema.Merge();
+                schema.Merge(revisions);
+            }
+            var result = schema.Tables.Find(x => x.Name == city.Name);
+
+            // Assert
+            schema.ShouldNotBeNull();
+            //schema.Imports.ShouldBeNull();
+            totalTablesBeforeMerge.ShouldBeLessThan(schema.Tables.Count);
+
+            result.Columns.Find(x => x.Name == city.Columns[0].Name).ShouldNotBeNull();
+            result.Columns.Find(x => x.Name == city.Columns[1].Name).DataType.ShouldBe(new DataType(SchemaType.SMALLINT));
+
+            result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[0].Name).ShouldNotBeNull();
+            result.ForeignKeys.Find(x => x.Name == city.ForeignKeys[1].Name).OnDelete.ShouldBe(ReferentialAction.Cascade);
+
+            result.Indecies.Find(x => x.Name == city.Indecies[0].Name).ShouldNotBeNull();
+            result.Indecies.Find(x => x.Name == city.Indecies[1].Name).Columns[0].Order.ShouldBe(Order.DESC);
+
+            Diff.Approve(schema.ToXml(), ".xml");
+        }
+
+        [TestMethod]
         [DataRow(typeof(System.Data.SqlClient.SqlConnection), Language.TSQL)]
         [DataRow(typeof(System.Data.SQLite.SQLiteConnection), Language.SQLite)]
         [DataRow(typeof(MySql.Data.MySqlClient.MySqlConnection), Language.MySQL)]
-        [TestMethod]
-        public void Can_get_the_sql_enum_from_the_connection_type(Type connectionType, Language excepectedValue)
+        public void Can_determine_language_from_the_connection_type(Type connectionType, Language excepectedValue)
         {
             IDbConnectionExtensions.GetLanguage(connectionType).ShouldBe(excepectedValue);
         }
 
         // ==================== ENUMERATOR ==================== //
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0, "")]
         [DataRow(1, "a")]
         [DataRow(2, "a b")]
@@ -221,7 +226,7 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(6, "a c b d")]
         [DataRow(7, "d a c b")]
         [DataRow(8, "a d c b")]
-        public void Can_enumerate_a_schema_by_its_dependencies(int caseNo, string exceptedValue)
+        public void Can_sort_tables_by_dependencies(int caseNo, string exceptedValue)
         {
             var sut = GetEnumeratorCase(caseNo);
             var results = string.Join(" ", sut.EnumerateTables().Select(x => x.Name));
@@ -236,11 +241,16 @@ namespace Acklann.Daterpillar.Tests
             return SchemaFactory.CreateFrom(assemblyFile);
         }
 
+
+
         private static Schema GetEnumeratorCase(int index)
         {
             var a = new Table("a"); var b = new Table("b");
             var c = new Table("c"); var d = new Table("d");
             var e = new Table("e"); var f = new Table("f");
+
+            void join(Table x, Table y) => x.Add(new ForeignKey("", y.Name, ""));
+
             var s = new Schema();
 
             switch (index)
@@ -294,7 +304,22 @@ namespace Acklann.Daterpillar.Tests
 
             throw new IndexOutOfRangeException();
 
-            void join(Table x, Table y) => x.Add(new ForeignKey("", y.Name, ""));
+        }
+
+        private static IEnumerable<object[]> GetMigrations()
+        {
+            TestDatabase2.ClearSchema();
+
+            var cases = new List<(string, Schema, Schema)>();
+            cases.Add(("init", new Schema(), CreateSchema()));
+
+            /* ********** */
+
+            foreach ((string label, Schema remote, Schema local) in cases)
+                foreach (var lang in TestDatabase2.GetSupportedLanguages())
+                {
+                    yield return new object[] { label, lang, remote, local };
+                }
         }
 
         #endregion Backing Members

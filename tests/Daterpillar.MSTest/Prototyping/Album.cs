@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Prototyping
         public int ArtistId { get; set; }
 
         [Key]
-        [ForeignKey(typeof(Song), nameof(Song.Id))]
+        [ForeignKey(typeof(Song), nameof(Song.Id), ReferentialAction.Restrict, ReferentialAction.Restrict)]
         public int SongId { get; set; }
 
         public int Year { get; set; }

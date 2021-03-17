@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -7,7 +8,7 @@ namespace Acklann.Daterpillar
 {
     internal static class TestDatabase2
     {
-        public static IDbConnection CreateConnection(Language type, bool useMaster = false)
+        public static IDbConnection CreateConnection(Language type, string databaseName = default)
         {
             IDbConnection connection = null;
             string connectionString = TestData.GetValue(type.ToString(), null);
@@ -16,12 +17,12 @@ namespace Acklann.Daterpillar
             {
                 case Language.TSQL:
                     connection = new System.Data.SqlClient.SqlConnection(connectionString);
-                    if (useMaster) connection.ChangeDatabase("master");
+                    if (databaseName != default) connection.ChangeDatabase(databaseName);
                     break;
 
                 case Language.MySQL:
                     connection = new MySql.Data.MySqlClient.MySqlConnection(connectionString);
-                    if (useMaster) connection.ChangeDatabase("master");
+                    if (databaseName != default) connection.ChangeDatabase(databaseName);
                     break;
 
                 case Language.SQLite:
@@ -97,6 +98,18 @@ namespace Acklann.Daterpillar
                     break;
             }
         }
+
+        public static void ClearSchema(string databaseName = default)
+        {
+            foreach (Language lang in GetSupportedLanguages())
+            {
+                using var database = CreateConnection(lang, databaseName);
+                ClearSchema(database, lang);
+            }
+        }
+
+        public static IEnumerable<Language> GetSupportedLanguages()
+           => new Language[] { Language.TSQL, Language.MySQL, Language.SQLite };
 
         private static readonly string _sqliteFilePath = Path.Combine(Path.GetTempPath(), "daterpillar-mstest.db3");
     }
