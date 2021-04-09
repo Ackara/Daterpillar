@@ -3,11 +3,9 @@ using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Migration;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
-using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -19,64 +17,6 @@ namespace Acklann.Daterpillar.Tests
         [ClassInitialize]
         public static void Setup(TestContext _)
         {
-        }
-
-        public TestContext TestContext { get; set; }
-
-        [TestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_create_new_database_schema(Language dialect)
-        {
-            // Arrange
-            using var database = TestDatabase2.CreateConnection(dialect);
-            TestDatabase2.ClearSchema(database, dialect);
-
-            Schema schema = CreateSchema();
-
-            // Act
-            string sql;
-            using (var stream = new MemoryStream())
-            using (var reader = new StreamReader(stream))
-            {
-                var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
-                writer.Create(schema);
-                writer.Flush();
-
-                stream.Seek(0, SeekOrigin.Begin);
-                sql = reader.ReadToEnd();
-            }
-
-            var result = TestDatabase.TryExecute(database, sql, out string error);
-
-            // Assert
-            sql.ShouldNotBeNullOrWhiteSpace();
-            result.ShouldBeTrue(error);
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(GetMigrations), DynamicDataSourceType.Method)]
-        public void Can_generate_migration_script(string label, Language dialect, Schema remote, Schema local)
-        {
-            // Arrange
-            using var database = TestDatabase2.CreateConnection(dialect);
-            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label, dialect);
-
-            string resultFile = Path.Combine(Path.GetTempPath(), $"daterpillar-{Guid.NewGuid()}.sql");
-
-            var sut = new Migrator();
-
-            // Act
-            var results = sut.GenerateMigrationScript(dialect, remote, local, resultFile);
-            var script = File.ReadAllText(resultFile);
-            System.Diagnostics.Debug.WriteLine(script);
-            var success = TestDatabase2.TryExecute2(database, script, out string error);
-
-            // Assert
-            success.ShouldBeTrue(error);
-            results.ShouldNotBeNull();
-            Approvals.VerifyFile(resultFile);
         }
 
         [TestMethod]
@@ -136,7 +76,7 @@ namespace Acklann.Daterpillar.Tests
                 foreach (var file in Directory.EnumerateFiles(migrationsDir))
                 {
                     var script = File.ReadAllText(file);
-                    var passed = db.TryExecute(script, out errorMsg);
+                    var passed = TestDatabase.TryExecute(db, script, out errorMsg);
 
                     if (!passed) script = (errorMsg + script);
                     script = $"file: {Path.GetFileName(file)}\n\n\n{script}";
@@ -241,8 +181,6 @@ namespace Acklann.Daterpillar.Tests
             return SchemaFactory.CreateFrom(assemblyFile);
         }
 
-
-
         private static Schema GetEnumeratorCase(int index)
         {
             var a = new Table("a"); var b = new Table("b");
@@ -303,23 +241,6 @@ namespace Acklann.Daterpillar.Tests
             }
 
             throw new IndexOutOfRangeException();
-
-        }
-
-        private static IEnumerable<object[]> GetMigrations()
-        {
-            TestDatabase2.ClearSchema();
-
-            var cases = new List<(string, Schema, Schema)>();
-            cases.Add(("init", new Schema(), CreateSchema()));
-
-            /* ********** */
-
-            foreach ((string label, Schema remote, Schema local) in cases)
-                foreach (var lang in TestDatabase2.GetSupportedLanguages())
-                {
-                    yield return new object[] { label, lang, remote, local };
-                }
         }
 
         #endregion Backing Members

@@ -3,11 +3,13 @@ using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Writers;
 using Acklann.Diffa;
+using ApprovalTests.Namers;
 using AutoBogus;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -18,176 +20,45 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class ScriptingTest
     {
-        [ClassInitialize]
-        public static void Setup(TestContext _)
-        {
-        }
-
-        [DataTestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_generate_script_to_create_a_database_schema(Language syntax)
+        [TestMethod]
+        [UseApprovalSubdirectory("../cases/approved-results")]
+        [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
+        public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
         {
             // Arrange
+            var sut = new Migration.Migrator();
+            string fileName = $"{label}.{dialect}.sql".ToLower();
+            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
 
-            #region Construct Schema
-
-            var scriptFile = Path.Combine(Path.GetTempPath(), $"dtp-create.{syntax}".ToLowerInvariant());
-            var schema = new Schema();
-
-            var genre = new Table("genre",
-                new Column("Id", new DataType(SchemaType.INT), true),
-                new Column("Name", new DataType(SchemaType.VARCHAR))
-                )
-            { Schema = schema, Comment = "Represents a music genre." };
-
-            var song = new Table("song",
-                new Column("Id", SchemaType.INT, true) { Comment = "The unique identifier." },
-                new Column("Name", new DataType(SchemaType.VARCHAR, 15)),
-                new Column("GenreId", SchemaType.INT),
-                new Column("Track", SchemaType.TINYINT, defaultValue: "1"),
-                new Column("Lyrics", new DataType(SchemaType.VARCHAR), nullable: true),
-
-                new ForeignKey("GenreId", "genre", "Id"),
-                new Index(IndexType.Index, new ColumnName("GenreId"))
-                )
-            { Schema = schema };
-
-            var album = new Table("album",
-                new Column("SongId", SchemaType.INT),
-                new Column("ArtistId", SchemaType.INT),
-                new Column("Name", SchemaType.VARCHAR),
-                new Column("Year", SchemaType.SMALLINT),
-                new Column("Price", SchemaType.DECIMAL)
-                )
-            { Schema = schema };
-
-            var genreSeed = new Script("INSERT INTO genre (Name) VAlUES ('Hip Hop'), ('R&B'), ('Country');", syntax);
-            var songSeed = new Script("INSERT INTO song (Name, GenreId, Track) VALUES ('Survival', '1', '1');", syntax);
-            var albumSeed = new Script("INSERT INTO album (SongId, ArtistId, Name, Year, Price) VALUES ('1', '1', 'Scorpion', '2018', '14.99');");
-            var generic = new Script("-- If you are reading this, I don't discriminate.", Language.SQL);
-            var virus = new Script("-- If you are reading this, it's to late. (I should not be here!)", (syntax + 1));
-
-            var name_idx = new Index(IndexType.Index, true, new ColumnName("Name", Order.DESC)) { Table = song };
-            var releaseDate = new Column("ReleaseDate", new DataType(SchemaType.TIMESTAMP), defaultValue: "$(now)") { Table = song };
-
-            var song_fk = new ForeignKey("SongId", "song", "Id") { Table = album };
-            var pKey = new Index(IndexType.PrimaryKey, new ColumnName("SongId"), new ColumnName("ArtistId")) { Table = album };
-
-            #endregion Construct Schema
+            using var stream = new MemoryStream();
+            using var connection = SqlValidator.ClearDatabase(dialect);
+            using var scenario = ApprovalResults.ForScenario(fileName);
+            using var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
 
             // Act
-            Sample.CreateDirectory(scriptFile);
-            if (File.Exists(scriptFile)) File.Delete(scriptFile);
+            sut.GenerateMigrationScript(dialect, new Schema(), oldSchema, scriptFile);
+            var sql = File.ReadAllText(scriptFile);
+            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
 
-            var factory = new SqlWriterFactory();
-            using (var file = File.OpenWrite(scriptFile))
-            using (var writer = factory.CreateInstance(syntax, file))
-            {
-                schema.Add(genre, song, album);
-                schema.Add(virus, generic, genreSeed, songSeed, albumSeed);
-                writer.Create(schema);
-
-                writer.Create(releaseDate);
-                song.Columns.Add(releaseDate);
-
-                writer.Create(song_fk);
-                album.ForeignKeys.Add(song_fk);
-
-                writer.Create(name_idx);
-                song.Indecies.Add(name_idx);
-
-                writer.Create(pKey);
-                writer.Flush();
-            }
-
-            TestScript(scriptFile, syntax, out string results, out bool executedScriptSuccessfully);
+            var changes = sut.GenerateMigrationScript(dialect, oldSchema, newSchema, scriptFile);
+            sql = File.ReadAllText(scriptFile);
+            var migrationWasSuccessful = SqlValidator.TryExecute(connection, sql, out error);
 
             // Assert
-            Diff.Approve(results, ".sql", syntax);
-            executedScriptSuccessfully.ShouldBeTrue();
+            migrationWasSuccessful.ShouldBeTrue(error);
+            ApprovalTests.Approvals.VerifyFile(scriptFile);
+            changes.ShouldNotBeNull();
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_generate_script_to_drop_a_database_schema(Language syntax)
+        [DataRow(Language.SQLite, "main")]
+        public void Can_clear_test_databases(Language connectionType, string expectedDatabaseName = default)
         {
-            // Arrange
-            var factory = new SqlWriterFactory();
-            var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-drop.sql");
-
-            var schema = CreateSchemaInstance();
-            var service = schema.Tables[2];
-
-            // Act
-            Sample.CreateDirectory(scriptFile);
-            if (File.Exists(scriptFile)) File.Delete(scriptFile);
-
-            using (var file = File.OpenWrite(scriptFile))
-            using (var writer = factory.CreateInstance(syntax, file))
-            {
-                writer.Drop(schema.Tables[0]);
-
-                writer.Drop(service.ForeignKeys[0]);
-                service.ForeignKeys.RemoveAt(0);
-
-                writer.Drop(service.Columns[3]);
-                service.Columns.RemoveAt(3);
-
-                writer.Drop(service.Indecies[0]);
-            }
-
-            TestScript(scriptFile, syntax, out string sql, out bool sqlIsExecutable);
-
-            // Assert
-            Diff.Approve(sql, ".sql", syntax);
-            sqlIsExecutable.ShouldBeTrue();
-        }
-
-        [DataTestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_generate_script_to_modify_a_database_schema(Language syntax)
-        {
-            // Arrange
-            var scriptFile = Path.Combine(Path.GetTempPath(), "dtp-alter.sql");
-            var schema = CreateSchemaInstance();
-            var factory = new SqlWriterFactory();
-
-            var service = schema.Tables[2];
-            var oldTable = service.Clone();
-
-            // Act
-            Sample.CreateDirectory(scriptFile);
-            if (File.Exists(scriptFile)) File.Delete(scriptFile);
-
-            using (var file = File.OpenWrite(scriptFile))
-            using (var writer = factory.CreateInstance(syntax, file))
-            {
-                writer.Rename("placeholder", "publisher");
-                writer.Rename(service.Columns[4], "ActiveUsers");
-                service.ForeignKeys[0].LocalColumn = "ActiveUsers";
-                service.Columns[4].Name = "ActiveUsers";
-
-                var replacement = service.Columns[2];
-                replacement.IsNullable = false;
-                replacement.DefaultValue = "0";
-                replacement.Comment = "Get or set the number of customers.";
-                writer.Alter(replacement);
-
-                service.Comment = "Represents a streaming service.";
-                writer.Alter(oldTable, service);
-            }
-
-            TestScript(scriptFile, syntax, out string sql, out bool generatedSqlIsExecutable);
-
-            // Assert
-            Diff.Approve(sql, ".sql", syntax);
-            generatedSqlIsExecutable.ShouldBeTrue();
+            using var connection = SqlValidator.ClearDatabase(connectionType);
+            connection.ShouldNotBeNull();
+            connection.Database.ShouldBe(expectedDatabaseName ?? nameof(Daterpillar));
         }
 
         [DataTestMethod]
@@ -230,14 +101,14 @@ namespace Acklann.Daterpillar.Tests
             using (var connection = TestDatabase.CreateConnection(kind))
             {
                 System.Diagnostics.Debug.WriteLine($"connection: {connection.ConnectionString}");
-                connection.TryExecute($"drop table {tableName};", out string errorMsg);
-                bool failed = !connection.TryExecute(createStatement, out errorMsg);
+                TestDatabase.TryExecute(connection, $"drop table {tableName};", out string errorMsg);
+                bool failed = !TestDatabase.TryExecute(connection, createStatement, out errorMsg);
                 if (failed) Assert.Fail($"Failed to create {tableName} table.\n\n{errorMsg}");
 
                 var separator = string.Concat(Enumerable.Repeat('=', 50));
                 foreach (var item in (case2.Concat(case3).Append(case4)))
                 {
-                    connection.TryExecute(item, out errorMsg);
+                    TestDatabase.TryExecute(connection, item, out errorMsg);
                     script.Append(errorMsg)
                           .AppendLine(item)
                           .AppendLine();
@@ -263,7 +134,7 @@ namespace Acklann.Daterpillar.Tests
             using (database)
             using (var command = database.CreateCommand())
             {
-                if (!database.TryExecute(SqlComposer.GenerateJoinedInsertStatements(records), out string errorMsg))
+                if (!TestDatabase.TryExecute(database, SqlComposer.GenerateJoinedInsertStatements(records), out string errorMsg))
                     Assert.Fail(errorMsg);
 
                 results = database.Select<Contact>($"select * from {nameof(Contact)};").ToArray();
@@ -361,7 +232,7 @@ namespace Acklann.Daterpillar.Tests
                 database.RebuildSchema(schemaName);
 
                 results = File.ReadAllText(scriptFile);
-                scriptExecutionWasSuccessful = database.TryExecute(results, out string error);
+                scriptExecutionWasSuccessful = TestDatabase.TryExecute(database, results, out string error);
                 var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
                 results = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, results, nl);
             }
@@ -391,6 +262,33 @@ namespace Acklann.Daterpillar.Tests
                 );
 
             return schema;
+        }
+
+        private static IEnumerable<object[]> GetMigrationCases()
+        {
+#if DEBUG
+            const string pattern = "add*";
+#else
+            const string pattern = "*";
+#endif
+            IEnumerable<string> caseFolder = Directory.EnumerateDirectories(Path.Combine(AppContext.BaseDirectory, "cases"), pattern, SearchOption.AllDirectories);
+
+            var languages = new Language[]
+            {
+                Language.SQLite,
+                Language.MySQL,
+                Language.TSQL,
+            };
+
+            foreach (Language lang in languages)
+                foreach (string folder in caseFolder)
+                {
+                    string label = Path.GetFileName(folder);
+                    Schema oldSchema = Schema.Load(Path.Combine(folder, "old.xml"));
+                    Schema newSchema = Schema.Load(Path.Combine(folder, "new.xml"));
+
+                    yield return new object[] { label, lang, oldSchema, newSchema };
+                }
         }
 
         #endregion Backing Members

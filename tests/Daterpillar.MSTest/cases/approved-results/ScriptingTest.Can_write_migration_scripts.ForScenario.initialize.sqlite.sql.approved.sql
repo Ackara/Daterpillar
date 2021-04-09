@@ -1,0 +1,8 @@
+CREATE TABLE [car] (
+	[id] VARCHAR(255) NOT NULL,
+	[make] VARCHAR(255) NOT NULL,
+	[model] VARCHAR(255) NOT NULL,
+	PRIMARY KEY ([id] ASC)
+)
+;
+

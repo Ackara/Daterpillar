@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
+  <table name="car">
+    <column name="id">
+      <dataType>varchar</dataType>
+    </column>
+
+    <column name="make">
+      <dataType>varchar</dataType>
+    </column>
+
+    <column name="model">
+      <dataType>varchar</dataType>
+    </column>
+
+    <column name="year">
+      <dataType>int</dataType>
+    </column>
+
+    <index type="primary-key">
+      <columnName>id</columnName>
+    </index>
+  </table>
+</schema>

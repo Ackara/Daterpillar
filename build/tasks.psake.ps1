@@ -1,153 +1,239 @@
 ﻿# SYNOPSIS: This is a psake task file.
-Join-Path $PSScriptRoot "toolkit.psm1" | Import-Module -Force;
-FormatTaskName "$(Write-Header -ReturnAsString)`r`n  {0}`r`n$(Write-Header -ReturnAsString)";
+FormatTaskName "$([string]::Concat([System.Linq.Enumerable]::Repeat('-', 70)))`r`n  {0}`r`n$([string]::Concat([System.Linq.Enumerable]::Repeat('-', 70)))";
 
 Properties {
-	$Dependencies = @("Ncrement");
+	$Dependencies = @(@{"Name"="Ncrement";"Version"="8.2.18"});
 
-	# Files & Folders
-	$SolutionFolder = (Split-Path $PSScriptRoot -Parent);
-	$ManifestFilePath = (Join-Path $PSScriptRoot  "manifest.json");
-	$SecretsFilePath = (Join-Path $SolutionFolder "secrets.json");
-	$ArtifactsFolder = (Join-Path $SolutionFolder "artifacts");
-	$ToolsFolder = "";
-
-	# Arguments
-    $ShouldCommitChanges = $true;
-	$CurrentBranch = "";
-	$Configuration = "";
-	$Filter = $null;
-	$DryRun = $false;
+    # Arguments
 	$Major = $false;
 	$Minor = $false;
-	$Force = $false;
+	$Filter = $null;
+	$InPreview = $false;
+	$Interactive = $true;
+	$InProduction = $false;
+	$Configuration = "Debug";
+	$EnvironmentName = $null;
+
+	# Files & Folders
+	$MSBuildExe = "";
+	$ToolsFolder = "";
+	$SecretsFilePath = "";
+	$SolutionFolder = (Split-Path $PSScriptRoot -Parent);
+	$SolutionName =   (Split-Path $SolutionFolder -Leaf);
+	$ArtifactsFolder = (Join-Path $SolutionFolder "artifacts");
+	$ManifestFilePath = (Join-Path $PSScriptRoot  "manifest.json");
 }
 
-Task "Default" -depends @("configure", "build", "test", "pack");
+Task "Default" -depends @("compile", "test", "pack");
 
-Task "Deploy" -alias "publish" -description "This task compiles, test then publish all packages to their respective destination." `
--depends @("clean", "build", "xsd", "test", "pack", "push-nuget", "push-ps", "tag");
+Task "Publish" -depends @("clean", "version", "compile", "test", "pack", "push-nuget", "tag") `
+-description "This task compiles, test then publish all packages to their respective destination.";
 
 # ======================================================================
 
-Task "Configure-Environment" -alias "configure" -description "This task generates all files required for development." `
--depends @("restore") -action {
-	# Generating the build manifest file.
-	if (-not (Test-Path $ManifestFilePath)) { New-NcrementManifest | ConvertTo-Json | Out-File $ManifestFilePath -Encoding utf8; }
-	Write-Host "  * added 'build/$(Split-Path $ManifestFilePath -Leaf)' to the solution.";
+Task "Restore-Dependencies" -alias "restore" -description "This task generate and/or import all file and module dependencies." `
+-action {
+	# Import powershell module dependencies
+	# ==================================================
+	foreach ($module in $Dependencies)
+	{
+		$modulePath = Join-Path $ToolsFolder "$($module.Name)/*/*.psd1";
+		if (-not (Test-Path $modulePath)) { Save-Module $module.Name -MaximumVersion $module.Version -Path $ToolsFolder; }
+		Import-Module $modulePath -Force;
+		Write-Host "  * imported the '$($module.Name)-$(Split-Path (Get-Item $modulePath).DirectoryName -Leaf)' powershell module.";
+	}
 
-	# Generating a secrets file template to store sensitive information.
+	# Generating the build manifest file
+	# ==================================================
+	if (-not (Test-Path $ManifestFilePath))
+	{
+		New-NcrementManifest | ConvertTo-Json | Out-File $ManifestFilePath -Encoding utf8;
+		Write-Host "  * added 'build/$(Split-Path $ManifestFilePath -Leaf)' to the solution.";
+	}
+
+	# Restore dotnet tools
+	# ==================================================
+	Push-Location $SolutionFolder;
+	Exec { &dotnet tool restore; }
+	Pop-Location;
+
+	# Generating a secrets file
+	# ==================================================
 	if (-not (Test-Path $SecretsFilePath))
 	{
-		$content = "{ 'nugetKey': null, 'mysql': 'server=;user=;password=;', 'tsql': 'server=;user=;password=;' }";
-		$content | ConvertFrom-Json | ConvertTo-Json | Out-File $SecretsFilePath -Encoding utf8;
+		"{}" | Out-File $SecretsFilePath -Encoding utf8;
+		Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
 	}
-	Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
+
+	$templateFilePath = Join-Path $SolutionFolder "config-template.csv";
+	$valuePairs = Get-Content $templateFilePath | ConvertFrom-Csv;
+	foreach ($item in $valuePairs)
+	{
+		$key = (&{ if (([string]$item.Key).StartsWith('$')) { return ($EnvironmentName + $item.Key.Substring(1)); } else { return $item.Key; } });
+		$currentValue = &dotnet app-secret get --path $SecretsFilePath --key $key;
+		if ([string]::IsNullOrWhiteSpace($currentValue) -and $Interactive)
+		{
+			$value = Read-Host (Get-Alt $item.Description $key);
+		}
+
+		$value = Get-Alt $value $item.Default;
+		&dotnet app-secret set --path $SecretsFilePath --key $key --value $value;
+	}
 }
+
+#region ----- PUBLISHING -----------------------------------------------
 
 Task "Package-Solution" -alias "pack" -description "This task generates all deployment packages." `
 -depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
-	$version = $ManifestFilePath | Select-NcrementVersionNumber;
-
-	# Building the powersehll manifest.
-	$moduleFolder = Join-Path $ArtifactsFolder (Split-Path $SolutionFolder -Leaf);
-	if (-not (Test-Path $moduleFolder)) { New-Item $moduleFolder -ItemType Directory | Out-Null; }
-	$projectFile = Join-Path $SolutionFolder "src/*.Powershell/*.*proj" | Get-Item;
-
-	Write-Header "dotnet: publish '$($projectFile.BaseName)'";
-	Exec { &dotnet publish $projectFile.FullName --configuration $Configuration --output $moduleFolder; }
-	Write-Header;
-
-	$manifest = Get-Content $ManifestFilePath | ConvertFrom-Json;
-	$dll = Join-Path $moduleFolder "*.Powershell.dll" | Get-Item;
-	$psd1 = Get-ChildItem $projectFile.DirectoryName -Filter "*.psd1" | Select-Object -First 1;
-	Get-ChildItem $moduleFolder -Filter "*.psd1" | Remove-Item;
-	Copy-Item $psd1.FullName -Destination (Join-Path $moduleFolder "$(Split-Path $moduleFolder -Leaf).psd1") -Force;
-	Join-Path $projectFile.DirectoryName "bin/$Configuration/*/*-help.xml" | Get-Item | Copy-Item -Destination $moduleFolder -Force;
-
-	# Building the nuget package.
-	$projectFile = Join-Path $SolutionFolder "src/$(Split-Path $SolutionFolder -Leaf)/*.*proj" | Get-Item;
-	$projectFile | Invoke-NugetPack $ArtifactsFolder $Configuration $version;
-	Get-ChildItem $ArtifactsFolder -Recurse -File -Filter "*.nupkg" | Expand-NugetPackage (Join-Path $ArtifactsFolder "msbuild");
 }
 
-Task "Generate-XmlSchemaFromDll" -alias "xsd" -description "This task generates a '.xsd' file from the project's '.dll' file." `
--precondition { return Test-XsdExe; } `
+Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
+-precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
-	Join-Path $SolutionFolder "src/*/$(Split-Path $SolutionFolder -Leaf).csproj" | Get-ChildItem `
-		| Export-XmlSchemaFromDll $Configuration -FullyQualifiedTypeName "Acklann.Daterpillar.Configuration.Schema" -Force;
+    foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.nupkg")
+    {
+        Write-Separator "dotnet nuget push '$($nupkg.Name)'";
+        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json"; }
+    }
 }
+
+Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
+-precondition { return ($InProduction -or $InPreview ) } `
+-depends @("restore") -action {
+	$version = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
+
+	if (-not ((&git status | Out-String) -match 'nothing to commit'))
+	{
+		Exec { &git add .; }
+		Write-Separator "git commit";
+		Exec { &git commit -m "Increment version number to '$version'."; }
+	}
+
+	Write-Separator "git tag '$version'";
+	Exec { &git tag --annotate "v$version" --message "Version $version"; }
+}
+
+#endregion
 
 #region ----- COMPILATION ----------------------------------------------
 
 Task "Clean" -description "This task removes all generated files and folders from the solution." `
 -action {
-	Join-Path $SolutionFolder "*.sln" | Get-Item | Remove-GeneratedProjectItem -AdditionalItems @("artifacts");
-	Get-ChildItem $SolutionFolder -Recurse -File -Filter "*.*proj" | Remove-GeneratedProjectItem -AdditionalItems @("package-lock.json");
+	foreach ($itemsToRemove in @("artifacts", "TestResults", "*/*/bin/", "*/*/obj/", "*/*/node_modules/", "*/*/package-lock.json"))
+	{
+		$itemPath = Join-Path $SolutionFolder $itemsToRemove;
+		if (Test-Path $itemPath)
+		{
+			Resolve-Path $itemPath `
+				| Write-Value "  * removed '{0}'." -PassThru `
+					| Remove-Item -Recurse -Force;
+		}
+	}
 }
 
-Task "Import-BuildDependencies" -alias "restore" -description "This task imports all build dependencies." `
--action {
-	# Installing all required dependencies.
-	$moduleId = "Ncrement";
-	$modulePath = Join-Path $ToolsFolder "$moduleId/*/*.psd1";
-	if (-not (Test-Path $modulePath)) { Save-Module $moduleId -Path $ToolsFolder -MaximumVersion "8.2.18"; }
-	Import-Module $modulePath -Force;
-	Write-Host "  * imported the '$moduleId.$(Split-Path (Get-Item $modulePath).DirectoryName -Leaf)' powershell module.";
-}
-
-Task "Increment-VersionNumber" -alias "version" -description "This task increments all of the projects version number." `
+Task "Increment-Version-Number" -alias "version" -description "This task increments all of the projects version number." `
 -depends @("restore") -action {
 	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch | Edit-NcrementManifest $ManifestFilePath;
-	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber;
-	
-	foreach ($item in @("*/*/*.*proj"))
+	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName;
+
+	foreach ($item in @("*/*/*.*proj", "src/*/*.vsixmanifest", "src/*/*.psd1"))
 	{
 		$itemPath = Join-Path $SolutionFolder $item;
 		if (Test-Path $itemPath)
 		{
-			Get-ChildItem $itemPath | Update-NcrementProjectFile $ManifestFilePath;
+			Get-ChildItem $itemPath | Update-NcrementProjectFile $ManifestFilePath `
+				| Write-Value "  * incremented '{0}' version number to '$newVersion'.";
 		}
 	}
-
-	#Join-Path $SolutionFolder "src/*/*.*proj" | Get-ChildItem -File | Update-NcrementProjectFile $manifest `
-	#	| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
-
-	#Join-Path $SolutionFolder "src/*/*.*psd1" | Get-ChildItem -File | Update-NcrementProjectFile $manifest -Commit:$ShouldCommitChanges `
-	#	| Write-FormatedMessage "  * updated '{0}' version number to '$(ConvertTo-NcrementVersionNumber $manifest | Select-Object -ExpandProperty Version)'.";
 }
 
-Task "Build-Solution" -alias "build" -description "This task compiles projects in the solution." `
+Task "Build-Solution" -alias "compile" -description "This task compiles projects in the solution." `
 -action {
-	Get-Item "$SolutionFolder/*.sln" | Invoke-MSBuild $Configuration;
+	$solutionFile = Join-Path $SolutionFolder "*.sln" | Get-Item;
+	Write-Separator "msbuild '$($solutionFile.Name)'";
+	Exec { &$MSBuildExe $solutionFile.FullName -property:Configuration=$Configuration -restore ; }
 }
 
 Task "Run-Tests" -alias "test" -description "This task invoke all tests within the 'tests' folder." `
--action { Join-Path $SolutionFolder "tests" | Get-ChildItem -Recurse -File -Filter "*MSTest.csproj" | Invoke-MSTest $Configuration; }
-
-Task "Run-Benchmarks" -alias "benchmark" -description "This task invoke all benchmark tests within the 'tests' folder." `
--action { $projectFile = Join-Path $SolutionFolder "tests/*.Benchmark/*.*proj" | Get-Item | Invoke-BenchmarkDotNet -Filter $Filter -DryRun:$DryRun; }
+-action {
+	foreach ($item in @("tests/*MSTest/*.*proj"))
+	{
+		[string]$projectPath = Join-Path $SolutionFolder $item;
+		if (Test-Path $projectPath -PathType Leaf)
+		{
+			$projectPath = Resolve-Path $projectPath;
+			Write-Separator "dotnet test '$(Split-Path $projectPath -Leaf)'";
+			Exec { &dotnet test $projectPath --configuration $Configuration; }
+		}
+	}
+}
 
 #endregion
 
-#region ----- PUBLISHING -----------------------------------------------
+#region ----- FUNCTIONS ------------------------------------------------
 
-Task "Publish-NuGetPackages" -alias "push-nuget" -description "This task publish all nuget packages to nuget.org." `
--precondition { return Test-Path $ArtifactsFolder -PathType Container } `
--action { Get-ChildItem $ArtifactsFolder -Recurse -Filter "*.nupkg" | Publish-PackageToNuget $SecretsFilePath "nugetKey"; }
+function Write-Value
+{
+	Param(
+		[Parameter(Mandatory)]
+		[string]$FormatString,
 
-Task "Publish-PowershellModules" -alias "push-ps" -description "" `
--precondition { return Test-Path $ArtifactsFolder -PathType Container } `
--action { Join-Path $ArtifactsFolder "*/*.psd1" | Get-Item | Publish-PackageToPowershellGallery $SecretsFilePath "psGalleryKey"; }
+		$Arg1, $Arg2,
 
-Task "Publish-VSIXPackage" -alias "push-vsix" -description "This task publish all .vsix packages." `
--precondition { return Test-Path $ArtifactsFolder -PathType Container } `
--action { Get-ChildItem $ArtifactsFolder -Recurse -Filter "*.vsix" | Publish-PackageToVSIXGallery $ToolsFolder; }
+		[Alias('c', "fg")]
+		[System.ConsoleColor]$ForegroundColor = [System.ConsoleColor]::Gray,
 
-Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the last commit with the version number." `
--precondition { return $CurrentBranch -eq "master"; } `
--depends @("restore") -action { $ManifestFilePath | ConvertTo-NcrementVersionNumber | Select-Object -ExpandProperty Version | New-GitTag $CurrentBranch; }
+		[Parameter(ValueFromPipeline)]
+		$InputObject,
+
+		[switch]$PassThru
+	)
+
+	PROCESS
+	{
+		Write-Host ([string]::Format($FormatString, $InputObject, $Arg1, $Arg2)) -ForegroundColor $ForegroundColor;
+		if ($PassThru -and $InputObject) { return $InputObject }
+	}
+}
+
+function Write-Separator([string]$Title = "", [int]$length = 70)
+{
+	$header = [string]::Concat([System.Linq.Enumerable]::Repeat('-', $length));
+	if (-not [String]::IsNullOrEmpty($Title))
+	{
+		$header = $header.Insert(4, " $Title ");
+		if ($header.Length -gt $length) { $header = $header.Substring(0, $length); }
+	}
+	Write-Host "`r`n$header`r`n" -ForegroundColor DarkGray;
+}
+
+function Get-Secret
+{
+	Param(
+		[Parameter(Mandatory)]
+		[string]$JPath,
+
+		[Parameter(Mandatory)]
+		[string]$EnvironmentVariable
+	)
+
+	$result = [Environment]::ExpandEnvironmentVariables("%$EnvironmentVariable%");
+	if ([string]::IsNullOrEmpty($result) -or ($result -eq "%$EnvironmentVariable%"))
+	{
+		$result = Get-Content $SecretsFilePath | Out-String | ConvertFrom-Json;
+		$properties = $JPath.Split(@('.', '/', ':'));
+		foreach($prop in $properties)
+		{
+			$result = $result.$prop;
+		}
+	}
+	return $result;
+}
+
+function Get-Alt([string]$value, [string]$default = ""){
+	if ([string]::IsNullOrWhiteSpace($value)) { return $default; } else { return $value; }
+}
 
 #endregion
