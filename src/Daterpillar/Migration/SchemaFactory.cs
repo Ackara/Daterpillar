@@ -52,33 +52,31 @@ namespace Acklann.Daterpillar.Migration
 
         public static Table CreateFrom(Type type)
         {
-            IEnumerable<MemberInfo> columnCandidates = (from m in type.GetRuntimeProperties().Cast<MemberInfo>().Concat(type.GetRuntimeFields())
-                                                        where
-                                                         m.IsDefined(typeof(SqlIgnoreAttribute)) == false
-                                                        select m).ToArray();
+            IEnumerable<MemberInfo> columnCandidates =
+                (from property in type.GetProperties()
+                 let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
+                 where
+                    /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                    &&
+                    (not_explictly_defined && property.CanWrite == false) == false
+                 select (MemberInfo)property)
+
+                 .Concat
+
+                 (from field in type.GetRuntimeFields()
+                  let isExplict = field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))
+                  where
+                     field.IsDefined(typeof(SqlIgnoreAttribute)) == false && field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                     &&
+                     isExplict
+                  select field);
 
             var table = new Table() { Id = type.GetId() };
             SetTableInfo(table, type.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.TableAttribute>());
             SetTableInfo(table, type.GetCustomAttribute<TableAttribute>());
             SetDefaults(table, type);
 
-            foreach (MemberInfo member in columnCandidates)
-            {
-                bool not_opt_in = (member.IsDefined(typeof(ColumnAttribute)) == false && member.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false);
-
-                switch (member)
-                {
-                    case PropertyInfo prop:
-                        if (not_opt_in && (prop.CanWrite == false)) continue;
-                        break;
-
-                    case FieldInfo field:
-                        if (not_opt_in) continue;
-                        break;
-                }
-
-                GetColumnInfo(table, member);
-            }
+            SetColumns(table, columnCandidates);
             ExtractIndexInfo(table, columnCandidates);
 
             return table;
@@ -142,6 +140,14 @@ namespace Acklann.Daterpillar.Migration
         }
 
         // ==================== Column Information ==================== //
+        private static void SetColumns(Table table, IEnumerable<MemberInfo> columnCandidates)
+        {
+            foreach (MemberInfo member in columnCandidates)
+            {
+                GetColumnInfo(table, member);
+            }
+        }
+
         private static void ExtractColumnInfo(Table table, MemberInfo member)
         {
             var column = new Column();
@@ -358,6 +364,57 @@ namespace Acklann.Daterpillar.Migration
                 table.Indecies.Add(idx);
                 idx.Table = table;
             }
+        }
+
+        private static void SetIndecies(Table table, IEnumerable<MemberInfo> members)
+        {
+            var list = new List<Index>();
+
+            foreach (MemberInfo member in members)
+            {
+                Index index = null;
+                string columnName = member.GetColumnName();
+
+                SetIndexInfo(index, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>());
+                SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.KeyAttribute>());
+                SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.IndexAttribute>());
+                SetIndexDefault(index, member, table);
+
+                if (index != null) list.Add(index);
+            }
+        }
+
+        private static void SetIndexInfo(Index index, System.ComponentModel.DataAnnotations.KeyAttribute attribute)
+        {
+            if (attribute == null) return;
+            if (index == null) index = new Index();
+
+            index.Type = IndexType.PrimaryKey;
+        }
+
+        private static void SetIndexInfo(Index index, KeyAttribute attribute)
+        {
+            if (attribute == null) return;
+            if (index == null) index = new Index();
+
+            index.Type = IndexType.PrimaryKey;
+        }
+
+        private static void SetIndexInfo(Index index, IndexAttribute attribute)
+        {
+            if (attribute == null) return;
+            if (index == null) index = new Index();
+
+            index.Name = attribute.Name;
+            index.IsUnique = attribute.Unique;
+            index.Type = attribute.Type;
+        }
+
+        private static void SetIndexDefault(Index index, MemberInfo member, Table table)
+        {
+            if (index == null) return;
+            index.Table = table;
+            index.Columns = new ColumnName[] { member.GetColumnName() };
         }
 
         #endregion Backing Members

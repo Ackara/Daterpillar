@@ -20,5 +20,20 @@ namespace Acklann.Daterpillar.Serialization
             return member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>()?.Length ?? 0;
         }
 
+        public static string GetColumnName(this MemberInfo member)
+        {
+            if (member.GetCustomAttribute(typeof(Attributes.ColumnAttribute)) is Attributes.ColumnAttribute attribute1 && !string.IsNullOrEmpty(attribute1.Name))
+            {
+                return attribute1.Name;
+            }
+            else if (member.GetCustomAttribute(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) is System.ComponentModel.DataAnnotations.Schema.ColumnAttribute attribute2 && !string.IsNullOrEmpty(attribute2.Name))
+            {
+                return attribute2.Name;
+            }
+            else
+            {
+                return member.Name;
+            }
+        }
     }
 }

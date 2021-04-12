@@ -98,6 +98,8 @@ namespace Acklann.Daterpillar.Tests
             public string Hash { get; set; }
         }
 
+
+
         #endregion Types To Convert
     }
 }
