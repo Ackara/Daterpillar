@@ -1,0 +1,29 @@
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="inffered-columns-table">
+  <column name="Id">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="Name">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="IntValue">
+    <dataType>int</dataType>
+  </column>
+  <column name="DecimalValue">
+    <dataType scale="8" precision="2">decimal</dataType>
+  </column>
+  <column name="Date">
+    <dataType>dateTime</dataType>
+  </column>
+  <column name="Boolean">
+    <dataType>bool</dataType>
+  </column>
+  <column name="Time">
+    <dataType>dateTime</dataType>
+  </column>
+  <column name="FloatValue">
+    <dataType>float</dataType>
+  </column>
+  <column name="EnumValue">
+    <dataType>int</dataType>
+  </column>
+</Table>

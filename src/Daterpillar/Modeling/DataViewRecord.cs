@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
-    public abstract class DataViewRecord : IReadable
+    public abstract class DataViewRecord : ISelectable
     {
         public DataViewRecord()
         {

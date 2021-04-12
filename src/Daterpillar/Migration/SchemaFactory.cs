@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Attributes;
 using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Serialization;
 using Acklann.Daterpillar.Translators;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,6 @@ namespace Acklann.Daterpillar.Migration
                                         where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
                                         select t);
 
-            
             var schema = new Schema { Version = assembly.GetName().Version.ToString(3) };
             string assemblyDocumentationFilePath = Path.ChangeExtension(assembly.Location, ".xml");
 
@@ -52,35 +52,39 @@ namespace Acklann.Daterpillar.Migration
 
         public static Table CreateFrom(Type type)
         {
-            IEnumerable<MemberInfo> members = (from m in type.GetMembers()
-                                               where
-                                                (m.MemberType == MemberTypes.Property || m.MemberType == MemberTypes.Field)
-                                                &&
-                                                m.IsDefined(typeof(SqlIgnoreAttribute)) == false
-                                               select m).ToArray();
+            IEnumerable<MemberInfo> columnCandidates = (from m in type.GetRuntimeProperties().Cast<MemberInfo>().Concat(type.GetRuntimeFields())
+                                                        where
+                                                         m.IsDefined(typeof(SqlIgnoreAttribute)) == false
+                                                        select m).ToArray();
 
-            var table = new Table(type.GetName()) { Id = type.GetId() };
-            foreach (MemberInfo member in members)
+            var table = new Table() { Id = type.GetId() };
+            SetTableInfo(table, type.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.TableAttribute>());
+            SetTableInfo(table, type.GetCustomAttribute<TableAttribute>());
+            SetDefaults(table, type);
+
+            foreach (MemberInfo member in columnCandidates)
             {
+                bool not_opt_in = (member.IsDefined(typeof(ColumnAttribute)) == false && member.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false);
+
                 switch (member)
                 {
                     case PropertyInfo prop:
-                        if (prop.CanWrite == false) continue;
+                        if (not_opt_in && (prop.CanWrite == false)) continue;
                         break;
 
                     case FieldInfo field:
-                        if (field.IsLiteral || field.IsInitOnly || field.IsStatic) continue;
+                        if (not_opt_in) continue;
                         break;
                 }
 
-                ExtractColumnInfo(table, member);
+                GetColumnInfo(table, member);
             }
-            ExtractIndexInfo(table, members);
+            ExtractIndexInfo(table, columnCandidates);
 
             return table;
         }
 
-        // ==================== HELPERS ==================== //
+        #region Backing Members
 
         private static void ExtractEmunInfo(Schema schema, Type type)
         {
@@ -113,6 +117,31 @@ namespace Acklann.Daterpillar.Migration
             schema.Add(script);
         }
 
+        // ==================== Table Information ==================== //
+
+        private static void SetTableInfo(Table table, System.ComponentModel.DataAnnotations.Schema.TableAttribute attribute)
+        {
+            if (attribute == null) return;
+
+            if (!string.IsNullOrEmpty(attribute.Name))
+                table.Name = attribute.Name;
+        }
+
+        private static void SetTableInfo(Table table, TableAttribute attribute)
+        {
+            if (attribute == null) return;
+
+            if (!string.IsNullOrEmpty(attribute.Name))
+                table.Name = attribute.Name;
+        }
+
+        private static void SetDefaults(Table table, Type type)
+        {
+            if (string.IsNullOrEmpty(table.Name))
+                table.Name = type.Name;
+        }
+
+        // ==================== Column Information ==================== //
         private static void ExtractColumnInfo(Table table, MemberInfo member)
         {
             var column = new Column();
@@ -154,6 +183,111 @@ namespace Acklann.Daterpillar.Migration
 
             ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
+
+        private static void GetColumnInfo(Table table, MemberInfo member)
+        {
+            var column = new Column();
+            table.Add(column);
+
+            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>());
+            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.DataTypeAttribute>(), member);
+            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DefaultValueAttribute>());
+            SetColumnInfo(column, member.GetCustomAttribute<ColumnAttribute>(), member);
+            SetColumnDefaults(column, member);
+        }
+
+        private static void SetColumnInfo(Column column, System.ComponentModel.DataAnnotations.Schema.ColumnAttribute attribute)
+        {
+            if (attribute == null) return;
+            column.Name = string.IsNullOrEmpty(attribute.Name) ? column.Name : attribute.Name;
+        }
+
+        private static void SetColumnInfo(Column column, System.ComponentModel.DataAnnotations.DataTypeAttribute attribute, MemberInfo member)
+        {
+            if (attribute == null) return;
+
+            int scale = member != default ? member.GetMaxLength() : 0;
+
+            switch (attribute.DataType)
+            {
+                case System.ComponentModel.DataAnnotations.DataType.CreditCard:
+                case System.ComponentModel.DataAnnotations.DataType.Currency:
+                case System.ComponentModel.DataAnnotations.DataType.Custom:
+                case System.ComponentModel.DataAnnotations.DataType.EmailAddress:
+                case System.ComponentModel.DataAnnotations.DataType.ImageUrl:
+                case System.ComponentModel.DataAnnotations.DataType.Password:
+                case System.ComponentModel.DataAnnotations.DataType.PhoneNumber:
+                case System.ComponentModel.DataAnnotations.DataType.PostalCode:
+                case System.ComponentModel.DataAnnotations.DataType.Url:
+                case System.ComponentModel.DataAnnotations.DataType.Upload:
+                    column.DataType = new DataType(SchemaType.VARCHAR, scale);
+                    break;
+
+                case System.ComponentModel.DataAnnotations.DataType.Date:
+                    column.DataType = new DataType(SchemaType.DATE, scale);
+                    break;
+
+                case System.ComponentModel.DataAnnotations.DataType.DateTime:
+                    column.DataType = new DataType(SchemaType.DATETIME, scale);
+                    break;
+
+                case System.ComponentModel.DataAnnotations.DataType.Time:
+                case System.ComponentModel.DataAnnotations.DataType.Duration:
+                    column.DataType = new DataType(SchemaType.BIGINT, scale);
+                    break;
+
+                case System.ComponentModel.DataAnnotations.DataType.Text:
+                case System.ComponentModel.DataAnnotations.DataType.Html:
+                case System.ComponentModel.DataAnnotations.DataType.MultilineText:
+                    column.DataType = new DataType(SchemaType.TEXT, scale);
+                    break;
+            }
+        }
+
+        private static void SetColumnInfo(Column column, System.ComponentModel.DefaultValueAttribute attribute)
+        {
+            if (attribute == null) return;
+            if (attribute.Value != null) column.DefaultValue = Convert.ToString(attribute.Value);
+        }
+
+        private static void SetColumnInfo(Column column, ColumnAttribute attribute, MemberInfo member)
+        {
+            if (attribute == null) return;
+
+            if (!string.IsNullOrEmpty(attribute.Name))
+                column.Name = attribute.Name;
+
+            if (attribute.DefaultValue != null)
+                column.DefaultValue = Convert.ToString(attribute.DefaultValue);
+
+            if (!string.IsNullOrEmpty(attribute.TypeName))
+                column.DataType = new DataType(attribute, member.GetMaxLength());
+
+            column.IsNullable = attribute.Nullable;
+            column.AutoIncrement = attribute.AutoIncrement;
+        }
+
+        private static void SetColumnDefaults(Column column, MemberInfo member)
+        {
+            if (string.IsNullOrEmpty(column.Name))
+                column.Name = member.Name;
+
+            if (string.IsNullOrEmpty(column.DataType.Name))
+            {
+                if (member is PropertyInfo prop)
+                {
+                    column.DataType = CSharpTranslator.GetDataType(prop.PropertyType);
+                    if (Nullable.GetUnderlyingType(prop.PropertyType) != null) column.IsNullable = true;
+                }
+                else if (member is FieldInfo field)
+                {
+                    column.DataType = CSharpTranslator.GetDataType(field.FieldType);
+                    if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
+                }
+            }
+        }
+
+        // ==================== Foreign Key Information ==================== //
 
         private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
         {
@@ -225,5 +359,7 @@ namespace Acklann.Daterpillar.Migration
                 idx.Table = table;
             }
         }
+
+        #endregion Backing Members
     }
 }

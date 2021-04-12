@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
-    public abstract class DataRecord : IInsertable, IReadable
+    public abstract class DataRecord : IInsertable, ISelectable
     {
         public DataRecord()
         {
@@ -54,14 +54,14 @@ namespace Acklann.Daterpillar.Modeling
             for (int i = 0; i < n; i++)
             {
                 string columnName = record.GetName(i);
-                ReadCell(record.GetValue(i), (PropertyInfo)_map[GetKey(columnName)], record, columnName);
+                ReadCell((PropertyInfo)_map[GetKey(columnName)], record.GetValue(i), record, columnName);
             }
         }
 
-        protected virtual void ReadCell(object value, PropertyInfo member, IDataRecord record, string columnName)
+        protected virtual void ReadCell(PropertyInfo member, object cellValue, IDataRecord record, string columnName)
         {
-            if (value != System.DBNull.Value)
-                member?.SetValue(this, value);
+            if (cellValue != System.DBNull.Value)
+                member?.SetValue(this, cellValue);
         }
 
         #region Backing Members

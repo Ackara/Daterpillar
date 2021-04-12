@@ -1,4 +1,5 @@
 ﻿using Acklann.Diffa;
+using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Acklann.Daterpillar.Tests
     public class SerializationTest
     {
         [TestMethod]
-        public void Can_deserialize_a_schema_xml_file()
+        public void Can_read_schema_from_xml_file()
         {
             void print(XmlSeverityType s, XmlSchemaException ex) => System.Console.WriteLine($"[{s}] {ex.Message}");
 
@@ -23,11 +24,11 @@ namespace Acklann.Daterpillar.Tests
             result1.ShouldBeTrue();
             result2.ShouldBeFalse();
 
-            Diff.Approve(schema1.ToXml(), ".xml");
+            Approvals.VerifyXml(schema1.ToXml());
         }
 
         [TestMethod]
-        public void Can_serialize_a_schema_to_xml()
+        public void Can_write_schema_to_xml_file()
         {
             // Arrange
             string xml = null;
@@ -42,7 +43,7 @@ namespace Acklann.Daterpillar.Tests
             else Assert.Fail(errorMsg);
 
             // Assert
-            Diff.Approve(xml, ".xml");
+            Approvals.VerifyXml(xml);
         }
 
         [TestMethod]

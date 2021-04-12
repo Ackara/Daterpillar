@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Tests
     public class ScriptingTest
     {
         [TestMethod]
-        [UseApprovalSubdirectory("../cases/approved-results")]
+        [UseApprovalSubdirectory("../test-cases/approved-results")]
         [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
         public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
         {
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             migrationWasSuccessful.ShouldBeTrue(error);
-            ApprovalTests.Approvals.VerifyFile(scriptFile);
+            if (!string.IsNullOrWhiteSpace(sql)) ApprovalTests.Approvals.VerifyFile(scriptFile);
             changes.ShouldNotBeNull();
         }
 
@@ -267,11 +267,11 @@ namespace Acklann.Daterpillar.Tests
         private static IEnumerable<object[]> GetMigrationCases()
         {
 #if DEBUG
-            const string pattern = "add*";
+            const string pattern = "*";
 #else
             const string pattern = "*";
 #endif
-            IEnumerable<string> caseFolder = Directory.EnumerateDirectories(Path.Combine(AppContext.BaseDirectory, "cases"), pattern, SearchOption.AllDirectories);
+            IEnumerable<string> caseFolder = Directory.EnumerateDirectories(Path.Combine(AppContext.BaseDirectory, "test-cases"), pattern, SearchOption.AllDirectories);
 
             var languages = new Language[]
             {

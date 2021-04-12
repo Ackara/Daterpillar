@@ -14,11 +14,6 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class MigrationTest
     {
-        [ClassInitialize]
-        public static void Setup(TestContext _)
-        {
-        }
-
         [TestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]

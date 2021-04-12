@@ -40,11 +40,11 @@ namespace Acklann.Daterpillar.Configuration
         /// Initializes a new instance of the <see cref="DataType"/> struct.
         /// </summary>
         /// <param name="attribute">The attribute.</param>
-        internal DataType(Attributes.ColumnAttribute attribute)
+        internal DataType(Attributes.ColumnAttribute attribute, int scale = default, int precision = default)
         {
             Name = attribute?.TypeName;
-            Scale = attribute?.Scale ?? 0;
-            Precision = attribute?.Precision ?? 0;
+            Scale = scale == default ? attribute?.Scale ?? 0 : scale;
+            Precision = precision == default ? attribute?.Precision ?? 0 : precision;
         }
 
         /// <summary>

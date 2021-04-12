@@ -111,14 +111,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="cases\**\*.xml">
+    <Content Include="test-cases\**\*.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="cases\add-column\new.xml" />
-    <None Remove="cases\add-column\old.xml" />
+    <Compile Remove="test-cases\approved-results\**" />
+    <Content Remove="test-cases\approved-results\**" />
+    <EmbeddedResource Remove="test-cases\approved-results\**" />
+    <None Remove="test-cases\approved-results\**" />
   </ItemGroup>
 
   <Target Name="RestoreAppsettings" BeforeTargets="PreBuildEvent">
