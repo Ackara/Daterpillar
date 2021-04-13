@@ -8,5 +8,7 @@
   <column name="Hash">
     <dataType scale="128">varchar</dataType>
   </column>
-<index type="primaryKey">id</index>
+  <index type="primary-key">
+    <columnName>Id</columnName>
+  </index>
 </Table>

@@ -77,7 +77,8 @@ namespace Acklann.Daterpillar.Migration
             SetDefaults(table, type);
 
             SetColumns(table, columnCandidates);
-            ExtractIndexInfo(table, columnCandidates);
+            SetIndecies(table, columnCandidates);
+            SetForeignKeys(table, columnCandidates);
 
             return table;
         }
@@ -144,7 +145,7 @@ namespace Acklann.Daterpillar.Migration
         {
             foreach (MemberInfo member in columnCandidates)
             {
-                GetColumnInfo(table, member);
+                SetColumnInfo(table, member);
             }
         }
 
@@ -190,7 +191,7 @@ namespace Acklann.Daterpillar.Migration
             ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
 
-        private static void GetColumnInfo(Table table, MemberInfo member)
+        private static void SetColumnInfo(Table table, MemberInfo member)
         {
             var column = new Column();
             table.Add(column);
@@ -293,38 +294,7 @@ namespace Acklann.Daterpillar.Migration
             }
         }
 
-        // ==================== Foreign Key Information ==================== //
-
-        private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
-        {
-            if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
-            {
-                string foreignTable = fkAttr.ForeignTable;
-                string foreignColumn = fkAttr.ForeignColumn;
-
-                Type referencedType = Type.GetType(fkAttr.ForeignTable);
-                if (referencedType != null)
-                {
-                    foreignTable = referencedType.GetIdOrName();
-
-                    MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
-                    if (referencedField != null)
-                    {
-                        foreignColumn = referencedField.GetIdOrName();
-                    }
-                }
-
-                table.ForeignKeys.Add(new ForeignKey()
-                {
-                    Table = table,
-                    LocalColumn = columnName,
-                    OnDelete = fkAttr.OnDelete,
-                    OnUpdate = fkAttr.OnUpdate,
-                    ForeignTable = foreignTable,
-                    ForeignColumn = foreignColumn
-                });
-            }
-        }
+        // ==================== Index Information ==================== //
 
         private static void ExtractIndexInfo(Table table, IEnumerable<MemberInfo> members)
         {
@@ -368,46 +338,76 @@ namespace Acklann.Daterpillar.Migration
 
         private static void SetIndecies(Table table, IEnumerable<MemberInfo> members)
         {
-            var list = new List<Index>();
+            /// An index may include 2 or more columns. The index will have to be grouped by name or by primary key.
+            /// One one primary key can exists on a table so therefore the index name is ignored.
+            /// STEPS:
+            /// 1. Caputre all indexes on all columns
+            /// 2. Combine with index with the same name into one
+            /// 3. Combine all the primary key index into one.
+
+            // 1. Capture
+            var candiates = new List<Index>();
 
             foreach (MemberInfo member in members)
             {
                 Index index = null;
-                string columnName = member.GetColumnName();
 
-                SetIndexInfo(index, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>());
-                SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.KeyAttribute>());
-                SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.IndexAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.KeyAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.IndexAttribute>());
                 SetIndexDefault(index, member, table);
 
-                if (index != null) list.Add(index);
+                if (index != null) candiates.Add(index);
             }
+
+            var results = new List<Index>();
+            IList<ColumnName> columns;
+
+            // 2. Combine by name.
+            foreach (var group in candiates.Where(x => x.Type == IndexType.Index).GroupBy(x => x.Name))
+            {
+                Index anchor = group.FirstOrDefault();
+                if (anchor == null) continue;
+
+                columns = new List<ColumnName>();
+                foreach (Index index in group) columns.Add(index.Columns[0]);
+                table.Add(new Index(IndexType.Index, columns.ToArray()));
+            }
+
+            // 3. Combine primary-keys
+            if (candiates.Any(x => x.Type == IndexType.PrimaryKey))
+                table.Add(new Index(IndexType.PrimaryKey, (from x in candiates
+                                                           where x.Type == IndexType.PrimaryKey
+                                                           select x.Columns[0]).ToArray()));
         }
 
-        private static void SetIndexInfo(Index index, System.ComponentModel.DataAnnotations.KeyAttribute attribute)
+        private static Index SetIndexInfo(Index index, System.ComponentModel.DataAnnotations.KeyAttribute attribute)
         {
-            if (attribute == null) return;
+            if (attribute == null) return index;
             if (index == null) index = new Index();
 
             index.Type = IndexType.PrimaryKey;
+            return index;
         }
 
-        private static void SetIndexInfo(Index index, KeyAttribute attribute)
+        private static Index SetIndexInfo(Index index, KeyAttribute attribute)
         {
-            if (attribute == null) return;
+            if (attribute == null) return index;
             if (index == null) index = new Index();
 
             index.Type = IndexType.PrimaryKey;
+            return index;
         }
 
-        private static void SetIndexInfo(Index index, IndexAttribute attribute)
+        private static Index SetIndexInfo(Index index, IndexAttribute attribute)
         {
-            if (attribute == null) return;
+            if (attribute == null) return index;
             if (index == null) index = new Index();
 
             index.Name = attribute.Name;
             index.IsUnique = attribute.Unique;
             index.Type = attribute.Type;
+            return index;
         }
 
         private static void SetIndexDefault(Index index, MemberInfo member, Table table)
@@ -415,6 +415,73 @@ namespace Acklann.Daterpillar.Migration
             if (index == null) return;
             index.Table = table;
             index.Columns = new ColumnName[] { member.GetColumnName() };
+        }
+
+        // ==================== Foreign Key Information ==================== //
+
+        private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
+        {
+            if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
+            {
+                string foreignTable = fkAttr.ForeignTable;
+                string foreignColumn = fkAttr.ForeignColumn;
+
+                Type referencedType = Type.GetType(fkAttr.ForeignTable);
+                if (referencedType != null)
+                {
+                    foreignTable = referencedType.GetTableName();
+
+                    MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
+                    if (referencedField != null)
+                    {
+                        foreignColumn = referencedField.GetColumnName();
+                    }
+                }
+
+                table.Add(new ForeignKey()
+                {
+                    Table = table,
+                    LocalColumn = columnName,
+                    OnDelete = fkAttr.OnDelete,
+                    OnUpdate = fkAttr.OnUpdate,
+                    ForeignTable = foreignTable,
+                    ForeignColumn = foreignColumn
+                });
+            }
+        }
+
+        private static void SetForeignKeys(Table table, IEnumerable<MemberInfo> memebers)
+        {
+            foreach (var member in memebers)
+            {
+                if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
+                {
+                    string foreignTable = fkAttr.ForeignTable;
+                    string foreignColumn = fkAttr.ForeignColumn;
+
+                    Type referencedType = Type.GetType(fkAttr.ForeignTable);
+                    if (referencedType != null)
+                    {
+                        foreignTable = referencedType.GetTableName();
+
+                        MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
+                        if (referencedField != null)
+                        {
+                            foreignColumn = referencedField.GetColumnName();
+                        }
+                    }
+
+                    table.Add(new ForeignKey()
+                    {
+                        Table = table,
+                        LocalColumn = member.GetColumnName(),
+                        OnDelete = fkAttr.OnDelete,
+                        OnUpdate = fkAttr.OnUpdate,
+                        ForeignTable = foreignTable,
+                        ForeignColumn = foreignColumn
+                    });
+                }
+            }
         }
 
         #endregion Backing Members

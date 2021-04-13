@@ -109,6 +109,12 @@ namespace Acklann.Daterpillar.Configuration
             ForeignKeys.Add(foreignKey);
         }
 
+        public void Add(Index index)
+        {
+            index.Table = this;
+            Indecies.Add(index);
+        }
+
         public void Merge(Table table)
         {
             foreach (Column right in table.Columns)

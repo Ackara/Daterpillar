@@ -40,7 +40,7 @@ namespace Acklann.Daterpillar.Tests
         private static IEnumerable<object[]> GetTypesToConvertToTable()
         {
             var cases = from t in typeof(ReflectionTest).GetNestedTypes()
-                        where t.Name == nameof(DataAnnotatedTable)
+                            //where t.Name == nameof(MultiKey)
                         select t;
             foreach (var type in cases)
             {
@@ -98,7 +98,38 @@ namespace Acklann.Daterpillar.Tests
             public string Hash { get; set; }
         }
 
+        [Attributes.Table]
+        public class MultiKey
+        {
+            public string Name { get; set; }
 
+            [System.ComponentModel.DataAnnotations.Key]
+            public string Part1 { get; set; }
+
+            [Attributes.Key]
+            public string Part2 { get; set; }
+
+            [Attributes.Key]
+            public string Part3 { get; set; }
+        }
+
+        public class Parent
+        {
+            [Attributes.Column("dln")]
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+        }
+
+        public class Child
+        {
+            public int Id { get; set; }
+            
+            public string Name { get; set; }
+
+            [Attributes.ForeignKey(typeof(Parent))]
+            public int ParentId { get; set; }
+        }
 
         #endregion Types To Convert
     }

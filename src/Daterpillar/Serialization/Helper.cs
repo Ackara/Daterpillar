@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Serialization
@@ -18,6 +19,22 @@ namespace Acklann.Daterpillar.Serialization
         public static int GetMaxLength(this MemberInfo member)
         {
             return member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>()?.Length ?? 0;
+        }
+
+        public static string GetTableName(this Type type)
+        {
+            if (type.GetCustomAttribute(typeof(System.ComponentModel.DataAnnotations.Schema.TableAttribute)) is System.ComponentModel.DataAnnotations.Schema.TableAttribute attr1 && !string.IsNullOrEmpty(attr1.Name))
+            {
+                return attr1.Name;
+            }
+            else if (type.GetCustomAttribute(typeof(Attributes.TableAttribute)) is Attributes.TableAttribute attr2 && !string.IsNullOrEmpty(attr2.Name))
+            {
+                return attr2.Name;
+            }
+            else
+            {
+                return type.Name;
+            }
         }
 
         public static string GetColumnName(this MemberInfo member)
