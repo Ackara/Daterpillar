@@ -1,16 +1,13 @@
 ﻿using Acklann.Daterpillar.Attributes;
-using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Serialization;
-using Acklann.Daterpillar.Translators;
+using Acklann.Daterpillar.Scripting.Translators;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Serialization
 {
     public static class SchemaFactory
     {
@@ -87,7 +84,7 @@ namespace Acklann.Daterpillar.Migration
 
         private static void ExtractEmunInfo(Schema schema, Type type)
         {
-            var table = new Table(type.GetName(),
+            var table = new Table(type.GetTableName(),
                 new Column("Id", new DataType(SchemaType.INT)),
                 new Column("Name", new DataType(SchemaType.VARCHAR)),
 
@@ -147,48 +144,6 @@ namespace Acklann.Daterpillar.Migration
             {
                 SetColumnInfo(table, member);
             }
-        }
-
-        private static void ExtractColumnInfo(Table table, MemberInfo member)
-        {
-            var column = new Column();
-            table.Add(column);
-
-            var columnAttr = member.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
-            var defaultAttr = member.GetCustomAttribute(typeof(DefaultValueAttribute)) as DefaultValueAttribute;
-
-            column.DefaultValue = Convert.ToString(columnAttr?.DefaultValue ?? defaultAttr?.Value);
-            if (string.IsNullOrEmpty(column.DefaultValue)) column.DefaultValue = null;
-            column.AutoIncrement = (columnAttr?.AutoIncrement ?? false);
-            column.IsNullable = (columnAttr?.Nullable ?? false);
-            column.Name = member.GetName();
-            column.Id = member.GetId();
-
-            var dataType = new DataType(columnAttr);
-            if (string.IsNullOrEmpty(dataType.Name))
-            {
-                if (member is PropertyInfo prop)
-                {
-                    dataType = CSharpTranslator.GetDataType(prop.PropertyType);
-                    if (Nullable.GetUnderlyingType(prop.PropertyType) != null) column.IsNullable = true;
-                }
-                else if (member is FieldInfo field)
-                {
-                    dataType = CSharpTranslator.GetDataType(field.FieldType);
-                    if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
-                }
-            }
-
-            var stringLenAttr = (dataType.Scale == default ? member.GetCustomAttribute<System.ComponentModel.DataAnnotations.StringLengthAttribute>() : null);
-            if (stringLenAttr != null) dataType.Scale = stringLenAttr.MaximumLength;
-
-            var maxLenAttr = (dataType.Scale == default ? member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>() : null);
-            if (maxLenAttr != null) dataType.Scale = maxLenAttr.Length;
-
-            DataTypeAttribute typeAttr = member.GetCustomAttribute(typeof(DataTypeAttribute)) as DataTypeAttribute;
-            column.DataType = (typeAttr == null ? dataType : typeAttr.ToDataType());
-
-            ExtractForiegnKeyInfo(table, member, column.GetIdOrName());
         }
 
         private static void SetColumnInfo(Table table, MemberInfo member)
@@ -296,46 +251,6 @@ namespace Acklann.Daterpillar.Migration
 
         // ==================== Index Information ==================== //
 
-        private static void ExtractIndexInfo(Table table, IEnumerable<MemberInfo> members)
-        {
-            var indecies = new List<(string, IndexAttribute)>();
-            foreach (MemberInfo member in members)
-            {
-                string columnName = member.GetIdOrName();
-
-                if (member.GetCustomAttribute(typeof(IndexAttribute)) is IndexAttribute idx)
-                {
-                    indecies.Add((columnName, idx));
-                }
-                else if (member.GetCustomAttribute(typeof(KeyAttribute)) is KeyAttribute key)
-                {
-                    indecies.Add((columnName, new IndexAttribute(nameof(IndexType.PrimaryKey), IndexType.PrimaryKey) { Order = key.Order }));
-                }
-                else if (member.IsDefined(typeof(ForeignKeyAttribute)))
-                {
-                    indecies.Add((columnName, new IndexAttribute(IndexType.Index)));
-                }
-            }
-
-            foreach (var index in indecies.GroupBy(a => (string.IsNullOrEmpty(a.Item2.Name) ? a.Item1 : a.Item2.Name)))
-            {
-                Index idx = null;
-                var names = new List<ColumnName>();
-                foreach ((string columnName, IndexAttribute attr) in index)
-                {
-                    if (idx == null)
-                    {
-                        idx = new Index(attr.Type, attr.Unique);
-                    }
-
-                    names.Add(new ColumnName(columnName, attr.Order));
-                }
-                idx.Columns = names.ToArray();
-                table.Indecies.Add(idx);
-                idx.Table = table;
-            }
-        }
-
         private static void SetIndecies(Table table, IEnumerable<MemberInfo> members)
         {
             /// An index may include 2 or more columns. The index will have to be grouped by name or by primary key.
@@ -418,37 +333,6 @@ namespace Acklann.Daterpillar.Migration
         }
 
         // ==================== Foreign Key Information ==================== //
-
-        private static void ExtractForiegnKeyInfo(Table table, MemberInfo member, string columnName)
-        {
-            if (member.GetCustomAttribute(typeof(ForeignKeyAttribute)) is ForeignKeyAttribute fkAttr)
-            {
-                string foreignTable = fkAttr.ForeignTable;
-                string foreignColumn = fkAttr.ForeignColumn;
-
-                Type referencedType = Type.GetType(fkAttr.ForeignTable);
-                if (referencedType != null)
-                {
-                    foreignTable = referencedType.GetTableName();
-
-                    MemberInfo referencedField = referencedType.GetMember(fkAttr.ForeignColumn).FirstOrDefault();
-                    if (referencedField != null)
-                    {
-                        foreignColumn = referencedField.GetColumnName();
-                    }
-                }
-
-                table.Add(new ForeignKey()
-                {
-                    Table = table,
-                    LocalColumn = columnName,
-                    OnDelete = fkAttr.OnDelete,
-                    OnUpdate = fkAttr.OnUpdate,
-                    ForeignTable = foreignTable,
-                    ForeignColumn = foreignColumn
-                });
-            }
-        }
 
         private static void SetForeignKeys(Table table, IEnumerable<MemberInfo> memebers)
         {

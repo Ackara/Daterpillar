@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Attributes
         public DataTypeAttribute(SchemaType type, int scale = 0, int precision = 0)
         {
             Precision = precision;
-            TypeName = Translators.TranslatorBase.ConvertToString(type);
+            TypeName = Scripting.Translators.TranslatorBase.ConvertToString(type);
             Scale = scale;
         }
 
@@ -38,12 +38,12 @@ namespace Acklann.Daterpillar.Attributes
         public readonly int Precision;
 
         /// <summary>
-        /// Returns a <see cref="Configuration.DataType" /> that represents this instance.
+        /// Returns a <see cref="Serialization.DataType" /> that represents this instance.
         /// </summary>
-        /// A <see cref="Configuration.DataType" /> that represents this instance.
-        public Configuration.DataType ToDataType()
+        /// A <see cref="Serialization.DataType" /> that represents this instance.
+        public Serialization.DataType ToDataType()
         {
-            return new Configuration.DataType(TypeName, Scale, Precision);
+            return new Serialization.DataType(TypeName, Scale, Precision);
         }
     }
 }

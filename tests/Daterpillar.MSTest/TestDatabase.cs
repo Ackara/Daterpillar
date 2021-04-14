@@ -42,7 +42,7 @@ namespace Acklann.Daterpillar
                           where m.MemberType == MemberTypes.Property
                           let prop = ((PropertyInfo)m)
                           where prop.CanWrite
-                          select $"{prop.Name} {Translators.CSharpTranslator.GetDataType(prop.PropertyType).Name} NOT NULL";
+                          select $"{prop.Name} {Scripting.Translators.CSharpTranslator.GetDataType(prop.PropertyType).Name} NOT NULL";
 
             var builder = new StringBuilder();
             builder.AppendLine($"CREATE TABLE {typeof(T).Name}");

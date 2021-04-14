@@ -6,7 +6,7 @@
     <dataType>varchar</dataType>
   </column>
   <column name="Hash">
-    <dataType scale="128">varchar</dataType>
+    <dataType scale="123">varchar</dataType>
   </column>
   <index type="primary-key">
     <columnName>Id</columnName>

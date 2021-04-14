@@ -1,5 +1,5 @@
 using Acklann.Daterpillar.Attributes;
-using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Serialization;
 
 namespace Acklann.Daterpillar.Prototyping
 {

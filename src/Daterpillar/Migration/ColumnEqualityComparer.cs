@@ -1,8 +1,7 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Translators;
+﻿using Acklann.Daterpillar.Serialization;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Serialization
 {
     internal class ColumnEqualityComparer : IEqualityComparer<Column>
     {
@@ -25,11 +24,5 @@ namespace Acklann.Daterpillar.Migration
         {
             return obj.Name.GetHashCode() ^ obj.DataType.GetHashCode() ^ obj.IsNullable.GetHashCode() ^ obj.AutoIncrement.GetHashCode() ^ obj.OrdinalPosition.GetHashCode() ^ obj.Comment.GetHashCode();
         }
-
-        #region Private Members
-
-        private SQLiteTranslator _typeResolver = new SQLiteTranslator();
-
-        #endregion Private Members
     }
 }

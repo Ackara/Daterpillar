@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Acklann.Daterpillar.Configuration
+namespace Acklann.Daterpillar.Serialization
 {
     /// <summary>
     /// Represents a SQL data type.
@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Configuration
         /// <param name="precision">The precision.</param>
         public DataType(SchemaType name, int scale = 0, int precision = 0)
         {
-            Name = Translators.TranslatorBase.ConvertToString(name);
+            Name = Scripting.Translators.TranslatorBase.ConvertToString(name);
             Precision = precision;
             Scale = scale;
         }

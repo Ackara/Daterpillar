@@ -1,12 +1,11 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Writers;
+﻿using Acklann.Daterpillar.Scripting.Writers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Serialization
 {
     public class Migrator
     {

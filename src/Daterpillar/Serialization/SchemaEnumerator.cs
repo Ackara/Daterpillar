@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Configuration
+namespace Acklann.Daterpillar.Serialization
 {
     partial class Schema
     {

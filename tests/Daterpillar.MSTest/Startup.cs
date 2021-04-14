@@ -1,6 +1,6 @@
 ﻿using Acklann.Daterpillar;
 using Acklann.Daterpillar.Attributes;
-using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Serialization;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
@@ -35,12 +35,12 @@ namespace Acklann.Daterpillar
 
         private static void RestoreDatabase()
         {
-            Schema schema = Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            Schema schema = Serialization.SchemaFactory.CreateFrom(typeof(Album).Assembly);
         }
 
         private static Schema CreateSchema()
         {
-            return Migration.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            return Serialization.SchemaFactory.CreateFrom(typeof(Album).Assembly);
         }
 
         private static void RemoveUnusedApprovalFiles(string path)

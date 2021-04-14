@@ -28,7 +28,7 @@ namespace Acklann.Daterpillar.Attributes
         /// <param name="schemaType">Name of the type.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public ColumnAttribute(SchemaType schemaType, int scale = 0, int precision = 0) : this(null, Translators.TranslatorBase.ConvertToString(schemaType), scale, precision)
+        public ColumnAttribute(SchemaType schemaType, int scale = 0, int precision = 0) : this(null, Scripting.Translators.TranslatorBase.ConvertToString(schemaType), scale, precision)
         { }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Attributes
         /// <param name="type">The data-type.</param>
         /// <param name="scale">The scale.</param>
         /// <param name="precision">The precision.</param>
-        public ColumnAttribute(string name, SchemaType type, int scale = 0, int precision = 0) : this(name, Translators.TranslatorBase.ConvertToString(type), scale, precision)
+        public ColumnAttribute(string name, SchemaType type, int scale = 0, int precision = 0) : this(name, Scripting.Translators.TranslatorBase.ConvertToString(type), scale, precision)
         { }
 
         /// <summary>

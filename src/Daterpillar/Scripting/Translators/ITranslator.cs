@@ -1,6 +1,6 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provides methods for translating SQL name/type to another SQL dialect.

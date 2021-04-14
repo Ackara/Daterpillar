@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Writers
+namespace Acklann.Daterpillar.Scripting.Writers
 {
     public class SqlWriterFactory
     {

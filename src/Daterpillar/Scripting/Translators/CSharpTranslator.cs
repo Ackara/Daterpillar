@@ -1,8 +1,8 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provide methods that maps a http://static.acklann.com/schema/v2/daterpillar.xsd TypeName to a clr type name.

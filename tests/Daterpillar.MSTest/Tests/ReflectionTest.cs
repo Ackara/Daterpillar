@@ -1,5 +1,4 @@
-using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Migration;
+using Acklann.Daterpillar.Serialization;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -93,7 +92,7 @@ namespace Acklann.Daterpillar.Tests
 
             public string Name { get; set; }
 
-            [System.ComponentModel.DataAnnotations.MaxLength(128)]
+            [System.ComponentModel.DataAnnotations.MaxLength(123)]
             [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Password)]
             public string Hash { get; set; }
         }
@@ -124,7 +123,7 @@ namespace Acklann.Daterpillar.Tests
         public class Child
         {
             public int Id { get; set; }
-            
+
             public string Name { get; set; }
 
             [Attributes.ForeignKey(typeof(Parent))]

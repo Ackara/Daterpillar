@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace Acklann.Daterpillar.Configuration
+namespace Acklann.Daterpillar.Serialization
 {
     /// <summary>
     /// Represents a <see cref="Table"/> foreign key.

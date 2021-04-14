@@ -1,9 +1,9 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Translators;
+﻿using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Scripting.Translators;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Acklann.Daterpillar.Writers
+namespace Acklann.Daterpillar.Scripting.Writers
 {
     /* Documentation: https://www.sqlite.org/lang.html */
 

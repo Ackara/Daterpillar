@@ -1,5 +1,5 @@
-using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Writers;
+using Acklann.Daterpillar.Scripting.Writers;
+using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -222,14 +222,14 @@ namespace Acklann.Daterpillar.Linq
 
         public static IDbConnection CreateDatabase(this IDbConnection connection, Assembly assembly, string name, Language kind, bool dropIfExists = false)
         {
-            var schema = Migration.SchemaFactory.CreateFrom(assembly);
+            var schema = SchemaFactory.CreateFrom(assembly);
             schema.Name = name;
             return CreateDatabase(connection, schema, kind, dropIfExists);
         }
 
         public static IDbConnection CreateDatabase(this IDbConnection connection, string assemblyPath, string name, Language kind, bool dropIfExists = false)
         {
-            var schema = Migration.SchemaFactory.CreateFrom(assemblyPath);
+            var schema = SchemaFactory.CreateFrom(assemblyPath);
             schema.Name = name;
             return CreateDatabase(connection, schema, kind, dropIfExists);
         }

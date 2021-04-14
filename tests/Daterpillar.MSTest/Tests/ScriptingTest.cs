@@ -1,7 +1,7 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Prototyping;
-using Acklann.Daterpillar.Writers;
+using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Diffa;
 using ApprovalTests.Namers;
 using AutoBogus;
@@ -26,7 +26,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
         {
             // Arrange
-            var sut = new Migration.Migrator();
+            var sut = new Serialization.Migrator();
             string fileName = $"{label}.{dialect}.sql".ToLower();
             string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
 

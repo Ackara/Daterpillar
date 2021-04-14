@@ -1,12 +1,12 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provides methods for translating SQL name/type to another SQL dialect.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.Translators.ITranslator"/>
+    /// <seealso cref="Acklann.Daterpillar.Scripting.Translators.ITranslator"/>
     public abstract partial class TranslatorBase : ITranslator
     {
         #region Keys

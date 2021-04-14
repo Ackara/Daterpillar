@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
-    public abstract class DataRecord : IInsertable, ISelectable
+    public abstract class DataRecord : DataViewRecord, IInsertable
     {
         public DataRecord()
         {
@@ -23,7 +22,7 @@ namespace Acklann.Daterpillar.Modeling
             }
         }
 
-        public abstract string GetTableName();
+        public string GetTableName() => TableName;
 
         public virtual string[] GetColumns()
         {
@@ -32,7 +31,7 @@ namespace Acklann.Daterpillar.Modeling
 
         public virtual object[] GetValues()
         {
-            PropertyInfo[] values = (PropertyInfo[])_map[nameof(GetValues)];
+            PropertyInfo[] values = ColumnMap.GetProperties(GetTableName());
             object[] results = new object[values.Length];
 
             for (int i = 0; i < values.Length; i++)
@@ -46,22 +45,6 @@ namespace Acklann.Daterpillar.Modeling
         public virtual object Serialize(PropertyInfo property)
         {
             return Linq.SqlComposer.Serialize(property.GetValue(this));
-        }
-
-        public void Load(IDataRecord record)
-        {
-            int n = record.FieldCount;
-            for (int i = 0; i < n; i++)
-            {
-                string columnName = record.GetName(i);
-                ReadCell((PropertyInfo)_map[GetKey(columnName)], record.GetValue(i), record, columnName);
-            }
-        }
-
-        protected virtual void ReadCell(PropertyInfo member, object cellValue, IDataRecord record, string columnName)
-        {
-            if (cellValue != System.DBNull.Value)
-                member?.SetValue(this, cellValue);
         }
 
         #region Backing Members

@@ -1,7 +1,7 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Serialization
 {
     internal class IndexEqualityComparer : IEqualityComparer<Index>
     {

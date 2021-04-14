@@ -1,5 +1,5 @@
 ﻿using Acklann.Daterpillar.Attributes;
-using Acklann.Daterpillar.Configuration;
+using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;

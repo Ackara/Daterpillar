@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System.IO;
 using System.Xml.Schema;
-using Schema = Acklann.Daterpillar.Configuration.Schema;
+using Schema = Acklann.Daterpillar.Serialization.Schema;
 
 namespace Acklann.Daterpillar.Tests
 {

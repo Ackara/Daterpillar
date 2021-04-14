@@ -1,8 +1,8 @@
-﻿using Acklann.Daterpillar.Writers;
-using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Scripting.Writers;
+using Acklann.Daterpillar.Serialization;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Migration
+namespace Acklann.Daterpillar.Serialization
 {
     [System.Diagnostics.DebuggerDisplay("{ToDebuggerDisplay()}")]
     public class Discrepancy

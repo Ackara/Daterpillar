@@ -1,12 +1,12 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provides methods for converting SQL name/type to it SQLite equivalent.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.TypeResolvers.TypeResolverBase" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.TypeResolvers.TypeResolverBase" />
     public class SQLiteTranslator : TranslatorBase
     {
         /// <summary>

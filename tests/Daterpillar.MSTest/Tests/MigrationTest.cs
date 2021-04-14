@@ -1,7 +1,6 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Linq;
-using Acklann.Daterpillar.Migration;
-using Acklann.Daterpillar.Writers;
+﻿using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.Scripting.Writers;
+using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;

@@ -1,12 +1,12 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provides methods for converting SQL name/type to it MySQL equivalent.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.Translators.TranslatorBase" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.Translators.TranslatorBase" />
     public class MySQLTranslator : TranslatorBase
     {
         /// <summary>

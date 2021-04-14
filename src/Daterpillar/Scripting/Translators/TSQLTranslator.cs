@@ -1,13 +1,13 @@
-﻿using Acklann.Daterpillar.Configuration;
+﻿using Acklann.Daterpillar.Serialization;
 using System;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Translators
+namespace Acklann.Daterpillar.Scripting.Translators
 {
     /// <summary>
     /// Provides methods for converting SQL name/type to it TSQL equivalent.
     /// </summary>
-    /// <seealso cref="Acklann.Daterpillar.Translators.TranslatorBase" />
+    /// <seealso cref="Acklann.Daterpillar.Scripting.Translators.TranslatorBase" />
     public class TSQLTranslator : TranslatorBase
     {
         /// <summary>
@@ -45,7 +45,7 @@ namespace Acklann.Daterpillar.Translators
         }
 
         /// <summary>
-        /// Converts the <see cref="Acklann.Daterpillar.Configuration.DataType" /> value to its equivalent TSQL representation.
+        /// Converts the <see cref="Acklann.Daterpillar.Serialization.DataType" /> value to its equivalent TSQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <returns>The <see cref="DataType"/> as a string.</returns>

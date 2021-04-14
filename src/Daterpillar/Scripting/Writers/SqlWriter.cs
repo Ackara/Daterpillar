@@ -1,5 +1,5 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Translators;
+﻿using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Scripting.Translators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Acklann.Daterpillar.Writers
+namespace Acklann.Daterpillar.Scripting.Writers
 {
     public abstract class SqlWriter : IDisposable
     {

@@ -1,8 +1,8 @@
-﻿using Acklann.Daterpillar.Configuration;
-using Acklann.Daterpillar.Translators;
+﻿using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Scripting.Translators;
 using System.IO;
 
-namespace Acklann.Daterpillar.Writers
+namespace Acklann.Daterpillar.Scripting.Writers
 {
     [System.ComponentModel.Category(nameof(Language.TSQL))]
     public class TSqlWriter : SqlWriter
