@@ -51,7 +51,7 @@ namespace Acklann.Daterpillar.Tests
 
         #region Types To Convert
 
-        [Acklann.Daterpillar.Attributes.Table]
+        [Acklann.Daterpillar.Modeling.Attributes.Table]
         public class Empty
         {
         }
@@ -97,7 +97,7 @@ namespace Acklann.Daterpillar.Tests
             public string Hash { get; set; }
         }
 
-        [Attributes.Table]
+        [Modeling.Attributes.Table]
         public class MultiKey
         {
             public string Name { get; set; }
@@ -105,16 +105,16 @@ namespace Acklann.Daterpillar.Tests
             [System.ComponentModel.DataAnnotations.Key]
             public string Part1 { get; set; }
 
-            [Attributes.Key]
+            [Modeling.Attributes.Key]
             public string Part2 { get; set; }
 
-            [Attributes.Key]
+            [Modeling.Attributes.Key]
             public string Part3 { get; set; }
         }
 
         public class Parent
         {
-            [Attributes.Column("dln")]
+            [Modeling.Attributes.Column("dln")]
             public int Id { get; set; }
 
             public string Name { get; set; }
@@ -126,7 +126,7 @@ namespace Acklann.Daterpillar.Tests
 
             public string Name { get; set; }
 
-            [Attributes.ForeignKey(typeof(Parent))]
+            [Modeling.Attributes.ForeignKey(typeof(Parent))]
             public int ParentId { get; set; }
         }
 

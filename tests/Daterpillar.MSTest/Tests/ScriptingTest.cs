@@ -1,7 +1,7 @@
-﻿using Acklann.Daterpillar.Serialization;
-using Acklann.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting.Writers;
+using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
 using ApprovalTests.Namers;
 using AutoBogus;
@@ -292,5 +292,24 @@ namespace Acklann.Daterpillar.Tests
         }
 
         #endregion Backing Members
+
+        #region Schema
+
+        public class Vehicle
+        {
+            [System.ComponentModel.DataAnnotations.Key]
+            public string Id { get; set; }
+
+
+            public string Model { get; set; }
+
+            public string Make { get; set; }
+        }
+
+        public class BodyShop
+        {
+        }
+
+        #endregion Schema
     }
 }

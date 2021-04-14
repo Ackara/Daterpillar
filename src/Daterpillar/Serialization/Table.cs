@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Attributes;
+﻿using Acklann.Daterpillar.Modeling.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Xml;

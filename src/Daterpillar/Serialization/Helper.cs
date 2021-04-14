@@ -11,7 +11,7 @@ namespace Acklann.Daterpillar.Serialization
             {
                 return attr1.Name;
             }
-            else if (type.GetCustomAttribute(typeof(Attributes.TableAttribute)) is Attributes.TableAttribute attr2 && !string.IsNullOrEmpty(attr2.Name))
+            else if (type.GetCustomAttribute(typeof(Modeling.Attributes.TableAttribute)) is Modeling.Attributes.TableAttribute attr2 && !string.IsNullOrEmpty(attr2.Name))
             {
                 return attr2.Name;
             }
@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Serialization
 
         public static string GetColumnName(this MemberInfo member)
         {
-            if (member.GetCustomAttribute(typeof(Attributes.ColumnAttribute)) is Attributes.ColumnAttribute attribute1 && !string.IsNullOrEmpty(attribute1.Name))
+            if (member.GetCustomAttribute(typeof(Modeling.Attributes.ColumnAttribute)) is Modeling.Attributes.ColumnAttribute attribute1 && !string.IsNullOrEmpty(attribute1.Name))
             {
                 return attribute1.Name;
             }

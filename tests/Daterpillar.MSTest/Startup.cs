@@ -1,5 +1,5 @@
 ﻿using Acklann.Daterpillar;
-using Acklann.Daterpillar.Attributes;
+using Acklann.Daterpillar.Modeling.Attributes;
 using Acklann.Daterpillar.Serialization;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Diffa;

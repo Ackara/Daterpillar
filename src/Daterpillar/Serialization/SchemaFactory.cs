@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Attributes;
+﻿using Acklann.Daterpillar.Modeling.Attributes;
 using Acklann.Daterpillar.Scripting.Translators;
 using System;
 using System.Collections.Generic;
@@ -268,8 +268,8 @@ namespace Acklann.Daterpillar.Serialization
                 Index index = null;
 
                 index = SetIndexInfo(index, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>());
-                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.KeyAttribute>());
-                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Attributes.IndexAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Modeling.Attributes.KeyAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Modeling.Attributes.IndexAttribute>());
                 SetIndexDefault(index, member, table);
 
                 if (index != null) candiates.Add(index);

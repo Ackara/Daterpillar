@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Attributes;
+﻿using Acklann.Daterpillar.Modeling.Attributes;
 using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections;
@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar
         public static IEnumerable<PropertyInfo> GetColumns(this Type model)
         {
             return from t in model.GetProperties()
-                   where t.IsDefined(typeof(Attributes.ColumnAttribute))
+                   where t.IsDefined(typeof(Modeling.Attributes.ColumnAttribute))
                    select t;
         }
 

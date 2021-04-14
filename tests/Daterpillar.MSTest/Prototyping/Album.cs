@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Attributes;
+﻿using Acklann.Daterpillar.Modeling.Attributes;
 
 namespace Acklann.Daterpillar.Prototyping
 {
