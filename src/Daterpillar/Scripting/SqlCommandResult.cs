@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Scripting
         {
         }
 
-        public SqlCommandResult(int changes, int errorCode, string message)
+        public SqlCommandResult(long changes, int errorCode, string message)
         {
             Changes = changes;
             ErrorCode = errorCode;
@@ -18,7 +18,7 @@ namespace Acklann.Daterpillar.Scripting
             get => ErrorCode == 0;
         }
 
-        public int Changes { get; }
+        public long Changes { get; }
 
         public int ErrorCode { get; }
 

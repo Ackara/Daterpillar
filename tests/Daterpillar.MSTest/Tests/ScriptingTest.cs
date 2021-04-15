@@ -1,8 +1,11 @@
 ﻿using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.Modeling.Attributes;
 using Acklann.Daterpillar.Prototyping;
+using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
+using ApprovalTests;
 using ApprovalTests.Namers;
 using AutoBogus;
 using FakeItEasy;
@@ -59,6 +62,29 @@ namespace Acklann.Daterpillar.Tests
             using var connection = SqlValidator.ClearDatabase(connectionType);
             connection.ShouldNotBeNull();
             connection.Database.ShouldBe(expectedDatabaseName ?? nameof(Daterpillar));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
+        public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
+        {
+            // Arrange
+            using var connection = SqlValidator.ClearDatabase(connectionType);
+
+            // Act
+            System.Data.SqlClient.SqlException ex1;
+            System.Data.SQLite.SQLiteException ex2;
+            MySql.Data.MySqlClient.MySqlException ex3;
+
+            var command = SqlComposer2.ToInsertCommand(model);
+            var result = SqlCommandHelper.Insert(connection, model, connectionType);
+
+            // Assert
+            result.Changes.ShouldBe(1, result.ErrorMessage);
+            result.ErrorCode.ShouldBe(0);
+            result.ErrorMessage.ShouldBeNullOrEmpty();
+
+            Approvals.Verify(command);
         }
 
         [DataTestMethod]
@@ -291,19 +317,26 @@ namespace Acklann.Daterpillar.Tests
                 }
         }
 
+        private static IEnumerable<object[]> GetInsertionCases()
+        {
+            throw new System.NotImplementedException();
+        }
+
         #endregion Backing Members
 
         #region Schema
 
+        [Table]
         public class Vehicle
         {
             [System.ComponentModel.DataAnnotations.Key]
             public string Id { get; set; }
 
+            public string Make { get; set; }
 
             public string Model { get; set; }
 
-            public string Make { get; set; }
+            public int Year { get; set; }
         }
 
         public class BodyShop
