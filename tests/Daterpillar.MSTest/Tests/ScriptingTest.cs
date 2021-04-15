@@ -317,11 +317,6 @@ namespace Acklann.Daterpillar.Tests
                 }
         }
 
-        private static IEnumerable<object[]> GetInsertionCases()
-        {
-            throw new System.NotImplementedException();
-        }
-
         #endregion Backing Members
 
         #region Schema
@@ -330,9 +325,9 @@ namespace Acklann.Daterpillar.Tests
         public class Vehicle
         {
             [System.ComponentModel.DataAnnotations.Key]
-            public string Id { get; set; }
+            [Column(AutoIncrement = true)]
+            public int Id { get; set; }
 
-            public string Make { get; set; }
 
             public string Model { get; set; }
 
