@@ -317,6 +317,12 @@ namespace Acklann.Daterpillar.Tests
                 }
         }
 
+
+        private static IEnumerable<object[]> GetInsertionCases()
+        {
+            throw new System.NotImplementedException();
+        }
+
         #endregion Backing Members
 
         #region Schema
