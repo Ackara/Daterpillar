@@ -1,6 +1,7 @@
 using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -10,39 +11,33 @@ namespace Acklann.Daterpillar.Modeling
     {
         public static void Register(Type recordType)
         {
-            string tableName = recordType.GetCustomAttribute<Attributes.TableAttribute>()?.Name;
-            if (string.IsNullOrEmpty(tableName)) return;
+            string tableName = recordType.GetTableName();
 
             if (_map.ContainsKey(tableName)) return;
-            else _map.Add(tableName, null);
+            else _map.Add(tableName, tableName);
 
-            PropertyInfo[] properties = recordType.GetColumns().ToArray();
-            foreach (PropertyInfo prop in properties)
+            IEnumerable<MemberInfo> members = Serialization.Helper.GetColumns(recordType);
+            foreach (MemberInfo member in members)
             {
-                string qualifiedName = GetFullQualifiedName(tableName, prop.Name);
+                string qualifiedName = GetFullQualifiedName(tableName, member.Name);
                 if (_map.ContainsKey(qualifiedName) == false)
                 {
-                    _map.Add(qualifiedName, prop);
+                    _map.Add(qualifiedName, member);
                 }
             }
 
-            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetColumns)), (from prop in properties select prop.GetColumnName()).ToArray());
-            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetValues)), from prop in properties select properties);
+            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetColumns)), (from p in members select p.GetColumnName()).ToArray());
+            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetValues)), (from x in members select x).ToArray());
         }
 
-        public static PropertyInfo GetMember(string columnName)
+        public static MemberInfo GetMember(string tableName, string columnName)
         {
-            return (PropertyInfo)_map[columnName];
+            return _map[GetFullQualifiedName(tableName, columnName)] as MemberInfo;
         }
 
-        public static PropertyInfo GetMember(string tableName, string columnName)
+        public static MemberInfo[] GetMembers(string tableName)
         {
-            return (PropertyInfo)_map[GetFullQualifiedName(tableName, columnName)];
-        }
-
-        public static PropertyInfo[] GetProperties(string tableName)
-        {
-            return (PropertyInfo[])_map[GetFullQualifiedName(tableName, nameof(IInsertable.GetValues))];
+            return (MemberInfo[])_map[GetFullQualifiedName(tableName, nameof(IInsertable.GetValues))];
         }
 
         public static string[] GetColumns(string tableName)

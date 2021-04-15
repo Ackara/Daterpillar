@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Linq;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
@@ -8,48 +6,50 @@ namespace Acklann.Daterpillar.Modeling
     {
         public DataRecord()
         {
-            if (_map.ContainsKey(GetTableName()) == false)
-            {
-                PropertyInfo[] properties = GetType().GetColumns().ToArray();
-
-                _map.Add(GetKey(nameof(GetColumns)), from i in properties select i.GetName());
-                _map.Add(GetKey(nameof(GetValues)), properties);
-
-                foreach (PropertyInfo property in properties)
-                {
-                    _map.Add(GetKey(property.GetName()), property);
-                }
-            }
+            ColumnMap.Register(GetType());
         }
 
         public string GetTableName() => TableName;
 
         public virtual string[] GetColumns()
         {
-            return (string[])_map[GetKey(nameof(GetColumns))];
+            return ColumnMap.GetColumns(GetTableName());
         }
 
         public virtual object[] GetValues()
         {
-            PropertyInfo[] values = ColumnMap.GetProperties(GetTableName());
-            object[] results = new object[values.Length];
+            MemberInfo[] members = ColumnMap.GetMembers(GetTableName());
+            object[] results = new object[members.Length];
 
-            for (int i = 0; i < values.Length; i++)
+            for (int i = 0; i < results.Length; i++)
             {
-                results[i] = Serialize(values[i]);
+                results[i] = WriteValue(members[i]);
             }
 
-            return values;
+            return results;
         }
 
-        public virtual object Serialize(PropertyInfo property)
+        protected virtual object WriteValue(PropertyInfo member)
         {
-            return Linq.SqlComposer.Serialize(property.GetValue(this));
+            return Linq.SqlComposer.Serialize(member.GetValue(this));
+        }
+
+        protected virtual object WriteValue(FieldInfo member)
+        {
+            return Linq.SqlComposer.Serialize(member.GetValue(this));
+        }
+
+        protected object WriteValue(MemberInfo member)
+        {
+            if (member is PropertyInfo property)
+                return WriteValue(property);
+            else if (member is FieldInfo field)
+                return WriteValue(field);
+            else
+                return null;
         }
 
         #region Backing Members
-
-        private static readonly Hashtable _map = new Hashtable();
 
         private string GetKey(string item) => string.Concat(GetTableName(), '.', item);
 

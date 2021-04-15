@@ -1,4 +1,7 @@
+using Acklann.Daterpillar.Modeling.Attributes;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Serialization
@@ -19,6 +22,28 @@ namespace Acklann.Daterpillar.Serialization
             {
                 return type.Name;
             }
+        }
+
+        public static IEnumerable<MemberInfo> GetColumns(this Type type)
+        {
+            return
+                (from property in type.GetProperties()
+                 let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
+                 where
+                    /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                    &&
+                    (not_explictly_defined && property.CanWrite == false) == false
+                 select (MemberInfo)property)
+
+                 .Concat
+
+                 (from field in type.GetRuntimeFields()
+                  let isExplict = field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))
+                  where
+                     field.IsDefined(typeof(SqlIgnoreAttribute)) == false && field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                     &&
+                     isExplict
+                  select field);
         }
 
         public static string GetColumnName(this MemberInfo member)
