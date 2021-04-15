@@ -66,18 +66,18 @@ namespace Acklann.Daterpillar.Tests
 
         [TestMethod]
         [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
-        public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
+        public void Can_execute_insert_command(Vehicle model, Language connectionType)
         {
             // Arrange
+            var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
             using var connection = SqlValidator.ClearDatabase(connectionType);
+            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label);
 
             // Act
-            System.Data.SqlClient.SqlException ex1;
-            System.Data.SQLite.SQLiteException ex2;
-            MySql.Data.MySqlClient.MySqlException ex3;
+            SqlValidator.CreateSchemaTable(model.GetType(), connectionType);
 
             var command = SqlComposer2.ToInsertCommand(model);
-            var result = SqlCommandHelper.Insert(connection, model, connectionType);
+            var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
 
             // Assert
             result.Changes.ShouldBe(1, result.ErrorMessage);
@@ -231,23 +231,6 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
         }
 
-        [DataTestMethod]
-        [DataRow("", "''")]
-        [DataRow(22, "'22'")]
-        [DataRow(null, "null")]
-        [DataRow("foo", "'foo'")]
-        [DataRow(12.54f, "'12.54'")]
-        [DataRow(DayOfWeek.Friday, "'5'")]
-        [DataRow("abc ' '' def", "'abc '' '''' def'")]
-        [DataRow("2015-1-1 1:1:1", "'2015-01-01 01:01:01'")]
-        public void Can_serialize_an_object_to_a_sql_value(object input, string expectedValue)
-        {
-            if (DateTime.TryParse(input?.ToString(), out DateTime dt))
-                input = dt;
-
-            SqlComposer.Serialize(input).ShouldBe(expectedValue);
-        }
-
         #region Backing Members
 
         private static void TestScript(string scriptFile, Language syntax, out string results, out bool scriptExecutionWasSuccessful)
@@ -317,33 +300,43 @@ namespace Acklann.Daterpillar.Tests
                 }
         }
 
-
         private static IEnumerable<object[]> GetInsertionCases()
         {
-            throw new System.NotImplementedException();
+            //var languages = new Language[] { Language.MySQL, Language.TSQL, Language.SQLite };
+            //for (int i = 0; i < languages.Length; i++)
+            //{
+                Modeling.IInsertable f = AutoFaker.Generate<Vehicle>();
+
+            //    yield return new object[] { f, languages[i] };
+            //}
+                yield return new object[] { f, Language.MySQL };
         }
 
         #endregion Backing Members
-
-        #region Schema
-
-        [Table]
-        public class Vehicle
-        {
-            [System.ComponentModel.DataAnnotations.Key]
-            [Column(AutoIncrement = true)]
-            public int Id { get; set; }
-
-
-            public string Model { get; set; }
-
-            public int Year { get; set; }
-        }
-
-        public class BodyShop
-        {
-        }
-
-        #endregion Schema
     }
+
+    #region Schema
+
+    [Table]
+    public class Vehicle : Modeling.DataRecord
+    {
+        [System.ComponentModel.DataAnnotations.Key]
+        [Column(AutoIncrement = true)]
+        public int Id { get; set; }
+
+        public string Model { get; set; }
+
+        public int Year { get; set; }
+
+        public string DealerId { get; set; }
+    }
+
+    public class Dealer
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+    }
+
+    #endregion Schema
 }

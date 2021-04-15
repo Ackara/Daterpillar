@@ -1,3 +1,4 @@
+using Acklann.Daterpillar.Serialization;
 using System;
 using System.Data;
 using System.IO;
@@ -50,6 +51,40 @@ namespace Acklann.Daterpillar
                     return ClearSQLiteDatabase();
 
                 default: throw new System.NotImplementedException();
+            }
+        }
+
+        public static IDbConnection CreateSchemaTable(Type type, Language dialect)
+        {
+            using (var stream = new MemoryStream())
+            using (Scripting.Writers.SqlWriter writer = new Scripting.Writers.SqlWriterFactory().CreateInstance(dialect, stream))
+            {
+                Table table = SchemaFactory.CreateFrom(type);
+                writer.Create(table);
+                writer.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+
+                string script = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+                IDbConnection connection = CreateConnection(dialect);
+                connection.Open();
+                connection.ChangeDatabase(nameof(Daterpillar));
+
+                bool failed = !TryExecute(connection, script, out string error);
+                if (failed) throw new System.Exception(error);
+
+                return connection;
+            }
+        }
+
+        public static IDbConnection CreateConnection(Language connectionType)
+        {
+            switch (connectionType)
+            {
+                case Language.MySQL: return CreateMySqlConnection();
+                case Language.SQLite: return CreateSQLiteConnection();
+                case Language.TSQL: return CreateSqlServerConnection();
+
+                default: throw new NotImplementedException();
             }
         }
 
