@@ -24,7 +24,7 @@ namespace Acklann.Daterpillar.Serialization
             }
         }
 
-        public static IEnumerable<MemberInfo> GetColumns(this Type type)
+        public static IEnumerable<MemberInfo> GetColumns(this Type type, bool skipAutoIncrementedColumn = false)
         {
             return
                 (from property in type.GetProperties()

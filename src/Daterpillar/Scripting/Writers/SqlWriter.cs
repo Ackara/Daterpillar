@@ -114,7 +114,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
                     /* 2 */(column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     /* 3 */(column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     /* 4 */(column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, Resolver.ExpandVariables(column.DefaultValue))).WithSpace(),
-                    /* 5 */column.Comment.Escape()
+                    /* 5 */column.Comment.EscapeColumn()
                     ));
 
                 if /* not last-column */ (i < (n - 1)) Writer.WriteLine(",");
@@ -182,7 +182,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? GetAutoIncrementValue(column) : string.Empty).WithSpace(),
                     string.Format(DefaultFormatString, GetDefaultValue(column)).WithSpace(),
-                    column.Comment.Escape()
+                    column.Comment.EscapeColumn()
                 ));
             Writer.WriteLine(";");
             Writer.WriteLine();
@@ -285,7 +285,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
                     (column.IsNullable ? string.Empty : NotNull).WithSpace(),
                     (column.AutoIncrement ? AutoIncrement : string.Empty).WithSpace(),
                     (column.DefaultValue == null ? string.Empty : string.Format(DefaultFormatString, GetDefaultValue(column))).WithSpace(),
-                    column.Comment.Escape()
+                    column.Comment.EscapeColumn()
                 ));
             Writer.WriteLine(';');
             Writer.WriteLine();

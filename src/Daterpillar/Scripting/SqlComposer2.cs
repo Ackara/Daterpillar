@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text;
 
@@ -5,8 +6,10 @@ namespace Acklann.Daterpillar.Scripting
 {
     public static class SqlComposer2
     {
-        private static string ToInsertCommand(Modeling.IInsertable model, Language dialect, StringBuilder builder)
+        public static string ToInsertCommand(Modeling.IInsertable model, Language dialect)
         {
+            var builder = new StringBuilder();
+
             builder.Append("INSERT INTO ")
                    .Append(Linq.SqlComposer.Escape(model.GetTableName(), dialect))
                    .Append(" (")
@@ -21,13 +24,47 @@ namespace Acklann.Daterpillar.Scripting
             return builder.ToString();
         }
 
-        public static string ToInsertCommand(Language dialect, params Modeling.IInsertable[] modeles)
+        public static string EscapeColumn(this string name, Language syntax = Language.SQL)
         {
-            var builder = new StringBuilder();
+            switch (syntax)
+            {
+                default: return name;
 
+                case Language.TSQL:
+                case Language.SQLite:
+                    return $"[{name}]";
 
+                case Language.MySQL:
+                    return $"`{name}`";
+            }
+        }
 
-            return builder.ToString();
+        public static string Serialize(this object value)
+        {
+            if (value == null)
+            {
+                return "null";
+            }
+            else if (value is bool bit)
+            {
+                return bit ? "'1'" : "'0'";
+            }
+            else if (value is TimeSpan time)
+            {
+                return string.Format("{0:hh}:{0:mm}:{0:ss}", time);
+            }
+            else if (value is DateTime date)
+            {
+                return $"'{date.ToString("yyyy-MM-dd HH:mm:ss")}'";
+            }
+            else if (value.GetType().IsEnum)
+            {
+                return $"'{(int)value}'";
+            }
+            else
+            {
+                return $"'{value.ToString().Replace("'", "''")}'";
+            }
         }
     }
 }

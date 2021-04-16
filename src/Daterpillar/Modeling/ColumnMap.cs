@@ -16,7 +16,11 @@ namespace Acklann.Daterpillar.Modeling
             if (_map.ContainsKey(tableName)) return;
             else _map.Add(tableName, tableName);
 
-            IEnumerable<MemberInfo> members = Serialization.Helper.GetColumns(recordType);
+            IEnumerable<MemberInfo> members = from m in Serialization.Helper.GetColumns(recordType)
+                                              let attr = m.GetCustomAttribute<Attributes.ColumnAttribute>()
+                                              where (attr?.AutoIncrement ?? false) == false
+                                              select m;
+
             foreach (MemberInfo member in members)
             {
                 string qualifiedName = GetFullQualifiedName(tableName, member.Name);

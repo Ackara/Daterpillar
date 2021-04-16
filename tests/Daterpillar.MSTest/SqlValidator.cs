@@ -67,7 +67,7 @@ namespace Acklann.Daterpillar
                 string script = System.Text.Encoding.UTF8.GetString(stream.ToArray());
                 IDbConnection connection = CreateConnection(dialect);
                 connection.Open();
-                connection.ChangeDatabase(nameof(Daterpillar));
+                try { connection.ChangeDatabase(nameof(Daterpillar)); } catch (NotImplementedException) { }
 
                 bool failed = !TryExecute(connection, script, out string error);
                 if (failed) throw new System.Exception(error);
@@ -85,6 +85,29 @@ namespace Acklann.Daterpillar
                 case Language.TSQL: return CreateSqlServerConnection();
 
                 default: throw new NotImplementedException();
+            }
+        }
+
+        public static void CreateDatabase(params Language[] languages)
+        {
+            var factory = new Scripting.Writers.SqlWriterFactory();
+            if (languages.Length == 0) languages = new Language[] { Language.MySQL, Language.TSQL, Language.SQLite };
+
+            foreach (var item in languages)
+            {
+                using (IDbConnection connection = ClearDatabase(item))
+                using (var stream = new MemoryStream())
+                using (var writer = factory.CreateInstance(item, stream))
+                {
+                    Schema schema = SchemaFactory.CreateFrom(typeof(SqlValidator).Assembly);
+                    writer.Create(schema);
+                    writer.Flush();
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    string sql = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+                    bool failed = !TryExecute(connection, sql, out string error);
+                    if (failed) throw new Exception(error);
+                }
             }
         }
 

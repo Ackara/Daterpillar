@@ -4,11 +4,8 @@ using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Daterpillar.Serialization;
-using Acklann.Diffa;
-using ApprovalTests;
 using ApprovalTests.Namers;
 using AutoBogus;
-using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
@@ -16,13 +13,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
     public class ScriptingTest
     {
+        public static void Setup(TestContext _)
+        {
+            SqlValidator.CreateDatabase(_languages);
+        }
+
         [TestMethod]
         [UseApprovalSubdirectory("../test-cases/approved-results")]
         [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
@@ -66,110 +67,36 @@ namespace Acklann.Daterpillar.Tests
 
         [TestMethod]
         [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
-        public void Can_execute_insert_command(Vehicle model, Language connectionType)
+        public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
         {
             // Arrange
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
-            using var connection = SqlValidator.ClearDatabase(connectionType);
+            using var connection = SqlValidator.CreateConnection(connectionType);
             using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label);
 
             // Act
-            SqlValidator.CreateSchemaTable(model.GetType(), connectionType);
-
-            var command = SqlComposer2.ToInsertCommand(model);
+            var command = SqlComposer2.ToInsertCommand(model, connectionType);
             var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
 
             // Assert
             result.Changes.ShouldBe(1, result.ErrorMessage);
             result.ErrorCode.ShouldBe(0);
             result.ErrorMessage.ShouldBeNullOrEmpty();
-
-            Approvals.Verify(command);
-        }
-
-        [DataTestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite)]
-        public void Can_generate_insert_commands(Language kind)
-        {
-            // Arrange
-            var script = new StringBuilder();
-            var tableName = "foo";
-            var createStatement = $"create table {tableName}(id int, name varchar(64), age int);";
-            var columns = new string[] { "id", "name", "age" };
-            var values1 = new object[] { 1, "sally", 12 };
-            var values2 = new object[] { 2, "peggy", 21 };
-            var values3 = new object[] { 3, "don", 40 };
-
-            var sample1 = A.Fake<IEntity>();
-            A.CallTo(() => sample1.GetTableName()).Returns(tableName);
-            A.CallTo(() => sample1.GetColumnList()).Returns(columns);
-
-            var sample2 = A.Fake<IEntity>();
-            A.CallTo(() => sample2.GetTableName()).Returns(tableName);
-            A.CallTo(() => sample2.GetColumnList()).Returns(columns);
-
-            // Act
-            var case1 = SqlComposer.GenerateInsertStatements();
-
-            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 1, "'sally'", 12 });
-            var case2 = SqlComposer.GenerateInsertStatements(sample1);
-
-            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 2, "'mark'", 21 });
-            A.CallTo(() => sample2.GetValueList()).Returns(new object[] { 3, "'mary'", 25 });
-            var case3 = SqlComposer.GenerateInsertStatements(sample1, sample2);
-
-            A.CallTo(() => sample1.GetValueList()).Returns(new object[] { 4, "'jim'", 40 });
-            A.CallTo(() => sample2.GetValueList()).Returns(new object[] { 5, "'sal'", 50 });
-            var case4 = SqlComposer.GenerateJoinedInsertStatements(sample1, sample2);
-
-            using (var connection = TestDatabase.CreateConnection(kind))
-            {
-                System.Diagnostics.Debug.WriteLine($"connection: {connection.ConnectionString}");
-                TestDatabase.TryExecute(connection, $"drop table {tableName};", out string errorMsg);
-                bool failed = !TestDatabase.TryExecute(connection, createStatement, out errorMsg);
-                if (failed) Assert.Fail($"Failed to create {tableName} table.\n\n{errorMsg}");
-
-                var separator = string.Concat(Enumerable.Repeat('=', 50));
-                foreach (var item in (case2.Concat(case3).Append(case4)))
-                {
-                    TestDatabase.TryExecute(connection, item, out errorMsg);
-                    script.Append(errorMsg)
-                          .AppendLine(item)
-                          .AppendLine();
-                }
-            }
-
-            // Assert
-            case1.ShouldBeEmpty();
-            Diff.Approve(script, ".sql", kind);
+            command.ShouldNotBeNullOrWhiteSpace();
         }
 
         [TestMethod]
-        public void Can_query_database()
+        public void Can_fetch_database_records(Modeling.ISelectable model, Language connectionType)
         {
             // Arrange
-            Contact[] results = null;
-            var database = TestDatabase.CreateDatabase<Contact>();
-            var records = AutoFaker.Generate<Contact>(100).ToArray();
+            var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
+            using var connection = SqlValidator.CreateConnection(connectionType);
+            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label);
 
             // Act
-            if (database.State != ConnectionState.Open) database.Open();
 
-            using (database)
-            using (var command = database.CreateCommand())
-            {
-                if (!TestDatabase.TryExecute(database, SqlComposer.GenerateJoinedInsertStatements(records), out string errorMsg))
-                    Assert.Fail(errorMsg);
-
-                results = database.Select<Contact>($"select * from {nameof(Contact)};").ToArray();
-            }
 
             // Assert
-            results.ShouldNotBeEmpty();
-            records.ShouldAllBe(x => !string.IsNullOrEmpty(x.Name) && !string.IsNullOrEmpty(x.Email));
-            records.ShouldAllBe(x => x.TimeBorn != default);
         }
 
         [TestMethod]
@@ -232,6 +159,13 @@ namespace Acklann.Daterpillar.Tests
         }
 
         #region Backing Members
+
+        private static readonly Language[] _languages = new Language[]
+        {
+            //Language.TSQL,
+            //Language.SQLite,
+            Language.MySQL,
+        };
 
         private static void TestScript(string scriptFile, Language syntax, out string results, out bool scriptExecutionWasSuccessful)
         {
@@ -302,41 +236,37 @@ namespace Acklann.Daterpillar.Tests
 
         private static IEnumerable<object[]> GetInsertionCases()
         {
-            //var languages = new Language[] { Language.MySQL, Language.TSQL, Language.SQLite };
-            //for (int i = 0; i < languages.Length; i++)
-            //{
-                Modeling.IInsertable f = AutoFaker.Generate<Vehicle>();
-
-            //    yield return new object[] { f, languages[i] };
-            //}
-                yield return new object[] { f, Language.MySQL };
+            for (int i = 0; i < _languages.Length; i++)
+            {
+                yield return new object[] { AutoFaker.Generate<Artist>(), _languages[i] };
+            }
         }
 
         #endregion Backing Members
+
+        #region Schema
+
+        [Table]
+        public class Vehicle : Modeling.DataRecord
+        {
+            [System.ComponentModel.DataAnnotations.Key]
+            [Column(AutoIncrement = true)]
+            public int Id { get; set; }
+
+            public string Model { get; set; }
+
+            public int Year { get; set; }
+
+            public string DealerId { get; set; }
+        }
+
+        public class Dealer
+        {
+            public string Id { get; set; }
+
+            public string Name { get; set; }
+        }
+
+        #endregion Schema
     }
-
-    #region Schema
-
-    [Table]
-    public class Vehicle : Modeling.DataRecord
-    {
-        [System.ComponentModel.DataAnnotations.Key]
-        [Column(AutoIncrement = true)]
-        public int Id { get; set; }
-
-        public string Model { get; set; }
-
-        public int Year { get; set; }
-
-        public string DealerId { get; set; }
-    }
-
-    public class Dealer
-    {
-        public string Id { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    #endregion Schema
 }

@@ -1,0 +1,1 @@
+INSERT INTO `Vehicle` (`Id`, `Model`, `Year`, `DealerId`) VALUES ('317897020','Schuppe Inc','2018','Missouri')
