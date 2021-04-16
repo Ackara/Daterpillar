@@ -13,37 +13,11 @@ namespace Acklann.Daterpillar.Scripting
 
         public static SqlCommandResult Insert(this IDbConnection connection, Modeling.IInsertable model, Language dialect)
         {
-            IDbCommand command = null;
-
-            try
-            {
-                if (connection.State != ConnectionState.Open) connection.Open();
-                command = connection.CreateCommand();
-
-                command.CommandText = SqlComposer2.ToInsertCommand(model, dialect);
-                long changes = command.ExecuteNonQuery();
-                return new SqlCommandResult(changes, 0, null);
-            }
-            catch (System.Data.Common.DbException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                return new SqlCommandResult(0, GetSqlErrorCode(ex, dialect), ex.Message);
-            }
-            finally
-            {
-                command?.Dispose();
-            }
+            return ExecuteCommand(connection, SqlComposer2.ToInsertCommand(model, dialect), dialect);
         }
 
         public static QueryResult<TRecord> SelectOne<TRecord>(this IDbConnection connection, string query, Language dialect) where TRecord : Modeling.ISelectable
         {
-            try
-            {
-            }
-            catch (System.Data.Common.DbException ex)
-            {
-                return new QueryResult<TRecord>(default, ex.Message);
-            }
             throw new System.NotImplementedException();
         }
 
@@ -54,6 +28,7 @@ namespace Acklann.Daterpillar.Scripting
             try
             {
                 if (connection.State != ConnectionState.Open) connection.Open();
+                try { connection.ChangeDatabase(nameof(Daterpillar)); } catch (System.Data.Common.DbException) { }
 
                 command = connection.CreateCommand();
                 command.CommandText = sql;

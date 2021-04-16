@@ -1,10 +1,13 @@
 ﻿using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Schema;
 using Schema = Acklann.Daterpillar.Serialization.Schema;
 
@@ -85,15 +88,8 @@ namespace Acklann.Daterpillar.Tests
             Diff.Approve(sut.ToXml(), ".xml");
         }
 
-        [DataTestMethod]
-        [DataRow("", "''")]
-        [DataRow(22, "'22'")]
-        [DataRow(null, "null")]
-        [DataRow("foo", "'foo'")]
-        [DataRow(12.54f, "'12.54'")]
-        [DataRow(DayOfWeek.Friday, "'5'")]
-        [DataRow("abc ' '' def", "'abc '' '''' def'")]
-        [DataRow("2015-1-1 1:1:1", "'2015-01-01 01:01:01'")]
+        [TestMethod]
+        [DynamicData(nameof(SqlConversionCases), DynamicDataSourceType.Method)]
         public void Can_serialize_an_object_to_a_sql_value(object input, string expectedValue)
         {
             if (DateTime.TryParse(input?.ToString(), out DateTime dt))
@@ -102,6 +98,77 @@ namespace Acklann.Daterpillar.Tests
             SqlComposer.Serialize(input).ShouldBe(expectedValue);
         }
 
-        
+        [TestMethod]
+        [DynamicData(nameof(GetEnumerationCases), DynamicDataSourceType.Method)]
+        public void Should_enumerate_tables_by_dependencies(string[] relationships, string expectedSequence)
+        {
+            // Arrange
+            var a = new Table("a");
+            var b = new Table("b");
+            var c = new Table("c");
+            var d = new Table("d");
+            var e = new Table("e");
+
+            var schema = new Schema();
+            schema.Add(a, b, c, d, e);
+
+            Table get(string key)
+            {
+                switch (key)
+                {
+                    case "a": return a;
+                    case "b": return b;
+                    case "c": return c;
+                    case "d": return d;
+                    case "e": return e;
+                    default: throw new NotImplementedException();
+                }
+            }
+
+            void join(Table x, Table y)
+            {
+                x.Add(new ForeignKey
+                {
+                    ForeignTable = x.Name,
+                    ForeignColumn = x.Id,
+                    LocalTable = y.Name,
+                    LocalColumn = y.Id
+                });
+            }
+
+            // Act
+            foreach (string item in relationships)
+            {
+                string[] pair = item.Split(">");
+                join(get(pair[0]), get(pair[1]));
+            }
+
+            var result = string.Join(" ", from x in schema.EnumerateTables() select x.Name);
+
+            // Assert
+            result.ShouldBe(expectedSequence);
+        }
+
+        #region Backing Members
+
+        private static IEnumerable<object[]> GetEnumerationCases()
+        {
+            yield return new object[] { new string[] { }, "a b c d e" };
+            yield return new object[] { new string[] { "a>d", "a>b", "b>c" }, "d c b a e" };
+        }
+
+        private static IEnumerable<object[]> SqlConversionCases()
+        {
+            yield return new object[] { "", "''" };
+            yield return new object[] { 22, "'22'" };
+            yield return new object[] { null, "null" };
+            yield return new object[] { "foo", "'foo'" };
+            yield return new object[] { 12.54f, "'12.54'" };
+            yield return new object[] { DayOfWeek.Friday, "'5'" };
+            yield return new object[] { "abc ' '' def", "'abc '' '''' def'" };
+            yield return new object[] { "2015-1-1 1:1:1", "'2015-01-01 01:01:01'" };
+        }
+
+        #endregion Backing Members
     }
 }

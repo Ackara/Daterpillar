@@ -8,11 +8,10 @@ namespace Acklann.Daterpillar.Serialization
         private SchemaEnumerator.Iterator _enumerator;
 
         /// <summary>
-        /// Enumerates the <see cref="Table" /> objects in order by thier dependencies.
+        /// Enumerates the <see cref="Table" /> objects in order by their dependencies.
         /// </summary>
         /// <param name="schema">The schema.</param>
-        /// <remarks>This function is indeeded to be used when generating a schema creation script. It will ensure that a table's dependency is created before it is created.</remarks>
-        /// <returns></returns>
+        /// <remarks>This function is intended to be used when generating a schema creation script. It will ensure that a table's dependency is created before it is created.</remarks>
         public IEnumerable<Table> EnumerateTables()
         {
             if (_enumerator == null) _enumerator = new SchemaEnumerator.Iterator(this);

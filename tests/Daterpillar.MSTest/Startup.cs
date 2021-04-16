@@ -37,15 +37,7 @@ namespace Acklann.Daterpillar
                 {
                 });
 
-                builder.WithOverride((context) =>
-                {
-                    var i = (Tests.ScriptingTest.Vehicle)context.Instance;
-                    i.Id = context.Faker.Random.Int(0, int.MaxValue);
-                    i.Model = context.Faker.Company.CompanyName();
-                    i.Year = context.Faker.Random.Int(2000, 2021);
-
-                    return i;
-                });
+               
             });
         }
 

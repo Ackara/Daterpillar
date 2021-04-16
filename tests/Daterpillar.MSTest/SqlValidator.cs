@@ -104,6 +104,7 @@ namespace Acklann.Daterpillar
                     writer.Flush();
                     stream.Seek(0, SeekOrigin.Begin);
 
+                    try { connection.ChangeDatabase(nameof(Daterpillar)); } catch (System.Data.Common.DbException) { }
                     string sql = System.Text.Encoding.UTF8.GetString(stream.ToArray());
                     bool failed = !TryExecute(connection, sql, out string error);
                     if (failed) throw new Exception(error);

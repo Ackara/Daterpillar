@@ -9,7 +9,6 @@ namespace Acklann.Daterpillar.Scripting
         public static string ToInsertCommand(Modeling.IInsertable model, Language dialect)
         {
             var builder = new StringBuilder();
-
             builder.Append("INSERT INTO ")
                    .Append(Linq.SqlComposer.Escape(model.GetTableName(), dialect))
                    .Append(" (")

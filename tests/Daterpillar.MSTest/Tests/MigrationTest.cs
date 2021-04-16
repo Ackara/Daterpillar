@@ -13,7 +13,7 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class MigrationTest
     {
-        [TestMethod]
+        //[TestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
         [DataRow(Language.SQLite)]
@@ -92,7 +92,7 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldBeGreaterThan(0, "The 3rd migration failed.");
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Should_merge_referenced_schema_when_applied()
         {
             // Arrange
@@ -149,7 +149,7 @@ namespace Acklann.Daterpillar.Tests
 
         // ==================== ENUMERATOR ==================== //
 
-        [TestMethod]
+        //[TestMethod]
         [DataRow(0, "")]
         [DataRow(1, "a")]
         [DataRow(2, "a b")]

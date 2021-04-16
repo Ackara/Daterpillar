@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Linq;
-using Acklann.Daterpillar.Modeling.Attributes;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
@@ -19,6 +18,7 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class ScriptingTest
     {
+        [ClassInitialize]
         public static void Setup(TestContext _)
         {
             SqlValidator.CreateDatabase(_languages);
@@ -94,7 +94,6 @@ namespace Acklann.Daterpillar.Tests
             using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label);
 
             // Act
-
 
             // Assert
         }
@@ -243,30 +242,5 @@ namespace Acklann.Daterpillar.Tests
         }
 
         #endregion Backing Members
-
-        #region Schema
-
-        [Table]
-        public class Vehicle : Modeling.DataRecord
-        {
-            [System.ComponentModel.DataAnnotations.Key]
-            [Column(AutoIncrement = true)]
-            public int Id { get; set; }
-
-            public string Model { get; set; }
-
-            public int Year { get; set; }
-
-            public string DealerId { get; set; }
-        }
-
-        public class Dealer
-        {
-            public string Id { get; set; }
-
-            public string Name { get; set; }
-        }
-
-        #endregion Schema
     }
 }
