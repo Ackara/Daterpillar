@@ -28,6 +28,7 @@ namespace Acklann.Daterpillar.Serialization
             }
 
             public Table Current => current;
+
             object IEnumerator.Current => current;
 
             public bool MoveNext()

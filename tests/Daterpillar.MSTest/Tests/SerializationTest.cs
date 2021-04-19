@@ -103,11 +103,13 @@ namespace Acklann.Daterpillar.Tests
         public void Should_enumerate_tables_by_dependencies(string[] relationships, string expectedSequence)
         {
             // Arrange
-            var a = new Table("a");
-            var b = new Table("b");
-            var c = new Table("c");
-            var d = new Table("d");
-            var e = new Table("e");
+            Table table(string name) => new Table(name, new Column("id", SchemaType.VARCHAR), new Column("name", SchemaType.VARCHAR));
+
+            var a = table("a");
+            var b = table("b");
+            var c = table("c");
+            var d = table("d");
+            var e = table("e");
 
             var schema = new Schema();
             schema.Add(a, b, c, d, e);
@@ -129,10 +131,10 @@ namespace Acklann.Daterpillar.Tests
             {
                 x.Add(new ForeignKey
                 {
-                    ForeignTable = x.Name,
-                    ForeignColumn = x.Id,
-                    LocalTable = y.Name,
-                    LocalColumn = y.Id
+                    ForeignTable = y.Name,
+                    ForeignColumn = "id",
+                    LocalTable = x.Name,
+                    LocalColumn = "id"
                 });
             }
 
@@ -154,6 +156,7 @@ namespace Acklann.Daterpillar.Tests
         private static IEnumerable<object[]> GetEnumerationCases()
         {
             yield return new object[] { new string[] { }, "a b c d e" };
+            yield return new object[] { new string[] { "a>b" }, "b a c d e" };
             yield return new object[] { new string[] { "a>d", "a>b", "b>c" }, "d c b a e" };
         }
 
