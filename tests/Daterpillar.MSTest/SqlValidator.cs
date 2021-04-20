@@ -88,16 +88,16 @@ namespace Acklann.Daterpillar
             }
         }
 
-        public static void CreateDatabase(params Language[] languages)
+        public static void CreateDatabase(params Language[] connectionTypes)
         {
             var factory = new Scripting.Writers.SqlWriterFactory();
-            if (languages.Length == 0) languages = new Language[] { Language.MySQL, Language.TSQL, Language.SQLite };
+            if (connectionTypes.Length == 0) connectionTypes = new Language[] { Language.MySQL, Language.TSQL, Language.SQLite };
 
-            foreach (var item in languages)
+            foreach (Language lang in connectionTypes)
             {
-                using (IDbConnection connection = ClearDatabase(item))
+                using (IDbConnection connection = ClearDatabase(lang))
                 using (var stream = new MemoryStream())
-                using (var writer = factory.CreateInstance(item, stream))
+                using (var writer = factory.CreateInstance(lang, stream))
                 {
                     Schema schema = SchemaFactory.CreateFrom(typeof(SqlValidator).Assembly);
                     writer.Create(schema);

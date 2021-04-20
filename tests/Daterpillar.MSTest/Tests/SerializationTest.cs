@@ -157,6 +157,7 @@ namespace Acklann.Daterpillar.Tests
         {
             yield return new object[] { new string[] { }, "a b c d e" };
             yield return new object[] { new string[] { "a>b" }, "b a c d e" };
+            yield return new object[] { new string[] { "a>b", "a>c", "b>d" }, "d b c a e" };
             yield return new object[] { new string[] { "a>d", "a>b", "b>c" }, "d c b a e" };
         }
 

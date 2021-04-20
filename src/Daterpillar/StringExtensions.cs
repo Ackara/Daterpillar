@@ -4,7 +4,7 @@ using System.Text;
 namespace Acklann.Daterpillar
 {
     /// <summary>
-    /// Provides entension methods for string objects.
+    /// Provides extension methods for string objects.
     /// </summary>
     public static class StringExtensions
     {

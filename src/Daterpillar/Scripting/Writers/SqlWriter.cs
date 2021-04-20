@@ -334,7 +334,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             if (string.IsNullOrEmpty(table.Id)) return;
 
             if (Variables.Contains(table.Id))
-                throw new System.Data.DuplicateNameException(string.Format(BadKeyExceptionFormatString, table.Name, table.Id, "table"));
+                throw new System.Data.DuplicateNameException(string.Format(BAD_KEY_EXCEPTION_FORMAT_STRING, table.Name, table.Id, "table"));
             else
                 Variables.Add(table.Id, table.Name);
 
@@ -343,7 +343,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
                 if (string.IsNullOrEmpty(column.Id)) continue;
 
                 if (Variables.Contains(column.Id))
-                    throw new System.Data.DuplicateNameException(string.Format(BadKeyExceptionFormatString, $"'{table.Name}'.'{column.Name}'", column.Id, "column"));
+                    throw new System.Data.DuplicateNameException(string.Format(BAD_KEY_EXCEPTION_FORMAT_STRING, $"'{table.Name}'.'{column.Name}'", column.Id, "column"));
                 else
                     Variables.Add(column.Id, column.Name);
             }
@@ -386,7 +386,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
         #region Private Members
 
-        private const string BadKeyExceptionFormatString = "Your {0} {2} SUID ({1}) is not unique.";
+        private const string BAD_KEY_EXCEPTION_FORMAT_STRING = "Your {0} {2} SUID ({1}) is not unique.";
         private int _indentation = 0;
 
         internal void WriteHeaderIf(string text, bool condition = true)
