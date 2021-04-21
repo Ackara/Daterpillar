@@ -97,7 +97,7 @@ namespace Acklann.Daterpillar.Serialization
                 for (int i = 0; i < _schema.Tables.Count; i++)
                 {
                     tmp = _schema.Tables[i];
-                    if (tmp.GetIdOrName() == tableName) return tmp;
+                    if (tmp.Name == tableName) return tmp;
                 }
 
                 return null;

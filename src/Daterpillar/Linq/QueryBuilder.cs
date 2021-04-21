@@ -1,3 +1,4 @@
+using Acklann.Daterpillar.Scripting;
 using System.Text;
 
 namespace Acklann.Daterpillar.Linq
@@ -29,7 +30,7 @@ namespace Acklann.Daterpillar.Linq
 
         public QueryBuilder From(string table)
         {
-            _from = SqlComposer.Escape(table, _language);
+            _from = SqlComposer.EscapeColumn(table, _language);
             return this;
         }
 
@@ -47,19 +48,19 @@ namespace Acklann.Daterpillar.Linq
 
         public QueryBuilder Predicate(string column, object value, string operand = "=")
         {
-            _where = string.Concat(SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 
         public QueryBuilder And(string column, object value, string operand = "=")
         {
-            _where = string.Concat(_where, " AND ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(_where, " AND ", SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 
         public QueryBuilder Or(string column, object value, string operand = "=")
         {
-            _where = string.Concat(_where, " OR ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(_where, " OR ", SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 
@@ -162,7 +163,7 @@ namespace Acklann.Daterpillar.Linq
             int n = columns.Length;
             for (int i = 0; i < n; i++)
             {
-                builder.Append(SqlComposer.Escape(columns[i], _language));
+                builder.Append(SqlComposer.EscapeColumn(columns[i], _language));
                 if (i < (n - 1)) builder.Append(", ");
             }
 

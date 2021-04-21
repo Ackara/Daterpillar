@@ -11,14 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
     public class ScriptingTest
     {
-        [ClassInitialize]
+        //[ClassInitialize]
         public static void Setup(TestContext _)
         {
             SqlValidator.CreateDatabase(_languages);
@@ -55,27 +54,16 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DataRow(Language.TSQL)]
-        [DataRow(Language.MySQL)]
-        [DataRow(Language.SQLite, "main")]
-        public void Can_clear_test_databases(Language connectionType, string expectedDatabaseName = default)
-        {
-            using var connection = SqlValidator.ClearDatabase(connectionType);
-            connection.ShouldNotBeNull();
-            connection.Database.ShouldBe(expectedDatabaseName ?? nameof(Daterpillar));
-        }
-
-        [TestMethod]
         [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
         public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
         {
             // Arrange
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
             using var connection = SqlValidator.CreateConnection(connectionType);
-            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(label);
+            using var scenario = ApprovalResults.ForScenario(label);
 
             // Act
-            var command = SqlComposer2.ToInsertCommand(model, connectionType);
+            var command = SqlComposer.ToInsertCommand(model, connectionType);
             var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
 
             // Assert
@@ -157,6 +145,17 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
         }
 
+        [TestMethod]
+        [DataRow(Language.TSQL)]
+        [DataRow(Language.MySQL)]
+        [DataRow(Language.SQLite, "main")]
+        public void Can_clear_test_databases(Language connectionType, string expectedDatabaseName = default)
+        {
+            using var connection = SqlValidator.ClearDatabase(connectionType);
+            connection.ShouldNotBeNull();
+            connection.Database.ShouldBe(expectedDatabaseName ?? nameof(Daterpillar));
+        }
+
         #region Backing Members
 
         private static readonly Language[] _languages = new Language[]
@@ -165,20 +164,6 @@ namespace Acklann.Daterpillar.Tests
             //Language.SQLite,
             Language.MySQL,
         };
-
-        private static void TestScript(string scriptFile, Language syntax, out string results, out bool scriptExecutionWasSuccessful)
-        {
-            string schemaName = "dtp_scripting_test";
-            using (var database = TestDatabase.CreateConnection(syntax, schemaName))
-            {
-                database.RebuildSchema(schemaName);
-
-                results = File.ReadAllText(scriptFile);
-                scriptExecutionWasSuccessful = TestDatabase.TryExecute(database, results, out string error);
-                var nl = string.Concat(Enumerable.Repeat(Environment.NewLine, 3));
-                results = string.Format("{0}SYNTAX: {1}{3}{2}", error, syntax, results, nl);
-            }
-        }
 
         private static Schema CreateSchemaInstance()
         {

@@ -4,13 +4,8 @@ using System.Text;
 
 namespace Acklann.Daterpillar.Linq
 {
-    public static class SqlComposer
+    public static class SqlComposerf
     {
-        public static string[] GenerateInsertStatements(params IEntity[] entities)
-        {
-            return GenerateInsertStatements(Language.SQL, entities);
-        }
-
         public static string[] GenerateInsertStatements(Language kind, params IEntity[] entities)
         {
             if (entities == null || entities.Length == 0) return new string[0];

@@ -13,7 +13,7 @@ namespace Acklann.Daterpillar.Scripting
 
         public static SqlCommandResult Insert(this IDbConnection connection, Modeling.IInsertable model, Language dialect)
         {
-            return ExecuteCommand(connection, SqlComposer2.ToInsertCommand(model, dialect), dialect);
+            return ExecuteCommand(connection, SqlComposer.ToInsertCommand(model, dialect), dialect);
         }
 
         public static QueryResult<TRecord> SelectOne<TRecord>(this IDbConnection connection, string query, Language dialect) where TRecord : Modeling.ISelectable

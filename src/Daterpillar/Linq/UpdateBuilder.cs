@@ -1,3 +1,5 @@
+using Acklann.Daterpillar.Scripting;
+
 namespace Acklann.Daterpillar.Linq
 {
     public class UpdateBuilder
@@ -9,12 +11,12 @@ namespace Acklann.Daterpillar.Linq
         public UpdateBuilder(string table, Language language = Language.SQL)
         {
             _language = language;
-            _table = SqlComposer.Escape(table, language);
+            _table = SqlComposer.EscapeColumn(table, language);
         }
 
         public UpdateBuilder Table(string tableName)
         {
-            _table = SqlComposer.Escape(tableName, _language);
+            _table = SqlComposer.EscapeColumn(tableName, _language);
             return this;
         }
 
@@ -28,12 +30,12 @@ namespace Acklann.Daterpillar.Linq
         {
             if (overwrite)
             {
-                _set = string.Concat(SqlComposer.Escape(column, _language), "=", SqlComposer.Serialize(value));
+                _set = string.Concat(SqlComposer.EscapeColumn(column, _language), "=", SqlComposer.Serialize(value));
             }
             else
             {
                 _set = string.Concat((string.IsNullOrEmpty(_set) ? null : $"{_set}, "),
-                    SqlComposer.Escape(column, _language), "=", SqlComposer.Serialize(value));
+                    SqlComposer.EscapeColumn(column, _language), "=", SqlComposer.Serialize(value));
             }
             return this;
         }
@@ -46,19 +48,19 @@ namespace Acklann.Daterpillar.Linq
 
         public UpdateBuilder Predicate(string column, object value, string operand = "=")
         {
-            _where = string.Concat(SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 
         public UpdateBuilder And(string column, object value, string operand = "=")
         {
-            _where = string.Concat(_where, " AND ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(_where, " AND ", SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 
         public UpdateBuilder Or(string column, object value, string operand = "=")
         {
-            _where = string.Concat(_where, " OR ", SqlComposer.Escape(column, _language), operand, SqlComposer.Serialize(value));
+            _where = string.Concat(_where, " OR ", SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
         }
 

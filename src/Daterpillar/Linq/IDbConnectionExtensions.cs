@@ -95,42 +95,6 @@ namespace Acklann.Daterpillar.Linq
 
         // ==================== INSERT DATA ==================== //
 
-        public static bool Insert(this IDbConnection connection, params IEntity[] entities)
-        {
-            return Insert(connection, GetLanguage(connection), entities);
-        }
-
-        public static bool Insert(this IDbConnection connection, Language kind, params IEntity[] entities)
-        {
-            Open(connection);
-            using (IDbTransaction transaction = connection.BeginTransaction())
-                try
-                {
-                    using (IDbCommand command = connection.CreateCommand())
-                    {
-                        command.Transaction = transaction;
-                        foreach (string sql in SqlComposer.GenerateInsertStatements(kind, entities))
-                        {
-                            command.CommandText = sql;
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit();
-                    return true;
-                }
-                catch { transaction.Rollback(); }
-            return false;
-        }
-
-        public static Task<bool> InsertAsync(this IDbConnection connection, params IEntity[] entities)
-        {
-            return InsertAsync(connection, GetLanguage(connection), entities);
-        }
-
-        public static Task<bool> InsertAsync(this IDbConnection connection, Language lang, params IEntity[] entities)
-        {
-            return Task.Run(() => { return Insert(connection, lang, entities); });
-        }
 
         // ==================== DROP DATABASE ==================== //
 

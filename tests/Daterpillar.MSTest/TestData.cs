@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar
 
         public static readonly IConfiguration Configuration;
 
-        public static readonly string Directory = Path.Combine(AppContext.BaseDirectory, "test-data");
+        public static readonly string Directory = Path.Combine(AppContext.BaseDirectory, "test-cases");
 
         public static string GetFilePath(string pattern)
         {

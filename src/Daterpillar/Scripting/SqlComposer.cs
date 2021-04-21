@@ -4,37 +4,37 @@ using System.Text;
 
 namespace Acklann.Daterpillar.Scripting
 {
-    public static class SqlComposer2
+    public static class SqlComposer
     {
         public static string ToInsertCommand(Modeling.IInsertable model, Language dialect)
         {
             var builder = new StringBuilder();
             builder.Append("INSERT INTO ")
-                   .Append(Linq.SqlComposer.Escape(model.GetTableName(), dialect))
+                   .Append(EscapeColumn(model.GetTableName(), dialect))
                    .Append(" (")
-                   .Append(string.Join(", ", (from x in model.GetColumns() select Linq.SqlComposer.Escape(x, dialect))))
+                   .Append(string.Join(", ", (from x in model.GetColumns() select EscapeColumn(x, dialect))))
                    .Append(")")
                    .Append(" VALUES ")
                    .Append("(")
-                   .Append(string.Join(",", (from x in model.GetValues() select x)))
+                   .Append(string.Join(", ", (from x in model.GetValues() select x)))
                    .Append(")")
                    ;
 
             return builder.ToString();
         }
 
-        public static string EscapeColumn(this string name, Language syntax = Language.SQL)
+        public static string EscapeColumn(this string columnName, Language syntax = Language.SQL)
         {
             switch (syntax)
             {
-                default: return name;
+                default: return columnName;
 
                 case Language.TSQL:
                 case Language.SQLite:
-                    return $"[{name}]";
+                    return $"[{columnName}]";
 
                 case Language.MySQL:
-                    return $"`{name}`";
+                    return $"`{columnName}`";
             }
         }
 
