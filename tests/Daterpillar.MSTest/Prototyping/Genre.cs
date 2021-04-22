@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Acklann.Daterpillar.Prototyping
 {
-    [Table, DisplayName("genre")]
+    [Table]
     public enum Genre
     {
         [DisplayName("Hip Hop")]

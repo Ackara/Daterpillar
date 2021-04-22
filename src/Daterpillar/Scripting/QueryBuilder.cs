@@ -1,7 +1,7 @@
-using Acklann.Daterpillar.Scripting;
+using System.Linq;
 using System.Text;
 
-namespace Acklann.Daterpillar.Linq
+namespace Acklann.Daterpillar.Scripting
 {
     public class QueryBuilder
     {
@@ -17,12 +17,6 @@ namespace Acklann.Daterpillar.Linq
         }
 
         public QueryBuilder Select(params string[] columns)
-        {
-            _select = Join(columns);
-            return this;
-        }
-
-        public QueryBuilder SelectRaw(params string[] columns)
         {
             _select = string.Join(", ", columns);
             return this;
@@ -46,7 +40,7 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
-        public QueryBuilder Predicate(string column, object value, string operand = "=")
+        public QueryBuilder Where(string column, object value, string operand = "=")
         {
             _where = string.Concat(SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
@@ -66,25 +60,19 @@ namespace Acklann.Daterpillar.Linq
 
         public QueryBuilder GroupBy(params string[] columns)
         {
-            _group = Join(columns);
-            return this;
-        }
-
-        public QueryBuilder GroupByRaw(params string[] columns)
-        {
             _group = string.Join(", ", columns);
             return this;
         }
 
         public QueryBuilder OrderBy(params string[] columns)
         {
-            _order = Join(columns);
+            _order = string.Join(", ", columns);
             return this;
         }
 
-        public QueryBuilder OrderByRaw(params string[] columns)
+        public QueryBuilder OrderByDescending(params string[] columns)
         {
-            _order = string.Join(", ", columns);
+            _order = string.Join(", ", columns.Select(x => string.Concat(SqlComposer.EscapeColumn(x, _language), " DESC")));
             return this;
         }
 
@@ -137,7 +125,36 @@ namespace Acklann.Daterpillar.Linq
 
         public override string ToString()
         {
-            return ToString(_language);
+            _builder.Clear().Append("SELECT");
+
+            if (_language == Language.TSQL && _limit > 0 && _offset < 1)
+                _builder.AppendLine($" TOP {_limit}");
+            else
+                _builder.AppendLine();
+
+            _builder.AppendLine(_select)
+                    .AppendLine($"FROM {_from}");
+
+            if (!string.IsNullOrEmpty(_where))
+                _builder.AppendLine($"WHERE {_where}");
+
+            if (!string.IsNullOrEmpty(_group))
+                _builder.AppendLine($"GROUP BY {_group}");
+
+            if (!string.IsNullOrEmpty(_order))
+                _builder.AppendLine($"ORDER BY {_order}");
+
+            if (_language == Language.TSQL && _offset > 0)
+                _builder.AppendLine($"OFFSET {_offset} ROWS FETCH NEXT {_limit} ROWS ONLY");
+
+            if (_language != Language.TSQL && _limit > 0)
+                _builder.AppendLine($"LIMIT {_limit}");
+
+            if (_language != Language.TSQL && _offset > 0)
+                _builder.AppendLine($"OFFSET {_offset}");
+
+            _builder.Append(';');
+            return _builder.ToString();
         }
 
         #region Operators

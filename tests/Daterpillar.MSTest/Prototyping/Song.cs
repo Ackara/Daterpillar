@@ -3,8 +3,7 @@ using System.ComponentModel;
 
 namespace Acklann.Daterpillar.Prototyping
 {
-    [StaticId(100)]
-    [Table, DisplayName("song")]
+    [Table]
     public class Song
     {
         [Column("Id", AutoIncrement = true)]

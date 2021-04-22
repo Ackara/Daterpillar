@@ -1,14 +1,86 @@
+using Acklann.Daterpillar.Modeling;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Acklann.Daterpillar.Scripting
 {
     public static class SqlCommandHelper
     {
-        public static QueryResult<TModel[]> Select<TModel>(this IDbConnection connection, string query) where TModel : Modeling.ISelectable
+        public static QueryResult Select(this IDbConnection connection, string query, Type recordType)
         {
-            if (string.IsNullOrEmpty(query)) return new QueryResult<TModel[]>(new TModel[0]);
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(query)) return new QueryResult(new object[0]);
+
+            IDbCommand command = null;
+            IDataReader records = null;
+
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+
+                command = connection.CreateCommand();
+                command.CommandText = query;
+                records = command.ExecuteReader();
+
+                ISelectable record;
+                var results = new LinkedList<ISelectable>();
+
+                while (records.Read())
+                {
+                    record = (ISelectable)Activator.CreateInstance(recordType);
+                    record.Load(records);
+                    results.AddLast(record);
+                }
+
+                return new QueryResult(results);
+            }
+            catch (System.Data.Common.DbException ex)
+            {
+                return new QueryResult(new object[0], ex.Message);
+            }
+            finally
+            {
+                command?.Dispose();
+                records?.Dispose();
+            }
+        }
+
+        public static QueryResult<IEnumerable<TModel>> Select<TModel>(this IDbConnection connection, string query) where TModel : ISelectable
+        {
+            if (string.IsNullOrEmpty(query)) return new QueryResult<IEnumerable<TModel>>(new TModel[0]);
+
+            IDbCommand command = null;
+            IDataReader records = null;
+
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+
+                command = connection.CreateCommand();
+                command.CommandText = query;
+                records = command.ExecuteReader();
+
+                TModel record;
+                var results = new LinkedList<TModel>();
+
+                while (records.Read())
+                {
+                    record = Activator.CreateInstance<TModel>();
+                    record.Load(records);
+                    results.AddLast(record);
+                }
+
+                return new QueryResult<IEnumerable<TModel>>(results);
+            }
+            catch (System.Data.Common.DbException ex)
+            {
+                return new QueryResult<IEnumerable<TModel>>(new TModel[0], ex.Message);
+            }
+            finally
+            {
+                command?.Dispose();
+                records?.Dispose();
+            }
         }
 
         public static SqlCommandResult Insert(this IDbConnection connection, Modeling.IInsertable model, Language dialect)
@@ -37,7 +109,7 @@ namespace Acklann.Daterpillar.Scripting
             }
             catch (System.Data.Common.DbException ex)
             {
-                return new SqlCommandResult(0, GetSqlErrorCode(ex, dialect), ex.Message);
+                return new SqlCommandResult(GetSqlErrorCode(ex, dialect), GetSqlErrorCode(ex, dialect), ex.Message);
             }
             finally
             {
@@ -50,10 +122,8 @@ namespace Acklann.Daterpillar.Scripting
             switch (connectionType)
             {
                 case Language.TSQL:
-                    return Convert.ToInt32(exception.GetType().GetProperty("Number")?.GetValue(exception));
-
                 case Language.MySQL:
-                    return Convert.ToInt32(exception.GetType().GetProperty("Code")?.GetValue(exception));
+                    return Convert.ToInt32(exception.GetType().GetProperty("Number")?.GetValue(exception));
 
                 default: return exception.ErrorCode;
             }

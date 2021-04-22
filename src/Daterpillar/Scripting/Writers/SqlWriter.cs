@@ -1,5 +1,5 @@
-﻿using Acklann.Daterpillar.Serialization;
-using Acklann.Daterpillar.Scripting.Translators;
+﻿using Acklann.Daterpillar.Scripting.Translators;
+using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -93,6 +93,8 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
         public virtual void Create(Table table)
         {
+            if ((table?.Columns?.Count ?? 0) < 1) return;
+
             int i, n;
             bool notUsingAutoKey = true;
             Writer.Write(Expand(CreateTableFormatString, Resolver.Escape(table.Name), table.Comment));
