@@ -152,7 +152,7 @@ namespace Acklann.Daterpillar.Scripting
             }
             catch (System.Data.Common.DbException ex)
             {
-                transaction.Rollback();
+                transaction?.Rollback();
                 return new SqlCommandResult(changes, GetSqlErrorCode(ex, connectionType), ex.Message);
             }
             finally
@@ -187,7 +187,7 @@ namespace Acklann.Daterpillar.Scripting
             }
             catch (System.Data.Common.DbException ex)
             {
-                transaction.Rollback();
+                transaction?.Rollback();
                 results[index] = new SqlCommandResult(0, GetSqlErrorCode(ex, connectionType), ex.Message);
             }
             finally
@@ -216,14 +216,18 @@ namespace Acklann.Daterpillar.Scripting
 
         internal static int GetSqlErrorCode(System.Data.Common.DbException exception, Language connectionType)
         {
+            int code;
             switch (connectionType)
             {
                 case Language.TSQL:
                 case Language.MySQL:
-                    return Convert.ToInt32(exception.GetType().GetProperty("Number")?.GetValue(exception));
+                    code = Convert.ToInt32(exception.GetType().GetProperty("Number")?.GetValue(exception));
+                    break;
 
                 default: return exception.ErrorCode;
             }
+
+            return code == 0 ? 500 : code;
         }
     }
 }

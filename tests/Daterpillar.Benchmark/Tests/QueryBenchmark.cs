@@ -15,12 +15,7 @@ namespace Acklann.Daterpillar.Tests
         public int RunDaterpillar()
         {
             int count = 0;
-            using (IDbConnection connection = Helper.CreateDatabase())
-            {
-                if (connection.State != ConnectionState.Open) connection.Open();
-                var results = connection.Select<User>(_query).ToArray();
-                count = results.Length;
-            }
+            
 
             return count;
         }
@@ -29,12 +24,7 @@ namespace Acklann.Daterpillar.Tests
         public int RunDapper()
         {
             int count = 0;
-            using (IDbConnection connection = Helper.CreateDatabase())
-            {
-                if (connection.State != ConnectionState.Open) connection.Open();
-                var results = connection.Query(_query).ToArray();
-                count = results.Length;
-            }
+           
 
             return count;
         }

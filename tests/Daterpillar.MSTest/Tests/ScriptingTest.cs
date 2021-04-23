@@ -17,8 +17,8 @@ namespace Acklann.Daterpillar.Tests
     [TestClass]
     public class ScriptingTest
     {
-        [ClassInitialize]
-        public static void Setup(TestContext _)
+        [TestInitialize]
+        public void Setup()
         {
             SqlValidator.CreateDatabase(_languages);
         }

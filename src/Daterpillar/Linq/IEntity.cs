@@ -1,7 +1,10 @@
+using System;
+
 namespace Acklann.Daterpillar.Linq
 {
-    public delegate IEntity EntityConstructor();
+    
 
+    [Obsolete]
     public interface IEntity
     {
         string GetTableName();
