@@ -7,14 +7,12 @@
   "releaseNotes": "https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt",
   "icon": "icon.png",
   "tags": "sql migration orm flyway build",
-  "version":
-  {
+  "version": {
     "major": 12,
     "minor": 0,
-    "patch": 2
+    "patch": 3
   },
-  "branchVersionMap":
-  {
+  "branchVersionMap": {
     "default": "x.y.z-\\beta",
     "production": "C"
   }
