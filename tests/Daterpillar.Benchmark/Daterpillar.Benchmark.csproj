@@ -5,16 +5,16 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   
-<Description>A tool that generates sql-migration scripts from your classes.</Description>
-<Version>12.0.0</Version>
-<AssemblyVersion>12.0.0</AssemblyVersion>
-<AssemblyFileVersion>12.0.0</AssemblyFileVersion>
+<Description>A library for generating SQL migration scripts.</Description>
+<Version>12.0.2</Version>
+<AssemblyVersion>12.0.2</AssemblyVersion>
+<AssemblyFileVersion>12.0.2</AssemblyFileVersion>
 <PackageIcon>icon.png</PackageIcon>
 <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
 <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
 <PackageTags>sql migration orm flyway build</PackageTags>
 <Company>Ackara</Company>
-<Copyright>Copyright © 2015 Ackara</Copyright>
+<Copyright>Copyright © 2021 Ackara</Copyright>
 <PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
 

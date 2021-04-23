@@ -51,33 +51,12 @@ Task "Restore-Dependencies" -alias "restore" -description "This task generate an
 		Write-Host "  * added 'build/$(Split-Path $ManifestFilePath -Leaf)' to the solution.";
 	}
 
-	# Restore dotnet tools
-	# ==================================================
-	Push-Location $SolutionFolder;
-	Exec { &dotnet tool restore; }
-	Pop-Location;
-
 	# Generating a secrets file
 	# ==================================================
 	if (-not (Test-Path $SecretsFilePath))
 	{
 		"{}" | Out-File $SecretsFilePath -Encoding utf8;
 		Write-Host "  * added '$(Split-Path $SecretsFilePath -Leaf)' to the solution.";
-	}
-
-	$templateFilePath = Join-Path $SolutionFolder "config-template.csv";
-	$valuePairs = Get-Content $templateFilePath | ConvertFrom-Csv;
-	foreach ($item in $valuePairs)
-	{
-		$key = (&{ if (([string]$item.Key).StartsWith('$')) { return ($EnvironmentName + $item.Key.Substring(1)); } else { return $item.Key; } });
-		$currentValue = &dotnet app-secret get --path $SecretsFilePath --key $key;
-		if ([string]::IsNullOrWhiteSpace($currentValue) -and $Interactive)
-		{
-			$value = Read-Host (Get-Alt $item.Description $key);
-		}
-
-		$value = Get-Alt $value $item.Default;
-		&dotnet app-secret set --path $SecretsFilePath --key $key --value $value;
 	}
 }
 
@@ -87,6 +66,11 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 -depends @("restore") -action {
 	if (Test-Path $ArtifactsFolder) { Remove-Item $ArtifactsFolder -Recurse -Force; }
 	New-Item $ArtifactsFolder -ItemType Directory | Out-Null;
+	$version = $ManifestFilePath  | Select-NcrementVersionNumber $EnvironmentName;
+
+	$project = Join-Path $SolutionFolder "src/$SolutionName/*.*proj" | Get-Item;
+	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
+	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
 }
 
 Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `

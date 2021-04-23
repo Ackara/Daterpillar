@@ -54,7 +54,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
+        [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
         public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
         {
             // Arrange
@@ -74,7 +74,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DynamicData(nameof(GetInsertionCases), DynamicDataSourceType.Method)]
+        [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
         public void Can_execute_select_command(Modeling.DataRecord model, Language connectionType)
         {
             // Arrange
@@ -83,7 +83,7 @@ namespace Acklann.Daterpillar.Tests
             using var scenario = ApprovalResults.ForScenario(label);
 
             // Act
-            var insertResult = SqlCommandHelper.Insert(connection, model, connectionType);
+            var insertResult = SqlCommandHelper.Insert(connection, connectionType, model);
             if (insertResult == false) Assert.Fail(insertResult.ErrorMessage);
 
             var query = new QueryBuilder()
@@ -165,6 +165,15 @@ namespace Acklann.Daterpillar.Tests
             connection.Database.ShouldBe(expectedDatabaseName ?? nameof(Daterpillar));
         }
 
+        [TestMethod]
+        [DataRow(typeof(System.Data.SqlClient.SqlConnection), Language.TSQL)]
+        [DataRow(typeof(System.Data.SQLite.SQLiteConnection), Language.SQLite)]
+        [DataRow(typeof(MySql.Data.MySqlClient.MySqlConnection), Language.MySQL)]
+        public void Can_determine_language_from_the_connection_type(Type connectionType, Language excepectedValue)
+        {
+            Scripting.SqlCommandHelper.GetLanguage(connectionType).ShouldBe(excepectedValue);
+        }
+
         #region Backing Members
 
         private static readonly Language[] _languages = new Language[]
@@ -227,7 +236,7 @@ namespace Acklann.Daterpillar.Tests
                 }
         }
 
-        private static IEnumerable<object[]> GetInsertionCases()
+        private static IEnumerable<object[]> GetSampleRecords()
         {
             for (int i = 0; i < _languages.Length; i++)
             {

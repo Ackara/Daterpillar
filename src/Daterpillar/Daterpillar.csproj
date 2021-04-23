@@ -4,17 +4,17 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>12.0.0</Version>
-    <AssemblyVersion>12.0.0</AssemblyVersion>
-    <AssemblyFileVersion>12.0.0</AssemblyFileVersion>
+    <Version>12.0.2</Version>
+    <AssemblyVersion>12.0.2</AssemblyVersion>
+    <AssemblyFileVersion>12.0.2</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>A tool that generates sql-migration scripts from your classes.</Description>
+    <Description>A library for generating SQL migration scripts.</Description>
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
-    <Copyright>Copyright © 2015 Ackara</Copyright>
+    <Copyright>Copyright © 2021 Ackara</Copyright>
 
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
