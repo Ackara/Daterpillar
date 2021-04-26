@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -74,10 +75,12 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
-        [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
-        public void Can_execute_select_command(Modeling.DataRecord model, Language connectionType)
+        [DynamicData(nameof(GetLanguages), DynamicDataSourceType.Method)]
+        public void Can_execute_select_command(Language connectionType)
         {
             // Arrange
+            var model = AutoFaker.Generate<Artist>();
+
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
             using var connection = SqlValidator.CreateConnection(connectionType);
             using var scenario = ApprovalResults.ForScenario(label);
@@ -87,12 +90,20 @@ namespace Acklann.Daterpillar.Tests
             if (insertResult == false) Assert.Fail(insertResult.ErrorMessage);
 
             var query = new QueryBuilder()
-                .SelectAll();
-            var result = SqlCommandHelper.Select(connection, query, model.GetType());
+                .SelectAll()
+                .From(model.GetTableName())
+                .Where("Name", model.Name);
+
+            var resultSet1 = SqlCommandHelper.Select<Artist>(connection, query);
+            var resultSet2 = SqlCommandHelper.Select(connection, query, model.GetType());
 
             // Assert
-            result.ErrorMessage.ShouldNotBeNullOrEmpty(result.ErrorMessage);
-            result.Data.ShouldNotBeNull();
+            resultSet1.ErrorMessage.ShouldBeNullOrWhiteSpace(resultSet1.ErrorMessage);
+            resultSet1.Data.ShouldNotBeNull();
+            resultSet1.Data.ShouldAllBe(x => x.Name == model.Name);
+
+            resultSet2.Data.ShouldNotBeNull();
+            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Modeling.ISelectable>));
         }
 
         [TestMethod]
@@ -243,6 +254,14 @@ namespace Acklann.Daterpillar.Tests
                 yield return new object[] { AutoFaker.Generate<Artist>(), _languages[i] };
 
                 //yield return new object[] { }
+            }
+        }
+
+        private static IEnumerable<object[]> GetLanguages()
+        {
+            foreach (Language item in _languages)
+            {
+                yield return new object[] { item };
             }
         }
 

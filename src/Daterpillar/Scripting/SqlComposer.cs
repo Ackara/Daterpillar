@@ -56,6 +56,10 @@ namespace Acklann.Daterpillar.Scripting
             {
                 return $"'{date.ToString("yyyy-MM-dd HH:mm:ss")}'";
             }
+            else if (value is DateTimeOffset utcDate)
+            {
+                return $"'{utcDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
+            }
             else if (value.GetType().IsEnum)
             {
                 return $"'{(int)value}'";

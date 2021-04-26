@@ -20,10 +20,11 @@ namespace Acklann.Daterpillar.Modeling
                                               let attr = m.GetCustomAttribute<Attributes.ColumnAttribute>()
                                               where (attr?.AutoIncrement ?? false) == false
                                               select m;
+            members = recordType.GetColumns();
 
             foreach (MemberInfo member in members)
             {
-                string qualifiedName = GetFullQualifiedName(tableName, member.Name);
+                string qualifiedName = GetFullQualifiedName(tableName, member.GetColumnName());
                 if (_map.ContainsKey(qualifiedName) == false)
                 {
                     _map.Add(qualifiedName, member);

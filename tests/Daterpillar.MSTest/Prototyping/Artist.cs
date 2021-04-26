@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Prototyping
     [Table("artist")]
     public class Artist: Modeling.DataRecord
     {
-        [Column(AutoIncrement = true)]
+        [Column("id", AutoIncrement = true)]
         public int Id { get; set; }
 
         [Index, Column]
