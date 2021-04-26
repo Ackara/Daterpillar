@@ -130,6 +130,28 @@ namespace Acklann.Daterpillar.Tests
             public int ParentId { get; set; }
         }
 
+        [Modeling.Attributes.Table]
+        public class ComplexType
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            [Modeling.Attributes.Column(SchemaType.VARCHAR)]
+            public ReadonlyValue Value { get; }
+        }
+
+        public readonly struct ReadonlyValue
+        {
+            public ReadonlyValue(string value)
+            {
+                Value = value;
+            }
+
+            [Modeling.Attributes.Column]
+            public string Value { get; }
+        }
+
         #endregion Types To Convert
     }
 }

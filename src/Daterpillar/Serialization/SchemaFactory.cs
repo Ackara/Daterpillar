@@ -16,7 +16,10 @@ namespace Acklann.Daterpillar.Serialization
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
             IEnumerable<Type> tables = (from t in assembly.DefinedTypes
-                                        where t.IsInterface == false && t.IsAbstract == false && t.IsDefined(typeof(TableAttribute))
+                                        where
+                                            t.IsInterface == false &&
+                                            t.IsAbstract == false &&
+                                            (t.IsDefined(typeof(TableAttribute)) || t.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.TableAttribute)))
                                         select t);
 
             var schema = new Schema { Version = assembly.GetName().Version.ToString(3) };
