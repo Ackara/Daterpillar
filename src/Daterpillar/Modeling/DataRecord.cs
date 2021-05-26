@@ -1,12 +1,17 @@
+using System;
 using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
     public abstract class DataRecord : DataViewRecord, IInsertable
     {
-        public DataRecord()
+        public DataRecord() : this(null)
         {
-            ColumnMap.Register(GetType());
+        }
+
+        public DataRecord(Type type)
+        {
+            ColumnMap.Register(type ?? GetType());
         }
 
         public string GetTableName() => TableName;

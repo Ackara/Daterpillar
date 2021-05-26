@@ -1,0 +1,9 @@
+Id
+Name
+IntValue
+DecimalValue
+Date
+Boolean
+Time
+FloatValue
+EnumValue

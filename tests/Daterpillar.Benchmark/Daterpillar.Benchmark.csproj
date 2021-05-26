@@ -6,9 +6,9 @@
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
   
 <Description>A library for generating SQL migration scripts.</Description>
-<Version>12.0.10</Version>
-<AssemblyVersion>12.0.10</AssemblyVersion>
-<AssemblyFileVersion>12.0.10</AssemblyFileVersion>
+<Version>12.0.14</Version>
+<AssemblyVersion>12.0.14</AssemblyVersion>
+<AssemblyFileVersion>12.0.14</AssemblyFileVersion>
 <PackageIcon>icon.png</PackageIcon>
 <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
 <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>

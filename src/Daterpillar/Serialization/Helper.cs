@@ -26,14 +26,13 @@ namespace Acklann.Daterpillar.Serialization
 
         public static IEnumerable<MemberInfo> GetColumns(this Type type)
         {
-            return
-                (from property in type.GetProperties()
-                 let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
-                 where
-                    /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
-                    &&
-                    (not_explictly_defined && property.CanWrite == false) == false
-                 select (MemberInfo)property)
+            return (from property in type.GetProperties()
+                    let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
+                    where
+                       /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                       &&
+                       (not_explictly_defined && property.CanWrite == false) == false
+                    select (MemberInfo)property)
 
                  .Concat
 

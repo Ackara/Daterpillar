@@ -34,6 +34,16 @@ namespace Acklann.Daterpillar.Tests
             Approvals.VerifyXml(xml);
         }
 
+        [TestMethod]
+        [DynamicData(nameof(GetTypesToConvertToTable), DynamicDataSourceType.Method)]
+        public void Can_enumerate_all_columns(Type type)
+        {
+            using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(type.Name);
+            var columns = Acklann.Daterpillar.Serialization.Helper.GetColumns(type).Select(x => x.Name);
+            var results = string.Join("\r\n", columns);
+            Approvals.Verify(results);
+        }
+
         #region Backing Members
 
         private static IEnumerable<object[]> GetTypesToConvertToTable()
@@ -150,6 +160,16 @@ namespace Acklann.Daterpillar.Tests
 
             [Modeling.Attributes.Column]
             public string Value { get; }
+        }
+
+        public class HiddenColumns
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            [Modeling.Attributes.Column(SchemaType.VARCHAR)]
+            private string _secret;
         }
 
         #endregion Types To Convert

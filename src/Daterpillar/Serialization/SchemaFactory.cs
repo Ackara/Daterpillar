@@ -52,24 +52,7 @@ namespace Acklann.Daterpillar.Serialization
 
         public static Table CreateFrom(Type type)
         {
-            IEnumerable<MemberInfo> columnCandidates =
-                (from property in type.GetProperties()
-                 let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
-                 where
-                    /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
-                    &&
-                    (not_explictly_defined && property.CanWrite == false) == false
-                 select (MemberInfo)property)
-
-                 .Concat
-
-                 (from field in type.GetRuntimeFields()
-                  let isExplict = field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))
-                  where
-                     field.IsDefined(typeof(SqlIgnoreAttribute)) == false && field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
-                     &&
-                     isExplict
-                  select field);
+            IEnumerable<MemberInfo> columnCandidates = Helper.GetColumns(type);
 
             var table = new Table() { Id = type.GetId() };
             SetTableInfo(table, type.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.TableAttribute>());

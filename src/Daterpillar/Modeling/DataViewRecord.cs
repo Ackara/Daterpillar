@@ -1,4 +1,5 @@
 using Acklann.Daterpillar.Serialization;
+using System;
 using System.Data;
 using System.Reflection;
 
@@ -6,9 +7,13 @@ namespace Acklann.Daterpillar.Modeling
 {
     public abstract class DataViewRecord : ISelectable
     {
-        public DataViewRecord()
+        public DataViewRecord() : this(null)
         {
-            TableName = GetType().GetTableName();
+        }
+
+        public DataViewRecord(Type type)
+        {
+            TableName = (type ?? GetType()).GetTableName();
         }
 
         protected internal readonly string TableName;

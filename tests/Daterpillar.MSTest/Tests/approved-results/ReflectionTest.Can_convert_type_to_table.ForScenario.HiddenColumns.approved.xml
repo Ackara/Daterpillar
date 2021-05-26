@@ -1,0 +1,11 @@
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="HiddenColumns">
+  <column name="Id">
+    <dataType>int</dataType>
+  </column>
+  <column name="Name">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="_secret">
+    <dataType>varchar</dataType>
+  </column>
+</Table>

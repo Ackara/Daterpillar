@@ -20,7 +20,6 @@ namespace Acklann.Daterpillar.Modeling
                                               let attr = m.GetCustomAttribute<Attributes.ColumnAttribute>()
                                               where (attr?.AutoIncrement ?? false) == false
                                               select m;
-            members = recordType.GetColumns();
 
             foreach (MemberInfo member in members)
             {
