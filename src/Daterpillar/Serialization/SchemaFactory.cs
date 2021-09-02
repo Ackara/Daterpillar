@@ -240,7 +240,7 @@ namespace Acklann.Daterpillar.Serialization
         private static void SetIndecies(Table table, IEnumerable<MemberInfo> members)
         {
             /// An index may include 2 or more columns. The index will have to be grouped by name or by primary key.
-            /// One one primary key can exists on a table so therefore the index name is ignored.
+            /// Only one primary key can exists on a table so therefore the index name is ignored.
             /// STEPS:
             /// 1. Caputre all indexes on all columns
             /// 2. Combine with index with the same name into one
@@ -254,12 +254,20 @@ namespace Acklann.Daterpillar.Serialization
                 Index index = null;
 
                 index = SetIndexInfo(index, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.KeyAttribute>());
-                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Modeling.Attributes.KeyAttribute>());
-                index = SetIndexInfo(index, member.GetCustomAttribute<Acklann.Daterpillar.Modeling.Attributes.IndexAttribute>());
+                index = SetIndexInfo(index, member.GetCustomAttribute<Modeling.Attributes.KeyAttribute>());
                 SetIndexDefault(index, member, table);
-
                 if (index != null) candiates.Add(index);
             }
+
+            foreach (MemberInfo member in members)
+                foreach (var attribute in member.GetCustomAttributes<Modeling.Attributes.IndexAttribute>())
+                {
+                    Index index = null;
+                    index = SetIndexInfo(index, attribute);
+                    SetIndexDefault(index, member, table);
+
+                    if (index != null) candiates.Add(index);
+                }
 
             var results = new List<Index>();
             IList<ColumnName> columns;

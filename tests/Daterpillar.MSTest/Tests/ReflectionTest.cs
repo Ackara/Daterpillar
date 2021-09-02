@@ -122,6 +122,22 @@ namespace Acklann.Daterpillar.Tests
             public string Part3 { get; set; }
         }
 
+        [Modeling.Attributes.Table]
+        public class MultiKey2
+        {
+            [System.ComponentModel.DataAnnotations.Key]
+            public string Name { get; set; }
+
+            [System.ComponentModel.DataAnnotations.Key]
+            [Modeling.Attributes.Index("name_unique_idx", IndexType.Index, Unique = true)]
+            public string Part1 { get; set; }
+
+            public string Part2 { get; set; }
+
+            [Modeling.Attributes.Index("name_unique_idx", IndexType.Index, Unique = true)]
+            public string Part3 { get; set; }
+        }
+
         public class Parent
         {
             [Modeling.Attributes.Column("dln")]

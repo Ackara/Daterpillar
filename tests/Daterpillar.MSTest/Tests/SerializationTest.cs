@@ -152,6 +152,7 @@ namespace Acklann.Daterpillar.Tests
             result.ShouldBe(expectedSequence);
         }
 
+
         #region Backing Members
 
         private static IEnumerable<object[]> GetEnumerationCases()

@@ -1,0 +1,22 @@
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MultiKey2">
+  <column name="Name">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="Part1">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="Part2">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="Part3">
+    <dataType>varchar</dataType>
+  </column>
+  <index>
+    <columnName>Part1</columnName>
+    <columnName>Part3</columnName>
+  </index>
+  <index type="primary-key">
+    <columnName>Name</columnName>
+    <columnName>Part1</columnName>
+  </index>
+</Table>
