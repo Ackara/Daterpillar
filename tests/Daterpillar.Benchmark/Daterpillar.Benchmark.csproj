@@ -18,10 +18,6 @@
 <PackageLicenseFile>license.txt</PackageLicenseFile>
 </PropertyGroup>
 
-<Title>Daterpillar</Title>
-<RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
-</PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Benchmarkable" Version="1.0.1" Condition="$(Configuration)=='Debug'" />
     <PackageReference Include="Dapper" Version="1.60.6" />

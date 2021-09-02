@@ -64,51 +64,9 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
-        public UpdateBuilder Limit(int value)
-        {
-            _limit = value;
-            return this;
-        }
-
         public override string ToString()
         {
-            string statement = null;
-
-            switch (_language)
-            {
-                case Language.MySQL:
-                    statement = string.Concat(
-                        "UPDATE ", _table,
-                        " SET ", _set,
-                        (string.IsNullOrEmpty(_where) ? null : $" WHERE {_where}"),
-                        (_limit > 0 ? $" LIMIT {_limit}" : null),
-                        ';'
-                        );
-
-                    break;
-
-                case Language.TSQL:
-                    statement = string.Concat(
-                        "UPDATE ",
-                        (_limit > 0 ? $" TOP ({_limit}) " : null),
-                        _table,
-                        " SET ", _set,
-                        (string.IsNullOrEmpty(_where) ? null : $" WHERE {_where}"),
-                        ';'
-                        );
-                    break;
-
-                default:
-                    statement = string.Concat(
-                       "UPDATE ", _table,
-                       " SET ", _set,
-                       (string.IsNullOrEmpty(_where) ? null : $" WHERE {_where}"),
-                       ';'
-                       );
-                    break;
-            }
-
-            return statement;
+            return $"UPDATE {_table} SET {_set} WHERE {_where};";
         }
 
         #region Operators
@@ -124,7 +82,6 @@ namespace Acklann.Daterpillar.Linq
 
         private readonly Language _language;
         private string _table, _set, _where;
-        private int _limit;
 
         #endregion Backing Members
     }

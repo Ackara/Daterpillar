@@ -12,10 +12,6 @@
     <AssemblyFileVersion>12.0.15</AssemblyFileVersion>
   </PropertyGroup>
 
-<Title>Daterpillar</Title>
-<RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
-</PropertyGroup>
-
   <PropertyGroup>
     <Description>A library for generating SQL migration scripts.</Description>
     <PackageIcon>icon.png</PackageIcon>
@@ -135,8 +131,4 @@
     <WriteLinesToFile File="appsettings.json" Lines="{}" Condition="!Exists('appsettings.json')" />
     <CopyJsonProperties JPath="*" SourceFile="$(SecretFile)" DestinationFile="appsettings.json" Condition="Exists('$(SecretFile)')" />
   </Target>
-
-
-
-
 </Project>
