@@ -2,6 +2,6 @@
 
 namespace Acklann.Daterpillar.Modeling.Attributes
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct), AllowMultiple = false, Inherited = true)]
     public sealed class SqlIgnoreAttribute : Attribute { }
 }

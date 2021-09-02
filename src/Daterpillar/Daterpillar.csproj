@@ -40,11 +40,20 @@
   <ItemGroup>
     <EmbeddedResource Include="daterpillar.xsd" />
   </ItemGroup>
+
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <ItemGroup Label="Nuget">
+    <Content Include="..\..\license.txt">
+      <PackagePath></PackagePath>
+      <Visible>false</Visible>
+    </Content>
+    <Content Include="..\..\art\$(PackageIcon)">
+      <PackagePath></PackagePath>
+      <Visible>false</Visible>
+    </Content>
     <Content Include="..\..\readme.md">
       <PackagePath>readme.md</PackagePath>
       <Visible>false</Visible>
@@ -79,6 +88,7 @@
       <PackagePath>tools\$(TargetFramework)</PackagePath>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Update="..\..\tests\Daterpillar.Sample\Entities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -87,4 +97,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+
 </Project>

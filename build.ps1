@@ -30,8 +30,7 @@ Param(
 	[switch]$Production,
 	[switch]$Preview,
 	[switch]$Major,
-	[switch]$Minor,
-	[switch]$Force
+	[switch]$Minor
 )
 
 # Ensuring we have our Dependencies installed.
