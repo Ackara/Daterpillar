@@ -7,9 +7,9 @@
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>12.0.17</Version>
-    <AssemblyVersion>12.0.17</AssemblyVersion>
-    <AssemblyFileVersion>12.0.17</AssemblyFileVersion>
+    <Version>12.0.18</Version>
+    <AssemblyVersion>12.0.18</AssemblyVersion>
+    <AssemblyFileVersion>12.0.18</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>

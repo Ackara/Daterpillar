@@ -150,10 +150,10 @@ namespace Acklann.Daterpillar.Tests
             // Act
             builder.Set("id", 123)
                 .Set("name", "abc")
-                .Predicate("id", "test");
+                .Where("id", "test");
             var case1 = builder.ToString();
 
-            builder.Predicate("id", "test").And("name", "jane");
+            builder.Where("id", "test").And("name", "jane");
             var case2 = builder.ToString();
 
             builder.Set("age", 12);

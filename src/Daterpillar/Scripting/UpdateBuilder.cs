@@ -1,6 +1,4 @@
-using Acklann.Daterpillar.Scripting;
-
-namespace Acklann.Daterpillar.Linq
+namespace Acklann.Daterpillar.Scripting
 {
     public class UpdateBuilder
     {
@@ -46,7 +44,7 @@ namespace Acklann.Daterpillar.Linq
             return this;
         }
 
-        public UpdateBuilder Predicate(string column, object value, string operand = "=")
+        public UpdateBuilder Where(string column, object value, string operand = "=")
         {
             _where = string.Concat(SqlComposer.EscapeColumn(column, _language), operand, SqlComposer.Serialize(value));
             return this;
