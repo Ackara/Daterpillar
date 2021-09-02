@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Modeling.Attributes
     /// Indicates that a public field or property represents a SQL index. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="Attribute" />
-    [AttributeUsage((AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Property | AttributeTargets.Field), AllowMultiple = true, Inherited = true)]
     public sealed class IndexAttribute : Attribute
     {
         /// <summary>
