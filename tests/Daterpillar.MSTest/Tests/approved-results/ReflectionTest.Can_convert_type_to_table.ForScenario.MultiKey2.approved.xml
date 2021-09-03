@@ -11,7 +11,7 @@
   <column name="Part3">
     <dataType>varchar</dataType>
   </column>
-  <index>
+  <index unique="true">
     <columnName>Part1</columnName>
     <columnName>Part3</columnName>
   </index>

@@ -17,6 +17,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_convert_type_to_table(Type type)
         {
             // Arrange
+            string name = type.Name;
             using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(type.Name);
             using var stream = new MemoryStream();
 
@@ -136,6 +137,17 @@ namespace Acklann.Daterpillar.Tests
 
             [Modeling.Attributes.Index("name_unique_idx", IndexType.Index, Unique = true)]
             public string Part3 { get; set; }
+        }
+
+        [Modeling.Attributes.Table]
+        public class UniqueIndex
+        {
+            public string Id { get; set; }
+
+            public string Name { get; set; }
+
+            [Modeling.Attributes.Index(Unique = true)]
+            public string Part2 { get; set; }
         }
 
         public class Parent

@@ -279,8 +279,9 @@ namespace Acklann.Daterpillar.Serialization
                 if (anchor == null) continue;
 
                 columns = new List<ColumnName>();
+                bool unique = group.Any(i => i.IsUnique);
                 foreach (Index index in group) columns.Add(index.Columns[0]);
-                table.Add(new Index(IndexType.Index, columns.ToArray()));
+                table.Add(new Index(IndexType.Index, columns.ToArray()) { IsUnique = unique });
             }
 
             // 3. Combine primary-keys
