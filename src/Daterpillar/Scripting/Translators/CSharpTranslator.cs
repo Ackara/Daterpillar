@@ -80,6 +80,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
 
                     case nameof(TimeSpan):
                     case nameof(DateTime):
+                    case nameof(DateTimeOffset):
                         return new DataType(DATETIME);
 
                     default:

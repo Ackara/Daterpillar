@@ -145,7 +145,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_build_update_statement()
         {
             // Arrange
-            var builder = new UpdateBuilder("foo");
+            var builder = new UpdateBuilder("foo", Language.SQL);
 
             // Act
             builder.Set("id", 123)

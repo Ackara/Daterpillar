@@ -67,6 +67,14 @@ namespace Acklann.Daterpillar.Tests
         {
         }
 
+        [System.ComponentModel.DataAnnotations.Schema.Table("offset_table")]
+        public class OffsetTable
+        {
+            public string Id { get; set; }
+
+            public DateTimeOffset Date { get; set; }
+        }
+
         [System.ComponentModel.DataAnnotations.Schema.Table("inffered-columns-table")]
         public class InferredTable
         {

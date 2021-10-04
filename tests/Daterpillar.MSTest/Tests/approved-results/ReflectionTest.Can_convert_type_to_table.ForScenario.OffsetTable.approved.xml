@@ -1,0 +1,8 @@
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="offset_table">
+  <column name="Id">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="Date">
+    <dataType>dateTime</dataType>
+  </column>
+</Table>

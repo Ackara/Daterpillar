@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Scripting
         {
         }
 
-        public UpdateBuilder(string table, Language language = Language.SQL)
+        public UpdateBuilder(string table, Language language)
         {
             _language = language;
             _table = SqlComposer.EscapeColumn(table, language);
