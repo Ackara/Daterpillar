@@ -50,6 +50,8 @@ namespace Acklann.Daterpillar.Scripting
 
         public static implicit operator bool(QueryResult<T> obj) => obj.Success;
 
+        public static implicit operator QueryResult(QueryResult<T> obj) => new QueryResult(obj.Data, obj.ErrorMessage);
+
         #endregion Operator
     }
 }

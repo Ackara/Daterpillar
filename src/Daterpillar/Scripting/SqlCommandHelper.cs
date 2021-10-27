@@ -83,7 +83,7 @@ namespace Acklann.Daterpillar.Scripting
             }
         }
 
-        public static QueryResult<TRecord> SelectOne<TRecord>(this IDbConnection connection, string query) where TRecord : ISelectable
+        public static QueryResult SelectOne(this IDbConnection connection, Type type, string query)
         {
             if (string.IsNullOrEmpty(query)) return default;
             IDataReader results = null;
@@ -99,14 +99,16 @@ namespace Acklann.Daterpillar.Scripting
 
                 while (results.Read())
                 {
-                    TRecord record = Activator.CreateInstance<TRecord>();
-                    record.Load(results);
-                    return new QueryResult<TRecord>(record);
+                    if (Activator.CreateInstance(type) is ISelectable record)
+                    {
+                        record.Load(results);
+                        return new QueryResult(record);
+                    }
                 }
             }
             catch (System.Data.Common.DbException ex)
             {
-                return new QueryResult<TRecord>(default, ex.Message);
+                return new QueryResult(default, ex.Message);
             }
             finally
             {
@@ -114,7 +116,13 @@ namespace Acklann.Daterpillar.Scripting
                 results?.Dispose();
             }
 
-            return new QueryResult<TRecord>(default, "no records");
+            return new QueryResult(default, "no records");
+        }
+
+        public static QueryResult<TRecord> SelectOne<TRecord>(this IDbConnection connection, string query) where TRecord : ISelectable
+        {
+            QueryResult result = SelectOne(connection, typeof(TRecord), query);
+            return new QueryResult<TRecord>((TRecord)result.Data, result.ErrorMessage);
         }
 
         public static SqlCommandResult Insert(this IDbConnection connection, Language connectionType, params IInsertable[] models)
