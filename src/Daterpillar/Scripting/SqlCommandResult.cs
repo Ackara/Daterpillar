@@ -2,21 +2,21 @@ namespace Acklann.Daterpillar.Scripting
 {
     public readonly struct SqlCommandResult
     {
-        public SqlCommandResult(int code, string message) : this(0, code, message)
+        public SqlCommandResult(int code, string message)
+            : this(code == 0, code, 0, message)
         {
         }
 
-        public SqlCommandResult(long changes, int errorCode, string message)
+        public SqlCommandResult(bool success, int errorCode, long changes, string message)
         {
+            Success = success;
             Changes = changes;
             ErrorCode = errorCode;
             ErrorMessage = message;
+            Changes = changes;
         }
 
-        public bool Success
-        {
-            get => ErrorCode == 0;
-        }
+        public bool Success { get; }
 
         public long Changes { get; }
 

@@ -148,12 +148,12 @@ namespace Acklann.Daterpillar.Scripting
                 }
 
                 transaction.Commit();
-                return new SqlCommandResult(changes, 0, null);
+                return new SqlCommandResult(true, 0, changes, null);
             }
             catch (System.Data.Common.DbException ex)
             {
                 transaction?.Rollback();
-                return new SqlCommandResult(changes, GetSqlErrorCode(ex, connectionType), ex.Message);
+                return new SqlCommandResult(false, GetSqlErrorCode(ex, connectionType), changes, ex.Message);
             }
             finally
             {
@@ -182,13 +182,13 @@ namespace Acklann.Daterpillar.Scripting
                 {
                     command.CommandText = commands[index];
                     if (!string.IsNullOrEmpty(command.CommandText)) changes = command.ExecuteNonQuery();
-                    results[index] = new SqlCommandResult(changes, 0, null);
+                    results[index] = new SqlCommandResult(true, 0, changes, null);
                 }
             }
             catch (System.Data.Common.DbException ex)
             {
                 transaction?.Rollback();
-                results[index] = new SqlCommandResult(0, GetSqlErrorCode(ex, connectionType), ex.Message);
+                results[index] = new SqlCommandResult(false, GetSqlErrorCode(ex, connectionType), changes, ex.Message);
             }
             finally
             {
