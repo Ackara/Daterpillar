@@ -14,7 +14,7 @@ namespace Acklann.Daterpillar.Modeling
             ColumnMap.Register(type ?? GetType());
         }
 
-        public string GetTableName() => TableName;
+        public virtual string GetTableName() => TableName;
 
         public virtual string[] GetColumns()
         {
