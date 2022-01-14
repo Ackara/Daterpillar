@@ -9,7 +9,7 @@ namespace Acklann.Daterpillar.Modeling
         {
         }
 
-        public DataRecord(Type type)
+        public DataRecord(Type type) : base(type)
         {
             ColumnMap.Register(type ?? GetType());
         }
