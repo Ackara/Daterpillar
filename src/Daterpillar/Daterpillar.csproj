@@ -4,9 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>12.0.23</Version>
-    <AssemblyVersion>12.0.23</AssemblyVersion>
-    <AssemblyFileVersion>12.0.23</AssemblyFileVersion>
+    <Version>12.0.27</Version>
+    <AssemblyVersion>12.0.27</AssemblyVersion>
+    <AssemblyFileVersion>12.0.27</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +14,7 @@
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
-    <Copyright>Copyright © 2021 Ackara</Copyright>
+    <Copyright>Copyright © 2022 Ackara</Copyright>
 
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
@@ -32,9 +32,9 @@
 
   <ItemGroup>
     <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="System.Memory" Version="4.5.3" />
-    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

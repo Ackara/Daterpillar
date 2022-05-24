@@ -4,19 +4,22 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
+  </PropertyGroup>
   
-<Description>A library for generating SQL migration scripts.</Description>
-<Version>12.0.23</Version>
-<AssemblyVersion>12.0.23</AssemblyVersion>
-<AssemblyFileVersion>12.0.23</AssemblyFileVersion>
-<PackageIcon>icon.png</PackageIcon>
-<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
-<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
-<PackageTags>sql migration orm flyway build</PackageTags>
-<Company>Ackara</Company>
-<Copyright>Copyright © 2021 Ackara</Copyright>
-<PackageLicenseFile>license.txt</PackageLicenseFile>
-</PropertyGroup>
+  <PropertyGroup>
+
+    <Description>A library for generating SQL migration scripts.</Description>
+    <Version>12.0.27</Version>
+    <AssemblyVersion>12.0.27</AssemblyVersion>
+    <AssemblyFileVersion>12.0.27</AssemblyFileVersion>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+    <PackageTags>sql migration orm flyway build</PackageTags>
+    <Company>Ackara</Company>
+    <Copyright>Copyright © 2022 Ackara</Copyright>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Benchmarkable" Version="1.0.1" Condition="$(Configuration)=='Debug'" />

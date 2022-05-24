@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Prototyping
     [Table]
     public enum Genre
     {
-        [DisplayName("Hip Hop")]
+        [EnumValue("Hip Hop")]
         HipHip,
 
         Pop,

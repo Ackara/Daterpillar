@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Modeling.Attributes
     /// Indicates that a class or enum represents a SQL table. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage((AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum), AllowMultiple = false, Inherited = true)]
+    [AttributeUsage((AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum), AllowMultiple = false, Inherited = false)]
     public sealed class TableAttribute : Attribute
     {
         /// <summary>
