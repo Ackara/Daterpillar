@@ -62,7 +62,7 @@ namespace Acklann.Daterpillar.Tests
 
         #region Types To Convert
 
-        [Acklann.Daterpillar.Modeling.Attributes.Table]
+        [Acklann.Daterpillar.Annotations.Table]
         public class Empty
         {
         }
@@ -116,7 +116,7 @@ namespace Acklann.Daterpillar.Tests
             public string Hash { get; set; }
         }
 
-        [Modeling.Attributes.Table]
+        [Annotations.Table]
         public class MultiKey
         {
             public string Name { get; set; }
@@ -124,43 +124,43 @@ namespace Acklann.Daterpillar.Tests
             [System.ComponentModel.DataAnnotations.Key]
             public string Part1 { get; set; }
 
-            [Modeling.Attributes.Key]
+            [Annotations.Key]
             public string Part2 { get; set; }
 
-            [Modeling.Attributes.Key]
+            [Annotations.Key]
             public string Part3 { get; set; }
         }
 
-        [Modeling.Attributes.Table]
+        [Annotations.Table]
         public class MultiKey2
         {
             [System.ComponentModel.DataAnnotations.Key]
             public string Name { get; set; }
 
             [System.ComponentModel.DataAnnotations.Key]
-            [Modeling.Attributes.Index("name_unique_idx", IndexType.Index, Unique = true)]
+            [Annotations.Index("name_unique_idx", IndexType.Index, Unique = true)]
             public string Part1 { get; set; }
 
             public string Part2 { get; set; }
 
-            [Modeling.Attributes.Index("name_unique_idx", IndexType.Index, Unique = true)]
+            [Annotations.Index("name_unique_idx", IndexType.Index, Unique = true)]
             public string Part3 { get; set; }
         }
 
-        [Modeling.Attributes.Table]
+        [Annotations.Table]
         public class UniqueIndex
         {
             public string Id { get; set; }
 
             public string Name { get; set; }
 
-            [Modeling.Attributes.Index(Unique = true)]
+            [Annotations.Index(Unique = true)]
             public string Part2 { get; set; }
         }
 
         public class Parent
         {
-            [Modeling.Attributes.Column("dln")]
+            [Annotations.Column("dln")]
             public int Id { get; set; }
 
             public string Name { get; set; }
@@ -172,18 +172,18 @@ namespace Acklann.Daterpillar.Tests
 
             public string Name { get; set; }
 
-            [Modeling.Attributes.ForeignKey(typeof(Parent))]
+            [Annotations.ForeignKey(typeof(Parent))]
             public int ParentId { get; set; }
         }
 
-        [Modeling.Attributes.Table]
+        [Annotations.Table]
         public class ComplexType
         {
             public int Id { get; set; }
 
             public string Name { get; set; }
 
-            [Modeling.Attributes.Column(SchemaType.VARCHAR)]
+            [Annotations.Column(SchemaType.VARCHAR)]
             public ReadonlyValue Value { get; }
         }
 
@@ -194,7 +194,7 @@ namespace Acklann.Daterpillar.Tests
                 Value = value;
             }
 
-            [Modeling.Attributes.Column]
+            [Annotations.Column]
             public string Value { get; }
         }
 
@@ -204,7 +204,7 @@ namespace Acklann.Daterpillar.Tests
 
             public string Name { get; set; }
 
-            [Modeling.Attributes.Column(SchemaType.VARCHAR)]
+            [Annotations.Column(SchemaType.VARCHAR)]
             private string _secret;
         }
 

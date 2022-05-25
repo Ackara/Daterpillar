@@ -1,6 +1,6 @@
 using System;
 
-namespace Acklann.Daterpillar.Modeling.Attributes
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// Indicates that a class or struct represents a SQL View. This class cannot be inherited.

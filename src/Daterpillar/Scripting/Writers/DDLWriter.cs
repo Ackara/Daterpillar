@@ -9,9 +9,9 @@ using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
-    public abstract class SqlWriter : IDisposable
+    public abstract class DDLWriter : IDisposable
     {
-        protected SqlWriter(TextWriter writer, ITranslator resolver)
+        protected DDLWriter(TextWriter writer, ITranslator resolver)
         {
             Writer = writer ?? throw new ArgumentNullException(nameof(writer));
             Resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));

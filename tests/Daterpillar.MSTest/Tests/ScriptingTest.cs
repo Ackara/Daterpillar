@@ -1,5 +1,4 @@
-﻿using Acklann.Daterpillar.Linq;
-using Acklann.Daterpillar.Prototyping;
+﻿using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Daterpillar.Serialization;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using Index = Acklann.Daterpillar.Serialization.Index;
 
 namespace Acklann.Daterpillar.Tests
@@ -25,35 +23,7 @@ namespace Acklann.Daterpillar.Tests
             SqlValidator.CreateDatabase(_languages);
         }
 
-        [TestMethod]
-        [UseApprovalSubdirectory("../test-cases/approved-results")]
-        [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
-        public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
-        {
-            // Arrange
-            var sut = new Serialization.Migrator();
-            string fileName = $"{label}.{dialect}.sql".ToLower();
-            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
-
-            using var stream = new MemoryStream();
-            using var connection = SqlValidator.ClearDatabase(dialect);
-            using var scenario = ApprovalResults.ForScenario(fileName);
-            using var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
-
-            // Act
-            sut.GenerateMigrationScript(dialect, new Schema(), oldSchema, scriptFile);
-            var sql = File.ReadAllText(scriptFile);
-            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
-
-            var changes = sut.GenerateMigrationScript(dialect, oldSchema, newSchema, scriptFile);
-            sql = File.ReadAllText(scriptFile);
-            var migrationWasSuccessful = SqlValidator.TryExecute(connection, sql, out error);
-
-            // Assert
-            migrationWasSuccessful.ShouldBeTrue(error);
-            if (!string.IsNullOrWhiteSpace(sql)) ApprovalTests.Approvals.VerifyFile(scriptFile);
-            changes.ShouldNotBeNull();
-        }
+        // ==================== CRUD ==================== //
 
         [TestMethod]
         [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
@@ -166,6 +136,38 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
         }
 
+        // ==================== DDL ==================== //
+
+        [TestMethod]
+        [UseApprovalSubdirectory("../test-cases/approved-results")]
+        [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
+        public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
+        {
+            // Arrange
+            var sut = new Serialization.Migrator();
+            string fileName = $"{label}.{dialect}.sql".ToLower();
+            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
+
+            using var stream = new MemoryStream();
+            using var connection = SqlValidator.ClearDatabase(dialect);
+            using var scenario = ApprovalResults.ForScenario(fileName);
+            using var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
+
+            // Act
+            sut.GenerateMigrationScript(dialect, new Schema(), oldSchema, scriptFile);
+            var sql = File.ReadAllText(scriptFile);
+            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+
+            var changes = sut.GenerateMigrationScript(dialect, oldSchema, newSchema, scriptFile);
+            sql = File.ReadAllText(scriptFile);
+            var migrationWasSuccessful = SqlValidator.TryExecute(connection, sql, out error);
+
+            // Assert
+            migrationWasSuccessful.ShouldBeTrue(error);
+            if (!string.IsNullOrWhiteSpace(sql)) ApprovalTests.Approvals.VerifyFile(scriptFile);
+            changes.ShouldNotBeNull();
+        }
+
         [TestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
@@ -190,7 +192,7 @@ namespace Acklann.Daterpillar.Tests
 
         private static readonly Language[] _languages = new Language[]
         {
-            //Language.TSQL,
+            Language.TSQL,
             //Language.SQLite,
             Language.MySQL,
         };
@@ -253,8 +255,6 @@ namespace Acklann.Daterpillar.Tests
             for (int i = 0; i < _languages.Length; i++)
             {
                 yield return new object[] { AutoFaker.Generate<Artist>(), _languages[i] };
-
-                //yield return new object[] { }
             }
         }
 

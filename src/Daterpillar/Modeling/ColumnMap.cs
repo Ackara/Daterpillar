@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Modeling
             else _map.Add(tableName, tableName);
 
             IEnumerable<MemberInfo> members = from m in Serialization.Helper.GetColumns(recordType)
-                                              let attr = m.GetCustomAttribute<Attributes.ColumnAttribute>()
+                                              let attr = m.GetCustomAttribute<Annotations.ColumnAttribute>()
                                               where (attr?.AutoIncrement ?? false) == false
                                               select m;
 

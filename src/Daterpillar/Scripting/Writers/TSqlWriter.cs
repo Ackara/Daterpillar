@@ -5,7 +5,7 @@ using System.IO;
 namespace Acklann.Daterpillar.Scripting.Writers
 {
     [System.ComponentModel.Category(nameof(Language.TSQL))]
-    public class TSqlWriter : SqlWriter
+    public class TSqlWriter : DDLWriter
     {
         public TSqlWriter(Stream stream) : this(new StreamWriter(stream), new TSQLTranslator())
         { }

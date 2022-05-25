@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar.Modeling.Attributes
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// Represents a column's data-type. This class cannot be inherited.

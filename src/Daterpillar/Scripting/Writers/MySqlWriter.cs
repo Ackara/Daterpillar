@@ -5,7 +5,7 @@ using System.IO;
 namespace Acklann.Daterpillar.Scripting.Writers
 {
     [System.ComponentModel.Category(nameof(Language.MySQL))]
-    public class MySqlWriter : SqlWriter
+    public class MySqlWriter : DDLWriter
     {
         public MySqlWriter(Stream stream) : this(new StreamWriter(stream), new MySQLTranslator())
         { }

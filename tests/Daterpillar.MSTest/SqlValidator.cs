@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar
         public static IDbConnection CreateSchemaTable(Type type, Language dialect)
         {
             using (var stream = new MemoryStream())
-            using (Scripting.Writers.SqlWriter writer = new Scripting.Writers.SqlWriterFactory().CreateInstance(dialect, stream))
+            using (Scripting.Writers.DDLWriter writer = new Scripting.Writers.SqlWriterFactory().CreateInstance(dialect, stream))
             {
                 Table table = SchemaFactory.CreateFrom(type);
                 writer.Create(table);

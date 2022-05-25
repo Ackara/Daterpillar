@@ -1,5 +1,5 @@
 ﻿using Acklann.Daterpillar;
-using Acklann.Daterpillar.Modeling.Attributes;
+using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: ApprovalTests.Namers.UseApprovalSubdirectory("approved-results")]
 [assembly: Reporter(typeof(DiffReporter))]
 [assembly: ApprovedFolder("approved-results")]
-[assembly: Include(Sample.File.MusicDataXML)]
+[assembly: Acklann.Daterpillar.Annotations.Include(Sample.File.MusicDataXML)]
 
 namespace Acklann.Daterpillar
 {
@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar
                 {
                 });
 
-               
+
             });
         }
 

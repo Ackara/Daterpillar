@@ -40,7 +40,7 @@ namespace Acklann.Daterpillar.Serialization
         /// Initializes a new instance of the <see cref="DataType"/> struct.
         /// </summary>
         /// <param name="attribute">The attribute.</param>
-        internal DataType(Modeling.Attributes.ColumnAttribute attribute, int scale = default, int precision = default)
+        internal DataType(Annotations.ColumnAttribute attribute, int scale = default, int precision = default)
         {
             Name = attribute?.TypeName;
             Scale = scale == default ? attribute?.Scale ?? 0 : scale;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar.Modeling.Attributes
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// Indicates that a public field or property represents a SQL index. This class cannot be inherited.

@@ -23,7 +23,7 @@ namespace Acklann.Daterpillar.Serialization
 
             InternalHelper.EnsureDirectoryExists(scriptFilePath);
             using (var stream = new FileStream(scriptFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-            using (SqlWriter writer = factory.CreateInstance(language, stream))
+            using (DDLWriter writer = factory.CreateInstance(language, stream))
             {
                 return GenerateMigrationScript(writer, oldSchema, newSchema, omitDropStatements);
             }
@@ -33,7 +33,7 @@ namespace Acklann.Daterpillar.Serialization
         {
             InternalHelper.EnsureDirectoryExists(scriptFile);
             using (var file = new FileStream(scriptFile, FileMode.Create, FileAccess.Write, FileShare.Write))
-            using (SqlWriter writer = _factory.CreateInstance(lanuage, file))
+            using (DDLWriter writer = _factory.CreateInstance(lanuage, file))
             {
                 Discrepancy[] changes = GenerateMigrationScript(writer, from, to, omitDropStatements);
                 if (changes.Length > 0) writer.Flush();
@@ -41,7 +41,7 @@ namespace Acklann.Daterpillar.Serialization
             }
         }
 
-        public Discrepancy[] GenerateMigrationScript(SqlWriter writer, Schema from, Schema to, bool omitDropStatements = false)
+        public Discrepancy[] GenerateMigrationScript(DDLWriter writer, Schema from, Schema to, bool omitDropStatements = false)
         {
             /// TASKS:
             /// (1) Mark all the tables that need to be created, altered or dropped.
@@ -259,7 +259,7 @@ namespace Acklann.Daterpillar.Serialization
             }
         }
 
-        private void WriteChanges(SqlWriter writer, Discrepancy discrepancy, LinkedList<Script> scripts, bool shouldIncludeDropStatements)
+        private void WriteChanges(DDLWriter writer, Discrepancy discrepancy, LinkedList<Script> scripts, bool shouldIncludeDropStatements)
         {
             Script[] associatedScripts = FindAssociatedScripts(scripts, discrepancy, writer.Syntax).ToArray();
             int children = associatedScripts.Length;
@@ -374,7 +374,7 @@ namespace Acklann.Daterpillar.Serialization
             }
         }
 
-        private void AppendVaribales(SqlWriter writer, Schema schema)
+        private void AppendVaribales(DDLWriter writer, Schema schema)
         {
             string errorMsg = "Your {0} {2} SUID ({1}) is not unique.";
             foreach (Table table in schema.Tables)

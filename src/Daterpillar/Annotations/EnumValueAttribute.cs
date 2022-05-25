@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar.Modeling.Attributes
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// Indicates that a enum field represents a table record/row. This class cannot be inherited.

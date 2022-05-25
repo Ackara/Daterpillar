@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Acklann.Daterpillar.Modeling.Attributes
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// Indicates that a class or enum represents a SQL table. This class cannot be inherited.

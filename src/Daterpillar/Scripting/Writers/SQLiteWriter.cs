@@ -8,7 +8,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
     /* Documentation: https://www.sqlite.org/lang.html */
 
     [System.ComponentModel.Category(nameof(Language.SQLite))]
-    public class SQLiteWriter : SqlWriter
+    public class SQLiteWriter : DDLWriter
     {
         public SQLiteWriter(Stream stream) : this(new StreamWriter(stream, System.Text.Encoding.UTF8))
         { }
