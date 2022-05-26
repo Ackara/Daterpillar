@@ -36,12 +36,12 @@ namespace Acklann.Daterpillar.Modeling
 
         protected virtual object WriteValue(PropertyInfo member)
         {
-            return Scripting.SqlComposer.Serialize(member.GetValue(this));
+            return Scripting.SqlExtensions.Serialize(member.GetValue(this));
         }
 
         protected virtual object WriteValue(FieldInfo member)
         {
-            return Scripting.SqlComposer.Serialize(member.GetValue(this));
+            return Scripting.SqlExtensions.Serialize(member.GetValue(this));
         }
 
         protected object WriteValue(MemberInfo member)

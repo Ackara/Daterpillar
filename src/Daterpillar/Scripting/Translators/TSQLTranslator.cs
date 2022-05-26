@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Annotations;
+using Acklann.Daterpillar.Serialization;
 using System;
 using System.Text.RegularExpressions;
 

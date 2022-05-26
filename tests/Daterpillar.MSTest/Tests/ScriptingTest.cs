@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Prototyping;
+﻿using Acklann.Daterpillar.Annotations;
+using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Daterpillar.Serialization;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Index = Acklann.Daterpillar.Serialization.Index;
+using SchemaType = Acklann.Daterpillar.Annotations.SchemaType;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -35,7 +37,7 @@ namespace Acklann.Daterpillar.Tests
             using var scenario = ApprovalResults.ForScenario(label);
 
             // Act
-            var command = SqlComposer.ToInsertCommand(model, connectionType);
+            var command = SqlExtensions.ToInsertCommand(model, connectionType);
             var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
 
             // Assert

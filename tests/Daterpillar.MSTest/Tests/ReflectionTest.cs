@@ -1,3 +1,4 @@
+using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Serialization;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

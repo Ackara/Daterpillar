@@ -1,4 +1,4 @@
-﻿namespace Acklann.Daterpillar
+﻿namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// A kind of SQL data-type.

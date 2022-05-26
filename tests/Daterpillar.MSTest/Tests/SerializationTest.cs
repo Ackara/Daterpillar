@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Annotations;
+using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Serialization;
 using Acklann.Diffa;
@@ -96,7 +97,7 @@ namespace Acklann.Daterpillar.Tests
             if (DateTime.TryParse(input?.ToString(), out DateTime dt))
                 input = dt;
 
-            SqlComposer.Serialize(input).ShouldBe(expectedValue);
+            SqlExtensions.Serialize(input).ShouldBe(expectedValue);
         }
 
         [TestMethod]

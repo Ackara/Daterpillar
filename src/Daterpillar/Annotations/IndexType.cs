@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Annotations
 {
     /// <summary>
     /// A kind of index.

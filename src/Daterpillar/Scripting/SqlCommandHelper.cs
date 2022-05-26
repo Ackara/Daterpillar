@@ -127,7 +127,7 @@ namespace Acklann.Daterpillar.Scripting
 
         public static SqlCommandResult Insert(this IDbConnection connection, Language connectionType, params IInsertable[] models)
         {
-            return ExecuteCommand(connection, connectionType, models.Select(x => SqlComposer.ToInsertCommand(x, connectionType)).ToArray());
+            return ExecuteCommand(connection, connectionType, models.Select(x => SqlExtensions.ToInsertCommand(x, connectionType)).ToArray());
         }
 
         public static SqlCommandResult ExecuteCommand(this IDbConnection connection, string sql, Language dialect)

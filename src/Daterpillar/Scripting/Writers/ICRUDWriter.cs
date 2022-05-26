@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
@@ -7,7 +8,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
     {
         string Create(object model, Language dialect);
 
-        IEnumerable<object> Read(string query, Language dialect);
+        object Read(IDataRecord data, Type recordType);
 
         string Update(object model, Language dialect);
 
