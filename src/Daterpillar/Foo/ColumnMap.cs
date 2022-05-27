@@ -16,7 +16,7 @@ namespace Acklann.Daterpillar.Foo
             if (_map.ContainsKey(tableName)) return;
             else _map.Add(tableName, tableName);
 
-            IEnumerable<MemberInfo> members = from m in Modeling.Helper.GetColumns(recordType)
+            IEnumerable<MemberInfo> members = from m in Modeling.TypeInfoExtensions.GetColumns(recordType)
                                               let attr = m.GetCustomAttribute<Annotations.ColumnAttribute>()
                                               where (attr?.AutoIncrement ?? false) == false
                                               select m;

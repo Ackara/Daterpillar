@@ -23,6 +23,12 @@ namespace Acklann.Daterpillar.Tests
             // Arrange
 
             using var connection = SqlValidator.CreateConnection(connectionType);
+            try
+            {
+                connection.Open();
+                connection.ChangeDatabase(nameof(Daterpillar));
+            }
+            catch { }
 
             // Act
 
@@ -63,13 +69,12 @@ namespace Acklann.Daterpillar.Tests
             results.ShouldNotBeEmpty();
         }
 
-        [TestMethod]
-        public void Can()
+        #region Backing Members
+
+        private static System.Data.IDbConnection CreateConnection()
         {
             throw new System.NotImplementedException();
         }
-
-        #region Backing Members
 
         private static IEnumerable<object[]> GetCreateTestCases()
         {

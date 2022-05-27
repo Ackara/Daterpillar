@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Modeling
 {
-    internal static class Helper
+    internal static class TypeInfoExtensions
     {
         public static string GetTableName(this Type type)
         {

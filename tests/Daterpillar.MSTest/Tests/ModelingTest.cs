@@ -35,12 +35,11 @@ namespace Acklann.Daterpillar.Tests
             Approvals.VerifyXml(xml);
         }
 
-        [TestMethod]
-        [DynamicData(nameof(GetTypesToConvertToTable), DynamicDataSourceType.Method)]
+        [DataTestMethod, DynamicData(nameof(GetTypesToConvertToTable), DynamicDataSourceType.Method)]
         public void Can_enumerate_all_columns(Type type)
         {
             using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(type.Name);
-            var columns = Acklann.Daterpillar.Modeling.Helper.GetColumns(type).Select(x => x.Name);
+            var columns = Acklann.Daterpillar.Modeling.TypeInfoExtensions.GetColumns(type).Select(x => x.Name);
             var results = string.Join("\r\n", columns);
             Approvals.Verify(results);
         }
@@ -52,6 +51,7 @@ namespace Acklann.Daterpillar.Tests
             var cases = from t in typeof(ModelingTest).GetNestedTypes()
                         select t;
             foreach (var type in cases)
+                if(type == typeof(DataAnnotatedTable))
             {
                 yield return new object[] { type };
             }
@@ -205,6 +205,17 @@ namespace Acklann.Daterpillar.Tests
 
             [Annotations.Column(SchemaType.VARCHAR)]
             private string _secret;
+        }
+
+        [Table]
+        public class MultiColumnTable
+        {
+            [Key, Column]
+            public string Id { get; set; }
+
+            [Column("age")]
+            [Column("dob")]
+            public Child Item { get; set; }
         }
 
         #endregion Types To Convert

@@ -1,0 +1,14 @@
+﻿<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MultiColumnTable">
+  <column name="Id">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="age">
+    <dataType>varchar</dataType>
+  </column>
+  <column name="dob">
+    <dataType>varchar</dataType>
+  </column>
+  <index type="primary-key">
+    <columnName>Id</columnName>
+  </index>
+</Table>

@@ -89,6 +89,25 @@ namespace Acklann.Daterpillar.Scripting.Translators
         }
 
         /// <summary>
+        /// Maps the specified <see cref="Type"/> to a <see cref="DataType"/>
+        /// </summary>
+        /// <param name="clrType">The clr type.</param>
+        /// <param name="dataType">The resulting <see cref="DataType"/>.</param>
+        /// <returns><c>true</c> if the conversion was successul; <c>false</c> otherwise.</returns>
+        public static bool TryGetDataType(Type clrType, out DataType dataType)
+        {
+            try
+            {
+                dataType = GetDataType(clrType);
+                return true;
+            }
+            catch { }
+
+            dataType = new DataType();
+            return false;
+        }
+
+        /// <summary>
         /// Maps the specified <see cref="T:Ackara.Daterpillar.DataType" /> to a clr type.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>

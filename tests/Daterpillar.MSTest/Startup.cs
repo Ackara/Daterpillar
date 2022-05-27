@@ -1,7 +1,4 @@
 ﻿using Acklann.Daterpillar;
-using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Prototyping;
-using Acklann.Daterpillar.Modeling;
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
 using AutoBogus;
@@ -27,8 +24,6 @@ namespace Acklann.Daterpillar
         [AssemblyInitialize]
         public static void Setup(TestContext _)
         {
-            RestoreDatabase();
-
             static string tid() => string.Concat("test-", Guid.NewGuid().ToString());
 
             AutoFaker.Configure((builder) =>
@@ -36,24 +31,13 @@ namespace Acklann.Daterpillar
                 builder.WithConventions((context) =>
                 {
                 });
-
-
             });
         }
 
         [AssemblyCleanup]
         public static void Cleanup()
         {
-        }
-
-        private static void RestoreDatabase()
-        {
-            Schema schema = Modeling.SchemaFactory.CreateFrom(typeof(Album).Assembly);
-        }
-
-        private static Schema CreateSchema()
-        {
-            return Modeling.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            ApprovalTests.Maintenance.ApprovalMaintenance.CleanUpAbandonedFiles();
         }
 
         private static void RemoveUnusedApprovalFiles(string path)
@@ -80,16 +64,6 @@ namespace Acklann.Daterpillar
                 if (File.Exists(file)) File.Delete(file);
                 System.Diagnostics.Debug.WriteLine($"removed '{file}'.");
             }
-        }
-
-        private static void RemoveMSSQLFiles()
-        {
-            var mssqlFiles = from f in Directory.EnumerateFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))
-                             where Path.GetFileName(f).StartsWith("dtp-")
-                             select f;
-
-            foreach (string filePath in mssqlFiles)
-                File.Delete(filePath);
         }
     }
 }

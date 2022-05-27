@@ -33,7 +33,7 @@ namespace Acklann.Daterpillar.Tests
         {
             // Arrange
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
-            using var connection = SqlValidator.CreateConnection(connectionType);
+            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
             using var scenario = ApprovalResults.ForScenario(label);
 
             // Act
@@ -55,7 +55,7 @@ namespace Acklann.Daterpillar.Tests
             var model = AutoFaker.Generate<Artist>();
 
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
-            using var connection = SqlValidator.CreateConnection(connectionType);
+            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
             using var scenario = ApprovalResults.ForScenario(label);
 
             // Act

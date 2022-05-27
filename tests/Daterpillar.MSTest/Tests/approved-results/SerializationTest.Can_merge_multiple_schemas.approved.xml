@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
+﻿<schema xmlns="https://raw.githubusercontent.com/Ackara/Daterpillar/master/src/Daterpillar/daterpillar.xsd">
   <include>music-data.xml</include>
   <table suid="100" name="song">
     <column name="Id" autoIncrement="true">
@@ -73,4 +72,18 @@ INSERT INTO genre (Id, Name)
 VALUES (1, 'Hip Hop'), (2, 'Rock'), (3, 'Pop'), (4, 'R&amp;B');
 </script>
   <script name="message">-- If you're reading this it means multiple scrips can be used.</script>
+  <script name="seed-2">
+-- Seed-Data
+-- -----------------------------------------------
+
+INSERT INTO song (Name, Artist, Album, Genre, Track, Length)
+VALUES
+('Survival', 'Drake', 'Scorpion', '1', '1', '136')
+;
+
+INSERT INTO artist (Id, Name, Bio, DOB)
+VALUES
+(6, 'Drake', 'canadian-jewish-british-jamican-afro-latina rapper from the 6.', '1987-10-04')
+;
+    </script>
 </schema>

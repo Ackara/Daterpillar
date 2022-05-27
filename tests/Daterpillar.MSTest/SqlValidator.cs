@@ -88,6 +88,18 @@ namespace Acklann.Daterpillar
             }
         }
 
+        public static IDbConnection CreateDefaultConnection(Language connectionType)
+        {
+            IDbConnection connection = CreateConnection(connectionType);
+            try
+            {
+                connection.Open();
+                connection.ChangeDatabase(nameof(Daterpillar));
+            }
+            catch { }
+            return connection;
+        }
+
         public static void CreateDatabase(params Language[] connectionTypes)
         {
             var factory = new Scripting.Writers.SqlWriterFactory();

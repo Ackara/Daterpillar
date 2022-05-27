@@ -52,7 +52,9 @@ namespace Acklann.Daterpillar.Modeling
 
         public static Table CreateFrom(Type type)
         {
-            IEnumerable<MemberInfo> columnCandidates = Helper.GetColumns(type);
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            IEnumerable<MemberInfo> columnCandidates = type.GetColumns();
 
             var table = new Table() { Id = type.GetId() };
             SetTableInfo(table, type.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.TableAttribute>());
@@ -134,14 +136,34 @@ namespace Acklann.Daterpillar.Modeling
 
         private static void SetColumnInfo(Table table, MemberInfo member)
         {
-            var column = new Column();
-            table.Add(column);
+            if (member.IsDefined(typeof(ColumnAttribute)))
+                foreach (var attribute in member.GetCustomAttributes<ColumnAttribute>())
+                {
+                    var column = new Column();
+                    table.Add(column);
 
-            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>());
-            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.DataTypeAttribute>(), member);
-            SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DefaultValueAttribute>());
-            SetColumnInfo(column, member.GetCustomAttribute<ColumnAttribute>(), member);
-            SetColumnDefaults(column, member);
+                    SetColumnInfo(column, attribute, member);
+                    SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.DataTypeAttribute>(), member);
+                    SetColumnDefaults(column, member);
+                }
+            else if (member.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)))
+                foreach (var attribute in member.GetCustomAttributes<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>())
+                {
+                    var column = new Column();
+                    table.Add(column);
+
+                    SetColumnInfo(column, attribute);
+                    SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.DataTypeAttribute>(), member);
+                    SetColumnDefaults(column, member);
+                }
+            else
+            {
+                var column = new Column();
+                table.Add(column);
+
+                SetColumnInfo(column, member.GetCustomAttribute<System.ComponentModel.DataAnnotations.DataTypeAttribute>(), member);
+                SetColumnDefaults(column, member);
+            }
         }
 
         private static void SetColumnInfo(Column column, System.ComponentModel.DataAnnotations.Schema.ColumnAttribute attribute)
@@ -224,7 +246,7 @@ namespace Acklann.Daterpillar.Modeling
             {
                 if (member is PropertyInfo prop)
                 {
-                    column.DataType = CSharpTranslator.GetDataType(prop.PropertyType);
+                    column.DataType = (CSharpTranslator.TryGetDataType(prop.PropertyType, out DataType dataType) ? dataType : CSharpTranslator.GetDataType(typeof(string)));
                     if (Nullable.GetUnderlyingType(prop.PropertyType) != null) column.IsNullable = true;
                 }
                 else if (member is FieldInfo field)
@@ -233,6 +255,9 @@ namespace Acklann.Daterpillar.Modeling
                     if (Nullable.GetUnderlyingType(field.FieldType) != null) column.IsNullable = true;
                 }
             }
+
+            var defaultAttribute = member.GetCustomAttribute<System.ComponentModel.DefaultValueAttribute>();
+            SetColumnInfo(column, defaultAttribute);
         }
 
         // ==================== Index Information ==================== //

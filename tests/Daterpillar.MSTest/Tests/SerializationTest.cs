@@ -1,8 +1,6 @@
 ﻿using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Linq;
-using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Modeling;
-using Acklann.Diffa;
+using Acklann.Daterpillar.Scripting;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -87,7 +85,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Assert
             sut.Scripts.ShouldNotBeEmpty();
-            Diff.Approve(sut.ToXml(), ".xml");
+            Approvals.VerifyXml(sut.ToXml());
         }
 
         [TestMethod]
@@ -152,7 +150,6 @@ namespace Acklann.Daterpillar.Tests
             // Assert
             result.ShouldBe(expectedSequence);
         }
-
 
         #region Backing Members
 
