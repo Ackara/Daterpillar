@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Serialization
+namespace Acklann.Daterpillar.Modeling
 {
     public class Migrator
     {

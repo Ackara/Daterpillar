@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Acklann.Daterpillar.Serialization
+namespace Acklann.Daterpillar.Modeling
 {
     public static class SchemaFactory
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Modeling
+namespace Acklann.Daterpillar.Foo
 {
     public abstract class DataRecord : DataViewRecord, IInsertable
     {

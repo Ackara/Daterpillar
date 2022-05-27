@@ -1,6 +1,6 @@
 ﻿using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Scripting.Translators;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Collections;
 using System.Collections.Generic;

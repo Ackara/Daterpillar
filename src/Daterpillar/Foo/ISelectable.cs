@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Acklann.Daterpillar.Modeling
+namespace Acklann.Daterpillar.Foo
 {
     public interface ISelectable
     {

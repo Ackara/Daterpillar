@@ -38,12 +38,12 @@ namespace Acklann.Daterpillar.Annotations
         public readonly int Precision;
 
         /// <summary>
-        /// Returns a <see cref="Serialization.DataType" /> that represents this instance.
+        /// Returns a <see cref="Modeling.DataType" /> that represents this instance.
         /// </summary>
-        /// A <see cref="Serialization.DataType" /> that represents this instance.
-        public Serialization.DataType ToDataType()
+        /// A <see cref="Modeling.DataType" /> that represents this instance.
+        public Modeling.DataType ToDataType()
         {
-            return new Serialization.DataType(TypeName, Scale, Precision);
+            return new Modeling.DataType(TypeName, Scale, Precision);
         }
     }
 }

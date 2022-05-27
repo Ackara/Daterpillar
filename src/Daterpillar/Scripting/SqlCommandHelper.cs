@@ -1,4 +1,4 @@
-using Acklann.Daterpillar.Modeling;
+using Acklann.Daterpillar.Foo;
 using System;
 using System.Collections.Generic;
 using System.Data;

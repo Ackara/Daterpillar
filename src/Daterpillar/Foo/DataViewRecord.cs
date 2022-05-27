@@ -1,9 +1,9 @@
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Data;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Modeling
+namespace Acklann.Daterpillar.Foo
 {
     public abstract class DataViewRecord : ISelectable
     {

@@ -1,5 +1,5 @@
 ﻿using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Text.RegularExpressions;
 
@@ -46,7 +46,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
         }
 
         /// <summary>
-        /// Converts the <see cref="Acklann.Daterpillar.Serialization.DataType" /> value to its equivalent TSQL representation.
+        /// Converts the <see cref="Acklann.Daterpillar.Modeling.DataType" /> value to its equivalent TSQL representation.
         /// </summary>
         /// <param name="dataType">Type of the data.</param>
         /// <returns>The <see cref="DataType"/> as a string.</returns>

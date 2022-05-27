@@ -1,5 +1,5 @@
 using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -11,10 +11,9 @@ using System.Xml.Serialization;
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
-    public class ReflectionTest
+    public class ModelingTest
     {
-        [TestMethod]
-        [DynamicData(nameof(GetTypesToConvertToTable), DynamicDataSourceType.Method)]
+        [DataTestMethod, DynamicData(nameof(GetTypesToConvertToTable), DynamicDataSourceType.Method)]
         public void Can_convert_type_to_table(Type type)
         {
             // Arrange
@@ -41,7 +40,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_enumerate_all_columns(Type type)
         {
             using var scenario = ApprovalTests.Namers.ApprovalResults.ForScenario(type.Name);
-            var columns = Acklann.Daterpillar.Serialization.Helper.GetColumns(type).Select(x => x.Name);
+            var columns = Acklann.Daterpillar.Modeling.Helper.GetColumns(type).Select(x => x.Name);
             var results = string.Join("\r\n", columns);
             Approvals.Verify(results);
         }
@@ -50,8 +49,7 @@ namespace Acklann.Daterpillar.Tests
 
         private static IEnumerable<object[]> GetTypesToConvertToTable()
         {
-            var cases = from t in typeof(ReflectionTest).GetNestedTypes()
-                            //where t.Name == nameof(MultiKey)
+            var cases = from t in typeof(ModelingTest).GetNestedTypes()
                         select t;
             foreach (var type in cases)
             {

@@ -1,7 +1,7 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Modeling;
 using System.Collections.Generic;
 
-namespace Acklann.Daterpillar.Serialization
+namespace Acklann.Daterpillar.Modeling
 {
     internal class ForeignKeyEqualityComparer : IEqualityComparer<ForeignKey>
     {

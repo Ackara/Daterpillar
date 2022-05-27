@@ -1,4 +1,4 @@
-namespace Acklann.Daterpillar.Modeling
+namespace Acklann.Daterpillar.Foo
 {
     public interface IInsertable
     {

@@ -1,5 +1,5 @@
+using Acklann.Daterpillar.Foo;
 using Acklann.Daterpillar.Modeling;
-using Acklann.Daterpillar.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Data;

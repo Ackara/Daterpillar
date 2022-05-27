@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Acklann.Daterpillar.Serialization
+namespace Acklann.Daterpillar.Modeling
 {
     /// <summary>
     /// Represents an <see cref="Index"/> column reference.

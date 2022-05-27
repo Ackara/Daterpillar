@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Scripting
 {
     public static class SqlExtensions
     {
-        public static string ToInsertCommand(Modeling.IInsertable model, Language dialect)
+        public static string ToInsertCommand(Foo.IInsertable model, Language dialect)
         {
             var builder = new StringBuilder();
             builder.Append("INSERT INTO ")

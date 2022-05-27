@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Acklann.Daterpillar.Serialization
+namespace Acklann.Daterpillar.Modeling
 {
     /// <summary>
     /// A in-memory representation of a SQL script.

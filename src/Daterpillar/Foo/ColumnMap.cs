@@ -1,11 +1,11 @@
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Modeling
+namespace Acklann.Daterpillar.Foo
 {
     internal static class ColumnMap
     {
@@ -16,7 +16,7 @@ namespace Acklann.Daterpillar.Modeling
             if (_map.ContainsKey(tableName)) return;
             else _map.Add(tableName, tableName);
 
-            IEnumerable<MemberInfo> members = from m in Serialization.Helper.GetColumns(recordType)
+            IEnumerable<MemberInfo> members = from m in Modeling.Helper.GetColumns(recordType)
                                               let attr = m.GetCustomAttribute<Annotations.ColumnAttribute>()
                                               where (attr?.AutoIncrement ?? false) == false
                                               select m;

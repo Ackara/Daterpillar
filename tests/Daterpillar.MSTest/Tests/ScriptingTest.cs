@@ -2,7 +2,7 @@
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using ApprovalTests.Namers;
 using AutoBogus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using Index = Acklann.Daterpillar.Serialization.Index;
+using Index = Acklann.Daterpillar.Modeling.Index;
 using SchemaType = Acklann.Daterpillar.Annotations.SchemaType;
 
 namespace Acklann.Daterpillar.Tests
@@ -29,7 +29,7 @@ namespace Acklann.Daterpillar.Tests
 
         [TestMethod]
         [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
-        public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
+        public void Can_execute_insert_command(Foo.IInsertable model, Language connectionType)
         {
             // Arrange
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
@@ -76,7 +76,7 @@ namespace Acklann.Daterpillar.Tests
             resultSet1.Data.ShouldAllBe(x => x.Name == model.Name);
 
             resultSet2.Data.ShouldNotBeNull();
-            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Modeling.ISelectable>));
+            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Foo.ISelectable>));
         }
 
         [TestMethod]
@@ -146,7 +146,7 @@ namespace Acklann.Daterpillar.Tests
         public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
         {
             // Arrange
-            var sut = new Serialization.Migrator();
+            var sut = new Modeling.Migrator();
             string fileName = $"{label}.{dialect}.sql".ToLower();
             string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
 

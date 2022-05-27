@@ -1,5 +1,5 @@
 ﻿using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 
 namespace Acklann.Daterpillar.Scripting.Translators
 {
