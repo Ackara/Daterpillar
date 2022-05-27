@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Modeling.Attributes;
+﻿using Acklann.Daterpillar.Annotations;
 using System.ComponentModel;
 
 namespace Acklann.Daterpillar.Prototyping
@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar.Prototyping
     [Table]
     public enum Genre
     {
-        [DisplayName("Hip Hop")]
+        [EnumValue("Hip Hop")]
         HipHip,
 
         Pop,

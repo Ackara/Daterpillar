@@ -1,7 +1,7 @@
 ﻿using Acklann.Daterpillar;
-using Acklann.Daterpillar.Modeling.Attributes;
+using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Prototyping;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using Acklann.Diffa;
 using Acklann.Diffa.Reporters;
 using AutoBogus;
@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: ApprovalTests.Namers.UseApprovalSubdirectory("approved-results")]
 [assembly: Reporter(typeof(DiffReporter))]
 [assembly: ApprovedFolder("approved-results")]
-[assembly: Include(Sample.File.MusicDataXML)]
+[assembly: Acklann.Daterpillar.Annotations.Include(Sample.File.MusicDataXML)]
 
 namespace Acklann.Daterpillar
 {
@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar
                 {
                 });
 
-               
+
             });
         }
 
@@ -48,12 +48,12 @@ namespace Acklann.Daterpillar
 
         private static void RestoreDatabase()
         {
-            Schema schema = Serialization.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            Schema schema = Modeling.SchemaFactory.CreateFrom(typeof(Album).Assembly);
         }
 
         private static Schema CreateSchema()
         {
-            return Serialization.SchemaFactory.CreateFrom(typeof(Album).Assembly);
+            return Modeling.SchemaFactory.CreateFrom(typeof(Album).Assembly);
         }
 
         private static void RemoveUnusedApprovalFiles(string path)

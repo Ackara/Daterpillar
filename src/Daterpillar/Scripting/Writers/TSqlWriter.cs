@@ -1,11 +1,11 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Modeling;
 using Acklann.Daterpillar.Scripting.Translators;
 using System.IO;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
     [System.ComponentModel.Category(nameof(Language.TSQL))]
-    public class TSqlWriter : SqlWriter
+    public class TSqlWriter : DDLWriter
     {
         public TSqlWriter(Stream stream) : this(new StreamWriter(stream), new TSQLTranslator())
         { }

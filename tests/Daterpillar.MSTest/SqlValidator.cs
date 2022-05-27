@@ -1,4 +1,4 @@
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Data;
 using System.IO;
@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar
         public static IDbConnection CreateSchemaTable(Type type, Language dialect)
         {
             using (var stream = new MemoryStream())
-            using (Scripting.Writers.SqlWriter writer = new Scripting.Writers.SqlWriterFactory().CreateInstance(dialect, stream))
+            using (Scripting.Writers.DDLWriter writer = new Scripting.Writers.SqlWriterFactory().CreateInstance(dialect, stream))
             {
                 Table table = SchemaFactory.CreateFrom(type);
                 writer.Create(table);
@@ -104,7 +104,9 @@ namespace Acklann.Daterpillar
                     writer.Flush();
                     stream.Seek(0, SeekOrigin.Begin);
 
-                    try { connection.ChangeDatabase(nameof(Daterpillar)); } catch (System.Data.Common.DbException) { }
+                    try { connection.ChangeDatabase(nameof(Daterpillar)); }
+                    catch (System.Data.Common.DbException) { }
+                    catch (NotImplementedException) { }
                     string sql = System.Text.Encoding.UTF8.GetString(stream.ToArray());
                     bool failed = !TryExecute(connection, sql, out string error);
                     if (failed) throw new Exception(error);

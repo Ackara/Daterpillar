@@ -1,6 +1,7 @@
-﻿using Acklann.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Annotations;
+using Acklann.Daterpillar.Linq;
 using Acklann.Daterpillar.Scripting;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using Acklann.Diffa;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Schema;
-using Schema = Acklann.Daterpillar.Serialization.Schema;
+using Schema = Acklann.Daterpillar.Modeling.Schema;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -96,7 +97,7 @@ namespace Acklann.Daterpillar.Tests
             if (DateTime.TryParse(input?.ToString(), out DateTime dt))
                 input = dt;
 
-            SqlComposer.Serialize(input).ShouldBe(expectedValue);
+            SqlExtensions.Serialize(input).ShouldBe(expectedValue);
         }
 
         [TestMethod]

@@ -10,11 +10,11 @@ namespace Acklann.Daterpillar.Scripting.Writers
     {
         public SqlWriterFactory()
         {
-            var assemblyTypes = (from t in typeof(SqlWriter).Assembly.ExportedTypes
+            var assemblyTypes = (from t in typeof(DDLWriter).Assembly.ExportedTypes
                                  where
                                     !t.IsAbstract &&
                                     !t.IsInterface &&
-                                    typeof(SqlWriter).IsAssignableFrom(t)
+                                    typeof(DDLWriter).IsAssignableFrom(t)
                                  select t);
 
             foreach (Type type in assemblyTypes)
@@ -26,16 +26,16 @@ namespace Acklann.Daterpillar.Scripting.Writers
             }
         }
 
-        public SqlWriter CreateInstance(Language syntax, Stream stream)
+        public DDLWriter CreateInstance(Language syntax, Stream stream)
         {
             return CreateInstance(syntax, new StreamWriter(stream));
         }
 
-        public SqlWriter CreateInstance(Language syntax, TextWriter writer)
+        public DDLWriter CreateInstance(Language syntax, TextWriter writer)
         {
             if (_returnTypes.ContainsKey(syntax.ToString()))
             {
-                return (SqlWriter)Activator.CreateInstance(_returnTypes[syntax.ToString()], writer);
+                return (DDLWriter)Activator.CreateInstance(_returnTypes[syntax.ToString()], writer);
             }
 
             throw new ArgumentOutOfRangeException(nameof(syntax), $"{GetType().Assembly.FullName} do not support '{syntax}' at this time. Visit 'https://github.com/Ackara/Daterpillar' to request support.");

@@ -1,8 +1,8 @@
-﻿using Acklann.Daterpillar.Linq;
+﻿using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Prototyping;
 using Acklann.Daterpillar.Scripting;
 using Acklann.Daterpillar.Scripting.Writers;
-using Acklann.Daterpillar.Serialization;
+using Acklann.Daterpillar.Modeling;
 using ApprovalTests.Namers;
 using AutoBogus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
+using Index = Acklann.Daterpillar.Modeling.Index;
+using SchemaType = Acklann.Daterpillar.Annotations.SchemaType;
 
 namespace Acklann.Daterpillar.Tests
 {
@@ -24,39 +25,11 @@ namespace Acklann.Daterpillar.Tests
             SqlValidator.CreateDatabase(_languages);
         }
 
-        [TestMethod]
-        [UseApprovalSubdirectory("../test-cases/approved-results")]
-        [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
-        public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
-        {
-            // Arrange
-            var sut = new Serialization.Migrator();
-            string fileName = $"{label}.{dialect}.sql".ToLower();
-            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
-
-            using var stream = new MemoryStream();
-            using var connection = SqlValidator.ClearDatabase(dialect);
-            using var scenario = ApprovalResults.ForScenario(fileName);
-            using var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
-
-            // Act
-            sut.GenerateMigrationScript(dialect, new Schema(), oldSchema, scriptFile);
-            var sql = File.ReadAllText(scriptFile);
-            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
-
-            var changes = sut.GenerateMigrationScript(dialect, oldSchema, newSchema, scriptFile);
-            sql = File.ReadAllText(scriptFile);
-            var migrationWasSuccessful = SqlValidator.TryExecute(connection, sql, out error);
-
-            // Assert
-            migrationWasSuccessful.ShouldBeTrue(error);
-            if (!string.IsNullOrWhiteSpace(sql)) ApprovalTests.Approvals.VerifyFile(scriptFile);
-            changes.ShouldNotBeNull();
-        }
+        // ==================== CRUD ==================== //
 
         [TestMethod]
         [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
-        public void Can_execute_insert_command(Modeling.IInsertable model, Language connectionType)
+        public void Can_execute_insert_command(Foo.IInsertable model, Language connectionType)
         {
             // Arrange
             var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
@@ -64,7 +37,7 @@ namespace Acklann.Daterpillar.Tests
             using var scenario = ApprovalResults.ForScenario(label);
 
             // Act
-            var command = SqlComposer.ToInsertCommand(model, connectionType);
+            var command = SqlExtensions.ToInsertCommand(model, connectionType);
             var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
 
             // Assert
@@ -103,7 +76,7 @@ namespace Acklann.Daterpillar.Tests
             resultSet1.Data.ShouldAllBe(x => x.Name == model.Name);
 
             resultSet2.Data.ShouldNotBeNull();
-            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Modeling.ISelectable>));
+            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Foo.ISelectable>));
         }
 
         [TestMethod]
@@ -165,6 +138,38 @@ namespace Acklann.Daterpillar.Tests
             case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
         }
 
+        // ==================== DDL ==================== //
+
+        [TestMethod]
+        [UseApprovalSubdirectory("../test-cases/approved-results")]
+        [DynamicData(nameof(GetMigrationCases), DynamicDataSourceType.Method)]
+        public void Can_write_migration_scripts(string label, Language dialect, Schema oldSchema, Schema newSchema)
+        {
+            // Arrange
+            var sut = new Modeling.Migrator();
+            string fileName = $"{label}.{dialect}.sql".ToLower();
+            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
+
+            using var stream = new MemoryStream();
+            using var connection = SqlValidator.ClearDatabase(dialect);
+            using var scenario = ApprovalResults.ForScenario(fileName);
+            using var writer = new SqlWriterFactory().CreateInstance(dialect, stream);
+
+            // Act
+            sut.GenerateMigrationScript(dialect, new Schema(), oldSchema, scriptFile);
+            var sql = File.ReadAllText(scriptFile);
+            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+
+            var changes = sut.GenerateMigrationScript(dialect, oldSchema, newSchema, scriptFile);
+            sql = File.ReadAllText(scriptFile);
+            var migrationWasSuccessful = SqlValidator.TryExecute(connection, sql, out error);
+
+            // Assert
+            migrationWasSuccessful.ShouldBeTrue(error);
+            if (!string.IsNullOrWhiteSpace(sql)) ApprovalTests.Approvals.VerifyFile(scriptFile);
+            changes.ShouldNotBeNull();
+        }
+
         [TestMethod]
         [DataRow(Language.TSQL)]
         [DataRow(Language.MySQL)]
@@ -189,7 +194,7 @@ namespace Acklann.Daterpillar.Tests
 
         private static readonly Language[] _languages = new Language[]
         {
-            //Language.TSQL,
+            Language.TSQL,
             //Language.SQLite,
             Language.MySQL,
         };
@@ -252,8 +257,6 @@ namespace Acklann.Daterpillar.Tests
             for (int i = 0; i < _languages.Length; i++)
             {
                 yield return new object[] { AutoFaker.Generate<Artist>(), _languages[i] };
-
-                //yield return new object[] { }
             }
         }
 

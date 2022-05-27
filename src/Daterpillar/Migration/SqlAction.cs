@@ -1,4 +1,4 @@
-﻿namespace Acklann.Daterpillar.Serialization
+﻿namespace Acklann.Daterpillar.Modeling
 {
     public enum SqlAction
     {

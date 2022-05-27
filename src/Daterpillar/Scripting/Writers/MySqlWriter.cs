@@ -1,11 +1,11 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Modeling;
 using Acklann.Daterpillar.Scripting.Translators;
 using System.IO;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
     [System.ComponentModel.Category(nameof(Language.MySQL))]
-    public class MySqlWriter : SqlWriter
+    public class MySqlWriter : DDLWriter
     {
         public MySqlWriter(Stream stream) : this(new StreamWriter(stream), new MySQLTranslator())
         { }

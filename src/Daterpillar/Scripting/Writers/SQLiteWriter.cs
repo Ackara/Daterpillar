@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Modeling;
 using Acklann.Daterpillar.Scripting.Translators;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
     /* Documentation: https://www.sqlite.org/lang.html */
 
     [System.ComponentModel.Category(nameof(Language.SQLite))]
-    public class SQLiteWriter : SqlWriter
+    public class SQLiteWriter : DDLWriter
     {
         public SQLiteWriter(Stream stream) : this(new StreamWriter(stream, System.Text.Encoding.UTF8))
         { }

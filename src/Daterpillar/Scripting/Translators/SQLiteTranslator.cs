@@ -1,4 +1,4 @@
-﻿using Acklann.Daterpillar.Serialization;
+﻿using Acklann.Daterpillar.Modeling;
 using System.Text.RegularExpressions;
 
 namespace Acklann.Daterpillar.Scripting.Translators

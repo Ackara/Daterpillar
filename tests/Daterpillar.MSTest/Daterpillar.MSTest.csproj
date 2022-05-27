@@ -3,13 +3,13 @@
   <PropertyGroup>
     <Optimize>false</Optimize>
     <IsPackable>false</IsPackable>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>12.0.23</Version>
-    <AssemblyVersion>12.0.23</AssemblyVersion>
-    <AssemblyFileVersion>12.0.23</AssemblyFileVersion>
+    <Version>12.0.27</Version>
+    <AssemblyVersion>12.0.27</AssemblyVersion>
+    <AssemblyFileVersion>12.0.27</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,7 +19,7 @@
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
     <PackageTags>sql migration orm flyway build</PackageTags>
     <Company>Ackara</Company>
-    <Copyright>Copyright © 2021 Ackara</Copyright>
+    <Copyright>Copyright © 2022 Ackara</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
   </PropertyGroup>
 
@@ -35,25 +35,25 @@
 
   <ItemGroup>
     <PackageReference Include="Acklann.Diffa" Version="1.1.1" />
-    <PackageReference Include="ApprovalTests" Version="5.4.7" />
-    <PackageReference Include="AutoBogus.Conventions" Version="2.13.0" />
+    <PackageReference Include="ApprovalTests" Version="5.7.1" />
+    <PackageReference Include="AutoBogus.Conventions" Version="2.13.1" />
     <PackageReference Include="Cecrets" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FakeItEasy" Version="7.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="FakeItEasy" Version="7.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Mockaroo.NET" Version="4.1.4" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
-    <PackageReference Include="MySql.Data" Version="8.0.23" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="MySql.Data" Version="8.0.27" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
   </ItemGroup>
 
   <ItemGroup>

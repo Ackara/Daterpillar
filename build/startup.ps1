@@ -1,0 +1,2 @@
+Start-MSSQL;
+Start-MySQL;
