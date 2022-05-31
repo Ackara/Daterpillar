@@ -4,7 +4,6 @@ using Acklann.Diffa.Reporters;
 using AutoBogus;
 using AutoBogus.Conventions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,8 +23,6 @@ namespace Acklann.Daterpillar
         [AssemblyInitialize]
         public static void Setup(TestContext _)
         {
-            static string tid() => string.Concat("test-", Guid.NewGuid().ToString());
-
             AutoFaker.Configure((builder) =>
             {
                 builder.WithConventions((context) =>

@@ -33,9 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="sample.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Tests\" />
   </ItemGroup>
 
 

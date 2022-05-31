@@ -1,16 +1,19 @@
-using Acklann.Daterpillar.Linq;
+using Acklann.Daterpillar.Annotations;
 using System;
-using System.Data;
 
 namespace Acklann.Daterpillar.Prototyping
 {
-    public class Contact : IEntity
+    [Table(TABLE)]
+    public class Contact
     {
         public const string TABLE = "contact";
 
+        [Key, Column]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        [Column("first_name")]
+        [Column("last_name")]
+        public FullName Name { get; set; }
 
         public string Email { get; set; }
 
@@ -19,29 +22,5 @@ namespace Acklann.Daterpillar.Prototyping
         public TimeSpan TimeBorn { get; set; }
 
         public DateTime BirthDay { get; set; }
-
-        public string GetTableName()
-        {
-            return nameof(Contact);
-        }
-
-        public string[] GetColumnList()
-        {
-            return new string[] { nameof(Id), nameof(Name), nameof(Email), nameof(DayBorn), nameof(TimeBorn), nameof(BirthDay) };
-        }
-
-        public object[] GetValueList()
-        {
-            return new object[] { Id, $"'{Name}'", $"'{Email}'", (int)DayBorn, $"'{TimeBorn.ToString(@"hh\:mm\:ss")}'", $"'{BirthDay.ToString("yyyy-MM-dd HH:mm:ss")}'" };
-        }
-
-        public void Load(IDataRecord record)
-        {
-            Id = (int)record[0];
-            Name = (string)record[1];
-            Email = Convert.ToString(record[nameof(Email)]);
-            DayBorn = (DayOfWeek)record[3];
-            TimeBorn = Convert.ToDateTime(record[4]).TimeOfDay;
-        }
     }
 }

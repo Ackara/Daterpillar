@@ -51,7 +51,6 @@ namespace Acklann.Daterpillar.Tests
             var cases = from t in typeof(ModelingTest).GetNestedTypes()
                         select t;
             foreach (var type in cases)
-                if(type == typeof(DataAnnotatedTable))
             {
                 yield return new object[] { type };
             }
@@ -62,20 +61,22 @@ namespace Acklann.Daterpillar.Tests
         #region Types To Convert
 
         [Acklann.Daterpillar.Annotations.Table]
-        public class Empty
+        internal class Empty
         {
         }
 
         [System.ComponentModel.DataAnnotations.Schema.Table("offset_table")]
-        public class OffsetTable
+        internal class OffsetTable
         {
+            [Column]
             public string Id { get; set; }
 
+            [Column]
             public DateTimeOffset Date { get; set; }
         }
 
-        [System.ComponentModel.DataAnnotations.Schema.Table("inffered-columns-table")]
-        public class InferredTable
+        [Table("inffered-columns-table", true)]
+        internal class InferredTable
         {
             public string Id { get; set; }
 
@@ -103,20 +104,23 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [System.ComponentModel.DataAnnotations.Schema.Table("dataAnnotation")]
-        public class DataAnnotatedTable
+        internal class DataAnnotatedTable
         {
+            [System.ComponentModel.DataAnnotations.Schema.Column]
             [System.ComponentModel.DataAnnotations.Key]
             public string Id { get; set; }
 
+            [System.ComponentModel.DataAnnotations.Schema.Column]
             public string Name { get; set; }
 
+            [System.ComponentModel.DataAnnotations.Schema.Column]
             [System.ComponentModel.DataAnnotations.MaxLength(123)]
             [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Password)]
             public string Hash { get; set; }
         }
 
-        [Annotations.Table]
-        public class MultiKey
+        [Annotations.Table(null, true)]
+        internal class MultiKey
         {
             public string Name { get; set; }
 
@@ -130,8 +134,8 @@ namespace Acklann.Daterpillar.Tests
             public string Part3 { get; set; }
         }
 
-        [Annotations.Table]
-        public class MultiKey2
+        [Annotations.Table(null, true)]
+        internal class MultiKey2
         {
             [System.ComponentModel.DataAnnotations.Key]
             public string Name { get; set; }
@@ -146,8 +150,8 @@ namespace Acklann.Daterpillar.Tests
             public string Part3 { get; set; }
         }
 
-        [Annotations.Table]
-        public class UniqueIndex
+        [Annotations.Table(null, true)]
+        internal class UniqueIndex
         {
             public string Id { get; set; }
 
@@ -157,7 +161,8 @@ namespace Acklann.Daterpillar.Tests
             public string Part2 { get; set; }
         }
 
-        public class Parent
+        [Annotations.Table(null, true)]
+        internal class Parent
         {
             [Annotations.Column("dln")]
             public int Id { get; set; }
@@ -165,7 +170,8 @@ namespace Acklann.Daterpillar.Tests
             public string Name { get; set; }
         }
 
-        public class Child
+        [Annotations.Table(null, true)]
+        internal class Child
         {
             public int Id { get; set; }
 
@@ -175,8 +181,8 @@ namespace Acklann.Daterpillar.Tests
             public int ParentId { get; set; }
         }
 
-        [Annotations.Table]
-        public class ComplexType
+        [Annotations.Table(null, true)]
+        internal class ComplexType
         {
             public int Id { get; set; }
 
@@ -197,7 +203,8 @@ namespace Acklann.Daterpillar.Tests
             public string Value { get; }
         }
 
-        public class HiddenColumns
+        [Annotations.Table(null, true)]
+        internal class HiddenColumns
         {
             public int Id { get; set; }
 
@@ -208,7 +215,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [Table]
-        public class MultiColumnTable
+        internal class MultiColumnTable
         {
             [Key, Column]
             public string Id { get; set; }

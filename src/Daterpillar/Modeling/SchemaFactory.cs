@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar.Modeling
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            IEnumerable<Type> tables = (from t in assembly.DefinedTypes
+            IEnumerable<Type> tables = (from t in assembly.ExportedTypes
                                         where
                                             t.IsInterface == false &&
                                             t.IsAbstract == false &&

@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
-    public interface ICRUDWriter
+    public interface ICrudOperations
     {
         string Create(object model, Language dialect);
 

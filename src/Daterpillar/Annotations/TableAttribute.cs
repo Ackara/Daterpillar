@@ -12,21 +12,28 @@ namespace Acklann.Daterpillar.Annotations
         /// <summary>
         /// Initializes a new instance of the <see cref="TableAttribute"/> class.
         /// </summary>
-        public TableAttribute() : this(null)
+        public TableAttribute() : this(null, false)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableAttribute"/> class.
+        /// Initializes a new instance of the <see cref="TableAttribute" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public TableAttribute(string name)
+        /// <param name="optInProperties">if set to <c>true</c> all properties will be treated as columns.</param>
+        public TableAttribute(string name, bool optInProperties = false)
         {
             Name = name;
+            OptInProperties = optInProperties;
         }
 
         /// <summary>
         /// The table name.
         /// </summary>
         public readonly string Name;
+
+        /// <summary>
+        /// Determine whether to treat all properties as SQL columns.
+        /// </summary>
+        public readonly bool OptInProperties;
     }
 }

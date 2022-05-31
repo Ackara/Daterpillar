@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Foo
+namespace Acklann.Daterpillar.Scripting
 {
     internal static class ColumnMap
     {
@@ -16,22 +16,26 @@ namespace Acklann.Daterpillar.Foo
             if (_map.ContainsKey(tableName)) return;
             else _map.Add(tableName, tableName);
 
-            IEnumerable<MemberInfo> members = from m in Modeling.TypeInfoExtensions.GetColumns(recordType)
-                                              let attr = m.GetCustomAttribute<Annotations.ColumnAttribute>()
-                                              where (attr?.AutoIncrement ?? false) == false
-                                              select m;
+            IEnumerable<MemberInfo> members = (from m in TypeInfoExtensions.GetColumns(recordType)
+                                               where m.IsAutoColumn() == false
+                                               select m).Distinct();
 
+            var columns = new List<string>();
             foreach (MemberInfo member in members)
             {
-                string qualifiedName = GetFullQualifiedName(tableName, member.GetColumnName());
-                if (_map.ContainsKey(qualifiedName) == false)
+                foreach (string columnName in member.GetColumnNames())
                 {
-                    _map.Add(qualifiedName, member);
+                    string qualifiedName = GetFullQualifiedName(tableName, columnName);
+                    if (!_map.ContainsKey(qualifiedName))
+                    {
+                        _map.Add(qualifiedName, member);
+                        columns.Add(columnName);
+                    }
                 }
             }
 
-            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetColumns)), (from p in members select p.GetColumnName()).ToArray());
-            _map.Add(GetFullQualifiedName(tableName, nameof(IInsertable.GetValues)), (from x in members select x).ToArray());
+            _map.Add(GetFullQualifiedName(tableName, nameof(GetColumns)), columns.ToArray());
+            _map.Add(GetFullQualifiedName(tableName, nameof(GetMembers)), members.ToArray());
         }
 
         public static MemberInfo GetMember(string tableName, string columnName)
@@ -41,12 +45,12 @@ namespace Acklann.Daterpillar.Foo
 
         public static MemberInfo[] GetMembers(string tableName)
         {
-            return (MemberInfo[])_map[GetFullQualifiedName(tableName, nameof(IInsertable.GetValues))];
+            return (MemberInfo[])_map[GetFullQualifiedName(tableName, nameof(GetMembers))];
         }
 
         public static string[] GetColumns(string tableName)
         {
-            return (string[])_map[GetFullQualifiedName(tableName, nameof(IInsertable.GetColumns))];
+            return (string[])_map[GetFullQualifiedName(tableName, nameof(GetColumns))];
         }
 
         public static string GetFullQualifiedName(string tableName, string columnName) => string.Concat(tableName, '.', columnName);

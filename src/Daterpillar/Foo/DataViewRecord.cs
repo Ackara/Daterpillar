@@ -1,4 +1,5 @@
 using Acklann.Daterpillar.Modeling;
+using Acklann.Daterpillar.Scripting;
 using System;
 using System.Data;
 using System.Reflection;

@@ -26,23 +26,49 @@ namespace Acklann.Daterpillar.Modeling
 
         public static IEnumerable<MemberInfo> GetColumns(this Type type)
         {
-            return (from property in type.GetProperties()
-                    let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
-                    where
-                       /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
-                       &&
-                       (not_explictly_defined && property.CanWrite == false) == false
-                    select (MemberInfo)property)
+            if (type.GetCustomAttribute<TableAttribute>()?.OptInProperties ?? false)
+            {
+                return (from property in type.GetProperties()
+                        let not_explictly_defined = property.IsDefined(typeof(ColumnAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)) == false
+                        where
+                           /*not ignored*/property.IsDefined(typeof(SqlIgnoreAttribute)) == false && property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                           &&
+                           (not_explictly_defined && property.CanWrite == false) == false
+                        select (MemberInfo)property)
 
-                 .Concat
+                     .Concat
 
-                 (from field in type.GetRuntimeFields()
-                  let isExplict = field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))
-                  where
-                     field.IsDefined(typeof(SqlIgnoreAttribute)) == false && field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
-                     &&
-                     isExplict
-                  select field);
+                     (from field in type.GetRuntimeFields()
+                      let isExplict = field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))
+                      where
+                         field.IsDefined(typeof(SqlIgnoreAttribute)) == false && field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute)) == false
+                         &&
+                         isExplict
+                      select field);
+            }
+            else
+            {
+                return (from property in type.GetProperties()
+                        where
+                            (property.IsDefined(typeof(ColumnAttribute)) || property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)))
+                            &&
+                            !property.IsDefined(typeof(SqlIgnoreAttribute))
+                            &&
+                            !property.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute))
+                        select (MemberInfo)property)
+
+                        .Concat
+
+                        (from field in type.GetRuntimeFields()
+                         where
+                            (field.IsDefined(typeof(ColumnAttribute)) || field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)))
+                            &&
+                            !field.IsDefined(typeof(SqlIgnoreAttribute))
+                            &&
+                            !field.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute))
+                         select field
+                    );
+            }
         }
 
         public static string GetColumnName(this MemberInfo member)
@@ -59,6 +85,35 @@ namespace Acklann.Daterpillar.Modeling
             {
                 return member.Name;
             }
+        }
+
+        public static IEnumerable<string> GetColumnNames(this MemberInfo member)
+        {
+            if (member.IsDefined(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute)))
+                foreach (var attribute in member.GetCustomAttributes<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>())
+                {
+                    yield return attribute.Name ?? member.Name;
+                }
+            else if (member.IsDefined(typeof(ColumnAttribute)))
+                foreach (var attribute in member.GetCustomAttributes<ColumnAttribute>())
+                {
+                    yield return attribute.Name ?? member.Name;
+                }
+            else
+            {
+                yield return member.Name;
+            }
+        }
+
+        public static bool IsAutoColumn(this MemberInfo member)
+        {
+            foreach (var attribute in member.GetCustomAttributes<ColumnAttribute>())
+                if (attribute.AutoIncrement)
+                {
+                    return true;
+                }
+
+            return false;
         }
 
         public static int GetMaxLength(this MemberInfo member)

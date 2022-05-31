@@ -1,5 +1,4 @@
 ﻿using Acklann.Daterpillar.Annotations;
-using System.ComponentModel;
 
 namespace Acklann.Daterpillar.Prototyping
 {
@@ -21,7 +20,6 @@ namespace Acklann.Daterpillar.Prototyping
         [Column("Album")]
         public string Album { get; set; }
 
-        [StaticId(205), DisplayName("Track"), DefaultValue(1)]
         public int TrackNo { get; set; }
 
         [Column("Disc", DefaultValue = 1)]
