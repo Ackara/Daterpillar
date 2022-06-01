@@ -24,15 +24,15 @@ namespace Acklann.Daterpillar.Tests
                     context.SetValue(value.FirstName.Serialize());
                     context.SetValue(value.LastName.Serialize());
                 });
-            });
 
-            CrudOperations.RegisterReadPlugin<Contact>((record, context) =>
-            {
-                record.Name = new FullName
+                builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>
                 {
-                    FirstName = Convert.ToString(context.GetValue(context.GetOrdinal("first_name"))),
-                    LastName = Convert.ToString(context.GetValue(context.GetOrdinal("last_name"))),
-                };
+                    record.Name = new FullName
+                    {
+                        FirstName = Convert.ToString(context.GetValue(context.GetOrdinal("first_name"))),
+                        LastName = Convert.ToString(context.GetValue(context.GetOrdinal("last_name"))),
+                    };
+                });
             });
         }
 
@@ -132,6 +132,9 @@ namespace Acklann.Daterpillar.Tests
 
         private static IEnumerable<object[]> GetReadTestCases()
         {
+            var record3 = AutoFaker.Generate<TrackSequence>();
+            yield return new object[] { $"select * from {nameof(TrackSequence)} where {nameof(TrackSequence.SongId)}={record3.SongId}", record3 };
+
             var record2 = AutoFaker.Generate<Contact>();
             yield return new object[] { $"select * from contact where Id={record2.Id}", record2 };
 

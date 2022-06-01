@@ -116,6 +116,19 @@ namespace Acklann.Daterpillar.Modeling
             return false;
         }
 
+        public static bool IsKey(this MemberInfo member)
+        {
+            if (member.IsDefined(typeof(KeyAttribute))) return true;
+
+            foreach (var item in member.GetCustomAttributes<IndexAttribute>())
+                if (item.Type == IndexType.PrimaryKey)
+                {
+                    return true;
+                }
+
+            return false;
+        }
+
         public static int GetMaxLength(this MemberInfo member)
         {
             return member.GetCustomAttribute<System.ComponentModel.DataAnnotations.StringLengthAttribute>()?.MaximumLength ?? member.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>()?.Length ?? 0;

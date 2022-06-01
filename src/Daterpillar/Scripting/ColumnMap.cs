@@ -17,43 +17,80 @@ namespace Acklann.Daterpillar.Scripting
             else _map.Add(tableName, tableName);
 
             IEnumerable<MemberInfo> members = (from m in TypeInfoExtensions.GetColumns(recordType)
-                                               where m.IsAutoColumn() == false
-                                               select m).Distinct();
+                                                   //where m.IsAutoColumn() == false
+                                               select m);
 
             var columns = new List<string>();
+            var keys = new List<(string, MemberInfo)>();
+            var nonKeys = new List<(string, MemberInfo)>();
+            var all = new List<(string, MemberInfo)>();
+
             foreach (MemberInfo member in members)
             {
                 foreach (string columnName in member.GetColumnNames())
                 {
-                    string qualifiedName = GetFullQualifiedName(tableName, columnName);
-                    if (!_map.ContainsKey(qualifiedName))
+                    string key = CreateKey(tableName, columnName);
+                    if (!_map.ContainsKey(key))
                     {
-                        _map.Add(qualifiedName, member);
+                        _map.Add(key, member);
                         columns.Add(columnName);
+                    }
+
+                    if (!member.IsAutoColumn())
+                    {
+                        all.Add((columnName, member));
+                    }
+
+                    if (member.IsKey())
+                    {
+                        keys.Add((columnName, member));
+                    }
+                    else
+                    {
+                        nonKeys.Add((columnName, member));
                     }
                 }
             }
 
-            _map.Add(GetFullQualifiedName(tableName, nameof(GetColumns)), columns.ToArray());
-            _map.Add(GetFullQualifiedName(tableName, nameof(GetMembers)), members.ToArray());
+            _map.Add(CreateKey(tableName, nameof(GetColumnNames)), columns.ToArray());
+            _map.Add(CreateKey(tableName, nameof(GetMembers)), members.ToArray());
+
+            _map.Add(CreateKey(tableName, nameof(GetColumns)), all.ToArray());
+            _map.Add(CreateKey(tableName, nameof(GetIdentityColumns)), keys.ToArray());
+            _map.Add(CreateKey(tableName, nameof(GetNonIdentityColumns)), nonKeys.ToArray());
         }
 
         public static MemberInfo GetMember(string tableName, string columnName)
         {
-            return _map[GetFullQualifiedName(tableName, columnName)] as MemberInfo;
+            return _map[CreateKey(tableName, columnName)] as MemberInfo;
+        }
+
+        public static IEnumerable<(string, MemberInfo)> GetColumns(string tableName)
+        {
+            return (IEnumerable<(string, MemberInfo)>)_map[CreateKey(tableName, nameof(GetColumns))];
+        }
+
+        public static IEnumerable<(string, MemberInfo)> GetIdentityColumns(string tableName)
+        {
+            return (IEnumerable<(string, MemberInfo)>)_map[CreateKey(tableName, nameof(GetIdentityColumns))];
+        }
+
+        public static IEnumerable<(string, MemberInfo)> GetNonIdentityColumns(string tableName)
+        {
+            return (IEnumerable<(string, MemberInfo)>)_map[CreateKey(tableName, nameof(GetNonIdentityColumns))];
         }
 
         public static MemberInfo[] GetMembers(string tableName)
         {
-            return (MemberInfo[])_map[GetFullQualifiedName(tableName, nameof(GetMembers))];
+            return (MemberInfo[])_map[CreateKey(tableName, nameof(GetMembers))];
         }
 
-        public static string[] GetColumns(string tableName)
+        public static string[] GetColumnNames(string tableName)
         {
-            return (string[])_map[GetFullQualifiedName(tableName, nameof(GetColumns))];
+            return (string[])_map[CreateKey(tableName, nameof(GetColumnNames))];
         }
 
-        public static string GetFullQualifiedName(string tableName, string columnName) => string.Concat(tableName, '.', columnName);
+        public static string CreateKey(string tableName, string columnName) => string.Concat(tableName, '.', columnName);
 
         private static readonly Hashtable _map = new Hashtable();
     }

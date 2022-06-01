@@ -9,7 +9,7 @@ using System.Text;
 namespace Acklann.Daterpillar.Scripting.Writers
 {
     /// <summary>
-    ///
+    /// Defines method that populate SQL values array when constructing an INSERT statement.
     /// </summary>
     /// <param name="context">The method context.</param>
     /// <param name="propertyValue">The value of the target column-member.</param>
@@ -42,7 +42,8 @@ namespace Acklann.Daterpillar.Scripting.Writers
             Type recordType = record.GetType();
             ColumnMap.Register(recordType);
             string tableName = recordType.GetTableName();
-            string[] columns = ColumnMap.GetColumns(tableName);
+            //string[] columns = ColumnMap.GetColumnNames(tableName);
+            string[] columns = ColumnMap.GetColumns(tableName).Select(x => x.Item1).ToArray();
 
             var builder = new StringBuilder();
             builder.Append("INSERT INTO ")
@@ -56,11 +57,6 @@ namespace Acklann.Daterpillar.Scripting.Writers
                    .Append(")");
 
             return builder.ToString();
-        }
-
-        public IEnumerable<object> Read(string query, Language dialect)
-        {
-            throw new NotImplementedException();
         }
 
         public object Read(IDataRecord data, Type recordType)
@@ -83,8 +79,32 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return record;
         }
 
-        public string Update(object model, Language dialect)
+        public string Update(object record, Language dialect)
         {
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ColumnMap.Register(recordType);
+            string tableName = recordType.GetTableName();
+            var members = ColumnMap.GetNonIdentityColumns(tableName).ToArray();
+
+
+
+            var builder = new StringBuilder();
+            builder.Append("UPDATE ")
+                   .Append(tableName.EscapeColumn(dialect))
+                   .Append("SET ");
+
+
+
+            foreach ((string a, MemberInfo member) in members)
+            {
+                builder.Append(a.EscapeColumn(dialect))
+                       .Append('=')
+                       .Append(WriteValue(member, record));
+            }
+
+
             throw new NotImplementedException();
         }
 
@@ -155,11 +175,13 @@ namespace Acklann.Daterpillar.Scripting.Writers
         #region Backing Members
 
         private readonly IDictionary<string, SqlValueArrayWriting> _createPlugins = new Dictionary<string, SqlValueArrayWriting>();
+        private readonly IDictionary<string, SqlValueArrayWriting> _updatePlugins = new Dictionary<string, SqlValueArrayWriting>();
         private readonly IDictionary<string, AfterSqlDataRecordLoaded> _readPlugins = new Dictionary<string, AfterSqlDataRecordLoaded>();
 
         private object[] GetValues(object record, Type recordType, string tableName, int totalColumns)
         {
-            MemberInfo[] members = ColumnMap.GetMembers(tableName);
+            //MemberInfo[] members = ColumnMap.GetMembers(tableName);
+            MemberInfo[] members = ColumnMap.GetColumns(tableName).Select(x => x.Item2).Distinct().ToArray();
             var context = new CreateOperationContext { Values = new object[totalColumns] };
 
             for (int i = 0; i < members.Length; i++)
@@ -195,14 +217,5 @@ namespace Acklann.Daterpillar.Scripting.Writers
         {
             Values[ValuesIndex++] = value;
         }
-    }
-
-    public class ReadOperationContext
-    {
-        public ReadOperationContext(string tableName)
-        {
-        }
-
-        public int ColumnIndex;
     }
 }

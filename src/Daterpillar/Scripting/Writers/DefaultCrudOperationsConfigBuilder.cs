@@ -11,37 +11,38 @@ namespace Acklann.Daterpillar.Scripting.Writers
         {
             var result = new DefaultCrudOperations();
             foreach (var plugin in _create) result.Add(plugin.Key, plugin.Value);
-
+            foreach (var plugin in _read) result.Add(plugin.Key, plugin.Value);
             return result;
         }
 
-        public void Add(string key, SqlValueArrayWriting plugin)
+        public void OverrideSqlValueArrayItem(string key, SqlValueArrayWriting plugin)
         {
             _create.Add(new KeyValuePair<string, SqlValueArrayWriting>(key, plugin));
         }
 
         public void OverrideSqlValueArrayItem<TRecord, TColumn>(string propertyName, Action<CreateOperationContext, TColumn> plugin)
-            => Add(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, propertyName), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
+            => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, propertyName), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
 
         public void OverrideSqlValueArrayItem<TRecord, TColumn>(Expression<Func<TRecord, object>> propertySelector, Action<CreateOperationContext, TColumn> plugin)
         {
             var expression = (MemberExpression)propertySelector.Body;
-            Add(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
+            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
         }
 
-        public void RegisterReadPlugin(string key, AfterSqlDataRecordLoaded plugin)
+        public void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin)
         {
-            throw new NotImplementedException();
+            _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(key, plugin));
         }
 
-        public void RegisterReadPlugin<TRecord>(Action<TRecord, IDataRecord> plugin)
+        public void OnAfterSqlDataRecordLoaded<TRecord>(Action<TRecord, IDataRecord> plugin)
         {
-            throw new NotImplementedException();
+            _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(typeof(TRecord).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TRecord)a, b); })));
         }
 
         #region Backing Members
 
         private readonly ICollection<KeyValuePair<string, SqlValueArrayWriting>> _create = new List<KeyValuePair<string, SqlValueArrayWriting>>();
+        private readonly ICollection<KeyValuePair<string, AfterSqlDataRecordLoaded>> _read = new List<KeyValuePair<string, AfterSqlDataRecordLoaded>>();
         private readonly ICollection<ICrudOperations> _operations = new List<ICrudOperations>();
 
         #endregion Backing Members

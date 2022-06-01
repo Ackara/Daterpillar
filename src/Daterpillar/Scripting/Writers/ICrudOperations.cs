@@ -5,13 +5,13 @@ namespace Acklann.Daterpillar.Scripting.Writers
 {
     public interface ICrudOperations
     {
-        string Create(object model, Language dialect);
+        string Create(object record, Language dialect);
 
         object Read(IDataRecord data, Type recordType);
 
-        string Update(object model, Language dialect);
+        string Update(object record, Language dialect);
 
-        string Delete(object model, Language dialect);
+        string Delete(object record, Language dialect);
 
         bool CanAccept(Type type);
     }

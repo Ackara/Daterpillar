@@ -3,11 +3,9 @@ using System;
 
 namespace Acklann.Daterpillar.Prototyping
 {
-    [Table(TABLE)]
+    [Table("contact")]
     public class Contact
     {
-        public const string TABLE = "contact";
-
         [Key, Column]
         public int Id { get; set; }
 

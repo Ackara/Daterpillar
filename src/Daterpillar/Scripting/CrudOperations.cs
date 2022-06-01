@@ -38,29 +38,14 @@ namespace Acklann.Daterpillar.Scripting
         public static IEnumerable<TRecord> Read<TRecord>(IDataReader resultSet)
             => Read(typeof(TRecord), resultSet).Cast<TRecord>();
 
-        public static void RegisterCreatePlugin(ICrudOperations writer)
+        public static long Update(object record, Language dialect)
         {
-            _alternateOperations.Add(writer);
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ICrudOperations handler = GetBestOperations(recordType);
+            return handler.Update(record, dialect);
         }
-
-        public static void RegisterCreatePlugin(string key, SqlValueArrayWriting plugin)
-        {
-            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
-            if (plugin == null) throw new ArgumentNullException(nameof(plugin));
-
-            _defaultOperations.Add(key, plugin);
-        }
-
-        public static void RegisterReadPlugin(string key, AfterSqlDataRecordLoaded plugin)
-        {
-            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
-            if (plugin == null) throw new ArgumentNullException(nameof(plugin));
-
-            _defaultOperations.Add(key, plugin);
-        }
-
-        public static void RegisterReadPlugin<TRecord>(Action<TRecord, IDataRecord> plugin)
-            => RegisterReadPlugin(typeof(TRecord).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TRecord)a, b); }));
 
         private static ICrudOperations GetBestOperations(Type type)
         {

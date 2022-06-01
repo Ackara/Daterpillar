@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Foo
 
         public virtual string[] GetColumns()
         {
-            return ColumnMap.GetColumns(GetTableName());
+            return ColumnMap.GetColumnNames(GetTableName());
         }
 
         public virtual object[] GetValues()
