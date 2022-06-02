@@ -19,10 +19,10 @@ namespace Acklann.Daterpillar.Tests
 
             CrudOperations.Configure((builder) =>
             {
-                builder.OverrideSqlValueArrayItem<Contact, FullName>(x => x.Name, (context, value) =>
+                builder.OverrideSqlValueArrayItem<Contact>((m => m.Name), (context, record) =>
                 {
-                    context.SetValue("first_name", value.FirstName.Serialize());
-                    context.SetValue("last_name", value.LastName.Serialize());
+                    context.SetValue(record.Name.FirstName.Serialize());
+                    context.SetValue(record.Name.LastName.Serialize());
                 });
 
                 builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>

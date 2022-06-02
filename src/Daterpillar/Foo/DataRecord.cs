@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Foo
 {
+    [Obsolete]
     public abstract class DataRecord : DataViewRecord, IInsertable
     {
         public DataRecord() : this(null)

@@ -15,18 +15,18 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return result;
         }
 
-        public void OverrideSqlValueArrayItem(string key, SqlValueArrayWriting plugin)
+        public void OverrideSqlValueArrayItem(string key, SqlValueArrayBuilding plugin)
         {
-            _create.Add(new KeyValuePair<string, SqlValueArrayWriting>(key, plugin));
+            _create.Add(new KeyValuePair<string, SqlValueArrayBuilding>(key, plugin));
         }
 
-        public void OverrideSqlValueArrayItem<TRecord, TColumn>(string propertyName, Action<SqlValueArrayPluginContext, TColumn> plugin)
-            => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, propertyName), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
+        public void OverrideSqlValueArrayItem<TTable>(string propertyName, Action<SqlValueArrayPluginContext, TTable> plugin)
+        => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TTable).FullName, propertyName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
 
-        public void OverrideSqlValueArrayItem<TRecord, TColumn>(Expression<Func<TRecord, object>> propertySelector, Action<SqlValueArrayPluginContext, TColumn> plugin)
+        public void OverrideSqlValueArrayItem<TRecord>(Expression<Func<TRecord, object>> propertySelector, Action<SqlValueArrayPluginContext, TRecord> plugin)
         {
             var expression = (MemberExpression)propertySelector.Body;
-            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
+            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TRecord)b); }));
         }
 
         public void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin)
@@ -41,7 +41,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
         #region Backing Members
 
-        private readonly ICollection<KeyValuePair<string, SqlValueArrayWriting>> _create = new List<KeyValuePair<string, SqlValueArrayWriting>>();
+        private readonly ICollection<KeyValuePair<string, SqlValueArrayBuilding>> _create = new List<KeyValuePair<string, SqlValueArrayBuilding>>();
         private readonly ICollection<KeyValuePair<string, AfterSqlDataRecordLoaded>> _read = new List<KeyValuePair<string, AfterSqlDataRecordLoaded>>();
         private readonly ICollection<ICrudOperations> _operations = new List<ICrudOperations>();
 

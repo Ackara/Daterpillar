@@ -6,11 +6,11 @@ namespace Acklann.Daterpillar.Scripting.Writers
 {
     public interface IDefaultCrudOperationsConfigBuilder
     {
-        void OverrideSqlValueArrayItem(string key, SqlValueArrayWriting plugin);
+        void OverrideSqlValueArrayItem(string key, SqlValueArrayBuilding plugin);
 
-        void OverrideSqlValueArrayItem<TTable, TColumn>(string propertyName, Action<SqlValueArrayPluginContext, TColumn> plugin);
+        void OverrideSqlValueArrayItem<TTable>(string memberName, Action<SqlValueArrayPluginContext, TTable> plugin);
 
-        void OverrideSqlValueArrayItem<TTable, TColumn>(Expression<Func<TTable, object>> propertySelector, Action<SqlValueArrayPluginContext, TColumn> plugin);
+        void OverrideSqlValueArrayItem<TTable>(Expression<Func<TTable, object>> memberSelector, Action<SqlValueArrayPluginContext, TTable> plugin);
 
         void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin);
 

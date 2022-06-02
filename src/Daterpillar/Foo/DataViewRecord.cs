@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace Acklann.Daterpillar.Foo
 {
+    [Obsolete]
     public abstract class DataViewRecord : ISelectable
     {
         public DataViewRecord() : this(null)
