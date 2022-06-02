@@ -8,9 +8,9 @@ namespace Acklann.Daterpillar.Scripting.Writers
     {
         void OverrideSqlValueArrayItem(string key, SqlValueArrayWriting plugin);
 
-        void OverrideSqlValueArrayItem<TTable, TColumn>(string propertyName, Action<CreateOperationContext, TColumn> plugin);
+        void OverrideSqlValueArrayItem<TTable, TColumn>(string propertyName, Action<SqlValueArrayPluginContext, TColumn> plugin);
 
-        void OverrideSqlValueArrayItem<TTable, TColumn>(Expression<Func<TTable, object>> propertySelector, Action<CreateOperationContext, TColumn> plugin);
+        void OverrideSqlValueArrayItem<TTable, TColumn>(Expression<Func<TTable, object>> propertySelector, Action<SqlValueArrayPluginContext, TColumn> plugin);
 
         void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin);
 

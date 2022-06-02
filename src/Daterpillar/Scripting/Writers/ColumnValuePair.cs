@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
 namespace Acklann.Daterpillar.Scripting.Writers
 {
-	public struct ColumnValuePair
-	{
+    public struct ColumnValuePair
+    {
+        public ColumnValuePair(string column, object value)
+        {
+            ColumnName = column;
+            Value = value;
+        }
+
         public string ColumnName { get; set; }
 
-        public bool Value { get; set; }
+        public object Value { get; set; }
     }
 }

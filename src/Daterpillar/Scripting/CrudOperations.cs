@@ -38,7 +38,7 @@ namespace Acklann.Daterpillar.Scripting
         public static IEnumerable<TRecord> Read<TRecord>(IDataReader resultSet)
             => Read(typeof(TRecord), resultSet).Cast<TRecord>();
 
-        public static long Update(object record, Language dialect)
+        public static string Update(object record, Language dialect)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 

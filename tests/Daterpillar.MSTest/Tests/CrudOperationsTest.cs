@@ -21,8 +21,8 @@ namespace Acklann.Daterpillar.Tests
             {
                 builder.OverrideSqlValueArrayItem<Contact, FullName>(x => x.Name, (context, value) =>
                 {
-                    context.SetValue(value.FirstName.Serialize());
-                    context.SetValue(value.LastName.Serialize());
+                    context.SetValue("first_name", value.FirstName.Serialize());
+                    context.SetValue("last_name", value.LastName.Serialize());
                 });
 
                 builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>
@@ -114,6 +114,27 @@ namespace Acklann.Daterpillar.Tests
             result.Name.LastName.ShouldBe(record.Name.LastName);
         }
 
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_generate_update_statement_for_record(Language connectionType)
+        {
+            // Arrange
+
+            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            var record = AutoFaker.Generate<Contact>();
+
+            // Act
+
+            var sql = CrudOperations.Create(record, connectionType);
+            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+
+            sql = CrudOperations.Update(record, connectionType);
+            System.Diagnostics.Debug.WriteLine(sql);
+
+            // Assert
+
+            SqlValidator.TryExecute(connection, sql, out error).ShouldBeTrue(error);
+        }
+
         #region Backing Members
 
         private static System.Data.IDbConnection CreateConnection()
@@ -133,13 +154,20 @@ namespace Acklann.Daterpillar.Tests
         private static IEnumerable<object[]> GetReadTestCases()
         {
             var record3 = AutoFaker.Generate<TrackSequence>();
-            yield return new object[] { $"select * from {nameof(TrackSequence)} where {nameof(TrackSequence.SongId)}={record3.SongId}", record3 };
+            yield return new object[] { $"select * from {nameof(TrackSequence)} where {nameof(TrackSequence.SongId)}='{record3.SongId}'", record3 };
 
             var record2 = AutoFaker.Generate<Contact>();
             yield return new object[] { $"select * from contact where Id={record2.Id}", record2 };
 
             var record1 = AutoFaker.Generate<Artist>();
             yield return new object[] { $"select * from artist where Name='{record1.Name}'", record1 };
+        }
+
+        private static IEnumerable<object[]> GetSupportedLang()
+        {
+            yield return new object[] { Language.TSQL };
+            yield return new object[] { Language.MySQL };
+            yield return new object[] { Language.SQLite };
         }
 
         private static readonly Language[] _supportedLanguages = new[]

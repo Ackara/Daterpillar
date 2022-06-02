@@ -20,10 +20,10 @@ namespace Acklann.Daterpillar.Scripting.Writers
             _create.Add(new KeyValuePair<string, SqlValueArrayWriting>(key, plugin));
         }
 
-        public void OverrideSqlValueArrayItem<TRecord, TColumn>(string propertyName, Action<CreateOperationContext, TColumn> plugin)
+        public void OverrideSqlValueArrayItem<TRecord, TColumn>(string propertyName, Action<SqlValueArrayPluginContext, TColumn> plugin)
             => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, propertyName), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
 
-        public void OverrideSqlValueArrayItem<TRecord, TColumn>(Expression<Func<TRecord, object>> propertySelector, Action<CreateOperationContext, TColumn> plugin)
+        public void OverrideSqlValueArrayItem<TRecord, TColumn>(Expression<Func<TRecord, object>> propertySelector, Action<SqlValueArrayPluginContext, TColumn> plugin)
         {
             var expression = (MemberExpression)propertySelector.Body;
             OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayWriting((a, b) => { plugin.Invoke(a, (TColumn)b); }));
