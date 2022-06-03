@@ -12,6 +12,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             var result = new DefaultCrudOperations();
             foreach (var plugin in _create) result.Add(plugin.Key, plugin.Value);
             foreach (var plugin in _read) result.Add(plugin.Key, plugin.Value);
+
             return result;
         }
 
@@ -38,6 +39,13 @@ namespace Acklann.Daterpillar.Scripting.Writers
         {
             _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(typeof(TRecord).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TRecord)a, b); })));
         }
+
+        public void Add(ICrudOperations operations)
+        {
+            _operations.Add(operations);
+        }
+
+        internal IEnumerable<ICrudOperations> GetCrudOperations() => _operations;
 
         #region Backing Members
 

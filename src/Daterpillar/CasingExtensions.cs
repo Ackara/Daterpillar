@@ -6,7 +6,7 @@ namespace Acklann.Daterpillar
     /// <summary>
     /// Provides extension methods for string objects.
     /// </summary>
-    public static class StringExtensions
+    public static class CasingExtensions
     {
         /// <summary>
         /// Converts the specified string to pascal case.

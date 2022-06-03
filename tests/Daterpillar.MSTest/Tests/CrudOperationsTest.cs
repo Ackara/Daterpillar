@@ -21,8 +21,8 @@ namespace Acklann.Daterpillar.Tests
             {
                 builder.OverrideSqlValueArrayItem<Contact>((m => m.Name), (context, record) =>
                 {
-                    context.SetValue(record.Name.FirstName.Serialize());
-                    context.SetValue(record.Name.LastName.Serialize());
+                    context.SetValue(record.Name.FirstName);
+                    context.SetValue(record.Name.LastName);
                 });
 
                 builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>
@@ -37,7 +37,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod, DynamicData(nameof(GetCreateTestCases), DynamicDataSourceType.Method)]
-        public void Can_generate_insert_statment_for_data_object(Language connectionType, object record)
+        public void Can_build_insert_command_from_object(Language connectionType, object record)
         {
             // Arrange
 
@@ -115,7 +115,7 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
-        public void Can_generate_update_statement_for_record(Language connectionType)
+        public void Can_build_update_command_from_object(Language connectionType)
         {
             // Arrange
 
@@ -135,12 +135,45 @@ namespace Acklann.Daterpillar.Tests
             SqlValidator.TryExecute(connection, sql, out error).ShouldBeTrue(error);
         }
 
-        #region Backing Members
-
-        private static System.Data.IDbConnection CreateConnection()
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_build_delete_command_from_object(Language connectionType)
         {
-            throw new System.NotImplementedException();
+            // Arrange
+
+            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            var record = AutoFaker.Generate<Contact>();
+
+            // Act
+
+            var sql = CrudOperations.Create(record, connectionType);
+            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+
+            sql = CrudOperations.Delete(record, connectionType);
+            System.Diagnostics.Debug.WriteLine(sql);
+
+            // Assert
+
+            SqlValidator.TryExecute(connection, sql, out error).ShouldBeTrue(error);
         }
+
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_execute_insert_command(Language connectionType)
+        {
+            // Arrange
+
+            using var connection = SqlValidator.CreateConnection(connectionType);
+            var record = AutoFaker.Generate<Song>();
+
+            // Act
+
+            var result = DbConnectionExtensions.Insert(connection, connectionType, record);
+
+            // Assert
+
+            result.Success.ShouldBeTrue(result.ErrorMessage);
+        }
+
+        #region Backing Members
 
         private static IEnumerable<object[]> GetCreateTestCases()
         {

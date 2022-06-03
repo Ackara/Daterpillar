@@ -45,8 +45,41 @@ namespace Acklann.Daterpillar.Scripting.Writers
                    .Append("(")
                    .Append(string.Join(", ", BuildValueArray(record, recordType, columns).Select(x => x.Value)))
                    .Append(")");
-
             return builder.ToString();
+        }
+
+        public void Create2(IDbCommand command, object record, Language dialect)
+        {
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ColumnMap.Register(recordType);
+            string tableName = recordType.GetTableName();
+            ColumnMemberPair[] columns = ColumnMap.GetColumns(tableName);
+
+            var builder = new StringBuilder();
+            builder.Append("INSERT INTO ")
+                   .Append(SqlExtensions.EscapeColumn(tableName, dialect))
+                   .Append(" (")
+                   .Append(string.Join(", ", (from x in columns select SqlExtensions.EscapeColumn(x.ColumnName, dialect))))
+                   .Append(")")
+                   .Append(" VALUES ")
+                   .Append("(")
+                   .Append(string.Join(", ", columns.Select(x => $"@{x.ColumnName}")))
+                   .Append(")");
+
+            command.CommandType = CommandType.Text;
+            command.CommandText = builder.ToString();
+            System.Diagnostics.Debug.WriteLine(command.CommandText);
+            foreach (ColumnValuePair arg in BuildValueArray(record, recordType, columns))
+            {
+                IDbDataParameter parameter = command.CreateParameter();
+                parameter.ParameterName = arg.ColumnName;
+                parameter.Value = arg.Value;
+                System.Diagnostics.Debug.WriteLine(parameter.DbType);
+                
+                command.Parameters.Add(parameter);
+            }
         }
 
         public object Read(IDataRecord data, Type recordType)
@@ -89,9 +122,21 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return builder.ToString();
         }
 
-        public string Delete(object model, Language dialect)
+        public string Delete(object record, Language dialect)
         {
-            throw new NotImplementedException();
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ColumnMap.Register(recordType);
+            string tableName = recordType.GetTableName();
+            ColumnValuePair[] whereArray = BuildValueArray(record, recordType, ColumnMap.GetIdentityColumns(tableName));
+
+            var builder = new StringBuilder();
+            builder.Append("DELETE FROM ")
+                   .Append(tableName.EscapeColumn(dialect))
+                   .Append(" WHERE ")
+                   .Append(string.Join(", ", whereArray.Select(x => $"{x.ColumnName.EscapeColumn(dialect)}={x.Value}")));
+            return builder.ToString();
         }
 
         bool ICrudOperations.CanAccept(Type type) => true;

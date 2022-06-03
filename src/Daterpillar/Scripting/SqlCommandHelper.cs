@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Acklann.Daterpillar.Scripting
 {
+    [System.Obsolete]
     public static class SqlCommandHelper
     {
         public static QueryResult Select(this IDbConnection connection, string query, Type recordType)
