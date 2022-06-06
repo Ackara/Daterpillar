@@ -1,28 +1,9 @@
 using System;
-using System.Linq;
-using System.Text;
 
 namespace Acklann.Daterpillar.Scripting
 {
     public static class SqlExtensions
     {
-        public static string ToInsertCommand(Foo.IInsertable model, Language dialect)
-        {
-            var builder = new StringBuilder();
-            builder.Append("INSERT INTO ")
-                   .Append(EscapeColumn(model.GetTableName(), dialect))
-                   .Append(" (")
-                   .Append(string.Join(", ", (from x in model.GetColumns() select EscapeColumn(x, dialect))))
-                   .Append(")")
-                   .Append(" VALUES ")
-                   .Append("(")
-                   .Append(string.Join(", ", (from x in model.GetValues() select x)))
-                   .Append(")")
-                   ;
-
-            return builder.ToString();
-        }
-
         public static string EscapeColumn(this string columnName, Language syntax = Language.SQL)
         {
             switch (syntax)

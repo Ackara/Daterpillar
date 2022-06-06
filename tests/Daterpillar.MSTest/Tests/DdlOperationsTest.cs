@@ -1,8 +1,7 @@
 ﻿using Acklann.Daterpillar.Annotations;
-using Acklann.Daterpillar.Prototyping;
-using Acklann.Daterpillar.Scripting;
-using Acklann.Daterpillar.Scripting.Writers;
 using Acklann.Daterpillar.Modeling;
+using Acklann.Daterpillar.Prototyping;
+using Acklann.Daterpillar.Scripting.Writers;
 using ApprovalTests.Namers;
 using AutoBogus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,128 +16,13 @@ using SchemaType = Acklann.Daterpillar.Annotations.SchemaType;
 namespace Acklann.Daterpillar.Tests
 {
     [TestClass]
-    public class ScriptingTest
+    public class DdlOperationsTest
     {
         [TestInitialize]
         public void Setup()
         {
             SqlValidator.CreateDatabase(_languages);
         }
-
-        // ==================== CRUD ==================== //
-
-        [TestMethod]
-        [DynamicData(nameof(GetSampleRecords), DynamicDataSourceType.Method)]
-        public void Can_execute_insert_command(Foo.IInsertable model, Language connectionType)
-        {
-            // Arrange
-            var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
-            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
-            using var scenario = ApprovalResults.ForScenario(label);
-
-            // Act
-            var command = SqlExtensions.ToInsertCommand(model, connectionType);
-            var result = SqlCommandHelper.ExecuteCommand(connection, command, connectionType);
-
-            // Assert
-            result.ErrorCode.ShouldBe(0, result.ErrorMessage);
-            result.ErrorMessage.ShouldBeNullOrEmpty(result.ErrorMessage);
-            result.Changes.ShouldBe(1, result.ErrorMessage);
-            command.ShouldNotBeNullOrWhiteSpace();
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(GetLanguages), DynamicDataSourceType.Method)]
-        public void Can_execute_select_command(Language connectionType)
-        {
-            // Arrange
-            var model = AutoFaker.Generate<Artist>();
-
-            var label = string.Concat(model.GetType().Name, '-', connectionType).ToLower();
-            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
-            using var scenario = ApprovalResults.ForScenario(label);
-
-            // Act
-            var insertResult = SqlCommandHelper.Insert(connection, connectionType, model);
-            if (insertResult == false) Assert.Fail(insertResult.ErrorMessage);
-
-            var query = new QueryBuilder()
-                .SelectAll()
-                .From(model.GetTableName())
-                .Where("Name", model.Name);
-
-            var resultSet1 = SqlCommandHelper.Select<Artist>(connection, query);
-            var resultSet2 = SqlCommandHelper.Select(connection, query, model.GetType());
-
-            // Assert
-            resultSet1.ErrorMessage.ShouldBeNullOrWhiteSpace(resultSet1.ErrorMessage);
-            resultSet1.Data.ShouldNotBeNull();
-            resultSet1.Data.ShouldAllBe(x => x.Name == model.Name);
-
-            resultSet2.Data.ShouldNotBeNull();
-            resultSet2.Data.ShouldBeAssignableTo(typeof(IEnumerable<Foo.ISelectable>));
-        }
-
-        [TestMethod]
-        public void Can_build_select_statement()
-        {
-            // Arrange
-            var sut = new QueryBuilder();
-
-            // Act
-            sut.SelectAll()
-                .From("profile");
-            var case1 = sut.ToString();
-
-            sut.Select("id", "name")
-                .From("profile")
-                .Where($"id = 234");
-            var case2 = sut.ToString();
-
-            sut.OrderBy("name")
-                .Limit(10);
-            var case3 = sut.ToString(Language.TSQL);
-
-            sut.Limit(5).Offset(10);
-            var case4 = sut.ToString(Language.TSQL);
-
-            var case5 = sut.ToString(Language.MySQL);
-
-            var case6 = sut.ToString();
-
-            // Assert
-            case1.ShouldMatch(@"(?i)select\s+\*\s+from profile\s*;");
-            case2.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+;");
-            case3.ShouldMatch(@"(?i)select top 10\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+;");
-            case4.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+offset \d+ rows fetch next \d+ rows only\s+;");
-            case5.ShouldMatch(@"(?i)select\s+id, name\s+from profile\s+where id = 234\s+order by\s+name\s+limit \d+\s+offset \d+\s+;");
-        }
-
-        [TestMethod]
-        public void Can_build_update_statement()
-        {
-            // Arrange
-            var builder = new UpdateBuilder("foo", Language.SQL);
-
-            // Act
-            builder.Set("id", 123)
-                .Set("name", "abc")
-                .Where("id", "test");
-            var case1 = builder.ToString();
-
-            builder.Where("id", "test").And("name", "jane");
-            var case2 = builder.ToString();
-
-            builder.Set("age", 12);
-            var case3 = builder.ToString();
-
-            // Assert
-            case1.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc' where id='test';");
-            case2.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc' where id='test' and name='jane';");
-            case3.ShouldMatch(@"(?i)update foo set id='?123'?, name='abc', age='?12'? where id='test' and name='jane';");
-        }
-
-        // ==================== DDL ==================== //
 
         [TestMethod]
         [UseApprovalSubdirectory("../test-cases/approved-results")]
@@ -148,7 +32,7 @@ namespace Acklann.Daterpillar.Tests
             // Arrange
             var sut = new Modeling.Migrator();
             string fileName = $"{label}.{dialect}.sql".ToLower();
-            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(ScriptingTest), fileName);
+            string scriptFile = Path.Combine(Path.GetTempPath(), nameof(Daterpillar), nameof(DdlOperationsTest), fileName);
 
             using var stream = new MemoryStream();
             using var connection = SqlValidator.ClearDatabase(dialect);
@@ -187,7 +71,7 @@ namespace Acklann.Daterpillar.Tests
         [DataRow(typeof(MySql.Data.MySqlClient.MySqlConnection), Language.MySQL)]
         public void Can_determine_language_from_the_connection_type(Type connectionType, Language excepectedValue)
         {
-            Scripting.SqlCommandHelper.GetLanguage(connectionType).ShouldBe(excepectedValue);
+            Scripting.DbConnectionExtensions.GetLanguage(connectionType).ShouldBe(excepectedValue);
         }
 
         #region Backing Members

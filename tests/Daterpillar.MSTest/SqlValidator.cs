@@ -37,6 +37,32 @@ namespace Acklann.Daterpillar
             return false;
         }
 
+        public static bool TryExecute(this IDbConnection connection, IDbCommand command, out string errorMsg)
+        {
+            errorMsg = null;
+            try
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMsg = $@"
+********** !!! SCRIPT FAILED !!! **********
+{ex.Message}
+*****************************************
+
+".TrimStart();
+            }
+            finally
+            {
+                command.Dispose();
+            }
+
+            return false;
+        }
+
         public static IDbConnection ClearDatabase(Language connectionType)
         {
             switch (connectionType)

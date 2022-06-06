@@ -4,7 +4,7 @@ using System;
 namespace Acklann.Daterpillar.Prototyping
 {
     [Table("artist")]
-    public class Artist: Foo.DataRecord
+    public class Artist
     {
         [Column("id", AutoIncrement = true)]
         public int Id { get; set; }

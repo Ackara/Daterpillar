@@ -45,15 +45,17 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            var sql = CrudOperations.Create(record, connectionType);
+            var command = connection.CreateCommand();
+            System.Diagnostics.Debug.WriteLine(command.CommandText);
+            CrudOperations.Create(command, record, connectionType);
 
             // Assert
 
-            SqlValidator.TryExecute(connection, sql, out string error).ShouldBeTrue(string.Concat(error, '\n', sql));
+            SqlValidator.TryExecute(connection, command, out string error).ShouldBeTrue(error);
         }
 
         [DataTestMethod, DynamicData(nameof(GetReadTestCases), DynamicDataSourceType.Method)]
-        public void Can_instantiate_objects_from_sql_result(string query, object record)
+        public void Can_load_array_from_IDataRecord(string query, object record)
         {
             // Arrange
 
@@ -61,13 +63,14 @@ namespace Acklann.Daterpillar.Tests
             var recordType = record.GetType();
             var connectionType = Language.SQLite;
             using var connection = SqlValidator.CreateConnection(connectionType);
+            var command = connection.CreateCommand();
 
             // Act
 
-            var sql = CrudOperations.Create(record, connectionType);
-            if (!SqlValidator.TryExecute(connection, sql, out string errorMessage)) Assert.Fail(errorMessage);
+            CrudOperations.Create(command, record, connectionType);
+            if (!SqlValidator.TryExecute(connection, command, out string errorMessage)) Assert.Fail(errorMessage);
 
-            using (var command = connection.CreateCommand())
+            using (command = connection.CreateCommand())
             {
                 command.CommandText = query;
                 using (var dataset = command.ExecuteReader())
@@ -89,16 +92,17 @@ namespace Acklann.Daterpillar.Tests
 
             var connectionType = Language.SQLite;
             using var connection = SqlValidator.CreateConnection(connectionType);
+            var command = connection.CreateCommand();
 
             var record = AutoFaker.Generate<Contact>();
             Contact result;
 
             // Act
 
-            var sql = CrudOperations.Create(record, connectionType);
-            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+            CrudOperations.Create(command, record, connectionType);
+            if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
-            using (var command = connection.CreateCommand())
+            using (command = connection.CreateCommand())
             {
                 command.CommandText = $"select * from contact where id={record.Id}";
                 using (var dataset = command.ExecuteReader())
@@ -120,19 +124,21 @@ namespace Acklann.Daterpillar.Tests
             // Arrange
 
             using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            var command = connection.CreateCommand();
             var record = AutoFaker.Generate<Contact>();
 
             // Act
 
-            var sql = CrudOperations.Create(record, connectionType);
-            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+            CrudOperations.Create(command, record, connectionType);
+            if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
-            sql = CrudOperations.Update(record, connectionType);
-            System.Diagnostics.Debug.WriteLine(sql);
+            command = connection.CreateCommand();
+            CrudOperations.Update(command, record, connectionType);
+            System.Diagnostics.Debug.WriteLine(command.CommandText);
 
             // Assert
 
-            SqlValidator.TryExecute(connection, sql, out error).ShouldBeTrue(error);
+            SqlValidator.TryExecute(connection, command, out error).ShouldBeTrue(error);
         }
 
         [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
@@ -141,19 +147,21 @@ namespace Acklann.Daterpillar.Tests
             // Arrange
 
             using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            var command = connection.CreateCommand();
             var record = AutoFaker.Generate<Contact>();
 
             // Act
 
-            var sql = CrudOperations.Create(record, connectionType);
-            if (!SqlValidator.TryExecute(connection, sql, out string error)) Assert.Fail(error);
+            CrudOperations.Create(command, record, connectionType);
+            if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
-            sql = CrudOperations.Delete(record, connectionType);
-            System.Diagnostics.Debug.WriteLine(sql);
+            command = connection.CreateCommand();
+            CrudOperations.Delete(command, record, connectionType);
+            System.Diagnostics.Debug.WriteLine(command.CommandText);
 
             // Assert
 
-            SqlValidator.TryExecute(connection, sql, out error).ShouldBeTrue(error);
+            SqlValidator.TryExecute(connection, command, out error).ShouldBeTrue(error);
         }
 
         [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
@@ -166,11 +174,62 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            var result = DbConnectionExtensions.Insert(connection, connectionType, record);
+            var result = DbConnectionExtensions.Insert(connection, record, connectionType);
 
             // Assert
 
             result.Success.ShouldBeTrue(result.ErrorMessage);
+        }
+
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_execute_update_command(Language connectionType)
+        {
+            // Arrange
+
+            using var connection = SqlValidator.CreateConnection(connectionType);
+            var contact = AutoFaker.Generate<Contact>();
+            var faker = new Bogus.Faker();
+
+            // Act
+
+            var result = DbConnectionExtensions.Insert(connection, contact, connectionType);
+            if (!result.Success) Assert.Fail(result.ErrorMessage);
+
+            contact.Name = new FullName { FirstName = faker.Name.FirstName(), LastName = faker.Name.LastName() };
+            result = DbConnectionExtensions.Update(connection, contact, connectionType);
+            var record = DbConnectionExtensions.SelectOne<Contact>(connection, $"select * from contact where {nameof(Contact.Id)}='{contact.Id}'");
+
+            // Assert
+
+            result.Success.ShouldBeTrue(result.ErrorMessage);
+            result.Changes.ShouldBe(1);
+            record.Success.ShouldBeTrue(record.ErrorMessage);
+            record.Data.Name.FirstName.ShouldBe(contact.Name.FirstName);
+            record.Data.Id.ShouldBe(contact.Id);
+        }
+
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_execute_delete_command(Language connectionType)
+        {
+            /// Arrange
+
+            using var connection = SqlValidator.CreateConnection(connectionType);
+            var contact = AutoFaker.Generate<Contact>();
+            var faker = new Bogus.Faker();
+
+            // Act
+
+            var result = DbConnectionExtensions.Insert(connection, contact, connectionType);
+            if (!result.Success) Assert.Fail(result.ErrorMessage);
+
+            result = DbConnectionExtensions.Delete(connection, contact, connectionType);
+            var record = DbConnectionExtensions.SelectOne<Contact>(connection, $"select * from contact where {nameof(Contact.Id)}='{contact.Id}'");
+
+            // Assert
+
+            result.Success.ShouldBeTrue(result.ErrorMessage);
+            result.Changes.ShouldBe(1);
+            record.Success.ShouldBeFalse(record.ErrorMessage);
         }
 
         #region Backing Members
@@ -198,9 +257,10 @@ namespace Acklann.Daterpillar.Tests
 
         private static IEnumerable<object[]> GetSupportedLang()
         {
-            yield return new object[] { Language.TSQL };
-            yield return new object[] { Language.MySQL };
-            yield return new object[] { Language.SQLite };
+            foreach (var lang in _supportedLanguages)
+            {
+                yield return new object[] { lang };
+            }
         }
 
         private static readonly Language[] _supportedLanguages = new[]

@@ -1,8 +1,8 @@
 namespace Acklann.Daterpillar.Scripting
 {
-    public readonly struct QueryResult
+    public readonly struct SqlQueryResult
     {
-        public QueryResult(object data, string message = default)
+        public SqlQueryResult(object data, string message = default)
         {
             Data = data;
             ErrorMessage = message;
@@ -19,7 +19,7 @@ namespace Acklann.Daterpillar.Scripting
 
         #region Operator
 
-        public static implicit operator bool(QueryResult obj) => obj.Success;
+        public static implicit operator bool(SqlQueryResult obj) => obj.Success;
 
         #endregion Operator
     }
@@ -50,7 +50,7 @@ namespace Acklann.Daterpillar.Scripting
 
         public static implicit operator bool(QueryResult<T> obj) => obj.Success;
 
-        public static implicit operator QueryResult(QueryResult<T> obj) => new QueryResult(obj.Data, obj.ErrorMessage);
+        public static implicit operator SqlQueryResult(QueryResult<T> obj) => new SqlQueryResult(obj.Data, obj.ErrorMessage);
 
         #endregion Operator
     }

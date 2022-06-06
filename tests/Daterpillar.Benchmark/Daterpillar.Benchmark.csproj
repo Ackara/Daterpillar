@@ -9,9 +9,9 @@
   <PropertyGroup>
 
     <Description>A library for generating SQL migration scripts.</Description>
-    <Version>12.0.27</Version>
-    <AssemblyVersion>12.0.27</AssemblyVersion>
-    <AssemblyFileVersion>12.0.27</AssemblyFileVersion>
+    <Version>13.0.4</Version>
+    <AssemblyVersion>13.0.4</AssemblyVersion>
+    <AssemblyFileVersion>13.0.4</AssemblyFileVersion>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>

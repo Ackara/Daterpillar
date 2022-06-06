@@ -275,6 +275,9 @@ Help_Backup/
 BenchmarkDotNet.Artifacts/
 !BenchmarkDotNet.Artifacts/results/
 
+# Generated Files
+*.runsettings
+
 # Sensitive Files
 connections.*
 credentials.*

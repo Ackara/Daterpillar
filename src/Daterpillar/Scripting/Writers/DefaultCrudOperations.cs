@@ -26,7 +26,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             _readPlugins.Add(key, plugin);
         }
 
-        public string Create(object record, Language dialect = Language.SQL)
+        public string CreateSql(object record, Language dialect = Language.SQL)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -48,7 +48,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return builder.ToString();
         }
 
-        public void Create2(IDbCommand command, object record, Language dialect)
+        public void Create(IDbCommand command, object record, Language dialect)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -76,8 +76,6 @@ namespace Acklann.Daterpillar.Scripting.Writers
                 IDbDataParameter parameter = command.CreateParameter();
                 parameter.ParameterName = arg.ColumnName;
                 parameter.Value = arg.Value;
-                System.Diagnostics.Debug.WriteLine(parameter.DbType);
-                
                 command.Parameters.Add(parameter);
             }
         }
@@ -102,7 +100,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return record;
         }
 
-        public string Update(object record, Language dialect)
+        public string UpdateSql(object record, Language dialect)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -122,7 +120,29 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return builder.ToString();
         }
 
-        public string Delete(object record, Language dialect)
+        public void Update(IDbCommand command, object record, Language dialect)
+        {
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ColumnMap.Register(recordType);
+            string tableName = recordType.GetTableName();
+            ColumnValuePair[] setArray = BuildValueArray(record, recordType, ColumnMap.GetNonIdentityColumns(tableName));
+            ColumnValuePair[] whereArray = BuildValueArray(record, recordType, ColumnMap.GetIdentityColumns(tableName));
+
+            var builder = new StringBuilder();
+            builder.Append("UPDATE ")
+                   .Append(tableName.EscapeColumn(dialect))
+                   .Append(" SET ")
+                   .Append(string.Join(",", setArray.Select(x => $"{x.ColumnName.EscapeColumn(dialect)} = @{x.ColumnName}")))
+                   .Append(" WHERE ")
+                   .Append(string.Join(",", whereArray.Select(x => $"{x.ColumnName.EscapeColumn(dialect)} = @{x.ColumnName}")));
+            command.CommandText = builder.ToString();
+            command.CommandType = CommandType.Text;
+            SetParameters(command, setArray.Concat(whereArray));
+        }
+
+        public string DeleteSql(object record, Language dialect)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -137,6 +157,25 @@ namespace Acklann.Daterpillar.Scripting.Writers
                    .Append(" WHERE ")
                    .Append(string.Join(", ", whereArray.Select(x => $"{x.ColumnName.EscapeColumn(dialect)}={x.Value}")));
             return builder.ToString();
+        }
+
+        public void Delete(IDbCommand command, object record, Language dialect)
+        {
+            if (record == null) throw new ArgumentNullException(nameof(record));
+
+            Type recordType = record.GetType();
+            ColumnMap.Register(recordType);
+            string tableName = recordType.GetTableName();
+            ColumnValuePair[] whereArray = BuildValueArray(record, recordType, ColumnMap.GetIdentityColumns(tableName));
+
+            var builder = new StringBuilder();
+            builder.Append("DELETE FROM ")
+                   .Append(tableName.EscapeColumn(dialect))
+                   .Append(" WHERE ")
+                   .Append(string.Join(", ", whereArray.Select(x => $"{x.ColumnName.EscapeColumn(dialect)}=@{x.ColumnName}")));
+            command.CommandText = builder.ToString();
+            command.CommandType = CommandType.Text;
+            SetParameters(command, whereArray);
         }
 
         bool ICrudOperations.CanAccept(Type type) => true;
@@ -170,12 +209,14 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
         protected virtual object WriteValue(PropertyInfo member, object record)
         {
-            return SqlExtensions.Serialize(member.GetValue(record));
+            //return SqlExtensions.Serialize(member.GetValue(record));
+            return member.GetValue(record);
         }
 
         protected virtual object WriteValue(FieldInfo member, object record)
         {
-            return SqlExtensions.Serialize(member.GetValue(record));
+            return member.GetValue(record);
+            //return SqlExtensions.Serialize(member.GetValue(record));
         }
 
         protected object WriteValue(MemberInfo member, object instance)
@@ -222,6 +263,17 @@ namespace Acklann.Daterpillar.Scripting.Writers
             }
 
             return context.Array;
+        }
+
+        private void SetParameters(IDbCommand command, IEnumerable<ColumnValuePair> values)
+        {
+            foreach (ColumnValuePair arg in values)
+            {
+                IDbDataParameter parameter = command.CreateParameter();
+                parameter.ParameterName = arg.ColumnName;
+                parameter.Value = arg.Value;
+                command.Parameters.Add(parameter);
+            }
         }
 
         #endregion Backing Members

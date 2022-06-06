@@ -41,7 +41,7 @@
 		{
 			"fileName": "powershell.exe",
 			"workingDirectory": ".",
-			"arguments": "-ExecutionPolicy Bypass -NoProfile -NonInteractive -File build/startup.ps1"
+			"arguments": "-ExecutionPolicy Bypass -NonInteractive -File build/startup.ps1"
 		}
 	},
 	"-vs-binding":{"ProjectOpened":["restore","startup"]}

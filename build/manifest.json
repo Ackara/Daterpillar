@@ -8,9 +8,9 @@
   "icon": "icon.png",
   "tags": "sql migration orm flyway build",
   "version": {
-    "major": 12,
+    "major": 13,
     "minor": 0,
-    "patch": 27
+    "patch": 4
   },
   "branchVersionMap": {
     "default": "x.y.z-\\beta",

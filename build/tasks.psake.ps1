@@ -71,6 +71,20 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	$project = Join-Path $SolutionFolder "src/$SolutionName/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
 	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
+
+	$project = Join-Path $SolutionFolder "src/*.Targets/*.*proj" | Get-Item;
+	Write-Separator "dotnet publish '$($project.BaseName)-$version'";
+	Exec { &dotnet publish $project.FullName --output "$ArtifactsFolder/tools" --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
+	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
+	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
+
+	$nupkg = Join-Path $ArtifactsFolder "*.Targets*.nupkg" | Resolve-Path;
+	$zip = Join-Path $ArtifactsFolder "msbuild.zip";
+	Copy-Item $nupkg -Destination $zip -Force;
+	Expand-Archive $zip -DestinationPath "$ArtifactsFolder/msbuild";
+	Remove-Item $zip;
+
+	
 }
 
 Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
