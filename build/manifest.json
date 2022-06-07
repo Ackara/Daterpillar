@@ -9,8 +9,8 @@
   "tags": "sql migration orm flyway build",
   "version": {
     "major": 13,
-    "minor": 0,
-    "patch": 4
+    "minor": 1,
+    "patch": 0
   },
   "branchVersionMap": {
     "default": "x.y.z-\\beta",

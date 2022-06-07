@@ -1,12 +1,7 @@
+using Acklann.Daterpillar.Commands;
 using CommandLine;
-using Daterpillar.Tool.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Daterpillar.Tool
+namespace Acklann.Daterpillar
 {
     public class Program
     {
@@ -15,8 +10,8 @@ namespace Daterpillar.Tool
             // docs: https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create
 
             Parser.Default.ParseArguments<ExportCommand, GenerateCommand>(args)
-                .WithParsed<ExportCommand>((x) => x.Execute())
-                .WithParsed<GenerateCommand>((x) => x.Execute());
+                .WithParsed<ExportCommand>((o) => o.Execute())
+                .WithParsed<GenerateCommand>((o) => o.Execute());
         }
     }
 }

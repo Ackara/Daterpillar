@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace Daterpillar.Tool.Commands
+namespace Acklann.Daterpillar.Commands
 {
-    [Verb("export")]
-    public class ExportCommand
+    [Verb("export", HelpText = "Produces a schema file from a .NET project file.")]
+    public class ExportCommand : ICommand
     {
         [Option('p', "project", Required = true)]
         public string ProjectFile { get; set; }
@@ -18,13 +18,16 @@ namespace Daterpillar.Tool.Commands
         [Option('o', "output")]
         public string OutputFilePath { get; set; }
 
-        public void Execute()
+        public int Execute()
         {
             if (!File.Exists(ProjectFile)) throw new FileNotFoundException($"Could not find file at '{ProjectFile}'.");
-            if (string.IsNullOrEmpty(EntryType)) throw new ArgumentNullException(nameof(EntryType));
+            if (string.IsNullOrWhiteSpace(EntryType)) throw new ArgumentNullException(nameof(EntryType));
+            if (string.IsNullOrWhiteSpace(OutputFilePath)) OutputFilePath = Path.Combine(Path.GetDirectoryName(ProjectFile), "obj", $"{Path.GetFileNameWithoutExtension(ProjectFile)}.schema.xml");
 
             string generatorProgramPath = BuildExportProject(ProjectFile);
             CallExportProjectProgram(generatorProgramPath);
+
+            return 0;
         }
 
         private void CallExportProjectProgram(string projectFile)

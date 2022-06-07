@@ -7,9 +7,9 @@
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>13.0.4</Version>
-    <AssemblyVersion>13.0.4</AssemblyVersion>
-    <AssemblyFileVersion>13.0.4</AssemblyFileVersion>
+    <Version>13.1.0</Version>
+    <AssemblyVersion>13.1.0</AssemblyVersion>
+    <AssemblyFileVersion>13.1.0</AssemblyFileVersion>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
@@ -59,6 +59,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Daterpillar.Targets\Daterpillar.Targets.csproj" />
+    <ProjectReference Include="..\..\src\Daterpillar.Tool\Daterpillar.Tool.csproj" />
     <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
   </ItemGroup>
 

@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>13.0.4</Version>
-    <AssemblyVersion>13.0.4</AssemblyVersion>
-    <AssemblyFileVersion>13.0.4</AssemblyFileVersion>
+    <Version>13.1.0</Version>
+    <AssemblyVersion>13.1.0</AssemblyVersion>
+    <AssemblyFileVersion>13.1.0</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>

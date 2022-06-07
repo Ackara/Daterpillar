@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Daterpillar.Tool": {
+      "commandName": "Project",
+      "commandLineArgs": "export help -p \"a\" -t \"b\" -l mysql"
+    }
+  }
+}

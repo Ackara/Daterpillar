@@ -1,0 +1,23 @@
+using Acklann.Daterpillar.Modeling;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+namespace ExportApp
+{{
+    public class Program
+    {{
+        public static void Main(string[] args)
+        {{
+            string exportPath = @"{1}";
+
+            Assembly assembly = typeof({0}).Assembly;
+            Schema schema = SchemaFactory.CreateFrom(assembly);
+            using (Stream file = new FileStream(exportPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {{
+                schema.WriteTo(file);
+            }}
+        }}
+    }}
+}}
