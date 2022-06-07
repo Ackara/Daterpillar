@@ -7,9 +7,9 @@
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>13.1.9</Version>
-    <AssemblyVersion>13.1.9</AssemblyVersion>
-    <AssemblyFileVersion>13.1.9</AssemblyFileVersion>
+    <Version>13.1.14</Version>
+    <AssemblyVersion>13.1.14</AssemblyVersion>
+    <AssemblyFileVersion>13.1.14</AssemblyFileVersion>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
