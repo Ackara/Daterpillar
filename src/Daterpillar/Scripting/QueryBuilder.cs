@@ -88,41 +88,6 @@ namespace Acklann.Daterpillar.Scripting
             return this;
         }
 
-        [System.Obsolete]
-        public string ToString(Language language)
-        {
-            _builder.Clear().Append("SELECT");
-
-            if (language == Language.TSQL && _limit > 0 && _offset < 1)
-                _builder.AppendLine($" TOP {_limit}");
-            else
-                _builder.AppendLine();
-
-            _builder.AppendLine(_select)
-                    .AppendLine($"FROM {_from}");
-
-            if (!string.IsNullOrEmpty(_where))
-                _builder.AppendLine($"WHERE {_where}");
-
-            if (!string.IsNullOrEmpty(_group))
-                _builder.AppendLine($"GROUP BY {_group}");
-
-            if (!string.IsNullOrEmpty(_order))
-                _builder.AppendLine($"ORDER BY {_order}");
-
-            if (language == Language.TSQL && _offset > 0)
-                _builder.AppendLine($"OFFSET {_offset} ROWS FETCH NEXT {_limit} ROWS ONLY");
-
-            if (language != Language.TSQL && _limit > 0)
-                _builder.AppendLine($"LIMIT {_limit}");
-
-            if (language != Language.TSQL && _offset > 0)
-                _builder.AppendLine($"OFFSET {_offset}");
-
-            _builder.Append(';');
-            return _builder.ToString();
-        }
-
         public override string ToString()
         {
             _builder.Clear().Append("SELECT");
@@ -159,10 +124,7 @@ namespace Acklann.Daterpillar.Scripting
 
         #region Operators
 
-        public static implicit operator string(QueryBuilder obj)
-        {
-            return obj.ToString(obj._language);
-        }
+        public static implicit operator string(QueryBuilder obj) => obj.ToString();
 
         #endregion Operators
 
