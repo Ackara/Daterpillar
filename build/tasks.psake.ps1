@@ -155,6 +155,7 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 		Push-Location $SolutionFolder;
 		Exec { &git add .;}
 		Exec { &git commit --message "increment version to '$newVersion'."; }
+		Exec { &git tag --annotate "v$newVersion" --message "version $newVersion."; }
 	}
 	finally { Pop-Location; }
 }
