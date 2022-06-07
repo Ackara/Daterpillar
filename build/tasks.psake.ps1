@@ -153,8 +153,8 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 	try
 	{
 		Push-Location $SolutionFolder;
-		#Exec { &git add .;}
-		#Exec { &git commit --message "increment version to '$newVersion'."; }
+		Exec { &git add .;}
+		Exec { &git commit --message "increment version to '$newVersion'."; }
 	}
 	finally { Pop-Location; }
 }
