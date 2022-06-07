@@ -41,7 +41,7 @@ namespace Acklann.Daterpillar.Tests
             File.ReadAllText(scriptPath).ShouldNotBeNullOrWhiteSpace();
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Can_generate_schema_file_from_project_file()
         {
             // Arrange

@@ -138,8 +138,8 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 	Assert ((&git status | Out-String) -match 'nothing to commit') "You must commit changes before running this task.";
 	
 	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch | Edit-NcrementManifest $ManifestFilePath;
-	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName;
-
+	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber -Format "C";
+	
 	foreach ($item in @("*/*/*.*proj", "src/*/*.vsixmanifest", "src/*/*.psd1"))
 	{
 		$itemPath = Join-Path $SolutionFolder $item;
