@@ -1,7 +1,7 @@
-using Acklann.Daterpillar.Commands;
+using Acklann.Daterpillar.Tool.Commands;
 using CommandLine;
 
-namespace Acklann.Daterpillar
+namespace Acklann.Daterpillar.Tool
 {
     public class Program
     {

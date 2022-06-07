@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Xml.Schema;
 
-namespace Acklann.Daterpillar.Commands
+namespace Acklann.Daterpillar.Tool.Commands
 {
     [Verb("generate", HelpText = "Produces a migration script from the old schema to the new schema.")]
     public class GenerateCommand : ICommand

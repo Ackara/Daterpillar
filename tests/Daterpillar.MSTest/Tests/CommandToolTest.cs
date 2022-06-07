@@ -1,4 +1,5 @@
 using Acklann.Daterpillar.Modeling;
+using Acklann.Daterpillar.Tool.Commands;
 using ApprovalTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -25,7 +26,7 @@ namespace Acklann.Daterpillar.Tests
             schema1.Save(schema1Path);
             schema2.Save(schema2Path);
 
-            var sut = new Commands.GenerateCommand
+            var sut = new GenerateCommand
             {
                 OldSchemaPath = schema1Path,
                 NewSchemaPath = schema2Path,
@@ -40,7 +41,7 @@ namespace Acklann.Daterpillar.Tests
             File.ReadAllText(scriptPath).ShouldNotBeNullOrWhiteSpace();
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void Can_generate_schema_file_from_project_file()
         {
             // Arrange
@@ -48,7 +49,7 @@ namespace Acklann.Daterpillar.Tests
             var projectPath = Environment.GetEnvironmentVariable("THIS_PROJECT_FILE");
             var resultFile = Path.Combine(Path.GetTempPath(), $"msbuild-schema-export-test.xml");
 
-            var sut = new Commands.ExportCommand
+            var sut = new ExportCommand
             {
                 ProjectFile = projectPath,
                 OutputFilePath = resultFile,

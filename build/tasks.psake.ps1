@@ -134,7 +134,9 @@ Task "Clean" -description "This task removes all generated files and folders fro
 }
 
 Task "Increment-Version-Number" -alias "version" -description "This task increments all of the projects version number." `
--depends @("restore") -action {
+-depends @("restore")  -action {
+	Assert ((&git status | Out-String) -match 'nothing to commit') "You must commit changes before running this task.";
+	
 	$manifest = $ManifestFilePath | Step-NcrementVersionNumber -Major:$Major -Minor:$Minor -Patch | Edit-NcrementManifest $ManifestFilePath;
 	$newVersion = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName;
 
@@ -147,6 +149,8 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 				| Write-Value "  * incremented '{0}' version number to '$newVersion'.";
 		}
 	}
+
+	Exec { &git commit --message "increment version to '$newVersion'."; }
 }
 
 Task "Build-Solution" -alias "compile" -description "This task compiles projects in the solution." `

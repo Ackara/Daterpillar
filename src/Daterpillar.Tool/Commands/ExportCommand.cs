@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace Acklann.Daterpillar.Commands
+namespace Acklann.Daterpillar.Tool.Commands
 {
     [Verb("export", HelpText = "Produces a schema file from a .NET project file.")]
     public class ExportCommand : ICommand
@@ -67,6 +67,8 @@ namespace Acklann.Daterpillar.Commands
 
             void export(string resourceName, string outPath, params object[] args)
             {
+                resourceName = string.Concat(nameof(Acklann), '.', assembly.GetName().Name, '.', resourceName);
+
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 using (var reader = new StreamReader(stream))
                 {
@@ -76,8 +78,8 @@ namespace Acklann.Daterpillar.Commands
                 }
             }
             string projectFile = Path.Combine(workingDirectory, $"{projectName}.Schema.csproj");
-            export($"{assembly.GetName().Name}.project.xml", projectFile, targetProject);
-            export($"{assembly.GetName().Name}.program.txt", Path.Combine(workingDirectory, $"Program.cs"), EntryType, OutputFilePath);
+            export("project.xml", projectFile, targetProject);
+            export("program.txt", Path.Combine(workingDirectory, $"Program.cs"), EntryType, OutputFilePath);
 
             return projectFile;
         }

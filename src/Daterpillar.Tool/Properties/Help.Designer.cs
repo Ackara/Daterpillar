@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Acklann.Daterpillar.Properties {
+namespace Acklann.Daterpillar.Tool.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Acklann.Daterpillar.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Acklann.Daterpillar.Properties.Help", typeof(Help).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Acklann.Daterpillar.Tool.Properties.Help", typeof(Help).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
