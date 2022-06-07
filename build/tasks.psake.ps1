@@ -150,8 +150,13 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 		}
 	}
 
-	#Exec { &git add .;}
-	#Exec { &git commit --message "increment version to '$newVersion'."; }
+	try
+	{
+		Push-Location $SolutionFolder;
+		#Exec { &git add .;}
+		#Exec { &git commit --message "increment version to '$newVersion'."; }
+	}
+	finally { Pop-Location; }
 }
 
 Task "Build-Solution" -alias "compile" -description "This task compiles projects in the solution." `
