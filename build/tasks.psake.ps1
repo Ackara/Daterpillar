@@ -150,6 +150,7 @@ Task "Increment-Version-Number" -alias "version" -description "This task increme
 		}
 	}
 
+	Exec { &git add .;}
 	Exec { &git commit --message "increment version to '$newVersion'."; }
 }
 
