@@ -29,11 +29,14 @@ namespace Acklann.Daterpillar.Scripting
         {
             if (resultSet == null) throw new ArgumentNullException(nameof(resultSet));
 
+            var records = new LinkedList<object>();
             ICrudOperations handler = GetBestOperations(recordType);
             while (resultSet.Read())
             {
-                yield return handler.Read(resultSet, recordType);
+                records.AddLast(handler.Read(resultSet, recordType));
             }
+
+            return records;
         }
 
         public static IEnumerable<TRecord> Read<TRecord>(IDataReader resultSet)
