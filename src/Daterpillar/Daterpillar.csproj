@@ -24,6 +24,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
