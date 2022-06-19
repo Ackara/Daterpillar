@@ -24,10 +24,19 @@ namespace Acklann.Daterpillar.Scripting.Writers
         public void OverrideSqlValueArrayItem<TTable>(string propertyName, Action<SqlValueArrayPluginContext, TTable> plugin)
         => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TTable).FullName, propertyName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
 
-        public void OverrideSqlValueArrayItem<TRecord>(Expression<Func<TRecord, object>> propertySelector, Action<SqlValueArrayPluginContext, TRecord> plugin)
+        /// <summary>
+        /// Overrides the SQL values array used for constructing INSERT statements.
+        /// </summary>
+        /// <typeparam name="TTable">The type that represent the table.</typeparam>
+        /// <param name="propertySelector">The SQL column selector.</param>
+        /// <param name="plugin">The method that overrides the values at the <paramref name="propertySelector"/> position.</param>
+        public void OverrideSqlValueArrayItem<TTable>(Expression<Func<TTable, object>> propertySelector, Action<SqlValueArrayPluginContext, TTable> plugin)
         {
-            var expression = (MemberExpression)propertySelector.Body;
-            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TRecord).FullName, expression.Member.Name), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TRecord)b); }));
+            string memberName = "";
+            if (propertySelector.Body is MemberExpression me) memberName = me.Member.Name;
+            else if (propertySelector.Body is UnaryExpression ue && ue.Operand is MemberExpression ueme) memberName = ueme.Member.Name;
+
+            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TTable).FullName, memberName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
         }
 
         public void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin)
@@ -35,9 +44,9 @@ namespace Acklann.Daterpillar.Scripting.Writers
             _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(key, plugin));
         }
 
-        public void OnAfterSqlDataRecordLoaded<TRecord>(Action<TRecord, IDataRecord> plugin)
+        public void OnAfterSqlDataRecordLoaded<TTable>(Action<TTable, IDataRecord> plugin)
         {
-            _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(typeof(TRecord).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TRecord)a, b); })));
+            _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(typeof(TTable).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TTable)a, b); })));
         }
 
         public void Add(ICrudOperations operations)

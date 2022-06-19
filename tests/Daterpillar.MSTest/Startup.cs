@@ -28,6 +28,19 @@ namespace Acklann.Daterpillar
                 builder.WithConventions((context) =>
                 {
                 });
+
+                builder.WithOverride((context) =>
+                {
+                    return new Prototyping.Username(context.Faker.Internet.UserName(), context.Faker.Internet.Email());
+                });
+
+                builder.WithOverride((context) =>
+                {
+                    var i = (Prototyping.Contact)context.Instance;
+                    i.UserId = new Prototyping.Username(context.Faker.Internet.UserName(), context.Faker.Internet.Email());
+
+                    return i;
+                });
             });
         }
 

@@ -25,6 +25,12 @@ namespace Acklann.Daterpillar.Tests
                     context.SetValue(record.Name.LastName);
                 });
 
+                builder.OverrideSqlValueArrayItem<Contact>((x => x.UserId), (context, record) =>
+                {
+                    context.SetValue(record.UserId.Name);
+                    context.SetValue(record.UserId.Email);
+                });
+
                 builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>
                 {
                     record.Name = new FullName
@@ -32,21 +38,42 @@ namespace Acklann.Daterpillar.Tests
                         FirstName = Convert.ToString(context.GetValue(context.GetOrdinal("first_name"))),
                         LastName = Convert.ToString(context.GetValue(context.GetOrdinal("last_name"))),
                     };
+
+                    record.UserId = new Username(
+                        Convert.ToString(context.GetValue(context.GetOrdinal("user_alias"))),
+                        Convert.ToString(context.GetValue(context.GetOrdinal("user_id"))));
                 });
             });
         }
 
         [DataTestMethod, DynamicData(nameof(GetCreateTestCases), DynamicDataSourceType.Method)]
-        public void Can_build_insert_command_from_object(Language connectionType, object record)
+        public void Can_build_insert_command_from_object(Language connectionType, Func<object> func)
         {
             // Arrange
 
             using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            object record = func();
 
             // Act
 
             var command = connection.CreateCommand();
-            System.Diagnostics.Debug.WriteLine(command.CommandText);
+            CrudOperations.Create(command, record, connectionType);
+
+            // Assert
+
+            SqlValidator.TryExecute(connection, command, out string error).ShouldBeTrue(error);
+        }
+
+        [DataTestMethod, DynamicData(nameof(GetSupportedLang), DynamicDataSourceType.Method)]
+        public void Can_build_insert_command_from_contact(Language connectionType)
+        {
+            // Arrange
+            using var connection = SqlValidator.CreateDefaultConnection(connectionType);
+            var record = AutoFaker.Generate<Contact>();
+
+            // Act
+
+            var command = connection.CreateCommand();
             CrudOperations.Create(command, record, connectionType);
 
             // Assert
@@ -55,11 +82,12 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [DataTestMethod, DynamicData(nameof(GetReadTestCases), DynamicDataSourceType.Method)]
-        public void Can_load_array_from_IDataRecord(string query, object record)
+        public void Can_load_array_from_IDataRecord(string query, Func<object> func)
         {
             // Arrange
 
             object[] results = null;
+            object record = func();
             var recordType = record.GetType();
             var connectionType = Language.SQLite;
             using var connection = SqlValidator.CreateConnection(connectionType);
@@ -238,21 +266,21 @@ namespace Acklann.Daterpillar.Tests
         {
             foreach (var lang in _supportedLanguages)
             {
-                yield return new object[] { lang, AutoFaker.Generate<Contact>() };
-                yield return new object[] { lang, AutoFaker.Generate<Song>() };
+                yield return new object[] { lang, new Func<object>(()=> AutoFaker.Generate<Contact>()) };
+                yield return new object[] { lang, new Func<object>(()=> AutoFaker.Generate<Song>()) };
             }
         }
 
         private static IEnumerable<object[]> GetReadTestCases()
         {
             var record3 = AutoFaker.Generate<TrackSequence>();
-            yield return new object[] { $"select * from {nameof(TrackSequence)} where {nameof(TrackSequence.SongId)}='{record3.SongId}'", record3 };
+            yield return new object[] { $"select * from {nameof(TrackSequence)} where {nameof(TrackSequence.SongId)}='{record3.SongId}'", new Func<object>(() => record3) };
 
             var record2 = AutoFaker.Generate<Contact>();
-            yield return new object[] { $"select * from contact where Id={record2.Id}", record2 };
+            yield return new object[] { $"select * from contact where Id={record2.Id}", new Func<object>(() => record2) };
 
             var record1 = AutoFaker.Generate<Artist>();
-            yield return new object[] { $"select * from artist where Name='{record1.Name}'", record1 };
+            yield return new object[] { $"select * from artist where Name='{record1.Name}'", new Func<object>(() => record1) };
         }
 
         private static IEnumerable<object[]> GetSupportedLang()

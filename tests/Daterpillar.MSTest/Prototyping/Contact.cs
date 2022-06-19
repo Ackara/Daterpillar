@@ -13,6 +13,10 @@ namespace Acklann.Daterpillar.Prototyping
         [Column("last_name")]
         public FullName Name { get; set; }
 
+        [Column("user_alias")]
+        [Column("user_id")]
+        public Username UserId { get; set; }
+
         public string Email { get; set; }
 
         public DayOfWeek DayBorn { get; set; }
