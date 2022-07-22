@@ -6,6 +6,8 @@ namespace Acklann.Daterpillar.Scripting.Writers
 {
     public interface IDefaultCrudOperationsConfigBuilder
     {
+        void CacheTableSchema(Type tableType);
+
         void OverrideSqlValueArrayItem(string key, SqlValueArrayBuilding plugin);
 
         void OverrideSqlValueArrayItem<TTable>(string memberName, Action<SqlValueArrayPluginContext, TTable> plugin);

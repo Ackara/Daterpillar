@@ -16,6 +16,11 @@ namespace Acklann.Daterpillar.Scripting.Writers
             return result;
         }
 
+        public void CacheTableSchema(Type tableType)
+        {
+            ColumnMap.Register(tableType);
+        }
+
         public void OverrideSqlValueArrayItem(string key, SqlValueArrayBuilding plugin)
         {
             _create.Add(new KeyValuePair<string, SqlValueArrayBuilding>(key, plugin));
