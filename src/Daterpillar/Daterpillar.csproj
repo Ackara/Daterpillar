@@ -4,9 +4,9 @@
     <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>13.1.18</Version>
-    <AssemblyVersion>13.1.18</AssemblyVersion>
-    <AssemblyFileVersion>13.1.18</AssemblyFileVersion>
+    <Version>13.1.19</Version>
+    <AssemblyVersion>13.1.19</AssemblyVersion>
+    <AssemblyFileVersion>13.1.19</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
