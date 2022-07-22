@@ -7,9 +7,9 @@ namespace Acklann.Daterpillar.Scripting.Writers
 {
     internal class DefaultCrudOperationsConfigBuilder : IDefaultCrudOperationsConfigBuilder
     {
-        public ICrudOperations Build()
+        public ICrudBuilder Build()
         {
-            var result = new DefaultCrudOperations();
+            var result = new DefaultCrudBuilder();
             foreach (var plugin in _create) result.Add(plugin.Key, plugin.Value);
             foreach (var plugin in _read) result.Add(plugin.Key, plugin.Value);
 
@@ -22,7 +22,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
         }
 
         public void OverrideSqlValueArrayItem<TTable>(string propertyName, Action<SqlValueArrayPluginContext, TTable> plugin)
-        => OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TTable).FullName, propertyName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
+        => OverrideSqlValueArrayItem(DefaultCrudBuilder.CreateKey(typeof(TTable).FullName, propertyName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
 
         /// <summary>
         /// Overrides the SQL values array used for constructing INSERT statements.
@@ -36,7 +36,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             if (propertySelector.Body is MemberExpression me) memberName = me.Member.Name;
             else if (propertySelector.Body is UnaryExpression ue && ue.Operand is MemberExpression ueme) memberName = ueme.Member.Name;
 
-            OverrideSqlValueArrayItem(DefaultCrudOperations.CreateKey(typeof(TTable).FullName, memberName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
+            OverrideSqlValueArrayItem(DefaultCrudBuilder.CreateKey(typeof(TTable).FullName, memberName), new SqlValueArrayBuilding((a, b) => { plugin.Invoke(a, (TTable)b); }));
         }
 
         public void OnAfterSqlDataRecordLoaded(string key, AfterSqlDataRecordLoaded plugin)
@@ -49,18 +49,18 @@ namespace Acklann.Daterpillar.Scripting.Writers
             _read.Add(new KeyValuePair<string, AfterSqlDataRecordLoaded>(typeof(TTable).FullName, new AfterSqlDataRecordLoaded((a, b) => { plugin.Invoke((TTable)a, b); })));
         }
 
-        public void Add(ICrudOperations operations)
+        public void Add(ICrudBuilder operations)
         {
             _operations.Add(operations);
         }
 
-        internal IEnumerable<ICrudOperations> GetCrudOperations() => _operations;
+        internal IEnumerable<ICrudBuilder> GetCrudOperations() => _operations;
 
         #region Backing Members
 
         private readonly ICollection<KeyValuePair<string, SqlValueArrayBuilding>> _create = new List<KeyValuePair<string, SqlValueArrayBuilding>>();
         private readonly ICollection<KeyValuePair<string, AfterSqlDataRecordLoaded>> _read = new List<KeyValuePair<string, AfterSqlDataRecordLoaded>>();
-        private readonly ICollection<ICrudOperations> _operations = new List<ICrudOperations>();
+        private readonly ICollection<ICrudBuilder> _operations = new List<ICrudBuilder>();
 
         #endregion Backing Members
     }

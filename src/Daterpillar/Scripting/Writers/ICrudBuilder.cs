@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
-    public interface ICrudOperations
+    public interface ICrudBuilder
     {
         void Create(IDbCommand command, object record, Language dialect);
 

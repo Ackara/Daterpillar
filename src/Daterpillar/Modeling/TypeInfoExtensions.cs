@@ -18,6 +18,14 @@ namespace Acklann.Daterpillar.Modeling
             {
                 return attr2.Name;
             }
+            else if (type.GetCustomAttribute(typeof(ViewAttribute)) is ViewAttribute attr3 && !string.IsNullOrEmpty(attr3.Name))
+            {
+                return attr3.Name;
+            }
+            else if (type.GetCustomAttribute(typeof(TempTableAttribute)) is TempTableAttribute attr4 && !string.IsNullOrEmpty(attr4.Name))
+            {
+                return attr4.Name;
+            }
             else
             {
                 return type.Name;

@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace Acklann.Daterpillar.Scripting
 {
-    public static class CrudOperations
+    public static class CrudBuilder
     {
         public static void Configure(Action<IDefaultCrudOperationsConfigBuilder> configuration)
         {
             var builder = new DefaultCrudOperationsConfigBuilder();
             configuration?.Invoke(builder);
-            _defaultOperations = (DefaultCrudOperations)builder.Build();
-            foreach (ICrudOperations item in builder.GetCrudOperations()) _alternateOperations.Add(item);
+            _defaultOperations = (DefaultCrudBuilder)builder.Build();
+            foreach (ICrudBuilder item in builder.GetCrudOperations()) _alternateOperations.Add(item);
         }
 
         public static void Create(IDbCommand command, object record, Language dialect)
@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Scripting
             if (record == null) throw new ArgumentNullException(nameof(record));
 
             Type recordType = record.GetType();
-            ICrudOperations writer = GetBestOperations(recordType);
+            ICrudBuilder writer = GetBestOperations(recordType);
             writer.Create(command, record, dialect);
         }
 
@@ -30,7 +30,7 @@ namespace Acklann.Daterpillar.Scripting
             if (resultSet == null) throw new ArgumentNullException(nameof(resultSet));
 
             var records = new LinkedList<object>();
-            ICrudOperations handler = GetBestOperations(recordType);
+            ICrudBuilder handler = GetBestOperations(recordType);
             while (resultSet.Read())
             {
                 records.AddLast(handler.Read(resultSet, recordType));
@@ -47,7 +47,7 @@ namespace Acklann.Daterpillar.Scripting
             if (record == null) throw new ArgumentNullException(nameof(record));
 
             Type recordType = record.GetType();
-            ICrudOperations handler = GetBestOperations(recordType);
+            ICrudBuilder handler = GetBestOperations(recordType);
             handler.Update(command, record, dialect);
         }
 
@@ -56,11 +56,11 @@ namespace Acklann.Daterpillar.Scripting
             if (record == null) throw new ArgumentNullException(nameof(record));
 
             Type recordType = record.GetType();
-            ICrudOperations handler = GetBestOperations(recordType);
+            ICrudBuilder handler = GetBestOperations(recordType);
             handler.Delete(command, record, dialect);
         }
 
-        private static ICrudOperations GetBestOperations(Type type)
+        private static ICrudBuilder GetBestOperations(Type type)
         {
             for (int i = 0; i < _alternateOperations.Count; i++)
                 if (_alternateOperations[i].CanAccept(type))
@@ -73,9 +73,9 @@ namespace Acklann.Daterpillar.Scripting
 
         #region Backing Members
 
-        private static DefaultCrudOperations _defaultOperations = new DefaultCrudOperations();
+        private static DefaultCrudBuilder _defaultOperations = new DefaultCrudBuilder();
 
-        private static readonly IList<ICrudOperations> _alternateOperations = new List<ICrudOperations>();
+        private static readonly IList<ICrudBuilder> _alternateOperations = new List<ICrudBuilder>();
 
         #endregion Backing Members
     }

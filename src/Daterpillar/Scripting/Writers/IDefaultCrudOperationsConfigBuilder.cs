@@ -16,8 +16,8 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
         void OnAfterSqlDataRecordLoaded<TRecord>(Action<TRecord, IDataRecord> plugin);
 
-        void Add(ICrudOperations operations);
+        void Add(ICrudBuilder operations);
 
-        ICrudOperations Build();
+        ICrudBuilder Build();
     }
 }

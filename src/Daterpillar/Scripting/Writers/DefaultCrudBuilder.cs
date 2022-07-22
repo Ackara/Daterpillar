@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Acklann.Daterpillar.Scripting.Writers
 {
-    public class DefaultCrudOperations : ICrudOperations
+    public class DefaultCrudBuilder : ICrudBuilder
     {
         public void Add(string key, SqlValueArrayBuilding plugin)
         {
@@ -70,7 +70,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
 
             command.CommandType = CommandType.Text;
             command.CommandText = builder.ToString();
-            System.Diagnostics.Debug.WriteLine(command.CommandText);
+            System.Diagnostics.Debug.WriteLine(command.CommandText, nameof(Daterpillar));
             foreach (ColumnValuePair arg in BuildValueArray(record, recordType, columns))
             {
                 IDbDataParameter parameter = command.CreateParameter();
@@ -178,7 +178,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             SetParameters(command, whereArray);
         }
 
-        bool ICrudOperations.CanAccept(Type type) => true;
+        bool ICrudBuilder.CanAccept(Type type) => true;
 
         internal static string CreateKey(string typeName, string memberName) => string.Concat(typeName, '.', memberName);
 

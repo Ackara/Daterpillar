@@ -15,7 +15,7 @@ namespace Acklann.Daterpillar.Scripting
             try
             {
                 OpenConnection(connection);
-                CrudOperations.Create(command, record, connectionType);
+                CrudBuilder.Create(command, record, connectionType);
                 command.Transaction = connection.BeginTransaction();
                 int changes = command.ExecuteNonQuery();
                 command.Transaction.Commit();
@@ -41,7 +41,7 @@ namespace Acklann.Daterpillar.Scripting
             {
                 OpenConnection(connection);
                 command.Transaction = connection.BeginTransaction();
-                CrudOperations.Update(command, record, connectionType);
+                CrudBuilder.Update(command, record, connectionType);
                 int changes = command.ExecuteNonQuery();
                 command.Transaction.Commit();
                 return new SqlCommandResult(command.CommandText, changes);
@@ -65,7 +65,7 @@ namespace Acklann.Daterpillar.Scripting
             {
                 OpenConnection(connection);
                 command.Transaction = connection.BeginTransaction();
-                CrudOperations.Delete(command, record, connectionType);
+                CrudBuilder.Delete(command, record, connectionType);
                 int changes = command.ExecuteNonQuery();
                 command.Transaction.Commit();
                 return new SqlCommandResult(command.CommandText, changes);
@@ -91,7 +91,7 @@ namespace Acklann.Daterpillar.Scripting
                 command.CommandText = query;
                 using (IDataReader reader = command.ExecuteReader())
                 {
-                    return new QueryResult<IEnumerable<TRecord>>(CrudOperations.Read<TRecord>(reader), null);
+                    return new QueryResult<IEnumerable<TRecord>>(CrudBuilder.Read<TRecord>(reader), null);
                 }
             }
             catch (DbException ex)
@@ -114,7 +114,7 @@ namespace Acklann.Daterpillar.Scripting
                 command.CommandText = query;
                 using (IDataReader reader = command.ExecuteReader())
                 {
-                    return new QueryResult<TRecord>(CrudOperations.Read<TRecord>(reader).FirstOrDefault(), null);
+                    return new QueryResult<TRecord>(CrudBuilder.Read<TRecord>(reader).FirstOrDefault(), null);
                 }
             }
             catch (DbException ex)

@@ -17,7 +17,7 @@ namespace Acklann.Daterpillar.Tests
         {
             SqlValidator.CreateDatabase(_supportedLanguages);
 
-            CrudOperations.Configure((builder) =>
+            CrudBuilder.Configure((builder) =>
             {
                 builder.OverrideSqlValueArrayItem<Contact>((m => m.Name), (context, record) =>
                 {
@@ -57,7 +57,7 @@ namespace Acklann.Daterpillar.Tests
             // Act
 
             var command = connection.CreateCommand();
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
 
             // Assert
 
@@ -74,7 +74,7 @@ namespace Acklann.Daterpillar.Tests
             // Act
 
             var command = connection.CreateCommand();
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
 
             // Assert
 
@@ -95,7 +95,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
             if (!SqlValidator.TryExecute(connection, command, out string errorMessage)) Assert.Fail(errorMessage);
 
             using (command = connection.CreateCommand())
@@ -103,7 +103,7 @@ namespace Acklann.Daterpillar.Tests
                 command.CommandText = query;
                 using (var dataset = command.ExecuteReader())
                 {
-                    results = CrudOperations.Read(recordType, dataset).ToArray();
+                    results = CrudBuilder.Read(recordType, dataset).ToArray();
                 }
             }
 
@@ -127,7 +127,7 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
             if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
             using (command = connection.CreateCommand())
@@ -135,7 +135,7 @@ namespace Acklann.Daterpillar.Tests
                 command.CommandText = $"select * from contact where id={record.Id}";
                 using (var dataset = command.ExecuteReader())
                 {
-                    result = CrudOperations.Read(record.GetType(), dataset).Cast<Contact>().First();
+                    result = CrudBuilder.Read(record.GetType(), dataset).Cast<Contact>().First();
                 }
             }
 
@@ -157,11 +157,11 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
             if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
             command = connection.CreateCommand();
-            CrudOperations.Update(command, record, connectionType);
+            CrudBuilder.Update(command, record, connectionType);
             System.Diagnostics.Debug.WriteLine(command.CommandText);
 
             // Assert
@@ -180,11 +180,11 @@ namespace Acklann.Daterpillar.Tests
 
             // Act
 
-            CrudOperations.Create(command, record, connectionType);
+            CrudBuilder.Create(command, record, connectionType);
             if (!SqlValidator.TryExecute(connection, command, out string error)) Assert.Fail(error);
 
             command = connection.CreateCommand();
-            CrudOperations.Delete(command, record, connectionType);
+            CrudBuilder.Delete(command, record, connectionType);
             System.Diagnostics.Debug.WriteLine(command.CommandText);
 
             // Assert

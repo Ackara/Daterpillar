@@ -12,8 +12,8 @@ namespace Acklann.Daterpillar.Annotations
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewAttribute"/> class.
         /// </summary>
-        /// <param name="query">The query.</param>
-        public ViewAttribute(string query) : this(null, query)
+        /// <param name="name">The name of the view table.</param>
+        public ViewAttribute(string name) : this(name, null)
         {
         }
 
@@ -26,9 +26,8 @@ namespace Acklann.Daterpillar.Annotations
         /// <exception cref="ArgumentNullException">query</exception>
         public ViewAttribute(string name, string query, params object[] args)
         {
-            Query = query ?? throw new ArgumentNullException(nameof(query));
-            Arguments = args;
             Name = name;
+            Query = args?.Length > 0 ? string.Format(query, args) : query;
         }
 
         /// <summary>
@@ -40,10 +39,5 @@ namespace Acklann.Daterpillar.Annotations
         /// The SQL query that will generate the view.
         /// </summary>
         public readonly string Query;
-
-        /// <summary>
-        /// The query arguments.
-        /// </summary>
-        public readonly object[] Arguments;
     }
 }
