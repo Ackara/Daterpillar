@@ -31,6 +31,11 @@ namespace Acklann.Daterpillar.Tests
                     context.SetValue(record.UserId.Email);
                 });
 
+                builder.OverrideSqlValueArrayItem<Contact>("_secret", (context, record) =>
+                {
+                    context.SetValue("the quick brown fox");
+                });
+
                 builder.OnAfterSqlDataRecordLoaded<Contact>((record, context) =>
                 {
                     record.Name = new FullName

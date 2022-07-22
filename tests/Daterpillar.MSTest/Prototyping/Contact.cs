@@ -24,5 +24,8 @@ namespace Acklann.Daterpillar.Prototyping
         public TimeSpan TimeBorn { get; set; }
 
         public DateTime BirthDay { get; set; }
+
+        [Column("secret")]
+        private string _secret;
     }
 }
