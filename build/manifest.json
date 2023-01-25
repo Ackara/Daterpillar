@@ -10,7 +10,7 @@
   "version": {
     "major": 13,
     "minor": 1,
-    "patch": 22
+    "patch": 23
   },
   "branchVersionMap": {
     "default": "x.y.z-\\beta",
