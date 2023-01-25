@@ -75,7 +75,7 @@ namespace Acklann.Daterpillar.Scripting.Writers
             {
                 IDbDataParameter parameter = command.CreateParameter();
                 parameter.ParameterName = arg.ColumnName;
-                parameter.Value = arg.Value;
+                parameter.Value = arg.Value?? DBNull.Value;
                 command.Parameters.Add(parameter);
             }
         }
