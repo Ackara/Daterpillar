@@ -7,9 +7,9 @@
     <AssemblyName>Daterpillar.MSTest</AssemblyName>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>13.1.21</Version>
-    <AssemblyVersion>13.1.21</AssemblyVersion>
-    <AssemblyFileVersion>13.1.21</AssemblyFileVersion>
+    <Version>13.1.22</Version>
+    <AssemblyVersion>13.1.22</AssemblyVersion>
+    <AssemblyFileVersion>13.1.22</AssemblyFileVersion>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
     <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
     <PackageTags>sql migration orm flyway build</PackageTags>
     <Company>Ackara</Company>
-    <Copyright>Copyright © 2022 Ackara</Copyright>
+    <Copyright>Copyright © 2023 Ackara</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
   </PropertyGroup>
 

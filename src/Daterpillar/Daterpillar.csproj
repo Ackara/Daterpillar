@@ -4,9 +4,9 @@
     <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>13.1.21</Version>
-    <AssemblyVersion>13.1.21</AssemblyVersion>
-    <AssemblyFileVersion>13.1.21</AssemblyFileVersion>
+    <Version>13.1.22</Version>
+    <AssemblyVersion>13.1.22</AssemblyVersion>
+    <AssemblyFileVersion>13.1.22</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +14,7 @@
     <Authors>Ackara</Authors>
     <Company>Ackara</Company>
     <Owners>Ackara</Owners>
-    <Copyright>Copyright © 2022 Ackara</Copyright>
+    <Copyright>Copyright © 2023 Ackara</Copyright>
 
     <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
