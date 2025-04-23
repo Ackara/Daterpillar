@@ -1,155 +1,147 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<AssemblyName>Daterpillar.MSTest</AssemblyName>
-		<RootNamespace>Acklann.Daterpillar</RootNamespace>
+  <PropertyGroup>
+    <Optimize>false</Optimize>
+    <IsPackable>false</IsPackable>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>Daterpillar.MSTest</AssemblyName>
+    <RootNamespace>Acklann.Daterpillar</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Version>14.0.0</Version>
+    <AssemblyVersion>14.0.0</AssemblyVersion>
+    <AssemblyFileVersion>14.0.0</AssemblyFileVersion>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
 
-		<TargetFramework>net9.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
-		<EnableMSTestRunner>true</EnableMSTestRunner>
-		<OutputType>Exe</OutputType>
-		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-		<TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-	</PropertyGroup>
+  <PropertyGroup>
+    <Description>A library for generating SQL migration scripts.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+    <PackageTags>sql migration orm flyway build</PackageTags>
+    <Company>Ackara</Company>
+    <Copyright>Copyright © 2025 Ackara</Copyright>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<Description>A library for generating SQL migration scripts.</Description>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
-		<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
-		<PackageTags>sql migration orm flyway build</PackageTags>
-		<Company>Ackara</Company>
-		<Copyright>Copyright © 2023 Ackara</Copyright>
-		<PackageLicenseFile>license.txt</PackageLicenseFile>
-	</PropertyGroup>
+  <PropertyGroup>
+    <GenerateDaterpillarSchemaOnBuild>false</GenerateDaterpillarSchemaOnBuild>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<GenerateDaterpillarSchemaOnBuild>false</GenerateDaterpillarSchemaOnBuild>
-	</PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="sample-data\daterpillar.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\..\src\Daterpillar\daterpillar.xsd" Link="sample-data\daterpillar.xsd">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Acklann.Diffa" Version="1.1.1" />
+    <PackageReference Include="ApprovalTests" Version="6.0.0" />
+    <PackageReference Include="AutoBogus.Conventions" Version="2.13.1" />
+    <PackageReference Include="Cecrets" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Mockaroo.NET" Version="4.1.4" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.7.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.7.3" />
+    <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Acklann.Diffa" Version="1.1.1" />
-		<PackageReference Include="ApprovalTests" Version="6.0.0" />
-		<PackageReference Include="AutoBogus.Conventions" Version="2.13.1" />
-		<PackageReference Include="Cecrets" Version="1.0.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="FakeItEasy" Version="8.3.0" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Daterpillar.Targets\Daterpillar.Targets.csproj" />
+    <ProjectReference Include="..\..\src\Daterpillar.Tool\Daterpillar.Tool.csproj" />
+    <ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
+  </ItemGroup>
 
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
-		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
-		<PackageReference Include="MSTest" Version="3.8.3" />
-		<PackageReference Include="Mockaroo.NET" Version="4.1.4" />
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\bad_schema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\flyway-output.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\init.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\music-data.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\music-revisions.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\music.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="connections.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\no-ns.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\sakila-business.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\sakila-customer.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\sakila-inventory.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample-data\sakila-views.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sample.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Sample.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
 
-		<PackageReference Include="MySql.Data" Version="9.3.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Shouldly" Version="4.3.0" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
-	</ItemGroup>
+  <ItemGroup>
+    <Content Include="test-cases\**\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\Daterpillar.Targets\Daterpillar.Targets.csproj" />
-		<ProjectReference Include="..\..\src\Daterpillar.Tool\Daterpillar.Tool.csproj" />
-		<ProjectReference Include="..\..\src\Daterpillar\Daterpillar.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="test-cases\approved-results\**" />
+    <Content Remove="test-cases\approved-results\**" />
+    <EmbeddedResource Remove="test-cases\approved-results\**" />
+    <None Remove="test-cases\approved-results\**" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-	</ItemGroup>
+  <Target Name="RestoreAppsettings" BeforeTargets="PreBuildEvent">
+    <PropertyGroup>
+      <SecretFile>../../secrets.json</SecretFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<None Update="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\bad_schema.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\flyway-output.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\init.sql">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\music-data.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\music-revisions.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\music.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="connections.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\no-ns.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\sakila-business.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\sakila-customer.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\sakila-inventory.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="sample-data\sakila-views.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Sample.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>Sample.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
+    <WriteLinesToFile File="appsettings.json" Lines="{}" Condition="!Exists('appsettings.json')" />
+    <CopyJsonProperties JPath="*" SourceFile="$(SecretFile)" DestinationFile="appsettings.json" Condition="Exists('$(SecretFile)')" />
+  </Target>
 
-	<ItemGroup>
-		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
+  <Target Name="RestoreRunSettings" Condition="">
+    <WriteLinesToFile File="test.runsettings" Lines="&lt;RunSettings&gt;&lt;RunConfiguration&gt;&lt;EnvironmentVariables&gt;&lt;THIS_PROJECT_FILE&gt;$(MSBuildProjectFullPath)&lt;/THIS_PROJECT_FILE&gt;&lt;/EnvironmentVariables&gt;&lt;/RunConfiguration&gt;&lt;/RunSettings&gt;" Overwrite="true" />
+  </Target>
 
-	<ItemGroup>
-		<Content Include="test-cases\**\*.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
+  <Target Name="TestTargets" Condition="Exists('..\..\artifacts\msbuild')">
+    <ExportDatabaseSchema ProjectFile="$(MSBuildProjectFullPath)" EntryType="Acklann.Daterpillar.Prototyping.Song" />
+  </Target>
 
-	<ItemGroup>
-		<Compile Remove="test-cases\approved-results\**" />
-		<Content Remove="test-cases\approved-results\**" />
-		<EmbeddedResource Remove="test-cases\approved-results\**" />
-		<None Remove="test-cases\approved-results\**" />
-	</ItemGroup>
-
-	<Target Name="RestoreAppsettings" BeforeTargets="PreBuildEvent">
-		<PropertyGroup>
-			<SecretFile>../../secrets.json</SecretFile>
-		</PropertyGroup>
-
-		<WriteLinesToFile File="appsettings.json" Lines="{}" Condition="!Exists('appsettings.json')" />
-		<CopyJsonProperties JPath="*" SourceFile="$(SecretFile)" DestinationFile="appsettings.json" Condition="Exists('$(SecretFile)')" />
-	</Target>
-
-	<Target Name="RestoreRunSettings" Condition="">
-		<WriteLinesToFile File="test.runsettings" Lines="&lt;RunSettings&gt;&lt;RunConfiguration&gt;&lt;EnvironmentVariables&gt;&lt;THIS_PROJECT_FILE&gt;$(MSBuildProjectFullPath)&lt;/THIS_PROJECT_FILE&gt;&lt;/EnvironmentVariables&gt;&lt;/RunConfiguration&gt;&lt;/RunSettings&gt;" Overwrite="true" />
-	</Target>
-
-	<Target Name="TestTargets" Condition="Exists('..\..\artifacts\msbuild')">
-		<ExportDatabaseSchema ProjectFile="$(MSBuildProjectFullPath)" EntryType="Acklann.Daterpillar.Prototyping.Song" />
-	</Target>
-
-	<Import Project="..\..\artifacts\msbuild\build\Daterpillar.Targets.targets" Condition="Exists('..\..\artifacts\msbuild\build\Daterpillar.Targets.targets')" />
-
-
+  <Import Project="..\..\artifacts\msbuild\build\Daterpillar.Targets.targets" Condition="Exists('..\..\artifacts\msbuild\build\Daterpillar.Targets.targets')" />
 </Project>
