@@ -92,10 +92,10 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
 -precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
-    foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.nupkg")
+    foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.*nupkg")
     {
         Write-Separator "dotnet nuget push '$($nupkg.Name)'";
-        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json"; }
+        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg; }
     }
 }
 
