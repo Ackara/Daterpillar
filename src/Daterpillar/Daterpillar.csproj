@@ -4,9 +4,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>Acklann.Daterpillar</RootNamespace>
     <AssemblyName>Daterpillar</AssemblyName>
-    <Version>14.0.1</Version>
-    <AssemblyVersion>14.0.1</AssemblyVersion>
-    <AssemblyFileVersion>14.0.1</AssemblyFileVersion>
+    <Version>14.0.2</Version>
+    <AssemblyVersion>14.0.2</AssemblyVersion>
+    <AssemblyFileVersion>14.0.2</AssemblyFileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
