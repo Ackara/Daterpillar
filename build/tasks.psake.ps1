@@ -70,7 +70,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 
 	$project = Join-Path $SolutionFolder "src/$SolutionName/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
-	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
+	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg; }
 
 	$project = Join-Path $SolutionFolder "src/*.Tool/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
@@ -95,7 +95,7 @@ Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publis
     foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.*nupkg")
     {
         Write-Separator "dotnet nuget push '$($nupkg.Name)'";
-        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg; }
+        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json"; }
     }
 }
 
