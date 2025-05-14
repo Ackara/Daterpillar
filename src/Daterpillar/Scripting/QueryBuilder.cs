@@ -48,12 +48,14 @@ namespace Acklann.Daterpillar.Scripting
 
         public QueryBuilder And(string column, object value, string operand = "=")
         {
+            if (string.IsNullOrEmpty(_where)) return Where(column, value, operand);
             _where = string.Concat(_where, " AND ", SqlExtensions.EscapeColumn(column, _language), operand, SqlExtensions.Serialize(value));
             return this;
         }
 
         public QueryBuilder Or(string column, object value, string operand = "=")
         {
+            if (string.IsNullOrEmpty(_where)) return Where(column, value, operand);
             _where = string.Concat(_where, " OR ", SqlExtensions.EscapeColumn(column, _language), operand, SqlExtensions.Serialize(value));
             return this;
         }
