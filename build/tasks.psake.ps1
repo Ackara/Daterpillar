@@ -70,7 +70,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 
 	$project = Join-Path $SolutionFolder "src/$SolutionName/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
-	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version"; }
+	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version" -p:"SymbolPackageFormat=snupkg"; }
 
 	$project = Join-Path $SolutionFolder "src/*.Tool/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";

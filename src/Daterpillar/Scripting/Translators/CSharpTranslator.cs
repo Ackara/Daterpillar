@@ -31,6 +31,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
             TypeMap[DATE.ToLowerInvariant()] = "DateTime";
             TypeMap[TIME.ToLowerInvariant()] = "DateTime";
             TypeMap[DATETIME.ToLowerInvariant()] = "DateTime";
+            TypeMap["uniqueidentifier"] = "string";
         }
 
         /// <summary>

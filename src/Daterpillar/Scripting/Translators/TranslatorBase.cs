@@ -127,7 +127,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
                 { "date", "DATE" },
                 { "time", "TIME" },
                 { "dateTime", "DATETIME" },
-                { "timeStamp", "TIMESTAMP" },
+                { "timeStamp", "TIMESTAMP" }
             };
         }
 
