@@ -10,7 +10,19 @@
 
 		<AssemblyName>Daterpillar.MSTest</AssemblyName>
 		<RootNamespace>Acklann.Daterpillar</RootNamespace>
-	</PropertyGroup>
+	
+<Description>A library for generating SQL migration scripts.</Description>
+<Version>14.0.1</Version>
+<AssemblyVersion>14.0.1</AssemblyVersion>
+<AssemblyFileVersion>14.0.1</AssemblyFileVersion>
+<PackageIcon>icon.png</PackageIcon>
+<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+<PackageTags>sql migration orm flyway build</PackageTags>
+<Company>Ackara</Company>
+<Copyright>Copyright © 2025 Ackara</Copyright>
+<PackageLicenseFile>license.txt</PackageLicenseFile>
+</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
@@ -22,5 +34,7 @@
 	<ItemGroup>
 		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
 	</ItemGroup>
+
+
 
 </Project>
