@@ -52,6 +52,25 @@ namespace Acklann.Daterpillar.Tests
         }
 
         [TestMethod]
+        public void Can_write_empty_schema_to_file()
+        {
+            // Arrange
+
+            var schema = new Schema();
+            string outputFile = Path.Combine(Path.GetTempPath(), $"{nameof(Can_write_empty_schema_to_file)}.xml");
+
+            // Act
+
+            using (Stream file = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                schema.WriteTo(file);
+            }
+
+            // Assert
+            Approvals.VerifyFile(outputFile);
+        }
+
+        [TestMethod]
         public void Can_validate_a_schema_for_errors()
         {
             // Arrange

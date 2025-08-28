@@ -11,8 +11,10 @@ namespace ExportApp
         public static void Main(string[] args)
         {{
             string exportPath = @"{1}";
+			string dir = Path.GetDirectoryName(exportPath);
+			if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            Assembly assembly = typeof({0}).Assembly;
+			Assembly assembly = typeof({0}).Assembly;
             Schema schema = SchemaFactory.CreateFrom(assembly);
             using (Stream file = new FileStream(exportPath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {{

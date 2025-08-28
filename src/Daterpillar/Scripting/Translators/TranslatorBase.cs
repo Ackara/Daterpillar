@@ -159,6 +159,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
                     return TEXT;
 
                 case SchemaType.VARCHAR:
+                case SchemaType.UNIQUEIDENTIFIER:
                     return VARCHAR;
 
                 case SchemaType.INT:

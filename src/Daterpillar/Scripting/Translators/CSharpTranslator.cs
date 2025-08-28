@@ -1,4 +1,5 @@
-﻿using Acklann.Daterpillar.Modeling;
+﻿using Acklann.Daterpillar.Annotations;
+using Acklann.Daterpillar.Modeling;
 using System;
 using System.Reflection;
 
@@ -31,6 +32,8 @@ namespace Acklann.Daterpillar.Scripting.Translators
             TypeMap[DATE.ToLowerInvariant()] = "DateTime";
             TypeMap[TIME.ToLowerInvariant()] = "DateTime";
             TypeMap[DATETIME.ToLowerInvariant()] = "DateTime";
+            TypeMap.Add("uniqueidentifier", "string");
+            TypeMap.Add(nameof(Guid), "string");
         }
 
         /// <summary>
@@ -77,6 +80,9 @@ namespace Acklann.Daterpillar.Scripting.Translators
 
                     case nameof(String):
                         return new DataType(VARCHAR);
+
+                    case nameof(Guid):
+                        return new DataType("UNIQUEIDENTIFIER");
 
                     case nameof(TimeSpan):
                     case nameof(DateTime):

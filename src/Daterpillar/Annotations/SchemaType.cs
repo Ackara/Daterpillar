@@ -71,6 +71,6 @@
 
         /// <summary>
         /// </summary>
-        TIMESTAMP,
+        TIMESTAMP
     }
 }

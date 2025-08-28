@@ -9,7 +9,8 @@ namespace Acklann.Daterpillar.Tool
         {
             // docs: https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create
 
-            Parser.Default.ParseArguments<ExportCommand, GenerateCommand>(args)
+            Parser.Default.ParseArguments<ExportCommand, GenerateCommand, NewSchemaCommand>(args)
+                .WithParsed<NewSchemaCommand>((o) => o.Execute())
                 .WithParsed<ExportCommand>((o) => o.Execute())
                 .WithParsed<GenerateCommand>((o) => o.Execute());
         }

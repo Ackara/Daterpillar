@@ -3,6 +3,7 @@ using CommandLine;
 using CommandLine.Text;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Schema;
 
 namespace Acklann.Daterpillar.Tool.Commands

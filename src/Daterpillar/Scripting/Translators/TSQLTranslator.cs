@@ -20,6 +20,8 @@ namespace Acklann.Daterpillar.Scripting.Translators
             TypeMap[BLOB] = "VARBINARY";
             TypeMap[MEDIUMINT] = "INT";
             TypeMap[TIMESTAMP] = "DATETIME";
+            TypeMap.Add("uniqueidentifier", "UNIQUEIDENTIFIER");
+            TypeMap.Add(nameof(Guid), "UNIQUEIDENTIFIER");
         }
 
         /// <summary>
