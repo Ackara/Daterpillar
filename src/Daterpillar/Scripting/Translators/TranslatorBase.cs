@@ -1,5 +1,6 @@
 ﻿using Acklann.Daterpillar.Annotations;
 using Acklann.Daterpillar.Modeling;
+using System;
 using System.Collections.Generic;
 
 namespace Acklann.Daterpillar.Scripting.Translators
@@ -128,6 +129,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
                 { "time", "TIME" },
                 { "dateTime", "DATETIME" },
                 { "timeStamp", "TIMESTAMP" },
+                { nameof(Guid), nameof(Guid) },
             };
         }
 

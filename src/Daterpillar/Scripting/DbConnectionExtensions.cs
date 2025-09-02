@@ -24,7 +24,7 @@ namespace Acklann.Daterpillar.Scripting
             catch (DbException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                command.Transaction.Rollback();
+                command.Transaction?.Rollback();
                 return new SqlCommandResult(command.CommandText, GetSqlErrorCode(ex, connectionType), ex.Message);
             }
             finally
