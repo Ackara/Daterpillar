@@ -41,6 +41,30 @@ namespace Acklann.Daterpillar.Tests
             File.ReadAllText(scriptPath).ShouldNotBeNullOrWhiteSpace();
         }
 
+        [TestMethod]
+        public void Can_generate_migration_script_files()
+        {
+            // Arrange
+
+            var scriptPath = Path.Combine(Path.GetTempPath(), "generated-tool-migration.sql");
+            var schema1Path = Path.Combine(Path.GetTempPath(), "old-test-schema.xml");
+            var schema2Path = Path.Combine(Path.GetTempPath(), "new-test-schema.xml");
+            
+            var sut = new GenerateCommand
+            {
+                OldSchemaPath = schema1Path,
+                NewSchemaPath = schema2Path,
+                OutputFile = scriptPath,
+                Language = Language.TSQL
+            };
+
+            // Act + Assert
+
+            sut.Execute().ShouldBe(0);
+            File.Exists(scriptPath).ShouldBeTrue();
+            File.ReadAllText(scriptPath).ShouldNotBeNullOrWhiteSpace();
+        }
+
         //[TestMethod]
         public void Can_generate_schema_file_from_project_file()
         {

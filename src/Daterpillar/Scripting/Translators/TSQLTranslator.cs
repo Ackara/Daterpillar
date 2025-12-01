@@ -21,7 +21,7 @@ namespace Acklann.Daterpillar.Scripting.Translators
             TypeMap[MEDIUMINT] = "INT";
             TypeMap[TIMESTAMP] = "DATETIME";
             TypeMap[nameof(Guid)] = "UNIQUEIDENTIFIER";
-            TypeMap.Add("uniqueidentifier", "UNIQUEIDENTIFIER");
+            TypeMap.Add("UNIQUEIDENTIFIER", "UNIQUEIDENTIFIER");
         }
 
         /// <summary>
