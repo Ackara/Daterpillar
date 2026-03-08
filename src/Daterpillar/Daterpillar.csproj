@@ -9,56 +9,56 @@
     <AssemblyFileVersion>14.1.3</AssemblyFileVersion>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <Description>A library for generating SQL migration scripts.</Description>
-    <Authors>Ackara</Authors>
-    <Company>Ackara</Company>
-    <Owners>Ackara</Owners>
-    <Copyright>Copyright © 2025 Ackara</Copyright>
+	<PropertyGroup>
+		<Description>A library for generating SQL migration scripts.</Description>
+		<Authors>Ackara</Authors>
+		<Company>Ackara</Company>
+		<Owners>Ackara</Owners>
+		<Copyright>Copyright © 2025 Ackara</Copyright>
 
-    <RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
-    <PackageTags>sql migration orm flyway build</PackageTags>
+		<RepositoryUrl>https://github.com/Ackara/Daterpillar.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Ackara/Daterpillar</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/Ackara/Daterpillar/blob/master/releaseNotes.txt</PackageReleaseNotes>
+		<PackageTags>sql migration orm flyway build</PackageTags>
 
-    <PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-  </PropertyGroup>
+		<PackageIconUrl>https://raw.githubusercontent.com/Ackara/Daterpillar/master/art/icon.png</PackageIconUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>bin\Release\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Acklann.GlobN" Version="2.1.7" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Memory" Version="4.6.0" />
-    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Acklann.GlobN" Version="2.1.7" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+		<PackageReference Include="System.Memory" Version="4.6.0" />
+		<PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="daterpillar.xsd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="daterpillar.xsd" />
+	</ItemGroup>
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
 
-  <ItemGroup Label="Nuget">
-    <Content Include="..\..\readme.md">
-      <PackagePath>readme.md</PackagePath>
-      <Visible>false</Visible>
-    </Content>
+	<ItemGroup Label="Nuget">
+		<Content Include="..\..\readme.md">
+			<PackagePath>readme.md</PackagePath>
+			<Visible>false</Visible>
+		</Content>
 
-    <Content Include="..\..\license.txt">
-      <PackagePath>license.txt</PackagePath>
-      <Visible>false</Visible>
-    </Content>
+		<Content Include="..\..\license.txt">
+			<PackagePath>license.txt</PackagePath>
+			<Visible>false</Visible>
+		</Content>
 
-    <Content Include="..\..\art\icon.png">
-      <Visible>false</Visible>
-      <PackagePath>icon.png</PackagePath>
-    </Content>
-  </ItemGroup>
+		<Content Include="..\..\art\icon.png">
+			<Visible>false</Visible>
+			<PackagePath>icon.png</PackagePath>
+		</Content>
+	</ItemGroup>
 </Project>

@@ -70,7 +70,7 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 
 	$project = Join-Path $SolutionFolder "src/$SolutionName/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
-	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg; }
+	Exec { &dotnet pack $project.FullName --output $ArtifactsFolder --configuration $Configuration -p:"EnvironmentName=$EnvironmentName;Version=$version" -p:"SymbolPackageFormat=snupkg"; }
 
 	$project = Join-Path $SolutionFolder "src/*.Tool/*.*proj" | Get-Item;
 	Write-Separator "dotnet pack '$($project.BaseName)-$version'";
@@ -89,17 +89,17 @@ Task "Package-Solution" -alias "pack" -description "This task generates all depl
 	#Remove-Item $zip;
 }
 
-Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all NuGET packages to a NuGET repository." `
+Task "Publish-NuGet-Packages" -alias "push-nuget" -description "This task publish all nuget packages to a nuget repository." `
 -precondition { return ($InProduction -or $InPreview ) -and (Test-Path $ArtifactsFolder -PathType Container) } `
 -action {
-    foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.*nupkg")
+    foreach ($nupkg in Get-ChildItem $ArtifactsFolder -Filter "*.nupkg")
     {
         Write-Separator "dotnet nuget push '$($nupkg.Name)'";
-        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json" --skip-duplicate; }
+        Exec { &dotnet nuget push $nupkg.FullName --source "https://api.nuget.org/v3/index.json"; }
     }
 }
 
-Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the latest commit with the version number." `
+Task "Add-GitReleaseTag" -alias "tag" -description "This task tags the lastest commit with the version number." `
 -precondition { return ($InProduction -or $InPreview ) } `
 -depends @("restore") -action {
 	$version = $ManifestFilePath | Select-NcrementVersionNumber $EnvironmentName -Format "C";
